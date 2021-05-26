@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.gray['000']};
+  color: ${({ theme }) => theme.colors.gray['100']};
   font-size: 5rem;
   letter-spacing: -0.055em;
   line-height: 0.9em;
