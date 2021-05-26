@@ -1,6 +1,4 @@
-import {
-  Title
-} from './welcome.css'
+import { Title } from './welcome.css'
 
 export default function Welcome() {
   return (
