@@ -142,8 +142,8 @@ export default {
   colors: {
     ...colors,
     background: {
-      light: colors.gray['900'],
-      dark: colors.gray['100']
+      light: colors.gray['000'],
+      dark: colors.gray['800']
     }
   }
 }
