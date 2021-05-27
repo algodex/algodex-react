@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styled from 'styled-components'
-import Welcome from '../components/welcome'
+import Welcome from 'components/welcome'
 
 const Container = styled.div`
   min-height: 100vh;
