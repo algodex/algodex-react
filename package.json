@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "jest",
+    "jest": "jest --watch",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,css,md,json}' --config ./.prettierrc",
     "storybook": "start-storybook -p 6006",
@@ -38,6 +40,9 @@
     "@storybook/addon-essentials": "^6.2.9",
     "@storybook/addon-links": "^6.2.9",
     "@storybook/react": "^6.2.9",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.7",
+    "babel-jest": "^27.0.1",
     "babel-loader": "^8.2.2",
     "babel-plugin-styled-components": "^1.12.0",
     "cypress": "^7.4.0",
@@ -48,6 +53,7 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^6.0.0",
+    "jest": "^27.0.1",
     "lint-staged": "^11.0.0",
     "prettier": "2.3.0"
   }
