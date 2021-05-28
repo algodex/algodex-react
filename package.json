@@ -12,7 +12,8 @@
     "format": "prettier --write './**/*.{js,jsx,css,md,json}' --config ./.prettierrc",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "chromatic": "npx chromatic --project-token=ef5af38aec3a"
   },
   "husky": {
     "hooks": {
@@ -45,6 +46,7 @@
     "babel-jest": "^27.0.1",
     "babel-loader": "^8.2.2",
     "babel-plugin-styled-components": "^1.12.0",
+    "chromatic": "^5.8.3",
     "cypress": "^7.4.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
