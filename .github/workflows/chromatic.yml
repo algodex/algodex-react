@@ -6,8 +6,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Install dependencies
       - uses: actions/checkout@v1
       - run: yarn
+      - name: Publish to Chromatic
       - uses: chromaui/checkout@v1
         with:
           projectToken: ef5af38aec3a
