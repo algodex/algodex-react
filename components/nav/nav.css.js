@@ -1,10 +1,43 @@
 import styled from 'styled-components'
 import { ReactSVG } from 'react-svg'
 import ReactCountryFlag from 'react-country-flag'
+import { fontSize } from 'styled-system'
 
-export const Logo = styled(ReactSVG)`
+export const InlineLogo = styled(ReactSVG)`
   height: auto;
   width: 10rem;
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+  }
+`
+export const IconLogo = styled(ReactSVG)`
+  height: auto;
+  width: 3rem;
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`
+
+export const MenuButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.gray[500]};
+  padding: 0.5rem 1rem;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+  ${fontSize}
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.gray[100]};
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.colors.gray[100]};
+  }
+  @media (min-width: 1024px) {
+    display: none;
+  }
 `
 
 export const Flag = styled(ReactCountryFlag)`
@@ -29,11 +62,15 @@ export const Container = styled.div`
   align-items: center;
 `
 export const StyledList = styled.ul`
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   list-style: none;
   & > *:not(:first-child) {
     margin-left: 3rem;
+  }
+
+  @media (min-width: 1024px) {
+    display: flex;
   }
 `

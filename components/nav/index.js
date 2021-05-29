@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { Container, Bar, Logo, StyledList, Flag } from './nav.css'
+import { Container, Bar, InlineLogo, IconLogo, StyledList, Flag, MenuButton } from './nav.css'
 import NavItem from 'components/nav-item'
-import { Bell } from 'react-feather'
+import { Bell, Menu } from 'react-feather'
 
 export default function Nav() {
   return (
@@ -9,7 +9,8 @@ export default function Nav() {
       <Container>
         <Link href="/">
           <a>
-            <Logo src="/logo-inline-light.svg" />
+            <InlineLogo src="/logo-inline-dark.svg" />
+            <IconLogo src="/logo-icon-dark.svg" />
           </a>
         </Link>
         <StyledList>
@@ -24,6 +25,9 @@ export default function Nav() {
             <Flag countryCode="US" svg />
           </NavItem>
         </StyledList>
+        <MenuButton>
+          <Menu />
+        </MenuButton>
       </Container>
     </Bar>
   )
