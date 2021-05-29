@@ -1,0 +1,14 @@
+name: CI
+on:
+  pull_request:
+    branches: [main, development]
+jobs:
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
+      - name: Run tests
+        run: yarn test
