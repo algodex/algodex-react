@@ -1,3 +1,4 @@
+import '../components/nav-item/nav-item.story'
 import '../components/button/button.story'
 import '../components/stateful-component/stateful-component.story'
 import '../components/functional-component/functional-component.story'

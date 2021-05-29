@@ -135,6 +135,15 @@ export default {
       lineHeight: '1rem',
       textTransform: 'uppercase',
       letterSpacing: '0.025em'
+    },
+    navLabel: {
+      as: 'li',
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 600,
+      lineHeight: '1.125rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.2em'
     }
   },
   fontSizes,

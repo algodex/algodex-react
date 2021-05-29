@@ -22,6 +22,7 @@ export default styled.div`
   ${textAlign}
   ${color}
   ${system({
-    textTransform: true
+    textTransform: true,
+    cursor: true
   })}
 `
