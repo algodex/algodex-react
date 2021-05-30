@@ -1,9 +1,12 @@
-import Link from 'next/link'
-import { Container, Bar, InlineLogo, IconLogo, StyledList, Flag, MenuButton } from './nav.css'
 import NavItem from 'components/nav-item'
-import { Bell, Menu } from 'react-feather'
+import Link from 'next/link'
+import { Bell } from 'react-feather'
+import { MenuButton } from 'components/menu-button'
+import { Bar, Container, Flag, IconLogo, InlineLogo, StyledList } from './nav.css'
+import { useState } from 'react'
 
 export default function Nav() {
+  const [isOpen, setIsOpen] = useState(false)
   return (
     <Bar>
       <Container>
@@ -25,9 +28,7 @@ export default function Nav() {
             <Flag countryCode="US" svg />
           </NavItem>
         </StyledList>
-        <MenuButton>
-          <Menu />
-        </MenuButton>
+        <MenuButton onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Container>
     </Bar>
   )
