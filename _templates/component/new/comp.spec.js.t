@@ -1,5 +1,5 @@
 ---
-to: components/<%= name %>/<%= name %>.spec.jsx
+to: components/<%= name %>/<%= name %>.spec.js
 ---
 <% comp = h.inflection.undasherize(name) -%>
 import React from 'react'

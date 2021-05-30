@@ -1,5 +1,5 @@
 ---
-to: components/<%= name %>/<%= name %>.stories.js
+to: components/<%= name %>/<%= name %>.stories.jsx
 ---
 <% const comp = h.inflection.undasherize(name) -%>
 import React from 'react'

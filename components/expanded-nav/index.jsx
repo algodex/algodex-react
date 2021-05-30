@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
-import { Container, StyledList } from './expanded-nav.css'
-import NavItemContainer from 'components/nav-item-container'
+import { Container } from './expanded-nav.css'
+import Nav from 'components/nav'
 
 function ExtendedNav({ isOpen = false }) {
   return (
     <Container isOpen={isOpen}>
-      <NavItemContainer fontSize={4} variant="small" />
+      <Nav fontSize={4} variant="small" />
     </Container>
   )
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
-import NavItemContainer from '.'
+import MenuButton from './index'
 
-it('NavItemContainer: default', () => {
-  const component = renderer.create(< NavItemContainer />)
+it('MenuButton: default', () => {
+  const component = renderer.create(<MenuButton />)
   const tree = component.toJSON()
   expect(tree).toMatchSnapshot()
 })

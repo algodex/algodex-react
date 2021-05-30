@@ -1,5 +1,9 @@
 import React from 'react'
-import { render, screen } from '../../test/test-utils'
-import Nav from './index'
+import renderer from 'react-test-renderer'
+import Nav from '.'
 
-describe('Nav', () => {})
+it('Nav: default', () => {
+  const component = renderer.create(<Nav />)
+  const tree = component.toJSON()
+  expect(tree).toMatchSnapshot()
+})

@@ -1,8 +1,7 @@
 import React from 'react'
+import { storiesOf } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
+import Nav from '.'
 
-import Nav from './index'
-
-const Template = (args) => <Nav {...args} />
-
-export const DesktopNav = Template.bind({})
-DesktopNav.args = {}
+storiesOf('Nav', module).add('default', () => <Nav />)

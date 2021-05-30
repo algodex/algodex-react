@@ -47,6 +47,7 @@ const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]
 const breakpoints = ['40em', '48em']
 
 export default {
+  name: 'Dark',
   textStyles: {
     title: {
       as: 'h1',

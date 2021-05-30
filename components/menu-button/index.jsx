@@ -9,7 +9,7 @@ const StyledMotionSvg = styled(motion.svg)`
   }
 `
 
-const MenuButton = ({
+function MenuButton({
   isOpen = false,
   width = 24,
   height = 15,
@@ -18,7 +18,7 @@ const MenuButton = ({
   transition = null,
   lineProps = null,
   ...props
-}) => {
+}) {
   const variant = isOpen ? 'opened' : 'closed'
   const top = {
     closed: {
@@ -76,4 +76,4 @@ const MenuButton = ({
   )
 }
 
-export { MenuButton }
+export default MenuButton

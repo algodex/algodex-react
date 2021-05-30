@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styled from 'styled-components'
-import Welcome from 'components/welcome'
-import Navbar from 'components/nav'
+import Welcome from '../components/welcome'
+import Header from '../components/header'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -30,7 +30,7 @@ export default function Home() {
         <title>Algodex | Algorand Decentralized Exchange</title>
         <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
       </Head>
-      <Navbar />
+      <Header />
 
       <Main>
         <Welcome />

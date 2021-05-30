@@ -1,11 +1,14 @@
-import '../components/nav-item-container/nav-item-container.story'
-import '../components/expanded-nav/expanded-nav.story'
-import '../components/menu-button/menu-button.story'
-import '../components/nav-item/nav-item.story'
-import '../components/button/button.story'
-import '../components/stateful-component/stateful-component.story'
-import '../components/functional-component/functional-component.story'
+const path = require('path')
+
 module.exports = {
-  stories: ['../stories/**/*.stories.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials']
+  stories: [
+    '../components/**/*.stories.@(js|jsx|ts|tsx)',
+    '../stories/**/*.stories.mdx',
+    '../stories/**/*.stories.@(js|jsx|ts|tsx)'
+  ],
+  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
+  webpackFinal: async (config) => {
+    config.resolve.modules = [path.resolve(__dirname, '..'), 'node_modules']
+    return config
+  }
 }
