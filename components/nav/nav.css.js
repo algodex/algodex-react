@@ -13,7 +13,7 @@ export const InlineLogo = styled(ReactSVG)`
 `
 export const IconLogo = styled(ReactSVG)`
   height: auto;
-  width: 3rem;
+  width: 1.7rem;
   @media (min-width: 1024px) {
     display: none;
   }
@@ -40,37 +40,38 @@ export const MenuButton = styled.button`
   }
 `
 
-export const Flag = styled(ReactCountryFlag)`
-  cursor: pointer;
-  font-size: 1.3rem;
-  margin-left: 0.75rem;
+export const MenuContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
 `
 
 export const Bar = styled.div`
   width: 100%;
   border-bottom: 2px solid ${({ theme }) => theme.colors.gray[700]};
   background-color: ${({ theme }) => theme.colors.gray[900]};
+  display: fixed;
+  z-index: 99;
+  position: relative;
+  @media (min-width: 1024px) {
+    display: block;
+  }
 `
 
 export const Container = styled.div`
   padding: 1rem 0;
-  width: 95%;
+  width: 90%;
   margin: 0 auto;
   display: flex;
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
-export const StyledList = styled.ul`
-  display: none;
-  justify-content: space-between;
-  align-items: center;
-  list-style: none;
-  & > *:not(:first-child) {
-    margin-left: 3rem;
-  }
 
   @media (min-width: 1024px) {
-    display: flex;
+    width: 95%;
   }
 `
