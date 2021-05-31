@@ -1,9 +1,9 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
-import Button from '.'
+import MenuButton from './index'
 
-it('Button: default', () => {
-  const component = renderer.create(<Button />)
+it('MenuButton: default', () => {
+  const component = renderer.create(<MenuButton />)
   const tree = component.toJSON()
   expect(tree).toMatchSnapshot()
 })

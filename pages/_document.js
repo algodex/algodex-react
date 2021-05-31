@@ -32,6 +32,7 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+          <link href="/fonts/style.css" rel="stylesheet" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body>

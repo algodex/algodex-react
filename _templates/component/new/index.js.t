@@ -2,8 +2,8 @@
 to: components/<%= name %>/index.js
 ---
 <% const comp = h.inflection.undasherize(name) -%>
-import React from 'react'
 import PropTypes from 'prop-types'
+import {} from './<%= name %>.css'
 
 function <%= comp %> (props){
   <>

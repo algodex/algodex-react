@@ -13,7 +13,8 @@ const {
   preTitle,
   labelLg,
   labelMd,
-  labelSm
+  labelSm,
+  navLabel
 } = theme.textStyles
 
 export const Title = (props) => (

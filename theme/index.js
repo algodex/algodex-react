@@ -38,7 +38,7 @@ const colors = {
 }
 
 const fontFamilies = {
-  heading: 'Inter, sans-serif',
+  heading: `'Alliance No.1', Inter, sans-serif`,
   body: 'Inter, sans-serif'
 }
 
@@ -47,6 +47,7 @@ const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]
 const breakpoints = ['40em', '48em']
 
 export default {
+  name: 'Dark',
   textStyles: {
     title: {
       as: 'h1',
@@ -54,7 +55,7 @@ export default {
       fontSize: [fontSizes[7], fontSizes[8], fontSizes[9]],
       fontWeight: 700,
       lineHeight: '0.9',
-      letterSpacing: '-0.05em'
+      letterSpacing: '-0.04em'
     },
     headerLg: {
       as: 'h2',
@@ -62,7 +63,7 @@ export default {
       fontSize: [fontSizes[5], fontSizes[6], fontSizes[7]],
       fontWeight: 700,
       lineHeight: ['2rem', '2.25rem', '2.5rem'],
-      letterSpacing: '-0.04em'
+      letterSpacing: '-0.03em'
     },
     headerSm: {
       as: 'h3',
@@ -70,7 +71,7 @@ export default {
       fontSize: [fontSizes[4], fontSizes[4], fontSizes[5]],
       fontWeight: 700,
       lineHeight: ['1.75rem', '1.75rem', '2rem'],
-      letterSpacing: '-0.03em'
+      letterSpacing: '-0.02em'
     },
     subtitle: {
       as: 'p',
@@ -135,6 +136,15 @@ export default {
       lineHeight: '1rem',
       textTransform: 'uppercase',
       letterSpacing: '0.025em'
+    },
+    navLabel: {
+      as: 'li',
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 600,
+      lineHeight: '1.125rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.2em'
     }
   },
   fontSizes,

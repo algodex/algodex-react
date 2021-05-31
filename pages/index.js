@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styled from 'styled-components'
 import MainLayout from 'components/MainLayout'
+import Header from 'components/header'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -22,11 +23,6 @@ const Container = styled.div`
   }
 `
 
-const Header = styled.header`
-  // for demo
-  height: 80px;
-`
-
 export default function Home() {
   return (
     <Container>
@@ -34,10 +30,8 @@ export default function Home() {
         <title>Algodex | Algorand Decentralized Exchange</title>
         <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
       </Head>
+      <Header />
 
-      <Header>
-        <p>Header</p>
-      </Header>
       <MainLayout />
     </Container>
   )
