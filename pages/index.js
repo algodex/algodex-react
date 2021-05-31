@@ -1,11 +1,7 @@
 import Head from 'next/head'
 import styled from 'styled-components'
-<<<<<<< HEAD
-import Welcome from '../components/welcome'
-import Header from '../components/header'
-=======
 import MainLayout from 'components/MainLayout'
->>>>>>> development
+import Header from 'components/Header'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -27,11 +23,6 @@ const Container = styled.div`
   }
 `
 
-const Header = styled.header`
-  // for demo
-  height: 80px;
-`
-
 export default function Home() {
   return (
     <Container>
@@ -41,9 +32,6 @@ export default function Home() {
       </Head>
       <Header />
 
-      <Header>
-        <p>Header</p>
-      </Header>
       <MainLayout />
     </Container>
   )
