@@ -1,24 +1,30 @@
 import Head from 'next/head'
 import styled from 'styled-components'
-import Welcome from 'components/welcome'
+import MainLayout from 'components/MainLayout'
 
 const Container = styled.div`
   min-height: 100vh;
-  padding: 0 0.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
+
+  // for demo
+  p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    color: ${({ theme }) => theme.colors.gray['600']};
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
 `
 
-const Main = styled.main`
-  padding: 5rem 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const Header = styled.header`
+  // for demo
+  height: 80px;
 `
 
 export default function Home() {
@@ -29,9 +35,10 @@ export default function Home() {
         <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
       </Head>
 
-      <Main>
-        <Welcome />
-      </Main>
+      <Header>
+        <p>Header</p>
+      </Header>
+      <MainLayout />
     </Container>
   )
 }
