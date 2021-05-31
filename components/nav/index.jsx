@@ -2,13 +2,22 @@ import PropTypes from 'prop-types'
 import { StyledList, Flag } from './nav.css'
 import { Bell, User } from 'react-feather'
 import NavItem from 'components/nav-item'
+import { useRouter } from 'next/router'
 
 function Nav({ fontSize = 2, variant = 'small' }) {
+  const router = useRouter()
+  const currentPath = router.pathname
   return (
     <StyledList variant={variant}>
-      <NavItem fontSize={fontSize}>Trade</NavItem>
-      <NavItem fontSize={fontSize}>Wallet</NavItem>
-      <NavItem fontSize={fontSize}>Support</NavItem>
+      <NavItem fontSize={fontSize} isActive={currentPath === '/'}>
+        Trade
+      </NavItem>
+      <NavItem fontSize={fontSize} isActive={currentPath === '/wallet'}>
+        Wallet
+      </NavItem>
+      <NavItem fontSize={fontSize} isActive={currentPath === '/support'}>
+        Support
+      </NavItem>
       {variant !== 'small' && (
         <>
           <NavItem fontSize={fontSize}>

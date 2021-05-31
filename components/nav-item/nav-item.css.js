@@ -6,18 +6,21 @@ export const StyledListItem = styled.li`
   justify-content: center;
   align-items: center;
   text-align: center;
+
   & > a {
     color: ${({ theme }) => theme.colors.gray[100]};
-    padding: 0.5rem 1rem;
+    padding: 1.5rem 1rem;
     transition: all 0.1s ease-in;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.2rem;
-    font-weight: 500;
+    font-weight: 600;
     ${fontSize}
     ${color}
+    border-bottom: ${({ isActive, border, theme }) =>
+      isActive && border ? `8px inset ${theme.colors.green[500]}` : `8px inset transparent`};
 
-  &:hover {
+    &:hover {
       color: ${({ theme }) => theme.colors.gray[100]};
     }
 
@@ -26,7 +29,8 @@ export const StyledListItem = styled.li`
     }
 
     @media (min-width: 1024px) {
-      color: ${({ theme }) => theme.colors.gray[500]};
+      color: ${({ isActive, theme }) =>
+        isActive ? theme.colors.gray[100] : theme.colors.gray[500]};
     }
   }
 `

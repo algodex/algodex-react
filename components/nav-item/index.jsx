@@ -2,10 +2,17 @@ import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { StyledListItem, StyledLink } from './nav-item.css'
 
-function NavItem({ to = '', children, fontSize = 2, color = 'gray.100' }) {
+function NavItem({
+  to = '',
+  children,
+  fontSize = 2,
+  color = 'gray.100',
+  isActive = false,
+  border = false
+}) {
   return (
     <Link href={`/${to}`}>
-      <StyledListItem fontSize={fontSize} color={color}>
+      <StyledListItem fontSize={fontSize} color={color} isActive={isActive} border={border}>
         <StyledLink>{children}</StyledLink>
       </StyledListItem>
     </Link>

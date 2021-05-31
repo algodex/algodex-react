@@ -1,13 +1,6 @@
 import MobileInterface from 'components/MobileInterface'
-
-import {
-  Main,
-  TradeSection,
-  ChartSection,
-  BookFeedSection,
-  OrdersSection,
-  AssetsSection
-} from './MainLayout.css'
+import OrdersSection from 'components/orders'
+import { Main, TradeSection, ChartSection, BookFeedSection, AssetsSection } from './MainLayout.css'
 
 export default function MainLayout() {
   return (
@@ -22,9 +15,7 @@ export default function MainLayout() {
       <BookFeedSection>
         <p>Order book &amp; Feed</p>
       </BookFeedSection>
-      <OrdersSection>
-        <p>Orders</p>
-      </OrdersSection>
+      <OrdersSection />
       <AssetsSection>
         <p>Assets search</p>
       </AssetsSection>

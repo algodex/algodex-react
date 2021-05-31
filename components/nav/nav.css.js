@@ -10,6 +10,7 @@ export const StyledList = styled.ul`
   height: 35%;
   width: 100%;
   padding: 0;
+  margin: 0;
 
   @media (min-width: 768px) {
     height: 30%;
