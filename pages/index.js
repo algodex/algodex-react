@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styled from 'styled-components'
 import MainLayout from 'components/MainLayout'
-import Header from 'components/Header'
+import Header from 'components/header'
 
 const Container = styled.div`
   min-height: 100vh;
