@@ -10,6 +10,7 @@ const {
   bodyCopyLg,
   bodyCopy,
   bodyCopySm,
+  bodyCopyTiny,
   preTitle,
   labelLg,
   labelMd,
@@ -59,6 +60,12 @@ export const BodyCopySm = (props) => (
   </BaseComponent>
 )
 
+export const BodyCopyTiny = (props) => (
+  <BaseComponent {...bodyCopyTiny} {...props}>
+    {props.children}
+  </BaseComponent>
+)
+
 export const PreTitle = (props) => (
   <BaseComponent {...preTitle} {...props}>
     {props.children}
@@ -79,6 +86,12 @@ export const LabelMd = (props) => (
 
 export const LabelSm = (props) => (
   <BaseComponent {...labelSm} {...props}>
+    {props.children}
+  </BaseComponent>
+)
+
+export const NavLabel = (props) => (
+  <BaseComponent {...navLabel} {...props}>
     {props.children}
   </BaseComponent>
 )
