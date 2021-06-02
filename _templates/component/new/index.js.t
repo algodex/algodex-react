@@ -6,9 +6,10 @@ import PropTypes from 'prop-types'
 import {} from './<%= name %>.css'
 
 function <%= comp %> (props){
-  <>
-    
-  </>
+  return(
+    <> 
+    </>
+  )
 }  
 
 export default <%= comp %>

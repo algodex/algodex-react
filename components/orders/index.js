@@ -1,22 +1,10 @@
-import PropTypes from 'prop-types'
-import { useState } from 'react'
-import {
-  HeaderSection,
-  Container,
-  TableSection,
-  DateSection,
-  TypeSection,
-  PairSection,
-  SideSection,
-  PriceSection,
-  AmountSection,
-  TotalSection,
-  CancelSection,
-  Label,
-  CancelButton
-} from './orders.css'
 import NavItem from 'components/nav-item'
-
+import OrderRow from 'components/order-row'
+import TradeHistoryRow from 'components/trade-history-row'
+import TableHeader from 'components/table-header'
+import { assets, openOrders, tradeHistory } from 'data/test-data'
+import { useState } from 'react'
+import { Container, EmptyState, HeaderSection, TableContainer, TableSection } from './orders.css'
 function Orders(props) {
   const [activeSection, setActiveSection] = useState('orders')
 
@@ -25,12 +13,12 @@ function Orders(props) {
       <HeaderSection>
         <div onClick={() => setActiveSection('orders')}>
           <NavItem isActive={activeSection === 'orders'} border={true}>
-            Orders
+            Open Orders
           </NavItem>
         </div>
         <div onClick={() => setActiveSection('history')}>
           <NavItem isActive={activeSection === 'history'} border={true}>
-            Order History
+            Trade History
           </NavItem>
         </div>
         <div onClick={() => setActiveSection('assets')}>
@@ -39,32 +27,109 @@ function Orders(props) {
           </NavItem>
         </div>
       </HeaderSection>
-      <TableSection>
-        <DateSection>
-          <Label>Date</Label>
-        </DateSection>
-        <PairSection>
-          <Label>Pair</Label>
-        </PairSection>
-        <TypeSection>
-          <Label>Type</Label>
-        </TypeSection>
-        <SideSection>
-          <Label>Side</Label>
-        </SideSection>
-        <PriceSection>
-          <Label>Price</Label>
-        </PriceSection>
-        <AmountSection>
-          <Label>Amount</Label>
-        </AmountSection>
-        <TotalSection>
-          <Label>Total</Label>
-        </TotalSection>
-        <CancelSection>
-          <CancelButton>Cancel</CancelButton>
-        </CancelSection>
-      </TableSection>
+      {/* Orders */}
+      {activeSection === 'orders' &&
+        (openOrders?.length ? (
+          <TableContainer>
+            <TableHeader
+              headings={['date', 'pair', 'type', 'price', 'amount', 'filled', 'total']}
+            />
+            <TableSection>
+              {openOrders.map((order) => (
+                <OrderRow
+                  type={order.type}
+                  amount={order.amount}
+                  filled={order.filled}
+                  price={order.price}
+                  pair={order.pair}
+                  date={order.date}
+                />
+              ))}
+            </TableSection>
+          </TableContainer>
+        ) : (
+          <>
+            <TableHeader
+              headings={['date', 'pair', 'type', 'price', 'amount', 'filled', 'total']}
+            />
+            <EmptyState>You have no open orders.</EmptyState>
+          </>
+        ))}
+      {/* Trade History */}
+      {activeSection === 'history' &&
+        (tradeHistory?.length ? (
+          <TableContainer>
+            <TableHeader
+              headings={['date', 'pair', 'side', 'price', 'executed', 'fee', 'total']}
+              columns={7}
+            />
+            <TableSection columns={7}>
+              {tradeHistory.map((order) => (
+                <TradeHistoryRow
+                  side={order.side}
+                  executed={order.executed}
+                  fee={order.fee}
+                  price={order.price}
+                  pair={order.pair}
+                  date={order.date}
+                />
+              ))}
+            </TableSection>
+          </TableContainer>
+        ) : (
+          <>
+            <TableHeader
+              headings={['date', 'pair', 'side', 'price', 'executed', 'fee', 'total']}
+              columns={7}
+            />
+            <EmptyState>You have no trade history.</EmptyState>
+          </>
+        ))}
+      {activeSection === 'assets' &&
+        (assets?.length ? (
+          <TableContainer>
+            <TableHeader
+              headings={[
+                'coin',
+                'total',
+                'available',
+                'in order',
+                'ALGO value',
+                'USDC value',
+                'PNL'
+              ]}
+            />
+            <TableSection>
+              {assets.map((order) => (
+                <OrderRow
+                  type={order.type}
+                  amount={order.amount}
+                  filled={order.filled}
+                  price={order.price}
+                  pair={order.pair}
+                  date={order.date}
+                />
+              ))}
+            </TableSection>
+          </TableContainer>
+        ) : (
+          <TableContainer>
+            <TableHeader
+              columns={7}
+              headings={[
+                'coin',
+                'total',
+                'available',
+                'in order',
+                'ALGO value',
+                'USDC value',
+                'PNL'
+              ]}
+            />
+            <EmptyState>You have no assets in your wallet.</EmptyState>
+          </TableContainer>
+        ))}
+      ;
     </Container>
   )
 }

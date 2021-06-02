@@ -52,7 +52,7 @@ export const MenuContainer = styled.div`
 
 export const Bar = styled.div`
   width: 100%;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.gray[700]};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
   background-color: ${({ theme }) => theme.colors.gray[900]};
   display: fixed;
   z-index: 99;

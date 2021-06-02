@@ -9,7 +9,7 @@ export const StyledListItem = styled.li`
 
   & > a {
     color: ${({ theme }) => theme.colors.gray[100]};
-    padding: 1rem 0;
+    padding: '../components 0;
     transition: all 0.1s ease-in;
     cursor: pointer;
     text-transform: uppercase;

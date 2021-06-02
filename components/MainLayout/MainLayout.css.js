@@ -42,13 +42,13 @@ export const Main = styled.main`
       display: block;
 
       // for demo
-      border: 1px dotted rgba(255, 255, 255, 0.125);
+      border: 1px solid rgba(255, 255, 255, 0.125);
     }
   }
 
   @media (min-width: 1024px) {
     grid-template-columns: 1fr 280px 280px;
-    grid-template-rows: 48px 2fr 1fr;
+    grid-template-rows: 48px 1fr 1fr;
     grid-template-areas:
       'assets assets assets'
       'chart book trade'
@@ -67,7 +67,7 @@ export const Main = styled.main`
 
   @media (min-width: 1536px) {
     grid-template-columns: 280px 1fr 280px 280px;
-    grid-template-rows: 2fr 1fr;
+    grid-template-rows: 3fr 300px;
     grid-template-areas:
       'assets chart book trade'
       'orders orders book trade';
