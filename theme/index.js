@@ -101,6 +101,15 @@ export default {
       fontWeight: 500,
       lineHeight: '1.25rem'
     },
+    bodyCopyTiny: {
+      as: 'p',
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 400,
+      lineHeight: '1rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.04em'
+    },
     preTitle: {
       as: 'h2',
       fontFamily: fontFamilies.body,
@@ -135,7 +144,7 @@ export default {
       fontWeight: 700,
       lineHeight: '1rem',
       textTransform: 'uppercase',
-      letterSpacing: '0.025em'
+      letterSpacing: '0.04em'
     },
     navLabel: {
       as: 'li',
