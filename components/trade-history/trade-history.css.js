@@ -1,36 +1,49 @@
 import styled from 'styled-components'
+import { rgba } from 'polished'
 
 export const Container = styled.div`
   flex: 1 1 0%;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background.dark};
+  padding: 0.75rem 0.625rem 1rem;
 `
 
-const gridColumns = `
+const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
+  column-gap: 0.25rem;
 `
 
 export const Header = styled.header`
+  flex-shrink: 0%;
   display: grid;
-  ${gridColumns}
-  padding: 0.5rem 0.75rem 0.625rem;
+  ${gridStyles}
+  padding: 0 0.5rem 0.75rem;
 `
 
-export const HistoryWrapper = styled.div`
+export const Trades = styled.div`
+  flex: 1 1 0%;
+  position: relative;
   overflow: hidden;
 `
 
-export const HistoryRow = styled.div`
+export const TradesWrapper = styled.div`
+  flex: 1 1 0%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+`
+
+export const TradesRow = styled.div`
   display: grid;
-  ${gridColumns}
-  padding: 0 0.75rem;
+  ${gridStyles}
+  padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.gray['700']};
+    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
   }
 `

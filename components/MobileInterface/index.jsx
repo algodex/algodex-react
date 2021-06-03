@@ -14,7 +14,7 @@ const Container = styled.div`
 export default function MobileInterface() {
   return (
     <Container>
-      <p>Mobile interface</p>
+      <p className="demo">Mobile interface</p>
     </Container>
   )
 }

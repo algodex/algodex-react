@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
-import { LabelSm, BodyCopyTiny } from 'components/type'
+import { BodyCopyTiny } from 'components/type'
 
-import { Container, Header, HistoryRow, HistoryWrapper } from './trade-history.css'
+import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
 function TradeHistory(props) {
   const { assetName, tradesData } = props
@@ -11,7 +11,7 @@ function TradeHistory(props) {
     tradesData
       .sort((a, b) => b.timestamp - a.timestamp)
       .map((row) => (
-        <HistoryRow key={`buy-${row.price}`} data-testid="trade-history-row">
+        <TradesRow key={`buy-${row.price}`} data-testid="trade-history-row">
           <BodyCopyTiny color="green.500" m={0}>
             {row.price}
           </BodyCopyTiny>
@@ -21,19 +21,23 @@ function TradeHistory(props) {
           <BodyCopyTiny color="gray.000" textAlign="right" m={0}>
             {dayjs(row.timestamp).format('HH:mm:ss')}
           </BodyCopyTiny>
-        </HistoryRow>
+        </TradesRow>
       ))
 
   return (
     <Container>
       <Header>
-        <LabelSm color="gray.500">Price (ALGO)</LabelSm>
-        <LabelSm color="gray.500">{`Amount (${assetName})`}</LabelSm>
-        <LabelSm color="gray.500" textAlign="right">
+        <BodyCopyTiny color="gray.500" m={0}>
+          Price (ALGO)
+        </BodyCopyTiny>
+        <BodyCopyTiny color="gray.500" m={0}>{`Amount (${assetName})`}</BodyCopyTiny>
+        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
           Time
-        </LabelSm>
+        </BodyCopyTiny>
       </Header>
-      <HistoryWrapper>{renderHistory()}</HistoryWrapper>
+      <Trades>
+        <TradesWrapper>{renderHistory()}</TradesWrapper>
+      </Trades>
     </Container>
   )
 }

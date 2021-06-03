@@ -1,5 +1,6 @@
 import React from 'react'
 import OrderBook from '.'
+import { generateBookData, randomInt } from './demo'
 
 export default {
   title: 'Order Book',
@@ -8,7 +9,7 @@ export default {
     (Story) => (
       <div
         style={{
-          width: '300px',
+          width: '320px',
           height: '700px',
           display: 'flex',
           flexDirection: 'column'
@@ -18,26 +19,6 @@ export default {
       </div>
     )
   ]
-}
-
-const randomInt = (min, max) => {
-  return min + Math.floor(Math.random() * (max - min))
-}
-
-const generateBookData = (startPrice, increment, qty = 24) => {
-  let result = []
-  let total = 0
-  for (let i = 0; i < qty; i++) {
-    const amount = randomInt(1, 300)
-    total = total + amount
-    const row = {
-      price: (i * increment + startPrice).toFixed(4),
-      amount,
-      total
-    }
-    result.push(row)
-  }
-  return result
 }
 
 const Template = (args) => <OrderBook {...args} />

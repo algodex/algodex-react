@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import OrderBookPrice from 'components/order-book-price'
-import { LabelSm, BodyCopyTiny } from 'components/type'
+import { BodyCopyTiny } from 'components/type'
 
 import {
   Container,
@@ -52,11 +52,13 @@ function OrderBook(props) {
   return (
     <Container>
       <Header>
-        <LabelSm color="gray.500">Price (ALGO)</LabelSm>
-        <LabelSm color="gray.500">{`Amount (${assetName})`}</LabelSm>
-        <LabelSm color="gray.500" textAlign="right">
+        <BodyCopyTiny color="gray.500" m={0}>
+          Price (ALGO)
+        </BodyCopyTiny>
+        <BodyCopyTiny color="gray.500" m={0}>{`Amount (${assetName})`}</BodyCopyTiny>
+        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
           Total
-        </LabelSm>
+        </BodyCopyTiny>
       </Header>
 
       <SellOrders>

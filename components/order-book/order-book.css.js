@@ -1,32 +1,36 @@
 import styled from 'styled-components'
+import { rgba } from 'polished'
 
 export const Container = styled.div`
   flex: 1 1 0%;
-  width: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr auto 1fr;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background.dark};
+  padding: 0.75rem 0.625rem 1rem;
 `
 
-const gridColumns = `
+const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
+  column-gap: 0.25rem;
 `
 
 export const Header = styled.header`
+  flex-shrink: 0%;
   display: grid;
-  ${gridColumns}
-  padding: 0.5rem 0.75rem 0.625rem;
+  ${gridStyles}
+  padding: 0 0.5rem 0.75rem;
 `
 
 export const BookRow = styled.div`
   display: grid;
-  ${gridColumns}
-  padding: 0 0.75rem;
+  ${gridStyles}
+  padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.gray['700']};
+    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
   }
 `
 
@@ -37,6 +41,7 @@ export const OrdersWrapper = styled.div`
 `
 
 export const SellOrders = styled.div`
+  flex: 1 1 0%;
   position: relative;
   overflow: hidden;
 
@@ -46,6 +51,7 @@ export const SellOrders = styled.div`
 `
 
 export const BuyOrders = styled.div`
+  flex: 1 1 0%;
   position: relative;
   overflow: hidden;
 
@@ -55,5 +61,5 @@ export const BuyOrders = styled.div`
 `
 
 export const CurrentPrice = styled.div`
-  padding: 1rem 0.75rem;
+  padding: 1rem 0;
 `
