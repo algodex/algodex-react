@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styled from 'styled-components'
-import MainLayout from 'components/MainLayout'
+import MainLayout from 'components/main-layout'
 import Header from 'components/header'
 
 const Container = styled.div`

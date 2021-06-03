@@ -1,4 +1,4 @@
-import MobileInterface from 'components/MobileInterface'
+import MobileInterface from 'components/mobile-interface'
 import OrderBook from 'components/order-book'
 import TradeHistory from 'components/trade-history'
 
@@ -13,7 +13,7 @@ import {
   TradeHistorySection,
   OrdersSection,
   AssetsSection
-} from './MainLayout.css'
+} from './main-layout.css'
 
 const DEMO_SELL_DATA = generateBookData(1.3766, 0.0001)
 const DEMO_BUY_DATA = generateBookData(1.3764, -0.0001)
