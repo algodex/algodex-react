@@ -1,0 +1,154 @@
+import styled from 'styled-components'
+import { rgba } from 'polished'
+
+export const Container = styled.section`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.background.dark};
+  grid-area: orders;
+`
+
+export const CancelButton = styled.button`
+  border: none;
+  outline: none;
+  text-align: right;
+  color: ${({ theme }) => theme.colors.red[700]};
+  text-transform: uppercase;
+  background-color: transparent;
+  padding: 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+  &:hover {
+    color: ${({ theme }) => theme.colors.red[500]};
+  }
+`
+
+const gridStyles = `
+      grid-template-columns: repeat(8, 1fr);
+      column-gap: 0.25rem;
+    `
+
+export const Header = styled.header`
+  flex-shrink: 0%;
+  display: grid;
+  ${gridStyles}
+  padding: 0 2rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+`
+
+export const OrderWrapper = styled.div`
+  position: absolute;
+  align-items: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+`
+
+export const OpenOrders = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  position: relative;
+  overflow: auto;
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.gray[700]};
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.gray[600]};
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #${({ theme }) => theme.colors.gray[500]};
+  }
+  ::-webkit-scrollbar-corner {
+    background: ${({ theme }) => theme.colors.gray[700]};
+  }
+`
+
+export const OrderRow = styled.div`
+  display: grid;
+  align-items: center;
+  ${gridStyles}
+  padding: .3rem 2rem;
+  transition: background-color 150ms ease-out;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+  &:hover {
+    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
+    & > button {
+      color: ${({ theme }) => theme.colors.red[500]};
+    }
+  }
+`
+
+export const EmptyState = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  justify-content: center;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.gray[400]};
+  line-height: 1.5;
+  font-size: 0.9rem;
+`
+
+export const ColumnHead = styled.span`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.gray[500]};
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  width: 100%;
+  height: 100%;
+`
+
+export const OrderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.gray[700]};
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.gray[600]};
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #${({ theme }) => theme.colors.gray[500]};
+  }
+  ::-webkit-scrollbar-corner {
+    background: ${({ theme }) => theme.colors.gray[700]};
+  }
+`
+
+export const HeaderSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  border-bottom: ${({ theme }) => theme.colors.gray[700]} 1px solid;
+  background-color: ${({ theme }) => theme.colors.gray[900]};
+
+  & > *:not(:last-child) {
+    margin-right: 0;
+  }
+
+  @media (min-width: 1024px) {
+    justify-content: flex-start;
+    & > *:not(:last-child) {
+      margin-right: 6rem;
+    }
+  }
+`

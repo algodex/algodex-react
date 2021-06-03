@@ -1,6 +1,7 @@
 {
   "conventionalCommits.scopes": [
     "hygen",
-    "nav"
+    "nav",
+    "orders"
   ]
 }

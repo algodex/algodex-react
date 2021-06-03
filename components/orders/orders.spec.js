@@ -1,9 +1,9 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
-import TradeHistoryRow from '.'
+import Orders from '.'
 
-it('TradeHistoryRow: default', () => {
-  const component = renderer.create(< TradeHistoryRow />)
+it('Orders: default', () => {
+  const component = renderer.create(< Orders />)
   const tree = component.toJSON()
   expect(tree).toMatchSnapshot()
 })

@@ -1,5 +1,6 @@
 import MobileInterface from 'components/MobileInterface'
 import OrderBook from 'components/order-book'
+import Orders from 'components/orders'
 import TradeHistory from 'components/trade-history'
 
 import { generateBookData } from 'components/order-book/demo'
@@ -42,7 +43,7 @@ export default function MainLayout() {
         <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
       </TradeHistorySection>
       <OrdersSection>
-        <p className="demo">Orders</p>
+        <Orders />
       </OrdersSection>
       <AssetsSection>
         <p className="demo">Assets search</p>

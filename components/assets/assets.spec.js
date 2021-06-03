@@ -1,9 +1,9 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
-import TableHeader from '.'
+import Assets from '.'
 
-it('TableHeader: default', () => {
-  const component = renderer.create(< TableHeader />)
+it('Assets: default', () => {
+  const component = renderer.create(< Assets />)
   const tree = component.toJSON()
   expect(tree).toMatchSnapshot()
 })
