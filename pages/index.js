@@ -10,7 +10,8 @@ const Container = styled.div`
   height: 100vh;
 
   // for demo
-  p {
+  p.demo {
+    flex: 1 1 0%;
     display: flex;
     align-items: center;
     justify-content: center;

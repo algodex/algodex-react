@@ -1,23 +1,51 @@
 import MobileInterface from 'components/MobileInterface'
-import OrdersSection from 'components/orders'
-import { Main, TradeSection, ChartSection, BookFeedSection, AssetsSection } from './MainLayout.css'
+import OrderBook from 'components/order-book'
+import TradeHistory from 'components/trade-history'
+
+import { generateBookData } from 'components/order-book/demo'
+import { generateTradesData } from 'components/trade-history/demo'
+
+import {
+  Main,
+  TradeSection,
+  ChartSection,
+  OrderBookSection,
+  TradeHistorySection,
+  OrdersSection,
+  AssetsSection
+} from './MainLayout.css'
+
+const DEMO_SELL_DATA = generateBookData(1.3766, 0.0001)
+const DEMO_BUY_DATA = generateBookData(1.3764, -0.0001)
+const DEMO_TRADES_DATA = generateTradesData(1.3766, 0.0001)
 
 export default function MainLayout() {
   return (
     <Main>
       <MobileInterface />
       <TradeSection>
-        <p>Trade</p>
+        <p className="demo">Trade</p>
       </TradeSection>
       <ChartSection>
-        <p>Chart</p>
+        <p className="demo">Chart</p>
       </ChartSection>
-      <BookFeedSection>
-        <p>Order book &amp; Feed</p>
-      </BookFeedSection>
-      <OrdersSection />
+      <OrderBookSection>
+        <OrderBook
+          assetName="FAME"
+          currentPrice={1.3765}
+          priceChange={-0.0001}
+          sellData={DEMO_SELL_DATA}
+          buyData={DEMO_BUY_DATA}
+        />
+      </OrderBookSection>
+      <TradeHistorySection>
+        <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
+      </TradeHistorySection>
+      <OrdersSection>
+        <p className="demo">Orders</p>
+      </OrdersSection>
       <AssetsSection>
-        <p>Assets search</p>
+        <p className="demo">Assets search</p>
       </AssetsSection>
     </Main>
   )

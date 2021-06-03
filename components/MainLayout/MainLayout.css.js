@@ -2,22 +2,52 @@ import styled from 'styled-components'
 
 export const TradeSection = styled.section`
   grid-area: trade;
+  border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
 `
 
 export const ChartSection = styled.section`
   grid-area: chart;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  @media (min-width: 1024px) and (orientation: landscape) {
+    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
 `
 
-export const BookFeedSection = styled.section`
+export const OrderBookSection = styled.section`
   grid-area: book;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  @media (min-width: 1024px) and (orientation: landscape) {
+    border-right: none;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
+`
+export const TradeHistorySection = styled.section`
+  grid-area: history;
+  display: flex;
+  flex-direction: column;
 `
 
 export const OrdersSection = styled.section`
   grid-area: orders;
+  border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  @media (min-width: 1024px) and (orientation: landscape) {
+    border-top: none;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
 `
 
 export const AssetsSection = styled.section`
   grid-area: assets;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  @media (min-width: 1536px) {
+    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
 `
 
 export const Main = styled.main`
@@ -35,24 +65,26 @@ export const Main = styled.main`
     grid-template-areas:
       'assets assets assets'
       'chart chart trade'
-      'book book trade'
-      'orders orders trade';
+      'book history trade'
+      'orders orders orders';
 
     & > section {
-      display: block;
+      display: flex;
 
       // for demo
-      border: 1px solid rgba(255, 255, 255, 0.125);
+      &.demo {
+        border: 1px dotted rgba(255, 255, 255, 0.125);
+      }
     }
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: 1fr 280px 280px;
-    grid-template-rows: 48px 1fr 1fr;
+    grid-template-columns: 1fr 320px 280px;
+    grid-template-rows: 48px 2fr 1fr;
     grid-template-areas:
       'assets assets assets'
       'chart book trade'
-      'orders orders trade';
+      'orders history trade';
   }
 
   @media (min-width: 1024px) and (orientation: portrait) {
@@ -61,16 +93,17 @@ export const Main = styled.main`
     grid-template-areas:
       'assets assets assets'
       'chart chart trade'
-      'book book trade'
+      'book history trade'
       'orders orders orders';
   }
 
   @media (min-width: 1536px) {
-    grid-template-columns: 280px 1fr 280px 280px;
-    grid-template-rows: 3fr 300px;
+    grid-template-columns: 280px 1fr 320px 320px;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
       'assets chart book trade'
-      'orders orders book trade';
+      'assets chart book trade'
+      'orders orders history trade';
   }
 
   @media (min-width: 1920px) {
