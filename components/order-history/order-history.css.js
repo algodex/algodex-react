@@ -6,6 +6,16 @@ const gridStyles = `
       column-gap: 0.25rem;
     `
 
+export const DateContainer = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+`
+
+export const PrimaryToken = styled.span`
+  color: ${({ theme }) => theme.colors.gray[500]};
+`
+
 export const OrderRow = styled.div`
   display: grid;
   align-items: center;

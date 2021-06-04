@@ -1,39 +1,29 @@
-import PropTypes from 'prop-types'
+import { BodyCopySm, BodyCopyTiny } from 'components/type'
+import { tradeHistory } from 'data/test-data'
+import dayjs from 'dayjs'
 import {
   Container,
+  DateContainer,
+  EmptyState,
   Header,
-  OrderWrapper,
   OrderRow,
-  WrapperContainer,
-  EmptyState
+  OrderWrapper,
+  PrimaryToken,
+  WrapperContainer
 } from './order-history.css'
-import { tradeHistory } from 'data/test-data'
-import styled from 'styled-components'
-import { BodyCopyTiny, BodyCopySm } from 'components/type'
-import dayjs from 'dayjs'
-
-const DateCointainer = styled.div`
-  display: flex;
-  flex: 1 1 0%;
-  flex-direction: column;
-`
-
-const PrimaryToken = styled.span`
-  color: ${({ theme }) => theme.colors.gray[500]};
-`
 
 function OrderHistory(props) {
   const renderOrderHistory = (orders) =>
     orders.map((order) => (
       <OrderRow key={`${order.date}-${order.filled}`}>
-        <DateCointainer>
+        <DateContainer>
           <BodyCopyTiny color="gray.100" m={0}>
             {dayjs(order.date).format('HH:mm:ss')}
           </BodyCopyTiny>
           <BodyCopyTiny color="gray.500" m={0}>
             {dayjs(order.date).format('D-MM-YY')}
           </BodyCopyTiny>
-        </DateCointainer>
+        </DateContainer>
         <BodyCopySm color="gray.100">
           {order.pair[0]}
           <PrimaryToken>{`/${order.pair[1]}`}</PrimaryToken>
