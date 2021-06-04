@@ -67,3 +67,9 @@ export const WrapperContainer = styled.div`
     background: ${({ theme }) => theme.colors.gray[700]};
   }
 `
+export const EmptyState = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`

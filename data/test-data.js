@@ -47,6 +47,7 @@ export const tradeHistory = [
     pair: ['MCAU', 'USDC'],
     side: 'sell',
     price: 3.7485,
+    amount: 9874.365,
     fee: 0,
     executed: 12500
   },
@@ -55,6 +56,7 @@ export const tradeHistory = [
     pair: ['AOX', 'ALGO'],
     side: 'buy',
     price: 1.2354,
+    amount: 568.365,
     fee: 200,
     executed: 245
   },
@@ -63,34 +65,35 @@ export const tradeHistory = [
     pair: ['FAME', 'USDC'],
     side: 'sell',
     price: 1.2354,
+    amount: 58.365,
     fee: 0,
     executed: 945
   }
 ]
 
 export const assets = [
-  // {
-  //   date: 'ALGO',
-  //   pair: 125000,
-  //   type: 125000,
-  //   price: 0.0,
-  //   filled: 125000,
-  //   amount: 156000
-  // },
-  // {
-  //   date: new Date(),
-  //   pair: 'AOX/USDC',
-  //   type: 'buy',
-  //   price: 1.2354,
-  //   filled: 200,
-  //   amount: 245
-  // },
-  // {
-  //   date: new Date(),
-  //   pair: 'FAME/USDC',
-  //   type: 'sell',
-  //   price: 1.2354,
-  //   filled: 0,
-  //   amount: 945
-  // }
+  {
+    icon: 'algo',
+    coin: 'ALGO',
+    name: 'Algorand',
+    total: 12000,
+    inOrder: 2000,
+    algoValue: 12000
+  },
+  {
+    icon: 'gobtc',
+    coin: 'goBTC',
+    name: 'GoChain/BTC',
+    total: 236,
+    inOrder: 0,
+    algoValue: 120
+  },
+  {
+    icon: 'meld-gold',
+    coin: 'MCAU',
+    name: 'Meld Gold',
+    total: 456,
+    inOrder: 22,
+    algoValue: 24952
+  }
 ]

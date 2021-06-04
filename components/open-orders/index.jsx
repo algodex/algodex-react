@@ -1,46 +1,34 @@
-import NavItem from 'components/nav-item'
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
 import { openOrders } from 'data/test-data'
-import { useState } from 'react'
 import dayjs from 'dayjs'
+import styled from 'styled-components'
 import {
-  Container,
+  CancelButton,
   EmptyState,
   Header,
-  HeaderSection,
-  OrderRow,
-  OrderWrapper,
-  OpenOrders,
+  OpenOrdersContainer,
   OrderContainer,
-  CancelButton
+  OrderRow,
+  SmallButton,
+  OrderWrapper,
+  DateContainer,
+  SecondaryToken
 } from './open-orders.css'
-import styled from 'styled-components'
 
-const SecondaryToken = styled.span`
-  color: ${({ theme }) => theme.colors.gray[500]};
-`
-
-const DateCointainer = styled.div`
-  display: flex;
-  flex: 1 1 0%;
-  flex-direction: column;
-`
-function Orders(props) {
-  const [activeSection, setActiveSection] = useState('orders')
-
+function OpenOrders(props) {
   const renderOpenOrders = (orders) =>
     orders.map((order, index) => {
       const total = order.price * order.amount
       return (
         <OrderRow key={`order-${order.price}=${index}`}>
-          <DateCointainer>
+          <DateContainer>
             <BodyCopyTiny color="gray.100" m={0}>
               {dayjs(order.date).format('HH:mm:ss')}
             </BodyCopyTiny>
             <BodyCopyTiny color="gray.500" m={0}>
               {dayjs(order.date).format('D-MM-YY')}
             </BodyCopyTiny>
-          </DateCointainer>
+          </DateContainer>
           <BodyCopySm color="gray.000" m={0}>
             {`${order.pair[0]}`}
             <SecondaryToken>{`/${order.pair[1]}`}</SecondaryToken>
@@ -55,7 +43,7 @@ function Orders(props) {
           </BodyCopySm>
           <BodyCopySm color="gray.000" textAlign="right" m={0}>
             {`${order.price}`}
-            <SecondaryToken>{`/${order.pair[1]}`}</SecondaryToken>
+            <SecondaryToken>{`${order.pair[1]}`}</SecondaryToken>
           </BodyCopySm>
           <BodyCopySm color="gray.000" textAlign="right" m={0}>
             {order.amount}
@@ -66,7 +54,7 @@ function Orders(props) {
           <BodyCopySm color="gray.000" textAlign="right" m={0}>
             {total}
           </BodyCopySm>
-          <CancelButton>Cancel</CancelButton>
+          <SmallButton variant="outline">Cancel</SmallButton>
         </OrderRow>
       )
     })
@@ -100,9 +88,9 @@ function Orders(props) {
         </CancelButton>
       </Header>
       {openOrders.length ? (
-        <OpenOrders>
+        <OpenOrdersContainer>
           <OrderWrapper>{renderOpenOrders(openOrders)}</OrderWrapper>
-        </OpenOrders>
+        </OpenOrdersContainer>
       ) : (
         <EmptyState>You have no open orders.</EmptyState>
       )}
@@ -110,7 +98,7 @@ function Orders(props) {
   )
 }
 
-export default Orders
+export default OpenOrders
 
-Orders.propTypes = {}
-Orders.defaultProps = {}
+OpenOrders.propTypes = {}
+OpenOrders.defaultProps = {}

@@ -47,7 +47,7 @@ export const OrderWrapper = styled.div`
   bottom: 0;
 `
 
-export const OpenOrders = styled.div`
+export const OpenOrdersContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
   position: relative;
@@ -68,6 +68,34 @@ export const OpenOrders = styled.div`
   }
   ::-webkit-scrollbar-corner {
     background: ${({ theme }) => theme.colors.gray[700]};
+  }
+`
+export const SmallButton = styled.button`
+  background-color: ${({ theme, variant = 'solid' }) =>
+    variant === 'solid' ? theme.colors.red[500] : 'transparent'};
+  color: ${({ theme, variant = 'solid' }) =>
+    variant === 'solid' ? theme.colors.gray[100] : theme.colors.red[500]};
+  padding: 0.3rem 0.3rem;
+  border: none;
+  width: 95%;
+  justify-self: flex-end;
+  font-weight: 600;
+  border-radius: 3px;
+  border: ${({ variant = 'solid', theme }) =>
+    variant === 'outline' ? `1px solid ${theme.colors.red[500]}` : 'none'};
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+  letter-spacing: 0.03rem;
+
+  &:hover {
+    background-color: ${({ theme, variant = 'solid' }) =>
+      variant === 'solid' ? theme.colors.red[400] : rgba(theme.colors.red['000'], 0.04)};
+  }
+
+  @media (min-width: 1536px) {
+    width: 60%;
   }
 `
 
@@ -95,6 +123,16 @@ export const EmptyState = styled.div`
   color: ${({ theme }) => theme.colors.gray[400]};
   line-height: 1.5;
   font-size: 0.9rem;
+`
+
+export const SecondaryToken = styled.span`
+  color: ${({ theme }) => theme.colors.gray[500]};
+`
+
+export const DateContainer = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
 `
 
 export const ColumnHead = styled.span`
