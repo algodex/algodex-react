@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ICONS from './defs'
-import theme from 'theme'
+import theme from '../../theme'
 
 const parseThemeColor = (str) => {
   return str.split('.').reduce((o, i) => o[i], theme.colors)
