@@ -1,5 +1,11 @@
 import styled from 'styled-components'
 
+export const WalletSection = styled.section`
+  grid-area: wallet;
+  border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+`
+
 export const TradeSection = styled.section`
   grid-area: trade;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -61,9 +67,10 @@ export const Main = styled.main`
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 48px 1fr 1fr 180px;
+    grid-template-rows: 48px 320px 1fr 1fr 180px;
     grid-template-areas:
       'assets assets assets'
+      'chart chart wallet'
       'chart chart trade'
       'book history trade'
       'orders orders orders';
@@ -80,18 +87,20 @@ export const Main = styled.main`
 
   @media (min-width: 1024px) {
     grid-template-columns: 1fr 320px 280px;
-    grid-template-rows: 48px 2fr 1fr;
+    grid-template-rows: 48px 320px 2fr 1fr;
     grid-template-areas:
       'assets assets assets'
+      'chart book wallet'
       'chart book trade'
       'orders history trade';
   }
 
   @media (min-width: 1024px) and (orientation: portrait) {
     grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 48px 1fr 1fr 280px;
+    grid-template-rows: 48px 320px 1fr 1fr 280px;
     grid-template-areas:
       'assets assets assets'
+      'chart chart wallet'
       'chart chart trade'
       'book history trade'
       'orders orders orders';
@@ -99,8 +108,9 @@ export const Main = styled.main`
 
   @media (min-width: 1536px) {
     grid-template-columns: 280px 1fr 320px 320px;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 320px 1fr 1fr 1fr;
     grid-template-areas:
+      'assets chart book wallet'
       'assets chart book trade'
       'assets chart book trade'
       'orders orders history trade';
