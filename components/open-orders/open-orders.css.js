@@ -2,11 +2,10 @@ import styled from 'styled-components'
 import { rgba } from 'polished'
 
 export const Container = styled.section`
-  flex: 1 1 0%;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.dark};
-  grid-area: orders;
+  flex: 1 1 0%;
+  position: relative;
 `
 
 export const CancelButton = styled.button`
@@ -47,7 +46,7 @@ export const OrderWrapper = styled.div`
   bottom: 0;
 `
 
-export const OpenOrdersContainer = styled.div`
+export const WrapperContainer = styled.section`
   flex: 1 1 0%;
   display: flex;
   position: relative;
@@ -72,17 +71,17 @@ export const OpenOrdersContainer = styled.div`
 `
 export const SmallButton = styled.button`
   background-color: ${({ theme, variant = 'solid' }) =>
-    variant === 'solid' ? theme.colors.red[500] : 'transparent'};
+    variant === 'solid' ? theme.colors.gray[500] : 'transparent'};
   color: ${({ theme, variant = 'solid' }) =>
-    variant === 'solid' ? theme.colors.gray[100] : theme.colors.red[500]};
+    variant === 'solid' ? theme.colors.gray[100] : theme.colors.gray[500]};
   padding: 0.3rem 0.3rem;
   border: none;
-  width: 95%;
+  width: 75%;
   justify-self: flex-end;
   font-weight: 600;
   border-radius: 3px;
   border: ${({ variant = 'solid', theme }) =>
-    variant === 'outline' ? `1px solid ${theme.colors.red[500]}` : 'none'};
+    variant === 'outline' ? `1px solid ${theme.colors.gray[500]}` : 'none'};
   font-size: 0.7rem;
   text-transform: uppercase;
   cursor: pointer;
@@ -92,6 +91,10 @@ export const SmallButton = styled.button`
   &:hover {
     background-color: ${({ theme, variant = 'solid' }) =>
       variant === 'solid' ? theme.colors.red[400] : rgba(theme.colors.red['000'], 0.04)};
+    border: ${({ variant = 'solid', theme }) =>
+      variant === 'outline' ? `1px solid ${theme.colors.red[500]}` : 'none'};
+    color: ${({ theme, variant = 'solid' }) =>
+      variant === 'solid' ? theme.colors.red[100] : theme.colors.red[500]};
   }
 
   @media (min-width: 1536px) {
@@ -107,11 +110,9 @@ export const OrderRow = styled.div`
   transition: background-color 150ms ease-out;
   cursor: pointer;
   transition: all 0.1s ease-in;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['900']};
   &:hover {
     background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
-    & > button {
-      color: ${({ theme }) => theme.colors.red[500]};
-    }
   }
 `
 
@@ -145,31 +146,6 @@ export const ColumnHead = styled.span`
   letter-spacing: 0.1rem;
   width: 100%;
   height: 100%;
-`
-
-export const OrderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 0%;
-  overflow: auto;
-
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.gray[700]};
-  }
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[600]};
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #${({ theme }) => theme.colors.gray[500]};
-  }
-  ::-webkit-scrollbar-corner {
-    background: ${({ theme }) => theme.colors.gray[700]};
-  }
 `
 
 export const HeaderSection = styled.section`

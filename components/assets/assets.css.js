@@ -3,7 +3,7 @@ import { ReactSVG } from 'react-svg'
 import { rgba } from 'polished'
 
 const gridStyles = `
-      grid-template-columns: repeat(8, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       column-gap: 0.25rem;
     `
 
@@ -13,6 +13,7 @@ export const AssetRow = styled.div`
   ${gridStyles}
   padding: .3rem 2rem;
   transition: background-color 150ms ease-out;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['900']};
   cursor: pointer;
   transition: all 0.1s ease-in;
   &:hover {
@@ -79,7 +80,7 @@ export const SmallButton = styled.button`
     variant === 'solid' ? theme.colors.gray[900] : theme.colors.gray[400]};
   padding: 0.3rem 0.3rem;
   border: none;
-  width: 95%;
+  width: 90%;
   justify-self: flex-end;
   font-weight: 600;
   border-radius: 3px;

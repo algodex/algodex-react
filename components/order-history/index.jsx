@@ -24,27 +24,28 @@ function OrderHistory(props) {
             {dayjs(order.date).format('D-MM-YY')}
           </BodyCopyTiny>
         </DateContainer>
-        <BodyCopySm color="gray.100">
+        <BodyCopySm color="gray.100" my={2}>
           {order.pair[0]}
           <PrimaryToken>{`/${order.pair[1]}`}</PrimaryToken>
         </BodyCopySm>
         <BodyCopySm
           color={order.side === 'buy' ? 'green.500' : 'red.500'}
           textTransform="uppercase"
+          my={2}
         >
           {order.side}
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {order.price}
           <PrimaryToken>{`${order.pair[1]}`}</PrimaryToken>
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {order.amount}
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {order.executed}
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {(order.executed * order.price).toFixed(4)}
         </BodyCopySm>
       </OrderRow>

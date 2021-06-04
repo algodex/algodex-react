@@ -1,13 +1,12 @@
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
 import { openOrders } from 'data/test-data'
 import dayjs from 'dayjs'
-import styled from 'styled-components'
 import {
   CancelButton,
   EmptyState,
   Header,
-  OpenOrdersContainer,
-  OrderContainer,
+  WrapperContainer,
+  Container,
   OrderRow,
   SmallButton,
   OrderWrapper,
@@ -29,29 +28,29 @@ function OpenOrders(props) {
               {dayjs(order.date).format('D-MM-YY')}
             </BodyCopyTiny>
           </DateContainer>
-          <BodyCopySm color="gray.000" m={0}>
+          <BodyCopySm color="gray.000" my={2}>
             {`${order.pair[0]}`}
             <SecondaryToken>{`/${order.pair[1]}`}</SecondaryToken>
           </BodyCopySm>
           <BodyCopySm
             color={order.type === 'sell' ? 'red.500' : 'green.500'}
             textAlign="left"
-            m={0}
+            my={2}
             textTransform="uppercase"
           >
             {order.type}
           </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" m={0}>
+          <BodyCopySm color="gray.000" textAlign="right" my={2}>
             {`${order.price}`}
             <SecondaryToken>{`${order.pair[1]}`}</SecondaryToken>
           </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" m={0}>
+          <BodyCopySm color="gray.000" textAlign="right" my={2}>
             {order.amount}
           </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" m={0}>
+          <BodyCopySm color="gray.000" textAlign="right" my={2}>
             {`${order.filled}%`}
           </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" m={0}>
+          <BodyCopySm color="gray.000" textAlign="right" my={2}>
             {total}
           </BodyCopySm>
           <SmallButton variant="outline">Cancel</SmallButton>
@@ -60,7 +59,7 @@ function OpenOrders(props) {
     })
 
   return (
-    <OrderContainer>
+    <Container>
       <Header>
         <BodyCopyTiny color="gray.500" textTransform="uppercase">
           Date
@@ -87,14 +86,14 @@ function OpenOrders(props) {
           <BodyCopyTiny fontWeight="600">Cancel All</BodyCopyTiny>
         </CancelButton>
       </Header>
-      {openOrders.length ? (
-        <OpenOrdersContainer>
+      <WrapperContainer>
+        {openOrders.length ? (
           <OrderWrapper>{renderOpenOrders(openOrders)}</OrderWrapper>
-        </OpenOrdersContainer>
-      ) : (
-        <EmptyState>You have no open orders.</EmptyState>
-      )}
-    </OrderContainer>
+        ) : (
+          <EmptyState>You have no open orders.</EmptyState>
+        )}
+      </WrapperContainer>
+    </Container>
   )
 }
 

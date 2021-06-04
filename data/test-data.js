@@ -81,6 +81,14 @@ export const assets = [
     algoValue: 12000
   },
   {
+    icon: 'algo',
+    coin: 'ALGO',
+    name: 'Algorand',
+    total: 12000,
+    inOrder: 2000,
+    algoValue: 12000
+  },
+  {
     icon: 'gobtc',
     coin: 'goBTC',
     name: 'GoChain/BTC',

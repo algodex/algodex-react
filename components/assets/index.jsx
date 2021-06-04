@@ -7,7 +7,6 @@ import {
   Container,
   EmptyState,
   Header,
-  SmallButton,
   WrapperContainer
 } from './assets.css'
 
@@ -15,30 +14,24 @@ function Assets(props) {
   const renderAssets = (assetBalances) =>
     assetBalances.map((asset) => (
       <AssetRow>
-        <CoinContainer>
-          <BodyCopySm color="gray.100" ml={2}>
-            {asset.coin}
-          </BodyCopySm>
-        </CoinContainer>
-        <BodyCopySm color="gray.100">{asset.name}</BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" my={2}>
+          {asset.coin}
+        </BodyCopySm>
+        <BodyCopySm color="gray.100" my={2}>
+          {asset.name}
+        </BodyCopySm>
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {asset.total}
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {asset.total - asset.inOrder}
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {asset.inOrder}
         </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right">
+        <BodyCopySm color="gray.100" textAlign="right" my={2}>
           {asset.algoValue}
         </BodyCopySm>
-        <SmallButton color="gray.100" textAlign="right">
-          Deposit
-        </SmallButton>
-        <SmallButton color="gray.100" textAlign="right" variant="outline">
-          Withdraw
-        </SmallButton>
       </AssetRow>
     ))
   return (
