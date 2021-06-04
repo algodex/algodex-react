@@ -24,7 +24,7 @@ const Svg = styled.svg`
  * Component for custom icons that aren't included in the Feather Icons set.
  *
  * Icon definitions live in './defs' and have two possible `format` values:
- * 'data' and 'markup'. For as icon to be styled with the `color` prop or
+ * 'data' and 'markup'. For an icon to be styled with the `color` prop or
  * inherit the color of its parent (by leaving `color` undefined), it must be
  * in 'data' format and consist of a single <path/>, its `d` attribute set as
  * a string.
