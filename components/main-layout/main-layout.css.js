@@ -87,7 +87,7 @@ export const Main = styled.main`
 
   @media (min-width: 1024px) {
     grid-template-columns: 1fr 320px 280px;
-    grid-template-rows: 48px 320px 2fr 1fr;
+    grid-template-rows: 48px 320px 2fr 2fr;
     grid-template-areas:
       'assets assets assets'
       'chart book wallet'
@@ -108,7 +108,7 @@ export const Main = styled.main`
 
   @media (min-width: 1536px) {
     grid-template-columns: 280px 1fr 320px 320px;
-    grid-template-rows: 320px 1fr 1fr 1fr;
+    grid-template-rows: 320px 1fr 1fr 2fr;
     grid-template-areas:
       'assets chart book wallet'
       'assets chart book trade'

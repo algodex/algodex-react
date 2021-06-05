@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 const StyledMotionSvg = styled(motion.svg)`
   cursor: pointer;
-  margin-left: 1rem;
   @media (min-width: 1024px) {
     display: none;
   }
