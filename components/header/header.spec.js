@@ -1,9 +1,10 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render } from '../../test/test-utils'
 import Header from './index'
 
-it('Header: default', () => {
-  const component = renderer.create(<Header />)
-  const tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
+describe('Header', () => {
+  it('should render the container', () => {
+    const { queryByTestId } = render(<Header />)
+    expect(queryByTestId('header-container')).not.toBeNull()
+  })
 })

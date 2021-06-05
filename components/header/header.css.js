@@ -5,16 +5,19 @@ import ReactCountryFlag from 'react-country-flag'
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[800]};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray[700]};
+  box-shadow: 0px 0px 0px -1px #000;
+  box-sizing: border-box;
+  /* border-bottom: 1px solid  */
   padding: 1rem;
   margin: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
-
+  width: 100%;
+  z-index: 99;
   @media (min-width: 1024px) {
-    width: 95%;
     padding: 2rem;
   }
 `
@@ -37,16 +40,16 @@ export const MobileNavigation = styled.nav`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  top: 0;
+  /* bottom: 0; */
+  top: 103%;
   left: 0;
+  height: calc(100vh - 65.16px);
   flex: 1 1 0%;
-  margin-top: 3rem;
-  position: fixed;
+  position: absolute;
   width: 100%;
-  height: calc(100vh - 3rem);
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   background-color: ${({ theme }) => theme.colors.gray[800]};
-  z-index: 99;
+  z-index: 10;
 
   @media (min-width: 1024px) {
     display: none;
@@ -62,7 +65,7 @@ export const Flag = styled(ReactCountryFlag)`
 export const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  width: 30%;
   align-items: center;
 
   @media (min-width: 768px) {
@@ -94,6 +97,7 @@ export const NavTextLg = styled.span`
   ${fontSize}
   ${color}
   cursor: pointer;
+  transition: all 0.1s ease-in;
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};
@@ -102,7 +106,7 @@ export const NavTextLg = styled.span`
   & > a {
     color: ${({ theme }) => theme.colors.gray[100]};
     padding: 1rem 0;
-    transition: all 0.1s ease-in;
+
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
       isActive && border ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
@@ -139,6 +143,7 @@ export const NavTextSm = styled.span`
   ${fontSize}
   ${color}
   cursor: pointer;
+  transition: all 0.1s ease-in;
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};
@@ -147,7 +152,6 @@ export const NavTextSm = styled.span`
   & > a {
     color: ${({ theme }) => theme.colors.gray[100]};
     padding: 1rem 0;
-    transition: all 0.1s ease-in;
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
       isActive && border ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
@@ -184,6 +188,7 @@ export const NavIcon = styled.span`
   ${fontSize}
   ${color}
   cursor: pointer;
+  transition: all 0.1s ease-in;
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};
@@ -192,7 +197,6 @@ export const NavIcon = styled.span`
   & > a {
     color: ${({ theme }) => theme.colors.gray[100]};
     padding: 1rem 0;
-    transition: all 0.1s ease-in;
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
       isActive && border ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
