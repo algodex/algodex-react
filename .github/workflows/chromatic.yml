@@ -12,5 +12,5 @@ jobs:
       - name: Publish to Chromatic
       - uses: chromaui/checkout@v1
         with:
-          projectToken: ef5af38aec3a
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
