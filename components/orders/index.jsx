@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
-import { orderHistory, assets, openOrders } from 'data'
+import { orderHistory, assets, openOrders } from '../../data'
 
 function Orders({ initialPanel, openOrders, orderHistory, assets }) {
   // 'open-orders', 'order-history', 'assets'
