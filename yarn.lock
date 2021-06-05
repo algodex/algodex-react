@@ -24,11 +24,6 @@
   dependencies:
     tunnel "0.0.6"
 
-"@algodex/algodex-api@^1.0.1":
-  version "1.0.1"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-api/1.0.1/fb8328b3112431fbfc23f9f6b5bfe22e72ed61be2c0fc38552d694896525fc3b#0b6da6d83abfba231e2bfed5ab660a16a04b9f17"
-  integrity sha512-kaqOEPxrMCOd1caT/nLktgnw+k10yY5IRWwBzeRfSyKRp8vgciO/rICmHXq1MaeXsgZJLihRw9goB+A9Jjr8WQ==
-
 "@babel/code-frame@7.10.4":
   version "7.10.4"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.10.4.tgz"

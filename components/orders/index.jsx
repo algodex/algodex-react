@@ -1,47 +1,64 @@
 import OpenOrders from 'components/open-orders'
 import OrderHistory from 'components/order-history'
+import PropTypes from 'prop-types'
 import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
+import { orderHistory, assets, openOrders } from '../../data/test-data'
 
-function Orders() {
+function Orders({ initialPanel }) {
   // 'open-orders', 'order-history', 'assets'
-  const [currentTab, setCurrentTab] = useState('open-orders')
+  const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
-  const renderCurrentTab = (tab) => {
-    switch (tab) {
-      case 'open-orders':
-        return <OpenOrders />
-      case 'order-history':
-        return <OrderHistory />
-      case 'assets':
-        return <Assets />
+  const OPEN_ORDERS_PANEL = 'open-orders'
+  const ORDER_HISTORY_PANEL = 'order-history'
+  const ASSETS_PANEL = 'assets'
+
+  const renderPanel = (panelName) => {
+    switch (panelName) {
+      case OPEN_ORDERS_PANEL:
+        return <OpenOrders openOrders={openOrders} />
+      case ORDER_HISTORY_PANEL:
+        return <OrderHistory orderHistory={orderHistory} />
+      case ASSETS_PANEL:
+        return <Assets assets={assets} />
       default:
         return null
     }
   }
+
   return (
     <Container>
       <Header>
-        <Tab isActive={currentTab === 'open-orders'} onClick={() => setCurrentTab('open-orders')}>
+        <Tab
+          isActive={selectedPanel === OPEN_ORDERS_PANEL}
+          onClick={() => setSelectedPanel(OPEN_ORDERS_PANEL)}
+        >
           Open Orders
         </Tab>
         <Tab
-          isActive={currentTab === 'order-history'}
-          onClick={() => setCurrentTab('order-history')}
+          isActive={selectedPanel === ORDER_HISTORY_PANEL}
+          onClick={() => setSelectedPanel(ORDER_HISTORY_PANEL)}
         >
           Order History
         </Tab>
-        <Tab isActive={currentTab === 'assets'} onClick={() => setCurrentTab('assets')}>
+        <Tab
+          isActive={selectedPanel === ASSETS_PANEL}
+          onClick={() => setSelectedPanel(ASSETS_PANEL)}
+        >
           Assets
         </Tab>
       </Header>
-      {renderCurrentTab(currentTab)}
+      {renderPanel(selectedPanel)}
     </Container>
   )
 }
 
 export default Orders
 
-Orders.propTypes = {}
-Orders.defaultProps = {}
+Orders.propTypes = {
+  initialPanel: PropTypes.string
+}
+Orders.defaultProps = {
+  initialPanel: 'open-orders'
+}

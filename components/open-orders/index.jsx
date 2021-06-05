@@ -1,5 +1,5 @@
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import { openOrders } from 'data/test-data'
+import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
 import {
   CancelButton,
@@ -14,12 +14,12 @@ import {
   SecondaryToken
 } from './open-orders.css'
 
-function OpenOrders(props) {
+function OpenOrders({ openOrders }) {
   const renderOpenOrders = (orders) =>
     orders.map((order, index) => {
       const total = order.price * order.amount
       return (
-        <OrderRow key={`order-${order.price}=${index}`}>
+        <OrderRow key={`order-${order.price}=${index}`} data-testid="open-order-row">
           <DateContainer>
             <BodyCopyTiny color="gray.100" m={0}>
               {dayjs(order.date).format('HH:mm:ss')}
@@ -59,7 +59,7 @@ function OpenOrders(props) {
     })
 
   return (
-    <Container>
+    <Container data-testid="open-orders">
       <Header>
         <BodyCopyTiny color="gray.500" textTransform="uppercase">
           Date
@@ -90,7 +90,7 @@ function OpenOrders(props) {
         {openOrders.length ? (
           <OrderWrapper>{renderOpenOrders(openOrders)}</OrderWrapper>
         ) : (
-          <EmptyState>You have no open orders.</EmptyState>
+          <EmptyState data-testid="empty-state">You have no open orders.</EmptyState>
         )}
       </WrapperContainer>
     </Container>
@@ -99,5 +99,9 @@ function OpenOrders(props) {
 
 export default OpenOrders
 
-OpenOrders.propTypes = {}
-OpenOrders.defaultProps = {}
+OpenOrders.propTypes = {
+  openOrders: PropTypes.array.isRequired
+}
+OpenOrders.defaultProps = {
+  openOrders: []
+}

@@ -24,13 +24,13 @@ function Nav({ fontSize = 2, variant = 'small' }) {
           <a>Support</a>
         </Link>
       </NavItem>
-      {variant !== 'small' && (
+      {variant === 'large' && (
         <>
           <NavItem fontSize={fontSize}>
-            <User />
+            <User data-testid="account" />
           </NavItem>
           <NavItem fontSize={fontSize}>
-            <Bell />
+            <Bell data-testid="notifications" />
           </NavItem>
         </>
       )}
@@ -47,8 +47,4 @@ export default Nav
 Nav.propTypes = {
   fontSize: PropTypes.number,
   variant: PropTypes.string
-}
-Nav.defaultProps = {
-  fontSize: 2,
-  variant: 'small'
 }

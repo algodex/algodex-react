@@ -1,5 +1,5 @@
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import { tradeHistory } from 'data/test-data'
+import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
 import {
   Container,
@@ -12,10 +12,10 @@ import {
   WrapperContainer
 } from './order-history.css'
 
-function OrderHistory(props) {
+function OrderHistory({ orderHistory }) {
   const renderOrderHistory = (orders) =>
     orders.map((order) => (
-      <OrderRow key={`${order.date}-${order.filled}`}>
+      <OrderRow key={`${order.date}-${order.filled}`} data-testid="order-history-row">
         <DateContainer>
           <BodyCopyTiny color="gray.100" m={0}>
             {dayjs(order.date).format('HH:mm:ss')}
@@ -51,7 +51,7 @@ function OrderHistory(props) {
       </OrderRow>
     ))
   return (
-    <Container>
+    <Container data-testid="order-history">
       <Header>
         <BodyCopyTiny color="gray.500">Date</BodyCopyTiny>
         <BodyCopyTiny color="gray.500">Pair</BodyCopyTiny>
@@ -70,10 +70,10 @@ function OrderHistory(props) {
         </BodyCopyTiny>
       </Header>
       <WrapperContainer>
-        {tradeHistory.length ? (
-          <OrderWrapper>{renderOrderHistory(tradeHistory)}</OrderWrapper>
+        {orderHistory.length ? (
+          <OrderWrapper>{renderOrderHistory(orderHistory)}</OrderWrapper>
         ) : (
-          <EmptyState>
+          <EmptyState data-testid="empty-state">
             <BodyCopySm color="gray.500">You have no order history.</BodyCopySm>
           </EmptyState>
         )}
@@ -84,5 +84,9 @@ function OrderHistory(props) {
 
 export default OrderHistory
 
-OrderHistory.propTypes = {}
-OrderHistory.defaultProps = {}
+OrderHistory.propTypes = {
+  orderHistory: PropTypes.array.isRequired
+}
+OrderHistory.defaultProps = {
+  orderHistory: []
+}

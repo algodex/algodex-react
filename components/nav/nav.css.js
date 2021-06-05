@@ -3,7 +3,7 @@ import ReactCountryFlag from 'react-country-flag'
 import { fontSize, color } from 'styled-system'
 
 export const NavContainer = styled.ul`
-  display: ${(props) => (props.variant !== 'small' ? 'none' : 'flex')};
+  display: flex;
   flex-direction: ${(props) => (props.variant === 'large' ? 'row' : 'column')};
   justify-content: space-between;
   align-items: center;

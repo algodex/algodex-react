@@ -1,19 +1,18 @@
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import { assets } from 'data/test-data'
+import PropTypes from 'prop-types'
 import {
   AssetRow,
   AssetsWrapper,
-  CoinContainer,
   Container,
   EmptyState,
   Header,
   WrapperContainer
 } from './assets.css'
 
-function Assets(props) {
+function Assets({ assets }) {
   const renderAssets = (assetBalances) =>
     assetBalances.map((asset) => (
-      <AssetRow>
+      <AssetRow data-testid="assets-row" key={asset.name}>
         <BodyCopySm color="gray.100" my={2}>
           {asset.coin}
         </BodyCopySm>
@@ -35,7 +34,7 @@ function Assets(props) {
       </AssetRow>
     ))
   return (
-    <Container>
+    <Container data-testid="assets">
       <Header>
         <BodyCopyTiny color="gray.500">Coin</BodyCopyTiny>
         <BodyCopyTiny color="gray.500">Name</BodyCopyTiny>
@@ -56,7 +55,7 @@ function Assets(props) {
         {assets.length ? (
           <AssetsWrapper>{renderAssets(assets)}</AssetsWrapper>
         ) : (
-          <EmptyState>
+          <EmptyState data-testid="empty-state">
             <BodyCopySm color="gray.500">You have no assets in your wallet.</BodyCopySm>
           </EmptyState>
         )}
@@ -67,5 +66,9 @@ function Assets(props) {
 
 export default Assets
 
-Assets.propTypes = {}
-Assets.defaultProps = {}
+Assets.propTypes = {
+  assets: PropTypes.array.isRequired
+}
+Assets.defaultProps = {
+  assets: []
+}

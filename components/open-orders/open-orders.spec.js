@@ -1,9 +1,38 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
-import Orders from '.'
+import OpenOrders from '.'
+import { render } from '../../test/test-utils'
 
-it('Orders: default', () => {
-  const component = renderer.create(<Orders />)
-  const tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
+const OPEN_ORDER_ROW = 'open-order-row'
+const EMPTY_STATE = 'empty-state'
+
+describe('OpenOrders', () => {
+  it('should not show any rows if no data is provided', () => {
+    const { queryByTestId } = render(<OpenOrders />)
+
+    expect(queryByTestId(OPEN_ORDER_ROW)).toBeNull()
+  })
+
+  it('should display empty state if no data is provided', () => {
+    const { queryByTestId } = render(<OpenOrders />)
+
+    expect(queryByTestId(EMPTY_STATE)).not.toBeNull()
+  })
+
+  it('should show rows if data is provided', () => {
+    const openOrders = [
+      {
+        date: new Date(),
+        pair: ['ALGO', 'USDC'],
+        type: 'buy',
+        price: 1.2354,
+        filled: 15,
+        amount: 954
+      }
+    ]
+
+    const { queryByTestId } = render(<OpenOrders openOrders={openOrders} />)
+
+    expect(queryByTestId(OPEN_ORDER_ROW)).not.toBeNull()
+    expect(queryByTestId(EMPTY_STATE)).toBeNull()
+  })
 })
