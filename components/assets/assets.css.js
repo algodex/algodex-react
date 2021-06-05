@@ -13,7 +13,6 @@ export const AssetRow = styled.div`
   ${gridStyles}
   padding: .3rem 2rem;
   transition: background-color 150ms ease-out;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['900']};
   cursor: pointer;
   transition: all 0.1s ease-in;
   &:hover {
@@ -37,7 +36,7 @@ export const AssetsWrapper = styled.div`
   top: 0;
   bottom: 0;
 `
-export const Container = styled.section`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;

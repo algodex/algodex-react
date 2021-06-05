@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
-import { orderHistory, assets, openOrders } from '../../data/test-data'
+import { orderHistory, assets, openOrders } from 'data'
 
-function Orders({ initialPanel }) {
+function Orders({ initialPanel, openOrders, orderHistory, assets }) {
   // 'open-orders', 'order-history', 'assets'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -57,8 +57,14 @@ function Orders({ initialPanel }) {
 export default Orders
 
 Orders.propTypes = {
-  initialPanel: PropTypes.string
+  initialPanel: PropTypes.string,
+  openOrders: PropTypes.array.isRequired,
+  orderHistory: PropTypes.array.isRequired,
+  assets: PropTypes.array.isRequired
 }
 Orders.defaultProps = {
-  initialPanel: 'open-orders'
+  initialPanel: 'open-orders',
+  openOrders,
+  orderHistory,
+  assets
 }

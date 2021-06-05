@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { rgba } from 'polished'
 
-export const Container = styled.section`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;
@@ -46,7 +46,7 @@ export const OrderWrapper = styled.div`
   bottom: 0;
 `
 
-export const WrapperContainer = styled.section`
+export const WrapperContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
   position: relative;
@@ -110,7 +110,7 @@ export const OrderRow = styled.div`
   transition: background-color 150ms ease-out;
   cursor: pointer;
   transition: all 0.1s ease-in;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['900']};
+
   &:hover {
     background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
   }

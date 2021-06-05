@@ -24,7 +24,6 @@ export const OrderRow = styled.div`
   transition: background-color 150ms ease-out;
   cursor: pointer;
   transition: all 0.1s ease-in;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['900']};
   &:hover {
     background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
     & > button {
@@ -49,7 +48,7 @@ export const OrderWrapper = styled.div`
   top: 0;
   bottom: 0;
 `
-export const Container = styled.section`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;

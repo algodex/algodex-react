@@ -90,7 +90,9 @@ function OpenOrders({ openOrders }) {
         {openOrders.length ? (
           <OrderWrapper>{renderOpenOrders(openOrders)}</OrderWrapper>
         ) : (
-          <EmptyState data-testid="empty-state">You have no open orders.</EmptyState>
+          <EmptyState data-testid="empty-state">
+            <BodyCopySm color="gray.500">You have no open orders.</BodyCopySm>
+          </EmptyState>
         )}
       </WrapperContainer>
     </Container>

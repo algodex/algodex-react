@@ -1,7 +1,38 @@
+import { orderHistory } from 'data'
 import React from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
+import styled from 'styled-components'
 import OrderHistory from '.'
 
-storiesOf('OrderHistory', module).add('default', () => <OrderHistory />)
+const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray[800]};
+  display: flex;
+  width: 800px;
+  height: 250px;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+`
+
+export default {
+  title: 'Order History',
+  component: OrderHistory,
+  decorators: [
+    (Story) => (
+      <Container>
+        <Story />
+      </Container>
+    )
+  ]
+}
+
+const Template = (args) => <OrderHistory {...args} />
+
+export const Default = Template.bind({})
+Default.args = {
+  orderHistory
+}
+
+export const NoOrderHistory = Template.bind({})
+NoOrderHistory.args = {
+  orderHistory: []
+}
