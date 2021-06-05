@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '../../test/test-utils'
+import renderer from 'react-test-renderer'
 import Header from './index'
 
 it('Header: default', () => {
