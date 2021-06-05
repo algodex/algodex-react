@@ -10,8 +10,9 @@ import {
 } from './assets.css'
 
 function Assets({ assets }) {
-  const renderAssets = (assetBalances) =>
-    assetBalances.map((asset) => (
+  const renderAssets = (assets) => {
+    const sortedByTotal = assets.sort((a, b) => b.total - a.total)
+    return sortedByTotal.map((asset) => (
       <AssetRow data-testid="assets-row" key={asset.name}>
         <BodyCopySm color="gray.100" my={2}>
           {asset.coin}
@@ -33,6 +34,7 @@ function Assets({ assets }) {
         </BodyCopySm>
       </AssetRow>
     ))
+  }
   return (
     <Container data-testid="assets">
       <Header>

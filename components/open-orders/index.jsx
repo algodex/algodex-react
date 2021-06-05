@@ -15,8 +15,9 @@ import {
 } from './open-orders.css'
 
 function OpenOrders({ openOrders }) {
-  const renderOpenOrders = (orders) =>
-    orders.map((order, index) => {
+  const renderOpenOrders = (orders) => {
+    const sortedByDate = orders.sort((a, b) => b.date - a.date)
+    return sortedByDate.map((order, index) => {
       const total = order.price * order.amount
       return (
         <OrderRow key={`order-${order.price}=${index}`} data-testid="open-order-row">
@@ -25,7 +26,7 @@ function OpenOrders({ openOrders }) {
               {dayjs(order.date).format('HH:mm:ss')}
             </BodyCopyTiny>
             <BodyCopyTiny color="gray.500" m={0}>
-              {dayjs(order.date).format('D-MM-YY')}
+              {dayjs(order.date).format('M-D-YY')}
             </BodyCopyTiny>
           </DateContainer>
           <BodyCopySm color="gray.000" my={2}>
@@ -57,6 +58,7 @@ function OpenOrders({ openOrders }) {
         </OrderRow>
       )
     })
+  }
 
   return (
     <Container data-testid="open-orders">

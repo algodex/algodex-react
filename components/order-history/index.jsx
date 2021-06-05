@@ -13,15 +13,16 @@ import {
 } from './order-history.css'
 
 function OrderHistory({ orderHistory }) {
-  const renderOrderHistory = (orders) =>
-    orders.map((order) => (
+  const renderOrderHistory = (orders) => {
+    const sortedByDate = orders.sort((a, b) => b.date - a.date)
+    return sortedByDate.map((order) => (
       <OrderRow key={`${order.date}-${order.filled}`} data-testid="order-history-row">
         <DateContainer>
           <BodyCopyTiny color="gray.100" m={0}>
             {dayjs(order.date).format('HH:mm:ss')}
           </BodyCopyTiny>
           <BodyCopyTiny color="gray.500" m={0}>
-            {dayjs(order.date).format('D-MM-YY')}
+            {dayjs(order.date).format('M-D-YY')}
           </BodyCopyTiny>
         </DateContainer>
         <BodyCopySm color="gray.100" my={2}>
@@ -50,6 +51,7 @@ function OrderHistory({ orderHistory }) {
         </BodyCopySm>
       </OrderRow>
     ))
+  }
   return (
     <Container data-testid="order-history">
       <Header>
