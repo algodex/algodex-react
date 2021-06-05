@@ -5,10 +5,7 @@ import ReactCountryFlag from 'react-country-flag'
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[800]};
-  border-bottom: 2px solid ${({ theme }) => theme.colors.gray[700]};
-  box-shadow: 0px 0px 0px -1px #000;
-  box-sizing: border-box;
-  /* border-bottom: 1px solid  */
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   padding: 1rem;
   margin: 0;
   display: flex;
@@ -40,7 +37,6 @@ export const MobileNavigation = styled.nav`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  /* bottom: 0; */
   top: 103%;
   left: 0;
   height: calc(100vh - 65.16px);
