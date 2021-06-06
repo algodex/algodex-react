@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Install dependencies
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
         run: yarn
       - name: Publish to Chromatic
         uses: chromaui/action@v1
