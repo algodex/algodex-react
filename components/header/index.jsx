@@ -1,37 +1,55 @@
-import NavItem from 'components/nav-item'
-import Link from 'next/link'
-import { Bell, User } from 'react-feather'
 import MenuButton from 'components/menu-button'
-import { Bar, Container, IconLogo, InlineLogo, MenuContainer } from './header.css'
+import Link from 'next/link'
 import { useState } from 'react'
-import ExpandedNav from 'components/expanded-nav'
-import Nav from 'components/nav'
+import { Bell, User } from 'react-feather'
+import {
+  Container,
+  IconLogo,
+  InlineLogo,
+  Navigation,
+  NavTextLg,
+  NavTextSm,
+  NavIcon,
+  Flag,
+  MobileNavigation,
+  MobileNavContainer
+} from './header.css'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   return (
-    <>
-      <Bar>
-        <Container>
-          <Link href="/">
-            <a>
-              <InlineLogo src="/logo-inline-dark.svg" />
-              <IconLogo src="/logo-icon-dark.svg" />
-            </a>
-          </Link>
-          <Nav variant="large" />
-          <MenuContainer>
-            <NavItem color="gray.500">
-              <Bell />
-            </NavItem>
-            <NavItem color="gray.500">
-              <User />
-            </NavItem>
-            <MenuButton onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
-          </MenuContainer>
-        </Container>
-      </Bar>
-      <ExpandedNav isOpen={isOpen} />
-    </>
+    <Container data-testid="header-container">
+      <Link href="/">
+        <a>
+          <InlineLogo src="/logo-inline-dark.svg" />
+          <IconLogo src="/logo-icon-dark.svg" />
+        </a>
+      </Link>
+      <Navigation>
+        <NavTextLg>Trade</NavTextLg>
+        <NavTextLg>Wallet</NavTextLg>
+        <NavTextLg>Support</NavTextLg>
+        <NavIcon color="gray.500">
+          <Bell />
+        </NavIcon>
+        <NavIcon color="gray.500">
+          <User />
+        </NavIcon>
+        <NavTextLg>
+          EN <Flag countryCode="US" svg />
+        </NavTextLg>
+        <MenuButton onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+      </Navigation>
+      <MobileNavigation isOpen={isOpen}>
+        <MobileNavContainer>
+          <NavTextSm>Trade</NavTextSm>
+          <NavTextSm>Wallet</NavTextSm>
+          <NavTextSm>Support</NavTextSm>
+          <NavTextSm>
+            EN <Flag countryCode="US" svg />
+          </NavTextSm>
+        </MobileNavContainer>
+      </MobileNavigation>
+    </Container>
   )
 }
