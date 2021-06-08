@@ -51,15 +51,13 @@ function PlaceOrder(props) {
     const price = Number(order.price)
     const amount = Number(order.amount)
 
-    if (price && amount) {
-      const total = (price * amount).toFixed(4)
+    const total = (price * amount).toFixed(4)
 
-      if (total !== order.total) {
-        setOrder({
-          ...order,
-          total
-        })
-      }
+    if (total !== order.total) {
+      setOrder({
+        ...order,
+        total
+      })
     }
   }, [order])
 
