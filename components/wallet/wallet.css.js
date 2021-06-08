@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { lighten } from 'polished'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -7,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background.dark};
-  padding: 0.75rem 0.25rem 1rem;
+  padding: 0.875rem 0 1rem;
 `
 
 export const ButtonContainer = styled.div`
@@ -17,31 +16,18 @@ export const ButtonContainer = styled.div`
 
   button {
     flex-grow: 1;
-    margin: 0 0.75rem;
-  }
-`
-
-export const MyAlgoLink = styled.a`
-  margin-top: 1rem;
-
-  svg {
-    transition: color 50ms ease-in-out;
-  }
-
-  &:hover {
-    svg {
-      color: ${({ theme }) => lighten(0.1, theme.colors.gray['500'])};
-    }
+    margin: 0 1.125rem;
   }
 `
 
 export const EmptyState = styled.div`
+  position: relative;
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1.25rem 1.125rem;
   text-align: center;
 `
 
@@ -50,11 +36,17 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
+export const Arrow = styled.div`
+  position: absolute;
+  top: 0.5rem;
+  left: 0.125rem;
+`
+
 export const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
   ${gridStyles}
-  padding: 0 0.75rem 0.25rem;
+  padding: 0 1.125rem 0.25rem;
   margin-top: 1.5rem;
 `
 
@@ -62,6 +54,23 @@ export const Wallets = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.gray[700]};
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.gray[600]};
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.gray[500]};
+  }
+  ::-webkit-scrollbar-corner {
+    background: ${({ theme }) => theme.colors.gray[700]};
+  }
 `
 
 export const WalletsWrapper = styled.div`
@@ -87,8 +96,8 @@ export const Balance = styled.p`
 export const WalletRow = styled.div`
   display: grid;
   ${gridStyles}
-  margin: 0.25rem 0.5rem;
-  padding: 0 0.25rem;
+  margin: 0.25rem 0.75rem;
+  padding: 0 0.375rem;
   border-radius: 0.125rem;
   cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
   transition: color 50ms ease-out;

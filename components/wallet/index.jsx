@@ -7,7 +7,7 @@ import SvgImage from 'components/svg-image'
 import {
   Container,
   ButtonContainer,
-  MyAlgoLink,
+  Arrow,
   EmptyState,
   Header,
   Wallets,
@@ -95,15 +95,15 @@ function Wallet(props) {
         </>
       ) : (
         <EmptyState>
+          <Arrow>
+            <SvgImage use="walletArrow" h={4} color="gray.600" />
+          </Arrow>
           <HeaderSm color="gray.100" m={0} mb={16}>
             Start by connecting an Algorand wallet
           </HeaderSm>
-          <BodyCopySm color="gray.500" m={0} mb={16}>
+          <BodyCopySm color="gray.500" m={0}>
             Once you&apos;ve connected a wallet using MyAlgo you can begin trading
           </BodyCopySm>
-          <MyAlgoLink href="https://wallet.myalgo.com/home" target="_blank" rel="noreferrer">
-            <SvgImage use="myAlgo" w={5} color="gray.500" />
-          </MyAlgoLink>
         </EmptyState>
       )}
     </Container>
