@@ -10,6 +10,7 @@ import { generateTradesData } from 'components/trade-history/demo'
 
 import {
   Main,
+  MainWrapper,
   WalletSection,
   TradeSection,
   ChartSection,
@@ -31,35 +32,41 @@ const DEMO_WALLETS = [
 
 export default function MainLayout() {
   return (
-    <Main>
-      <MobileInterface />
-      <WalletSection>
-        <Wallet wallets={DEMO_WALLETS} activeWalletId={DEMO_WALLETS[0].id} />
-      </WalletSection>
-      <TradeSection>
-        <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="FAME" />
-      </TradeSection>
-      <ChartSection>
-        <p className="demo">Chart</p>
-      </ChartSection>
-      <OrderBookSection>
-        <OrderBook
-          assetName="FAME"
-          currentPrice={1.3765}
-          priceChange={-0.0001}
-          sellData={DEMO_SELL_DATA}
-          buyData={DEMO_BUY_DATA}
-        />
-      </OrderBookSection>
-      <TradeHistorySection>
-        <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
-      </TradeHistorySection>
-      <OrdersSection>
-        <Orders />
-      </OrdersSection>
-      <AssetsSection>
-        <p className="demo">Assets search</p>
-      </AssetsSection>
-    </Main>
+    <MainWrapper>
+      <Main>
+        <MobileInterface />
+        <WalletSection>
+          <Wallet
+            wallets={DEMO_WALLETS}
+            activeWalletId={DEMO_WALLETS[0].id}
+            onWalletClick={() => null}
+          />
+        </WalletSection>
+        <TradeSection>
+          <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="FAME" />
+        </TradeSection>
+        <ChartSection>
+          <p className="demo">Chart</p>
+        </ChartSection>
+        <OrderBookSection>
+          <OrderBook
+            assetName="FAME"
+            currentPrice={1.3765}
+            priceChange={-0.0001}
+            sellData={DEMO_SELL_DATA}
+            buyData={DEMO_BUY_DATA}
+          />
+        </OrderBookSection>
+        <TradeHistorySection>
+          <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
+        </TradeHistorySection>
+        <OrdersSection>
+          <Orders />
+        </OrdersSection>
+        <AssetsSection>
+          <p className="demo">Assets search</p>
+        </AssetsSection>
+      </Main>
+    </MainWrapper>
   )
 }

@@ -8,8 +8,13 @@ export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background.dark};
+  overflow: hidden scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 export const Header = styled.header`

@@ -56,9 +56,15 @@ export const AssetsSection = styled.section`
   }
 `
 
+export const MainWrapper = styled.div`
+  position: relative;
+  height: 100%;
+`
+
 export const Main = styled.main`
+  position: absolute;
+  inset: 0;
   flex: 1 1 0%;
-  width: 100vw;
 
   & > section {
     display: none;
@@ -67,7 +73,7 @@ export const Main = styled.main`
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 48px 320px 1fr 1fr 180px;
+    grid-template-rows: 48px 240px 1fr 1fr 180px;
     grid-template-areas:
       'assets assets assets'
       'chart chart wallet'
@@ -87,7 +93,7 @@ export const Main = styled.main`
 
   @media (min-width: 1024px) {
     grid-template-columns: 1fr 320px 280px;
-    grid-template-rows: 48px 320px 2fr 2fr;
+    grid-template-rows: 48px 240px 2fr 2fr;
     grid-template-areas:
       'assets assets assets'
       'chart book wallet'
@@ -97,7 +103,7 @@ export const Main = styled.main`
 
   @media (min-width: 1024px) and (orientation: portrait) {
     grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 48px 320px 1fr 1fr 280px;
+    grid-template-rows: 48px 240px 1fr 1fr 280px;
     grid-template-areas:
       'assets assets assets'
       'chart chart wallet'
@@ -108,7 +114,7 @@ export const Main = styled.main`
 
   @media (min-width: 1536px) {
     grid-template-columns: 280px 1fr 320px 320px;
-    grid-template-rows: 320px 1fr 1fr 2fr;
+    grid-template-rows: 240px 1fr 1fr 2fr;
     grid-template-areas:
       'assets chart book wallet'
       'assets chart book trade'

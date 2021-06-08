@@ -4,7 +4,7 @@ import MainLayout from 'components/main-layout'
 import Header from 'components/header'
 
 const Container = styled.div`
-  min-height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   height: 100vh;
