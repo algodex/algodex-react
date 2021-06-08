@@ -22,13 +22,22 @@ const Button = styled.button.attrs(({ type }) => ({
   width: 100%;
   `};
 
+  padding: ${({ size }) => {
+    switch (size) {
+      case 'large':
+        return '0.875rem 2rem'
+
+      default:
+        return '0.5rem 1.5rem'
+    }
+  }};
+
   text-transform: uppercase;
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.05em;
   border-radius: 3px;
-  padding: 0.5rem 1.5rem;
   cursor: pointer;
   transition: background-color 50ms ease-in-out;
 
