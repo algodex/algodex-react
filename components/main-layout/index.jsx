@@ -3,6 +3,7 @@ import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
 import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
+import PlaceOrder from 'components/place-order'
 
 import { generateBookData } from 'components/order-book/demo'
 import { generateTradesData } from 'components/trade-history/demo'
@@ -36,7 +37,7 @@ export default function MainLayout() {
         <Wallet wallets={DEMO_WALLETS} activeWalletId={DEMO_WALLETS[0].id} />
       </WalletSection>
       <TradeSection>
-        <p className="demo">Trade</p>
+        <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="FAME" />
       </TradeSection>
       <ChartSection>
         <p className="demo">Chart</p>

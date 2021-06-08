@@ -6,6 +6,7 @@ const {
   title,
   headerLg,
   headerSm,
+  headerCaps,
   subtitle,
   bodyCopyLg,
   bodyCopy,
@@ -32,6 +33,12 @@ export const HeaderLg = (props) => (
 
 export const HeaderSm = (props) => (
   <BaseComponent {...headerSm} {...props}>
+    {props.children}
+  </BaseComponent>
+)
+
+export const HeaderCaps = (props) => (
+  <BaseComponent {...headerCaps} {...props}>
     {props.children}
   </BaseComponent>
 )
