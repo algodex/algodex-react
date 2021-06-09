@@ -4,9 +4,8 @@ import PropTypes from 'prop-types'
 import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
-import { orderHistory, assets, openOrders } from '../../data'
 
-function Orders({ initialPanel, openOrders, orderHistory, assets }) {
+function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
   // 'open-orders', 'order-history', 'assets'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -17,11 +16,11 @@ function Orders({ initialPanel, openOrders, orderHistory, assets }) {
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <OpenOrders openOrders={openOrders} />
+        return <OpenOrders openOrders={openOrderData} />
       case ORDER_HISTORY_PANEL:
-        return <OrderHistory orderHistory={orderHistory} />
+        return <OrderHistory orderHistory={orderHistoryData} />
       case ASSETS_PANEL:
-        return <Assets assets={assets} />
+        return <Assets assets={assetsData} />
       default:
         return null
     }
@@ -58,13 +57,13 @@ export default Orders
 
 Orders.propTypes = {
   initialPanel: PropTypes.string,
-  openOrders: PropTypes.array.isRequired,
-  orderHistory: PropTypes.array.isRequired,
-  assets: PropTypes.array.isRequired
+  openOrdersData: PropTypes.array.isRequired,
+  orderHistoryData: PropTypes.array.isRequired,
+  assetsData: PropTypes.array.isRequired
 }
 Orders.defaultProps = {
   initialPanel: 'open-orders',
-  openOrders,
-  orderHistory,
-  assets
+  openOrderData: [],
+  orderHistoryData: [],
+  assetsData: []
 }

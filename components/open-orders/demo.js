@@ -1,4 +1,4 @@
-export default [
+export const demoOpenOrderData = [
   {
     date: new Date('06-03-2021'),
     pair: ['ALGO', 'USDC'],
