@@ -22,9 +22,9 @@ export const Price = styled.div`
   position: absolute;
   justify-content: center;
   align-items: center;
-  top: 3.8rem;
+  top: 4.2rem;
   height: auto;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
 `
 export const Bid = styled.span`
   padding: 0.2rem 0.75rem;
@@ -41,6 +41,12 @@ export const Ask = styled.span`
 `
 
 export const Spread = styled.span`
-  padding: 0.75rem 2rem;
+  padding: 0.1rem 0.75rem;
   color: ${({ theme }) => theme.colors.gray['100']};
+`
+
+export const VolumeContainer = styled.div`
+  position: absolute;
+  top: 6rem;
+  display: flex;
 `

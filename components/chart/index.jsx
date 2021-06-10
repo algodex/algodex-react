@@ -1,22 +1,33 @@
 import PropTypes from 'prop-types'
-import { Container, ChartLabel, AssetName, Price, Bid, Ask, Spread } from './chart.css'
+import {
+  Container,
+  ChartLabel,
+  AssetName,
+  Price,
+  Bid,
+  Ask,
+  Spread,
+  VolumeContainer
+} from './chart.css'
 import { createChart, CrosshairMode } from 'lightweight-charts'
 import { useEffect } from 'react'
-import { Subtitle } from 'components/type'
+import { BodyCopyTiny, Subtitle } from 'components/type'
 
 const UP_COLOR = '#38A169'
 const DOWN_COLOR = '#E53E3E'
 const LINE_COLOR = '#1A202C'
 const BACKGROUND_COLOR = '#171923'
+const BORDER_COLOR = '#718096'
+const TEXT_COLOR = '#CBD5E0'
 
-function Chart({ data }) {
+function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair }) {
   useEffect(() => {
     const chartContainer = document.getElementById('chart')
 
     const chart = createChart(chartContainer, {
       layout: {
         backgroundColor: BACKGROUND_COLOR,
-        textColor: 'rgba(255, 255, 255, 0.9)',
+        textColor: TEXT_COLOR,
         fontFamily: 'Inter'
       },
       grid: {
@@ -31,10 +42,10 @@ function Chart({ data }) {
         mode: CrosshairMode.Normal
       },
       rightPriceScale: {
-        borderColor: '#718096'
+        borderColor: BORDER_COLOR
       },
       timeScale: {
-        borderColor: '#718096'
+        borderColor: BORDER_COLOR
       }
     })
 
@@ -46,24 +57,33 @@ function Chart({ data }) {
       wickDownColor: DOWN_COLOR,
       wickUpColor: UP_COLOR
     })
-    candleSeries.setData(data)
+    candleSeries.setData(priceData)
   }, [])
+
   return (
     <Container id="chart">
       <ChartLabel>
         <AssetName>
           <Subtitle color="gray.100" letterSpacing=".2rem">
-            FAME
+            {pair[0]}
           </Subtitle>
           <Subtitle color="gray.500" letterSpacing=".2rem" ml={1}>
-            /ALGO
+            {`/${pair[1]}`}
           </Subtitle>
         </AssetName>
         <Price>
-          <Bid>191.84</Bid>
-          <Spread>0.95</Spread>
-          <Ask>192.79</Ask>
+          <Bid>{bid.toFixed(4)}</Bid>
+          <Spread>{Math.abs(ask - bid).toFixed(4)}</Spread>
+          <Ask>{ask.toFixed(4)}</Ask>
         </Price>
+        <VolumeContainer>
+          <BodyCopyTiny color="gray.100" letterSpacing=".1rem">
+            VOL(ALGO):
+          </BodyCopyTiny>
+          <BodyCopyTiny color="gray.100" letterSpacing=".1rem" ml={1}>
+            {volume}
+          </BodyCopyTiny>
+        </VolumeContainer>
       </ChartLabel>
     </Container>
   )
