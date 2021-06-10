@@ -40,7 +40,7 @@ function SvgImage(props) {
   const { viewBox, markup } = IMAGES[props.use]
 
   return (
-    <Svg width={`${props.w}rem`} height={`${props.h}rem`} viewBox={viewBox} {...props}>
+    <Svg viewBox={viewBox} {...props}>
       {markup}
     </Svg>
   )

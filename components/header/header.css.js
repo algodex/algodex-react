@@ -44,6 +44,7 @@ export const MobileNavigation = styled.nav`
   position: absolute;
   width: 100%;
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  pointer-events: ${({ isOpen }) => (isOpen ? 'all' : 'none')};
   background-color: ${({ theme }) => theme.colors.gray[800]};
   z-index: 10;
 

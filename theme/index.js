@@ -68,10 +68,19 @@ const textStyles = {
   headerSm: {
     as: 'h3',
     fontFamily: fontFamilies.heading,
-    fontSize: [fontSizes[4], fontSizes[4], fontSizes[5]],
+    fontSize: [fontSizes[5], fontSizes[4], fontSizes[5]],
     fontWeight: 700,
     lineHeight: ['1.75rem', '1.75rem', '2rem'],
     letterSpacing: '-0.02em'
+  },
+  headerCaps: {
+    as: 'h3',
+    fontFamily: fontFamilies.body,
+    fontSize: fontSizes[3],
+    fontWeight: 700,
+    lineHeight: '1.25rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.12em'
   },
   subtitle: {
     as: 'p',
@@ -135,7 +144,7 @@ const textStyles = {
     fontWeight: 700,
     lineHeight: '1.125rem',
     textTransform: 'uppercase',
-    letterSpacing: '0.025em'
+    letterSpacing: '0.05em'
   },
   labelSm: {
     as: 'span',
@@ -172,6 +181,14 @@ export const buttons = {
     backgroundColor: colors.gray['600'],
     '&:hover': {
       backgroundColor: lighten(0.05, colors.gray['600'])
+    }
+  },
+  danger: {
+    color: colors.gray['000'],
+    border: '1px solid transparent',
+    backgroundColor: colors.red['500'],
+    '&:hover': {
+      backgroundColor: lighten(0.05, colors.red['500'])
     }
   }
 }

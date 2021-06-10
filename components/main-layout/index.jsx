@@ -5,6 +5,7 @@ import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
 import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
+import PlaceOrder from 'components/place-order'
 
 import { generateBookData } from 'components/order-book/demo'
 import { generateTradesData } from 'components/trade-history/demo'
@@ -15,6 +16,7 @@ import { demoAssetsData } from 'components/assets/demo'
 
 import {
   Main,
+  MainWrapper,
   WalletSection,
   TradeSection,
   ChartSection,
@@ -44,39 +46,45 @@ const DEMO_ASSETS_DATA = demoAssetsData
 
 export default function MainLayout() {
   return (
-    <Main>
-      <MobileInterface />
-      <WalletSection>
-        <Wallet wallets={DEMO_WALLETS} activeWalletId={DEMO_WALLETS[0].id} />
-      </WalletSection>
-      <TradeSection>
-        <p className="demo">Trade</p>
-      </TradeSection>
-      <ChartSection>
-        <Chart data={DEMO_CHART_DATA} />
-      </ChartSection>
-      <OrderBookSection>
-        <OrderBook
-          assetName="FAME"
-          currentPrice={1.3765}
-          priceChange={-0.0001}
-          sellData={DEMO_SELL_DATA}
-          buyData={DEMO_BUY_DATA}
-        />
-      </OrderBookSection>
-      <TradeHistorySection>
-        <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
-      </TradeHistorySection>
-      <OrdersSection>
-        <Orders
-          openOrderData={DEMO_OPEN_ORDER_DATA}
-          orderHistoryData={DEMO_ORDER_HISTORY_DATA}
-          assetData={DEMO_ASSETS_DATA}
-        />
-      </OrdersSection>
-      <AssetsSection>
-        <p className="demo">Assets search</p>
-      </AssetsSection>
-    </Main>
+    <MainWrapper>
+      <Main>
+        <MobileInterface />
+        <WalletSection>
+          <Wallet
+            wallets={DEMO_WALLETS}
+            activeWalletId={DEMO_WALLETS[0].id}
+            onWalletClick={() => null}
+          />
+        </WalletSection>
+        <TradeSection>
+          <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="FAME" />
+        </TradeSection>
+        <ChartSection>
+          <Chart data={DEMO_CHART_DATA} />
+        </ChartSection>
+        <OrderBookSection>
+          <OrderBook
+            assetName="FAME"
+            currentPrice={1.3765}
+            priceChange={-0.0001}
+            sellData={DEMO_SELL_DATA}
+            buyData={DEMO_BUY_DATA}
+          />
+        </OrderBookSection>
+        <TradeHistorySection>
+          <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
+        </TradeHistorySection>
+        <OrdersSection>
+          <Orders
+            openOrderData={DEMO_OPEN_ORDER_DATA}
+            orderHistoryData={DEMO_ORDER_HISTORY_DATA}
+            assetData={DEMO_ASSETS_DATA}
+          />
+        </OrdersSection>
+        <AssetsSection>
+          <p className="demo">Assets search</p>
+        </AssetsSection>
+      </Main>
+    </MainWrapper>
   )
 }

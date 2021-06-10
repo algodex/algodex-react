@@ -11,6 +11,12 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Inter', sans-serif;
     background-color: ${theme.colors.background.dark};
   }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
 `
 
 export default function App({ Component, pageProps }) {
