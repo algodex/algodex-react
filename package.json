@@ -31,6 +31,7 @@
   "dependencies": {
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
+    "lightweight-charts": "^3.3.0",
     "next": "10.2.3",
     "polished": "^4.1.3",
     "react": "17.0.2",
@@ -68,5 +69,8 @@
     "lint-staged": "^11.0.0",
     "prettier": "2.3.0",
     "react-test-renderer": "^17.0.2"
-  }
+  },
+  "transformIgnorePatterns": [
+    "node_modules/(?!(lightweight-charts|fancy-canvas)/)"
+  ]
 }
