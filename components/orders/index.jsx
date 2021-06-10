@@ -57,7 +57,7 @@ export default Orders
 
 Orders.propTypes = {
   initialPanel: PropTypes.string,
-  openOrdersData: PropTypes.array.isRequired,
+  openOrderData: PropTypes.array.isRequired,
   orderHistoryData: PropTypes.array.isRequired,
   assetsData: PropTypes.array.isRequired
 }
