@@ -36,6 +36,8 @@ const DEMO_CHART_DATA = demoChartData
 const DEMO_BID_ASK_PRICE = { bid: 191.26, ask: 192.68 }
 const DEMO_VOLUME_AMOUNT = '650M'
 const DEMO_SELECTED_PAIR = ['FAME', 'ALGO']
+const DEMO_DAILY_CHANGE_PERCENT = 5.26
+const DEMO_OHLC = { open: 185.6423, high: 209.6563, low: 159.3689, close: 171.6985 }
 
 const DEMO_WALLETS = [
   { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
@@ -68,6 +70,8 @@ export default function MainLayout() {
             bidAndAsk={DEMO_BID_ASK_PRICE}
             volume={DEMO_VOLUME_AMOUNT}
             pair={DEMO_SELECTED_PAIR}
+            dailyChange={DEMO_DAILY_CHANGE_PERCENT}
+            ohlc={DEMO_OHLC}
           />
         </ChartSection>
         <OrderBookSection>
