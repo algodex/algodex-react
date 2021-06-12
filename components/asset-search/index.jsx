@@ -32,7 +32,9 @@ const AssetNameCell = ({ value }) => (
 const AssetPriceCell = ({ value }) => <AssetPrice>{value.toFixed(3)}</AssetPrice>
 
 // eslint-disable-next-line react/prop-types
-const AssetChangeCell = ({ value }) => <AssetChange value={value}>{`${value}%`}</AssetChange>
+const AssetChangeCell = ({ value }) => (
+  <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
+)
 
 // eslint-disable-next-line react/prop-types
 function GlobalFilter({ globalFilter, setGlobalFilter }) {

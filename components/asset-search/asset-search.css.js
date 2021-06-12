@@ -62,10 +62,6 @@ export const AssetPrice = styled.span`
 
 export const AssetChange = styled.span`
   color: ${({ theme, value }) => (value < 0 ? theme.colors.red['500'] : theme.colors.green['500'])};
-
-  &::before {
-    content: ${({ value }) => (value < 0 ? '""' : '"+"')};
-  }
 `
 
 export const SortIcon = styled(Icon)``
