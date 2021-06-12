@@ -13,7 +13,7 @@ export const Container = styled.div`
 `
 
 export const SearchContainer = styled.div`
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.125rem;
   width: 319px;
 
   @media (min-width: 1536px) {
@@ -127,13 +127,14 @@ export const TableContainer = styled.div`
         &:first-child {
           th {
             top: 0;
-            padding: 0.75rem 1.125rem;
+            padding: 0.5rem 1.125rem;
           }
         }
 
         &:last-child {
           th {
-            top: 59px;
+            top: 51px;
+            border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
             color: ${({ theme }) => theme.colors.gray['500']};
             text-align: left;
             text-transform: uppercase;
