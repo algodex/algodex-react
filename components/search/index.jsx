@@ -52,9 +52,15 @@ const Input = styled(TextInput)`
 `
 
 function Search({ value, onCancel, ...props }) {
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      onCancel()
+    }
+  }
+
   return (
     <Container>
-      <Input value={value} {...props} />
+      <Input value={value} onKeyDown={handleKeyDown} {...props} />
       <SearchIcon color={theme.colors.gray['500']} size={16} />
       {onCancel && value !== '' && (
         <CancelButton onClick={onCancel}>
