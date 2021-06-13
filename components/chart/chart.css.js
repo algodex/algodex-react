@@ -137,6 +137,7 @@ export const IntervalSelector = styled.select`
   -moz-appearance: none;
   appearance: none;
   width: 3.75rem;
+  height: 1.75rem;
 `
 
 export const OHLC = styled.div`
@@ -192,8 +193,8 @@ export const Interval = styled.option``
 export const Chevron = styled(ChevronDown)`
   position: absolute;
   color: ${({ theme }) => theme.colors.gray[100]};
-  top: 0;
-  right: 0.2rem;
+  top: 0.1rem;
+  right: 0.35rem;
   width: 1rem;
   pointer-events: none;
 `
@@ -203,14 +204,7 @@ export const ChartModeButton = styled.button`
   color: ${({ theme }) => theme.colors.gray[100]};
   border: 1px solid ${({ theme }) => theme.colors.gray[100]};
   padding: 0.3rem 0.3rem 0.1rem 0.3rem;
-  position: absolute;
-  top: 7rem;
-  left: -1.5rem;
-
-  @media (min-width: 1536px) {
-    top: 7.5rem;
-    left: -1rem;
-  }
+  margin-left: 0.5rem;
 `
 
 export const TrendingUpIcon = styled(TrendingUp)``
@@ -232,4 +226,15 @@ export const CandleStickChart = styled.div`
   bottom: 0;
   right: 0;
   visibility: ${({ display }) => (display ? 'visible' : 'hidden')};
+`
+export const ChartOptions = styled.div`
+  display: flex;
+  position: absolute;
+  top: 7rem;
+  left: -1.5rem;
+
+  @media (min-width: 1536px) {
+    top: 7.5rem;
+    left: -1rem;
+  }
 `

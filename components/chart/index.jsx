@@ -24,7 +24,8 @@ import {
   CandleStickChart,
   AreaSeriesChart,
   TrendingUpIcon,
-  StatsChartIcon
+  StatsChartIcon,
+  ChartOptions
 } from './chart.css'
 import { useState, useEffect } from 'react'
 import { addListener } from 'resize-detector'
@@ -218,14 +219,6 @@ function Chart({
                 {dailyChange > 0 ? `+${dailyChange}%` : `-${dailyChange}%`}
               </BodyCopyTiny>
             </DailyChange>
-            <IntervalWrapper>
-              <IntervalSelector>
-                {CHART_INTERVALS.map((interval) => (
-                  <Interval key={interval}>{interval}</Interval>
-                ))}
-              </IntervalSelector>
-              <Chevron />
-            </IntervalWrapper>
           </AssetLabelContainer>
 
           <OHLC>
@@ -276,13 +269,23 @@ function Chart({
             {volume}
           </BodyCopyTiny>
         </VolumeContainer>
-        <ChartModeButton onClick={() => changeMode(chartMode)}>
-          {chartMode === 'LINE' ? (
-            <TrendingUpIcon color="#f2f2f2" width="1rem" height="1rem" />
-          ) : (
-            <StatsChartIcon color="#f2f2f2" width="1rem" height="1rem" />
-          )}
-        </ChartModeButton>
+        <ChartOptions>
+          <IntervalWrapper>
+            <IntervalSelector>
+              {CHART_INTERVALS.map((interval) => (
+                <Interval key={interval}>{interval}</Interval>
+              ))}
+            </IntervalSelector>
+            <Chevron />
+          </IntervalWrapper>
+          <ChartModeButton onClick={() => changeMode(chartMode)}>
+            {chartMode === 'LINE' ? (
+              <TrendingUpIcon color="#f2f2f2" width="1rem" height="1rem" />
+            ) : (
+              <StatsChartIcon color="#f2f2f2" width="1rem" height="1rem" />
+            )}
+          </ChartModeButton>
+        </ChartOptions>
       </ChartLabel>
     </Container>
   )
