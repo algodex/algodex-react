@@ -50,6 +50,10 @@ function GlobalFilter({ globalFilter, setGlobalFilter }) {
         setValue(e.target.value)
         onChange(e.target.value)
       }}
+      onCancel={() => {
+        setValue(undefined)
+        setGlobalFilter(undefined)
+      }}
       placeholder="Search"
     />
   )
