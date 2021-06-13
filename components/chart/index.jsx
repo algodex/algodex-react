@@ -1,4 +1,4 @@
-import { BodyCopyTiny, BodyCopyLg } from 'components/type'
+import { BodyCopyTiny, BodyCopy } from 'components/type'
 import {
   Ask,
   Bid,
@@ -168,11 +168,12 @@ function Chart({
   useEffect(() => {
     if (areaSeriesChart) {
       const areaSeries = areaSeriesChart.addAreaSeries({
-        topColor: 'rgba(33, 150, 243, 0.56)',
-        bottomColor: 'rgba(33, 150, 243, 0.04)',
-        lineColor: 'rgba(33, 150, 243, 1)',
+        topColor: '#248350',
+        bottomColor: '#38a16911',
+        lineColor: '#38A169',
         lineWidth: 2
       })
+
       areaSeries.setData(areaSeriesData)
       areaSeriesChart.timeScale().fitContent()
 
@@ -207,12 +208,12 @@ function Chart({
         <TopRow>
           <AssetLabelContainer>
             <AssetName>
-              <BodyCopyLg color="gray.100" letterSpacing=".2rem" mb={0}>
+              <BodyCopy color="gray.100" letterSpacing=".1rem" mb={0}>
                 {pair[0]}
-              </BodyCopyLg>
-              <BodyCopyLg color="gray.500" letterSpacing=".2rem" ml={1} mb={0}>
+              </BodyCopy>
+              <BodyCopy color="gray.500" letterSpacing=".1rem" ml={1} mb={0}>
                 {`/${pair[1]}`}
-              </BodyCopyLg>
+              </BodyCopy>
             </AssetName>
             <DailyChange dailyChange={dailyChange}>
               <BodyCopyTiny fontSize=".7rem" letterSpacing=".1rem" mb={1}>

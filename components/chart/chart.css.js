@@ -35,12 +35,12 @@ export const Price = styled.div`
   }
 
   @media (min-width: 1344px) {
-    top: 3rem;
+    top: 2.5rem;
     left: -0.5rem;
   }
 
   @media (min-width: 1920px) {
-    top: 3.5rem;
+    top: 3rem;
     left: 0;
   }
 `
@@ -75,12 +75,12 @@ export const VolumeContainer = styled.div`
   }
 
   @media (min-width: 1344px) {
-    top: 4.5rem;
+    top: 3.75rem;
     left: -0.5rem;
   }
 
   @media (min-width: 1920px) {
-    top: 5rem;
+    top: 4.25rem;
     left: 0rem;
   }
 `
@@ -138,6 +138,8 @@ export const IntervalSelector = styled.select`
   appearance: none;
   width: 3.75rem;
   height: 1.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
 `
 
 export const OHLC = styled.div`
@@ -230,11 +232,11 @@ export const CandleStickChart = styled.div`
 export const ChartOptions = styled.div`
   display: flex;
   position: absolute;
-  top: 6.8rem;
+  top: 5.8rem;
   left: -1.5rem;
 
   @media (min-width: 1920px) {
-    top: 7.5rem;
+    top: 6.5rem;
     left: -1rem;
   }
 `
