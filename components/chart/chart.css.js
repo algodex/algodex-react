@@ -1,4 +1,7 @@
 import styled from 'styled-components'
+import { ChevronDown } from 'react-feather'
+import { ReactSVG } from 'react-svg'
+import { TrendingUp, StatsChart } from 'react-ionicons'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -7,7 +10,7 @@ export const Container = styled.div`
 `
 export const ChartLabel = styled.div`
   position: absolute;
-  left: 2rem;
+  left: 1.75rem;
   z-index: 99;
 `
 
@@ -43,14 +46,14 @@ export const Price = styled.div`
 `
 export const Bid = styled.span`
   padding: 0.2rem 0.75rem;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid ${({ theme }) => theme.colors.green['500']};
   color: ${({ theme }) => theme.colors.green['500']};
 `
 
 export const Ask = styled.span`
   padding: 0.2rem 0.75rem;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid ${({ theme }) => theme.colors.red['500']};
   color: ${({ theme }) => theme.colors.red['500']};
 `
@@ -109,18 +112,31 @@ export const DailyChange = styled.div`
   color: ${({ theme, dailyChange }) =>
     dailyChange > 0 ? theme.colors.green[500] : theme.colors.red[500]};
 `
+export const IntervalWrapper = styled.div`
+  position: relative;
+`
 
-export const TimeIntervalSelector = styled.button`
-  color: ${({ theme }) => theme.colors.gray[100]};
-  border: none;
-  outline: none;
-  background: none;
-  cursor: pointer;
+const chartButtonStyles = `
+cursor: pointer;
+  margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0.2rem;
-  margin-left: 0.5rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  letter-spacing: 0.1rem;
+  font-weight: 500;
+`
+
+export const IntervalSelector = styled.select`
+  color: ${({ theme }) => theme.colors.gray[100]};
+  border: 1px solid ${({ theme }) => theme.colors.gray[100]};
+  background: none;
+  ${chartButtonStyles}
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 3.75rem;
 `
 
 export const OHLC = styled.div`
@@ -170,4 +186,45 @@ export const Close = styled.div`
 export const AssetLabelContainer = styled.div`
   display: flex;
   align-items: flex-end;
+`
+export const Interval = styled.option``
+
+export const Chevron = styled(ChevronDown)`
+  position: absolute;
+  color: ${({ theme }) => theme.colors.gray[100]};
+  top: 0;
+  right: 0.2rem;
+  width: 1rem;
+  pointer-events: none;
+`
+export const ChartModeButton = styled.button`
+  background: none;
+  ${chartButtonStyles}
+  color: ${({ theme }) => theme.colors.gray[100]};
+  border: 1px solid ${({ theme }) => theme.colors.gray[100]};
+  padding: 0.3rem 0.3rem 0.1rem 0.3rem;
+  position: absolute;
+  top: 7.5rem;
+  left: -1rem;
+`
+
+export const TrendingUpIcon = styled(TrendingUp)``
+
+export const StatsChartIcon = styled(StatsChart)``
+
+export const AreaSeriesChart = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  visibility: ${({ display }) => (display ? 'visible' : 'hidden')};
+`
+export const CandleStickChart = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  visibility: ${({ display }) => (display ? 'visible' : 'hidden')};
 `

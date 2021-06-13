@@ -6,6 +6,7 @@ import Orders from 'components/orders'
 import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
 import PlaceOrder from 'components/place-order'
+import Chart from 'components/chart'
 
 import { generateBookData } from 'components/order-book/demo'
 import { generateTradesData } from 'components/trade-history/demo'
@@ -25,8 +26,6 @@ import {
   OrdersSection,
   AssetsSection
 } from './main-layout.css'
-
-const Chart = dynamic(() => import('../chart'), { ssr: false })
 
 const DEMO_SELL_DATA = generateBookData(1.3766, 0.0001)
 const DEMO_BUY_DATA = generateBookData(1.3764, -0.0001)

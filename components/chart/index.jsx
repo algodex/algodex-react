@@ -1,27 +1,32 @@
-import PropTypes from 'prop-types'
+import { BodyCopyTiny, BodyCopyLg } from 'components/type'
 import {
-  Container,
-  ChartLabel,
-  AssetName,
-  Price,
-  Bid,
   Ask,
-  Spread,
-  VolumeContainer,
-  TopRow,
-  DailyChange,
-  TimeIntervalSelector,
-  OHLC,
-  Open,
+  Bid,
+  ChartLabel,
+  Close,
+  Container,
   High,
   Low,
-  Close,
-  AssetLabelContainer
+  OHLC,
+  Open,
+  Price,
+  Spread,
+  TopRow,
+  VolumeContainer,
+  AssetLabelContainer,
+  AssetName,
+  DailyChange,
+  IntervalWrapper,
+  IntervalSelector,
+  Interval,
+  Chevron,
+  ChartModeButton,
+  CandleStickChart,
+  AreaSeriesChart,
+  TrendingUpIcon,
+  StatsChartIcon
 } from './chart.css'
-import { createChart, CrosshairMode } from 'lightweight-charts'
-import { useEffect, useState } from 'react'
-import { BodyCopyTiny, BodyCopyLg, BodyCopySm } from 'components/type'
-import { ChevronDown } from 'react-feather'
+import { useState, useEffect } from 'react'
 
 const UP_COLOR = '#38A169'
 const DOWN_COLOR = '#E53E3E'
@@ -30,13 +35,30 @@ const BACKGROUND_COLOR = '#171923'
 const BORDER_COLOR = '#718096'
 const TEXT_COLOR = '#CBD5E0'
 
+const CHART_INTERVALS = ['1D', '4H', '1H', '15m', '3m', '1m']
+const CHART_MODES = ['CANDLE', 'LINE']
+
 function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, ohlc }) {
-  const [chartInterval, setChartInterval] = useState('1D')
+  const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[0])
+  const [chartMode, setChartMode] = useState(CHART_MODES[1])
 
-  useEffect(() => {
-    const chartContainer = document.getElementById('chart')
+  const areaSeriesData = priceData.map(({ time, close }) => ({
+    time,
+    value: close
+  }))
 
-    const chart = createChart(chartContainer, {
+  function changeMode(currentMode) {
+    currentMode === CHART_MODES[1] ? setChartMode(CHART_MODES[0]) : setChartMode(CHART_MODES[1])
+  }
+
+  let candleStickChartContainer, areaSeriesChartContainer, candleStickChart, areaSeriesChart
+
+  useEffect(async () => {
+    const { createChart, CrosshairMode } = await import('lightweight-charts')
+    candleStickChartContainer = document.getElementById('candleStickChart')
+    areaSeriesChartContainer = document.getElementById('areaSeriesChart')
+
+    candleStickChart = createChart(candleStickChartContainer, {
       layout: {
         backgroundColor: BACKGROUND_COLOR,
         textColor: TEXT_COLOR,
@@ -60,8 +82,7 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
         borderColor: BORDER_COLOR
       }
     })
-
-    const candleSeries = chart.addCandlestickSeries({
+    const candleSeries = candleStickChart.addCandlestickSeries({
       upColor: UP_COLOR,
       downColor: DOWN_COLOR,
       borderDownColor: DOWN_COLOR,
@@ -70,10 +91,81 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
       wickUpColor: UP_COLOR
     })
     candleSeries.setData(priceData)
+    candleStickChart.timeScale().fitContent()
+
+    areaSeriesChart = createChart(areaSeriesChartContainer, {
+      layout: {
+        backgroundColor: BACKGROUND_COLOR,
+        textColor: TEXT_COLOR,
+        fontFamily: 'Inter'
+      },
+      grid: {
+        vertLines: {
+          color: LINE_COLOR
+        },
+        horzLines: {
+          color: LINE_COLOR
+        }
+      },
+      crosshair: {
+        mode: CrosshairMode.Normal
+      },
+      rightPriceScale: {
+        borderColor: BORDER_COLOR
+      },
+      timeScale: {
+        borderColor: BORDER_COLOR
+      }
+    })
+    const areaSeries = areaSeriesChart.addAreaSeries({
+      topColor: '#248350',
+      bottomColor: '#38a16911',
+      lineColor: '#38A169',
+      lineWidth: 2
+    })
+
+    areaSeries.setData(areaSeriesData)
+    areaSeriesChart.timeScale().fitContent()
   }, [])
 
+  useEffect(() => {
+    if (areaSeriesChart) {
+      const areaSeries = areaSeriesChart.addAreaSeries({
+        topColor: 'rgba(33, 150, 243, 0.56)',
+        bottomColor: 'rgba(33, 150, 243, 0.04)',
+        lineColor: 'rgba(33, 150, 243, 1)',
+        lineWidth: 2
+      })
+      areaSeries.setData(areaSeriesData)
+      areaSeriesChart.timeScale().fitContent()
+
+      const barSpacing = candleStickChart.timeScale().getBarSpacing()
+      const rightOffset = candleStickChart.timeScale().scrollPosition()
+      areaSeriesChart.timeScale().applyOptions({ rightOffset, barSpacing })
+    }
+
+    if (candleStickChart) {
+      const candleSeries = candleStickChart.addCandlestickSeries({
+        upColor: UP_COLOR,
+        downColor: DOWN_COLOR,
+        borderDownColor: DOWN_COLOR,
+        borderUpColor: UP_COLOR,
+        wickDownColor: DOWN_COLOR,
+        wickUpColor: UP_COLOR
+      })
+      candleSeries.setData(priceData)
+      candleStickChart.timeScale().fitContent()
+
+      const barSpacing = areaSeriesChart.timeScale().getBarSpacing()
+      const rightOffset = areaSeriesChart.timeScale().scrollPosition()
+      candleStickChart.timeScale().applyOptions({ rightOffset, barSpacing })
+    }
+  }, [chartMode])
+
   return (
-    <Container id="chart">
+    <Container>
+      <CandleStickChart id="candleStickChart" display={chartMode === 'LINE'} />
+      <AreaSeriesChart id="areaSeriesChart" display={chartMode === 'CANDLE'} />
       <ChartLabel>
         <TopRow>
           <AssetLabelContainer>
@@ -90,13 +182,16 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
                 {dailyChange > 0 ? `+${dailyChange}%` : `-${dailyChange}%`}
               </BodyCopyTiny>
             </DailyChange>
+            <IntervalWrapper>
+              <IntervalSelector>
+                {CHART_INTERVALS.map((interval) => (
+                  <Interval key={interval}>{interval}</Interval>
+                ))}
+              </IntervalSelector>
+              <Chevron />
+            </IntervalWrapper>
           </AssetLabelContainer>
-          <TimeIntervalSelector>
-            <BodyCopyTiny letterSpacing=".1rem" fontSize=".7rem" letterSpacing=".1rem" m={0} mr={1}>
-              {chartInterval}
-            </BodyCopyTiny>
-            <ChevronDown size={12} />
-          </TimeIntervalSelector>
+
           <OHLC>
             <Open>
               <BodyCopyTiny color="gray.100" m={1}>
@@ -145,6 +240,13 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
             {volume}
           </BodyCopyTiny>
         </VolumeContainer>
+        <ChartModeButton onClick={() => changeMode(chartMode)}>
+          {chartMode === 'LINE' ? (
+            <TrendingUpIcon color="#f2f2f2" width="1rem" height="1rem" />
+          ) : (
+            <StatsChartIcon color="#f2f2f2" width="1rem" height="1rem" />
+          )}
+        </ChartModeButton>
       </ChartLabel>
     </Container>
   )

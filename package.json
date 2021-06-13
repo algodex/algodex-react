@@ -38,6 +38,7 @@
     "react-country-flag": "^2.3.0",
     "react-dom": "17.0.2",
     "react-feather": "^2.0.9",
+    "react-ionicons": "^4.2.0",
     "react-svg": "^13.0.6",
     "storybook-addon-jsx": "^7.3.10",
     "storybook-addon-next-router": "^2.0.4",
@@ -69,8 +70,5 @@
     "lint-staged": "^11.0.0",
     "prettier": "2.3.0",
     "react-test-renderer": "^17.0.2"
-  },
-  "transformIgnorePatterns": [
-    "node_modules/(?!(lightweight-charts|fancy-canvas)/)"
-  ]
+  }
 }
