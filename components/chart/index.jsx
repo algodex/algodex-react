@@ -27,6 +27,7 @@ import {
   StatsChartIcon
 } from './chart.css'
 import { useState, useEffect } from 'react'
+import { addListener } from 'resize-detector'
 
 const UP_COLOR = '#38A169'
 const DOWN_COLOR = '#E53E3E'
@@ -93,6 +94,13 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
     candleSeries.setData(priceData)
     candleStickChart.timeScale().fitContent()
 
+    addListener(candleStickChartContainer, () =>
+      candleStickChart.resize(
+        candleStickChartContainer.offsetWidth,
+        candleStickChartContainer.offsetHeight
+      )
+    )
+
     areaSeriesChart = createChart(areaSeriesChartContainer, {
       layout: {
         backgroundColor: BACKGROUND_COLOR,
@@ -126,6 +134,13 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
 
     areaSeries.setData(areaSeriesData)
     areaSeriesChart.timeScale().fitContent()
+
+    addListener(areaSeriesChartContainer, () =>
+      areaSeriesChart.resize(
+        areaSeriesChartContainer.offsetWidth,
+        areaSeriesChartContainer.offsetHeight
+      )
+    )
   }, [])
 
   useEffect(() => {

@@ -41,6 +41,7 @@
     "react-ionicons": "^4.2.0",
     "react-svg": "^13.0.6",
     "react-table": "^7.7.0",
+    "resize-detector": "^0.3.0",
     "storybook-addon-jsx": "^7.3.10",
     "storybook-addon-next-router": "^2.0.4",
     "styled-components": "^5.3.0",
