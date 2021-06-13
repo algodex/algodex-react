@@ -204,8 +204,13 @@ export const ChartModeButton = styled.button`
   border: 1px solid ${({ theme }) => theme.colors.gray[100]};
   padding: 0.3rem 0.3rem 0.1rem 0.3rem;
   position: absolute;
-  top: 7.5rem;
-  left: -1rem;
+  top: 7rem;
+  left: -1.5rem;
+
+  @media (min-width: 1536px) {
+    top: 7.5rem;
+    left: -1rem;
+  }
 `
 
 export const TrendingUpIcon = styled(TrendingUp)``
