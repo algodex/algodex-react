@@ -7,6 +7,7 @@ import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
 import PlaceOrder from 'components/place-order'
 import Chart from 'components/chart'
+import AssetSearch from 'components/asset-search'
 
 import { generateBookData } from 'components/order-book/demo'
 import { generateTradesData } from 'components/trade-history/demo'
@@ -93,7 +94,7 @@ export default function MainLayout() {
           />
         </OrdersSection>
         <AssetsSection>
-          <p className="demo">Assets search</p>
+          <AssetSearch />
         </AssetsSection>
       </Main>
     </MainWrapper>
