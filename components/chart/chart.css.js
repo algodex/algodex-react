@@ -230,10 +230,10 @@ export const CandleStickChart = styled.div`
 export const ChartOptions = styled.div`
   display: flex;
   position: absolute;
-  top: 7rem;
+  top: 6.8rem;
   left: -1.5rem;
 
-  @media (min-width: 1536px) {
+  @media (min-width: 1920px) {
     top: 7.5rem;
     left: -1rem;
   }
