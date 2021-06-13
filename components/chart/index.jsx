@@ -164,8 +164,8 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
 
   return (
     <Container>
-      <CandleStickChart id="candleStickChart" display={chartMode === 'LINE'} />
-      <AreaSeriesChart id="areaSeriesChart" display={chartMode === 'CANDLE'} />
+      <CandleStickChart id="candleStickChart" display={chartMode === 'LINE' ? true : false} />
+      <AreaSeriesChart id="areaSeriesChart" display={chartMode === 'CANDLE' ? true : false} />
       <ChartLabel>
         <TopRow>
           <AssetLabelContainer>
