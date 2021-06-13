@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 import { useState, useMemo } from 'react'
 // import PropTypes from 'prop-types'
-import { useTable, useSortBy, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 
 import makeData from './demo'
@@ -39,9 +39,9 @@ const AssetChangeCell = ({ value }) => (
 // eslint-disable-next-line react/prop-types
 function GlobalFilter({ globalFilter, setGlobalFilter }) {
   const [value, setValue] = useState(globalFilter)
-  const onChange = useAsyncDebounce((value) => {
+  const onChange = (value) => {
     setGlobalFilter(value || undefined)
-  }, 200)
+  }
 
   return (
     <Search
