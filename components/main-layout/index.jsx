@@ -11,7 +11,7 @@ import AssetSearch from 'components/asset-search'
 
 import { generateBookData } from 'components/order-book/demo'
 import { generateTradesData } from 'components/trade-history/demo'
-import { demoChartData } from 'components/chart/demo'
+import { demoChartData, demoVolumeData } from 'components/chart/demo'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import { demoAssetsData } from 'components/assets/demo'
@@ -38,6 +38,7 @@ const DEMO_VOLUME_AMOUNT = '650M'
 const DEMO_SELECTED_PAIR = ['FAME', 'ALGO']
 const DEMO_DAILY_CHANGE_PERCENT = 5.26
 const DEMO_OHLC = { open: 185.6423, high: 209.6563, low: 159.3689, close: 171.6985 }
+const DEMO_VOLUME_DATA = demoVolumeData
 
 const DEMO_WALLETS = [
   { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
@@ -72,6 +73,7 @@ export default function MainLayout() {
             pair={DEMO_SELECTED_PAIR}
             dailyChange={DEMO_DAILY_CHANGE_PERCENT}
             ohlc={DEMO_OHLC}
+            volumeData={DEMO_VOLUME_DATA}
           />
         </ChartSection>
         <OrderBookSection>

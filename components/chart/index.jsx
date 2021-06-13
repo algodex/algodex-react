@@ -28,7 +28,8 @@ import {
 } from './chart.css'
 import { useState, useEffect } from 'react'
 import { addListener } from 'resize-detector'
-
+const ll = '#2fb16c6c'
+const asd = '#e53e3e6c'
 const UP_COLOR = '#38A169'
 const DOWN_COLOR = '#E53E3E'
 const LINE_COLOR = '#1A202C'
@@ -39,7 +40,15 @@ const TEXT_COLOR = '#CBD5E0'
 const CHART_INTERVALS = ['1D', '4H', '1H', '15m', '3m', '1m']
 const CHART_MODES = ['CANDLE', 'LINE']
 
-function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, ohlc }) {
+function Chart({
+  bidAndAsk: { bid, ask },
+  priceData,
+  volume,
+  pair,
+  dailyChange,
+  ohlc,
+  volumeData
+}) {
   const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[0])
   const [chartMode, setChartMode] = useState(CHART_MODES[1])
 
@@ -91,6 +100,18 @@ function Chart({ bidAndAsk: { bid, ask }, priceData, volume, pair, dailyChange, 
       wickDownColor: DOWN_COLOR,
       wickUpColor: UP_COLOR
     })
+    const volumeSeries = candleStickChart.addHistogramSeries({
+      color: UP_COLOR,
+      priceFormat: {
+        type: 'volume'
+      },
+      priceScaleId: '',
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0
+      }
+    })
+    volumeSeries.setData(volumeData)
     candleSeries.setData(priceData)
     candleStickChart.timeScale().fitContent()
 
