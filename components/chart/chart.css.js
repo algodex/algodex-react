@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { ChevronDown } from 'react-feather'
-import { ReactSVG } from 'react-svg'
 import { TrendingUp, StatsChart } from 'react-ionicons'
 
 export const Container = styled.div`

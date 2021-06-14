@@ -29,6 +29,7 @@ import {
 } from './chart.css'
 import { useState, useEffect } from 'react'
 import { addListener } from 'resize-detector'
+import { ReturnUpBackOutline } from 'react-ionicons'
 const ll = '#2fb16c6c'
 const asd = '#e53e3e6c'
 const UP_COLOR = '#38A169'
@@ -50,120 +51,69 @@ function Chart({
   ohlc,
   volumeData
 }) {
-  const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[0])
-  const [chartMode, setChartMode] = useState(CHART_MODES[1])
+  const [chartInterval, setChartInterval] = useState('1D')
+  const [chartMode, setChartMode] = useState('CANDLE')
+  const [candleStickChart, setCandleStickChart] = useState()
+  const [areaSeriesChart, setAreaSeriesChart] = useState()
 
   const areaSeriesData = priceData.map(({ time, close }) => ({
     time,
     value: close
   }))
 
+  let candleStickChartContainer, areaSeriesChartContainer
+
   function changeMode(currentMode) {
-    currentMode === CHART_MODES[1] ? setChartMode(CHART_MODES[0]) : setChartMode(CHART_MODES[1])
+    if (currentMode === 'LINE') {
+      const logicalRange = areaSeriesChart.timeScale().getVisibleLogicalRange()
+      candleStickChart.timeScale().setVisibleLogicalRange(logicalRange)
+      setChartMode('CANDLE')
+      return
+    }
+
+    if (currentMode === 'CANDLE') {
+      const logicalRange = candleStickChart.timeScale().getVisibleLogicalRange()
+      areaSeriesChart.timeScale().setVisibleLogicalRange(logicalRange)
+      setChartMode('LINE')
+      return
+    }
   }
 
-  let candleStickChartContainer, areaSeriesChartContainer, candleStickChart, areaSeriesChart
-
-  useEffect(async () => {
-    const { createChart, CrosshairMode } = await import('lightweight-charts')
-    candleStickChartContainer = document.getElementById('candleStickChart')
-    areaSeriesChartContainer = document.getElementById('areaSeriesChart')
-
-    candleStickChart = createChart(candleStickChartContainer, {
-      layout: {
-        backgroundColor: BACKGROUND_COLOR,
-        textColor: TEXT_COLOR,
-        fontFamily: 'Inter'
-      },
-      grid: {
-        vertLines: {
-          color: LINE_COLOR
+  useEffect(() => {
+    if (candleStickChart) {
+      const candleSeries = candleStickChart.addCandlestickSeries({
+        upColor: UP_COLOR,
+        downColor: DOWN_COLOR,
+        borderDownColor: DOWN_COLOR,
+        borderUpColor: UP_COLOR,
+        wickDownColor: DOWN_COLOR,
+        wickUpColor: UP_COLOR
+      })
+      const volumeSeries = candleStickChart.addHistogramSeries({
+        color: UP_COLOR,
+        priceFormat: {
+          type: 'volume'
         },
-        horzLines: {
-          color: LINE_COLOR
+        priceScaleId: '',
+        scaleMargins: {
+          top: 0.8,
+          bottom: 0
         }
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal
-      },
-      rightPriceScale: {
-        borderColor: BORDER_COLOR
-      },
-      timeScale: {
-        borderColor: BORDER_COLOR
+      })
+      volumeSeries.setData(volumeData)
+      candleSeries.setData(priceData)
+      candleStickChart.timeScale().fitContent()
+
+      if (candleStickChartContainer) {
+        addListener(candleStickChartContainer, () =>
+          candleStickChart.resize(
+            candleStickChartContainer.offsetWidth,
+            candleStickChartContainer.offsetHeight
+          )
+        )
       }
-    })
-    const candleSeries = candleStickChart.addCandlestickSeries({
-      upColor: UP_COLOR,
-      downColor: DOWN_COLOR,
-      borderDownColor: DOWN_COLOR,
-      borderUpColor: UP_COLOR,
-      wickDownColor: DOWN_COLOR,
-      wickUpColor: UP_COLOR
-    })
-    const volumeSeries = candleStickChart.addHistogramSeries({
-      color: UP_COLOR,
-      priceFormat: {
-        type: 'volume'
-      },
-      priceScaleId: '',
-      scaleMargins: {
-        top: 0.8,
-        bottom: 0
-      }
-    })
-    volumeSeries.setData(volumeData)
-    candleSeries.setData(priceData)
-    candleStickChart.timeScale().fitContent()
-
-    addListener(candleStickChartContainer, () =>
-      candleStickChart.resize(
-        candleStickChartContainer.offsetWidth,
-        candleStickChartContainer.offsetHeight
-      )
-    )
-
-    areaSeriesChart = createChart(areaSeriesChartContainer, {
-      layout: {
-        backgroundColor: BACKGROUND_COLOR,
-        textColor: TEXT_COLOR,
-        fontFamily: 'Inter'
-      },
-      grid: {
-        vertLines: {
-          color: LINE_COLOR
-        },
-        horzLines: {
-          color: LINE_COLOR
-        }
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal
-      },
-      rightPriceScale: {
-        borderColor: BORDER_COLOR
-      },
-      timeScale: {
-        borderColor: BORDER_COLOR
-      }
-    })
-    const areaSeries = areaSeriesChart.addAreaSeries({
-      topColor: '#248350',
-      bottomColor: '#38a16911',
-      lineColor: '#38A169',
-      lineWidth: 2
-    })
-
-    areaSeries.setData(areaSeriesData)
-    areaSeriesChart.timeScale().fitContent()
-
-    addListener(areaSeriesChartContainer, () =>
-      areaSeriesChart.resize(
-        areaSeriesChartContainer.offsetWidth,
-        areaSeriesChartContainer.offsetHeight
-      )
-    )
-  }, [])
+    }
+  }, [candleStickChart])
 
   useEffect(() => {
     if (areaSeriesChart) {
@@ -177,33 +127,81 @@ function Chart({
       areaSeries.setData(areaSeriesData)
       areaSeriesChart.timeScale().fitContent()
 
-      const barSpacing = candleStickChart.timeScale().getBarSpacing()
-      const rightOffset = candleStickChart.timeScale().scrollPosition()
-      areaSeriesChart.timeScale().applyOptions({ rightOffset, barSpacing })
+      if (areaSeriesChartContainer) {
+        addListener(areaSeriesChartContainer, () =>
+          areaSeriesChart.resize(
+            areaSeriesChartContainer.offsetWidth,
+            areaSeriesChartContainer.offsetHeight
+          )
+        )
+      }
     }
+  }, [areaSeriesChart])
 
-    if (candleStickChart) {
-      const candleSeries = candleStickChart.addCandlestickSeries({
-        upColor: UP_COLOR,
-        downColor: DOWN_COLOR,
-        borderDownColor: DOWN_COLOR,
-        borderUpColor: UP_COLOR,
-        wickDownColor: DOWN_COLOR,
-        wickUpColor: UP_COLOR
+  useEffect(async () => {
+    const { createChart, CrosshairMode } = await import('lightweight-charts')
+    candleStickChartContainer = document.getElementById('candleStickChart')
+    areaSeriesChartContainer = document.getElementById('areaSeriesChart')
+
+    setCandleStickChart(
+      createChart(candleStickChartContainer, {
+        layout: {
+          backgroundColor: BACKGROUND_COLOR,
+          textColor: TEXT_COLOR,
+          fontFamily: 'Inter'
+        },
+        grid: {
+          vertLines: {
+            color: LINE_COLOR
+          },
+          horzLines: {
+            color: LINE_COLOR
+          }
+        },
+        crosshair: {
+          mode: CrosshairMode.Normal
+        },
+        rightPriceScale: {
+          borderColor: BORDER_COLOR
+        },
+        timeScale: {
+          borderColor: BORDER_COLOR
+        }
       })
-      candleSeries.setData(priceData)
-      candleStickChart.timeScale().fitContent()
+    )
 
-      const barSpacing = areaSeriesChart.timeScale().getBarSpacing()
-      const rightOffset = areaSeriesChart.timeScale().scrollPosition()
-      candleStickChart.timeScale().applyOptions({ rightOffset, barSpacing })
-    }
-  }, [chartMode])
+    setAreaSeriesChart(
+      createChart(areaSeriesChartContainer, {
+        layout: {
+          backgroundColor: BACKGROUND_COLOR,
+          textColor: TEXT_COLOR,
+          fontFamily: 'Inter'
+        },
+        grid: {
+          vertLines: {
+            color: LINE_COLOR
+          },
+          horzLines: {
+            color: LINE_COLOR
+          }
+        },
+        crosshair: {
+          mode: CrosshairMode.Normal
+        },
+        rightPriceScale: {
+          borderColor: BORDER_COLOR
+        },
+        timeScale: {
+          borderColor: BORDER_COLOR
+        }
+      })
+    )
+  }, [])
 
   return (
     <Container>
-      <CandleStickChart id="candleStickChart" display={chartMode === 'LINE' ? true : false} />
-      <AreaSeriesChart id="areaSeriesChart" display={chartMode === 'CANDLE' ? true : false} />
+      <CandleStickChart id="candleStickChart" display={chartMode === 'CANDLE' ? true : false} />
+      <AreaSeriesChart id="areaSeriesChart" display={chartMode === 'LINE' ? true : false} />
       <ChartLabel>
         <TopRow>
           <AssetLabelContainer>
@@ -280,7 +278,7 @@ function Chart({
             <Chevron />
           </IntervalWrapper>
           <ChartModeButton onClick={() => changeMode(chartMode)}>
-            {chartMode === 'LINE' ? (
+            {chartMode === 'CANDLE' ? (
               <TrendingUpIcon color="#f2f2f2" width="1rem" height="1rem" />
             ) : (
               <StatsChartIcon color="#f2f2f2" width="1rem" height="1rem" />
