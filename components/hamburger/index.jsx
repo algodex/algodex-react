@@ -9,13 +9,12 @@ const StyledMotionSvg = styled(motion.svg)`
   }
 `
 
-function Hamburger({ isOpen, ...props }) {
+function Hamburger({ isOpen }) {
   const width = 24
   const height = 15
   const strokeWidth = 2
   const color = '#F8FAFC'
   const transition = null
-  const lineProps = null
   const variant = isOpen ? 'opened' : 'closed'
 
   const top = {
@@ -46,14 +45,13 @@ function Hamburger({ isOpen, ...props }) {
       translateY: -2
     }
   }
-  lineProps = {
+  const lineProps = {
     stroke: color,
     strokeWidth: strokeWidth,
     vectorEffect: 'non-scaling-stroke',
     initial: 'closed',
     animate: variant,
-    transition,
-    ...lineProps
+    transition
   }
   const unitHeight = 4
   const unitWidth = (unitHeight * width) / height
