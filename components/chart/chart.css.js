@@ -229,7 +229,7 @@ export const AreaSeriesChart = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  visibility: ${({ display }) => (display ? 'visible' : 'hidden')};
+  visibility: ${({ display }) => (display === true ? 'visible' : 'hidden')};
 `
 export const CandleStickChart = styled.div`
   position: absolute;
