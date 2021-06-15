@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Orders from '.'
-import { openOrders, orderHistory, assets } from 'data'
+import { demoOpenOrderData } from 'components/open-orders/demo'
+import { demoOrderHistoryData } from 'components/order-history/demo'
+import { demoAssetsData } from 'components/assets/demo'
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[800]};
@@ -29,9 +31,9 @@ const Template = (args) => <Orders {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  openOrders,
-  orderHistory,
-  assets
+  openOrders: demoOpenOrderData,
+  orderHistory: demoOrderHistoryData,
+  assets: demoAssetsData
 }
 export const Empty = Template.bind({})
 Empty.args = {

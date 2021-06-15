@@ -1,7 +1,7 @@
-import { orderHistory } from 'data'
+import { demoAssetsData } from './demo'
 import React from 'react'
 import styled from 'styled-components'
-import OrderHistory from '.'
+import Assets from '.'
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[800]};
@@ -14,8 +14,8 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Order History',
-  component: OrderHistory,
+  title: 'Assets',
+  component: Assets,
   decorators: [
     (Story) => (
       <Container>
@@ -25,14 +25,14 @@ export default {
   ]
 }
 
-const Template = (args) => <OrderHistory {...args} />
+const Template = (args) => <Assets {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  orderHistory
+  assets: demoAssetsData
 }
 
-export const NoOrderHistory = Template.bind({})
-NoOrderHistory.args = {
-  orderHistory: []
+export const NoAssets = Template.bind({})
+NoAssets.args = {
+  assets: []
 }

@@ -1,4 +1,4 @@
-import MenuButton from 'components/menu-button'
+import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Bell, User } from 'react-feather'
@@ -38,7 +38,7 @@ export default function Header() {
         <NavTextLg>
           EN <Flag countryCode="US" svg />
         </NavTextLg>
-        <MenuButton onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+        <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
         <MobileNavContainer>

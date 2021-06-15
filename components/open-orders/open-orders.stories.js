@@ -1,7 +1,7 @@
-import { assets } from 'data'
+import { demoOpenOrderData } from './demo'
 import React from 'react'
 import styled from 'styled-components'
-import Assets from '.'
+import OpenOrders from '.'
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[800]};
@@ -14,8 +14,8 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Assets',
-  component: Assets,
+  title: 'Open Orders',
+  component: OpenOrders,
   decorators: [
     (Story) => (
       <Container>
@@ -25,14 +25,14 @@ export default {
   ]
 }
 
-const Template = (args) => <Assets {...args} />
+const Template = (args) => <OpenOrders {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  assets
+  openOrders: demoOpenOrderData
 }
 
-export const NoAssets = Template.bind({})
-NoAssets.args = {
-  assets: []
+export const NoOpenOrders = Template.bind({})
+NoOpenOrders.args = {
+  openOrders: []
 }

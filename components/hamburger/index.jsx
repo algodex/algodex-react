@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 const StyledMotionSvg = styled(motion.svg)`
   cursor: pointer;
@@ -8,17 +9,15 @@ const StyledMotionSvg = styled(motion.svg)`
   }
 `
 
-function MenuButton({
-  isOpen = false,
-  width = 24,
-  height = 15,
-  strokeWidth = 2,
-  color = '#F8FAFC',
-  transition = null,
-  lineProps = null,
-  ...props
-}) {
+function Hamburger({ isOpen, ...props }) {
+  const width = 24
+  const height = 15
+  const strokeWidth = 2
+  const color = '#F8FAFC'
+  const transition = null
+  const lineProps = null
   const variant = isOpen ? 'opened' : 'closed'
+
   const top = {
     closed: {
       rotate: 0,
@@ -75,4 +74,12 @@ function MenuButton({
   )
 }
 
-export default MenuButton
+export default Hamburger
+
+Hamburger.propTypes = {
+  isOpen: PropTypes.bool
+}
+
+Hamburger.defaultProps = {
+  isOpen: false
+}

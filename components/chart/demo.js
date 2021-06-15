@@ -1,4 +1,4 @@
-export const demoChartData = [
+export const DEMO_CHART_DATA = [
   { time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85 },
   { time: '2018-10-22', open: 180.82, high: 181.4, low: 177.56, close: 178.75 },
   { time: '2018-10-23', open: 175.77, high: 179.49, low: 175.44, close: 178.53 },
@@ -150,7 +150,7 @@ export const demoChartData = [
   { time: '2019-05-24', open: 192.54, high: 193.86, low: 190.41, close: 193.59 }
 ]
 
-const colors = demoChartData.map(({ open, close }) => (open > close ? '#e53e3e2c' : '#2fb16c2c'))
+const colors = DEMO_CHART_DATA.map(({ open, close }) => (open > close ? '#e53e3e2c' : '#2fb16c2c'))
 
 const volumeData = [
   { time: '2018-10-19', value: 19103293.0 },
@@ -305,4 +305,9 @@ const volumeData = [
   { time: '2019-05-28', value: 3097125.0 }
 ]
 
-export const demoVolumeData = volumeData.map((data, i) => ({ ...data, color: colors[i] }))
+export const DEMO_VOLUME_DATA = volumeData.map((data, i) => ({ ...data, color: colors[i] }))
+export const DEMO_BID_ASK_PRICE = { bid: 191.26, ask: 192.68 }
+export const DEMO_VOLUME_AMOUNT = 650000000
+export const DEMO_SELECTED_PAIR = ['FAME', 'ALGO']
+export const DEMO_DAILY_CHANGE_PERCENT = 5.26
+export const DEMO_OHLC = { open: 185.6423, high: 209.6563, low: 159.3689, close: 171.6985 }

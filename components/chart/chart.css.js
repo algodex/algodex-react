@@ -43,11 +43,19 @@ export const Price = styled.div`
     left: 0;
   }
 `
+const bidAskStyles = `
+width: 3rem;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
 export const Bid = styled.span`
   padding: 0.2rem 0.75rem;
   border-radius: 3px;
   border: 1px solid ${({ theme }) => theme.colors.green['500']};
   color: ${({ theme }) => theme.colors.green['500']};
+  ${bidAskStyles}
 `
 
 export const Ask = styled.span`
@@ -55,11 +63,13 @@ export const Ask = styled.span`
   border-radius: 3px;
   border: 1px solid ${({ theme }) => theme.colors.red['500']};
   color: ${({ theme }) => theme.colors.red['500']};
+  ${bidAskStyles}
 `
 
 export const Spread = styled.span`
   padding: 0.1rem 0.75rem;
   color: ${({ theme }) => theme.colors.gray['100']};
+  ${bidAskStyles}
 `
 
 export const VolumeContainer = styled.div`
@@ -204,8 +214,9 @@ export const ChartModeButton = styled.button`
   ${chartButtonStyles}
   color: ${({ theme }) => theme.colors.gray[100]};
   border: 1px solid ${({ theme }) => theme.colors.gray[100]};
-  padding: 0.3rem 0.3rem 0.1rem 0.3rem;
+  padding: 0.3rem;
   margin-left: 0.5rem;
+  transition: background-color 0.1s ease-in;
 `
 
 export const TrendingUpIcon = styled(TrendingUp)``
