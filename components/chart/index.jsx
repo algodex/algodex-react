@@ -331,20 +331,12 @@ function Chart({
 export default Chart
 
 Chart.propTypes = {
-  bidAndAsk: {
-    bid: PropTypes.number,
-    ask: PropTypes.number
-  },
+  bidAndAsk: PropTypes.object,
   priceData: PropTypes.array,
   volume24hr: PropTypes.number,
   pair: PropTypes.array,
   dailyChange: PropTypes.number,
-  ohlc: {
-    open: PropTypes.number,
-    high: PropTypes.number,
-    low: PropTypes.number,
-    close: PropTypes.number
-  },
+  ohlc: PropTypes.object,
   volumeData: PropTypes.array,
   initialMode: PropTypes.string
 }
