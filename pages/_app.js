@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useEffect } from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import theme from 'theme'
 
@@ -20,6 +21,14 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function App({ Component, pageProps }) {
+  useEffect(() => {
+    const initAlgodexApi = async () => {
+      const algodex = (await import('@algodex/algodex-api')).default
+      algodex.printMsg()
+    }
+    initAlgodexApi()
+  }, [])
+
   return (
     <>
       <GlobalStyle />
