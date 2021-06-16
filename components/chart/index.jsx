@@ -88,12 +88,12 @@ function Chart({
     <Container>
       <CandleStickChart
         ref={candleChartRef}
-        display={chartMode === CANDLE ? true : false}
+        isVisible={chartMode === CANDLE ? true : false}
         data-testid="candleStickChart"
       />
       <AreaSeriesChart
         ref={areaChartRef}
-        display={chartMode === LINE ? true : false}
+        isVisible={chartMode === LINE ? true : false}
         data-testid="lineChart"
       />
       <ChartLabel>
