@@ -44,7 +44,7 @@ export const Price = styled.div`
   }
 `
 const bidAskStyles = `
-width: 3rem;
+width: 4rem;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -75,12 +75,12 @@ export const Spread = styled.span`
 export const VolumeContainer = styled.div`
   position: absolute;
   top: 4.5rem;
-  left: -1rem;
+  left: -0.9rem;
   display: flex;
 
   @media (min-width: 768px) {
     top: 5.3rem;
-    left: -1.25rem;
+    left: -1.2rem;
   }
 
   @media (min-width: 1344px) {
@@ -217,6 +217,10 @@ export const ChartModeButton = styled.button`
   padding: 0.3rem;
   margin-left: 0.5rem;
   transition: background-color 0.1s ease-in;
+
+  & > span {
+    height: 16px;
+  }
 `
 
 export const TrendingUpIcon = styled(TrendingUp)``
@@ -242,10 +246,10 @@ export const CandleStickChart = styled.div`
 export const ChartOptions = styled.div`
   display: flex;
   position: absolute;
-  top: 5.8rem;
-  left: -1.5rem;
+  top: 7.5rem;
+  left: -2.2rem;
 
-  @media (min-width: 1920px) {
+  @media (min-width: 1344px) {
     top: 6.5rem;
     left: -1rem;
   }
