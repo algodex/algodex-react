@@ -1,6 +1,6 @@
-/* eslint-disable react/jsx-key */
-import { useState, useEffect, useMemo, useRef } from 'react'
-// import PropTypes from 'prop-types'
+/* eslint-disable react/prop-types, react/jsx-key  */
+import { useState, useEffect, useMemo, useRef, createRef } from 'react'
+import PropTypes from 'prop-types'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 
@@ -8,7 +8,6 @@ import makeData from './demo'
 
 import {
   Container,
-  SearchContainer,
   AssetsContainer,
   TableWrapper,
   AssetName,
@@ -20,7 +19,6 @@ import {
   TableContainer
 } from './asset-search.css'
 
-// eslint-disable-next-line react/prop-types
 const AssetNameCell = ({ value }) => (
   <>
     <AssetName>{value}</AssetName>
@@ -29,23 +27,61 @@ const AssetNameCell = ({ value }) => (
   </>
 )
 
-// eslint-disable-next-line react/prop-types
 const AssetPriceCell = ({ value }) => <AssetPrice>{value.toFixed(3)}</AssetPrice>
 
-// eslint-disable-next-line react/prop-types
 const AssetChangeCell = ({ value }) => (
   <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
 )
 
-// eslint-disable-next-line react/prop-types
-function GlobalFilter({ globalFilter, setGlobalFilter }) {
+function GlobalFilter({
+  globalFilter,
+  setGlobalFilter,
+  onSearchFocus,
+  onExternalClick,
+  containerRef,
+  isActive
+}) {
   const [value, setValue] = useState(globalFilter)
+
+  /**
+   * This ref is forwarded to the search input
+   */
+  const inputRef = createRef()
+
+  /**
+   * Blur search bar (if focused) when flyout is hidden
+   */
+  useEffect(() => {
+    !isActive && inputRef?.current?.blur()
+  }, [inputRef, isActive])
+
   const onChange = (value) => {
     setGlobalFilter(value || undefined)
   }
 
+  /**
+   * If the user clicks outside the expanded flyout, it should close, and click
+   * listener can be removed
+   */
+  const handleClick = (e) => {
+    if (!containerRef?.current.contains(e.target)) {
+      onExternalClick()
+      window.removeEventListener('click', handleClick)
+    }
+  }
+
+  /**
+   * Focusing on the search input triggers the flyout to appear. A listener is
+   * added to detect clicks outside the expanded flyout.
+   */
+  const handleFocus = () => {
+    onSearchFocus()
+    window.addEventListener('click', handleClick)
+  }
+
   return (
     <Search
+      ref={inputRef}
       value={value || ''}
       onChange={(e) => {
         setValue(e.target.value)
@@ -55,16 +91,25 @@ function GlobalFilter({ globalFilter, setGlobalFilter }) {
         setValue(undefined)
         setGlobalFilter(undefined)
       }}
+      onFocus={handleFocus}
       placeholder="Search"
     />
   )
 }
 
-function AssetSearch() {
-  const [searchText, setSearchText] = useState('') // State for small screen search
-  const [searchHeight, setSearchHeight] = useState(51) // determines relative position of table header
+function AssetSearch(props) {
+  const { gridSize } = props
+
+  /**
+   * `isActive` determines flyout visibility on smaller screens and whether
+   * asset rows are tab-navigable
+   */
+  const [isActive, setIsActive] = useState(false)
+  const [searchHeight, setSearchHeight] = useState(0)
+
   const data = useMemo(() => makeData(), [])
 
+  const containerRef = useRef()
   const searchRef = useRef()
 
   useEffect(() => {
@@ -73,6 +118,34 @@ function AssetSearch() {
       setSearchHeight(height)
     }
   }, [searchRef])
+
+  /**
+   * The `gridSize` prop changes on window resize, so this is equivalent to a
+   * resize listener callback. On large screens, `isActive` is always true.
+   * The active (focused) element is blurred so an asset row can't remain
+   * focused when flyout is hidden.
+   */
+  useEffect(() => {
+    const isFixed = window.matchMedia('(min-width: 1536px)').matches
+    setIsActive(isFixed)
+    document.activeElement.blur()
+  }, [gridSize])
+
+  const handleSearchFocus = () => {
+    !isActive && setIsActive(true)
+  }
+
+  /**
+   * Flyout is only hidden on smaller screens, triggered by external click
+   */
+  const handleExternalClick = () => {
+    const isFixed = window.matchMedia('(min-width: 1536px)').matches
+    !isFixed && setIsActive(false)
+  }
+
+  const handleAssetClick = (name) => {
+    alert(`Navigate to https://algodex.com/trade/${name}-ALGO/`)
+  }
 
   const columns = useMemo(
     () => [
@@ -109,13 +182,9 @@ function AssetSearch() {
     []
   )
 
-  const handleAssetClick = (name) => {
-    alert(`Navigate to https://algodex.com/trade/${name}-ALGO/`)
-  }
-
   const getRowProps = (row) => ({
     role: 'button',
-    tabIndex: '0',
+    tabIndex: isActive ? '0' : '-1', // tab-navigable only when rows are visible
     onClick: () => handleAssetClick(row.original.name),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
@@ -145,18 +214,8 @@ function AssetSearch() {
   )
 
   return (
-    <Container>
-      {/* This is for smaller screen sizes, not sure how it will work/look yet */}
-      <SearchContainer>
-        <Search
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          placeholder="Search"
-        />
-      </SearchContainer>
-
-      {/* This appears on > 1536px screens, uses React Table */}
-      <AssetsContainer>
+    <Container ref={containerRef} isActive={isActive}>
+      <AssetsContainer gridHeight={gridSize.height}>
         <TableWrapper>
           <TableContainer>
             <table {...getTableProps()}>
@@ -166,6 +225,10 @@ function AssetSearch() {
                     <GlobalFilter
                       globalFilter={state.globalFilter}
                       setGlobalFilter={setGlobalFilter}
+                      onSearchFocus={handleSearchFocus}
+                      onExternalClick={handleExternalClick}
+                      containerRef={containerRef}
+                      isActive={isActive}
                     />
                   </th>
                 </tr>
@@ -210,6 +273,8 @@ function AssetSearch() {
   )
 }
 
-// AssetSearch.propTypes = {}
+AssetSearch.propTypes = {
+  gridSize: PropTypes.object.isRequired
+}
 
 export default AssetSearch

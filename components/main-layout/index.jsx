@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import MobileInterface from 'components/mobile-interface'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
@@ -32,9 +33,25 @@ const DEMO_WALLETS = [
 ]
 
 export default function MainLayout() {
+  const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
+  const gridRef = useRef()
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (gridRef?.current) {
+        const { width, height } = gridRef.current.getBoundingClientRect()
+        setGridSize({ width, height })
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <MainWrapper>
-      <Main>
+      <Main ref={gridRef}>
         <MobileInterface />
         <WalletSection>
           <Wallet
@@ -65,7 +82,7 @@ export default function MainLayout() {
           <Orders />
         </OrdersSection>
         <AssetsSection>
-          <AssetSearch />
+          <AssetSearch gridSize={gridSize} />
         </AssetsSection>
       </Main>
     </MainWrapper>
