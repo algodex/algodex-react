@@ -28,23 +28,10 @@ import {
   StatsChartIcon,
   ChartOptions
 } from './chart.css'
-import { useState, useEffect } from 'react'
-import { addListener } from 'resize-detector'
+import { useState, useRef } from 'react'
 import millify from 'millify'
-
-// Candlestick chart colors
-const UP_COLOR = '#38A169'
-const DOWN_COLOR = '#E53E3E'
-const LINE_COLOR = '#1A202C'
-const BACKGROUND_COLOR = '#171923'
-const BORDER_COLOR = '#718096'
-const TEXT_COLOR = '#CBD5E0'
-
-// Line chart colors
-const TOP_COLOR = '#248350'
-const TOP_LINE_COLOR = '#38A169'
-const BOTTOM_COLOR = '#38a16911'
-const LINE_WIDTH = 2
+import useCandleChart from './use-candle-chart'
+import useAreaChart from './use-area-chart'
 
 // Common
 const MODE_ICON_COLOR = '#f2f2f2'
@@ -67,15 +54,12 @@ function Chart({
 }) {
   const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[0])
   const [chartMode, setChartMode] = useState(initialMode)
-  const [candleStickChart, setCandleStickChart] = useState()
-  const [areaSeriesChart, setAreaSeriesChart] = useState()
 
-  let candleStickChartContainer, areaSeriesChartContainer
+  const candleChartRef = useRef()
+  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData)
 
-  const areaSeriesData = priceData.map(({ time, close }) => ({
-    time,
-    value: close
-  }))
+  const areaChartRef = useRef()
+  const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData)
 
   const formattedVolume = millify(volume24hr)
   const formattedBid = bid.toFixed(4)
@@ -86,149 +70,30 @@ function Chart({
 
   function changeMode(currentMode) {
     if (currentMode === LINE) {
-      const logicalRange = areaSeriesChart.timeScale().getVisibleLogicalRange()
-      candleStickChart.timeScale().setVisibleLogicalRange(logicalRange)
+      const logicalRange = areaChart.timeScale().getVisibleLogicalRange()
+      candleChart.timeScale().setVisibleLogicalRange(logicalRange)
       setChartMode(CANDLE)
       return
     }
 
     if (currentMode === CANDLE) {
-      const logicalRange = candleStickChart.timeScale().getVisibleLogicalRange()
-      areaSeriesChart.timeScale().setVisibleLogicalRange(logicalRange)
+      const logicalRange = candleChart.timeScale().getVisibleLogicalRange()
+      areaChart.timeScale().setVisibleLogicalRange(logicalRange)
       setChartMode(LINE)
       return
     }
   }
 
-  useEffect(() => {
-    if (candleStickChart) {
-      const candleSeries = candleStickChart.addCandlestickSeries({
-        upColor: UP_COLOR,
-        downColor: DOWN_COLOR,
-        borderDownColor: DOWN_COLOR,
-        borderUpColor: UP_COLOR,
-        wickDownColor: DOWN_COLOR,
-        wickUpColor: UP_COLOR
-      })
-      const volumeSeries = candleStickChart.addHistogramSeries({
-        color: UP_COLOR,
-        priceFormat: {
-          type: 'volume'
-        },
-        priceScaleId: '',
-        scaleMargins: {
-          top: 0.8,
-          bottom: 0
-        }
-      })
-      volumeSeries.setData(volumeData)
-      candleSeries.setData(priceData)
-      candleStickChart.timeScale().fitContent()
-
-      if (candleStickChartContainer) {
-        addListener(candleStickChartContainer, () =>
-          candleStickChart.resize(
-            candleStickChartContainer.offsetWidth,
-            candleStickChartContainer.offsetHeight
-          )
-        )
-      }
-    }
-  }, [candleStickChart])
-
-  useEffect(() => {
-    if (areaSeriesChart) {
-      const areaSeries = areaSeriesChart.addAreaSeries({
-        topColor: TOP_COLOR,
-        bottomColor: BOTTOM_COLOR,
-        lineColor: TOP_LINE_COLOR,
-        lineWidth: LINE_WIDTH
-      })
-
-      areaSeries.setData(areaSeriesData)
-      areaSeriesChart.timeScale().fitContent()
-
-      if (areaSeriesChartContainer) {
-        addListener(areaSeriesChartContainer, () =>
-          areaSeriesChart.resize(
-            areaSeriesChartContainer.offsetWidth,
-            areaSeriesChartContainer.offsetHeight
-          )
-        )
-      }
-    }
-  }, [areaSeriesChart])
-
-  useEffect(async () => {
-    const { createChart, CrosshairMode } = await import('lightweight-charts')
-    candleStickChartContainer = document.getElementById('candleStickChart')
-    areaSeriesChartContainer = document.getElementById('areaSeriesChart')
-
-    setCandleStickChart(
-      createChart(candleStickChartContainer, {
-        layout: {
-          backgroundColor: BACKGROUND_COLOR,
-          textColor: TEXT_COLOR,
-          fontFamily: 'Inter'
-        },
-        grid: {
-          vertLines: {
-            color: LINE_COLOR
-          },
-          horzLines: {
-            color: LINE_COLOR
-          }
-        },
-        crosshair: {
-          mode: CrosshairMode.Normal
-        },
-        rightPriceScale: {
-          borderColor: BORDER_COLOR
-        },
-        timeScale: {
-          borderColor: BORDER_COLOR
-        }
-      })
-    )
-
-    setAreaSeriesChart(
-      createChart(areaSeriesChartContainer, {
-        layout: {
-          backgroundColor: BACKGROUND_COLOR,
-          textColor: TEXT_COLOR,
-          fontFamily: 'Inter'
-        },
-        grid: {
-          vertLines: {
-            color: LINE_COLOR
-          },
-          horzLines: {
-            color: LINE_COLOR
-          }
-        },
-        crosshair: {
-          mode: CrosshairMode.Normal
-        },
-        rightPriceScale: {
-          borderColor: BORDER_COLOR
-        },
-        timeScale: {
-          borderColor: BORDER_COLOR
-        }
-      })
-    )
-  }, [])
-
   return (
     <Container>
       <CandleStickChart
-        id="candleStickChart"
-        display={chartMode === CANDLE ? true : false}
+        ref={candleChartRef}
+        isVisible={chartMode === CANDLE ? true : false}
         data-testid="candleStickChart"
       />
       <AreaSeriesChart
-        id="areaSeriesChart"
-        display={chartMode === LINE ? true : false}
+        ref={areaChartRef}
+        isVisible={chartMode === LINE ? true : false}
         data-testid="lineChart"
       />
       <ChartLabel>
@@ -340,6 +205,7 @@ Chart.propTypes = {
   volumeData: PropTypes.array,
   initialMode: PropTypes.string
 }
+
 Chart.defaultProps = {
   bidAndAsk: {
     bid: 0,
