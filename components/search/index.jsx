@@ -52,7 +52,7 @@ const Input = styled(TextInput)`
   padding-right: 3rem;
 `
 
-function Search({ value, onCancel, ...props }, ref) {
+const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       onCancel()
@@ -70,7 +70,7 @@ function Search({ value, onCancel, ...props }, ref) {
       )}
     </Container>
   )
-}
+})
 
 Search.propTypes = {
   value: PropTypes.string,
@@ -82,4 +82,6 @@ Search.defaultProps = {
   placeholder: 'Search'
 }
 
-export default forwardRef(Search)
+Search.displayName = 'Search'
+
+export default Search
