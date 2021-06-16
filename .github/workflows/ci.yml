@@ -11,7 +11,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies
-        run: npm config set '//npm.pkg.github.com/:_authToken' "${GH_TOKEN}"
+        run: |
+          yarn config set '//npm.pkg.github.com/:_authToken' "${GH_TOKEN}"
+          yarn
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Run tests
