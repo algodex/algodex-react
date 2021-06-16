@@ -66,6 +66,10 @@ export const AssetChange = styled.span`
 
 export const SortIcon = styled(Icon)``
 
+export const TableHeader = styled.th`
+  top: ${({ searchHeight }) => (searchHeight ? `${searchHeight}px` : '51px')};
+`
+
 export const TableContainer = styled.div`
   table {
     position: relative;
@@ -128,8 +132,7 @@ export const TableContainer = styled.div`
         }
 
         &:last-child {
-          th {
-            top: 51px;
+          ${TableHeader} {
             border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
             color: ${({ theme }) => theme.colors.gray['500']};
             text-align: left;

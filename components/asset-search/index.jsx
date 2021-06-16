@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 // import PropTypes from 'prop-types'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
@@ -16,6 +16,7 @@ import {
   AssetPrice,
   AssetChange,
   SortIcon,
+  TableHeader,
   TableContainer
 } from './asset-search.css'
 
@@ -61,7 +62,17 @@ function GlobalFilter({ globalFilter, setGlobalFilter }) {
 
 function AssetSearch() {
   const [searchText, setSearchText] = useState('') // State for small screen search
+  const [searchHeight, setSearchHeight] = useState(51) // determines relative position of table header
   const data = useMemo(() => makeData(), [])
+
+  const searchRef = useRef()
+
+  useEffect(() => {
+    if (searchRef.current) {
+      const height = searchRef.current.offsetHeight
+      setSearchHeight(height)
+    }
+  }, [searchRef])
 
   const columns = useMemo(
     () => [
@@ -151,7 +162,7 @@ function AssetSearch() {
             <table {...getTableProps()}>
               <thead>
                 <tr>
-                  <th colSpan={visibleColumns.length}>
+                  <th ref={searchRef} colSpan={visibleColumns.length}>
                     <GlobalFilter
                       globalFilter={state.globalFilter}
                       setGlobalFilter={setGlobalFilter}
@@ -161,11 +172,12 @@ function AssetSearch() {
                 {headerGroups.map((headerGroup) => (
                   <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column) => (
-                      // Add the sorting props to control sorting. For this example
-                      // we can add them into the header props
-                      <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      <TableHeader
+                        searchHeight={searchHeight}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                      >
                         {column.render('Header')}
-                        {/* Add a sort direction indicator */}
+
                         {!column.isSorted ? (
                           <SortIcon use="sortNone" size={0.625} />
                         ) : column.isSortedDesc ? (
@@ -173,7 +185,7 @@ function AssetSearch() {
                         ) : (
                           <SortIcon use="sortAsc" size={0.625} />
                         )}
-                      </th>
+                      </TableHeader>
                     ))}
                   </tr>
                 ))}
