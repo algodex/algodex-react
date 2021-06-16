@@ -29,6 +29,7 @@
     "styled-components": "^5"
   },
   "dependencies": {
+    "@algodex/algodex-api": "^1.0.4",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
     "lightweight-charts": "^3.3.0",

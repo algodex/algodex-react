@@ -6,9 +6,13 @@ export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   background-color: ${({ theme }) => theme.colors.background.dark};
+  position: relative;
+  overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
+  height: 51px;
 
   @media (min-width: 1536px) {
     flex-direction: column;
+    height: auto;
   }
 `
 
@@ -26,12 +30,19 @@ export const SearchTableHeader = styled.th`
 `
 
 export const AssetsContainer = styled.div`
-  display: none;
+  position: absolute;
+  width: 320px;
+  height: ${({ gridHeight }) => `${gridHeight}px`};
+  background-color: ${({ theme }) => theme.colors.gray['900']};
 
   @media (min-width: 1536px) {
+    position: static;
     display: block;
     flex: 1 1 0%;
     position: relative;
+    width: auto;
+    height: auto;
+    background-color: transparent;
   }
 `
 
@@ -65,6 +76,10 @@ export const AssetChange = styled.span`
 `
 
 export const SortIcon = styled(Icon)``
+
+export const TableHeader = styled.th`
+  top: ${({ searchHeight }) => (searchHeight ? `${searchHeight}px` : '51px')};
+`
 
 export const TableContainer = styled.div`
   table {
@@ -128,8 +143,7 @@ export const TableContainer = styled.div`
         }
 
         &:last-child {
-          th {
-            top: 51px;
+          ${TableHeader} {
             border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
             color: ${({ theme }) => theme.colors.gray['500']};
             text-align: left;

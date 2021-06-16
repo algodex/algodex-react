@@ -1,40 +1,28 @@
-import dynamic from 'next/dynamic'
-
-import MobileInterface from 'components/mobile-interface'
-import OrderBook from 'components/order-book'
-import Orders from 'components/orders'
-import TradeHistory from 'components/trade-history'
-import Wallet from 'components/wallet'
-import PlaceOrder from 'components/place-order'
-import Chart from 'components/chart'
 import AssetSearch from 'components/asset-search'
-
-import { generateBookData } from 'components/order-book/demo'
-import { generateTradesData } from 'components/trade-history/demo'
-import {
-  DEMO_CHART_DATA,
-  DEMO_VOLUME_DATA,
-  DEMO_BID_ASK_PRICE,
-  DEMO_SELECTED_PAIR,
-  DEMO_VOLUME_AMOUNT,
-  DEMO_DAILY_CHANGE_PERCENT,
-  DEMO_OHLC
-} from 'components/chart/demo'
-import { demoOpenOrderData } from 'components/open-orders/demo'
-import { demoOrderHistoryData } from 'components/order-history/demo'
 import { demoAssetsData } from 'components/assets/demo'
-
+import Chart from 'components/chart'
 import {
-  Main,
-  MainWrapper,
-  WalletSection,
-  TradeSection,
-  ChartSection,
-  OrderBookSection,
-  TradeHistorySection,
-  OrdersSection,
-  AssetsSection
+  DEMO_BID_ASK_PRICE, DEMO_CHART_DATA, DEMO_DAILY_CHANGE_PERCENT,
+  DEMO_OHLC, DEMO_SELECTED_PAIR,
+  DEMO_VOLUME_AMOUNT, DEMO_VOLUME_DATA
+} from 'components/chart/demo'
+import MobileInterface from 'components/mobile-interface'
+import { demoOpenOrderData } from 'components/open-orders/demo'
+import OrderBook from 'components/order-book'
+import { generateBookData } from 'components/order-book/demo'
+import { demoOrderHistoryData } from 'components/order-history/demo'
+import Orders from 'components/orders'
+import PlaceOrder from 'components/place-order'
+import TradeHistory from 'components/trade-history'
+import { generateTradesData } from 'components/trade-history/demo'
+import Wallet from 'components/wallet'
+import { useEffect, useRef, useState } from 'react'
+import {
+  AssetsSection, ChartSection, Main,
+  MainWrapper, OrderBookSection, OrdersSection, TradeHistorySection, TradeSection, WalletSection
 } from './main-layout.css'
+
+
 
 const DEMO_SELL_DATA = generateBookData(1.3766, 0.0001)
 const DEMO_BUY_DATA = generateBookData(1.3764, -0.0001)
@@ -51,9 +39,25 @@ const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
 
 export default function MainLayout() {
+  const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
+  const gridRef = useRef()
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (gridRef?.current) {
+        const { width, height } = gridRef.current.getBoundingClientRect()
+        setGridSize({ width, height })
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <MainWrapper>
-      <Main>
+      <Main ref={gridRef}>
         <MobileInterface />
         <WalletSection>
           <Wallet
@@ -96,7 +100,7 @@ export default function MainLayout() {
           />
         </OrdersSection>
         <AssetsSection>
-          <AssetSearch />
+          <AssetSearch gridSize={gridSize} />
         </AssetsSection>
       </Main>
     </MainWrapper>

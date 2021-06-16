@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Search as _Search, X as CancelIcon } from 'react-feather'
 import styled from 'styled-components'
@@ -51,7 +52,7 @@ const Input = styled(TextInput)`
   padding-right: 3rem;
 `
 
-function Search({ value, onCancel, ...props }) {
+const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       onCancel()
@@ -60,7 +61,7 @@ function Search({ value, onCancel, ...props }) {
 
   return (
     <Container>
-      <Input value={value} onKeyDown={handleKeyDown} {...props} />
+      <Input ref={ref} value={value} onKeyDown={handleKeyDown} {...props} />
       <SearchIcon color={theme.colors.gray['500']} size={16} />
       {onCancel && value !== '' && (
         <CancelButton onClick={onCancel}>
@@ -69,7 +70,7 @@ function Search({ value, onCancel, ...props }) {
       )}
     </Container>
   )
-}
+})
 
 Search.propTypes = {
   value: PropTypes.string,
@@ -80,5 +81,7 @@ Search.propTypes = {
 Search.defaultProps = {
   placeholder: 'Search'
 }
+
+Search.displayName = 'Search'
 
 export default Search
