@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@algodex/algodex-api": "^1.0.4",
+    "axios": "^0.21.1",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
     "next": "10.2.3",
@@ -38,6 +39,7 @@
     "react-country-flag": "^2.3.0",
     "react-dom": "17.0.2",
     "react-feather": "^2.0.9",
+    "react-query": "^3.17.1",
     "react-svg": "^13.0.6",
     "react-table": "^7.7.0",
     "storybook-addon-jsx": "^7.3.10",

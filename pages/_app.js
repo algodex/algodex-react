@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { Hydrate } from 'react-query/hydration'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import theme from 'theme'
 
@@ -21,6 +23,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function App({ Component, pageProps }) {
+  const [queryClient] = useState(() => new QueryClient())
   useEffect(() => {
     const initAlgodexApi = async () => {
       const algodex = (await import('@algodex/algodex-api')).default
@@ -33,7 +36,11 @@ export default function App({ Component, pageProps }) {
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <Component {...pageProps} />
+          </Hydrate>
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   )

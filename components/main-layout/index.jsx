@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 import MobileInterface from 'components/mobile-interface'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
@@ -32,7 +33,9 @@ const DEMO_WALLETS = [
   { id: 'wallet-03', name: 'Stablecoins', balance: 1078.9265 }
 ]
 
-export default function MainLayout() {
+function MainLayout(props) {
+  const { assetsPriceData } = props
+
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
 
@@ -82,9 +85,15 @@ export default function MainLayout() {
           <Orders />
         </OrdersSection>
         <AssetsSection>
-          <AssetSearch gridSize={gridSize} />
+          <AssetSearch priceData={assetsPriceData} gridSize={gridSize} />
         </AssetsSection>
       </Main>
     </MainWrapper>
   )
 }
+
+MainLayout.propTypes = {
+  assetsPriceData: PropTypes.array.isRequired
+}
+
+export default MainLayout

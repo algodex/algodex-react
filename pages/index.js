@@ -1,3 +1,5 @@
+import { useQuery } from 'react-query'
+import { fetchRecentTrades } from 'lib/api'
 import Head from 'next/head'
 import styled from 'styled-components'
 import MainLayout from 'components/main-layout'
@@ -26,6 +28,25 @@ const Container = styled.div`
 `
 
 export default function Home() {
+  const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
+
+  const recentTrades = data?.tradingPairs || []
+
+  const formatPriceData = () => {
+    return recentTrades.map((pair) => ({
+      name: pair.asset_info.params['unit-name'],
+      price: parseFloat(parseFloat(pair.asaPrice).toFixed(3)),
+      change: 0
+    }))
+  }
+
+  const renderDashboard = () => {
+    if (status === 'loading') return <h1>Loading...</h1>
+    if (status === 'error') return <span>Error: {error.message}</span>
+
+    return <MainLayout assetsPriceData={formatPriceData()} />
+  }
+
   return (
     <Container>
       <Head>
@@ -34,7 +55,7 @@ export default function Home() {
       </Head>
       <Header />
 
-      <MainLayout />
+      {renderDashboard()}
     </Container>
   )
 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 
-import makeData from './demo'
+// import makeData from './demo'
 
 import {
   Container,
@@ -98,7 +98,7 @@ function GlobalFilter({
 }
 
 function AssetSearch(props) {
-  const { gridSize } = props
+  const { gridSize, priceData } = props
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
@@ -107,7 +107,7 @@ function AssetSearch(props) {
   const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
 
-  const data = useMemo(() => makeData(), [])
+  const data = useMemo(() => priceData, [priceData])
 
   const containerRef = useRef()
   const searchRef = useRef()
@@ -274,7 +274,8 @@ function AssetSearch(props) {
 }
 
 AssetSearch.propTypes = {
-  gridSize: PropTypes.object.isRequired
+  gridSize: PropTypes.object.isRequired,
+  priceData: PropTypes.array.isRequired
 }
 
 export default AssetSearch
