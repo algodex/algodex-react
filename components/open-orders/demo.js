@@ -9,7 +9,7 @@ export const demoOpenOrderData = [
   },
   {
     date: new Date('05-03-2021'),
-    pair: ['FAME', 'ALGO'],
+    pair: ['YLDY', 'ALGO'],
     type: 'buy',
     price: 1.2354,
     filled: 1578,
@@ -33,7 +33,7 @@ export const demoOpenOrderData = [
   },
   {
     date: new Date('02-03-2021'),
-    pair: ['FAME', 'USDC'],
+    pair: ['YLDY', 'USDC'],
     type: 'sell',
     price: 1.2354,
     filled: 0,

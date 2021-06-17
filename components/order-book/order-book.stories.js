@@ -25,7 +25,7 @@ const Template = (args) => <OrderBook {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  assetName: 'FAME',
+  assetName: 'YLDY',
   currentPrice: 1.3765,
   priceChange: -0.1,
   sellData: generateBookData(1.3766, 0.0001),
@@ -34,7 +34,7 @@ Default.args = {
 
 export const LowOrders = Template.bind({})
 LowOrders.args = {
-  assetName: 'FAME',
+  assetName: 'YLDY',
   currentPrice: 1.3765,
   priceChange: 0.1,
   sellData: generateBookData(1.3766, (randomInt(1, 5) * 0.0001).toFixed(4), randomInt(5, 15)),

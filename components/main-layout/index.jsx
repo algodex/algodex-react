@@ -76,7 +76,7 @@ export default function MainLayout() {
           />
         </WalletSection>
         <TradeSection>
-          <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="FAME" />
+          <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="YLDY" />
         </TradeSection>
         <ChartSection>
           <Chart
@@ -91,7 +91,7 @@ export default function MainLayout() {
         </ChartSection>
         <OrderBookSection>
           <OrderBook
-            assetName="FAME"
+            assetName="YLDY"
             currentPrice={1.3765}
             priceChange={-0.0001}
             sellData={DEMO_SELL_DATA}
@@ -99,7 +99,7 @@ export default function MainLayout() {
           />
         </OrderBookSection>
         <TradeHistorySection>
-          <TradeHistory assetName="FAME" tradesData={DEMO_TRADES_DATA} />
+          <TradeHistory assetName="YLDY" tradesData={DEMO_TRADES_DATA} />
         </TradeHistorySection>
         <OrdersSection>
           <Orders

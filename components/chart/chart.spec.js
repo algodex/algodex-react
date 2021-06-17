@@ -76,10 +76,10 @@ describe('Chart', () => {
   })
 
   describe('if price data is passed', () => {
-    it('should display the trading pair as FAME/ALGO', () => {
+    it('should display the trading pair as YLDY/ALGO', () => {
       const { getByTestId } = render(<Chart {...DEMO_DATA} />)
 
-      expect(getByTestId('primaryAsset')).toHaveTextContent('FAME')
+      expect(getByTestId('primaryAsset')).toHaveTextContent('YLDY')
       expect(getByTestId('secondaryAsset')).toHaveTextContent('/ALGO')
     })
 

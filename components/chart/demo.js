@@ -308,6 +308,6 @@ const volumeData = [
 export const DEMO_VOLUME_DATA = volumeData.map((data, i) => ({ ...data, color: colors[i] }))
 export const DEMO_BID_ASK_PRICE = { bid: 191.26, ask: 192.68 }
 export const DEMO_VOLUME_AMOUNT = 650000000
-export const DEMO_SELECTED_PAIR = ['FAME', 'ALGO']
+export const DEMO_SELECTED_PAIR = ['YLDY', 'ALGO']
 export const DEMO_DAILY_CHANGE_PERCENT = 5.26
 export const DEMO_OHLC = { open: 185.6423, high: 209.6563, low: 159.3689, close: 171.6985 }

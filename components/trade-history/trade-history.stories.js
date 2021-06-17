@@ -25,6 +25,6 @@ const Template = (args) => <TradeHistory {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  assetName: 'FAME',
+  assetName: 'YLDY',
   tradesData: generateTradesData(1.3766, 0.0001)
 }

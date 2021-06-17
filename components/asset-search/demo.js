@@ -7,7 +7,7 @@ const randomBool = () => {
 }
 
 const assetNames = [
-  'FAME',
+  'YLDY',
   'LEAF',
   'CRAB',
   'SOP',
