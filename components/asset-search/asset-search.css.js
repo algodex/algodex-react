@@ -46,6 +46,11 @@ export const AssetsContainer = styled.div`
   }
 `
 
+export const StatusContainer = styled.div`
+  position: absolute;
+  inset: 6.25rem 1.125rem 2rem;
+`
+
 export const TableWrapper = styled.div`
   position: absolute;
   inset: 0;

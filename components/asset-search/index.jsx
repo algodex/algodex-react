@@ -1,14 +1,18 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useState, useEffect, useMemo, useRef, createRef } from 'react'
 import PropTypes from 'prop-types'
+import { useQuery } from 'react-query'
+import { fetchRecentTrades } from 'lib/api'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
+import { BodyCopyTiny, BodyCopySm } from 'components/type'
 
 // import makeData from './demo'
 
 import {
   Container,
   AssetsContainer,
+  StatusContainer,
   TableWrapper,
   AssetName,
   PairSlash,
@@ -97,8 +101,20 @@ function GlobalFilter({
   )
 }
 
-function AssetSearch(props) {
-  const { gridSize, priceData } = props
+function AssetSearch({ gridSize }) {
+  const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
+
+  const formatPriceData = (data) => {
+    const tradingPairs = data?.tradingPairs || []
+
+    return tradingPairs.map((pair) => ({
+      name: pair.asset_info.params['unit-name'],
+      price: parseFloat(parseFloat(pair.asaPrice).toFixed(3)),
+      change: 0
+    }))
+  }
+
+  const priceData = useMemo(() => formatPriceData(data), [data])
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
@@ -106,8 +122,6 @@ function AssetSearch(props) {
    */
   const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
-
-  const data = useMemo(() => priceData, [priceData])
 
   const containerRef = useRef()
   const searchRef = useRef()
@@ -205,13 +219,25 @@ function AssetSearch(props) {
   } = useTable(
     {
       columns,
-      data,
+      data: priceData,
       filterTypes
     },
     useFilters,
     useGlobalFilter,
     useSortBy
   )
+
+  const renderStatus = () => {
+    if (status === 'success') {
+      return null
+    }
+    return (
+      <StatusContainer>
+        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+      </StatusContainer>
+    )
+  }
 
   return (
     <Container ref={containerRef} isActive={isActive}>
@@ -268,14 +294,15 @@ function AssetSearch(props) {
             </table>
           </TableContainer>
         </TableWrapper>
+
+        {renderStatus()}
       </AssetsContainer>
     </Container>
   )
 }
 
 AssetSearch.propTypes = {
-  gridSize: PropTypes.object.isRequired,
-  priceData: PropTypes.array.isRequired
+  gridSize: PropTypes.object.isRequired
 }
 
 export default AssetSearch
