@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@algodex/algodex-api": "^1.0.4",
+    "axios": "^0.21.1",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
     "lightweight-charts": "^3.3.0",
@@ -40,6 +41,7 @@
     "react-country-flag": "^2.3.0",
     "react-dom": "17.0.2",
     "react-feather": "^2.0.9",
+    "react-query": "^3.17.1",
     "react-ionicons": "^4.2.0",
     "react-svg": "^13.0.6",
     "react-table": "^7.7.0",
