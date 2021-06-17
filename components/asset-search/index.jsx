@@ -214,8 +214,8 @@ function AssetSearch(props) {
   )
 
   return (
-    <Container ref={containerRef} isActive={isActive}>
-      <AssetsContainer gridHeight={gridSize.height}>
+    <Container isActive={isActive}>
+      <AssetsContainer ref={containerRef} gridHeight={gridSize.height}>
         <TableWrapper>
           <TableContainer>
             <table {...getTableProps()}>
