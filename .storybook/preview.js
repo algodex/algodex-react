@@ -1,7 +1,10 @@
 import React from 'react'
 import { jsxDecorator } from 'storybook-addon-jsx'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import theme from '../theme'
+
+const queryClient = new QueryClient()
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -25,7 +28,13 @@ export const parameters = {
 
 export const decorators = [
   jsxDecorator,
-  (Story) => <ThemeProvider theme={theme}>{Story()}</ThemeProvider>,
+  (Story) => (
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        {Story()}
+      </QueryClientProvider>
+    </ThemeProvider>
+  ),
   (Story) => (
     <>
       <GlobalStyle />
