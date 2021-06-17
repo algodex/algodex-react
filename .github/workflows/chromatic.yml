@@ -11,10 +11,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies
         run: |
-          yarn config set '//npm.pkg.github.com/:_authToken' "${GHP_TOKEN}"
+          echo '//npm.pkg.github.com/:_authToken=${{ secrets.GHP_TOKEN  }}' > ${{ github.workspace }}/.npmrc
+          cat .npmrc
           yarn
-        env:
-          GHP_TOKEN: ${{ secrets.GHP_TOKEN }}
       - name: Publish to Chromatic
         uses: chromaui/action@v1
         with:
