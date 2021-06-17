@@ -9,7 +9,7 @@ describe('Order Book', () => {
   it('should show asset name in the header', () => {
     const { getByText } = render(
       <OrderBook
-        assetName="FAME"
+        assetName="YLDY"
         currentPrice={1.3765}
         priceChange={-0.0001}
         sellData={[]}
@@ -17,13 +17,13 @@ describe('Order Book', () => {
       />
     )
 
-    expect(getByText(/Amount \(FAME\)/i)).toBeVisible()
+    expect(getByText(/Amount \(YLDY\)/i)).toBeVisible()
   })
 
   it('should not show rows if no data is provided', () => {
     const { queryByTestId } = render(
       <OrderBook
-        assetName="FAME"
+        assetName="YLDY"
         currentPrice={1.3765}
         priceChange={-0.0001}
         sellData={[]}
@@ -40,7 +40,7 @@ describe('Order Book', () => {
 
     const { queryByTestId } = render(
       <OrderBook
-        assetName="FAME"
+        assetName="YLDY"
         currentPrice={1.3765}
         priceChange={-0.0001}
         sellData={orderData}

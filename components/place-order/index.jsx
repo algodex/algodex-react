@@ -161,7 +161,7 @@ function PlaceOrder(props) {
             id="amount"
             name="af2Km9q"
             label="Amount"
-            asset="FAME"
+            asset="YLDY"
             orderType={order.type}
             value={order.amount}
             onChange={handleChange}

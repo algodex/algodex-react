@@ -94,7 +94,7 @@ export const NavTextLg = styled.span`
   ${fontSize}
   ${color}
   cursor: pointer;
-  transition: all 0.1s ease-in;
+  transition: color 0.1s ease-in;
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};
@@ -140,7 +140,7 @@ export const NavTextSm = styled.span`
   ${fontSize}
   ${color}
   cursor: pointer;
-  transition: all 0.1s ease-in;
+  transition: color 0.1s ease-in;
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};
@@ -185,7 +185,7 @@ export const NavIcon = styled.span`
   ${fontSize}
   ${color}
   cursor: pointer;
-  transition: all 0.1s ease-in;
+  transition: color 0.1s ease-in;
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};
@@ -238,7 +238,7 @@ export const MenuButton = styled.button`
   border: none;
   color: ${({ theme }) => theme.colors.gray[500]};
   padding: 0.5rem 1rem;
-  transition: all 0.1s ease-in;
+  transition: color 0.1s ease-in;
   cursor: pointer;
   ${fontSize}
 

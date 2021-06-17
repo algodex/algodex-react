@@ -28,11 +28,11 @@ const Template = (args) => <PlaceOrder {...args} />
 // export const NoWallet = Template.bind({})
 // NoWallet.args = {
 //   activeWallet: undefined,
-//   asset: 'FAME'
+//   asset: 'YLDY'
 // }
 
 export const HasWallet = Template.bind({})
 HasWallet.args = {
   activeWallet: { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
-  asset: 'FAME'
+  asset: 'YLDY'
 }

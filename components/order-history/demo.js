@@ -1,4 +1,4 @@
-export default [
+export const demoOrderHistoryData = [
   {
     date: new Date('02-03-2021'),
     pair: ['MCAU', 'USDC'],
@@ -19,7 +19,7 @@ export default [
   },
   {
     date: new Date('02-05-2021'),
-    pair: ['FAME', 'USDC'],
+    pair: ['YLDY', 'USDC'],
     side: 'sell',
     price: 1.2354,
     amount: 58.365,
