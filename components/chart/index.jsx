@@ -1,4 +1,4 @@
-import { BodyCopyTiny, BodyCopy } from 'components/type'
+import { BodyCopyTiny, BodyCopy, BodyCopyLg } from 'components/type'
 import PropTypes from 'prop-types'
 import {
   Ask,
@@ -26,12 +26,18 @@ import {
   AreaSeriesChart,
   TrendingUpIcon,
   StatsChartIcon,
-  ChartOptions
+  ChartOptions,
+  LoadingContainer
 } from './chart.css'
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import millify from 'millify'
 import useCandleChart from './use-candle-chart'
 import useAreaChart from './use-area-chart'
+import { useQuery } from 'react-query'
+import { fetchChartData } from 'lib/api'
+import { ReactQueryDevtools } from 'react-query/devtools'
+
+import dayjs from 'dayjs'
 
 // Common
 const MODE_ICON_COLOR = '#f2f2f2'
@@ -42,24 +48,53 @@ const CHART_MODES = {
 }
 const { CANDLE, LINE } = CHART_MODES
 
-function Chart({
-  bidAndAsk: { bid, ask },
-  priceData,
-  volume24hr,
-  pair,
-  dailyChange,
-  ohlc,
-  volumeData,
-  initialMode
-}) {
+const DEMO_ASSET_ID = '15322902'
+
+function Chart({ bidAndAsk: { bid, ask }, volume24hr, pair, dailyChange, ohlc, initialMode }) {
+  const [intervalMs, setIntervalMs] = useState(1000)
+  // const [chartData, setChartData] = useState([])
+
+  const { status, data, error, isSuccess, isLoading } = useQuery(['chartData'], fetchChartData)
+
+  function mapChartData() {
+    const prices =
+      data?.map(({ date, open, high, low, close }) => {
+        const time = dayjs(new Date(date)).format('YYYY-MM-DD')
+        return {
+          time,
+          open: parseFloat(open),
+          high: parseFloat(high),
+          low: parseFloat(low),
+          close: parseFloat(close)
+        }
+      }) || []
+    console.log(prices)
+    return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
+  }
+
+  function mapVolumeData() {
+    const mappedData = data?.map(({ date, asaVolume }) => {
+      const time = dayjs(new Date(date)).format('YYYY-MM-DD')
+      return {
+        time,
+        value: asaVolume
+      }
+    })
+    const volumeColors = data?.map(({ open, close }) => (open > close ? '#e53e3e2c' : '#2fb16c2c'))
+    const volumeData = mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
+    return volumeData
+  }
+
   const [chartInterval, setChartInterval] = useState(CHART_INTERVALS[0])
   const [chartMode, setChartMode] = useState(initialMode)
+  const chartData = useMemo(() => mapChartData(), [data])
+  const volumeData = useMemo(() => mapVolumeData(), [data])
 
   const candleChartRef = useRef()
-  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData)
-
   const areaChartRef = useRef()
-  const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData)
+
+  const { candleChart } = useCandleChart(candleChartRef, volumeData, chartData, data)
+  const { areaChart } = useAreaChart(areaChartRef, volumeData, chartData)
 
   const formattedVolume = millify(volume24hr)
   const formattedBid = bid.toFixed(4)
@@ -86,16 +121,26 @@ function Chart({
 
   return (
     <Container>
-      <CandleStickChart
-        ref={candleChartRef}
-        isVisible={chartMode === CANDLE ? true : false}
-        data-testid="candleStickChart"
-      />
-      <AreaSeriesChart
-        ref={areaChartRef}
-        isVisible={chartMode === LINE ? true : false}
-        data-testid="lineChart"
-      />
+      {isLoading ? (
+        <LoadingContainer>
+          <BodyCopyLg color="gray.100" textTransform="uppercase">
+            Loading...
+          </BodyCopyLg>
+        </LoadingContainer>
+      ) : (
+        <>
+          <CandleStickChart
+            ref={candleChartRef}
+            isVisible={chartMode === CANDLE ? true : false}
+            data-testid="candleStickChart"
+          />
+          <AreaSeriesChart
+            ref={areaChartRef}
+            isVisible={chartMode === LINE ? true : false}
+            data-testid="lineChart"
+          />
+        </>
+      )}
       <ChartLabel>
         <TopRow>
           <AssetLabelContainer>
@@ -189,6 +234,7 @@ function Chart({
           </ChartModeButton>
         </ChartOptions>
       </ChartLabel>
+      {/* <ReactQueryDevtools initialIsOpen /> */}
     </Container>
   )
 }
@@ -197,7 +243,6 @@ export default Chart
 
 Chart.propTypes = {
   bidAndAsk: PropTypes.object,
-  priceData: PropTypes.array,
   volume24hr: PropTypes.number,
   pair: PropTypes.array,
   dailyChange: PropTypes.number,
@@ -211,7 +256,6 @@ Chart.defaultProps = {
     bid: 0,
     ask: 0
   },
-  priceData: [],
   volume24hr: 0,
   pair: ['ALGO', 'ALGO'],
   dailyChange: 0,

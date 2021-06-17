@@ -59,13 +59,15 @@ export default function useAreaChart(containerRef, volumeData, priceData) {
         lineWidth: LINE_WIDTH
       })
 
-      const areaSeriesData = priceData.map(({ time, close }) => ({
-        time,
-        value: close
-      }))
+      if (priceData?.length) {
+        const areaSeriesData = priceData.map(({ time, close }) => ({
+          time,
+          value: close
+        }))
 
-      areaSeries.setData(areaSeriesData)
-      chart.timeScale().fitContent()
+        areaSeries.setData(areaSeriesData)
+        chart.timeScale().fitContent()
+      }
 
       if (chartContainer) {
         addListener(chartContainer, () =>

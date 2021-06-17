@@ -7,6 +7,14 @@ export const Container = styled.div`
   display: flex;
   position: relative;
 `
+export const LoadingContainer = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`
+
 export const ChartLabel = styled.div`
   position: absolute;
   left: 1.75rem;
