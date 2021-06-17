@@ -24,7 +24,7 @@ function OrderBookPrice(props) {
   return (
     <Price color={color} data-testid="order-book-price">
       {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
-      {price}
+      {parseFloat(price).toFixed(3)}
     </Price>
   )
 }
