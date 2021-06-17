@@ -1,4 +1,4 @@
-export default [
+export const demoAssetsData = [
   {
     icon: 'algo',
     coin: 'ALGO',

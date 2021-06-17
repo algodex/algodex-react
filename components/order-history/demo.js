@@ -1,4 +1,4 @@
-export default [
+export const demoOrderHistoryData = [
   {
     date: new Date('02-03-2021'),
     pair: ['MCAU', 'USDC'],
