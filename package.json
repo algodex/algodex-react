@@ -9,7 +9,7 @@
     "test": "jest",
     "jest": "jest --watch",
     "lint": "eslint --fix .",
-    "format": "prettier --write './**/*.{js,jsx,css,md,json}' --config ./.prettierrc",
+    "format": "prettier --write './**/*.{js,jsx,css,md,json}' --config ./.prettierrc.json",
     "storybook": "start-storybook -p 6006 --no-dll -s ./public",
     "build-storybook": "build-storybook",
     "cypress": "cypress open",

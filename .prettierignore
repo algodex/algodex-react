@@ -12,3 +12,6 @@
 
 # production
 /build
+
+# hygen
+/_templates

@@ -2,9 +2,13 @@ import AssetSearch from 'components/asset-search'
 import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
 import {
-  DEMO_BID_ASK_PRICE, DEMO_CHART_DATA, DEMO_DAILY_CHANGE_PERCENT,
-  DEMO_OHLC, DEMO_SELECTED_PAIR,
-  DEMO_VOLUME_AMOUNT, DEMO_VOLUME_DATA
+  DEMO_BID_ASK_PRICE,
+  DEMO_CHART_DATA,
+  DEMO_DAILY_CHANGE_PERCENT,
+  DEMO_OHLC,
+  DEMO_SELECTED_PAIR,
+  DEMO_VOLUME_AMOUNT,
+  DEMO_VOLUME_DATA
 } from 'components/chart/demo'
 import MobileInterface from 'components/mobile-interface'
 import { demoOpenOrderData } from 'components/open-orders/demo'
@@ -18,11 +22,16 @@ import { generateTradesData } from 'components/trade-history/demo'
 import Wallet from 'components/wallet'
 import { useEffect, useRef, useState } from 'react'
 import {
-  AssetsSection, ChartSection, Main,
-  MainWrapper, OrderBookSection, OrdersSection, TradeHistorySection, TradeSection, WalletSection
+  AssetsSection,
+  ChartSection,
+  Main,
+  MainWrapper,
+  OrderBookSection,
+  OrdersSection,
+  TradeHistorySection,
+  TradeSection,
+  WalletSection
 } from './main-layout.css'
-
-
 
 const DEMO_SELL_DATA = generateBookData(1.3766, 0.0001)
 const DEMO_BUY_DATA = generateBookData(1.3764, -0.0001)
