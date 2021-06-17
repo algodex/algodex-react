@@ -1,77 +1,33 @@
 import PropTypes from 'prop-types'
-import OrderBookPrice from 'components/order-book-price'
-import { BodyCopyTiny } from 'components/type'
+import { useQuery } from 'react-query'
+import { fetchOrdersInEscrow } from 'lib/api'
+import { generateBookData } from './helpers'
+import Spinner from 'components/spinner'
+import Error from 'components/error'
+import OrderBookView from './view'
 
-import {
-  Container,
-  Header,
-  BookRow,
-  OrdersWrapper,
-  SellOrders,
-  BuyOrders,
-  CurrentPrice
-} from './order-book.css'
+import { Container } from './order-book.css'
 
 function OrderBook(props) {
-  const { assetName, currentPrice, priceChange, sellData, buyData } = props
+  const { assetId, ...rest } = props
 
-  const renderSellOrders = () =>
-    sellData
-      .sort((a, b) => b.price - a.price)
-      .map((row) => (
-        <BookRow key={`sell-${row.price}`} data-testid="order-book-sell-row">
-          <BodyCopyTiny color="red.500" m={0}>
-            {row.price}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.000" m={0}>
-            {row.amount}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.000" textAlign="right" m={0}>
-            {row.total}
-          </BodyCopyTiny>
-        </BookRow>
-      ))
+  const { status, data } = useQuery(['ordersInEscrow', { assetId }], () =>
+    fetchOrdersInEscrow(assetId)
+  )
 
-  const renderBuyOrders = () =>
-    buyData
-      .sort((a, b) => b.price - a.price)
-      .map((row) => (
-        <BookRow key={`buy-${row.price}`} data-testid="order-book-buy-row">
-          <BodyCopyTiny color="green.500" m={0}>
-            {row.price}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.000" m={0}>
-            {row.amount}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.000" textAlign="right" m={0}>
-            {row.total}
-          </BodyCopyTiny>
-        </BookRow>
-      ))
+  if (status === 'loading') {
+    return <Spinner flex />
+  }
+  if (status === 'error') {
+    return <Error message="Error loading order book" flex />
+  }
+
+  const sellData = generateBookData(data.sellASAOrdersInEscrow, 'sell')
+  const buyData = generateBookData(data.buyASAOrdersInEscrow, 'buy')
 
   return (
     <Container>
-      <Header>
-        <BodyCopyTiny color="gray.500" m={0}>
-          Price (ALGO)
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" m={0}>{`Amount (${assetName})`}</BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Total
-        </BodyCopyTiny>
-      </Header>
-
-      <SellOrders>
-        <OrdersWrapper>{renderSellOrders()}</OrdersWrapper>
-      </SellOrders>
-
-      <CurrentPrice>
-        <OrderBookPrice price={currentPrice} change={priceChange} />
-      </CurrentPrice>
-
-      <BuyOrders>
-        <OrdersWrapper>{renderBuyOrders()}</OrdersWrapper>
-      </BuyOrders>
+      <OrderBookView buyData={buyData} sellData={sellData} {...rest} />
     </Container>
   )
 }
@@ -80,8 +36,7 @@ OrderBook.propTypes = {
   assetName: PropTypes.string.isRequired,
   currentPrice: PropTypes.number.isRequired,
   priceChange: PropTypes.number.isRequired,
-  sellData: PropTypes.array.isRequired,
-  buyData: PropTypes.array.isRequired
+  assetId: PropTypes.number.isRequired
 }
 
 export default OrderBook

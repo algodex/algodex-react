@@ -15,5 +15,5 @@ export const generateBookData = (startPrice, increment, qty = 24) => {
     }
     result.push(row)
   }
-  return result
+  return result.sort((a, b) => b.price - a.price)
 }
