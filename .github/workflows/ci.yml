@@ -15,7 +15,5 @@ jobs:
           echo '//npm.pkg.github.com/:_authToken=${{ secrets.GHP_TOKEN  }}' > ${{ github.workspace }}/.npmrc
           cat .npmrc
           yarn
-        env:
-          GHP_TOKEN: ${{ secrets.GHP_TOKEN }}
       - name: Run tests
         run: yarn test
