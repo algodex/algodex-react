@@ -3,6 +3,7 @@ import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 
 import {
+  Container,
   Header,
   BookRow,
   OrdersWrapper,
@@ -45,7 +46,7 @@ function OrderBookView(props) {
     ))
 
   return (
-    <>
+    <Container>
       <Header>
         <BodyCopyTiny color="gray.500" m={0}>
           Price (ALGO)
@@ -67,7 +68,7 @@ function OrderBookView(props) {
       <BuyOrders>
         <OrdersWrapper>{renderBuyOrders()}</OrdersWrapper>
       </BuyOrders>
-    </>
+    </Container>
   )
 }
 

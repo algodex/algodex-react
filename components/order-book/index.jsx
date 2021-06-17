@@ -6,8 +6,6 @@ import Spinner from 'components/spinner'
 import Error from 'components/error'
 import OrderBookView from './view'
 
-import { Container } from './order-book.css'
-
 function OrderBook(props) {
   const { assetId, ...rest } = props
 
@@ -25,11 +23,7 @@ function OrderBook(props) {
   const sellData = generateBookData(data.sellASAOrdersInEscrow, 'sell')
   const buyData = generateBookData(data.buyASAOrdersInEscrow, 'buy')
 
-  return (
-    <Container>
-      <OrderBookView buyData={buyData} sellData={sellData} {...rest} />
-    </Container>
-  )
+  return <OrderBookView buyData={buyData} sellData={sellData} {...rest} />
 }
 
 OrderBook.propTypes = {
