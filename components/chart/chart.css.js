@@ -13,6 +13,7 @@ export const LoadingContainer = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.gray[900]};
 `
 
 export const ChartLabel = styled.div`
