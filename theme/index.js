@@ -193,6 +193,10 @@ export const buttons = {
   }
 }
 
+export const parseThemeColor = (str) => {
+  return str.split('.').reduce((o, i) => o[i], colors)
+}
+
 export default {
   name: 'Dark',
   textStyles,

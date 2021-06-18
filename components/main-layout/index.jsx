@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import AssetSearch from 'components/asset-search'
 import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
@@ -13,7 +14,6 @@ import {
 import MobileInterface from 'components/mobile-interface'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import OrderBook from 'components/order-book'
-import { generateBookData } from 'components/order-book/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import Orders from 'components/orders'
 import PlaceOrder from 'components/place-order'
@@ -33,8 +33,6 @@ import {
   WalletSection
 } from './main-layout.css'
 
-const DEMO_SELL_DATA = generateBookData(1.3766, 0.0001)
-const DEMO_BUY_DATA = generateBookData(1.3764, -0.0001)
 const DEMO_TRADES_DATA = generateTradesData(1.3766, 0.0001)
 
 const DEMO_WALLETS = [
@@ -47,7 +45,9 @@ const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
 
-export default function MainLayout() {
+function MainLayout(props) {
+  const { asset } = props
+
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
 
@@ -91,11 +91,10 @@ export default function MainLayout() {
         </ChartSection>
         <OrderBookSection>
           <OrderBook
-            assetName="YLDY"
-            currentPrice={1.3765}
-            priceChange={-0.0001}
-            sellData={DEMO_SELL_DATA}
-            buyData={DEMO_BUY_DATA}
+            assetName={asset.params['unit-name']}
+            currentPrice={asset.price}
+            priceChange={0.0001}
+            assetId={asset.id}
           />
         </OrderBookSection>
         <TradeHistorySection>
@@ -115,3 +114,9 @@ export default function MainLayout() {
     </MainWrapper>
   )
 }
+
+MainLayout.propTypes = {
+  asset: PropTypes.object.isRequired
+}
+
+export default MainLayout

@@ -1,7 +1,11 @@
 import Head from 'next/head'
 import styled from 'styled-components'
+import { useQuery } from 'react-query'
+import { fetchAssetById } from 'lib/api'
 import MainLayout from 'components/main-layout'
 import Header from 'components/header'
+import Spinner from 'components/spinner'
+import Error from 'components/error'
 
 const Container = styled.div`
   max-height: 100vh;
@@ -25,7 +29,32 @@ const Container = styled.div`
   }
 `
 
+const StatusContainer = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+`
+
 export default function Home() {
+  const { status, data } = useQuery(['asset', { id: 15322902 }], () => fetchAssetById(15322902))
+
+  const renderDashboard = () => {
+    if (status === 'loading') {
+      return (
+        <StatusContainer>
+          <Spinner flex />
+        </StatusContainer>
+      )
+    }
+    if (status === 'error') {
+      return (
+        <StatusContainer>
+          <Error message="Error loading trading pair" flex />
+        </StatusContainer>
+      )
+    }
+
+    return <MainLayout asset={data.asset} />
+  }
   return (
     <Container>
       <Head>
@@ -34,7 +63,7 @@ export default function Home() {
       </Head>
       <Header />
 
-      <MainLayout />
+      {renderDashboard()}
     </Container>
   )
 }
