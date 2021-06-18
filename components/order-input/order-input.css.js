@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const Input = styled.input`
   flex: 1 1 auto;
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.gray['900']};
   border: 2px solid ${({ theme }) => theme.colors.gray['700']};
   border-radius: 3px;
