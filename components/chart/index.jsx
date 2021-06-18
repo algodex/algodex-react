@@ -5,7 +5,7 @@ import millify from 'millify'
 
 import { useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { getAssetInfo, mapPriceData, mapVolumeData, relDiff } from './helpers'
+import { getAssetInfo, mapPriceData, mapVolumeData, relDiff, getOhlc } from './helpers'
 import useAreaChart from './use-area-chart'
 import useCandleChart from './use-candle-chart'
 import ChartView from './view'
@@ -14,7 +14,6 @@ import ChartView from './view'
 const LOADER_COLOR = '#2D3748 '
 const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
-const ASSET_FIXED_DECIMALS = 4
 const baseAsset = 'ALGO'
 // Demo
 const assetId = 15322902
@@ -31,13 +30,8 @@ function Chart() {
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
   const assetInfo = useMemo(() => getAssetInfo(data), [data])
   const assetName = assetInfo?.asset?.params['unit-name'] || 'ALGO'
-  const ohlc =
-    {
-      open: lastPriceData?.open?.toFixed(ASSET_FIXED_DECIMALS),
-      high: lastPriceData?.high?.toFixed(ASSET_FIXED_DECIMALS),
-      low: lastPriceData?.low?.toFixed(ASSET_FIXED_DECIMALS),
-      close: lastPriceData?.close?.toFixed(ASSET_FIXED_DECIMALS)
-    } || {}
+  const ohlc = useMemo(() => getOhlc(data), [data])
+
   const lastPriceData = priceData[priceData.length - 1] || {}
   const secondLastPriceData = priceData[priceData.length - 2] || {}
   const dailyChange = relDiff(lastPriceData.open, secondLastPriceData.open)

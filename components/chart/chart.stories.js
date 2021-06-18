@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {
   DEMO_CHART_DATA,
   DEMO_VOLUME_DATA,
@@ -9,7 +8,7 @@ import {
   DEMO_DAILY_CHANGE_PERCENT,
   DEMO_OHLC
 } from './demo'
-import Chart from '.'
+import Chart from './view'
 import styled from 'styled-components'
 
 const Container = styled.div`

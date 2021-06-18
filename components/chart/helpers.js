@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 
+const ASSET_FIXED_DECIMALS = 4
+
 export const mapPriceData = (data) => {
   const prices =
     data?.chart_data.map(({ date, open, high, low, close }) => {
@@ -13,6 +15,18 @@ export const mapPriceData = (data) => {
       }
     }) || []
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
+}
+
+export const getOhlc = (data) => {
+  const lastPriceData = data?.chart_data[0] || {}
+  const ohlc =
+    {
+      open: parseFloat(lastPriceData?.open).toFixed(ASSET_FIXED_DECIMALS),
+      high: parseFloat(lastPriceData?.high).toFixed(ASSET_FIXED_DECIMALS),
+      low: parseFloat(lastPriceData?.low).toFixed(ASSET_FIXED_DECIMALS),
+      close: parseFloat(lastPriceData?.close).toFixed(ASSET_FIXED_DECIMALS)
+    } || {}
+  return ohlc
 }
 
 export const mapVolumeData = (data, volUpColor, volDownColor) => {
