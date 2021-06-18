@@ -104,9 +104,7 @@ function GlobalFilter({
 function AssetSearch({ gridSize }) {
   const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
 
-  const formatPriceData = (data) => {
-    const tradingPairs = data?.tradingPairs || []
-
+  const formatPriceData = (tradingPairs = []) => {
     return tradingPairs.map((pair) => ({
       name: pair.asset_info.params['unit-name'],
       price: parseFloat(parseFloat(pair.asaPrice).toFixed(3)),
@@ -114,7 +112,7 @@ function AssetSearch({ gridSize }) {
     }))
   }
 
-  const priceData = useMemo(() => formatPriceData(data), [data])
+  const priceData = useMemo(() => formatPriceData(data?.tradingPairs), [data])
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether

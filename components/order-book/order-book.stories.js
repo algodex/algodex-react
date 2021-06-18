@@ -1,5 +1,5 @@
 import React from 'react'
-import OrderBook from '.'
+import OrderBook from './view'
 import { generateBookData, randomInt } from './demo'
 
 export default {
