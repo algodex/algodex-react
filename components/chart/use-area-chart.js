@@ -46,7 +46,7 @@ export default function useAreaChart(containerRef, volumeData, priceData, data) 
       )
     }
     containerRef?.current && !chart && initializeChart()
-  }, [chart, containerRef])
+  }, [chart, containerRef, data])
 
   useEffect(() => {
     const chartContainer = containerRef?.current
