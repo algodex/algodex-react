@@ -5,7 +5,7 @@ import { ArrowUp, ArrowDown } from 'react-feather'
 const Price = styled.p`
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: ${({ theme, color }) => theme.colors[color]['500']};
   margin: 0;
