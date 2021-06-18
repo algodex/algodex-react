@@ -6,6 +6,10 @@ const convertAmount = (amount, decimals = 6) => {
 //   return price * (10 ^ (decimals - 6))
 // }
 
+const calculateBuyAmount = (price, totalCost, decimals) => {
+  return convertAmount(totalCost, decimals) / price
+}
+
 const aggregateOrders = (asset, orders, type) => {
   const isBuyOrder = type === 'buy'
   let total = 0
@@ -22,7 +26,10 @@ const aggregateOrders = (asset, orders, type) => {
 
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
     const decimals = isBuyOrder ? 6 : asset.params.decimals
-    const amount = convertAmount(orderAmount, decimals)
+
+    const amount = isBuyOrder
+      ? calculateBuyAmount(price, orderAmount, decimals)
+      : convertAmount(orderAmount, decimals)
 
     total += amount
 

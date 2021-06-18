@@ -53,7 +53,7 @@ function OrderBookView(props) {
         </BodyCopyTiny>
         <BodyCopyTiny color="gray.500" m={0}>{`Amount (${assetName})`}</BodyCopyTiny>
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Total
+          {`Total (${assetName})`}
         </BodyCopyTiny>
       </Header>
 
