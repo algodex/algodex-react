@@ -13,6 +13,6 @@ jobs:
       - name: Install dependencies
         run: yarn
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GPR_TOKEN}}
+          NPM_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
       - name: Run tests
         run: yarn test
