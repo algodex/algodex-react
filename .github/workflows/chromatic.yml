@@ -8,12 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
       - name: Install dependencies
-        run: |
-          echo '//npm.pkg.github.com/:_authToken=${{ secrets.GHP_TOKEN  }}' > ${{ github.workspace }}/.npmrc
-          cat .npmrc
-          yarn
+        run: yarn
       - name: Publish to Chromatic
         uses: chromaui/action@v1
         with:
