@@ -6,11 +6,13 @@ jobs:
   chromatic-deployment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
         with:
-          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies
         run: yarn
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GPR_TOKEN}}
       - name: Publish to Chromatic
         uses: chromaui/action@v1
         with:
