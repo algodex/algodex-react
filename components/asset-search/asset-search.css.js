@@ -129,6 +129,7 @@ export const TableContainer = styled.div`
       padding: 0.5rem;
       color: ${({ theme }) => theme.colors.gray['600']};
       font-size: 0.75rem;
+      line-height: 1.25;
 
       &:first-child {
         padding-left: 1.125rem;

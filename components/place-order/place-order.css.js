@@ -28,7 +28,7 @@ export const Form = styled.form`
 
 export const ToggleWrapper = styled.div`
   display: flex;
-  padding: 0 0 1.25rem;
+  padding: 0 0 1.5rem;
 `
 
 export const ToggleInput = styled.input`
@@ -41,6 +41,7 @@ const ToggleBtn = styled(Button)`
   display: flex;
   justify-content: center;
   margin: 0;
+  line-height: 1.25;
   background-color: ${({ theme }) => theme.colors.gray['700']};
 
   &:hover {

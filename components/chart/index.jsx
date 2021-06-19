@@ -100,13 +100,20 @@ function Chart({
         <TopRow>
           <AssetLabelContainer>
             <AssetName>
-              <BodyCopy color="gray.100" letterSpacing=".1rem" mb={0} data-testid="primaryAsset">
+              <BodyCopy
+                color="gray.100"
+                letterSpacing=".1rem"
+                mt={3}
+                mb={0}
+                data-testid="primaryAsset"
+              >
                 {pair[0]}
               </BodyCopy>
               <BodyCopy
                 color="gray.500"
                 letterSpacing=".1rem"
                 ml={1}
+                mt={3}
                 mb={0}
                 data-testid="secondaryAsset"
               >
@@ -161,10 +168,16 @@ function Chart({
           <Ask data-testid="ask">{formattedAsk}</Ask>
         </Price>
         <VolumeContainer>
-          <BodyCopyTiny color="gray.100" letterSpacing=".1rem">
+          <BodyCopyTiny color="gray.100" letterSpacing=".1rem" mt={10}>
             VOL(ALGO):
           </BodyCopyTiny>
-          <BodyCopyTiny color="gray.100" letterSpacing=".1rem" ml={1} data-testid="volume24hr">
+          <BodyCopyTiny
+            color="gray.100"
+            letterSpacing=".1rem"
+            mt={10}
+            ml={1}
+            data-testid="volume24hr"
+          >
             {formattedVolume}
           </BodyCopyTiny>
         </VolumeContainer>

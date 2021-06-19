@@ -39,7 +39,7 @@ const gridStyles = `
 export const Arrow = styled.div`
   position: absolute;
   top: 0.5rem;
-  left: 0.125rem;
+  left: 0.375rem;
 `
 
 export const Header = styled.header`
@@ -107,6 +107,7 @@ export const WalletRow = styled.div`
   span,
   p {
     color: inherit;
+    line-height: 1.25;
   }
 
   span {

@@ -13,6 +13,7 @@ export const Tab = styled.div`
   text-transform: uppercase;
   letter-spacing: 0.2rem;
   font-weight: 600;
+  line-height: 1.25;
 
   border-bottom: ${({ isActive, theme }) =>
     isActive ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
