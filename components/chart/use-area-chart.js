@@ -11,7 +11,7 @@ const TOP_LINE_COLOR = '#38A169'
 const BOTTOM_COLOR = '#38a16911'
 const LINE_WIDTH = 2
 
-export default function useAreaChart(containerRef, volumeData, priceData) {
+export default function useAreaChart(containerRef, volumeData, priceData, data) {
   const [chart, setChart] = useState()
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function useAreaChart(containerRef, volumeData, priceData) {
       )
     }
     containerRef?.current && !chart && initializeChart()
-  }, [chart, containerRef])
+  }, [chart, containerRef, data])
 
   useEffect(() => {
     const chartContainer = containerRef?.current
@@ -59,13 +59,15 @@ export default function useAreaChart(containerRef, volumeData, priceData) {
         lineWidth: LINE_WIDTH
       })
 
-      const areaSeriesData = priceData.map(({ time, close }) => ({
-        time,
-        value: close
-      }))
+      if (priceData?.length) {
+        const areaSeriesData = priceData.map(({ time, close }) => ({
+          time,
+          value: close
+        }))
 
-      areaSeries.setData(areaSeriesData)
-      chart.timeScale().fitContent()
+        areaSeries.setData(areaSeriesData)
+        chart.timeScale().fitContent()
+      }
 
       if (chartContainer) {
         addListener(chartContainer, () =>
@@ -75,7 +77,7 @@ export default function useAreaChart(containerRef, volumeData, priceData) {
 
       return () => removeListener(chartContainer)
     }
-  }, [chart, containerRef, volumeData, priceData])
+  }, [chart, containerRef, volumeData, priceData, data])
 
   return {
     areaChart: chart

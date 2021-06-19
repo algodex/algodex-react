@@ -7,6 +7,15 @@ export const Container = styled.div`
   display: flex;
   position: relative;
 `
+export const LoadingContainer = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.gray[900]};
+`
+
 export const ChartLabel = styled.div`
   position: absolute;
   left: 1.75rem;
@@ -29,7 +38,7 @@ export const Price = styled.div`
   font-size: 0.7rem;
 
   @media (min-width: 768px) {
-    top: 4rem;
+    top: 3.5rem;
     left: -1.25rem;
   }
 
@@ -81,7 +90,7 @@ export const VolumeContainer = styled.div`
   display: flex;
 
   @media (min-width: 768px) {
-    top: 5.3rem;
+    top: 4.5rem;
     left: -1.2rem;
   }
 
@@ -151,6 +160,7 @@ export const IntervalSelector = styled.select`
   height: 1.75rem;
   font-size: 0.7rem;
   font-weight: 700;
+  margin-left: 0;
 `
 
 export const OHLC = styled.div`
@@ -249,10 +259,20 @@ export const ChartOptions = styled.div`
   display: flex;
   position: absolute;
   top: 7.5rem;
-  left: -2.2rem;
+  left: -1.25rem;
 
-  @media (min-width: 1344px) {
+  @media (min-width: 768px) {
+    top: 6.4rem;
+    left: -1.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    top: 6rem;
+    left: -0.5rem;
+  }
+
+  @media (min-width: 1536px) {
     top: 6.5rem;
-    left: -1rem;
+    left: 0;
   }
 `

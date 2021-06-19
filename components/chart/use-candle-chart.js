@@ -8,7 +8,7 @@ const BACKGROUND_COLOR = '#171923'
 const BORDER_COLOR = '#718096'
 const TEXT_COLOR = '#CBD5E0'
 
-export default function useCandleChart(containerRef, volumeData, priceData) {
+export default function useCandleChart(containerRef, volumeData, priceData, data) {
   const [chart, setChart] = useState()
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
       )
     }
     containerRef?.current && !chart && initializeChart()
-  }, [chart, containerRef])
+  }, [chart, containerRef, data])
 
   useEffect(() => {
     const chartContainer = containerRef?.current
@@ -58,19 +58,29 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
         wickUpColor: UP_COLOR
       })
       const volumeSeries = chart.addHistogramSeries({
+        base: 0,
         color: UP_COLOR,
         priceFormat: {
           type: 'volume'
         },
         priceScaleId: '',
+        position: 'left',
+        mode: 2,
+        autoScale: false,
+        invertScale: true,
+        alignLabels: false,
         scaleMargins: {
-          top: 0.8,
+          top: 0.9983,
           bottom: 0
         }
       })
-      volumeSeries.setData(volumeData)
-      candleSeries.setData(priceData)
-      chart.timeScale().fitContent()
+      if (volumeData?.length) {
+        volumeSeries.setData(volumeData)
+      }
+      if (priceData?.length) {
+        candleSeries.setData(priceData)
+        chart.timeScale().fitContent()
+      }
 
       if (chartContainer) {
         addListener(chartContainer, () =>
@@ -80,7 +90,7 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
 
       return () => removeListener(chartContainer)
     }
-  }, [chart, containerRef, volumeData, priceData])
+  }, [chart, containerRef, volumeData, priceData, data])
 
   return {
     candleChart: chart
