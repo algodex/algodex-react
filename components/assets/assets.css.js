@@ -26,6 +26,10 @@ export const Header = styled.header`
   ${gridStyles}
   padding: 0 2rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+
+  p {
+    margin: 1em 0;
+  }
 `
 
 export const AssetsWrapper = styled.div`
