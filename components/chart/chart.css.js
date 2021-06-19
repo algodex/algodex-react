@@ -52,6 +52,7 @@ align-items: center;
 
 export const Bid = styled.span`
   padding: 0.2rem 0.75rem;
+  line-height: 1.25;
   border-radius: 3px;
   border: 1px solid ${({ theme }) => theme.colors.green['500']};
   color: ${({ theme }) => theme.colors.green['500']};
@@ -60,6 +61,7 @@ export const Bid = styled.span`
 
 export const Ask = styled.span`
   padding: 0.2rem 0.75rem;
+  line-height: 1.25;
   border-radius: 3px;
   border: 1px solid ${({ theme }) => theme.colors.red['500']};
   color: ${({ theme }) => theme.colors.red['500']};

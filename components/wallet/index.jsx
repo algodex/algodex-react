@@ -82,10 +82,8 @@ function Wallet(props) {
       {hasWallets ? (
         <>
           <Header>
-            <BodyCopyTiny color="gray.500" m={0}>
-              Name
-            </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            <BodyCopyTiny color="gray.500">Name</BodyCopyTiny>
+            <BodyCopyTiny color="gray.500" textAlign="right">
               Balance (ALGO)
             </BodyCopyTiny>
           </Header>
