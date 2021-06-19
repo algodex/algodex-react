@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { getAssetInfo, mapPriceData, mapVolumeData, relDiff, getOhlc } from './helpers'
-
+import useStore from 'store/use-store'
 import ChartView from './view'
 
 // Common
@@ -16,8 +16,9 @@ const baseAsset = 'ALGO'
 
 const bidAndAsk = { bid: 0, ask: 0 }
 function Chart(props) {
-  const { assetId, ...rest } = props
-  console.log('ASSET ID: ', assetId)
+  const { id: assetId } = useStore((state) => state.asset)
+  console.log('ASSET ID: ' + JSON.stringify(assetId))
+
   const [intervalMs, setIntervalMs] = useState(1000)
 
   const { data, isLoading, isError } = useQuery(['priceData', { assetId }], fetchPriceData, {
@@ -25,15 +26,21 @@ function Chart(props) {
     refetchInterval: intervalMs
   })
 
+  const getAssetName = (asset) => {
+    return asset?.asset?.params['unit-name'] || ''
+  }
+
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
   const assetInfo = useMemo(() => getAssetInfo(data), [data])
-  const assetName = assetInfo?.asset?.params['unit-name'] || 'ALGO'
+  const assetName = useMemo(() => getAssetName(assetInfo), [assetInfo])
   const ohlc = useMemo(() => getOhlc(data), [data])
 
-  const lastPriceData = priceData[priceData.length - 1] || {}
-  const secondLastPriceData = priceData[priceData.length - 2] || {}
-  const dailyChange = relDiff(lastPriceData.open, secondLastPriceData.open)
+  const lastPriceData = priceData[priceData.length - 1] || null
+  const secondLastPriceData = priceData[priceData.length - 2] || null
+  const dailyChange = secondLastPriceData
+    ? relDiff(lastPriceData?.open, secondLastPriceData?.open)
+    : 0
   const algoVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.algoVolume || 0)
   const bid = bidAndAsk.bid.toFixed(4)
   const ask = bidAndAsk.ask.toFixed(4)
@@ -61,7 +68,7 @@ function Chart(props) {
       volumeData={volumeData}
       data={data}
       initialChartMode="CANDLE"
-      {...rest}
+      {...props}
     />
   )
 }

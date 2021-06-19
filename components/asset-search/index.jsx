@@ -6,6 +6,7 @@ import { fetchRecentTrades } from 'lib/api'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import useStore from 'store/use-store'
 
 // import makeData from './demo'
 
@@ -112,8 +113,15 @@ function AssetSearch({ gridSize }) {
     }))
   }
 
-  const priceData = useMemo(() => formatPriceData(data?.tradingPairs), [data])
+  const getAssetData = (tradingPairs = []) => {
+    return tradingPairs.map(({ asset_id, asset_info }) => ({
+      id: asset_id,
+      name: asset_info.params['unit-name']
+    }))
+  }
 
+  const priceData = useMemo(() => formatPriceData(data?.tradingPairs), [data])
+  const assetData = useMemo(() => getAssetData(data?.tradingPairs), [data])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -155,8 +163,14 @@ function AssetSearch({ gridSize }) {
     !isFixed && setIsActive(false)
   }
 
-  const handleAssetClick = (name) => {
-    alert(`Navigate to https://algodex.com/trade/${name}-ALGO/`)
+  const handleAssetClick = async (row) => {
+    // eslint-disable-next-line
+    const asset = assetData.find((asset) => asset.name === row.original.name)
+
+    if (asset) {
+      useStore.setState({ asset })
+    }
+    // alert(`Navigate to https://algodex.com/trade/${row.original.name}-ALGO/`)
   }
 
   const columns = useMemo(
@@ -197,7 +211,7 @@ function AssetSearch({ gridSize }) {
   const getRowProps = (row) => ({
     role: 'button',
     tabIndex: isActive ? '0' : '-1', // tab-navigable only when rows are visible
-    onClick: () => handleAssetClick(row.original.name),
+    onClick: () => handleAssetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         handleAssetClick(row.original.name)

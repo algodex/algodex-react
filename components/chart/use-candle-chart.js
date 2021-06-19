@@ -78,6 +78,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
         volumeSeries.setData(volumeData)
       }
       if (priceData?.length) {
+        console.log('LENGTH:', priceData.length)
         candleSeries.setData(priceData)
         chart.timeScale().fitContent()
       }
