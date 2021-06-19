@@ -1,4 +1,4 @@
-export const DEMO_CHART_DATA = [
+export const DEMO_PRICE_DATA = [
   { time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85 },
   { time: '2018-10-22', open: 180.82, high: 181.4, low: 177.56, close: 178.75 },
   { time: '2018-10-23', open: 175.77, high: 179.49, low: 175.44, close: 178.53 },
@@ -150,7 +150,7 @@ export const DEMO_CHART_DATA = [
   { time: '2019-05-24', open: 192.54, high: 193.86, low: 190.41, close: 193.59 }
 ]
 
-const colors = DEMO_CHART_DATA.map(({ open, close }) => (open > close ? '#e53e3e2c' : '#2fb16c2c'))
+const colors = DEMO_PRICE_DATA.map(({ open, close }) => (open > close ? '#e53e3e2c' : '#2fb16c2c'))
 
 const volumeData = [
   { time: '2018-10-19', value: 19103293.0 },
@@ -306,8 +306,14 @@ const volumeData = [
 ]
 
 export const DEMO_VOLUME_DATA = volumeData.map((data, i) => ({ ...data, color: colors[i] }))
-export const DEMO_BID_ASK_PRICE = { bid: 191.26, ask: 192.68 }
-export const DEMO_VOLUME_AMOUNT = 650000000
-export const DEMO_SELECTED_PAIR = ['YLDY', 'ALGO']
-export const DEMO_DAILY_CHANGE_PERCENT = 5.26
+export const DEMO_ASSET_NAME = 'YLDY'
+export const DEMO_DAILY_CHANGE = 10.36
+export const DEMO_ALGO_VOLUME = 126.8456
+export const DEMO_BASE_ASSET = 'ALGO'
 export const DEMO_OHLC = { open: 185.6423, high: 209.6563, low: 159.3689, close: 171.6985 }
+export const DEMO_BID = 191.2685
+export const DEMO_ASK = 192.6875
+export const DEMO_SPREAD = (192.68 - 191.26).toFixed(4)
+export const DEMO_CANDLE_CHART_MODE = 'CANDLE'
+export const DEMO_AREA_CHART_MODE = 'AREA'
+export const DEMO_CHART_MODES = { CANDLE: 'CANDLE', AREA: 'AREA' }

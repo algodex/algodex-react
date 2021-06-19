@@ -70,7 +70,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
         invertScale: true,
         alignLabels: false,
         scaleMargins: {
-          top: 0.9983,
+          top: 0.8,
           bottom: 0
         }
       })

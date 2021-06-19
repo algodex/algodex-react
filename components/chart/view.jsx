@@ -1,6 +1,8 @@
 import { BodyCopy, BodyCopyTiny } from 'components/type'
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useRef, useState } from 'react'
+import useAreaChart from './use-area-chart'
+import useCandleChart from './use-candle-chart'
 import {
   AreaSeriesChart,
   Ask,
@@ -31,8 +33,6 @@ import {
 } from './chart.css'
 
 function ChartView({
-  candleChartRef,
-  areaChartRef,
   assetName,
   dailyChange,
   algoVolume,
@@ -41,15 +41,44 @@ function ChartView({
   bid,
   ask,
   spread,
-  toggleChartMode,
-  chartMode,
-  chartModes
+  volumeData,
+  priceData,
+  data,
+  initialChartMode
 }) {
   const MODE_ICON_COLOR = '#f2f2f2'
   const formattedDailyChange =
     dailyChange > 0 ? `+${dailyChange.toFixed(2)}%` : `-${dailyChange.toFixed(2)}%`
-  const { CANDLE, AREA } = chartModes
   const CHART_INTERVALS = ['1D', '4H', '1H', '15m', '3m', '1m']
+
+  const candleChartRef = useRef()
+  const areaChartRef = useRef()
+
+  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData, data)
+  const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData, data)
+
+  const chartModes = {
+    CANDLE: 'CANDLE',
+    AREA: 'AREA'
+  }
+  const { CANDLE, AREA } = chartModes
+  const [chartMode, setChartMode] = useState(initialChartMode)
+
+  const changeMode = () => {
+    if (chartMode === AREA) {
+      setChartMode(CANDLE)
+      const logicalRange = areaChart?.timeScale().getVisibleLogicalRange()
+      candleChart?.timeScale().setVisibleLogicalRange(logicalRange)
+      return
+    }
+
+    if (chartMode === CANDLE) {
+      setChartMode(AREA)
+      const logicalRange = candleChart?.timeScale().getVisibleLogicalRange()
+      areaChart?.timeScale().setVisibleLogicalRange(logicalRange)
+      return
+    }
+  }
 
   return (
     <Container>
@@ -146,7 +175,7 @@ function ChartView({
             </IntervalSelector>
             <Chevron />
           </IntervalWrapper>
-          <ChartModeButton onClick={toggleChartMode}>
+          <ChartModeButton onClick={() => changeMode()}>
             {chartMode === CANDLE ? (
               <TrendingUpIcon color={MODE_ICON_COLOR} width="1rem" height="1rem" />
             ) : (
@@ -170,15 +199,16 @@ ChartView.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
   ]),
-  candleChart: PropTypes.any,
-  areaChart: PropTypes.any,
   assetName: PropTypes.string,
   dailyChange: PropTypes.number,
   algoVolume: PropTypes.number,
   baseAsset: PropTypes.string,
-  chartModes: PropTypes.object,
   ohlc: PropTypes.object,
   bid: PropTypes.number,
   ask: PropTypes.number,
-  spread: PropTypes.number
+  spread: PropTypes.number,
+  volumeData: PropTypes.array,
+  priceData: PropTypes.array,
+  data: PropTypes.object,
+  initialChartMode: PropTypes.string
 }

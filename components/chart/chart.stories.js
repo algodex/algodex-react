@@ -1,12 +1,17 @@
 import React from 'react'
 import {
-  DEMO_CHART_DATA,
-  DEMO_VOLUME_DATA,
-  DEMO_BID_ASK_PRICE,
-  DEMO_SELECTED_PAIR,
-  DEMO_VOLUME_AMOUNT,
-  DEMO_DAILY_CHANGE_PERCENT,
-  DEMO_OHLC
+  DEMO_BASE_ASSET,
+  DEMO_ALGO_VOLUME,
+  DEMO_DAILY_CHANGE,
+  DEMO_ASSET_NAME,
+  DEMO_OHLC,
+  DEMO_BID,
+  DEMO_ASK,
+  DEMO_SPREAD,
+  DEMO_CANDLE_CHART_MODE,
+  DEMO_AREA_CHART_MODE,
+  DEMO_PRICE_DATA,
+  DEMO_VOLUME_DATA
 } from './demo'
 import Chart from './view'
 import styled from 'styled-components'
@@ -37,44 +42,42 @@ const Template = (args) => <Chart {...args} />
 
 export const NoData = Template.bind({})
 NoData.args = {
-  bidAndAsk: {
-    bid: 0,
-    ask: 0
-  },
-  priceData: [],
-  volume24hr: 0,
-  pair: ['ALGO', 'ALGO'],
+  assetName: '',
   dailyChange: 0,
-  ohlc: {
-    open: 0,
-    high: 0,
-    low: 0,
-    close: 0
-  },
-  volumeData: [],
-  initialMode: 'CANDLE'
+  algoVolume: 0,
+  baseAsset: DEMO_BASE_ASSET,
+  ohlc: { open: 0, high: 0, low: 0, close: 0 },
+  bid: 0,
+  ask: 0,
+  spread: 0
 }
 
 export const Candlestick = Template.bind({})
 Candlestick.args = {
-  bidAndAsk: DEMO_BID_ASK_PRICE,
-  priceData: DEMO_CHART_DATA,
-  volume24hr: DEMO_VOLUME_AMOUNT,
-  pair: DEMO_SELECTED_PAIR,
-  dailyChange: DEMO_DAILY_CHANGE_PERCENT,
+  assetName: DEMO_ASSET_NAME,
+  dailyChange: DEMO_DAILY_CHANGE,
+  algoVolume: DEMO_ALGO_VOLUME,
+  baseAsset: DEMO_BASE_ASSET,
   ohlc: DEMO_OHLC,
-  volumeData: DEMO_VOLUME_DATA,
-  initialMode: 'CANDLE'
+  bid: DEMO_BID,
+  ask: DEMO_ASK,
+  spread: DEMO_SPREAD,
+  initialChartMode: DEMO_CANDLE_CHART_MODE,
+  priceData: DEMO_PRICE_DATA,
+  volumeData: DEMO_VOLUME_DATA
 }
 
-export const Line = Template.bind({})
-Line.args = {
-  bidAndAsk: DEMO_BID_ASK_PRICE,
-  priceData: DEMO_CHART_DATA,
-  volume24hr: DEMO_VOLUME_AMOUNT,
-  pair: DEMO_SELECTED_PAIR,
-  dailyChange: DEMO_DAILY_CHANGE_PERCENT,
+export const AreaSeries = Template.bind({})
+AreaSeries.args = {
+  assetName: DEMO_ASSET_NAME,
+  dailyChange: DEMO_DAILY_CHANGE,
+  algoVolume: DEMO_ALGO_VOLUME,
+  baseAsset: DEMO_BASE_ASSET,
   ohlc: DEMO_OHLC,
-  volumeData: DEMO_VOLUME_DATA,
-  initialMode: 'LINE'
+  bid: DEMO_BID,
+  ask: DEMO_ASK,
+  spread: DEMO_SPREAD,
+  initialChartMode: DEMO_AREA_CHART_MODE,
+  priceData: DEMO_PRICE_DATA,
+  volumeData: DEMO_VOLUME_DATA
 }

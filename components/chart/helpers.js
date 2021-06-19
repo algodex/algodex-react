@@ -31,7 +31,9 @@ export const getOhlc = (data) => {
 
 export const mapVolumeData = (data, volUpColor, volDownColor) => {
   const mappedData = data?.chart_data?.map(({ date, asaVolume }) => {
+    console.log('DATE: ', date)
     const time = dayjs(new Date(date)).format('YYYY-MM-DD')
+    console.log('TIME: ', time)
     return {
       time,
       value: asaVolume

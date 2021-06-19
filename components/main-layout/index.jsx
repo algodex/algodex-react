@@ -3,13 +3,18 @@ import AssetSearch from 'components/asset-search'
 import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
 import {
-  DEMO_BID_ASK_PRICE,
-  DEMO_CHART_DATA,
-  DEMO_DAILY_CHANGE_PERCENT,
+  DEMO_BASE_ASSET,
+  DEMO_ALGO_VOLUME,
+  DEMO_DAILY_CHANGE,
+  DEMO_ASSET_NAME,
+  DEMO_VOLUME_DATA,
   DEMO_OHLC,
-  DEMO_SELECTED_PAIR,
-  DEMO_VOLUME_AMOUNT,
-  DEMO_VOLUME_DATA
+  DEMO_BID,
+  DEMO_ASK,
+  DEMO_SPREAD,
+  DEMO_CANDLE_CHART_MODE,
+  DEMO_AREA_CHART_MODE,
+  DEMO_CHART_MODES
 } from 'components/chart/demo'
 import MobileInterface from 'components/mobile-interface'
 import { demoOpenOrderData } from 'components/open-orders/demo'
@@ -79,15 +84,7 @@ function MainLayout(props) {
           <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="YLDY" />
         </TradeSection>
         <ChartSection>
-          <Chart
-            priceData={DEMO_CHART_DATA}
-            bidAndAsk={DEMO_BID_ASK_PRICE}
-            volume24hr={DEMO_VOLUME_AMOUNT}
-            pair={DEMO_SELECTED_PAIR}
-            dailyChange={DEMO_DAILY_CHANGE_PERCENT}
-            ohlc={DEMO_OHLC}
-            volumeData={DEMO_VOLUME_DATA}
-          />
+          <Chart assetName={asset.params['unit-name']} assetId={asset.id} />
         </ChartSection>
         <OrderBookSection>
           <OrderBook
