@@ -3,8 +3,8 @@ import Spinner from 'components/spinner'
 import { fetchPriceData } from 'lib/api'
 import millify from 'millify'
 import PropTypes from 'prop-types'
-import { useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useMemo, useState, useEffect } from 'react'
+import { useQuery, useQueryClient } from 'react-query'
 import { getAssetInfo, mapPriceData, mapVolumeData, relDiff, getOhlc } from './helpers'
 import useStore from 'store/use-store'
 import ChartView from './view'
@@ -17,7 +17,7 @@ const baseAsset = 'ALGO'
 const bidAndAsk = { bid: 0, ask: 0 }
 function Chart(props) {
   const { id: assetId } = useStore((state) => state.asset)
-  console.log('ASSET ID: ' + JSON.stringify(assetId))
+  const queryClient = useQueryClient()
 
   const [intervalMs, setIntervalMs] = useState(1000)
 
@@ -25,6 +25,10 @@ function Chart(props) {
     // Refetch the data every second
     refetchInterval: intervalMs
   })
+
+  useEffect(() => {
+    queryClient.invalidateQueries('priceData')
+  }, [assetId, queryClient])
 
   const getAssetName = (asset) => {
     return asset?.asset?.params['unit-name'] || ''
