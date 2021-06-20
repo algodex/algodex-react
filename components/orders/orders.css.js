@@ -33,8 +33,7 @@ export const Tab = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  padding: 0 2rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  padding: 0 1.125rem;
 
   & > *:not(:last-child) {
     margin-right: 6rem;

@@ -1,89 +1,157 @@
 import styled from 'styled-components'
 import { rgba } from 'polished'
+import Icon from 'components/icon'
 
-const gridStyles = `
-      grid-template-columns: repeat(7, 1fr);
-      column-gap: 0.25rem;
-    `
-
-export const DateContainer = styled.div`
+export const OrderHistoryContainer = styled.div`
   display: flex;
-  flex: 1 1 0%;
   flex-direction: column;
+  flex: 1 1 0%;
+  position: relative;
 `
 
-export const PrimaryToken = styled.span`
-  color: ${({ theme }) => theme.colors.gray[500]};
+export const StatusContainer = styled.div`
+  position: absolute;
+  inset: 6.25rem 1.125rem 2rem;
 `
 
-export const OrderRow = styled.div`
-  display: grid;
-  align-items: center;
-  ${gridStyles}
-  padding: .3rem 2rem;
-  transition: background-color 150ms ease-out;
-  cursor: pointer;
-  transition: all 0.1s ease-in;
-  &:hover {
-    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
-    & > button {
-      color: ${({ theme }) => theme.colors.red[500]};
+export const AssetsContainer = styled.div`
+  position: absolute;
+  width: 320px;
+  height: ${({ gridHeight }) => `${gridHeight}px`};
+  background-color: ${({ theme }) => theme.colors.gray['800']};
+  box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
+  z-index: 100;
+
+  @media (min-width: 1536px) {
+    position: static;
+    display: block;
+    flex: 1 1 0%;
+    position: relative;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    box-shadow: none;
+  }
+`
+
+export const SortIcon = styled(Icon)``
+
+export const TableWrapper = styled.div`
+  padding: 0;
+  position: absolute;
+  inset: 0;
+  overflow: hidden scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+export const TableHeader = styled.th`
+  top: ${({ searchHeight }) => (searchHeight ? `${searchHeight}px` : '51px')};
+`
+
+export const TableContainer = styled.div`
+  table {
+    position: relative;
+    border-spacing: 0;
+    border: none;
+    width: 100%;
+
+    tr {
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: 0;
+        box-shadow: inset 0 0 0 0.2rem rgba(121, 255, 156, 0.5);
+        border-radius: 3px;
+      }
+
+      &:nth-child(odd) {
+        td {
+          background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
+        }
+      }
+
+      &:nth-child(odd),
+      &:nth-child(even) {
+        &:hover {
+          td {
+            background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
+          }
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem 0;
+      color: ${({ theme }) => theme.colors.gray['600']};
+      font-size: 0.75rem;
+      line-height: 1.25;
+
+      &:first-child {
+        padding-left: 1.125rem;
+      }
+    }
+
+    thead {
+      tr {
+        th {
+          padding: 0.75rem 0rem;
+          background-color: ${({ theme }) => theme.colors.gray['800']};
+          &:first-child {
+            th {
+              top: 0;
+              padding: 0.75rem 1.125rem;
+            }
+          }
+        }
+
+        &:last-child {
+          ${TableHeader} {
+            border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
+            color: ${({ theme }) => theme.colors.gray['500']};
+            text-align: left;
+            text-transform: uppercase;
+            font-weight: 500;
+            user-select: none;
+
+            ${SortIcon} {
+              position: relative;
+              top: -1px;
+              margin-left: 0.25rem;
+            }
+          }
+        }
+      }
     }
   }
 `
 
-export const Header = styled.header`
-  flex-shrink: 0%;
-  display: grid;
-  ${gridStyles}
-  padding: 0 2rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
-
-  p {
-    margin: 1em 0;
-  }
+export const OrderDate = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
 `
-
-export const OrderWrapper = styled.div`
-  position: absolute;
-  align-items: center;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+export const OrderPrice = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
 `
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 0%;
-  position: relative;
+export const OrderPair = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
 `
-export const WrapperContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  position: relative;
-  overflow: auto;
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.gray[700]};
-  }
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[600]};
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #${({ theme }) => theme.colors.gray[500]};
-  }
-  ::-webkit-scrollbar-corner {
-    background: ${({ theme }) => theme.colors.gray[700]};
-  }
+export const OrderSide = styled.span`
+  color: ${({ theme, value }) =>
+    value === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
 `
-export const EmptyState = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+export const OrderAmount = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const OrderExecuted = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const OrderTotal = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
 `

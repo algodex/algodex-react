@@ -88,6 +88,7 @@ function MainLayout(props) {
             openOrderData={DEMO_OPEN_ORDER_DATA}
             orderHistoryData={DEMO_ORDER_HISTORY_DATA}
             assetData={DEMO_ASSETS_DATA}
+            gridSize={gridSize}
           />
         </OrdersSection>
         <AssetsSection>

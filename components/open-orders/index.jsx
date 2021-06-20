@@ -1,111 +1,172 @@
-import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import PropTypes from 'prop-types'
+import React, { useMemo, useRef } from 'react'
+import { useTable, useSortBy } from 'react-table'
+import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import dayjs from 'dayjs'
+// import { useQuery } from 'react-query'
 import {
-  CancelButton,
-  EmptyState,
-  Header,
-  WrapperContainer,
-  Container,
-  OrderRow,
-  SmallButton,
-  OrderWrapper,
-  DateContainer,
-  SecondaryToken
+  OrderDate,
+  OrderPrice,
+  OrderPair,
+  OrderType,
+  OrderAmount,
+  OrderFilled,
+  OrderTotal,
+  StatusContainer,
+  TableWrapper,
+  OpenOrdersContainer,
+  TableContainer,
+  TableHeader,
+  SortIcon
 } from './open-orders.css'
 
-function OpenOrders({ openOrders }) {
-  const renderOpenOrders = (orders) => {
-    const sortedByDate = orders.sort((a, b) => b.date - a.date)
-    return sortedByDate.map((order, index) => {
-      const total = order.price * order.amount
-      return (
-        <OrderRow key={`order-${order.price}=${index}`} data-testid="open-order-row">
-          <DateContainer>
-            <BodyCopyTiny color="gray.100" m={0}>
-              {dayjs(order.date).format('HH:mm:ss')}
-            </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" m={0}>
-              {dayjs(order.date).format('M-D-YY')}
-            </BodyCopyTiny>
-          </DateContainer>
-          <BodyCopySm color="gray.000" my={2}>
-            {`${order.pair[0]}`}
-            <SecondaryToken>{`/${order.pair[1]}`}</SecondaryToken>
-          </BodyCopySm>
-          <BodyCopySm
-            color={order.type === 'sell' ? 'red.500' : 'green.500'}
-            textAlign="left"
-            my={2}
-            textTransform="uppercase"
-          >
-            {order.type}
-          </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" my={2}>
-            {`${order.price}`}
-            <SecondaryToken>{`${order.pair[1]}`}</SecondaryToken>
-          </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" my={2}>
-            {order.amount}
-          </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" my={2}>
-            {`${order.filled}%`}
-          </BodyCopySm>
-          <BodyCopySm color="gray.000" textAlign="right" my={2}>
-            {total}
-          </BodyCopySm>
-          <SmallButton variant="outline">Cancel</SmallButton>
-        </OrderRow>
-      )
-    })
+const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
+
+const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
+
+const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
+
+const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
+
+const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
+
+const OrderFilledCell = ({ value }) => <OrderFilled>{value}</OrderFilled>
+
+const OrderTotalCell = ({ value }) => <OrderTotal>{value}</OrderTotal>
+
+function OpenOrders({ gridSize, openOrders }) {
+  // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
+
+  const error = {}
+  const priceData = [
+    {
+      date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+      price: '0.458',
+      pair: 'YLDY/ALGO',
+      type: 'BUY',
+      amount: '1000',
+      filled: '125',
+      total: '458'
+    },
+    {
+      date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+      price: '0.501',
+      pair: 'MCAU/ALGO',
+      type: 'SELL',
+      amount: '9000',
+      filled: '3000',
+      total: '4600'
+    }
+  ]
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Date',
+        accessor: 'date',
+        Cell: OrderDateCell
+      },
+      {
+        Header: 'Pair',
+        accessor: 'pair',
+        Cell: OrderPairCell
+      },
+      {
+        Header: 'Price (ALGO)',
+        accessor: 'price',
+        Cell: OrderPriceCell
+      },
+      {
+        Header: 'Type',
+        accessor: 'type',
+        Cell: OrderTypeCell
+      },
+      {
+        Header: 'Amount',
+        accessor: 'amount',
+        Cell: OrderAmountCell
+      },
+      {
+        Header: 'Filled',
+        accessor: 'filled',
+        Cell: OrderFilledCell
+      },
+      {
+        Header: 'Total',
+        accessor: 'total',
+        Cell: OrderTotalCell
+      }
+    ],
+    []
+  )
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+    {
+      columns,
+      data: priceData
+    }
+    // useSortBy
+  )
+
+  const containerRef = useRef()
+
+  const renderStatus = () => {
+    if (status === 'success') {
+      return null
+    }
+    return (
+      <StatusContainer>
+        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+      </StatusContainer>
+    )
   }
 
   return (
-    <Container data-testid="open-orders">
-      <Header>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase">
-          Date
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase">
-          Pair
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase">
-          Type
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase" textAlign="right">
-          Price
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase" textAlign="right">
-          Amount
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase" textAlign="right">
-          Filled
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textTransform="uppercase" textAlign="right">
-          Total
-        </BodyCopyTiny>
-        <CancelButton>
-          <BodyCopyTiny fontWeight="600">Cancel All</BodyCopyTiny>
-        </CancelButton>
-      </Header>
-      <WrapperContainer>
-        {openOrders.length ? (
-          <OrderWrapper>{renderOpenOrders(openOrders)}</OrderWrapper>
-        ) : (
-          <EmptyState data-testid="empty-state">
-            <BodyCopySm color="gray.500">You have no open orders.</BodyCopySm>
-          </EmptyState>
-        )}
-      </WrapperContainer>
-    </Container>
+    <OpenOrdersContainer ref={containerRef} gridHeight={gridSize.height}>
+      <TableWrapper>
+        <TableContainer>
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup}>
+                  {headerGroup.headers.map((column) => (
+                    <TableHeader key={column} searchHeight={false}>
+                      {column.render('Header')}
+                      {!column.isSorted ? (
+                        <SortIcon use="sortNone" size={0.625} />
+                      ) : column.isSortedDesc ? (
+                        <SortIcon use="sortDesc" size={0.625} />
+                      ) : (
+                        <SortIcon use="sortAsc" size={0.625} />
+                      )}
+                    </TableHeader>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row)
+                return (
+                  <tr {...row.getRowProps(row)} key={row}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()} key={cell}>
+                          {cell.render('Cell')}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </TableContainer>
+      </TableWrapper>
+
+      {renderStatus()}
+    </OpenOrdersContainer>
   )
 }
 
 export default OpenOrders
-
-OpenOrders.propTypes = {
-  openOrders: PropTypes.array.isRequired
-}
-OpenOrders.defaultProps = {
-  openOrders: []
-}
