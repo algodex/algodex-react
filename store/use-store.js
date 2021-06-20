@@ -4,7 +4,8 @@ import create from 'zustand'
 const useStore = create(() => ({
   asset: {
     id: 15322902,
-    name: 'LAMP'
+    name: 'LAMP',
+    decimals: 6
   }
 }))
 

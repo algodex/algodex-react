@@ -44,6 +44,9 @@ export const TradesRow = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
+    background-color: ${({ theme, type }) => {
+      const color = type === 'buyASA' ? 'green' : 'red'
+      return rgba(theme.colors[color]['500'], 0.15)
+    }};
   }
 `

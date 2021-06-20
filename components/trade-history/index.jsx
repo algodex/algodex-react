@@ -1,50 +1,33 @@
-import PropTypes from 'prop-types'
-import dayjs from 'dayjs'
-import { BodyCopyTiny } from 'components/type'
+import useStore from 'store/use-store'
+import { useQuery } from 'react-query'
+import { fetchTradeHistory } from 'lib/api'
+import Spinner from 'components/spinner'
+import Error from 'components/error'
+import TradeHistoryView from './view'
 
-import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
+export default function TradeHistory() {
+  const { id, name, decimals } = useStore((state) => state.asset)
 
-function TradeHistory(props) {
-  const { assetName, tradesData } = props
+  const { status, data } = useQuery(['tradeHistory', { assetId: id }], () => fetchTradeHistory(id))
 
-  const renderHistory = () =>
-    tradesData
-      .sort((a, b) => b.timestamp - a.timestamp)
-      .map((row) => (
-        <TradesRow key={`buy-${row.price}`} data-testid="trade-history-row">
-          <BodyCopyTiny color="green.500" m={0}>
-            {row.price}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.000" m={0}>
-            {row.amount}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.000" textAlign="right" m={0}>
-            {dayjs(row.timestamp).format('HH:mm:ss')}
-          </BodyCopyTiny>
-        </TradesRow>
-      ))
+  if (status === 'loading') {
+    return <Spinner flex />
+  }
+  if (status === 'error') {
+    return <Error message="Error loading trade history" flex />
+  }
 
-  return (
-    <Container>
-      <Header>
-        <BodyCopyTiny color="gray.500" m={0}>
-          Price (ALGO)
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" m={0}>{`Amount (${assetName})`}</BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Time
-        </BodyCopyTiny>
-      </Header>
-      <Trades>
-        <TradesWrapper>{renderHistory()}</TradesWrapper>
-      </Trades>
-    </Container>
-  )
+  const convertAmount = (amount, decimals = 6) => {
+    return amount / 10 ** decimals
+  }
+
+  const tradesData = data.transactions.map((txn) => ({
+    id: txn.PK_trade_history_id,
+    type: txn.tradeType,
+    price: parseFloat(txn.asaPrice).toFixed(3),
+    amount: convertAmount(txn.asaAmount, decimals).toFixed(3),
+    timestamp: txn.unix_time * 1000
+  }))
+
+  return <TradeHistoryView assetName={name} tradesData={tradesData} />
 }
-
-TradeHistory.propTypes = {
-  assetName: PropTypes.string.isRequired,
-  tradesData: PropTypes.array.isRequired
-}
-
-export default TradeHistory
