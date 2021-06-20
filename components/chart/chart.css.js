@@ -38,12 +38,12 @@ export const Price = styled.div`
   font-size: 0.7rem;
 
   @media (min-width: 768px) {
-    top: 3.5rem;
+    top: 3rem;
     left: -1.25rem;
   }
 
   @media (min-width: 1344px) {
-    top: 2.5rem;
+    top: 3rem;
     left: -0.5rem;
   }
 
@@ -90,18 +90,18 @@ export const VolumeContainer = styled.div`
   display: flex;
 
   @media (min-width: 768px) {
-    top: 4.5rem;
+    top: 4.75rem;
     left: -1.2rem;
   }
 
   @media (min-width: 1344px) {
-    top: 3.75rem;
+    top: 4.75rem;
     left: -0.5rem;
   }
 
   @media (min-width: 1920px) {
-    top: 4.25rem;
-    left: 0rem;
+    top: 4.9rem;
+    left: 0;
   }
 `
 
@@ -113,17 +113,17 @@ export const TopRow = styled.div`
   z-index: 99;
 
   @media (min-width: 768px) {
-    top: 0.5rem;
+    top: 1.25rem;
     left: -1.25rem;
   }
 
   @media (min-width: 1344px) {
-    top: -0.5rem;
+    top: 1rem;
     left: -0.5rem;
   }
 
   @media (min-width: 1920px) {
-    top: 0rem;
+    top: 1rem;
     left: 0rem;
   }
 `
@@ -165,13 +165,14 @@ export const IntervalSelector = styled.select`
 
 export const OHLC = styled.div`
   display: flex;
-
+  top: -1.25rem;
+  left: -0.2rem;
   align-items: flex-end;
   margin-bottom: 0.1rem;
   position: absolute;
 
   @media (min-width: 768px) {
-    top: -0.3rem;
+    top: -1.25rem;
     left: -0.2rem;
   }
 
@@ -262,12 +263,12 @@ export const ChartOptions = styled.div`
   left: -1.25rem;
 
   @media (min-width: 768px) {
-    top: 6.4rem;
+    top: 6.15rem;
     left: -1.25rem;
   }
 
   @media (min-width: 1024px) {
-    top: 6rem;
+    top: 6.25rem;
     left: -0.5rem;
   }
 

@@ -10,6 +10,20 @@ const TEXT_COLOR = '#CBD5E0'
 
 export default function useCandleChart(containerRef, volumeData, priceData, data) {
   const [chart, setChart] = useState()
+  const [candleSeries, setCandleSeries] = useState()
+  const [volumeSeries, setVolumeSeries] = useState()
+
+  useEffect(() => {
+    if (chart) {
+      if (volumeData?.length) {
+        volumeSeries?.setData(volumeData)
+      }
+      if (priceData?.length) {
+        candleSeries?.setData(priceData)
+        chart.timeScale().fitContent()
+      }
+    }
+  }, [volumeSeries, candleSeries, data, chart])
 
   useEffect(() => {
     const initializeChart = async () => {
@@ -47,40 +61,37 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
 
   useEffect(() => {
     const chartContainer = containerRef?.current
+    if (chart && !candleSeries) {
+      setCandleSeries(
+        chart.addCandlestickSeries({
+          upColor: UP_COLOR,
+          downColor: DOWN_COLOR,
+          borderDownColor: DOWN_COLOR,
+          borderUpColor: UP_COLOR,
+          wickDownColor: DOWN_COLOR,
+          wickUpColor: UP_COLOR
+        })
+      )
 
-    if (chart) {
-      const candleSeries = chart.addCandlestickSeries({
-        upColor: UP_COLOR,
-        downColor: DOWN_COLOR,
-        borderDownColor: DOWN_COLOR,
-        borderUpColor: UP_COLOR,
-        wickDownColor: DOWN_COLOR,
-        wickUpColor: UP_COLOR
-      })
-      const volumeSeries = chart.addHistogramSeries({
-        base: 0,
-        color: UP_COLOR,
-        priceFormat: {
-          type: 'volume'
-        },
-        priceScaleId: '',
-        position: 'left',
-        mode: 2,
-        autoScale: false,
-        invertScale: true,
-        alignLabels: false,
-        scaleMargins: {
-          top: 0.9983,
-          bottom: 0
-        }
-      })
-      if (volumeData?.length) {
-        volumeSeries.setData(volumeData)
-      }
-      if (priceData?.length) {
-        candleSeries.setData(priceData)
-        chart.timeScale().fitContent()
-      }
+      setVolumeSeries(
+        chart.addHistogramSeries({
+          base: 0,
+          color: UP_COLOR,
+          priceFormat: {
+            type: 'volume'
+          },
+          priceScaleId: '',
+          position: 'left',
+          mode: 2,
+          autoScale: false,
+          invertScale: true,
+          alignLabels: false,
+          scaleMargins: {
+            top: 0.9983,
+            bottom: 0
+          }
+        })
+      )
 
       if (chartContainer) {
         addListener(chartContainer, () =>
@@ -90,7 +101,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
 
       return () => removeListener(chartContainer)
     }
-  }, [chart, containerRef, volumeData, priceData, data])
+  }, [chart, containerRef, volumeData, priceData, data, candleSeries])
 
   return {
     candleChart: chart

@@ -2,20 +2,6 @@ import PropTypes from 'prop-types'
 import AssetSearch from 'components/asset-search'
 import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
-import {
-  DEMO_BASE_ASSET,
-  DEMO_ALGO_VOLUME,
-  DEMO_DAILY_CHANGE,
-  DEMO_ASSET_NAME,
-  DEMO_VOLUME_DATA,
-  DEMO_OHLC,
-  DEMO_BID,
-  DEMO_ASK,
-  DEMO_SPREAD,
-  DEMO_CANDLE_CHART_MODE,
-  DEMO_AREA_CHART_MODE,
-  DEMO_CHART_MODES
-} from 'components/chart/demo'
 import MobileInterface from 'components/mobile-interface'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import OrderBook from 'components/order-book'
@@ -84,7 +70,7 @@ function MainLayout(props) {
           <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="YLDY" />
         </TradeSection>
         <ChartSection>
-          <Chart assetName={asset.params['unit-name']} assetId={asset.id} />
+          <Chart />
         </ChartSection>
         <OrderBookSection>
           <OrderBook

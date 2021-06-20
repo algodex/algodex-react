@@ -13,6 +13,20 @@ const LINE_WIDTH = 2
 
 export default function useAreaChart(containerRef, volumeData, priceData, data) {
   const [chart, setChart] = useState()
+  const [areaSeries, setAreaSeries] = useState()
+
+  useEffect(() => {
+    const areaSeriesData = priceData?.map(({ time, close }) => ({
+      time,
+      value: close
+    }))
+    if (chart) {
+      if (priceData?.length) {
+        areaSeries?.setData(areaSeriesData)
+        chart.timeScale().fitContent()
+      }
+    }
+  }, [areaSeries, data, chart, priceData])
 
   useEffect(() => {
     const initializeChart = async () => {
@@ -51,23 +65,15 @@ export default function useAreaChart(containerRef, volumeData, priceData, data) 
   useEffect(() => {
     const chartContainer = containerRef?.current
 
-    if (chart) {
-      const areaSeries = chart.addAreaSeries({
-        topColor: TOP_COLOR,
-        bottomColor: BOTTOM_COLOR,
-        lineColor: TOP_LINE_COLOR,
-        lineWidth: LINE_WIDTH
-      })
-
-      if (priceData?.length) {
-        const areaSeriesData = priceData.map(({ time, close }) => ({
-          time,
-          value: close
-        }))
-
-        areaSeries.setData(areaSeriesData)
-        chart.timeScale().fitContent()
-      }
+    if (chart && !areaSeries) {
+      setAreaSeries(
+        chart.addAreaSeries({
+          topColor: TOP_COLOR,
+          bottomColor: BOTTOM_COLOR,
+          lineColor: TOP_LINE_COLOR,
+          lineWidth: LINE_WIDTH
+        })
+      )
 
       if (chartContainer) {
         addListener(chartContainer, () =>
@@ -77,7 +83,7 @@ export default function useAreaChart(containerRef, volumeData, priceData, data) 
 
       return () => removeListener(chartContainer)
     }
-  }, [chart, containerRef, volumeData, priceData, data])
+  }, [chart, containerRef, volumeData, priceData, data, areaSeries])
 
   return {
     areaChart: chart
