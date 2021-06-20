@@ -23,7 +23,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
         chart.timeScale().fitContent()
       }
     }
-  }, [volumeSeries, candleSeries, data, chart])
+  }, [volumeSeries, candleSeries, data, chart, volumeData, priceData])
 
   useEffect(() => {
     const initializeChart = async () => {
