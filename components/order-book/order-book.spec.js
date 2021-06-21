@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '../../test/test-utils'
-import OrderBook from '.'
+import OrderBookView from './view'
 
 const SELL_ROW = 'order-book-sell-row'
 const BUY_ROW = 'order-book-buy-row'
@@ -8,7 +8,7 @@ const BUY_ROW = 'order-book-buy-row'
 describe('Order Book', () => {
   it('should show asset name in the header', () => {
     const { getByText } = render(
-      <OrderBook
+      <OrderBookView
         assetName="YLDY"
         currentPrice={1.3765}
         priceChange={-0.0001}
@@ -22,7 +22,7 @@ describe('Order Book', () => {
 
   it('should not show rows if no data is provided', () => {
     const { queryByTestId } = render(
-      <OrderBook
+      <OrderBookView
         assetName="YLDY"
         currentPrice={1.3765}
         priceChange={-0.0001}
@@ -39,7 +39,7 @@ describe('Order Book', () => {
     const orderData = [{ price: 1.0, amount: 123, total: 123 }]
 
     const { queryByTestId } = render(
-      <OrderBook
+      <OrderBookView
         assetName="YLDY"
         currentPrice={1.3765}
         priceChange={-0.0001}

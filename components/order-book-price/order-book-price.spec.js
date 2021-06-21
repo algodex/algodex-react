@@ -11,7 +11,7 @@ describe('Order Book Price', () => {
   it('should show price', () => {
     const { getByTestId } = render(<OrderBookPrice price={1.2345} change={-0.1} />)
 
-    expect(getByTestId(ORDER_BOOK_PRICE)).toHaveTextContent(1.2345)
+    expect(getByTestId(ORDER_BOOK_PRICE)).toHaveTextContent(1.234)
   })
 
   it('should indicate price decrease', () => {
