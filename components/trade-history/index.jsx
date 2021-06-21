@@ -6,9 +6,11 @@ import Error from 'components/error'
 import TradeHistoryView from './view'
 
 export default function TradeHistory() {
-  const { id, decimals } = useStore((state) => state.asset)
+  const asset = useStore((state) => state.asset)
 
-  const { status, data } = useQuery(['tradeHistory', { assetId: id }], () => fetchTradeHistory(id))
+  const { status, data } = useQuery(['tradeHistory', { assetId: asset.id }], () =>
+    fetchTradeHistory(asset.id)
+  )
 
   if (status === 'loading') {
     return <Spinner flex />
@@ -24,10 +26,10 @@ export default function TradeHistory() {
   const tradesData = data.transactions.map((txn) => ({
     id: txn.PK_trade_history_id,
     type: txn.tradeType,
-    price: parseFloat(txn.asaPrice).toFixed(3),
-    amount: convertAmount(txn.asaAmount, decimals).toFixed(3),
+    price: parseFloat(txn.asaPrice),
+    amount: convertAmount(txn.asaAmount, asset.decimals),
     timestamp: txn.unix_time * 1000
   }))
 
-  return <TradeHistoryView tradesData={tradesData} />
+  return <TradeHistoryView asset={asset} tradesData={tradesData} />
 }

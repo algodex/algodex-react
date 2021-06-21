@@ -4,15 +4,11 @@ import TradeHistoryView from './view'
 
 const HISTORY_ROW = 'trade-history-row'
 
-describe('Order Book', () => {
-  it('should show asset name in the header', () => {
-    const { getByText } = render(<TradeHistoryView assetName="YLDY" tradesData={[]} />)
-
-    expect(getByText(/Amount \(YLDY\)/i)).toBeVisible()
-  })
+describe('Trade History', () => {
+  const asset = { id: 123, name: 'YLDY', decimals: 6 }
 
   it('should not show rows if no data is provided', () => {
-    const { queryByTestId } = render(<TradeHistoryView assetName="YLDY" tradesData={[]} />)
+    const { queryByTestId } = render(<TradeHistoryView asset={asset} tradesData={[]} />)
 
     expect(queryByTestId(HISTORY_ROW)).toBeNull()
   })
@@ -22,7 +18,7 @@ describe('Order Book', () => {
       { id: 1, type: 'buyASA', price: 1.0, amount: 123, timestamp: 1623600112000 }
     ]
 
-    const { queryByTestId } = render(<TradeHistoryView assetName="YLDY" tradesData={tradesData} />)
+    const { queryByTestId } = render(<TradeHistoryView asset={asset} tradesData={tradesData} />)
 
     expect(queryByTestId(HISTORY_ROW)).not.toBeNull()
   })

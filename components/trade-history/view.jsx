@@ -6,7 +6,7 @@ import PriceHeader from 'components/price-header'
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
 function TradeHistoryView(props) {
-  const { tradesData } = props
+  const { asset, tradesData } = props
 
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
@@ -16,15 +16,16 @@ function TradeHistoryView(props) {
       .map((row) => (
         <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
           <BodyCopyTiny fontFamily="'Roboto Mono', monospace" color={getColor(row.type)} m={0}>
-            {row.price}
+            {row.price.toFixed(3)}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
             m={0}
+            title={row.amount.toFixed(asset.decimals)}
           >
-            {row.amount}
+            {row.amount.toFixed(3)}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
@@ -57,7 +58,7 @@ function TradeHistoryView(props) {
 }
 
 TradeHistoryView.propTypes = {
-  assetName: PropTypes.string.isRequired,
+  asset: PropTypes.object.isRequired,
   tradesData: PropTypes.array.isRequired
 }
 
