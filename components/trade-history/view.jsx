@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
 import { BodyCopyTiny } from 'components/type'
+import PriceHeader from 'components/price-header'
 
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
@@ -40,9 +41,7 @@ function TradeHistoryView(props) {
   return (
     <Container>
       <Header>
-        <BodyCopyTiny color="gray.500" m={0}>
-          Price (ALGO)
-        </BodyCopyTiny>
+        <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
           Amount
         </BodyCopyTiny>
