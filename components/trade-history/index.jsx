@@ -6,7 +6,7 @@ import Error from 'components/error'
 import TradeHistoryView from './view'
 
 export default function TradeHistory() {
-  const { id, name, decimals } = useStore((state) => state.asset)
+  const { id, decimals } = useStore((state) => state.asset)
 
   const { status, data } = useQuery(['tradeHistory', { assetId: id }], () => fetchTradeHistory(id))
 
@@ -29,5 +29,5 @@ export default function TradeHistory() {
     timestamp: txn.unix_time * 1000
   }))
 
-  return <TradeHistoryView assetName={name} tradesData={tradesData} />
+  return <TradeHistoryView tradesData={tradesData} />
 }
