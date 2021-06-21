@@ -317,3 +317,7 @@ export const DEMO_SPREAD = (192.68 - 191.26).toFixed(4)
 export const DEMO_CANDLE_CHART_MODE = 'CANDLE'
 export const DEMO_AREA_CHART_MODE = 'AREA'
 export const DEMO_CHART_MODES = { CANDLE: 'CANDLE', AREA: 'AREA' }
+export const DEMO_BID_ASK_PRICE = {
+  bid: 0,
+  ask: 0
+}
