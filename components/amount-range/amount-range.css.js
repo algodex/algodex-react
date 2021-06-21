@@ -139,6 +139,7 @@ export const TickWrapper = styled.div`
 
 export const Tick = styled.div`
   position: relative;
+  top: -0.125rem;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
