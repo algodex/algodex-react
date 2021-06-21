@@ -1,8 +1,9 @@
-import React, { useMemo, useRef } from 'react'
-import { useTable, useSortBy } from 'react-table'
-import { BodyCopyTiny, BodyCopySm } from 'components/type'
-import dayjs from 'dayjs'
+/* eslint-disable react/prop-types  */
+import { useMemo } from 'react'
 // import { useQuery } from 'react-query'
+import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import OrdersTable from 'components/orders-table'
+
 import {
   AssetCoin,
   AssetName,
@@ -12,10 +13,7 @@ import {
   AssetAlgoValue,
   StatusContainer,
   TableWrapper,
-  Container,
-  TableContainer,
-  TableHeader,
-  SortIcon
+  Container
 } from './assets.css'
 
 const AssetCoinCell = ({ value }) => <AssetCoin>{value}</AssetCoin>
@@ -30,28 +28,10 @@ const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
 
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 
-function OpenOrders({ gridSize, openOrders }) {
+function Assets({ assets }) {
   // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
 
   const error = {}
-  const priceData = [
-    {
-      coin: 'YLDY',
-      name: 'Yieldly',
-      total: '500',
-      available: '42',
-      'in-order': '456',
-      'algo-value': '250'
-    },
-    {
-      coin: 'MCAU',
-      name: 'Meld Gold',
-      total: '1000',
-      available: '420',
-      'in-order': '580',
-      'algo-value': '12000'
-    }
-  ]
 
   const columns = useMemo(
     () => [
@@ -89,12 +69,27 @@ function OpenOrders({ gridSize, openOrders }) {
     []
   )
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data: priceData
-  })
-
-  const containerRef = useRef()
+  const data = useMemo(
+    () => [
+      {
+        coin: 'YLDY',
+        name: 'Yieldly',
+        total: '500',
+        available: '42',
+        'in-order': '456',
+        'algo-value': '250'
+      },
+      {
+        coin: 'MCAU',
+        name: 'Meld Gold',
+        total: '1000',
+        available: '420',
+        'in-order': '580',
+        'algo-value': '12000'
+      }
+    ],
+    []
+  )
 
   const renderStatus = () => {
     if (status === 'success') {
@@ -109,46 +104,9 @@ function OpenOrders({ gridSize, openOrders }) {
   }
 
   return (
-    <Container ref={containerRef} gridHeight={gridSize.height}>
+    <Container>
       <TableWrapper>
-        <TableContainer>
-          <table {...getTableProps()}>
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup}>
-                  {headerGroup.headers.map((column) => (
-                    <TableHeader key={column} searchHeight={false}>
-                      {column.render('Header')}
-                      {!column.isSorted ? (
-                        <SortIcon use="sortNone" size={0.625} />
-                      ) : column.isSortedDesc ? (
-                        <SortIcon use="sortDesc" size={0.625} />
-                      ) : (
-                        <SortIcon use="sortAsc" size={0.625} />
-                      )}
-                    </TableHeader>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row)
-                return (
-                  <tr {...row.getRowProps(row)} key={row}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <td {...cell.getCellProps()} key={cell}>
-                          {cell.render('Cell')}
-                        </td>
-                      )
-                    })}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </TableContainer>
+        <OrdersTable columns={columns} data={data} />
       </TableWrapper>
 
       {renderStatus()}
@@ -156,4 +114,4 @@ function OpenOrders({ gridSize, openOrders }) {
   )
 }
 
-export default OpenOrders
+export default Assets

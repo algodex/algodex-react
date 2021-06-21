@@ -5,7 +5,7 @@ import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
 
-function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData, gridSize }) {
+function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
   // 'open-orders', 'order-history', 'assets'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -16,11 +16,11 @@ function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData, gri
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <OpenOrders openOrders={openOrderData} gridSize={gridSize} />
+        return <OpenOrders openOrders={openOrderData} />
       case ORDER_HISTORY_PANEL:
-        return <OrderHistory orderHistory={orderHistoryData} gridSize={gridSize} />
+        return <OrderHistory orderHistory={orderHistoryData} />
       case ASSETS_PANEL:
-        return <Assets assets={assetsData} gridSize={gridSize} />
+        return <Assets assets={assetsData} />
       default:
         return null
     }
