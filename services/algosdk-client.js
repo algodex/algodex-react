@@ -1,10 +1,7 @@
 import algosdk from 'algosdk'
 
-const PURESTAKE_TOKEN = {
-  'X-API-key': process.env.PURESTAKE_KEY
-}
+const ALGOD_SERVER = 'https://testnet.algoexplorerapi.io/'
+const ALGOD_TOKEN = ''
+const ALGOD_PORT = ''
 
-const PURESTAKE_URL = 'https://testnet-algorand.api.purestake.io/ps2'
-const PURESTAKE_PORT = ''
-
-export default new algosdk.Algodv2(PURESTAKE_TOKEN, PURESTAKE_URL, PURESTAKE_PORT)
+export default new algosdk.Algodv2(ALGOD_TOKEN, ALGOD_SERVER, ALGOD_PORT)
