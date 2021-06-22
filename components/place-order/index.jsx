@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 // import PropTypes from 'prop-types'
-import { HeaderCaps, LabelMd, BodyCopy } from 'components/type'
+import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 // import Icon from 'components/icon'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
@@ -14,14 +14,13 @@ import {
   ToggleInput,
   BuyButton,
   SellButton,
-  ActiveWallet,
+  AvailableBalance,
+  BalanceRow,
   Tab,
   Tabs,
   LimitOrder,
   SubmitButton
 } from './place-order.css'
-
-import { WalletRow, Balance } from 'components/wallet/wallet.css'
 
 export default function PlaceOrder() {
   const asset = useStore((state) => state.asset)
@@ -89,19 +88,6 @@ export default function PlaceOrder() {
     )
   }
 
-  const renderBalance = (bal) => {
-    const split = (bal + '').split('.')
-
-    return (
-      <Balance>
-        <LabelMd fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </LabelMd>
-      </Balance>
-    )
-  }
-
   const renderForm = () => {
     return (
       <Form onSubmit={handleSubmit} autocomplete="off">
@@ -128,19 +114,27 @@ export default function PlaceOrder() {
           </SellButton>
         </ToggleWrapper>
 
-        <ActiveWallet>
-          <LabelMd color="gray.500" letterSpacing="0.1em" fontWeight="600">
-            Balances
-          </LabelMd>
-          <WalletRow>
-            <LabelMd fontWeight="500">ALGO</LabelMd>
-            {renderBalance(activeWallet.balance.toFixed(6))}
-          </WalletRow>
-          <WalletRow>
-            <LabelMd fontWeight="500">{asset.name}</LabelMd>
-            {renderBalance(activeWallet.assets[asset.id].balance.toFixed(6))}
-          </WalletRow>
-        </ActiveWallet>
+        <AvailableBalance>
+          <BodyCopyTiny color="gray.500" mb={10}>
+            Available to trade
+          </BodyCopyTiny>
+          <BalanceRow>
+            <LabelMd color="gray.500" fontWeight="500">
+              ALGO
+            </LabelMd>
+            <LabelMd color="gray.300" fontWeight="500">
+              {activeWallet.balance.toFixed(6)}
+            </LabelMd>
+          </BalanceRow>
+          <BalanceRow>
+            <LabelMd color="gray.500" fontWeight="500">
+              {asset.name}
+            </LabelMd>
+            <LabelMd color="gray.300" fontWeight="500">
+              {activeWallet.assets[asset.id].balance.toFixed(6)}
+            </LabelMd>
+          </BalanceRow>
+        </AvailableBalance>
 
         <Tabs orderType={order.type}>
           <Tab isActive>Limit</Tab>
