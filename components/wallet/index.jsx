@@ -1,8 +1,13 @@
-import PropTypes from 'prop-types'
+import { useEffect } from 'react'
+// import PropTypes from 'prop-types'
 import { HeaderSm, BodyCopySm, BodyCopyTiny, LabelMd } from 'components/type'
 import Button from 'components/button'
 import Icon from 'components/icon'
 import SvgImage from 'components/svg-image'
+import useMyAlgo from 'hooks/use-my-algo'
+import useStore from 'store/use-store'
+import AlgorandClient from 'services/algosdk-client'
+import { convertAmount } from 'services/convert'
 
 import {
   Container,
@@ -16,25 +21,66 @@ import {
   WalletRow
 } from './wallet.css'
 
-function Wallet(props) {
-  const { wallets, activeWalletId, onConnectClick, onWalletClick } = props
+export default function Wallet() {
+  const { connect, addresses } = useMyAlgo()
 
-  const hasWallets = wallets.length > 0
+  const wallets = useStore((state) => state.wallets)
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const isSignedIn = useStore((state) => state.isSignedIn)
+
+  const setWallets = useStore((state) => state.setWallets)
+  const setActiveWallet = useStore((state) => state.setActiveWallet)
+  // const signOut = useStore((state) => state.signOut)
+
+  const truncateAddress = (addr) => {
+    return `${addr.substr(0, 4)}...${addr.substr(addr.length - 4)}`
+  }
+
+  useEffect(() => {
+    const onMyAlgoConnect = async () => {
+      try {
+        const promises = addresses.map(async (address) => {
+          const accountInfo = await AlgorandClient.accountInformation(address).do()
+          return {
+            address,
+            name: truncateAddress(address),
+            balance: convertAmount(accountInfo.amount),
+            assets: accountInfo.assets.reduce(
+              (result, asset) => ({
+                ...result,
+                [asset['asset-id']]: {
+                  balance: convertAmount(asset.amount)
+                }
+              }),
+              {}
+            )
+          }
+        })
+
+        const result = await Promise.all(promises)
+        setWallets(result)
+      } catch (e) {
+        console.error(e.message)
+      }
+    }
+
+    addresses && onMyAlgoConnect(addresses)
+  }, [addresses, setWallets])
 
   const getButtonVariant = () => {
-    return hasWallets ? 'secondary' : 'primary'
+    return isSignedIn ? 'secondary' : 'primary'
   }
 
-  const isWalletActive = (id) => {
-    return activeWalletId === id
+  const isWalletActive = (addr) => {
+    return activeWalletAddress === addr
   }
 
-  const isTabbable = (id) => {
-    return isWalletActive(id) ? -1 : 0
+  const isTabbable = (addr) => {
+    return isWalletActive(addr) ? -1 : 0
   }
 
-  const handleWalletClick = (id) => {
-    !isWalletActive(id) && onWalletClick(id)
+  const handleWalletClick = (addr) => {
+    !isWalletActive(addr) && setActiveWallet(addr)
   }
 
   const renderBalance = (bal) => {
@@ -53,13 +99,13 @@ function Wallet(props) {
   const renderWallets = () => {
     return wallets.map((wallet) => (
       <WalletRow
-        key={wallet.id}
-        tabIndex={isTabbable(wallet.id)}
+        key={wallet.address}
+        tabIndex={isTabbable(wallet.address)}
         role="button"
-        isActive={isWalletActive(wallet.id)}
-        onClick={() => handleWalletClick(wallet.id)}
+        isActive={isWalletActive(wallet.address)}
+        onClick={() => handleWalletClick(wallet.address)}
       >
-        <LabelMd fontWeight="500">
+        <LabelMd fontWeight="500" title={wallet.address}>
           <Icon use="wallet" size={0.75} />
           {wallet.name}
         </LabelMd>
@@ -71,15 +117,11 @@ function Wallet(props) {
   return (
     <Container>
       <ButtonContainer>
-        <Button
-          variant={getButtonVariant()}
-          onClick={onConnectClick}
-          data-testid="connect-wallet-btn"
-        >
+        <Button variant={getButtonVariant()} onClick={connect} data-testid="connect-wallet-btn">
           Connect Wallet
         </Button>
       </ButtonContainer>
-      {hasWallets ? (
+      {isSignedIn ? (
         <>
           <Header>
             <BodyCopyTiny color="gray.500">Name</BodyCopyTiny>
@@ -107,16 +149,3 @@ function Wallet(props) {
     </Container>
   )
 }
-
-Wallet.propTypes = {
-  wallets: PropTypes.array,
-  activeWalletId: PropTypes.string,
-  onConnectClick: PropTypes.func,
-  onWalletClick: PropTypes.func
-}
-
-Wallet.defaultProps = {
-  wallets: []
-}
-
-export default Wallet

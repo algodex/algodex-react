@@ -26,12 +26,6 @@ import {
 
 const DEMO_TRADES_DATA = generateTradesData(1.3766, 0.0001)
 
-const DEMO_WALLETS = [
-  { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
-  { id: 'wallet-02', name: 'Trading', balance: 63125.7856 },
-  { id: 'wallet-03', name: 'Stablecoins', balance: 1078.9265 }
-]
-
 const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
@@ -60,14 +54,10 @@ function MainLayout(props) {
       <Main ref={gridRef}>
         <MobileInterface />
         <WalletSection>
-          <Wallet
-            wallets={DEMO_WALLETS}
-            activeWalletId={DEMO_WALLETS[0].id}
-            onWalletClick={() => null}
-          />
+          <Wallet />
         </WalletSection>
         <TradeSection>
-          <PlaceOrder activeWallet={DEMO_WALLETS[0]} asset="YLDY" />
+          <PlaceOrder />
         </TradeSection>
         <ChartSection>
           <Chart />

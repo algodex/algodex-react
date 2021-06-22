@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { HeaderCaps, LabelMd } from 'components/type'
-import Icon from 'components/icon'
+// import PropTypes from 'prop-types'
+import { HeaderCaps, LabelMd, BodyCopy } from 'components/type'
+// import Icon from 'components/icon'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
+import useStore from 'store/use-store'
 
 import {
   Container,
@@ -22,15 +23,20 @@ import {
 
 import { WalletRow, Balance } from 'components/wallet/wallet.css'
 
-function PlaceOrder(props) {
-  const { activeWallet, asset } = props
+export default function PlaceOrder() {
+  const asset = useStore((state) => state.asset)
+  const wallets = useStore((state) => state.wallets)
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const isSignedIn = useStore((state) => state.isSignedIn)
+
+  const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
 
   const [order, setOrder] = useState({
     type: 'buy',
     price: '',
     amount: '',
     total: '',
-    asset
+    asset: asset.name
   })
 
   const handleChange = (e, field) => {
@@ -67,8 +73,8 @@ function PlaceOrder(props) {
 
   const renderSubmit = () => {
     const buttonProps = {
-      buy: { variant: 'primary', text: `Buy ${asset}` },
-      sell: { variant: 'danger', text: `Sell ${asset}` }
+      buy: { variant: 'primary', text: `Buy ${asset.name}` },
+      sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
     return (
       <SubmitButton
@@ -96,13 +102,8 @@ function PlaceOrder(props) {
     )
   }
 
-  return (
-    <Container data-testid="place-order">
-      <Header>
-        <HeaderCaps color="gray.500" m={0}>
-          Place Order
-        </HeaderCaps>
-      </Header>
+  const renderForm = () => {
+    return (
       <Form onSubmit={handleSubmit} autocomplete="off">
         <ToggleWrapper>
           <ToggleInput
@@ -129,14 +130,15 @@ function PlaceOrder(props) {
 
         <ActiveWallet>
           <LabelMd color="gray.500" letterSpacing="0.1em" fontWeight="600">
-            Active Wallet
+            Balances
           </LabelMd>
-          <WalletRow isActive>
-            <LabelMd fontWeight="500">
-              <Icon use="wallet" size={0.75} />
-              {activeWallet.name}
-            </LabelMd>
-            {renderBalance(activeWallet.balance)}
+          <WalletRow>
+            <LabelMd fontWeight="500">ALGO</LabelMd>
+            {renderBalance(activeWallet.balance.toFixed(6))}
+          </WalletRow>
+          <WalletRow>
+            <LabelMd fontWeight="500">{asset.name}</LabelMd>
+            {renderBalance(activeWallet.assets[asset.id].balance.toFixed(6))}
           </WalletRow>
         </ActiveWallet>
 
@@ -161,7 +163,7 @@ function PlaceOrder(props) {
             id="amount"
             name="af2Km9q"
             label="Amount"
-            asset="YLDY"
+            asset={asset.name}
             orderType={order.type}
             value={order.amount}
             onChange={handleChange}
@@ -187,13 +189,26 @@ function PlaceOrder(props) {
 
         {renderSubmit()}
       </Form>
+    )
+  }
+
+  const renderNotConnected = () => {
+    // @todo: make this better, this is a placeholder
+    return (
+      <BodyCopy color="gray.500" textAlign="center" m={16}>
+        Not signed in
+      </BodyCopy>
+    )
+  }
+
+  return (
+    <Container data-testid="place-order">
+      <Header>
+        <HeaderCaps color="gray.500" m={0}>
+          Place Order
+        </HeaderCaps>
+      </Header>
+      {isSignedIn ? renderForm() : renderNotConnected()}
     </Container>
   )
 }
-
-PlaceOrder.propTypes = {
-  activeWallet: PropTypes.object.isRequired,
-  asset: PropTypes.string.isRequired
-}
-
-export default PlaceOrder
