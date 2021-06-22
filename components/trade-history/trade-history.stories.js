@@ -1,10 +1,10 @@
 import React from 'react'
-import TradeHistory from '.'
+import TradeHistoryView from './view'
 import { generateTradesData } from './demo'
 
 export default {
   title: 'Trade History',
-  component: TradeHistory,
+  component: TradeHistoryView,
   decorators: [
     (Story) => (
       <div
@@ -21,10 +21,10 @@ export default {
   ]
 }
 
-const Template = (args) => <TradeHistory {...args} />
+const Template = (args) => <TradeHistoryView {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  assetName: 'YLDY',
+  asset: { id: 123, name: 'YLDY', decimals: 6 },
   tradesData: generateTradesData(1.3766, 0.0001)
 }
