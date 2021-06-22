@@ -32,6 +32,17 @@
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.9.1"
 
+"@algodex/algodex-sdk@^1.0.22":
+  version "1.0.22"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.22/ae8d1a5c5b9a3933dc591e3e769b501aa8027cbe31b26e784681af1d70729a20#ee5161abb472c3e48b87fb0cc84faa23ec0815be"
+  integrity sha512-ggcftkegj3DaLDuNwFzUr5UhYQBdVshEOsUbS2vC283syBt7SCFTmVxZuomv/u3qHFKhTZIIwmNkt7Bgbi55fA==
+  dependencies:
+    "@randlabs/myalgo-connect" "^1.0.1"
+    algosdk "^1.9.1"
+    js-big-decimal "^1.3.4"
+    text-encoding "^0.7.0"
+    util "^0.12.4"
+
 "@babel/code-frame@7.10.4":
   version "7.10.4"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.10.4.tgz"
@@ -8679,6 +8690,11 @@ js-beautify@^1.8.8:
     mkdirp "^1.0.4"
     nopt "^5.0.0"
 
+js-big-decimal@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/js-big-decimal/-/js-big-decimal-1.3.4.tgz#212f6e18bdc332b73a2ec2e5ea322c5a7516289e"
+  integrity sha512-wF8j7/WuGn/mwcgo7xofgeQTmJAf8uaiNRFWaM3usTn4NSQtyggdg8FofFumuVnvftWYEmHZBtxKgRK9hlOPiw==
+
 js-sha256@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.9.0.tgz#0b89ac166583e91ef9123644bd3c5334ce9d0966"
@@ -12737,6 +12753,11 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
+text-encoding@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.7.0.tgz#f895e836e45990624086601798ea98e8f36ee643"
+  integrity sha512-oJQ3f1hrOnbRLOcwKz0Liq2IcrvDeZRHXhd9RgLrsT+DjWY/nty1Hi7v3dtkaEYbPYe0mUoOfzRrMwfXXwgPUA==
+
 text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz"
@@ -13342,6 +13363,18 @@ util@^0.11.0:
   integrity sha512-HShAsny+zS2TZfaXxD9tYj4HQGlBezXZMZuM/S5PKLLoZkShZiGk9o5CzukI1LVHZvjdvZ2Sj1aW/Ndn2NB/HQ==
   dependencies:
     inherits "2.0.3"
+
+util@^0.12.4:
+  version "0.12.4"
+  resolved "https://registry.yarnpkg.com/util/-/util-0.12.4.tgz#66121a31420df8f01ca0c464be15dfa1d1850253"
+  integrity sha512-bxZ9qtSlGUWSOy9Qa9Xgk11kSslpuZwaxCg4sNIDj6FLucDab2JxnHwyNTCpHMtK1MjoQiWQ6DiUMZYbSrO+Sw==
+  dependencies:
+    inherits "^2.0.3"
+    is-arguments "^1.0.4"
+    is-generator-function "^1.0.7"
+    is-typed-array "^1.1.3"
+    safe-buffer "^5.1.2"
+    which-typed-array "^1.1.2"
 
 utila@~0.4:
   version "0.4.0"
