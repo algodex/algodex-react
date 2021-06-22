@@ -82,11 +82,21 @@ export const WalletsWrapper = styled.div`
 `
 
 export const Balance = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   margin: 0;
   text-align: right;
   font-weight: 500;
+  line-height: 1.5;
 
-  span {
+  svg {
+    opacity: 0.5;
+  }
+
+  > span {
+    margin-left: 0.375rem;
+
     > span {
       opacity: 0.5;
     }
@@ -96,8 +106,8 @@ export const Balance = styled.p`
 export const WalletRow = styled.div`
   display: grid;
   ${gridStyles}
-  margin: 0.25rem 0.75rem;
-  padding: 0 0.375rem;
+  margin: 0.375rem 0.75rem;
+  padding: 0.125rem 0.375rem;
   border-radius: 0.125rem;
   cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
   transition: color 50ms ease-out;

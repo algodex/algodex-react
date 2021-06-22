@@ -1,9 +1,9 @@
 import React from 'react'
-import Wallet from '.'
+import WalletView from './view'
 
 export default {
   title: 'Wallet',
-  component: Wallet,
+  component: WalletView,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   decorators: [
     (Story) => (
@@ -21,35 +21,35 @@ export default {
   ]
 }
 
-const Template = (args) => <Wallet {...args} />
+const Template = (args) => <WalletView {...args} />
 
 export const NoWallets = Template.bind({})
 NoWallets.args = {
   wallets: [],
-  activeWalletId: null,
-  onConnectClick: () => null,
-  onWalletClick: () => null
+  activeWalletAddress: null
 }
 
 export const HasWallets = Template.bind({})
 HasWallets.args = {
   wallets: [
-    { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
-    { id: 'wallet-02', name: 'Trading', balance: 63125.7856 },
-    { id: 'wallet-03', name: 'Stablecoins', balance: 1078.9265 }
+    { address: 'wallet-01', name: 'Main', balance: 812569.2658 },
+    { address: 'wallet-02', name: 'Trading', balance: 63125.7856 },
+    { address: 'wallet-03', name: 'Stablecoins', balance: 1078.9265 }
   ],
-  activeWalletId: 'wallet-01'
+  activeWalletAddress: 'wallet-01',
+  isSignedIn: true
 }
 
 export const WalletsScroll = Template.bind({})
 WalletsScroll.args = {
   wallets: [
-    { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
-    { id: 'wallet-02', name: 'Trading', balance: 63125.7856 },
-    { id: 'wallet-03', name: 'Stablecoins', balance: 1078.9265 },
-    { id: 'wallet-04', name: 'Foo', balance: 812569.2658 },
-    { id: 'wallet-05', name: 'Bar', balance: 63125.7856 },
-    { id: 'wallet-06', name: 'Baz', balance: 1078.9265 }
+    { address: 'wallet-01', name: 'Main', balance: 812569.2658 },
+    { address: 'wallet-02', name: 'Trading', balance: 63125.7856 },
+    { address: 'wallet-03', name: 'Stablecoins', balance: 1078.9265 },
+    { address: 'wallet-04', name: 'Foo', balance: 812569.2658 },
+    { address: 'wallet-05', name: 'Bar', balance: 63125.7856 },
+    { address: 'wallet-06', name: 'Baz', balance: 1078.9265 }
   ],
-  activeWalletId: 'wallet-01'
+  activeWalletAddress: 'wallet-01',
+  isSignedIn: true
 }
