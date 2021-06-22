@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
+import algodexsdk from '@algodex/algodex-sdk'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore from 'store/use-store'
-import AlgorandClient from 'services/algosdk-client'
 import { convertAmount } from 'services/convert'
 import { truncateAddress } from 'services/display'
 import WalletView from './view'
@@ -27,8 +27,11 @@ export default function Wallet() {
   useEffect(() => {
     const onMyAlgoConnect = async () => {
       try {
+        const AlgodClient = new algodexsdk.initAlgodClient('test')
+
         const promises = addresses.map(async (address) => {
-          const accountInfo = await AlgorandClient.accountInformation(address).do()
+          const accountInfo = await AlgodClient.accountInformation(address).do()
+
           return {
             address,
             name: truncateAddress(address),
