@@ -10,6 +10,7 @@ import {
   OrderPrice,
   OrderPair,
   OrderSide,
+  OrderRole,
   OrderAmount,
   OrderExecuted,
   OrderTotal,
@@ -23,6 +24,8 @@ const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
 
 const OrderSideCell = ({ value }) => <OrderSide value={value}>{value}</OrderSide>
+
+const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
 
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
@@ -54,6 +57,7 @@ function OrderHistory({ orderHistory }) {
         accessor: 'side',
         Cell: OrderSideCell
       },
+
       {
         Header: 'Price (ALGO)',
         accessor: 'price',
@@ -73,6 +77,11 @@ function OrderHistory({ orderHistory }) {
         Header: 'Total',
         accessor: 'total',
         Cell: OrderTotalCell
+      },
+      {
+        Header: 'Role',
+        accessor: 'role',
+        Cell: OrderRoleCell
       }
     ],
     []
@@ -85,6 +94,7 @@ function OrderHistory({ orderHistory }) {
         price: '0.458',
         pair: 'YLDY/ALGO',
         side: 'BUY',
+        role: 'TAKER',
         amount: '1000',
         executed: '125',
         total: '458'
@@ -94,6 +104,7 @@ function OrderHistory({ orderHistory }) {
         price: '0.501',
         pair: 'MCAU/ALGO',
         side: 'SELL',
+        role: 'MAKER',
         amount: '9000',
         executed: '3000',
         total: '4600'

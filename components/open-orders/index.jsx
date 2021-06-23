@@ -10,6 +10,7 @@ import {
   OrderPrice,
   OrderPair,
   OrderType,
+  OrderRole,
   OrderAmount,
   OrderFilled,
   OrderTotal,
@@ -25,6 +26,8 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
 
 const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
+
+const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
@@ -73,6 +76,11 @@ function OpenOrders({ openOrders }) {
         Header: 'Total',
         accessor: 'total',
         Cell: OrderTotalCell
+      },
+      {
+        Header: 'Role',
+        accessor: 'role',
+        Cell: OrderRoleCell
       }
     ],
     []
@@ -85,6 +93,7 @@ function OpenOrders({ openOrders }) {
         price: '0.458',
         pair: 'YLDY/ALGO',
         type: 'BUY',
+        role: 'MAKER',
         amount: '1000',
         filled: '125',
         total: '458'
@@ -94,6 +103,7 @@ function OpenOrders({ openOrders }) {
         price: '0.501',
         pair: 'MCAU/ALGO',
         type: 'SELL',
+        role: 'TAKER',
         amount: '9000',
         filled: '3000',
         total: '4600'
