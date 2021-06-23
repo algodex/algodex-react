@@ -74,13 +74,12 @@ export default function useAreaChart(containerRef, volumeData, priceData, data) 
           lineWidth: LINE_WIDTH
         })
       )
+    }
 
-      if (chartContainer) {
-        addListener(chartContainer, () =>
-          chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight)
-        )
-      }
-
+    if (chart && chartContainer) {
+      addListener(chartContainer, () =>
+        chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight)
+      )
       return () => removeListener(chartContainer)
     }
   }, [chart, containerRef, volumeData, priceData, data, areaSeries])
