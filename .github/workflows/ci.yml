@@ -13,6 +13,6 @@ jobs:
       - name: Install dependencies
         run: yarn
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Run tests
         run: yarn test
