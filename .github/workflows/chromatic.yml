@@ -10,7 +10,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies
-        run: yarn
+        run:  |
+          echo @algodex:registry=https://npm.pkg.github.com/ >> ~/.npmrc
+          echo //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN >> ~/.npmrc
+          yarn
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - name: Publish to Chromatic
