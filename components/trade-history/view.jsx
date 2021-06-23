@@ -12,7 +12,12 @@ function TradeHistoryView(props) {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
     return tradesData
-      .sort((a, b) => b.timestamp - a.timestamp)
+      .sort((a, b) => {
+        if (a.timestamp === b.timestamp) {
+          return a.id > b.id ? -1 : 1
+        }
+        return b.timestamp - a.timestamp
+      })
       .map((row) => (
         <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
           <BodyCopyTiny fontFamily="'Roboto Mono', monospace" color={getColor(row.type)} m={0}>
