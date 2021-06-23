@@ -45,10 +45,10 @@ export default function PlaceOrder() {
     }))
   }
 
-  const handleRangeChange = (e) => {
+  const handleRangeChange = (amount) => {
     setOrder((prev) => ({
       ...prev,
-      amount: (activeWallet.balance * (Number(e.target.value) / 100)).toFixed(4)
+      amount
     }))
   }
 
@@ -56,7 +56,7 @@ export default function PlaceOrder() {
     const price = Number(order.price)
     const amount = Number(order.amount)
 
-    const total = (price * amount).toFixed(4)
+    const total = (price * amount).toFixed(6)
 
     if (total !== order.total) {
       setOrder({
@@ -75,6 +75,13 @@ export default function PlaceOrder() {
       buy: { variant: 'primary', text: `Buy ${asset.name}` },
       sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
+
+    const isDisabled = {
+      buy:
+        parseFloat((Number(order.price) * Number(order.amount)).toFixed(6)) > activeWallet.balance,
+      sell: Number(order.amount) > activeWallet.assets[asset.id].balance
+    }
+
     return (
       <SubmitButton
         type="submit"
@@ -82,6 +89,7 @@ export default function PlaceOrder() {
         size="large"
         block
         orderType={order.type}
+        disabled={isDisabled[order.type]}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
@@ -151,6 +159,7 @@ export default function PlaceOrder() {
             value={order.price}
             onChange={handleChange}
             autocomplete="false"
+            min="0"
           />
           <OrderInput
             type="number"
@@ -162,12 +171,13 @@ export default function PlaceOrder() {
             value={order.amount}
             onChange={handleChange}
             autocomplete="false"
+            min="0"
           />
           <AmountRange
-            amount={order.amount}
-            balance={activeWallet.balance}
+            order={order}
+            activeWallet={activeWallet}
+            asset={asset}
             onChange={handleRangeChange}
-            orderType={order.type}
           />
           <OrderInput
             type="number"
