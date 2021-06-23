@@ -6,29 +6,15 @@ const SELL_ROW = 'order-book-sell-row'
 const BUY_ROW = 'order-book-buy-row'
 
 describe('Order Book', () => {
-  it('should show asset name in the header', () => {
-    const { getByText } = render(
-      <OrderBookView
-        assetName="YLDY"
-        currentPrice={1.3765}
-        priceChange={-0.0001}
-        sellData={[]}
-        buyData={[]}
-      />
-    )
-
-    expect(getByText(/Amount \(YLDY\)/i)).toBeVisible()
-  })
-
+  const asset = {
+    id: 123,
+    name: 'YDLY',
+    price: 1.3765,
+    decimals: 6
+  }
   it('should not show rows if no data is provided', () => {
     const { queryByTestId } = render(
-      <OrderBookView
-        assetName="YLDY"
-        currentPrice={1.3765}
-        priceChange={-0.0001}
-        sellData={[]}
-        buyData={[]}
-      />
+      <OrderBookView asset={asset} priceChange={-0.0001} sellData={[]} buyData={[]} />
     )
 
     expect(queryByTestId(SELL_ROW)).toBeNull()
@@ -39,13 +25,7 @@ describe('Order Book', () => {
     const orderData = [{ price: 1.0, amount: 123, total: 123 }]
 
     const { queryByTestId } = render(
-      <OrderBookView
-        assetName="YLDY"
-        currentPrice={1.3765}
-        priceChange={-0.0001}
-        sellData={orderData}
-        buyData={orderData}
-      />
+      <OrderBookView asset={asset} priceChange={-0.0001} sellData={orderData} buyData={orderData} />
     )
 
     expect(queryByTestId(SELL_ROW)).not.toBeNull()

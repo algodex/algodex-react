@@ -30,7 +30,16 @@ export const BookRow = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
+    background-color: ${({ theme, type }) => {
+      const color = type === 'buy' ? 'green' : 'red'
+      return rgba(theme.colors[color]['500'], 0.15)
+    }};
+
+    p {
+      &:not(:first-child) {
+        color: ${({ theme }) => theme.colors.gray['000']};
+      }
+    }
   }
 `
 
