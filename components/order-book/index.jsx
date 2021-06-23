@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types'
 import { useQuery } from 'react-query'
 import { fetchOrdersInEscrow } from 'lib/api'
-import { generateBookData } from './helpers'
+import { aggregateOrders } from './helpers'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import OrderBookView from './view'
+import useStore from 'store/use-store'
 
-function OrderBook(props) {
-  const { assetId, ...rest } = props
+export default function OrderBook() {
+  const asset = useStore((state) => state.asset)
 
-  const { status, data } = useQuery(['ordersInEscrow', { assetId }], () =>
-    fetchOrdersInEscrow(assetId)
+  const { status, data } = useQuery(['ordersInEscrow', { assetId: asset.id }], () =>
+    fetchOrdersInEscrow(asset.id)
   )
 
   if (status === 'loading') {
@@ -20,17 +20,8 @@ function OrderBook(props) {
     return <Error message="Error loading order book" flex />
   }
 
-  const sellData = generateBookData(data.sellASAOrdersInEscrow, 'sell')
-  const buyData = generateBookData(data.buyASAOrdersInEscrow, 'buy')
+  const sellData = aggregateOrders(asset, data.sellASAOrdersInEscrow, 'sell')
+  const buyData = aggregateOrders(asset, data.buyASAOrdersInEscrow, 'buy')
 
-  return <OrderBookView buyData={buyData} sellData={sellData} {...rest} />
+  return <OrderBookView asset={asset} buyData={buyData} sellData={sellData} priceChange={0.001} />
 }
-
-OrderBook.propTypes = {
-  assetName: PropTypes.string.isRequired,
-  currentPrice: PropTypes.number.isRequired,
-  priceChange: PropTypes.number.isRequired,
-  assetId: PropTypes.number.isRequired
-}
-
-export default OrderBook

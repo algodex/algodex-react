@@ -65,12 +65,7 @@ function MainLayout() {
           <Chart />
         </ChartSection>
         <OrderBookSection>
-          <OrderBook
-            assetName={asset.name}
-            currentPrice={asset.price}
-            priceChange={0.0001}
-            assetId={asset.id}
-          />
+          <OrderBook />
         </OrderBookSection>
         <TradeHistorySection>
           <TradeHistory assetName={asset.name} tradesData={DEMO_TRADES_DATA} />
