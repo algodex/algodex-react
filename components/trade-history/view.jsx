@@ -20,15 +20,20 @@ function TradeHistoryView(props) {
       })
       .map((row) => (
         <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-          <BodyCopyTiny fontFamily="'Roboto Mono', monospace" color={getColor(row.type)} m={0}>
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color={getColor(row.type)}
+            title={row.price.toFixed(6)}
+            m={0}
+          >
             {row.price.toFixed(3)}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
-            m={0}
             title={row.amount.toFixed(asset.decimals)}
+            m={0}
           >
             {row.amount.toFixed(3)}
           </BodyCopyTiny>

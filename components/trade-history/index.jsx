@@ -4,6 +4,7 @@ import { fetchTradeHistory } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
+import { convertAmount } from 'services/convert'
 
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
@@ -17,10 +18,6 @@ export default function TradeHistory() {
   }
   if (status === 'error') {
     return <Error message="Error loading trade history" flex />
-  }
-
-  const convertAmount = (amount, decimals = 6) => {
-    return amount / 10 ** decimals
   }
 
   const tradesData = data.transactions.map((txn) => ({
