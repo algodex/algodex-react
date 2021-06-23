@@ -2,11 +2,7 @@ import create from 'zustand'
 
 // eslint-disable-next-line
 const useStore = create((set) => ({
-  asset: {
-    id: 15322902,
-    name: 'LAMP',
-    decimals: 6
-  },
+  asset: {},
   setAsset: (asset) => set({ asset }),
 
   wallets: [],

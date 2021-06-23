@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types'
+import { useEffect, useRef, useState } from 'react'
+// import PropTypes from 'prop-types'
 import AssetSearch from 'components/asset-search'
 import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
@@ -11,7 +12,8 @@ import PlaceOrder from 'components/place-order'
 import TradeHistory from 'components/trade-history'
 import { generateTradesData } from 'components/trade-history/demo'
 import Wallet from 'components/wallet'
-import { useEffect, useRef, useState } from 'react'
+import useStore from 'store/use-store'
+
 import {
   AssetsSection,
   ChartSection,
@@ -30,8 +32,8 @@ const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
 
-function MainLayout(props) {
-  const { asset } = props
+function MainLayout() {
+  const asset = useStore((state) => state.asset)
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
@@ -64,14 +66,14 @@ function MainLayout(props) {
         </ChartSection>
         <OrderBookSection>
           <OrderBook
-            assetName={asset.params['unit-name']}
+            assetName={asset.name}
             currentPrice={asset.price}
             priceChange={0.0001}
             assetId={asset.id}
           />
         </OrderBookSection>
         <TradeHistorySection>
-          <TradeHistory assetName="YLDY" tradesData={DEMO_TRADES_DATA} />
+          <TradeHistory assetName={asset.name} tradesData={DEMO_TRADES_DATA} />
         </TradeHistorySection>
         <OrdersSection>
           <Orders
@@ -86,10 +88,6 @@ function MainLayout(props) {
       </Main>
     </MainWrapper>
   )
-}
-
-MainLayout.propTypes = {
-  asset: PropTypes.object.isRequired
 }
 
 export default MainLayout
