@@ -61,6 +61,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
 
   useEffect(() => {
     const chartContainer = containerRef?.current
+
     if (chart && !candleSeries) {
       setCandleSeries(
         chart.addCandlestickSeries({
@@ -92,13 +93,12 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
           }
         })
       )
+    }
 
-      if (chartContainer) {
-        addListener(chartContainer, () =>
-          chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight)
-        )
-      }
-
+    if (chart && chartContainer) {
+      addListener(chartContainer, () =>
+        chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight)
+      )
       return () => removeListener(chartContainer)
     }
   }, [chart, containerRef, volumeData, priceData, data, candleSeries])
