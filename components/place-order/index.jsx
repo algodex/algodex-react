@@ -23,12 +23,17 @@ import {
 } from './place-order.css'
 
 export default function PlaceOrder() {
+  const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
+
   const asset = useStore((state) => state.asset)
   const wallets = useStore((state) => state.wallets)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
+
+  const algoBalance = activeWallet?.balance
+  const asaBalance = activeWallet?.assets[asset.id]?.balance || 0
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -37,6 +42,13 @@ export default function PlaceOrder() {
     total: '',
     asset: asset.name
   })
+
+  useEffect(() => {
+    const buy = algoBalance > 0
+    const sell = asaBalance > 0
+
+    setEnableOrder({ buy, sell })
+  }, [algoBalance, asaBalance])
 
   const handleChange = (e, field) => {
     setOrder((prev) => ({
@@ -70,6 +82,15 @@ export default function PlaceOrder() {
     e.preventDefault()
   }
 
+  const renderNotConnected = () => {
+    // @todo: make this better, this is a placeholder
+    return (
+      <BodyCopy color="gray.500" textAlign="center" m={16}>
+        Not signed in
+      </BodyCopy>
+    )
+  }
+
   const renderSubmit = () => {
     const buttonProps = {
       buy: { variant: 'primary', text: `Buy ${asset.name}` },
@@ -77,9 +98,8 @@ export default function PlaceOrder() {
     }
 
     const isDisabled = {
-      buy:
-        parseFloat((Number(order.price) * Number(order.amount)).toFixed(6)) > activeWallet.balance,
-      sell: Number(order.amount) > activeWallet.assets[asset.id].balance
+      buy: parseFloat((Number(order.price) * Number(order.amount)).toFixed(6)) > algoBalance,
+      sell: Number(order.amount) > asaBalance
     }
 
     return (
@@ -96,58 +116,18 @@ export default function PlaceOrder() {
     )
   }
 
-  const renderForm = () => {
+  const renderLimitOrder = () => {
+    if (!enableOrder[order.type]) {
+      // @todo: make this better, this is a placeholder
+      return (
+        <BodyCopy color="gray.500" textAlign="center" m={32}>
+          Insufficient balance
+        </BodyCopy>
+      )
+    }
+
     return (
-      <Form onSubmit={handleSubmit} autocomplete="off">
-        <ToggleWrapper>
-          <ToggleInput
-            type="radio"
-            id="type-buy"
-            value="buy"
-            checked={order.type === 'buy'}
-            onChange={(e) => handleChange(e, 'type')}
-          />
-          <BuyButton as="label" htmlFor="type-buy">
-            Buy
-          </BuyButton>
-          <ToggleInput
-            type="radio"
-            id="type-sell"
-            value="sell"
-            checked={order.type === 'sell'}
-            onChange={(e) => handleChange(e, 'type')}
-          />
-          <SellButton as="label" htmlFor="type-sell">
-            Sell
-          </SellButton>
-        </ToggleWrapper>
-
-        <AvailableBalance>
-          <BodyCopyTiny color="gray.500" mb={10}>
-            Available to trade
-          </BodyCopyTiny>
-          <BalanceRow>
-            <LabelMd color="gray.500" fontWeight="500">
-              ALGO
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {activeWallet.balance.toFixed(6)}
-            </LabelMd>
-          </BalanceRow>
-          <BalanceRow>
-            <LabelMd color="gray.500" fontWeight="500">
-              {asset.name}
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {activeWallet.assets[asset.id].balance.toFixed(6)}
-            </LabelMd>
-          </BalanceRow>
-        </AvailableBalance>
-
-        <Tabs orderType={order.type}>
-          <Tab isActive>Limit</Tab>
-        </Tabs>
-
+      <>
         <LimitOrder>
           <OrderInput
             type="number"
@@ -190,18 +170,69 @@ export default function PlaceOrder() {
             disabled
           />
         </LimitOrder>
-
         {renderSubmit()}
-      </Form>
+      </>
     )
   }
 
-  const renderNotConnected = () => {
-    // @todo: make this better, this is a placeholder
+  const renderForm = () => {
+    if (!isSignedIn) {
+      return renderNotConnected()
+    }
+
     return (
-      <BodyCopy color="gray.500" textAlign="center" m={16}>
-        Not signed in
-      </BodyCopy>
+      <Form onSubmit={handleSubmit} autocomplete="off">
+        <ToggleWrapper>
+          <ToggleInput
+            type="radio"
+            id="type-buy"
+            value="buy"
+            checked={order.type === 'buy'}
+            onChange={(e) => handleChange(e, 'type')}
+          />
+          <BuyButton as="label" htmlFor="type-buy">
+            Buy
+          </BuyButton>
+          <ToggleInput
+            type="radio"
+            id="type-sell"
+            value="sell"
+            checked={order.type === 'sell'}
+            onChange={(e) => handleChange(e, 'type')}
+          />
+          <SellButton as="label" htmlFor="type-sell">
+            Sell
+          </SellButton>
+        </ToggleWrapper>
+
+        <AvailableBalance>
+          <BodyCopyTiny color="gray.500" mb={10}>
+            Available to trade
+          </BodyCopyTiny>
+          <BalanceRow>
+            <LabelMd color="gray.500" fontWeight="500">
+              ALGO
+            </LabelMd>
+            <LabelMd color="gray.300" fontWeight="500">
+              {algoBalance.toFixed(6)}
+            </LabelMd>
+          </BalanceRow>
+          <BalanceRow>
+            <LabelMd color="gray.500" fontWeight="500">
+              {asset.name}
+            </LabelMd>
+            <LabelMd color="gray.300" fontWeight="500">
+              {asaBalance.toFixed(6)}
+            </LabelMd>
+          </BalanceRow>
+        </AvailableBalance>
+
+        <Tabs orderType={order.type}>
+          <Tab isActive>Limit</Tab>
+        </Tabs>
+
+        {renderLimitOrder()}
+      </Form>
     )
   }
 
@@ -212,7 +243,7 @@ export default function PlaceOrder() {
           Place Order
         </HeaderCaps>
       </Header>
-      {isSignedIn ? renderForm() : renderNotConnected()}
+      {renderForm()}
     </Container>
   )
 }
