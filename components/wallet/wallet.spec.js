@@ -56,7 +56,8 @@ describe('Wallet', () => {
         />
       )
 
-      expect(getByText(/Balance \(ALGO\)/i)).toBeVisible()
+      expect(getByText(/Balance/i)).toBeVisible()
+      expect(getByText(/Stablecoins/i)).toBeVisible()
     })
 
     it('should show secondary connect button', () => {
