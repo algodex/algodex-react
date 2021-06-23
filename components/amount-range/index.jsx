@@ -47,7 +47,7 @@ function AmountRange(props) {
           min={0}
           max={100}
           step={5}
-          value={value}
+          value={value || 0}
           onChange={handleChange}
           orderType={order.type}
         />
