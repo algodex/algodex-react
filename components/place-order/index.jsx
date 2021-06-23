@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { HeaderCaps, LabelMd } from 'components/type'
-import Icon from 'components/icon'
+import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
+import useStore from 'store/use-store'
 
 import {
   Container,
@@ -13,45 +12,46 @@ import {
   ToggleInput,
   BuyButton,
   SellButton,
-  ActiveWallet,
+  AvailableBalance,
+  BalanceRow,
   Tab,
   Tabs,
   LimitOrder,
   SubmitButton
 } from './place-order.css'
 
-import { WalletRow, Balance } from 'components/wallet/wallet.css'
+export default function PlaceOrder() {
+  const asset = useStore((state) => state.asset)
+  const wallets = useStore((state) => state.wallets)
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const isSignedIn = useStore((state) => state.isSignedIn)
 
-function PlaceOrder(props) {
-  const { activeWallet, asset } = props
+  const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
+  const algoBalance = activeWallet?.balance
+  const asaBalance = activeWallet?.assets[asset.id]?.balance || 0
+
+  const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
+
+  useEffect(() => {
+    const buy = algoBalance > 0
+    const sell = asaBalance > 0
+
+    setEnableOrder({ buy, sell })
+  }, [algoBalance, asaBalance])
 
   const [order, setOrder] = useState({
     type: 'buy',
     price: '',
     amount: '',
     total: '',
-    asset
+    asset: asset.name
   })
-
-  const handleChange = (e, field) => {
-    setOrder((prev) => ({
-      ...prev,
-      [field || e.target.id]: e.target.value
-    }))
-  }
-
-  const handleRangeChange = (e) => {
-    setOrder((prev) => ({
-      ...prev,
-      amount: (activeWallet.balance * (Number(e.target.value) / 100)).toFixed(4)
-    }))
-  }
 
   useEffect(() => {
     const price = Number(order.price)
     const amount = Number(order.amount)
 
-    const total = (price * amount).toFixed(4)
+    const total = (price * amount).toFixed(6)
 
     if (total !== order.total) {
       setOrder({
@@ -61,15 +61,35 @@ function PlaceOrder(props) {
     }
   }, [order])
 
+  const handleChange = (e, field) => {
+    setOrder((prev) => ({
+      ...prev,
+      [field || e.target.id]: e.target.value
+    }))
+  }
+
+  const handleRangeChange = (update) => {
+    setOrder((prev) => ({
+      ...prev,
+      ...update
+    }))
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
   }
 
   const renderSubmit = () => {
     const buttonProps = {
-      buy: { variant: 'primary', text: `Buy ${asset}` },
-      sell: { variant: 'danger', text: `Sell ${asset}` }
+      buy: { variant: 'primary', text: `Buy ${asset.name}` },
+      sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
+
+    const isDisabled = {
+      buy: parseFloat((Number(order.price) * Number(order.amount)).toFixed(6)) > algoBalance,
+      sell: Number(order.amount) > asaBalance
+    }
+
     return (
       <SubmitButton
         type="submit"
@@ -77,32 +97,83 @@ function PlaceOrder(props) {
         size="large"
         block
         orderType={order.type}
+        disabled={isDisabled[order.type]}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
     )
   }
 
-  const renderBalance = (bal) => {
-    const split = (bal + '').split('.')
+  const renderLimitOrder = () => {
+    if (!enableOrder[order.type]) {
+      // @todo: make this better, this is a placeholder
+      return (
+        <BodyCopy color="gray.500" textAlign="center" m={32}>
+          Insufficient balance
+        </BodyCopy>
+      )
+    }
 
     return (
-      <Balance>
-        <LabelMd fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </LabelMd>
-      </Balance>
+      <>
+        <LimitOrder>
+          <OrderInput
+            type="number"
+            id="price"
+            name="af2Km9q"
+            label="Price"
+            asset="ALGO"
+            orderType={order.type}
+            value={order.price}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+          />
+          <OrderInput
+            type="number"
+            id="amount"
+            name="af2Km9q"
+            label="Amount"
+            asset={asset.name}
+            orderType={order.type}
+            value={order.amount}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+          />
+          <AmountRange
+            order={order}
+            activeWallet={activeWallet}
+            asset={asset}
+            onChange={handleRangeChange}
+          />
+          <OrderInput
+            type="number"
+            id="total"
+            label="Total"
+            asset="ALGO"
+            orderType={order.type}
+            value={order.total}
+            readOnly
+            disabled
+          />
+        </LimitOrder>
+        {renderSubmit()}
+      </>
     )
   }
 
-  return (
-    <Container data-testid="place-order">
-      <Header>
-        <HeaderCaps color="gray.500" m={0}>
-          Place Order
-        </HeaderCaps>
-      </Header>
+  const renderForm = () => {
+    if (!isSignedIn) {
+      // @todo: make this better, this is a placeholder
+      return (
+        <BodyCopy color="gray.500" textAlign="center" m={16}>
+          Not signed in
+        </BodyCopy>
+      )
+    }
+
+    return (
       <Form onSubmit={handleSubmit} autocomplete="off">
         <ToggleWrapper>
           <ToggleInput
@@ -127,73 +198,45 @@ function PlaceOrder(props) {
           </SellButton>
         </ToggleWrapper>
 
-        <ActiveWallet>
-          <LabelMd color="gray.500" letterSpacing="0.1em" fontWeight="600">
-            Active Wallet
-          </LabelMd>
-          <WalletRow isActive>
-            <LabelMd fontWeight="500">
-              <Icon use="wallet" size={0.75} />
-              {activeWallet.name}
+        <AvailableBalance>
+          <BodyCopyTiny color="gray.500" mb={10}>
+            Available to trade
+          </BodyCopyTiny>
+          <BalanceRow>
+            <LabelMd color="gray.500" fontWeight="500">
+              ALGO
             </LabelMd>
-            {renderBalance(activeWallet.balance)}
-          </WalletRow>
-        </ActiveWallet>
+            <LabelMd color="gray.300" fontWeight="500">
+              {algoBalance.toFixed(6)}
+            </LabelMd>
+          </BalanceRow>
+          <BalanceRow>
+            <LabelMd color="gray.500" fontWeight="500">
+              {asset.name}
+            </LabelMd>
+            <LabelMd color="gray.300" fontWeight="500">
+              {asaBalance.toFixed(6)}
+            </LabelMd>
+          </BalanceRow>
+        </AvailableBalance>
 
         <Tabs orderType={order.type}>
           <Tab isActive>Limit</Tab>
         </Tabs>
 
-        <LimitOrder>
-          <OrderInput
-            type="number"
-            id="price"
-            name="af2Km9q"
-            label="Price"
-            asset="ALGO"
-            orderType={order.type}
-            value={order.price}
-            onChange={handleChange}
-            autocomplete="false"
-          />
-          <OrderInput
-            type="number"
-            id="amount"
-            name="af2Km9q"
-            label="Amount"
-            asset="YLDY"
-            orderType={order.type}
-            value={order.amount}
-            onChange={handleChange}
-            autocomplete="false"
-          />
-          <AmountRange
-            amount={order.amount}
-            balance={activeWallet.balance}
-            onChange={handleRangeChange}
-            orderType={order.type}
-          />
-          <OrderInput
-            type="number"
-            id="total"
-            label="Total"
-            asset="ALGO"
-            orderType={order.type}
-            value={order.total}
-            readOnly
-            disabled
-          />
-        </LimitOrder>
-
-        {renderSubmit()}
+        {renderLimitOrder()}
       </Form>
+    )
+  }
+
+  return (
+    <Container data-testid="place-order">
+      <Header>
+        <HeaderCaps color="gray.500" m={0}>
+          Place Order
+        </HeaderCaps>
+      </Header>
+      {renderForm()}
     </Container>
   )
 }
-
-PlaceOrder.propTypes = {
-  activeWallet: PropTypes.object.isRequired,
-  asset: PropTypes.string.isRequired
-}
-
-export default PlaceOrder

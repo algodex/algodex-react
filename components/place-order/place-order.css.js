@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { lighten } from 'polished'
 import Button from 'components/button'
-import { WalletRow } from 'components/wallet/wallet.css'
 import { Tab as _Tab, Header as _Tabs } from 'components/orders/orders.css'
 
 export const Container = styled.div`
@@ -94,14 +93,17 @@ export const SellButton = styled(ToggleBtn)`
   }
 `
 
-export const ActiveWallet = styled.div`
-  margin-bottom: 0.5rem;
+export const AvailableBalance = styled.div`
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+`
 
-  ${WalletRow} {
-    padding: 0.25rem 0 0.375rem;
-    margin: 0;
-  }
+export const BalanceRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
 `
 
 export const Tab = styled(_Tab)`

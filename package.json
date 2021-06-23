@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "@algodex/algodex-api": "^1.0.4",
+    "@algodex/algodex-sdk": "^1.0.22",
+    "@randlabs/myalgo-connect": "^1.0.1",
     "axios": "^0.21.1",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
