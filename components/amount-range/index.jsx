@@ -9,6 +9,7 @@ function AmountRange(props) {
   const amount = parseFloat(order.amount) || 0
   const algoBalance = activeWallet.balance
   const asaBalance = activeWallet.assets[asset.id].balance
+  const currentPrice = asset.price
 
   const value = isBuyOrder ? (price * amount * 100) / algoBalance : (amount * 100) / asaBalance
 
@@ -17,14 +18,19 @@ function AmountRange(props) {
 
   const handleChange = (e) => {
     if (isBuyOrder && !price) {
-      onChange(0)
+      onChange({
+        price: currentPrice,
+        amount: ((algoBalance * (Number(e.target.value) / 100)) / currentPrice).toFixed(6)
+      })
       return
     }
     const newAmount = isBuyOrder
       ? ((algoBalance * (Number(e.target.value) / 100)) / price).toFixed(6)
       : (asaBalance * (Number(e.target.value) / 100)).toFixed(6)
 
-    onChange(newAmount)
+    onChange({
+      amount: newAmount
+    })
   }
 
   return (

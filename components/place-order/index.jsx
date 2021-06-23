@@ -45,10 +45,10 @@ export default function PlaceOrder() {
     }))
   }
 
-  const handleRangeChange = (amount) => {
+  const handleRangeChange = (update) => {
     setOrder((prev) => ({
       ...prev,
-      amount
+      ...update
     }))
   }
 
