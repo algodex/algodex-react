@@ -1,94 +1,128 @@
-import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import PropTypes from 'prop-types'
+/* eslint-disable react/prop-types, react/jsx-key  */
+import { useMemo } from 'react'
 import dayjs from 'dayjs'
+// import { useQuery } from 'react-query'
+import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import OrdersTable from 'components/orders-table'
+
 import {
-  Container,
-  DateContainer,
-  EmptyState,
-  Header,
-  OrderRow,
-  OrderWrapper,
-  PrimaryToken,
-  WrapperContainer
+  OrderDate,
+  OrderPrice,
+  OrderPair,
+  OrderSide,
+  OrderAmount,
+  OrderExecuted,
+  OrderTotal,
+  StatusContainer,
+  TableWrapper,
+  OrderHistoryContainer
 } from './order-history.css'
 
+const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
+
+const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
+
+const OrderSideCell = ({ value }) => <OrderSide value={value}>{value}</OrderSide>
+
+const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
+
+const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
+
+const OrderExecutedCell = ({ value }) => <OrderExecuted>{value}</OrderExecuted>
+
+const OrderTotalCell = ({ value }) => <OrderTotal>{value}</OrderTotal>
+
 function OrderHistory({ orderHistory }) {
-  const renderOrderHistory = (orders) => {
-    const sortedByDate = orders.sort((a, b) => b.date - a.date)
-    return sortedByDate.map((order) => (
-      <OrderRow key={`${order.date}-${order.filled}`} data-testid="order-history-row">
-        <DateContainer>
-          <BodyCopyTiny color="gray.100" m={0}>
-            {dayjs(order.date).format('HH:mm:ss')}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.500" m={0}>
-            {dayjs(order.date).format('M-D-YY')}
-          </BodyCopyTiny>
-        </DateContainer>
-        <BodyCopySm color="gray.100" my={2}>
-          {order.pair[0]}
-          <PrimaryToken>{`/${order.pair[1]}`}</PrimaryToken>
-        </BodyCopySm>
-        <BodyCopySm
-          color={order.side === 'buy' ? 'green.500' : 'red.500'}
-          textTransform="uppercase"
-          my={2}
-        >
-          {order.side}
-        </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right" my={2}>
-          {order.price}
-          <PrimaryToken>{`${order.pair[1]}`}</PrimaryToken>
-        </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right" my={2}>
-          {order.amount}
-        </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right" my={2}>
-          {order.executed}
-        </BodyCopySm>
-        <BodyCopySm color="gray.100" textAlign="right" my={2}>
-          {(order.executed * order.price).toFixed(4)}
-        </BodyCopySm>
-      </OrderRow>
-    ))
+  // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
+
+  const error = {}
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Date',
+        accessor: 'date',
+        Cell: OrderDateCell
+      },
+      {
+        Header: 'Pair',
+        accessor: 'pair',
+        Cell: OrderPairCell
+      },
+      {
+        Header: 'Side',
+        accessor: 'side',
+        Cell: OrderSideCell
+      },
+      {
+        Header: 'Price (ALGO)',
+        accessor: 'price',
+        Cell: OrderPriceCell
+      },
+      {
+        Header: 'Amount',
+        accessor: 'amount',
+        Cell: OrderAmountCell
+      },
+      {
+        Header: 'Executed',
+        accessor: 'executed',
+        Cell: OrderExecutedCell
+      },
+      {
+        Header: 'Total',
+        accessor: 'total',
+        Cell: OrderTotalCell
+      }
+    ],
+    []
+  )
+
+  const data = useMemo(
+    () => [
+      {
+        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
+        price: '0.458',
+        pair: 'YLDY/ALGO',
+        side: 'BUY',
+        amount: '1000',
+        executed: '125',
+        total: '458'
+      },
+      {
+        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
+        price: '0.501',
+        pair: 'MCAU/ALGO',
+        side: 'SELL',
+        amount: '9000',
+        executed: '3000',
+        total: '4600'
+      }
+    ],
+    []
+  )
+
+  const renderStatus = () => {
+    if (status === 'success') {
+      return null
+    }
+    return (
+      <StatusContainer>
+        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+      </StatusContainer>
+    )
   }
+
   return (
-    <Container data-testid="order-history">
-      <Header>
-        <BodyCopyTiny color="gray.500">Date</BodyCopyTiny>
-        <BodyCopyTiny color="gray.500">Pair</BodyCopyTiny>
-        <BodyCopyTiny color="gray.500">Side</BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right">
-          Price
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right">
-          Amount
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right">
-          Executed
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right">
-          Total
-        </BodyCopyTiny>
-      </Header>
-      <WrapperContainer>
-        {orderHistory.length ? (
-          <OrderWrapper>{renderOrderHistory(orderHistory)}</OrderWrapper>
-        ) : (
-          <EmptyState data-testid="empty-state">
-            <BodyCopySm color="gray.500">You have no order history.</BodyCopySm>
-          </EmptyState>
-        )}
-      </WrapperContainer>
-    </Container>
+    <OrderHistoryContainer>
+      <TableWrapper>
+        <OrdersTable columns={columns} data={data} />
+      </TableWrapper>
+
+      {renderStatus()}
+    </OrderHistoryContainer>
   )
 }
 
 export default OrderHistory
-
-OrderHistory.propTypes = {
-  orderHistory: PropTypes.array.isRequired
-}
-OrderHistory.defaultProps = {
-  orderHistory: []
-}
