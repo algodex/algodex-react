@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-// import PropTypes from 'prop-types'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
-// import Icon from 'components/icon'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
 import useStore from 'store/use-store'
@@ -23,25 +21,16 @@ import {
 } from './place-order.css'
 
 export default function PlaceOrder() {
-  const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
-
   const asset = useStore((state) => state.asset)
   const wallets = useStore((state) => state.wallets)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
-
   const algoBalance = activeWallet?.balance
   const asaBalance = activeWallet?.assets[asset.id]?.balance || 0
 
-  const [order, setOrder] = useState({
-    type: 'buy',
-    price: '',
-    amount: '',
-    total: '',
-    asset: asset.name
-  })
+  const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
 
   useEffect(() => {
     const buy = algoBalance > 0
@@ -50,19 +39,13 @@ export default function PlaceOrder() {
     setEnableOrder({ buy, sell })
   }, [algoBalance, asaBalance])
 
-  const handleChange = (e, field) => {
-    setOrder((prev) => ({
-      ...prev,
-      [field || e.target.id]: e.target.value
-    }))
-  }
-
-  const handleRangeChange = (update) => {
-    setOrder((prev) => ({
-      ...prev,
-      ...update
-    }))
-  }
+  const [order, setOrder] = useState({
+    type: 'buy',
+    price: '',
+    amount: '',
+    total: '',
+    asset: asset.name
+  })
 
   useEffect(() => {
     const price = Number(order.price)
@@ -78,17 +61,22 @@ export default function PlaceOrder() {
     }
   }, [order])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleChange = (e, field) => {
+    setOrder((prev) => ({
+      ...prev,
+      [field || e.target.id]: e.target.value
+    }))
   }
 
-  const renderNotConnected = () => {
-    // @todo: make this better, this is a placeholder
-    return (
-      <BodyCopy color="gray.500" textAlign="center" m={16}>
-        Not signed in
-      </BodyCopy>
-    )
+  const handleRangeChange = (update) => {
+    setOrder((prev) => ({
+      ...prev,
+      ...update
+    }))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
   }
 
   const renderSubmit = () => {
@@ -177,7 +165,12 @@ export default function PlaceOrder() {
 
   const renderForm = () => {
     if (!isSignedIn) {
-      return renderNotConnected()
+      // @todo: make this better, this is a placeholder
+      return (
+        <BodyCopy color="gray.500" textAlign="center" m={16}>
+          Not signed in
+        </BodyCopy>
+      )
     }
 
     return (
