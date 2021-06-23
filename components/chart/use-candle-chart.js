@@ -97,7 +97,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
 
     if (chart && chartContainer) {
       addListener(chartContainer, () =>
-        chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight)
+        chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight - 1)
       )
       return () => removeListener(chartContainer)
     }
