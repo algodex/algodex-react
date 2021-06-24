@@ -128,6 +128,7 @@ export default function PlaceOrder() {
             onChange={handleChange}
             autocomplete="false"
             min="0"
+            step="0.000001"
           />
           <OrderInput
             type="number"
@@ -140,6 +141,7 @@ export default function PlaceOrder() {
             onChange={handleChange}
             autocomplete="false"
             min="0"
+            step="0.000001"
           />
           <AmountRange
             order={order}
@@ -200,10 +202,10 @@ export default function PlaceOrder() {
 
         <AvailableBalance>
           <BodyCopyTiny color="gray.500" mb={10}>
-            Available to trade
+            Available Balance
           </BodyCopyTiny>
           <BalanceRow>
-            <LabelMd color="gray.500" fontWeight="500">
+            <LabelMd color="gray.400" fontWeight="500">
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
@@ -211,7 +213,7 @@ export default function PlaceOrder() {
             </LabelMd>
           </BalanceRow>
           <BalanceRow>
-            <LabelMd color="gray.500" fontWeight="500">
+            <LabelMd color="gray.400" fontWeight="500">
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
