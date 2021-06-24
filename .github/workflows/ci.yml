@@ -16,6 +16,6 @@ jobs:
           echo //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN >> ~/.npmrc
           yarn
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
       - name: Run tests
         run: yarn test
