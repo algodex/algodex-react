@@ -35,6 +35,12 @@ function WalletView(props) {
     !isWalletActive(addr) && onSetActiveWallet(addr)
   }
 
+  const handleKeyDown = (e, addr) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      !isWalletActive(addr) && onSetActiveWallet(addr)
+    }
+  }
+
   const renderBalance = (bal) => {
     const split = bal.toFixed(6).split('.')
 
@@ -57,6 +63,7 @@ function WalletView(props) {
         role="button"
         isActive={isWalletActive(wallet.address)}
         onClick={() => handleWalletClick(wallet.address)}
+        onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <LabelMd fontWeight="500" title={wallet.address}>
           <Icon use="wallet" size={0.75} />
