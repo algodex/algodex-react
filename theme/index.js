@@ -209,6 +209,10 @@ export default {
     background: {
       light: colors.gray['000'],
       dark: colors.gray['800']
+    },
+    focus: {
+      green: '#4b9064',
+      red: '#b23639'
     }
   }
 }

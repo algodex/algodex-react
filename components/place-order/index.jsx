@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
+import OrderOptions from 'components/order-options'
 import useStore from 'store/use-store'
 
 import {
@@ -44,6 +45,7 @@ export default function PlaceOrder() {
     price: '',
     amount: '',
     total: '',
+    execution: 'maker',
     asset: asset.name
   })
 
@@ -159,6 +161,7 @@ export default function PlaceOrder() {
             readOnly
             disabled
           />
+          <OrderOptions order={order} onChange={handleChange} />
         </LimitOrder>
         {renderSubmit()}
       </>
