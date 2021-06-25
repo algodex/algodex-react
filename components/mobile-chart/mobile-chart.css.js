@@ -58,6 +58,7 @@ export const DailyChange = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: flex-end;
+  padding-bottom: 0.05rem;
   color: ${({ theme, isPositive }) =>
     isPositive ? theme.colors.green[500] : theme.colors.red[500]};
 `
