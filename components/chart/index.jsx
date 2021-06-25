@@ -26,7 +26,7 @@ function Chart(props) {
     // Refetch the data every second
     refetchInterval: intervalMs
   })
-
+  console.log(data)
   useEffect(() => {
     queryClient.invalidateQueries('priceData')
   }, [assetId, queryClient])
@@ -61,7 +61,19 @@ function Chart(props) {
 
   return (
     <>
-      <MobileChart priceData={priceData} volumeData={volumeData} data={data} />
+      <MobileChart
+        bid={bid}
+        ask={ask}
+        baseAsset={baseAsset}
+        dailyChange={dailyChange}
+        spread={spread}
+        algoVolume={algoVolume}
+        assetName={assetName}
+        ohlc={ohlc}
+        priceData={priceData}
+        volumeData={volumeData}
+        data={data}
+      />
       <ChartView
         bid={bid}
         ask={ask}

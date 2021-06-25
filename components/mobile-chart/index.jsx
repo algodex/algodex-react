@@ -1,31 +1,49 @@
-import PropTypes from 'prop-types'
-import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import theme from 'theme'
-import {
-  Container,
-  ChartWrapper,
-  AssetSearchPlaceholder,
-  TradingPair,
-  DailyChange,
-  PriceContainer,
-  Price,
-  AssetInfo,
-  OHLC,
-  ChartModeButton,
-  InfoPair,
-  StatsChartIcon,
-  TrendingUpIcon,
-  CandleStickChart,
-  AreaSeriesChart
-} from './mobile-chart.css'
-import { useRef } from 'react'
-import { ArrowUp, ArrowDown } from 'react-feather'
-import useStore, { chartModes } from 'store/use-store'
 import useAreaChart from 'components/chart/use-area-chart'
 import useCandleChart from 'components/chart/use-candle-chart'
+import { BodyCopySm, BodyCopyTiny } from 'components/type'
+import { useRef } from 'react'
+import { ArrowUp } from 'react-feather'
+import useStore, { chartModes } from 'store/use-store'
+import theme from 'theme'
+import {
+  AreaSeriesChart,
+  AssetInfo,
+  AssetSearchPlaceholder,
+  CandleStickChart,
+  ChartModeButton,
+  ChartWrapper,
+  Container,
+  DailyChange,
+  InfoPair,
+  OHLC,
+  Price,
+  PriceContainer,
+  StatsChartIcon,
+  TradingPair,
+  TrendingUpIcon,
+  Volume,
+  Bid,
+  Ask,
+  Spread,
+  CurrentPrice
+} from './mobile-chart.css'
 
-function MobileChart({ priceData, volumeData, data }) {
+function MobileChart({
+  priceData,
+  volumeData,
+  data,
+  assetName,
+  dailyChange,
+  algoVolume,
+  baseAsset,
+  ohlc,
+  bid,
+  ask,
+  spread
+}) {
   const MODE_ICON_COLOR = '#f2f2f2'
+  const formattedDailyChange =
+    dailyChange > 0 ? `+${dailyChange.toFixed(2)}%` : `-${dailyChange.toFixed(2)}%`
 
   const chartMode = useStore((state) => state.chartMode)
 
@@ -55,15 +73,15 @@ function MobileChart({ priceData, volumeData, data }) {
     <Container>
       <AssetSearchPlaceholder>
         <TradingPair>
-          <span>YLDY</span>
-          <span>/ALGO</span>
+          <span>{assetName}</span>
+          <span>{`/${baseAsset}`}</span>
         </TradingPair>
-        <DailyChange>
-          <BodyCopySm lineHeight={1}>-5.26%</BodyCopySm>
+        <DailyChange isPositive={dailyChange > 0}>
+          <BodyCopySm lineHeight={1}>{formattedDailyChange}</BodyCopySm>
         </DailyChange>
         <PriceContainer>
           <ArrowUp color={theme.colors.green[500]} />
-          <Price>1.3645</Price>
+          <Price>0.8000</Price>
         </PriceContainer>
       </AssetSearchPlaceholder>
       <ChartWrapper>
@@ -83,27 +101,38 @@ function MobileChart({ priceData, volumeData, data }) {
               <BodyCopyTiny color="gray.100" mr={1}>
                 O:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">1.3257</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc.open}</BodyCopyTiny>
             </InfoPair>
             <InfoPair>
               <BodyCopyTiny color="gray.100" mr={1}>
                 H:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">1.3257</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc.high}</BodyCopyTiny>
             </InfoPair>
             <InfoPair>
               <BodyCopyTiny color="gray.100" mr={1}>
                 L:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">1.3257</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc.low}</BodyCopyTiny>
             </InfoPair>
             <InfoPair>
               <BodyCopyTiny color="gray.100" mr={1}>
                 C:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">1.3257</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc.close}</BodyCopyTiny>
             </InfoPair>
           </OHLC>
+          <CurrentPrice>
+            <Ask>{ask}</Ask>
+            <Spread>{spread}</Spread>
+            <Bid>{bid}</Bid>
+          </CurrentPrice>
+          <Volume>
+            <BodyCopyTiny color="gray.100" mr={1}>
+              VOL(ALGO):
+            </BodyCopyTiny>
+            <BodyCopyTiny color="gray.100">{algoVolume}</BodyCopyTiny>
+          </Volume>
           <ChartModeButton onClick={() => changeMode(chartMode)}>
             {chartMode === chartModes.CANDLE ? (
               <TrendingUpIcon color={MODE_ICON_COLOR} width="1rem" height="1rem" />

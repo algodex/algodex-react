@@ -58,7 +58,8 @@ export const DailyChange = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: flex-end;
-  color: ${({ theme }) => theme.colors.red[500]};
+  color: ${({ theme, isPositive }) =>
+    isPositive ? theme.colors.green[500] : theme.colors.red[500]};
 `
 
 export const PriceContainer = styled.div`
@@ -80,7 +81,7 @@ export const AssetInfo = styled.div`
   top: 0.5rem;
   left: 0.5rem;
   width: 70%;
-  z-index: 99;
+  z-index: 10;
 `
 export const OHLC = styled.div`
   display: flex;
@@ -108,7 +109,7 @@ export const ChartModeButton = styled.button`
   color: ${({ theme }) => theme.colors.gray[100]};
   border: 1px solid ${({ theme }) => theme.colors.gray[100]};
   padding: 0.3rem;
-  margin: 1rem 0 0 0;
+  margin: 0.5rem 0 0 0;
   transition: background-color 0.1s ease-in;
   width: 1.75rem;
   & > span {
@@ -126,4 +127,44 @@ export const AreaSeriesChart = styled.div`
   width: 100%;
   display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
   height: 100%;
+`
+export const Volume = styled.div`
+  display: flex;
+  margin-top: 0.5rem;
+`
+export const CurrentPrice = styled.div`
+  display: flex;
+  margin-top: 0.5rem;
+`
+
+const bidAskStyles = `
+font-size: .6rem;
+width: 4rem;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
+export const Bid = styled.span`
+  padding: 0.2rem 0.75rem;
+  line-height: 1.25;
+  border-radius: 3px;
+  border: 1px solid ${({ theme }) => theme.colors.green['500']};
+  color: ${({ theme }) => theme.colors.green['500']};
+  ${bidAskStyles}
+`
+
+export const Ask = styled.span`
+  padding: 0.2rem 0.75rem;
+  line-height: 1.25;
+  border-radius: 3px;
+  border: 1px solid ${({ theme }) => theme.colors.red['500']};
+  color: ${({ theme }) => theme.colors.red['500']};
+  ${bidAskStyles}
+`
+
+export const Spread = styled.span`
+  padding: 0.1rem 0.75rem;
+  color: ${({ theme }) => theme.colors.gray['100']};
+  ${bidAskStyles}
 `
