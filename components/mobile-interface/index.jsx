@@ -12,6 +12,7 @@ import {
 import useStore, { mobileTabs } from 'store/use-store'
 import { BodyCopyLg } from 'components/type'
 import Chart from 'components/chart'
+import Orders from 'components/mobile-orders'
 
 export default function MobileInterface() {
   const activeMobileTab = useStore((state) => state.activeMobileTab)
@@ -29,7 +30,7 @@ export default function MobileInterface() {
           <BodyCopyLg color="gray.100">Trade</BodyCopyLg>
         </TradeContainer>
         <OrdersContainer isActive={activeMobileTab === mobileTabs.ORDERS}>
-          <BodyCopyLg color="gray.100">Orders</BodyCopyLg>
+          <Orders />
         </OrdersContainer>
         <HistoryContainer isActive={activeMobileTab === mobileTabs.HISTORY}>
           <BodyCopyLg color="gray.100">History</BodyCopyLg>
