@@ -1,20 +1,41 @@
 import styled from 'styled-components'
-
-const Container = styled.div`
-  height: 100%;
-
-  // for demo
-  border: 1px dotted rgba(255, 255, 255, 0.125);
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-`
+import BottomNav from 'components/mobile-bottom-nav'
+import {
+  Wrapper,
+  Container,
+  ChartContainer,
+  BookContainer,
+  TradeContainer,
+  OrdersContainer,
+  HistoryContainer
+} from './mobile-interface.css'
+import useStore, { mobileTabs } from 'store/use-store'
+import { BodyCopyLg } from 'components/type'
+import Chart from 'components/chart'
 
 export default function MobileInterface() {
+  const activeMobileTab = useStore((state) => state.activeMobileTab)
+  console.log(activeMobileTab)
   return (
     <Container>
-      <p className="demo">Mobile interface</p>
+      <Wrapper>
+        <ChartContainer isActive={activeMobileTab === mobileTabs.CHART}>
+          <Chart />
+        </ChartContainer>
+        <BookContainer isActive={activeMobileTab === mobileTabs.BOOK}>
+          <BodyCopyLg color="gray.100">Book</BodyCopyLg>
+        </BookContainer>
+        <TradeContainer isActive={activeMobileTab === mobileTabs.TRADE}>
+          <BodyCopyLg color="gray.100">Trade</BodyCopyLg>
+        </TradeContainer>
+        <OrdersContainer isActive={activeMobileTab === mobileTabs.ORDERS}>
+          <BodyCopyLg color="gray.100">Orders</BodyCopyLg>
+        </OrdersContainer>
+        <HistoryContainer isActive={activeMobileTab === mobileTabs.HISTORY}>
+          <BodyCopyLg color="gray.100">History</BodyCopyLg>
+        </HistoryContainer>
+      </Wrapper>
+      <BottomNav />
     </Container>
   )
 }

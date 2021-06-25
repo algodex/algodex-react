@@ -4,8 +4,12 @@ import { TrendingUp, StatsChart } from 'react-ionicons'
 
 export const Container = styled.div`
   flex: 1 1 0%;
-  display: flex;
   position: relative;
+  display: none;
+
+  @media (min-width: 767px) {
+    display: flex;
+  }
 `
 export const LoadingContainer = styled.div`
   flex: 1 1 0%;

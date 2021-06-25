@@ -8,6 +8,7 @@ import { useQuery, useQueryClient } from 'react-query'
 import { getAssetInfo, mapPriceData, mapVolumeData, relDiff, getOhlc } from './helpers'
 import useStore from 'store/use-store'
 import ChartView from './view'
+import MobileChart from 'components/mobile-chart'
 
 // Common
 const VOLUME_UP_COLOR = '#2fb16c2c'
@@ -59,21 +60,24 @@ function Chart(props) {
   }
 
   return (
-    <ChartView
-      bid={bid}
-      ask={ask}
-      baseAsset={baseAsset}
-      dailyChange={dailyChange}
-      spread={spread}
-      algoVolume={algoVolume}
-      assetName={assetName}
-      ohlc={ohlc}
-      priceData={priceData}
-      volumeData={volumeData}
-      data={data}
-      initialChartMode="CANDLE"
-      {...props}
-    />
+    <>
+      <MobileChart priceData={priceData} volumeData={volumeData} data={data} />
+      <ChartView
+        bid={bid}
+        ask={ask}
+        baseAsset={baseAsset}
+        dailyChange={dailyChange}
+        spread={spread}
+        algoVolume={algoVolume}
+        assetName={assetName}
+        ohlc={ohlc}
+        priceData={priceData}
+        volumeData={volumeData}
+        data={data}
+        initialChartMode="CANDLE"
+        {...props}
+      />
+    </>
   )
 }
 

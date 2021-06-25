@@ -27,8 +27,8 @@ import {
   Price,
   Spread,
   StatsChartIcon,
-  TopRow,
   TrendingUpIcon,
+  TopRow,
   VolumeContainer
 } from './chart.css'
 

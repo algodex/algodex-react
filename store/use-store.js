@@ -1,5 +1,17 @@
 import create from 'zustand'
 
+export const mobileTabs = {
+  CHART: 'CHART',
+  BOOK: 'BOOK',
+  TRADE: 'TRADE',
+  ORDERS: 'ORDERS'
+}
+
+export const chartModes = {
+  CANDLE: 'CANDLE',
+  AREA: 'AREA'
+}
+
 // eslint-disable-next-line
 const useStore = create((set) => ({
   asset: {},
@@ -13,22 +25,13 @@ const useStore = create((set) => ({
   setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
 
   isSignedIn: false,
-  signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false })
+  signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
+
+  activeMobileTab: mobileTabs.CHART,
+  setActiveMobileTab: (tab) => set({ activeMobileTab: tab }),
+
+  chartMode: chartModes.CANDLE,
+  setChartMode: (mode) => set({ chartMode: mode })
 }))
 
 export default useStore
-
-// currentAsset: {
-//   id: null,
-//   name: null,
-//   symbol: null,
-//   currentPrice: null,
-//   bid: null,
-//   ask: null,
-//   volume24H: null,
-//   dailyChange: null,
-//   open: null,
-//   high: null,
-//   low: null,
-//   close: null
-// }
