@@ -58,7 +58,7 @@ function OrderOptions(props) {
           <ChevronDown />
         </ArrowContainer>
       </ExpandToggle>
-      <ExpandContainer>
+      <ExpandContainer aria-hidden={!isExpanded} aria-expanded={isExpanded}>
         <ExpandContentWrapper>
           <ExpandContent>
             <OptionsWrapper>
