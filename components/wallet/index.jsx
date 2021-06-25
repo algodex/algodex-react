@@ -30,13 +30,6 @@ export default function Wallet() {
   }, [isStorageChecked, setWallets, storedWallets])
 
   useEffect(() => {
-    const reduceAssets = (result, asset) => ({
-      ...result,
-      [asset['asset-id']]: {
-        balance: convertAmount(asset.amount)
-      }
-    })
-
     const onMyAlgoConnect = async () => {
       try {
         const AlgodClient = new algodexsdk.initAlgodClient('test')
@@ -48,11 +41,20 @@ export default function Wallet() {
             address,
             name: truncateAddress(address),
             balance: convertAmount(accountInfo.amount),
-            assets: accountInfo.assets.reduce(reduceAssets, {})
+            assets: accountInfo.assets.reduce(
+              (result, asset) => ({
+                ...result,
+                [asset['asset-id']]: {
+                  balance: convertAmount(asset.amount)
+                }
+              }),
+              {}
+            )
           }
         })
 
         const result = await Promise.all(promises)
+
         setWallets(result)
         setStoredWallets(result)
       } catch (e) {
