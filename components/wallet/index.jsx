@@ -23,7 +23,7 @@ export default function Wallet() {
   // const signOut = useStore((state) => state.signOut)
 
   useEffect(() => {
-    if (!isStorageChecked) {
+    if (!isStorageChecked && storedWallets.length > 0) {
       setWallets(storedWallets)
     }
     setIsStorageChecked(true)
