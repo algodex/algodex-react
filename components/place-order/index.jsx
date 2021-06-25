@@ -237,7 +237,7 @@ export default function PlaceOrder() {
   return (
     <Container data-testid="place-order">
       <Header>
-        <HeaderCaps color="gray.500" m={0}>
+        <HeaderCaps color="gray.500" mb={1}>
           Place Order
         </HeaderCaps>
       </Header>
