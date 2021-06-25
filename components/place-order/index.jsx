@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
+import OrderOptions from 'components/order-options'
 import useStore from 'store/use-store'
 
 import {
@@ -44,6 +45,7 @@ export default function PlaceOrder() {
     price: '',
     amount: '',
     total: '',
+    execution: 'maker',
     asset: asset.name
   })
 
@@ -128,6 +130,7 @@ export default function PlaceOrder() {
             onChange={handleChange}
             autocomplete="false"
             min="0"
+            step="0.000001"
           />
           <OrderInput
             type="number"
@@ -140,6 +143,7 @@ export default function PlaceOrder() {
             onChange={handleChange}
             autocomplete="false"
             min="0"
+            step="0.000001"
           />
           <AmountRange
             order={order}
@@ -157,6 +161,7 @@ export default function PlaceOrder() {
             readOnly
             disabled
           />
+          <OrderOptions order={order} onChange={handleChange} />
         </LimitOrder>
         {renderSubmit()}
       </>
@@ -200,10 +205,10 @@ export default function PlaceOrder() {
 
         <AvailableBalance>
           <BodyCopyTiny color="gray.500" mb={10}>
-            Available to trade
+            Available Balance
           </BodyCopyTiny>
           <BalanceRow>
-            <LabelMd color="gray.500" fontWeight="500">
+            <LabelMd color="gray.400" fontWeight="500">
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
@@ -211,7 +216,7 @@ export default function PlaceOrder() {
             </LabelMd>
           </BalanceRow>
           <BalanceRow>
-            <LabelMd color="gray.500" fontWeight="500">
+            <LabelMd color="gray.400" fontWeight="500">
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
@@ -232,7 +237,7 @@ export default function PlaceOrder() {
   return (
     <Container data-testid="place-order">
       <Header>
-        <HeaderCaps color="gray.500" m={0}>
+        <HeaderCaps color="gray.500" mb={1}>
           Place Order
         </HeaderCaps>
       </Header>
