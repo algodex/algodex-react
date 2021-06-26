@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import algodexsdk from '@algodex/algodex-sdk'
+import algodex from '@algodex/algodex-sdk'
 import Spinner from 'components/spinner'
 import useMyAlgo from 'hooks/use-my-algo'
 import useLocalStorage from 'hooks/use-local-storage'
@@ -32,7 +32,7 @@ export default function Wallet() {
   useEffect(() => {
     const onMyAlgoConnect = async () => {
       try {
-        const AlgodClient = new algodexsdk.initAlgodClient('test')
+        const AlgodClient = new algodex.initAlgodClient('test')
 
         const promises = addresses.map(async (address) => {
           const accountInfo = await AlgodClient.accountInformation(address).do()

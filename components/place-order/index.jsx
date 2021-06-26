@@ -3,7 +3,9 @@ import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
+// import Icon from 'components/icon'
 import useStore from 'store/use-store'
+import OrderService from 'services/order'
 
 import {
   Container,
@@ -18,8 +20,17 @@ import {
   Tab,
   Tabs,
   LimitOrder,
+  // TxnFeeContainer,
   SubmitButton
 } from './place-order.css'
+
+const DEFAULT_ORDER = {
+  type: 'buy',
+  price: '',
+  amount: '',
+  total: '',
+  execution: 'maker'
+}
 
 export default function PlaceOrder() {
   const asset = useStore((state) => state.asset)
@@ -29,9 +40,18 @@ export default function PlaceOrder() {
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
-  const asaBalance = activeWallet?.assets[asset.id]?.balance || 0
+  const asaBalance = activeWallet?.assets?.[asset.id]?.balance || 0
+
+  // @todo: calculate transaction fees in total
+  // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
+  // const txnFee = isAsaOptedIn ? 0.002 : 0.003
 
   const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
+
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false
+  })
 
   useEffect(() => {
     const buy = algoBalance > 0
@@ -40,18 +60,22 @@ export default function PlaceOrder() {
     setEnableOrder({ buy, sell })
   }, [algoBalance, asaBalance])
 
-  const [order, setOrder] = useState({
-    type: 'buy',
-    price: '',
-    amount: '',
-    total: '',
-    execution: 'maker',
-    asset: asset.name
-  })
+  const [order, setOrder] = useState(DEFAULT_ORDER)
 
   useEffect(() => {
     const price = Number(order.price)
     const amount = Number(order.amount)
+
+    // let totalAmount = price * amount
+    // if (totalAmount > 0) {
+    //   if (order.type === 'buy') {
+    //     totalAmount += txnFee
+    //   } else {
+    //     totalAmount -= txnFee
+    //   }
+    // }
+
+    // const total = totalAmount.toFixed(6)
 
     const total = (price * amount).toFixed(6)
 
@@ -77,8 +101,29 @@ export default function PlaceOrder() {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setStatus((prev) => ({ ...prev, submitting: true }))
+
+    try {
+      const orderData = {
+        ...order,
+        address: activeWalletAddress,
+        asset
+      }
+
+      await OrderService.placeOrder(orderData)
+
+      setStatus({ submitted: true, submitting: false })
+
+      setOrder({
+        ...DEFAULT_ORDER,
+        type: order.type
+      })
+    } catch (e) {
+      setStatus({ submitted: false, submitting: false })
+      console.error(e.message)
+    }
   }
 
   const renderSubmit = () => {
@@ -99,7 +144,7 @@ export default function PlaceOrder() {
         size="large"
         block
         orderType={order.type}
-        disabled={isDisabled[order.type]}
+        disabled={isDisabled[order.type] || status.submitting}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
@@ -149,6 +194,7 @@ export default function PlaceOrder() {
             order={order}
             activeWallet={activeWallet}
             asset={asset}
+            // txnFee={txnFee}
             onChange={handleRangeChange}
           />
           <OrderInput
@@ -161,6 +207,12 @@ export default function PlaceOrder() {
             readOnly
             disabled
           />
+          {/* <TxnFeeContainer>
+            <BodyCopyTiny color="gray.500" textTransform="none">
+              Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
+              {txnFee.toFixed(3)}
+            </BodyCopyTiny>
+          </TxnFeeContainer> */}
           <OrderOptions order={order} onChange={handleChange} />
         </LimitOrder>
         {renderSubmit()}
