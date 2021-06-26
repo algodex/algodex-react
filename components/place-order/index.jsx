@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
@@ -101,29 +102,39 @@ export default function PlaceOrder() {
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const placeOrder = (orderData) => {
+    return OrderService.placeOrder(orderData)
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault()
     setStatus((prev) => ({ ...prev, submitting: true }))
 
-    try {
-      const orderData = {
-        ...order,
-        address: activeWalletAddress,
-        asset
-      }
-
-      await OrderService.placeOrder(orderData)
-
-      setStatus({ submitted: true, submitting: false })
-
-      setOrder({
-        ...DEFAULT_ORDER,
-        type: order.type
-      })
-    } catch (e) {
-      setStatus({ submitted: false, submitting: false })
-      console.error(e.message)
+    const orderData = {
+      ...order,
+      address: activeWalletAddress,
+      asset
     }
+
+    const orderPromise = placeOrder(orderData)
+      .then(() => {
+        setStatus({ submitted: true, submitting: false })
+
+        setOrder({
+          ...DEFAULT_ORDER,
+          type: order.type
+        })
+      })
+      .catch((e) => {
+        setStatus({ submitted: false, submitting: false })
+        console.error(e)
+      })
+
+    toast.promise(orderPromise, {
+      loading: 'Awaiting confirmation...',
+      success: 'Order successfully placed',
+      error: 'Error placing order'
+    })
   }
 
   const renderSubmit = () => {
