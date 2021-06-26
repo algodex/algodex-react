@@ -1,33 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import algodex from '@algodex/algodex-sdk'
-import Spinner from 'components/spinner'
 import useMyAlgo from 'hooks/use-my-algo'
-import useLocalStorage from 'hooks/use-local-storage'
 import useStore from 'store/use-store'
-import { convertAmount } from 'services/convert'
-import { truncateAddress } from 'services/display'
+import WalletService from 'services/wallet'
 import WalletView from './view'
 
 export default function Wallet() {
   const { connect, addresses } = useMyAlgo()
 
-  const [storedWallets, setStoredWallets] = useLocalStorage('wallets', [])
-  const [isStorageChecked, setIsStorageChecked] = useState(false)
-
   const wallets = useStore((state) => state.wallets)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
 
-  const setWallets = useStore((state) => state.setWallets)
+  // const setWallets = useStore((state) => state.setWallets)
   const setActiveWalletAddress = useStore((state) => state.setActiveWalletAddress)
+  const setNewConnection = useStore((state) => state.setNewConnection)
   // const signOut = useStore((state) => state.signOut)
-
-  useEffect(() => {
-    if (!isStorageChecked && storedWallets.length > 0) {
-      setWallets(storedWallets)
-    }
-    setIsStorageChecked(true)
-  }, [isStorageChecked, setWallets, storedWallets])
 
   useEffect(() => {
     const onMyAlgoConnect = async () => {
@@ -37,37 +25,18 @@ export default function Wallet() {
         const promises = addresses.map(async (address) => {
           const accountInfo = await AlgodClient.accountInformation(address).do()
 
-          return {
-            address,
-            name: truncateAddress(address),
-            balance: convertAmount(accountInfo.amount),
-            assets: accountInfo.assets.reduce(
-              (result, asset) => ({
-                ...result,
-                [asset['asset-id']]: {
-                  balance: convertAmount(asset.amount)
-                }
-              }),
-              {}
-            )
-          }
+          return WalletService.setWalletData(accountInfo)
         })
 
-        const result = await Promise.all(promises)
+        const walletData = await Promise.all(promises)
 
-        setWallets(result)
-        setStoredWallets(result)
+        setNewConnection(walletData)
       } catch (e) {
-        console.error(e.message)
+        console.error(e)
       }
     }
-
     addresses && onMyAlgoConnect(addresses)
-  }, [addresses, setStoredWallets, setWallets])
-
-  if (!isStorageChecked) {
-    return <Spinner flex />
-  }
+  }, [addresses, setNewConnection])
 
   return (
     <WalletView

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import algodex from '@algodex/algodex-sdk'
 import toast from 'react-hot-toast'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
@@ -7,6 +8,7 @@ import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import useStore from 'store/use-store'
 import OrderService from 'services/order'
+import WalletService from 'services/wallet'
 
 import {
   Container,
@@ -36,6 +38,7 @@ const DEFAULT_ORDER = {
 export default function PlaceOrder() {
   const asset = useStore((state) => state.asset)
   const wallets = useStore((state) => state.wallets)
+  const updateBalances = useStore((state) => state.updateBalances)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
 
@@ -117,17 +120,34 @@ export default function PlaceOrder() {
     }
 
     const orderPromise = placeOrder(orderData)
-      .then(() => {
+      .then(async () => {
         setStatus({ submitted: true, submitting: false })
 
         setOrder({
           ...DEFAULT_ORDER,
           type: order.type
         })
+
+        try {
+          const AlgodClient = new algodex.initAlgodClient('test')
+          const accountInfo = await AlgodClient.accountInformation(activeWalletAddress).do()
+          const update = WalletService.setWalletData(accountInfo)
+          updateBalances(
+            activeWalletAddress,
+            update.balance,
+            asset.id,
+            update.assets[asset.id].balance
+          )
+        } catch (e) {
+          console.error(e)
+        }
       })
       .catch((e) => {
         setStatus({ submitted: false, submitting: false })
         console.error(e)
+      })
+      .finally(() => {
+        setStatus({ submitted: false, submitting: false })
       })
 
     toast.promise(orderPromise, {
