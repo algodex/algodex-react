@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import Head from 'next/head'
 import styled from 'styled-components'
 import { useQuery } from 'react-query'
 import { fetchAssetById } from 'lib/api'
+import WalletService from 'services/wallet'
 import MainLayout from 'components/main-layout'
 import Header from 'components/header'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
+import useMyAlgo from 'hooks/use-my-algo'
 import useStore from 'store/use-store'
 
 const Container = styled.div`
@@ -37,20 +39,62 @@ const StatusContainer = styled.div`
 `
 
 export default function Home() {
-  const { status, data } = useQuery(['asset', { id: 15322902 }], () => fetchAssetById(15322902))
+  const { connect, addresses } = useMyAlgo()
+
+  const wallets = useStore((state) => state.wallets)
+  const setWallets = useStore((state) => state.setWallets)
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const setActiveWalletAddress = useStore((state) => state.setActiveWalletAddress)
+  const isSignedIn = useStore((state) => state.isSignedIn)
+  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
+
+  const walletAddresses = useMemo(
+    () => addresses || wallets.map((w) => w.address) || [],
+    [addresses, wallets]
+  )
+
+  const { data: walletData, refetch } = useQuery('wallets', () =>
+    WalletService.fetchWallets(walletAddresses)
+  )
+
+  useEffect(() => {
+    if (walletData?.wallets) {
+      setWallets(walletData.wallets)
+
+      if (!isSignedIn) {
+        setIsSignedIn(true)
+      }
+
+      if (!walletAddresses.includes(activeWalletAddress)) {
+        setActiveWalletAddress(walletData.wallets[0].address)
+      }
+    }
+  }, [
+    activeWalletAddress,
+    walletData,
+    isSignedIn,
+    setActiveWalletAddress,
+    setIsSignedIn,
+    setWallets,
+    walletAddresses
+  ])
+
+  const { status: assetStatus, data: assetData } = useQuery(['asset', { id: 15322902 }], () =>
+    fetchAssetById(15322902)
+  )
 
   const asset = useStore((state) => state.asset)
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
-    if (data?.asset) {
-      setAsset(data.asset)
+    if (assetData?.asset) {
+      setAsset(assetData.asset)
     }
-  }, [asset, setAsset, data])
+  }, [assetData, setAsset])
 
   const renderDashboard = () => {
-    const isError = status === 'error'
-    const isLoading = status === 'loading' || (!isError && !asset.price)
+    const isError = assetStatus === 'error'
+    const isLoading = assetStatus === 'loading' || (!isError && !asset.price)
 
     if (isLoading) {
       return (
@@ -67,7 +111,7 @@ export default function Home() {
       )
     }
 
-    return <MainLayout />
+    return <MainLayout onWalletConnect={connect} refetchWallets={refetch} />
   }
   return (
     <Container>

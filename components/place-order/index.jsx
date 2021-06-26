@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import algodex from '@algodex/algodex-sdk'
+import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
@@ -8,7 +8,6 @@ import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import useStore from 'store/use-store'
 import OrderService from 'services/order'
-import WalletService from 'services/wallet'
 
 import {
   Container,
@@ -35,10 +34,11 @@ const DEFAULT_ORDER = {
   execution: 'maker'
 }
 
-export default function PlaceOrder() {
+function PlaceOrder(props) {
+  const { refetchWallets } = props
+
   const asset = useStore((state) => state.asset)
   const wallets = useStore((state) => state.wallets)
-  const updateBalances = useStore((state) => state.updateBalances)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
 
@@ -123,24 +123,12 @@ export default function PlaceOrder() {
       .then(async () => {
         setStatus({ submitted: true, submitting: false })
 
+        refetchWallets()
+
         setOrder({
           ...DEFAULT_ORDER,
           type: order.type
         })
-
-        try {
-          const AlgodClient = new algodex.initAlgodClient('test')
-          const accountInfo = await AlgodClient.accountInformation(activeWalletAddress).do()
-          const update = WalletService.setWalletData(accountInfo)
-          updateBalances(
-            activeWalletAddress,
-            update.balance,
-            asset.id,
-            update.assets[asset.id].balance
-          )
-        } catch (e) {
-          console.error(e)
-        }
       })
       .catch((e) => {
         setStatus({ submitted: false, submitting: false })
@@ -328,3 +316,9 @@ export default function PlaceOrder() {
     </Container>
   )
 }
+
+PlaceOrder.propTypes = {
+  refetchWallets: PropTypes.func.isRequired
+}
+
+export default PlaceOrder

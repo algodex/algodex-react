@@ -21,13 +21,6 @@ export const useStore = create(
       wallets: [],
       setWallets: (wallets) => set({ wallets }),
 
-      updateBalances: (addr, algo, id, asa) =>
-        set((state) => {
-          const i = state.wallets.findIndex((w) => w.address === addr)
-          state.wallets[i].balance = algo
-          state.wallets[i].assets[id].balance = asa
-        }),
-
       activeWalletAddress: '',
       setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
 
@@ -36,7 +29,7 @@ export const useStore = create(
       signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false })
     })),
     {
-      name: 'algodex-wallets'
+      name: 'algodex'
     }
   )
 )
