@@ -32,10 +32,10 @@
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.9.1"
 
-"@algodex/algodex-sdk@^1.0.29":
-  version "1.0.29"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.29/11760ddebc2966ee38355906963f9a6c61a8aa2dcd7591f1bebed331494fc4c0#648d72c1e8aff580c2b3ffc32f73b45cbd5bc377"
-  integrity sha512-G4ufIGQ3J5Gc69kye5ShE7Tz0F0dEnuVsYHJjVQRCQMABls5lGaApGnHIcwd4GKAlipxdeKBw0LNRep/96ArFw==
+"@algodex/algodex-sdk@^1.0.30":
+  version "1.0.30"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.30/efa59fa0ea28871fc41dbe6dc8293c4253b6adc9820852a46540239fab494816#4e63aa5154c8f612e8b8e7fe374a4ed3461f1700"
+  integrity sha512-D9NrDfMv6HoHiWIoOK+EPOz1qB4jFrpE4rLf//n2aeYDCyaD8sZm7PEAgJ0aSn4twFcjKawnqSF0p6Ozjh9ECw==
   dependencies:
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.9.1"
