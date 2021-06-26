@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import algodex from '@algodex/algodex-sdk'
+import { useEffect, useMemo } from 'react'
+import { useQuery } from 'react-query'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore from 'store/use-store'
 import WalletService from 'services/wallet'
@@ -11,32 +11,39 @@ export default function Wallet() {
   const wallets = useStore((state) => state.wallets)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
+  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
 
-  // const setWallets = useStore((state) => state.setWallets)
+  const setWallets = useStore((state) => state.setWallets)
   const setActiveWalletAddress = useStore((state) => state.setActiveWalletAddress)
-  const setNewConnection = useStore((state) => state.setNewConnection)
-  // const signOut = useStore((state) => state.signOut)
+
+  const walletAddresses = useMemo(
+    () => addresses || wallets.map((w) => w.address) || [],
+    [addresses, wallets]
+  )
+
+  const { data } = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses))
 
   useEffect(() => {
-    const onMyAlgoConnect = async () => {
-      try {
-        const AlgodClient = new algodex.initAlgodClient('test')
+    if (data?.wallets) {
+      setWallets(data.wallets)
 
-        const promises = addresses.map(async (address) => {
-          const accountInfo = await AlgodClient.accountInformation(address).do()
+      if (!isSignedIn) {
+        setIsSignedIn(true)
+      }
 
-          return WalletService.setWalletData(accountInfo)
-        })
-
-        const walletData = await Promise.all(promises)
-
-        setNewConnection(walletData)
-      } catch (e) {
-        console.error(e)
+      if (!walletAddresses.includes(activeWalletAddress)) {
+        setActiveWalletAddress(data.wallets[0].address)
       }
     }
-    addresses && onMyAlgoConnect(addresses)
-  }, [addresses, setNewConnection])
+  }, [
+    activeWalletAddress,
+    data,
+    isSignedIn,
+    setActiveWalletAddress,
+    setIsSignedIn,
+    setWallets,
+    walletAddresses
+  ])
 
   return (
     <WalletView
