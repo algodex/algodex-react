@@ -1,10 +1,9 @@
 import React from 'react'
-import PlaceOrder from '.'
+import PlaceOrderView from './view'
 
 export default {
   title: 'PlaceOrder',
-  component: PlaceOrder,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
+  component: PlaceOrderView,
   decorators: [
     (Story) => (
       <div
@@ -21,18 +20,39 @@ export default {
   ]
 }
 
-const Template = (args) => <PlaceOrder {...args} />
+const Template = (args) => <PlaceOrderView {...args} />
 
-// @todo: design no wallet view
+const asset = {
+  id: 0,
+  name: 'LAMP',
+  decimals: 6,
+  price: 1.75
+}
 
-// export const NoWallet = Template.bind({})
-// NoWallet.args = {
-//   activeWallet: undefined,
-//   asset: 'YLDY'
-// }
+const wallets = [
+  {
+    address: 'FOSOZ3VVQ6WTBA32PZNZSVV3YNZ6BXMHVHZPLVGMQ6BXSUGBKP6JUUAK3E',
+    name: 'FOSO...AK3E',
+    balance: 0,
+    assets: {}
+  },
+  {
+    address: 'X5RS35DM4FDQZQ5GRGIOSM33DQGL7PSE222NIFIBS4NR3J36WS4P74LTAQ',
+    name: 'X5RS...LTAQ',
+    balance: 10.391179,
+    assets: {
+      15322902: {
+        balance: 6.217775
+      }
+    }
+  }
+]
 
-export const HasWallet = Template.bind({})
-HasWallet.args = {
-  activeWallet: { id: 'wallet-01', name: 'Main', balance: 812569.2658 },
-  asset: 'YLDY'
+export const HasWallets = Template.bind({})
+HasWallets.args = {
+  asset,
+  wallets,
+  activeWalletAddress: wallets[1].address,
+  isSignedIn: true,
+  refetchWallets: () => {}
 }
