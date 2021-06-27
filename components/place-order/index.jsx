@@ -120,7 +120,7 @@ function PlaceOrder(props) {
     }
 
     const orderPromise = placeOrder(orderData)
-      .then(async () => {
+      .then(() => {
         setStatus({ submitted: true, submitting: false })
 
         refetchWallets()
@@ -131,7 +131,6 @@ function PlaceOrder(props) {
         })
       })
       .catch((e) => {
-        setStatus({ submitted: false, submitting: false })
         console.error(e)
       })
       .finally(() => {
