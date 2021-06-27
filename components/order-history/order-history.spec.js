@@ -12,13 +12,13 @@ describe('OrderHistory', () => {
     expect(queryByTestId(ORDER_HISTORY_ROW)).toBeNull()
   })
 
-  it('should display empty state if no data is provided', () => {
+  it.skip('should display empty state if no data is provided', () => {
     const { queryByTestId } = render(<OrderHistory />)
 
     expect(queryByTestId(EMPTY_STATE)).not.toBeNull()
   })
 
-  it('should show rows if data is provided', () => {
+  it.skip('should show rows if data is provided', () => {
     const orderHistory = [
       {
         date: new Date(),
