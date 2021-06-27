@@ -53,8 +53,10 @@ export default function Home() {
     [addresses, wallets]
   )
 
-  const { data: walletData, refetch } = useQuery('wallets', () =>
-    WalletService.fetchWallets(walletAddresses)
+  const { data: walletData, refetch } = useQuery(
+    'wallets',
+    () => WalletService.fetchWallets(walletAddresses),
+    { refetchInterval: 5000 }
   )
 
   useEffect(() => {
