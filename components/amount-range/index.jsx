@@ -11,10 +11,36 @@ function AmountRange(props) {
   const asaBalance = activeWallet.assets[asset.id]?.balance || 0
   const currentPrice = asset.price
 
+  // @todo: calculate txn fees
+  // const value = isBuyOrder
+  //   ? ((price * amount + txnFee) * 100) / algoBalance
+  //   : (amount * 100) / asaBalance
+
   const value = isBuyOrder ? (price * amount * 100) / algoBalance : (amount * 100) / asaBalance
 
   const rounded = Math.round(value / 5) * 5
   const fullBalance = Math.abs(100 - value) < 0.00001
+
+  // @todo: calculate txn fees
+  // const handleChange = (e) => {
+  //   const adjustAlgoBalance = algoBalance - txnFee
+
+  //   if (isBuyOrder && !price) {
+  //     onChange({
+  //       price: currentPrice,
+  //       amount: ((adjustAlgoBalance * (Number(e.target.value) / 100)) / currentPrice).toFixed(6)
+  //     })
+  //     return
+  //   }
+
+  //   const newAmount = isBuyOrder
+  //     ? ((adjustAlgoBalance * (Number(e.target.value) / 100)) / price).toFixed(6)
+  //     : (asaBalance * (Number(e.target.value) / 100)).toFixed(6)
+
+  //   onChange({
+  //     amount: newAmount
+  //   })
+  // }
 
   const handleChange = (e) => {
     if (isBuyOrder && !price) {

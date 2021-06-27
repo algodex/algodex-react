@@ -1,20 +1,38 @@
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
+import produce from 'immer'
 
-// eslint-disable-next-line
-const useStore = create((set) => ({
-  asset: {},
-  setAsset: (asset) => set({ asset }),
+const immer = (config) => (set, get, api) =>
+  config(
+    (partial, replace) => {
+      const nextState = typeof partial === 'function' ? produce(partial) : partial
+      return set(nextState, replace)
+    },
+    get,
+    api
+  )
 
-  wallets: [],
-  setWallets: (wallets) =>
-    set({ wallets, activeWalletAddress: wallets[0].address, isSignedIn: true }),
+export const useStore = create(
+  persist(
+    immer((set) => ({
+      asset: {},
+      setAsset: (asset) => set({ asset }),
 
-  activeWalletAddress: '',
-  setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
+      wallets: [],
+      setWallets: (wallets) => set({ wallets }),
 
-  isSignedIn: false,
-  signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false })
-}))
+      activeWalletAddress: '',
+      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
+
+      isSignedIn: false,
+      setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
+      signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false })
+    })),
+    {
+      name: 'algodex'
+    }
+  )
+)
 
 export default useStore
 

@@ -32,13 +32,14 @@
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.9.1"
 
-"@algodex/algodex-sdk@^1.0.23":
-  version "1.0.23"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.23/007c0d795c3dd26e6c1a98a839bf506c715d5ce5827fcb5ffa2567dcd81cf463#d381bf2457f3c587ad92bdd236cfd603760018ae"
-  integrity sha512-ebzTMCtGP8loilqmnrca+u4DshGXtTGXw0sj8S4L3hse1OrWQo9APOPogi9XDG2BqSjYWPsBtdlKo8anXppSqw==
+"@algodex/algodex-sdk@^1.0.30":
+  version "1.0.30"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.30/efa59fa0ea28871fc41dbe6dc8293c4253b6adc9820852a46540239fab494816#4e63aa5154c8f612e8b8e7fe374a4ed3461f1700"
+  integrity sha512-D9NrDfMv6HoHiWIoOK+EPOz1qB4jFrpE4rLf//n2aeYDCyaD8sZm7PEAgJ0aSn4twFcjKawnqSF0p6Ozjh9ECw==
   dependencies:
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.9.1"
+    axios "^0.21.1"
     js-big-decimal "^1.3.4"
     text-encoding "^0.7.0"
     util "^0.12.4"
@@ -7105,6 +7106,11 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
+goober@^2.0.35:
+  version "2.0.38"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.38.tgz#ca81fbc37b2fc7a6cfe10fd3d8be3a1867927ac2"
+  integrity sha512-oGrP8xMB3k6EEcEAuKstd05r0JRFs8L9ouPCTKxupu85PdDJ443LTCXvxRVMeYN6pVhV6htVb7FaKTk5JlFzCQ==
+
 good-listener@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/good-listener/-/good-listener-1.2.2.tgz"
@@ -7543,6 +7549,11 @@ immer@8.0.1:
   version "8.0.1"
   resolved "https://registry.npmjs.org/immer/-/immer-8.0.1.tgz"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
+
+immer@^9.0.3:
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.3.tgz#146e2ba8b84d4b1b15378143c2345559915097f4"
+  integrity sha512-mONgeNSMuyjIe0lkQPa9YhdmTv8P19IeHV0biYhcXhbd5dhdB9HSK93zBpyKjp6wersSUgT5QyU0skmejUVP2A==
 
 import-fresh@^3.0.0, import-fresh@^3.1.0, import-fresh@^3.2.1:
   version "3.3.0"
@@ -11123,6 +11134,13 @@ react-helmet-async@^1.0.7:
     prop-types "^15.7.2"
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
+
+react-hot-toast@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-hot-toast/-/react-hot-toast-2.0.0.tgz#6e83b2937a20b040acb2d5fd08bcf32561b7832a"
+  integrity sha512-J0J2rcSvKetlziVquwESgk85pV9JB0Dz3RJIZcAEv7CWU2y2z8BQqxmZHZUxjPKIBGPqXAocZch4Kj4oUdX4+w==
+  dependencies:
+    goober "^2.0.35"
 
 react-inspector@^5.1.0:
   version "5.1.1"

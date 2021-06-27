@@ -129,6 +129,15 @@ export const LimitOrder = styled.div`
   margin-bottom: 1rem;
 `
 
+// export const TxnFeeContainer = styled.div`
+//   margin-bottom: 0.75rem;
+//   text-align: right;
+
+//   svg {
+//     margin-left: 0.25rem;
+//   }
+// `
+
 export const SubmitButton = styled(Button)`
   &:focus {
     box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
