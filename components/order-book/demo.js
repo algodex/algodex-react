@@ -9,7 +9,7 @@ export const generateBookData = (startPrice, increment, qty = 24) => {
     const amount = randomInt(1, 500)
     total = total + amount
     const row = {
-      price: (i * increment + startPrice).toFixed(4),
+      price: i * increment + startPrice,
       amount,
       total
     }
