@@ -1,11 +1,20 @@
 import styled from 'styled-components'
-import { lighten } from 'polished'
+
+export const Wrapper = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+`
 
 export const Container = styled.nav`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
   height: 7vh;
+  border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
 `
 
 export const NavItem = styled.div`
@@ -18,31 +27,6 @@ export const NavItem = styled.div`
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.background.dark};
 
-  border: ${({ isActive, theme }) =>
-    isActive ? `2px solid ${theme.colors.gray['500']}` : `2px solid ${theme.colors.gray['700']}`};
+  border: ${({ theme }) => `1px solid ${theme.colors.gray['700']}`};
   border-bottom: none;
-
-  &:first-child {
-    border-left: none;
-  }
-
-  &:last-child {
-    border-right: none;
-  }
-
-  &:not(:first-child) {
-    border-left: 2px solid
-      ${({ isActive, theme }) =>
-        isActive
-          ? `2px solid ${theme.colors.gray['500']}`
-          : `2px solid ${theme.colors.gray['700']}`};
-  }
-
-  &:not(:last-child) {
-    border-right: 2px solid
-      ${({ isActive, theme }) =>
-        isActive
-          ? `2px solid ${theme.colors.gray['500']}`
-          : `2px solid ${theme.colors.gray['700']}`};
-  }
 `

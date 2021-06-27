@@ -6,11 +6,19 @@ export const TrendingUpIcon = styled(TrendingUp)``
 export const StatsChartIcon = styled(StatsChart)``
 
 export const Container = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 11fr;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 0%;
   width: 100%;
-  height: 100%;
+  padding-bottom: 2.8rem;
+
+  @media (min-height: 700px) {
+    padding-bottom: 3.1rem;
+  }
+
+  @media (min-height: 740px) {
+    padding-bottom: 3.5rem;
+  }
 
   @media (min-width: 767px) {
     display: none;
@@ -118,15 +126,25 @@ export const ChartModeButton = styled.button`
   }
 `
 export const CandleStickChart = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   flex: 1 1 0%;
   width: 100%;
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   height: 100%;
 `
 export const AreaSeriesChart = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   flex: 1 1 0%;
   width: 100%;
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   height: 100%;
 `
 export const Volume = styled.div`

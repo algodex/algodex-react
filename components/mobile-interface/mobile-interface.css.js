@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex: 1 1 0%;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
 `
@@ -13,7 +13,8 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-
+  justify-content: flex-start;
+  padding-top: 4rem;
   // for demo
   border: 1px dotted rgba(255, 255, 255, 0.125);
 

@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 // import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-
 import {
   OrderDate,
   OrderPrice,
@@ -18,99 +17,16 @@ import {
   TableWrapper,
   OpenOrdersContainer
 } from './open-orders.css'
-
-const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
-
-const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
-
-const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
-
-const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
-
-const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
-
-const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-
-const OrderFilledCell = ({ value }) => <OrderFilled>{value}</OrderFilled>
-
-const OrderTotalCell = ({ value }) => <OrderTotal>{value}</OrderTotal>
+import { openOrdersColumns, openOrdersData } from 'components/utils/open-orders'
 
 function OpenOrders({ openOrders }) {
   // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
 
   const error = {}
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'Date',
-        accessor: 'date',
-        Cell: OrderDateCell
-      },
-      {
-        Header: 'Pair',
-        accessor: 'pair',
-        Cell: OrderPairCell
-      },
-      {
-        Header: 'Price (ALGO)',
-        accessor: 'price',
-        Cell: OrderPriceCell
-      },
-      {
-        Header: 'Type',
-        accessor: 'type',
-        Cell: OrderTypeCell
-      },
-      {
-        Header: 'Amount',
-        accessor: 'amount',
-        Cell: OrderAmountCell
-      },
-      {
-        Header: 'Filled',
-        accessor: 'filled',
-        Cell: OrderFilledCell
-      },
-      {
-        Header: 'Total',
-        accessor: 'total',
-        Cell: OrderTotalCell
-      },
-      {
-        Header: 'Role',
-        accessor: 'role',
-        Cell: OrderRoleCell
-      }
-    ],
-    []
-  )
+  const columns = useMemo(() => openOrdersColumns, [])
 
-  const data = useMemo(
-    () => [
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.458',
-        pair: 'YLDY/ALGO',
-        type: 'BUY',
-        role: 'MAKER',
-        amount: '1000',
-        filled: '125',
-        total: '458'
-      },
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.501',
-        pair: 'MCAU/ALGO',
-        type: 'SELL',
-        role: 'TAKER',
-        amount: '9000',
-        filled: '3000',
-        total: '4600'
-      }
-    ],
-    []
-  )
+  const data = useMemo(() => openOrdersData, [])
 
   const renderStatus = () => {
     if (status === 'success') {

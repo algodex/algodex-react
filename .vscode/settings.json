@@ -1,3 +1,1 @@
-{
-  "conventionalCommits.scopes": ["hygen", "nav", "orders", "chart"]
-}
+{"conventionalCommits.scopes":["hygen","nav","orders","chart"],"files.associations":{"*.rsh":"javascript"}}

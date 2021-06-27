@@ -8,6 +8,9 @@ import {
   OrderHistoryContainer,
   AssetsContainer
 } from './mobile-orders.css'
+import OpenOrders from 'components/mobile-open-orders'
+import OrderHistory from 'components/mobile-order-history'
+import Assets from 'components/mobile-assets'
 import { BodyCopySm } from 'components/type'
 import { useState } from 'react'
 
@@ -46,9 +49,15 @@ function MobileOrders(props) {
         </TabItem>
       </OrderTabContainer>
       <PanelWrapper>
-        <OpenOrdersContainer isActive={openOrdersActive}>Open Orders</OpenOrdersContainer>
-        <OrderHistoryContainer isActive={orderHistoryActive}>Order History</OrderHistoryContainer>
-        <AssetsContainer isActive={assetsActive}>Assets</AssetsContainer>
+        <OpenOrdersContainer isActive={openOrdersActive}>
+          <OpenOrders />
+        </OpenOrdersContainer>
+        <OrderHistoryContainer isActive={orderHistoryActive}>
+          <OrderHistory />
+        </OrderHistoryContainer>
+        <AssetsContainer isActive={assetsActive}>
+          <Assets />
+        </AssetsContainer>
       </PanelWrapper>
     </Container>
   )

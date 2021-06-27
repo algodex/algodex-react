@@ -11,14 +11,23 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  position: fixed;
   width: 100%;
   z-index: 99;
+
   @media (min-width: 1024px) {
+    position: relative;
+    display: flex;
     padding: 2rem;
   }
 `
-
+export const MobileNavWrapper = styled.div`
+  display: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+`
 export const MobileNavContainer = styled.div`
   display: flex;
   flex-direction: column;

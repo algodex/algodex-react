@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 // import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-
+import { orderHistoryData } from 'components/utils/order-history'
 import {
   OrderDate,
   OrderPrice,
@@ -87,31 +87,7 @@ function OrderHistory({ orderHistory }) {
     []
   )
 
-  const data = useMemo(
-    () => [
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.458',
-        pair: 'YLDY/ALGO',
-        side: 'BUY',
-        role: 'TAKER',
-        amount: '1000',
-        executed: '125',
-        total: '458'
-      },
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.501',
-        pair: 'MCAU/ALGO',
-        side: 'SELL',
-        role: 'MAKER',
-        amount: '9000',
-        executed: '3000',
-        total: '4600'
-      }
-    ],
-    []
-  )
+  const data = useMemo(() => orderHistoryData, [])
 
   const renderStatus = () => {
     if (status === 'success') {

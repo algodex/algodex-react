@@ -12,7 +12,8 @@ import {
   NavIcon,
   Flag,
   MobileNavigation,
-  MobileNavContainer
+  MobileNavContainer,
+  MobileNavWrapper
 } from './header.css'
 
 export default function Header() {

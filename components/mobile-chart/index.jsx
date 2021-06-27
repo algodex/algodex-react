@@ -1,31 +1,31 @@
 import useAreaChart from 'components/chart/use-area-chart'
 import useCandleChart from 'components/chart/use-candle-chart'
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { ArrowUp } from 'react-feather'
 import useStore, { chartModes } from 'store/use-store'
 import theme from 'theme'
 import {
   AreaSeriesChart,
+  Ask,
   AssetInfo,
   AssetSearchPlaceholder,
+  Bid,
   CandleStickChart,
   ChartModeButton,
   ChartWrapper,
   Container,
+  CurrentPrice,
   DailyChange,
   InfoPair,
   OHLC,
   Price,
   PriceContainer,
+  Spread,
   StatsChartIcon,
   TradingPair,
   TrendingUpIcon,
-  Volume,
-  Bid,
-  Ask,
-  Spread,
-  CurrentPrice
+  Volume
 } from './mobile-chart.css'
 
 function MobileChart({
@@ -54,17 +54,17 @@ function MobileChart({
   const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData, data)
 
   const changeMode = () => {
-    if (chartMode === chartModes.AREA) {
-      useStore.setState({ chartMode: chartModes.CANDLE })
+    if (chartMode === chartModes.AREA && candleChart) {
       const logicalRange = areaChart.timeScale().getVisibleLogicalRange()
-      candleChart.timeScale().setVisibleLogicalRange(logicalRange)
+      useStore.setState({ chartMode: chartModes.CANDLE })
+      candleChart?.timeScale().setVisibleLogicalRange(logicalRange)
       return
     }
 
     if (chartMode === chartModes.CANDLE) {
-      useStore.setState({ chartMode: chartModes.AREA })
       const logicalRange = candleChart.timeScale().getVisibleLogicalRange()
-      areaChart.timeScale().setVisibleLogicalRange(logicalRange)
+      useStore.setState({ chartMode: chartModes.AREA })
+      areaChart?.timeScale().setVisibleLogicalRange(logicalRange)
       return
     }
   }

@@ -26,7 +26,7 @@ function Chart(props) {
     // Refetch the data every second
     refetchInterval: intervalMs
   })
-  console.log(data)
+
   useEffect(() => {
     queryClient.invalidateQueries('priceData')
   }, [assetId, queryClient])
