@@ -46,17 +46,21 @@ function PlaceOrder(props) {
   const algoBalance = activeWallet?.balance
   const asaBalance = activeWallet?.assets?.[asset.id]?.balance || 0
 
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false
+  })
+
   // @todo: calculate transaction fees in total
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
   // const txnFee = isAsaOptedIn ? 0.002 : 0.003
 
   const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
 
-  const [status, setStatus] = useState({
-    submitted: false,
-    submitting: false
-  })
-
+  /**
+   * Buy orders are enabled if active wallet has an ALGO balance > 0
+   * Sell orders are enabled if active wallet has an ASA balance > 0
+   */
   useEffect(() => {
     const buy = algoBalance > 0
     const sell = asaBalance > 0
@@ -66,10 +70,14 @@ function PlaceOrder(props) {
 
   const [order, setOrder] = useState(DEFAULT_ORDER)
 
+  /**
+   * When order price or amount changes, automatically calculate total (in ALGO)
+   */
   useEffect(() => {
     const price = Number(order.price)
     const amount = Number(order.amount)
 
+    // @todo: calculate transaction fees in total
     // let totalAmount = price * amount
     // if (totalAmount > 0) {
     //   if (order.type === 'buy') {
@@ -123,8 +131,10 @@ function PlaceOrder(props) {
       .then(() => {
         setStatus({ submitted: true, submitting: false })
 
+        // update wallet balances
         refetchWallets()
 
+        // reset order form
         setOrder({
           ...DEFAULT_ORDER,
           type: order.type
@@ -150,6 +160,7 @@ function PlaceOrder(props) {
       sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
 
+    // disable submit button if insufficient balance
     const isDisabled = {
       buy: parseFloat((Number(order.price) * Number(order.amount)).toFixed(6)) > algoBalance,
       sell: Number(order.amount) > asaBalance
