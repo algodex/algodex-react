@@ -12,7 +12,7 @@ export const generateTradesData = (startPrice, increment, qty = 48) => {
     const row = {
       id: i,
       type: i % 2 == 0 ? 'buyASA' : 'sellASA',
-      price: (i * increment + startPrice).toFixed(4),
+      price: i * increment + startPrice,
       amount,
       timestamp
     }
