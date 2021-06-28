@@ -26,7 +26,19 @@ export const useStore = create(
 
       isSignedIn: false,
       setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
-      signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false })
+      signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
+
+      orderBook: {
+        buyOrders: [],
+        sellOrders: []
+      },
+      setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
+        set({
+          orderBook: {
+            buyOrders: buyASAOrdersInEscrow,
+            sellOrders: sellASAOrdersInEscrow
+          }
+        })
     })),
     {
       name: 'algodex'

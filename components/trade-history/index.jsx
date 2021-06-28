@@ -9,8 +9,10 @@ import { convertAmount } from 'services/convert'
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
 
-  const { status, data } = useQuery(['tradeHistory', { assetId: asset.id }], () =>
-    fetchTradeHistory(asset.id)
+  const { status, data } = useQuery(
+    ['tradeHistory', { assetId: asset.id }],
+    () => fetchTradeHistory(asset.id),
+    { refetchInterval: 5000 }
   )
 
   if (status === 'loading') {

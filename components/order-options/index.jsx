@@ -78,6 +78,7 @@ function OrderOptions(props) {
                 value="both"
                 checked={order.execution === 'both'}
                 onChange={handleChange}
+                disabled
               />
               <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
                 Allow Taker

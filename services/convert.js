@@ -7,7 +7,7 @@ export const calculateBuyAmount = (price, totalCost, decimals) => {
 }
 
 export const convertAsaPrice = (price, decimals) => {
-  return price * (10 ^ (decimals - 6))
+  return price * 10 ** (decimals - 6)
 }
 
 export const convertOrderAmount = (amount, decimals = 6) => {

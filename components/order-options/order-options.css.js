@@ -133,6 +133,12 @@ export const OptionsButton = styled(Button)`
         return `0 0 0 0.2rem ${theme.colors.focus[color]}`
       }};
     }
+
+    ${OptionsInput}:disabled + & {
+      opacity: 0.25;
+      pointer-events: none;
+      cursor: default;
+    }
   }
 
   && {

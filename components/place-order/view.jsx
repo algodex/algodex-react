@@ -34,7 +34,7 @@ const DEFAULT_ORDER = {
 }
 
 function PlaceOrderView(props) {
-  const { asset, wallets, activeWalletAddress, isSignedIn, refetchWallets } = props
+  const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
@@ -108,7 +108,7 @@ function PlaceOrderView(props) {
   }
 
   const placeOrder = (orderData) => {
-    return OrderService.placeOrder(orderData)
+    return OrderService.placeOrder(orderData, orderBook)
   }
 
   const handleSubmit = (e) => {
@@ -326,6 +326,7 @@ PlaceOrderView.propTypes = {
   wallets: PropTypes.array.isRequired,
   activeWalletAddress: PropTypes.string.isRequired,
   isSignedIn: PropTypes.bool.isRequired,
+  orderBook: PropTypes.object.isRequired,
   refetchWallets: PropTypes.func.isRequired
 }
 

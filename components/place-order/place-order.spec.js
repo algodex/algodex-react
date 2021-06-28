@@ -38,6 +38,10 @@ describe('PlaceOrder', () => {
         wallets={wallets}
         activeWalletAddress={wallets[1].address}
         isSignedIn={true}
+        orderBook={{
+          buyOrders: [],
+          sellOrders: []
+        }}
         refetchWallets={() => {}}
       />
     )
