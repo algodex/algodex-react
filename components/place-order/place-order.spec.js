@@ -5,7 +5,7 @@ import PlaceOrderView from './view'
 const PLACE_ORDER = 'place-order'
 
 const asset = {
-  id: 0,
+  id: 15322902,
   name: 'LAMP',
   decimals: 6,
   price: 1.75

@@ -23,7 +23,7 @@ export default {
 const Template = (args) => <PlaceOrderView {...args} />
 
 const asset = {
-  id: 0,
+  id: 15322902,
   name: 'LAMP',
   decimals: 6,
   price: 1.75
