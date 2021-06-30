@@ -32,6 +32,7 @@
     "@algodex/algodex-api": "^1.0.4",
     "@algodex/algodex-sdk": "^1.0.30",
     "@randlabs/myalgo-connect": "^1.0.1",
+    "@sentry/nextjs": "^6.8.0",
     "axios": "^0.21.1",
     "big.js": "^6.1.1",
     "dayjs": "^1.10.5",

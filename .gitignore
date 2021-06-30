@@ -36,3 +36,6 @@ yarn-error.log*
 
 # VS Code workspace
 *.code-workspace
+
+# Sentry
+sentry.properties
