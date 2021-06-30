@@ -1,5 +1,5 @@
 import algodex from '@algodex/algodex-sdk'
-import { convertOrderAmount, convertAsaPrice } from './convert'
+import { convertToBaseUnits, convertAsaLimitPrice } from './convert'
 
 const OrderService = {
   placeOrder: (order, orderBook) => {
@@ -8,10 +8,10 @@ const OrderService = {
     const address = order.address
     const minimumAmount = 0
 
-    const asaAmount = convertOrderAmount(parseFloat(order.amount), order.asset.decimals)
-    const algoAmount = convertOrderAmount(parseFloat(order.total))
+    const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
+    const algoAmount = convertToBaseUnits(order.total)
 
-    const price = parseFloat(order.price)
+    const price = order.price
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
 
     const AlgodClient = new algodex.initAlgodClient('test')
@@ -54,7 +54,7 @@ const OrderService = {
 
     if (order.execution === 'taker') {
       const isSellOrder = order.type === 'sell'
-      const limitPrice = convertAsaPrice(price, order.asset.decimals)
+      const limitPrice = convertAsaLimitPrice(price, order.asset.decimals)
 
       const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
 

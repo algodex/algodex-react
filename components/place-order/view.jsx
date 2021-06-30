@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
+import Big from 'big.js'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
@@ -27,9 +28,9 @@ import {
 
 const DEFAULT_ORDER = {
   type: 'buy',
-  price: '',
-  amount: '',
-  total: '',
+  price: null,
+  amount: null,
+  total: 0,
   execution: 'maker'
 }
 
@@ -68,8 +69,8 @@ function PlaceOrderView(props) {
    * When order price or amount changes, automatically calculate total (in ALGO)
    */
   useEffect(() => {
-    const price = Number(order.price)
-    const amount = Number(order.amount)
+    const price = new Big(order.price || 0)
+    const amount = new Big(order.amount || 0)
 
     // @todo: calculate transaction fees in total
     // let totalAmount = price * amount
@@ -83,7 +84,7 @@ function PlaceOrderView(props) {
 
     // const total = totalAmount.toFixed(6)
 
-    const total = (price * amount).toFixed(6)
+    const total = price.times(amount).round(6).toNumber()
 
     if (total !== order.total) {
       setOrder({
@@ -155,10 +156,14 @@ function PlaceOrderView(props) {
     }
 
     // disable submit button if insufficient balance
-    const isDisabled = {
-      buy: parseFloat((Number(order.price) * Number(order.amount)).toFixed(6)) > algoBalance,
-      sell: Number(order.amount) > asaBalance
+    const isBalanceExceeded = () => {
+      if (order.type === 'buy') {
+        return new Big(order.price).times(order.amount).gt(algoBalance)
+      }
+      return new Big(order.amount).gt(asaBalance)
     }
+
+    const isDisabled = order.total === 0 || isBalanceExceeded() || status.submitting
 
     return (
       <SubmitButton
@@ -167,7 +172,7 @@ function PlaceOrderView(props) {
         size="large"
         block
         orderType={order.type}
-        disabled={isDisabled[order.type] || status.submitting}
+        disabled={isDisabled}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
@@ -184,6 +189,15 @@ function PlaceOrderView(props) {
       )
     }
 
+    // round input value to asset's `decimals` value
+    const roundValue = (field) => {
+      if (order[field] === null) {
+        return ''
+      }
+      const decimals = field === 'amount' ? asset.decimals : 6
+      return new Big(order[field]).round(decimals).toNumber()
+    }
+
     return (
       <>
         <LimitOrder>
@@ -194,7 +208,7 @@ function PlaceOrderView(props) {
             label="Price"
             asset="ALGO"
             orderType={order.type}
-            value={order.price}
+            value={roundValue('price')}
             onChange={handleChange}
             autocomplete="false"
             min="0"
@@ -207,7 +221,7 @@ function PlaceOrderView(props) {
             label="Amount"
             asset={asset.name}
             orderType={order.type}
-            value={order.amount}
+            value={roundValue('amount')}
             onChange={handleChange}
             autocomplete="false"
             min="0"
@@ -226,7 +240,7 @@ function PlaceOrderView(props) {
             label="Total"
             asset="ALGO"
             orderType={order.type}
-            value={order.total}
+            value={roundValue('total')}
             readOnly
             disabled
           />
