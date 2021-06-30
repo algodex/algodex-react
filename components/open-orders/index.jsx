@@ -21,7 +21,7 @@ import { openOrdersColumns, openOrdersData } from 'components/utils/open-orders'
 
 function OpenOrders({ openOrders }) {
   // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
-
+  const status = 'success' // remove - demo only
   const error = {}
 
   const columns = useMemo(() => openOrdersColumns, [])
