@@ -264,14 +264,6 @@ function PlaceOrderView(props) {
           <OrderOptions order={order} onChange={handleOptionsChange} />
         </LimitOrder>
         {renderSubmit()}
-        <button
-          type="button"
-          onClick={() => {
-            throw new Error('Sentry Frontend Error')
-          }}
-        >
-          Throw error
-        </button>
       </>
     )
   }
