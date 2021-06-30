@@ -5,17 +5,19 @@ import { Tab as _Tab, Header as _Tabs } from 'components/orders/orders.css'
 
 export const Container = styled.div`
   flex: 1 1 0%;
-  display: none;
+  display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.background.dark};
   overflow: hidden scroll;
   scrollbar-width: none;
-
-  @media (min-width: 768px) {
-    display: flex;
-  }
+  width: 100%;
+  margin-top: 1rem;
 
   &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
     display: none;
   }
 `
