@@ -108,6 +108,14 @@ function PlaceOrderView(props) {
     }))
   }
 
+  const handleOptionsChange = (e) => {
+    const isChecked = e.target.checked
+    setOrder((prev) => ({
+      ...prev,
+      execution: isChecked ? e.target.value : 'both'
+    }))
+  }
+
   const placeOrder = (orderData) => {
     return OrderService.placeOrder(orderData, orderBook)
   }
@@ -165,6 +173,9 @@ function PlaceOrderView(props) {
 
     const isDisabled = order.total === 0 || isBalanceExceeded() || status.submitting
 
+    // @todo: remove once 'both' (maker or taker) is a valid option
+    const isBoth = order.execution === 'both'
+
     return (
       <SubmitButton
         type="submit"
@@ -172,7 +183,7 @@ function PlaceOrderView(props) {
         size="large"
         block
         orderType={order.type}
-        disabled={isDisabled}
+        disabled={isDisabled || isBoth}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
@@ -250,7 +261,7 @@ function PlaceOrderView(props) {
               {txnFee.toFixed(3)}
             </BodyCopyTiny>
           </TxnFeeContainer> */}
-          <OrderOptions order={order} onChange={handleChange} />
+          <OrderOptions order={order} onChange={handleOptionsChange} />
         </LimitOrder>
         {renderSubmit()}
       </>
