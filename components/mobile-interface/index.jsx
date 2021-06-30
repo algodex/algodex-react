@@ -12,6 +12,7 @@ import {
 import useStore, { mobileTabs } from 'store/use-store'
 import { BodyCopyLg } from 'components/type'
 import Chart from 'components/chart'
+import OrderBook from 'components/order-book'
 import Orders from 'components/mobile-orders'
 
 export default function MobileInterface() {
@@ -24,7 +25,7 @@ export default function MobileInterface() {
           <Chart />
         </ChartContainer>
         <BookContainer isActive={activeMobileTab === mobileTabs.BOOK}>
-          <BodyCopyLg color="gray.100">Book</BodyCopyLg>
+          <OrderBook />
         </BookContainer>
         <TradeContainer isActive={activeMobileTab === mobileTabs.TRADE}>
           <BodyCopyLg color="gray.100">Trade</BodyCopyLg>
