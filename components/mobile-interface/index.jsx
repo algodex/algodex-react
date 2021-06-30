@@ -1,25 +1,22 @@
-import styled from 'styled-components'
-import BottomNav from 'components/mobile-bottom-nav'
-import {
-  Wrapper,
-  Container,
-  ChartContainer,
-  BookContainer,
-  TradeContainer,
-  OrdersContainer,
-  HistoryContainer
-} from './mobile-interface.css'
-import useStore, { mobileTabs } from 'store/use-store'
-import { BodyCopyLg } from 'components/type'
 import Chart from 'components/chart'
-import OrderBook from 'components/order-book'
+import BottomNav from 'components/mobile-bottom-nav'
 import Orders from 'components/mobile-orders'
-import TradeHistory from 'components/trade-history'
+import OrderBook from 'components/order-book'
 import PlaceOrder from 'components/place-order'
+import TradeHistory from 'components/trade-history'
+import useStore, { mobileTabs } from 'store/use-store'
+import {
+  BookContainer,
+  ChartContainer,
+  Container,
+  HistoryContainer,
+  OrdersContainer,
+  TradeContainer,
+  Wrapper
+} from './mobile-interface.css'
 
 export default function MobileInterface() {
   const activeMobileTab = useStore((state) => state.activeMobileTab)
-  console.log(activeMobileTab)
   return (
     <Container>
       <Wrapper>

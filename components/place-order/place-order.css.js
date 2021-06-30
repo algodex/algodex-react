@@ -5,7 +5,8 @@ import { Tab as _Tab, Header as _Tabs } from 'components/orders/orders.css'
 
 export const Container = styled.div`
   flex: 1 1 0%;
-  display: none;
+  display: flex;
+  width: 100%;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.background.dark};
   overflow: hidden scroll;
@@ -13,6 +14,7 @@ export const Container = styled.div`
 
   @media (min-width: 768px) {
     display: flex;
+    margin-bottom: 0;
   }
 
   &::-webkit-scrollbar {

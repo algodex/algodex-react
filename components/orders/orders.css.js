@@ -5,16 +5,10 @@ export const Tab = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: 0.9rem;
   color: ${({ theme }) => theme.colors.gray[100]};
   padding: 1rem 0;
   transition: all 0.1s ease-in;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  font-weight: 600;
-  line-height: 1.25;
-
   border-bottom: ${({ isActive, theme }) =>
     isActive ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
 

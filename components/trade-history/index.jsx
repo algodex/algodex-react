@@ -4,7 +4,6 @@ import { fetchTradeHistory } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
-import MobileTradeHistoryView from 'components/mobile-trade-history-view'
 import { convertAmount } from 'services/convert'
 
 export default function TradeHistory() {
@@ -29,10 +28,5 @@ export default function TradeHistory() {
     timestamp: txn.unix_time * 1000
   }))
 
-  return (
-    <>
-      <TradeHistoryView asset={asset} tradesData={tradesData} />
-      <MobileTradeHistoryView asset={asset} tradesData={tradesData} />
-    </>
-  )
+  return <TradeHistoryView asset={asset} tradesData={tradesData} />
 }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import PlaceOrderView from './view'
-import MobilePlaceOrderView from 'components/mobile-place-order-view'
+
 import useStore from 'store/use-store'
 
 function PlaceOrder(props) {
@@ -12,22 +12,13 @@ function PlaceOrder(props) {
   const isSignedIn = useStore((state) => state.isSignedIn)
 
   return (
-    <>
-      <PlaceOrderView
-        asset={asset}
-        wallets={wallets}
-        activeWalletAddress={activeWalletAddress}
-        isSignedIn={isSignedIn}
-        refetchWallets={refetchWallets}
-      />
-      <MobilePlaceOrderView
-        asset={asset}
-        wallets={wallets}
-        activeWalletAddress={activeWalletAddress}
-        isSignedIn={isSignedIn}
-        refetchWallets={refetchWallets}
-      />
-    </>
+    <PlaceOrderView
+      asset={asset}
+      wallets={wallets}
+      activeWalletAddress={activeWalletAddress}
+      isSignedIn={isSignedIn}
+      refetchWallets={refetchWallets}
+    />
   )
 }
 

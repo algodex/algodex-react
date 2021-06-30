@@ -21,6 +21,14 @@ export const Container = styled.div`
     padding: 2rem;
   }
 `
+
+export const DesktopItem = styled.div`
+  display: none;
+  @media (min-width: 768px) {
+    display: flex;
+  }
+`
+
 export const MobileNavWrapper = styled.div`
   display: fixed;
   top: 0;

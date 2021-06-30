@@ -2,6 +2,6 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
-import MobilePlaceOrderView from '.'
+import MobileTradeContainer from '.'
 
-storiesOf('MobilePlaceOrderView', module).add('default', () => <MobilePlaceOrderView />)
+storiesOf('MobileTradeContainer', module).add('default', () => <MobileTradeContainer />)
