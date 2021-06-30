@@ -3,14 +3,16 @@ import { rgba } from 'polished'
 
 export const Container = styled.div`
   flex: 1 1 0%;
-  display: none;
+  margin-bottom: 3.5rem;
+  width: 100%;
+  display: flex;
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background.dark};
   padding: 0.75rem 0.625rem 1rem;
 
   @media (min-width: 768px) {
-    display: flex;
+    display: none;
   }
 `
 

@@ -5,6 +5,7 @@ import Spinner from 'components/spinner'
 import Error from 'components/error'
 import OrderBookView from './view'
 import useStore from 'store/use-store'
+import MobileOrderBookView from 'components/mobile-order-book-view'
 
 export default function OrderBook() {
   const asset = useStore((state) => state.asset)
@@ -23,5 +24,15 @@ export default function OrderBook() {
   const sellData = aggregateOrders(asset, data.sellASAOrdersInEscrow, 'sell')
   const buyData = aggregateOrders(asset, data.buyASAOrdersInEscrow, 'buy')
 
-  return <OrderBookView asset={asset} buyData={buyData} sellData={sellData} priceChange={0.001} />
+  return (
+    <>
+      <OrderBookView asset={asset} buyData={buyData} sellData={sellData} priceChange={0.001} />
+      <MobileOrderBookView
+        asset={asset}
+        buyData={buyData}
+        sellData={sellData}
+        priceChange={0.001}
+      />
+    </>
+  )
 }
