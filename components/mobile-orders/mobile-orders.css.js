@@ -16,12 +16,12 @@ export const OrderTabContainer = styled.div`
   position: fixed;
   top: 4rem;
   z-index: 20;
-  background-color: ${({ theme }) => theme.colors.gray[800]};
+  background-color: ${({ theme }) => theme?.colors?.gray[800]};
   left: 0;
   right: 0;
   align-items: center;
   grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  border-bottom: 1px solid ${({ theme }) => theme?.colors?.gray[700]};
 `
 export const PanelWrapper = styled.div`
   padding: 3.25rem 0 2.5rem 0;
@@ -43,7 +43,7 @@ export const TabItem = styled.div`
   padding: 1rem 0;
 
   border-bottom: ${({ theme, isActive }) =>
-    isActive ? `4px solid ${theme.colors.green['500']}` : `4px solid transparent`};
+    isActive ? `4px solid ${theme?.colors?.green['500']}` : `4px solid transparent`};
 `
 export const OrderHistoryContainer = styled.div`
   display: ${({ isActive }) => (isActive ? 'flex' : 'none')};

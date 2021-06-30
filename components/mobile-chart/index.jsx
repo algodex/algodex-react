@@ -1,7 +1,8 @@
 import useAreaChart from 'components/chart/use-area-chart'
 import useCandleChart from 'components/chart/use-candle-chart'
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { useRef } from 'react'
 import { ArrowUp } from 'react-feather'
 import useStore, { chartModes } from 'store/use-store'
 import theme from 'theme'
@@ -43,7 +44,7 @@ function MobileChart({
 }) {
   const MODE_ICON_COLOR = '#f2f2f2'
   const formattedDailyChange =
-    dailyChange > 0 ? `+${dailyChange.toFixed(2)}%` : `-${dailyChange.toFixed(2)}%`
+    dailyChange > 0 ? `+${dailyChange?.toFixed(2)}%` : `-${dailyChange?.toFixed(2)}%` || ''
 
   const chartMode = useStore((state) => state.chartMode)
 
@@ -101,25 +102,25 @@ function MobileChart({
               <BodyCopyTiny color="gray.100" mr={1}>
                 O:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">{ohlc.open}</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc?.open}</BodyCopyTiny>
             </InfoPair>
             <InfoPair>
               <BodyCopyTiny color="gray.100" mr={1}>
                 H:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">{ohlc.high}</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc?.high}</BodyCopyTiny>
             </InfoPair>
             <InfoPair>
               <BodyCopyTiny color="gray.100" mr={1}>
                 L:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">{ohlc.low}</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc?.low}</BodyCopyTiny>
             </InfoPair>
             <InfoPair>
               <BodyCopyTiny color="gray.100" mr={1}>
                 C:
               </BodyCopyTiny>
-              <BodyCopyTiny color="green.500">{ohlc.close}</BodyCopyTiny>
+              <BodyCopyTiny color="green.500">{ohlc?.close}</BodyCopyTiny>
             </InfoPair>
           </OHLC>
           <CurrentPrice>
@@ -148,5 +149,21 @@ function MobileChart({
 
 export default MobileChart
 
-MobileChart.propTypes = {}
-MobileChart.defaultProps = {}
+MobileChart.propTypes = {
+  priceData: PropTypes.arrayOf(PropTypes.object),
+  volumeData: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.arrayOf(PropTypes.object),
+  assetName: PropTypes.string,
+  dailyChange: PropTypes.number,
+  algoVolume: PropTypes.number,
+  baseAsset: PropTypes.string,
+  ohlc: PropTypes.shape({
+    open: PropTypes.number,
+    high: PropTypes.number,
+    low: PropTypes.number,
+    close: PropTypes.number
+  }),
+  bid: PropTypes.number,
+  ask: PropTypes.number,
+  spread: PropTypes.number
+}

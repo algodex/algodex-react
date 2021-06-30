@@ -43,8 +43,7 @@ function ChartView({
   spread,
   volumeData,
   priceData,
-  data,
-  initialChartMode
+  data
 }) {
   const MODE_ICON_COLOR = '#f2f2f2'
   const formattedDailyChange =
@@ -62,7 +61,7 @@ function ChartView({
     AREA: 'AREA'
   }
   const { CANDLE, AREA } = chartModes
-  const [chartMode, setChartMode] = useState(initialChartMode)
+  const [chartMode, setChartMode] = useState(CANDLE)
 
   const changeMode = () => {
     if (chartMode === AREA) {
@@ -191,24 +190,20 @@ function ChartView({
 export default ChartView
 
 ChartView.propTypes = {
-  candleChartRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
-  ]),
-  areaChartRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
-  ]),
+  priceData: PropTypes.arrayOf(PropTypes.object),
+  volumeData: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.arrayOf(PropTypes.object),
   assetName: PropTypes.string,
   dailyChange: PropTypes.number,
-  algoVolume: PropTypes.string,
+  algoVolume: PropTypes.number,
   baseAsset: PropTypes.string,
-  ohlc: PropTypes.object,
-  bid: PropTypes.string,
-  ask: PropTypes.string,
-  spread: PropTypes.string,
-  volumeData: PropTypes.array,
-  priceData: PropTypes.array,
-  data: PropTypes.object,
-  initialChartMode: PropTypes.string
+  ohlc: PropTypes.shape({
+    open: PropTypes.number,
+    high: PropTypes.number,
+    low: PropTypes.number,
+    close: PropTypes.number
+  }),
+  bid: PropTypes.number,
+  ask: PropTypes.number,
+  spread: PropTypes.spread
 }

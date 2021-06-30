@@ -8,9 +8,7 @@ const TEST_IDS = { name: 'name', tokenLg: 'token-lg', tokenSm: 'token-sm', amoun
 
 describe('Mobile Asset Row', () => {
   it('should display the correct data', () => {
-    const { getByTestId } = render(
-      <MobileAsset name={ASSET.name} amount={ASSET.amount} token={ASSET.token} />
-    )
+    const { getByTestId } = render(<MobileAsset asset={ASSET} />)
 
     expect(getByTestId(TEST_IDS.name).textContent).toBe(ASSET.name)
     expect(getByTestId(TEST_IDS.tokenLg).textContent).toBe(ASSET.token)

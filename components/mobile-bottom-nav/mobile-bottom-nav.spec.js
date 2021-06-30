@@ -1,9 +1,15 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render } from '../../test/test-utils'
 import MobileBottomNav from '.'
 
-it('MobileBottomNav: default', () => {
-  const component = renderer.create(< MobileBottomNav />)
-  const tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
+describe('Mobile Bottom Nav', () => {
+  it('should display the correct nav options', () => {
+    const { getByText } = render(<MobileBottomNav />)
+
+    expect(getByText(/^chart$/i)).not.toBeNull()
+    expect(getByText(/^book$/i)).not.toBeNull()
+    expect(getByText(/^trade$/i)).not.toBeNull()
+    expect(getByText(/^orders$/i)).not.toBeNull()
+    expect(getByText(/^trades$/i)).not.toBeNull()
+  })
 })

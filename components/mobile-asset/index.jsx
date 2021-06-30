@@ -32,5 +32,5 @@ MobileAsset.propTypes = {
     name: PropTypes.string,
     token: PropTypes.string,
     amount: PropTypes.number
-  }).isRequired
+  })
 }

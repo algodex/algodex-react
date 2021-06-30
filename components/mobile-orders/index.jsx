@@ -1,21 +1,20 @@
-import PropTypes from 'prop-types'
-import {
-  Container,
-  OrderTabContainer,
-  PanelWrapper,
-  TabItem,
-  OpenOrdersContainer,
-  OrderHistoryContainer,
-  AssetsContainer
-} from './mobile-orders.css'
+import Assets from 'components/mobile-assets'
 import OpenOrders from 'components/mobile-open-orders'
 import OrderHistory from 'components/mobile-order-history'
-import Assets from 'components/mobile-assets'
 import { BodyCopySm } from 'components/type'
+import { openOrdersData } from 'components/utils/open-orders'
+import { orderHistoryData } from 'components/utils/order-history'
 import { useState } from 'react'
 import { assetBalances } from '../utils/asset-balances'
-import { orderHistoryData } from 'components/utils/order-history'
-import { openOrdersData } from 'components/utils/open-orders'
+import {
+  AssetsContainer,
+  Container,
+  OpenOrdersContainer,
+  OrderHistoryContainer,
+  OrderTabContainer,
+  PanelWrapper,
+  TabItem
+} from './mobile-orders.css'
 
 const orderTabs = {
   OPEN_ORDERS: 'OPEN_ORDERS',
@@ -30,7 +29,7 @@ function MobileOrders() {
   const assetsActive = activeTab === orderTabs.ASSETS
   return (
     <Container>
-      <OrderTabContainer>
+      <OrderTabContainer data-testid="tab-container">
         <TabItem isActive={openOrdersActive} onClick={() => setActiveTab(orderTabs.OPEN_ORDERS)}>
           <BodyCopySm color="gray.100" textTransform="uppercase">
             Open
@@ -51,13 +50,13 @@ function MobileOrders() {
         </TabItem>
       </OrderTabContainer>
       <PanelWrapper>
-        <OpenOrdersContainer isActive={openOrdersActive}>
+        <OpenOrdersContainer isActive={openOrdersActive} data-testid="open-orders">
           <OpenOrders data={openOrdersData} />
         </OpenOrdersContainer>
-        <OrderHistoryContainer isActive={orderHistoryActive}>
+        <OrderHistoryContainer isActive={orderHistoryActive} data-testid="order-history">
           <OrderHistory data={orderHistoryData} />
         </OrderHistoryContainer>
-        <AssetsContainer isActive={assetsActive}>
+        <AssetsContainer isActive={assetsActive} data-testid="assets">
           <Assets data={assetBalances} />
         </AssetsContainer>
       </PanelWrapper>
@@ -66,6 +65,3 @@ function MobileOrders() {
 }
 
 export default MobileOrders
-
-MobileOrders.propTypes = {}
-MobileOrders.defaultProps = {}

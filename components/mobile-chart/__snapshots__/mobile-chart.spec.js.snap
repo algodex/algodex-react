@@ -1,0 +1,240 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MobileChart: default 1`] = `
+<div
+  className="mobile-chartcss__Container-sc-12pxw94-2 bRRWCN"
+>
+  <div
+    className="mobile-chartcss__AssetSearchPlaceholder-sc-12pxw94-3 jeSJIx"
+  >
+    <div
+      className="mobile-chartcss__TradingPair-sc-12pxw94-5 eTOdnz"
+    >
+      <span />
+      <span>
+        /undefined
+      </span>
+    </div>
+    <div
+      className="mobile-chartcss__DailyChange-sc-12pxw94-6 hlHFOU"
+    >
+      <p
+        className="base-jpuu65-0 kSqaGX"
+        fontFamily="Inter, sans-serif"
+        fontSize={14}
+        fontWeight={500}
+      >
+        -undefined%
+      </p>
+    </div>
+    <div
+      className="mobile-chartcss__PriceContainer-sc-12pxw94-7 jbZEYY"
+    >
+      <svg
+        fill="none"
+        height={24}
+        stroke="#38A169"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        width={24}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="12"
+          x2="12"
+          y1="19"
+          y2="5"
+        />
+        <polyline
+          points="5 12 12 5 19 12"
+        />
+      </svg>
+      <span
+        className="mobile-chartcss__Price-sc-12pxw94-8 iuuDyF"
+      >
+        0.8000
+      </span>
+    </div>
+  </div>
+  <div
+    className="mobile-chartcss__ChartWrapper-sc-12pxw94-4 dumDmA"
+  >
+    <div
+      className="mobile-chartcss__CandleStickChart-sc-12pxw94-13 bUoyES"
+    />
+    <div
+      className="mobile-chartcss__AreaSeriesChart-sc-12pxw94-14 dgGcYe"
+    />
+    <div
+      className="mobile-chartcss__AssetInfo-sc-12pxw94-9 jYgfgv"
+    >
+      <div
+        className="mobile-chartcss__OHLC-sc-12pxw94-10 ftalgR"
+      >
+        <div
+          className="mobile-chartcss__InfoPair-sc-12pxw94-11 bkTnQT"
+        >
+          <p
+            className="base-jpuu65-0 hPzbIm"
+            color="gray.100"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          >
+            O:
+          </p>
+          <p
+            className="base-jpuu65-0 fDqLUq"
+            color="green.500"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          />
+        </div>
+        <div
+          className="mobile-chartcss__InfoPair-sc-12pxw94-11 bkTnQT"
+        >
+          <p
+            className="base-jpuu65-0 hPzbIm"
+            color="gray.100"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          >
+            H:
+          </p>
+          <p
+            className="base-jpuu65-0 fDqLUq"
+            color="green.500"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          />
+        </div>
+        <div
+          className="mobile-chartcss__InfoPair-sc-12pxw94-11 bkTnQT"
+        >
+          <p
+            className="base-jpuu65-0 hPzbIm"
+            color="gray.100"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          >
+            L:
+          </p>
+          <p
+            className="base-jpuu65-0 fDqLUq"
+            color="green.500"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          />
+        </div>
+        <div
+          className="mobile-chartcss__InfoPair-sc-12pxw94-11 bkTnQT"
+        >
+          <p
+            className="base-jpuu65-0 hPzbIm"
+            color="gray.100"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          >
+            C:
+          </p>
+          <p
+            className="base-jpuu65-0 fDqLUq"
+            color="green.500"
+            fontFamily="Inter, sans-serif"
+            fontSize={10}
+            fontWeight={400}
+            letterSpacing="0.04em"
+          />
+        </div>
+      </div>
+      <div
+        className="mobile-chartcss__CurrentPrice-sc-12pxw94-16 ejJlKk"
+      >
+        <span
+          className="mobile-chartcss__Ask-sc-12pxw94-18 sAXSU"
+        />
+        <span
+          className="mobile-chartcss__Spread-sc-12pxw94-19 idiNEI"
+        />
+        <span
+          className="mobile-chartcss__Bid-sc-12pxw94-17 hkBVDd"
+        />
+      </div>
+      <div
+        className="mobile-chartcss__Volume-sc-12pxw94-15 cDOXlz"
+      >
+        <p
+          className="base-jpuu65-0 hPzbIm"
+          color="gray.100"
+          fontFamily="Inter, sans-serif"
+          fontSize={10}
+          fontWeight={400}
+          letterSpacing="0.04em"
+        >
+          VOL(ALGO):
+        </p>
+        <p
+          className="base-jpuu65-0 bXHhIY"
+          color="gray.100"
+          fontFamily="Inter, sans-serif"
+          fontSize={10}
+          fontWeight={400}
+          letterSpacing="0.04em"
+        />
+      </div>
+      <button
+        className="mobile-chartcss__ChartModeButton-sc-12pxw94-12 gtGgFz"
+        onClick={[Function]}
+      >
+        <span
+          className="sc-bdnxRM EOzHA mobile-chartcss__TrendingUpIcon-sc-12pxw94-0"
+          color="#f2f2f2"
+          height="1rem"
+          rotate={0}
+          width="1rem"
+        >
+          <svg
+            className=""
+            style={Object {}}
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            
+            <path
+              d="M352 144h112v112"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="32"
+            />
+            <path
+              d="M48 368l121.37-121.37a32 32 0 0145.26 0l50.74 50.74a32 32 0 0045.26 0L448 160"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="32"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;

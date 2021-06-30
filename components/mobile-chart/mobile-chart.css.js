@@ -31,7 +31,7 @@ export const AssetSearchPlaceholder = styled.div`
   align-items: center;
   grid-template-columns: 4fr 3fr 3fr;
   padding: 0.75rem 1rem 1.25rem 1rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.gray[700]};
 `
 
 export const ChartWrapper = styled.div`
@@ -52,11 +52,11 @@ export const TradingPair = styled.div`
   align-items: flex-end;
 
   & span:first-child {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.colors?.gray[100]};
   }
 
   & span:nth-child(2) {
-    color: ${({ theme }) => theme.colors.gray[500]};
+    color: ${({ theme }) => theme.colors?.gray[500]};
   }
 `
 
@@ -68,7 +68,7 @@ export const DailyChange = styled.div`
   align-items: flex-end;
   padding-bottom: 0.05rem;
   color: ${({ theme, isPositive }) =>
-    isPositive ? theme.colors.green[500] : theme.colors.red[500]};
+    isPositive ? theme.colors?.green[500] : theme.colors?.red[500]};
 `
 
 export const PriceContainer = styled.div`
@@ -80,7 +80,7 @@ export const PriceContainer = styled.div`
 export const Price = styled.span`
   font-size: 1.4rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.gray['100']};
+  color: ${({ theme }) => theme.colors?.gray['100']};
   margin-left: 0.25rem;
 `
 export const AssetInfo = styled.div`
@@ -115,8 +115,8 @@ cursor: pointer;
 export const ChartModeButton = styled.button`
   background: none;
   ${chartButtonStyles}
-  color: ${({ theme }) => theme.colors.gray[100]};
-  border: 1px solid ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.colors?.gray[100]};
+  border: 1px solid ${({ theme }) => theme.colors?.gray[100]};
   padding: 0.3rem;
   margin: 0.5rem 0 0 0;
   transition: background-color 0.1s ease-in;
@@ -168,8 +168,8 @@ export const Bid = styled.span`
   padding: 0.2rem 0.75rem;
   line-height: 1.25;
   border-radius: 3px;
-  border: 1px solid ${({ theme }) => theme.colors.green['500']};
-  color: ${({ theme }) => theme.colors.green['500']};
+  border: 1px solid ${({ theme }) => theme.colors?.green['500']};
+  color: ${({ theme }) => theme.colors?.green['500']};
   ${bidAskStyles}
 `
 
@@ -177,13 +177,13 @@ export const Ask = styled.span`
   padding: 0.2rem 0.75rem;
   line-height: 1.25;
   border-radius: 3px;
-  border: 1px solid ${({ theme }) => theme.colors.red['500']};
-  color: ${({ theme }) => theme.colors.red['500']};
+  border: 1px solid ${({ theme }) => theme.colors?.red['500']};
+  color: ${({ theme }) => theme.colors?.red['500']};
   ${bidAskStyles}
 `
 
 export const Spread = styled.span`
   padding: 0.1rem 0.75rem;
-  color: ${({ theme }) => theme.colors.gray['100']};
+  color: ${({ theme }) => theme.colors?.gray['100']};
   ${bidAskStyles}
 `

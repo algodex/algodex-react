@@ -4,13 +4,16 @@ import { Container, Percent, Bar } from './progress-bar.css'
 function ProgressBar({ value, max, type }) {
   return (
     <Container>
-      <Bar value={value} max={max} orderType={type} />
-      <Percent>{((value / max) * 100).toFixed(2)}%</Percent>
+      <Bar value={value} max={max} orderType={type} data-testid="progress-bar" />
+      <Percent data-testid="percent-text">{((value / max) * 100).toFixed(2)}%</Percent>
     </Container>
   )
 }
 
 export default ProgressBar
 
-ProgressBar.propTypes = {}
-ProgressBar.defaultProps = {}
+ProgressBar.propTypes = {
+  value: PropTypes.number,
+  max: PropTypes.number,
+  type: PropTypes.string
+}
