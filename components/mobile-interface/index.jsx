@@ -14,6 +14,7 @@ import { BodyCopyLg } from 'components/type'
 import Chart from 'components/chart'
 import OrderBook from 'components/order-book'
 import Orders from 'components/mobile-orders'
+import TradeHistory from 'components/trade-history'
 
 export default function MobileInterface() {
   const activeMobileTab = useStore((state) => state.activeMobileTab)
@@ -34,7 +35,7 @@ export default function MobileInterface() {
           <Orders />
         </OrdersContainer>
         <HistoryContainer isActive={activeMobileTab === mobileTabs.HISTORY}>
-          <BodyCopyLg color="gray.100">History</BodyCopyLg>
+          <TradeHistory />
         </HistoryContainer>
       </Wrapper>
       <BottomNav />
