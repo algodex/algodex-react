@@ -1,4 +1,6 @@
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
+import produce from 'immer'
 
 export const mobileTabs = {
   CHART: 'CHART',
@@ -18,29 +20,44 @@ export const orderModes = {
   ASSETS: 'ASSETS'
 }
 
-// eslint-disable-next-line
-const useStore = create((set) => ({
-  asset: {},
-  setAsset: (asset) => set({ asset }),
+const immer = (config) => (set, get, api) =>
+  config(
+    (partial, replace) => {
+      const nextState = typeof partial === 'function' ? produce(partial) : partial
+      return set(nextState, replace)
+    },
+    get,
+    api
+  )
 
-  wallets: [],
-  setWallets: (wallets) =>
-    set({ wallets, activeWalletAddress: wallets[0].address, isSignedIn: true }),
+export const useStore = create(
+  persist(
+    immer((set) => ({
+      asset: {},
+      setAsset: (asset) => set({ asset }),
 
-  activeWalletAddress: '',
-  setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
+      wallets: [],
+      setWallets: (wallets) => set({ wallets }),
 
-  isSignedIn: false,
-  signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
+      isSignedIn: false,
+      setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
+      signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
 
-  activeMobileTab: mobileTabs.CHART,
-  setActiveMobileTab: (tab) => set({ activeMobileTab: tab }),
+      activeMobileTab: mobileTabs.CHART,
+      setActiveMobileTab: (tab) => set({ activeMobileTab: tab }),
 
-  chartMode: chartModes.CANDLE,
-  setChartMode: (mode) => set({ chartMode: mode }),
+      chartMode: chartModes.CANDLE,
+      setChartMode: (mode) => set({ chartMode: mode }),
 
-  orderMode: orderModes.OPEN_ORDERS,
-  setOrderMode: (mode) => set({ orderMode: mode })
-}))
+      orderMode: orderModes.OPEN_ORDERS,
+      setOrderMode: (mode) => set({ orderMode: mode }),
+      activeWalletAddress: '',
+      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
+    })),
+    {
+      name: 'algodex'
+    }
+  )
+)
 
 export default useStore

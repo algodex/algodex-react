@@ -168,7 +168,7 @@ function ChartView({
         </VolumeContainer>
         <ChartOptions>
           <IntervalWrapper>
-            <IntervalSelector onChange={(e) => {}} data-testid="intervalSelector">
+            <IntervalSelector onChange={() => {}} data-testid="intervalSelector">
               {CHART_INTERVALS.map((interval) => (
                 <Interval key={interval}>{interval}</Interval>
               ))}
@@ -201,12 +201,12 @@ ChartView.propTypes = {
   ]),
   assetName: PropTypes.string,
   dailyChange: PropTypes.number,
-  algoVolume: PropTypes.number,
+  algoVolume: PropTypes.string,
   baseAsset: PropTypes.string,
   ohlc: PropTypes.object,
-  bid: PropTypes.number,
-  ask: PropTypes.number,
-  spread: PropTypes.number,
+  bid: PropTypes.string,
+  ask: PropTypes.string,
+  spread: PropTypes.string,
   volumeData: PropTypes.array,
   priceData: PropTypes.array,
   data: PropTypes.object,

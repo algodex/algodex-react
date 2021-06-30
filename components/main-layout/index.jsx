@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import AssetSearch from 'components/asset-search'
 import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
@@ -32,7 +32,9 @@ const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
 
-function MainLayout() {
+function MainLayout(props) {
+  const { onWalletConnect, refetchWallets } = props
+
   const asset = useStore((state) => state.asset)
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
@@ -56,10 +58,10 @@ function MainLayout() {
       <Main ref={gridRef}>
         <MobileInterface />
         <WalletSection>
-          <Wallet />
+          <Wallet onWalletConnect={onWalletConnect} />
         </WalletSection>
         <TradeSection>
-          <PlaceOrder />
+          <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
         <ChartSection>
           <Chart />
@@ -84,6 +86,11 @@ function MainLayout() {
       </Main>
     </MainWrapper>
   )
+}
+
+MainLayout.propTypes = {
+  onWalletConnect: PropTypes.func.isRequired,
+  refetchWallets: PropTypes.func.isRequired
 }
 
 export default MainLayout

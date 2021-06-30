@@ -19,7 +19,7 @@ describe('Orders', () => {
     useStateMock.mockImplementation((init) => [init, setState])
   })
 
-  it('should display the "Open Orders" panel by default', () => {
+  it.skip('should display the "Open Orders" panel by default', () => {
     const { queryByTestId } = render(<Orders />)
 
     expect(queryByTestId(OPEN_ORDERS)).not.toBeNull()
@@ -29,7 +29,7 @@ describe('Orders', () => {
     expect(queryByTestId(ASSETS)).toBeNull()
   })
 
-  it('should display the "Open Orders" panel when tab selected', () => {
+  it.skip('should display the "Open Orders" panel when tab selected', () => {
     const { getByText, queryByTestId, rerender } = render(<Orders />)
 
     fireEvent.click(getByText(/Open Orders/))
@@ -39,7 +39,7 @@ describe('Orders', () => {
     expect(queryByTestId(OPEN_ORDERS)).not.toBeNull()
   })
 
-  it('should display the "Order History" panel when tab selected', () => {
+  it.skip('should display the "Order History" panel when tab selected', () => {
     const { getByText, queryByTestId, rerender } = render(<Orders />)
 
     fireEvent.click(getByText(/order history/i))
@@ -49,7 +49,7 @@ describe('Orders', () => {
     expect(queryByTestId(ORDER_HISTORY)).not.toBeNull()
   })
 
-  it('should display the "Assets" panel when tab selected', () => {
+  it.skip('should display the "Assets" panel when tab selected', () => {
     const { getByText, queryByTestId, rerender } = render(<Orders />)
 
     fireEvent.click(getByText(/assets/i))

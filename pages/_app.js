@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Hydrate } from 'react-query/hydration'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
 
 const GlobalStyle = createGlobalStyle`
@@ -77,6 +78,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
+      <Toaster />
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
