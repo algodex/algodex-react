@@ -13,6 +13,7 @@ import OrderHistory from 'components/mobile-order-history'
 import Assets from 'components/mobile-assets'
 import { BodyCopySm } from 'components/type'
 import { useState } from 'react'
+import { assetBalances } from 'components/utils/asset-balances'
 
 const orderTabs = {
   OPEN_ORDERS: 'OPEN_ORDERS',
@@ -56,7 +57,7 @@ function MobileOrders(props) {
           <OrderHistory />
         </OrderHistoryContainer>
         <AssetsContainer isActive={assetsActive}>
-          <Assets />
+          <Assets data={assetBalances} />
         </AssetsContainer>
       </PanelWrapper>
     </Container>

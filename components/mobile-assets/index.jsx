@@ -2,11 +2,8 @@ import PropTypes from 'prop-types'
 import { Container } from './mobile-assets.css'
 import { BodyCopySm } from 'components/type'
 import AssetsTable from 'components/mobile-assets-table'
-import { assetBalances } from 'components/utils/asset-balances'
 
-function MobileAssets(props) {
-  const data = assetBalances
-
+function MobileAssets({ data }) {
   if (!data.length) {
     return (
       <Container>
@@ -23,5 +20,13 @@ function MobileAssets(props) {
 
 export default MobileAssets
 
-MobileAssets.propTypes = {}
-MobileAssets.defaultProps = {}
+MobileAssets.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired
+    })
+  )
+}

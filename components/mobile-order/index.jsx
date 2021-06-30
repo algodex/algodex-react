@@ -11,9 +11,9 @@ import {
 import { BodyCopySm, BodyCopyTiny } from 'components/type'
 import ProgressBar from 'components/progress-bar'
 
-function MobileOrder({ pair, date, type, price, amount, total, role, filled, status }) {
+function MobileOrder({ order: { pair, date, type, price, amount, total, role, filled, status } }) {
   return (
-    <Container>
+    <Container className="order-row">
       <ColumnContainer>
         <LeftColumn>
           <BodyCopySm color="gray.100" textTransform="uppercase" mb={1}>
@@ -62,5 +62,20 @@ function MobileOrder({ pair, date, type, price, amount, total, role, filled, sta
 
 export default MobileOrder
 
-MobileOrder.propTypes = {}
-MobileOrder.defaultProps = {}
+MobileOrder.propTypes = {
+  order: PropTypes.shape({
+    date: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    pair: PropTypes.arrayOf(PropTypes.string),
+    type: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+    amount: PropTypes.number.isRequired,
+    filled: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired
+  }),
+  status: PropTypes.string
+}
+
+MobileOrder.defaultProps = {
+  status: 'CLOSED'
+}

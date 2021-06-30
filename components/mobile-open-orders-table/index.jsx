@@ -1,23 +1,23 @@
 import PropTypes from 'prop-types'
-import { Container } from './mobile-order-history-table.css'
+import { Container } from './mobile-open-orders-table.css'
 import Order from 'components/mobile-order'
 
-function MobileOrderHistoryTable({ data }) {
+function MobileOpenOrdersTable({ data }) {
   return (
-    <Container data-testid="order-history-table">
+    <Container data-testid="open-orders-table">
       {
         // eslint-disable-next-line
         data?.map((order) => (
-          <Order key={`${order.pair}-${order.date}`} order={order} />
+          <Order key={`${order.pair}-${order.date}`} order={order} status="OPEN" />
         ))
       }
     </Container>
   )
 }
 
-export default MobileOrderHistoryTable
+export default MobileOpenOrdersTable
 
-MobileOrderHistoryTable.propTypes = {
+MobileOpenOrdersTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       date: PropTypes.string.isRequired,

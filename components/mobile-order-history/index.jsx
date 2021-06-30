@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types'
 import { Container } from './mobile-order-history.css'
 import { BodyCopySm } from 'components/type'
-import { orderHistoryData } from 'components/utils/order-history'
-import { useMemo } from 'react'
 import OrderHistoryTable from 'components/mobile-order-history-table'
 
-function MobileOrderHistory(props) {
-  if (!orderHistoryData.length) {
+function MobileOrderHistory({ data }) {
+  if (!data.length) {
     return (
       <Container>
         <BodyCopySm color="gray.500">You have no order history.</BodyCopySm>
@@ -15,11 +13,23 @@ function MobileOrderHistory(props) {
   }
   return (
     <Container>
-      <OrderHistoryTable data={orderHistoryData} />
+      <OrderHistoryTable data={data} />
     </Container>
   )
 }
 export default MobileOrderHistory
 
-MobileOrderHistory.propTypes = {}
-MobileOrderHistory.defaultProps = {}
+MobileOrderHistory.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      pair: PropTypes.arrayOf(PropTypes.string),
+      type: PropTypes.string.isRequired,
+      role: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      filled: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired
+    })
+  )
+}

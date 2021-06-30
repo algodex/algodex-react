@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Container } from './mobile-open-orders.css'
-import MobileOpenOrdersTable from 'components/mobile-orders-table'
-import { openOrdersData } from 'components/utils/open-orders'
+import MobileOpenOrdersTable from 'components/mobile-open-orders-table'
 import { BodyCopySm } from 'components/type'
-function MobileOpenOrders(props) {
+function MobileOpenOrders({ data: openOrdersData }) {
   const data = useMemo(() => openOrdersData, [])
 
   if (!data.length) {
@@ -24,5 +23,17 @@ function MobileOpenOrders(props) {
 
 export default MobileOpenOrders
 
-MobileOpenOrders.propTypes = {}
-MobileOpenOrders.defaultProps = {}
+MobileOpenOrders.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      pair: PropTypes.arrayOf(PropTypes.string),
+      type: PropTypes.string.isRequired,
+      role: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      filled: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired
+    })
+  )
+}

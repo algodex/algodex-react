@@ -1,9 +1,20 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render } from '../../test/test-utils'
 import MobileOpenOrders from '.'
+import { openOrdersData } from '../utils/open-orders'
 
-it('MobileOpenOrders: default', () => {
-  const component = renderer.create(< MobileOpenOrders />)
-  const tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
+const OPEN_ORDERS_TABLE = 'open-orders-table'
+
+describe('Mobile Open Orders', () => {
+  it('should show empty state if no data is provided', () => {
+    const { getByText } = render(<MobileOpenOrders data={[]} />)
+
+    expect(getByText(/You have no open orders./i)).toBeVisible()
+  })
+
+  it('should show open orders table if data is provided', () => {
+    const { queryByTestId } = render(<MobileOpenOrders data={openOrdersData} />)
+
+    expect(queryByTestId(OPEN_ORDERS_TABLE)).not.toBeNull()
+  })
 })
