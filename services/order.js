@@ -17,12 +17,6 @@ const OrderService = {
 
     if (order.execution === 'maker') {
       if (order.type === 'buy') {
-        console.log('Maker buy order', {
-          address,
-          price,
-          assetId,
-          algoAmount
-        })
         return algodex.placeAlgosToBuyASAOrderIntoOrderbook(
           AlgodClient,
           address,
@@ -33,12 +27,6 @@ const OrderService = {
           algoAmount
         )
       } else if (order.type === 'sell') {
-        console.log('Maker sell order', {
-          address,
-          price,
-          assetId,
-          asaAmount
-        })
         return algodex.placeASAToSellASAOrderIntoOrderbook(
           AlgodClient,
           address,
