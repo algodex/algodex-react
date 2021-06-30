@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import { useQuery } from 'react-query'
 import { fetchAssetById } from 'lib/api'
+import { fetchOrdersInEscrow } from 'lib/api'
 import WalletService from 'services/wallet'
 import MainLayout from 'components/main-layout'
 import Header from 'components/header'
@@ -47,56 +48,69 @@ export default function Home() {
   const setActiveWalletAddress = useStore((state) => state.setActiveWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
+  const setOrderBook = useStore((state) => state.setOrderBook)
 
   const walletAddresses = useMemo(
     () => addresses || wallets.map((w) => w.address) || [],
     [addresses, wallets]
   )
 
-  const { data: walletData, refetch } = useQuery(
-    'wallets',
-    () => WalletService.fetchWallets(walletAddresses),
-    { refetchInterval: 5000 }
-  )
+  // fetch wallet balances from blockchain
+  const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
+    refetchInterval: 5000
+  })
 
   useEffect(() => {
-    if (walletData?.wallets) {
-      setWallets(walletData.wallets)
+    if (walletsQuery.data?.wallets) {
+      setWallets(walletsQuery.data.wallets)
 
       if (!isSignedIn) {
         setIsSignedIn(true)
       }
 
       if (!walletAddresses.includes(activeWalletAddress)) {
-        setActiveWalletAddress(walletData.wallets[0].address)
+        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
       }
     }
   }, [
     activeWalletAddress,
-    walletData,
     isSignedIn,
     setActiveWalletAddress,
     setIsSignedIn,
     setWallets,
-    walletAddresses
+    walletAddresses,
+    walletsQuery.data
   ])
 
-  const { status: assetStatus, data: assetData } = useQuery(['asset', { id: 15322902 }], () =>
-    fetchAssetById(15322902)
-  )
+  // fetch asset from API
+  const assetsQuery = useQuery(['asset', { id: 15322902 }], () => fetchAssetById(15322902))
 
   const asset = useStore((state) => state.asset)
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
-    if (assetData?.asset) {
-      setAsset(assetData.asset)
+    if (assetsQuery.data?.asset) {
+      setAsset(assetsQuery.data.asset)
     }
-  }, [assetData, setAsset])
+  }, [assetsQuery.data, setAsset])
+
+  // fetch order book for current asset
+  // this query is dependent on asset.id being defined
+  const orderBookQuery = useQuery(
+    ['orderBook', { assetId: asset.id }],
+    () => fetchOrdersInEscrow(asset.id),
+    { enabled: !!asset.id, refetchInterval: 5000 }
+  )
+
+  useEffect(() => {
+    if (orderBookQuery.data) {
+      setOrderBook(orderBookQuery.data)
+    }
+  }, [orderBookQuery.data, setOrderBook])
 
   const renderDashboard = () => {
-    const isError = assetStatus === 'error'
-    const isLoading = assetStatus === 'loading' || (!isError && !asset.price)
+    const isError = assetsQuery.isError || orderBookQuery.isError
+    const isLoading = assetsQuery.isLoading || orderBookQuery.isLoading
 
     if (isLoading) {
       return (
@@ -108,13 +122,14 @@ export default function Home() {
     if (isError) {
       return (
         <StatusContainer>
-          <Error message="Error loading trading pair" flex />
+          <Error message="Error loading exchange data" flex />
         </StatusContainer>
       )
     }
 
-    return <MainLayout onWalletConnect={connect} refetchWallets={refetch} />
+    return <MainLayout onWalletConnect={connect} refetchWallets={walletsQuery.refetch} />
   }
+
   return (
     <Container>
       <Head>

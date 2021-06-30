@@ -1,5 +1,5 @@
 import algodex from '@algodex/algodex-sdk'
-import { convertAmount } from './convert'
+import { convertFromBaseUnits } from './convert'
 import { truncateAddress } from './display'
 
 const WalletService = {
@@ -31,12 +31,12 @@ const WalletService = {
     return {
       address: accountInfo.address,
       name: truncateAddress(accountInfo.address),
-      balance: convertAmount(accountInfo.amount),
+      balance: convertFromBaseUnits(accountInfo.amount),
       assets: accountInfo.assets.reduce(
         (result, asset) => ({
           ...result,
           [asset['asset-id']]: {
-            balance: convertAmount(asset.amount)
+            balance: convertFromBaseUnits(asset.amount)
           }
         }),
         {}

@@ -21,7 +21,7 @@ function OrderOptions(props) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const handleChange = (e) => {
-    onChange(e, 'execution')
+    onChange(e)
   }
 
   const handleKeyDown = (e) => {
@@ -39,7 +39,7 @@ function OrderOptions(props) {
         return `Your order will only execute as a taker order.`
 
       case 'both':
-        return `Your order may execute as a maker order or taker order.`
+        return `Your order may execute as a maker order or taker order. (Currently unavailable)`
 
       default:
         return null
@@ -63,7 +63,7 @@ function OrderOptions(props) {
           <ExpandContent>
             <OptionsWrapper>
               <OptionsInput
-                type="radio"
+                type="checkbox"
                 id="order-maker"
                 value="maker"
                 checked={order.execution === 'maker'}
@@ -73,24 +73,14 @@ function OrderOptions(props) {
                 Post Only
               </OptionsButton>
               <OptionsInput
-                type="radio"
-                id="order-both"
-                value="both"
-                checked={order.execution === 'both'}
-                onChange={handleChange}
-              />
-              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
-                Allow Taker
-              </OptionsButton>
-              <OptionsInput
-                type="radio"
+                type="checkbox"
                 id="order-taker"
                 value="taker"
                 checked={order.execution === 'taker'}
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
-                Taker Only
+                Immediate-or-Cancel
               </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">

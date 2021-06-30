@@ -5,7 +5,7 @@ import PlaceOrderView from './view'
 const PLACE_ORDER = 'place-order'
 
 const asset = {
-  id: 0,
+  id: 15322902,
   name: 'LAMP',
   decimals: 6,
   price: 1.75
@@ -38,6 +38,10 @@ describe('PlaceOrder', () => {
         wallets={wallets}
         activeWalletAddress={wallets[1].address}
         isSignedIn={true}
+        orderBook={{
+          buyOrders: [],
+          sellOrders: []
+        }}
         refetchWallets={() => {}}
       />
     )

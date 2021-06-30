@@ -9,6 +9,7 @@ function PlaceOrder(props) {
   const wallets = useStore((state) => state.wallets)
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
+  const orderBook = useStore((state) => state.orderBook)
 
   return (
     <PlaceOrderView
@@ -16,6 +17,7 @@ function PlaceOrder(props) {
       wallets={wallets}
       activeWalletAddress={activeWalletAddress}
       isSignedIn={isSignedIn}
+      orderBook={orderBook}
       refetchWallets={refetchWallets}
     />
   )
