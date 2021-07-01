@@ -52,7 +52,20 @@ export const useStore = create(
       orderMode: orderModes.OPEN_ORDERS,
       setOrderMode: (mode) => set({ orderMode: mode }),
       activeWalletAddress: '',
-      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
+      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
+
+      orderBook: {
+        buyOrders: [],
+        sellOrders: []
+      },
+
+      setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
+        set({
+          orderBook: {
+            buyOrders: buyASAOrdersInEscrow,
+            sellOrders: sellASAOrdersInEscrow
+          }
+        })
     })),
     {
       name: 'algodex'

@@ -4,13 +4,15 @@ import { fetchTradeHistory } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
-import { convertAmount } from 'services/convert'
+import { convertFromBaseUnits } from 'services/convert'
 
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
 
-  const { status, data } = useQuery(['tradeHistory', { assetId: asset.id }], () =>
-    fetchTradeHistory(asset.id)
+  const { status, data } = useQuery(
+    ['tradeHistory', { assetId: asset.id }],
+    () => fetchTradeHistory(asset.id),
+    { refetchInterval: 5000 }
   )
 
   if (status === 'loading') {
@@ -24,7 +26,7 @@ export default function TradeHistory() {
     id: txn.PK_trade_history_id,
     type: txn.tradeType,
     price: parseFloat(txn.asaPrice),
-    amount: convertAmount(txn.asaAmount, asset.decimals),
+    amount: convertFromBaseUnits(txn.asaAmount, asset.decimals),
     timestamp: txn.unix_time * 1000
   }))
 

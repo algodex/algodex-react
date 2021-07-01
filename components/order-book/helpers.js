@@ -1,4 +1,4 @@
-import { convertAmount, calculateBuyAmount } from 'services/convert'
+import { convertFromBaseUnits, calculateAsaBuyAmount } from 'services/convert'
 
 export const aggregateOrders = (asset, orders, type) => {
   const isBuyOrder = type === 'buy'
@@ -18,8 +18,8 @@ export const aggregateOrders = (asset, orders, type) => {
     const decimals = isBuyOrder ? 6 : asset.decimals
 
     const amount = isBuyOrder
-      ? calculateBuyAmount(price, orderAmount, decimals)
-      : convertAmount(orderAmount, decimals)
+      ? calculateAsaBuyAmount(price, orderAmount, decimals)
+      : convertFromBaseUnits(orderAmount, decimals)
 
     total += amount
 

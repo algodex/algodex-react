@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types'
+import Big from 'big.js'
 import { Input, Container, TickWrapper, InputWrapper, Tick } from './amount-range.css'
 
 function AmountRange(props) {
   const { order, activeWallet, asset, onChange } = props
 
   const isBuyOrder = order.type === 'buy'
-  const price = parseFloat(order.price) || 0
-  const amount = parseFloat(order.amount) || 0
+  const price = order.price || 0
+  const amount = order.amount || 0
   const algoBalance = activeWallet.balance
   const asaBalance = activeWallet.assets[asset.id]?.balance || 0
   const currentPrice = asset.price
@@ -16,10 +17,11 @@ function AmountRange(props) {
   //   ? ((price * amount + txnFee) * 100) / algoBalance
   //   : (amount * 100) / asaBalance
 
-  const value = isBuyOrder ? (price * amount * 100) / algoBalance : (amount * 100) / asaBalance
+  const value = isBuyOrder
+    ? new Big(price).times(amount).times(100).div(algoBalance).toNumber()
+    : new Big(amount).times(100).div(asaBalance).toNumber()
 
-  const rounded = Math.round(value / 5) * 5
-  const fullBalance = Math.abs(100 - value) < 0.00001
+  const rounded = new Big(value).div(5).round().times(5).toNumber()
 
   // @todo: calculate txn fees
   // const handleChange = (e) => {
@@ -46,13 +48,14 @@ function AmountRange(props) {
     if (isBuyOrder && !price) {
       onChange({
         price: currentPrice,
-        amount: ((algoBalance * (Number(e.target.value) / 100)) / currentPrice).toFixed(6)
+        amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
       })
       return
     }
+
     const newAmount = isBuyOrder
-      ? ((algoBalance * (Number(e.target.value) / 100)) / price).toFixed(6)
-      : (asaBalance * (Number(e.target.value) / 100)).toFixed(6)
+      ? new Big(e.target.value).div(100).times(algoBalance).div(price).toNumber()
+      : new Big(e.target.value).div(100).times(asaBalance).toNumber()
 
     onChange({
       amount: newAmount
@@ -66,7 +69,7 @@ function AmountRange(props) {
         <Tick amt={25} isActive={rounded >= 25} isHighlighted={rounded === 25} />
         <Tick amt={50} isActive={rounded >= 50} isHighlighted={rounded === 50} />
         <Tick amt={75} isActive={rounded >= 75} isHighlighted={rounded === 75} />
-        <Tick amt={100} isActive={rounded === 100} isHighlighted={fullBalance} />
+        <Tick amt={100} isActive={rounded === 100} isHighlighted={rounded === 100} />
       </TickWrapper>
       <InputWrapper>
         <Input
