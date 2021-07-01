@@ -156,6 +156,7 @@ function PlaceOrderView(props) {
       .catch((err) => {
         setStatus({ submitted: false, submitting: false })
         Sentry.captureException(err)
+        console.error(err)
       })
 
     toast.promise(orderPromise, {
