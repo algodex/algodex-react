@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
 import Big from 'big.js'
+import * as Sentry from '@sentry/browser'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
@@ -130,6 +131,15 @@ function PlaceOrderView(props) {
       asset
     }
 
+    Sentry.addBreadcrumb({
+      category: 'order',
+      message: `${order.execution} ${order.type} order placed`,
+      data: {
+        order: orderData
+      },
+      level: Sentry.Severity.Info
+    })
+
     const orderPromise = placeOrder(orderData)
       .then(() => {
         setStatus({ submitted: true, submitting: false })
@@ -143,11 +153,10 @@ function PlaceOrderView(props) {
           type: order.type
         })
       })
-      .catch((e) => {
-        console.error(e)
-      })
-      .finally(() => {
+      .catch((err) => {
         setStatus({ submitted: false, submitting: false })
+        Sentry.captureException(err)
+        console.error(err)
       })
 
     toast.promise(orderPromise, {
