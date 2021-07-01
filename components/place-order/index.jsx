@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import PlaceOrderView from './view'
+
 import useStore from 'store/use-store'
 
 function PlaceOrder(props) {

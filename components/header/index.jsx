@@ -1,19 +1,19 @@
 import Hamburger from 'components/hamburger'
+import { BodyCopySm } from 'components/type'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Bell, User } from 'react-feather'
 import {
   Container,
+  DesktopItem,
+  Flag,
   IconLogo,
   InlineLogo,
-  Navigation,
-  NavTextLg,
-  NavTextSm,
-  NavIcon,
-  Flag,
-  MobileNavigation,
   MobileNavContainer,
-  MobileNavWrapper
+  MobileNavigation,
+  NavIcon,
+  Navigation,
+  NavTextSm
 } from './header.css'
 
 export default function Header() {
@@ -27,18 +27,27 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <NavTextLg>Trade</NavTextLg>
-        <NavTextLg>Wallet</NavTextLg>
-        <NavTextLg>Support</NavTextLg>
+        <DesktopItem>
+          <BodyCopySm textTransform="uppercase">Trade</BodyCopySm>
+        </DesktopItem>
+        <DesktopItem>
+          <BodyCopySm textTransform="uppercase">Wallet</BodyCopySm>
+        </DesktopItem>
+        <DesktopItem>
+          <BodyCopySm textTransform="uppercase">Support</BodyCopySm>
+        </DesktopItem>
         <NavIcon color="gray.500">
           <Bell />
         </NavIcon>
         <NavIcon color="gray.500">
           <User />
         </NavIcon>
-        <NavTextLg>
-          EN <Flag countryCode="US" svg />
-        </NavTextLg>
+        <DesktopItem>
+          <BodyCopySm textTransform="uppercase">
+            EN <Flag countryCode="US" svg />
+          </BodyCopySm>
+        </DesktopItem>
+
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
+import { BodyCopySm } from 'components/type'
 
 function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
   // 'open-orders', 'order-history', 'assets'
@@ -33,19 +34,19 @@ function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
           isActive={selectedPanel === OPEN_ORDERS_PANEL}
           onClick={() => setSelectedPanel(OPEN_ORDERS_PANEL)}
         >
-          Open Orders
+          <BodyCopySm textTransform="uppercase">Open Orders</BodyCopySm>
         </Tab>
         <Tab
           isActive={selectedPanel === ORDER_HISTORY_PANEL}
           onClick={() => setSelectedPanel(ORDER_HISTORY_PANEL)}
         >
-          Order History
+          <BodyCopySm textTransform="uppercase">Order History</BodyCopySm>
         </Tab>
         <Tab
           isActive={selectedPanel === ASSETS_PANEL}
           onClick={() => setSelectedPanel(ASSETS_PANEL)}
         >
-          Assets
+          <BodyCopySm textTransform="uppercase"> Assets</BodyCopySm>
         </Tab>
       </Header>
       {renderPanel(selectedPanel)}

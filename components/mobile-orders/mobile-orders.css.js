@@ -41,6 +41,7 @@ export const TabItem = styled.div`
   width: 100%;
   height: 100%;
   padding: 1rem 0;
+  color: ${({ theme, isActive }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
 
   border-bottom: ${({ theme, isActive }) =>
     isActive ? `4px solid ${theme?.colors?.green['500']}` : `4px solid transparent`};

@@ -15,12 +15,23 @@ export const Container = styled.div`
   width: 100%;
   z-index: 99;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     position: relative;
     display: flex;
+    padding: 1rem;
+  }
+  @media (min-width: 1024px) {
     padding: 2rem;
   }
 `
+
+export const DesktopItem = styled.div`
+  display: none;
+  @media (min-width: 1024px) {
+    display: flex;
+  }
+`
+
 export const MobileNavWrapper = styled.div`
   display: fixed;
   top: 0;

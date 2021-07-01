@@ -31,22 +31,16 @@ function MobileOrders() {
     <Container>
       <OrderTabContainer data-testid="tab-container">
         <TabItem isActive={openOrdersActive} onClick={() => setActiveTab(orderTabs.OPEN_ORDERS)}>
-          <BodyCopySm color="gray.100" textTransform="uppercase">
-            Open
-          </BodyCopySm>
+          <BodyCopySm textTransform="uppercase">Open</BodyCopySm>
         </TabItem>
         <TabItem
           isActive={orderHistoryActive}
           onClick={() => setActiveTab(orderTabs.ORDER_HISTORY)}
         >
-          <BodyCopySm color="gray.100" textTransform="uppercase">
-            History
-          </BodyCopySm>
+          <BodyCopySm textTransform="uppercase">History</BodyCopySm>
         </TabItem>
         <TabItem isActive={assetsActive} onClick={() => setActiveTab(orderTabs.ASSETS)}>
-          <BodyCopySm color="gray.100" textTransform="uppercase">
-            Assets
-          </BodyCopySm>
+          <BodyCopySm textTransform="uppercase">Assets</BodyCopySm>
         </TabItem>
       </OrderTabContainer>
       <PanelWrapper>
