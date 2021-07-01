@@ -2,11 +2,19 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   flex: 1 1 0%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background.dark};
   padding: 0.875rem 0 1rem;
+  margin-top: 1rem;
+  margin-bottom: 3.5rem;
+
+  @media (min-width: 767px) {
+    margin-top: 0;
+    margin-bottom: 0rem;
+  }
 `
 
 export const ButtonContainer = styled.div`

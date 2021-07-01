@@ -5,7 +5,7 @@ export const Tab = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
   padding: 1rem 0;
   transition: all 0.1s ease-in;
   cursor: pointer;

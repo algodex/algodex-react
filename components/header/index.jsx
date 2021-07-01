@@ -1,22 +1,20 @@
 import Hamburger from 'components/hamburger'
+import { BodyCopySm } from 'components/type'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Bell, User } from 'react-feather'
 import {
   Container,
+  DesktopItem,
+  Flag,
   IconLogo,
   InlineLogo,
-  Navigation,
-  NavTextLg,
-  NavTextSm,
-  NavIcon,
-  Flag,
-  MobileNavigation,
   MobileNavContainer,
-  MobileNavWrapper,
-  DesktopItem
+  MobileNavigation,
+  NavIcon,
+  Navigation,
+  NavTextSm
 } from './header.css'
-import { BodyCopySm } from 'components/type'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
