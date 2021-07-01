@@ -65,7 +65,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps, err }) {
   const [queryClient] = useState(() => new QueryClient())
   useEffect(() => {
     const initAlgodexApi = async () => {
@@ -82,7 +82,7 @@ export default function App({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
-            <Component {...pageProps} />
+            <Component {...pageProps} err={err} />
           </Hydrate>
         </QueryClientProvider>
       </ThemeProvider>
