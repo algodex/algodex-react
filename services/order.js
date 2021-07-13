@@ -11,7 +11,7 @@ const OrderService = {
     const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
     const algoAmount = convertToBaseUnits(order.total)
 
-    const price = order.price
+    const price = parseFloat(order.price)
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
 
     const AlgodClient = new algodex.initAlgodClient('test')

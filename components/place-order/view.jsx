@@ -121,7 +121,7 @@ function PlaceOrderView(props) {
     return OrderService.placeOrder(orderData, orderBook)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus((prev) => ({ ...prev, submitting: true }))
 
@@ -141,29 +141,32 @@ function PlaceOrderView(props) {
     })
 
     const orderPromise = placeOrder(orderData)
-      .then(() => {
-        setStatus({ submitted: true, submitting: false })
-
-        // update wallet balances
-        refetchWallets()
-
-        // reset order form
-        setOrder({
-          ...DEFAULT_ORDER,
-          type: order.type
-        })
-      })
-      .catch((err) => {
-        setStatus({ submitted: false, submitting: false })
-        Sentry.captureException(err)
-        console.error(err)
-      })
 
     toast.promise(orderPromise, {
       loading: 'Awaiting confirmation...',
       success: 'Order successfully placed',
       error: 'Error placing order'
     })
+
+    try {
+      const result = await orderPromise
+      console.log('Order successfully placed', result)
+
+      setStatus({ submitted: true, submitting: false })
+
+      // update wallet balances
+      refetchWallets()
+
+      // reset order form
+      setOrder({
+        ...DEFAULT_ORDER,
+        type: order.type
+      })
+    } catch (err) {
+      setStatus({ submitted: false, submitting: false })
+      Sentry.captureException(err)
+      console.error(err)
+    }
   }
 
   const renderSubmit = () => {
