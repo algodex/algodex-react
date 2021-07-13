@@ -211,7 +211,7 @@ function PlaceOrderView(props) {
 
     // round input value to asset's `decimals` value
     const roundValue = (field) => {
-      if (order[field] === null) {
+      if (order[field] === null || order[field] === '') {
         return ''
       }
       const decimals = field === 'amount' ? asset.decimals : 6
