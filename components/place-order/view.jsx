@@ -29,9 +29,9 @@ import {
 
 const DEFAULT_ORDER = {
   type: 'buy',
-  price: null,
-  amount: null,
-  total: 0,
+  price: '',
+  amount: '',
+  total: '0',
   execution: 'maker'
 }
 
@@ -85,7 +85,7 @@ function PlaceOrderView(props) {
 
     // const total = totalAmount.toFixed(6)
 
-    const total = price.times(amount).round(6).toNumber()
+    const total = price.times(amount).round(6).toString()
 
     if (total !== order.total) {
       setOrder({
@@ -183,7 +183,7 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
-    const isDisabled = order.total === 0 || isBalanceExceeded() || status.submitting
+    const isDisabled = order.total === '0' || isBalanceExceeded() || status.submitting
 
     // @todo: remove once 'both' (maker or taker) is a valid option
     const isBoth = order.execution === 'both'
@@ -214,11 +214,11 @@ function PlaceOrderView(props) {
 
     // round input value to asset's `decimals` value
     const roundValue = (field) => {
-      if (order[field] === null || order[field] === '') {
+      if (order[field] === '') {
         return ''
       }
       const decimals = field === 'amount' ? asset.decimals : 6
-      return new Big(order[field]).round(decimals).toNumber()
+      return new Big(order[field]).round(decimals).toString()
     }
 
     return (
