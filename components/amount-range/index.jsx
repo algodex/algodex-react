@@ -6,11 +6,11 @@ function AmountRange(props) {
   const { order, activeWallet, asset, onChange } = props
 
   const isBuyOrder = order.type === 'buy'
-  const price = order.price || 0
-  const amount = order.amount || 0
-  const algoBalance = activeWallet.balance
-  const asaBalance = activeWallet.assets[asset.id]?.balance || 0
-  const currentPrice = asset.price
+  const price = new Big(order.price || 0).toString()
+  const amount = new Big(order.amount || 0).toString()
+  const algoBalance = new Big(activeWallet.balance).toString()
+  const asaBalance = new Big(activeWallet.assets[asset.id]?.balance || 0).toString()
+  const currentPrice = new Big(asset.price).toString()
 
   // @todo: calculate txn fees
   // const value = isBuyOrder
@@ -45,17 +45,17 @@ function AmountRange(props) {
   // }
 
   const handleChange = (e) => {
-    if (isBuyOrder && !price) {
+    if (isBuyOrder && price === '0') {
       onChange({
         price: currentPrice,
-        amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
+        amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toString()
       })
       return
     }
 
     const newAmount = isBuyOrder
-      ? new Big(e.target.value).div(100).times(algoBalance).div(price).toNumber()
-      : new Big(e.target.value).div(100).times(asaBalance).toNumber()
+      ? new Big(e.target.value).div(100).times(algoBalance).div(price).toString()
+      : new Big(e.target.value).div(100).times(asaBalance).toString()
 
     onChange({
       amount: newAmount
