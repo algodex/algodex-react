@@ -6,6 +6,9 @@ import PriceHeader from 'components/price-header'
 
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat)
+
 function TradeHistoryView(props) {
   const { asset, tradesData } = props
 
@@ -46,6 +49,7 @@ function TradeHistoryView(props) {
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
+              title={dayjs(row.timestamp).format('lll')}
               m={0}
             >
               {dayjs(row.timestamp).format('HH:mm:ss')}
