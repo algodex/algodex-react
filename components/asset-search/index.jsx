@@ -219,7 +219,7 @@ function AssetSearch({ gridSize }) {
     onClick: () => handleAssetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
-        handleAssetClick(row.original.name)
+        handleAssetClick(row)
       }
     }
   })
