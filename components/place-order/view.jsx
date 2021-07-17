@@ -95,6 +95,15 @@ function PlaceOrderView(props) {
     }
   }, [order])
 
+  /**
+   * When asset or active wallet changes, reset the form
+   */
+  useEffect(() => {
+    setOrder({
+      ...DEFAULT_ORDER
+    })
+  }, [asset, activeWalletAddress])
+
   const handleChange = (e, field) => {
     setOrder((prev) => ({
       ...prev,
@@ -230,6 +239,7 @@ function PlaceOrderView(props) {
             name="af2Km9q"
             label="Price"
             asset="ALGO"
+            decimals={6}
             orderType={order.type}
             value={roundValue('price')}
             onChange={handleChange}
@@ -243,6 +253,7 @@ function PlaceOrderView(props) {
             name="af2Km9q"
             label="Amount"
             asset={asset.name}
+            decimals={asset.decimals}
             orderType={order.type}
             value={roundValue('amount')}
             onChange={handleChange}
@@ -262,6 +273,7 @@ function PlaceOrderView(props) {
             id="total"
             label="Total"
             asset="ALGO"
+            decimals={6}
             orderType={order.type}
             value={roundValue('total')}
             readOnly
@@ -332,7 +344,7 @@ function PlaceOrderView(props) {
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance.toFixed(6)}
+              {asaBalance.toFixed(asset.decimals)}
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>

@@ -48,7 +48,11 @@ function AmountRange(props) {
     if (isBuyOrder && price === '0') {
       onChange({
         price: currentPrice,
-        amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toString()
+        amount: new Big(e.target.value)
+          .div(100)
+          .times(algoBalance)
+          .div(new Big(currentPrice).toFixed(Math.min(3, asset.decimals)))
+          .toString()
       })
       return
     }

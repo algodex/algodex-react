@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ArrowUp, ArrowDown } from 'react-feather'
+import Big from 'big.js'
 
 const Price = styled.p`
   display: flex;
@@ -16,22 +17,29 @@ const Price = styled.p`
 `
 
 function OrderBookPrice(props) {
-  const { price, change } = props
+  const { price, decimals, change } = props
 
   const isDecrease = change < 0
   const color = isDecrease ? 'red' : 'green'
 
+  const displayPrice = new Big(price).toFixed(Math.min(3, decimals)).toString()
+
   return (
     <Price color={color} data-testid="order-book-price">
       {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
-      {parseFloat(price).toFixed(3)}
+      {displayPrice}
     </Price>
   )
 }
 
 OrderBookPrice.propTypes = {
   price: PropTypes.number.isRequired,
-  change: PropTypes.number.isRequired
+  change: PropTypes.number.isRequired,
+  decimals: PropTypes.number
+}
+
+OrderBookPrice.defaultProps = {
+  decimals: 3
 }
 
 export default OrderBookPrice
