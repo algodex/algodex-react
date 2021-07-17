@@ -259,7 +259,7 @@ function PlaceOrderView(props) {
             onChange={handleChange}
             autocomplete="false"
             min="0"
-            step="0.000001"
+            step={new Big(10).pow(-1 * asset.decimals).toString()}
           />
           <AmountRange
             order={order}
