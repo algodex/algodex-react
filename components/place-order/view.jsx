@@ -184,7 +184,10 @@ function PlaceOrderView(props) {
       sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
 
-    // disable submit button if insufficient balance
+    const isInvalid = () => {
+      return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
+    }
+
     const isBalanceExceeded = () => {
       if (order.type === 'buy') {
         return new Big(order.price).times(order.amount).gt(algoBalance)
@@ -192,7 +195,8 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
-    const isDisabled = order.total === '0' || isBalanceExceeded() || status.submitting
+    const isDisabled =
+      order.total === '0' || isInvalid() || isBalanceExceeded() || status.submitting
 
     // @todo: remove once 'both' (maker or taker) is a valid option
     const isBoth = order.execution === 'both'
