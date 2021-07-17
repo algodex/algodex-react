@@ -70,7 +70,7 @@ function GlobalFilter({
    * listener can be removed
    */
   const handleClick = (e) => {
-    if (!containerRef?.current.contains(e.target)) {
+    if (!containerRef?.current?.contains(e.target)) {
       onExternalClick()
       window.removeEventListener('click', handleClick)
     }
