@@ -1,5 +1,5 @@
 import algodex from '@algodex/algodex-sdk'
-import { convertToBaseUnits, convertAsaLimitPrice } from './convert'
+import { convertToBaseUnits, convertToAsaLimitPrice } from './convert'
 
 const OrderService = {
   placeOrder: (order, orderBook) => {
@@ -54,7 +54,7 @@ const OrderService = {
 
     if (order.execution === 'taker') {
       const isSellOrder = order.type === 'sell'
-      const limitPrice = convertAsaLimitPrice(price, order.asset.decimals)
+      const limitPrice = convertToAsaLimitPrice(order.price, order.asset.decimals)
 
       const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
 

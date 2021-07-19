@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import Big from 'big.js'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
+import { displayPrice } from 'services/display'
 
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
@@ -23,7 +24,6 @@ function TradeHistoryView(props) {
         return b.timestamp - a.timestamp
       })
       .map((row) => {
-        const price = new Big(row.price)
         const amount = new Big(row.amount)
 
         return (
@@ -31,19 +31,19 @@ function TradeHistoryView(props) {
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"
               color={getColor(row.type)}
-              title={price.toFixed(6).toString()}
+              title={row.price}
               m={0}
             >
-              {price.toFixed(3).toString()}
+              {displayPrice(row.price)}
             </BodyCopyTiny>
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
-              title={amount.toFixed(asset.decimals).toString()}
+              title={amount.toFixed(asset.decimals)}
               m={0}
             >
-              {amount.toFixed(Math.min(3, asset.decimals)).toString()}
+              {amount.toFixed(Math.min(3, asset.decimals))}
             </BodyCopyTiny>
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"

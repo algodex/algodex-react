@@ -2,8 +2,9 @@
 import { useState, useEffect, useMemo, useRef, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from 'react-query'
-import Big from 'big.js'
 import { fetchRecentTrades } from 'lib/api'
+import { convertFromAsaLimitPrice } from 'services/convert'
+import { displayPrice } from 'services/display'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
@@ -33,7 +34,7 @@ const AssetNameCell = ({ value }) => (
   </>
 )
 
-const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
+const AssetPriceCell = ({ value }) => <AssetPrice>{displayPrice(value)}</AssetPrice>
 
 const AssetChangeCell = ({ value }) => (
   <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
@@ -107,11 +108,9 @@ function AssetSearch({ gridSize }) {
   const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
 
   const formatPriceData = (tradingPairs = []) => {
-    return tradingPairs.map((pair) => ({
-      name: pair.asset_info.params['unit-name'],
-      price: new Big(pair.asaPrice)
-        .toFixed(Math.min(3, pair.asset_info.params.decimals))
-        .toString(),
+    return tradingPairs.map(({ asaPrice, asset_info: { params } }) => ({
+      name: params['unit-name'],
+      price: convertFromAsaLimitPrice(asaPrice, params.decimals),
       change: 0
     }))
   }
@@ -121,7 +120,7 @@ function AssetSearch({ gridSize }) {
       id: index,
       name: params['unit-name'],
       decimals: params.decimals,
-      price: parseFloat(asaPrice)
+      price: convertFromAsaLimitPrice(asaPrice, params.decimals)
     }))
   }
 

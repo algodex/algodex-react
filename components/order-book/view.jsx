@@ -3,6 +3,7 @@ import Big from 'big.js'
 import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
+import { displayPrice } from 'services/display'
 
 import {
   Container,
@@ -21,7 +22,6 @@ function OrderBookView(props) {
     const color = type === 'buy' ? 'green' : 'red'
 
     return data.map((row) => {
-      const price = new Big(row.price)
       const amount = new Big(row.amount)
       const total = new Big(row.total)
 
@@ -30,10 +30,10 @@ function OrderBookView(props) {
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
             color={`${color}.500`}
-            title={price.toFixed(6).toString()}
+            title={row.price}
             m={0}
           >
-            {row.price.toFixed(3).toString()}
+            {displayPrice(row.price)}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
@@ -42,7 +42,7 @@ function OrderBookView(props) {
             title={amount.toFixed(asset.decimals).toString()}
             m={0}
           >
-            {amount.toFixed(Math.min(3, asset.decimals)).toString()}
+            {amount.toFixed(Math.min(3, asset.decimals))}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
@@ -51,7 +51,7 @@ function OrderBookView(props) {
             title={total.toFixed(asset.decimals).toString()}
             m={0}
           >
-            {total.toFixed(Math.min(3, asset.decimals)).toString()}
+            {total.toFixed(Math.min(3, asset.decimals))}
           </BodyCopyTiny>
         </BookRow>
       )

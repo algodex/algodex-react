@@ -1,13 +1,10 @@
 import PropTypes from 'prop-types'
-import Big from 'big.js'
 import { Container, Input, Label, Asset } from './order-input.css'
 
-function OrderInput({ label, asset, decimals, orderType, ...props }) {
-  const placeholder = new Big('0').toFixed(Math.min(3, decimals)).toString()
-
+function OrderInput({ label, asset, orderType, ...props }) {
   return (
     <Container orderType={orderType}>
-      <Input placeholder={placeholder} {...props} />
+      <Input placeholder="0.00" {...props} />
       <Label>{label}</Label>
       <Asset>{asset}</Asset>
     </Container>
