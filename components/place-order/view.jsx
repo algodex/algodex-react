@@ -227,8 +227,8 @@ function PlaceOrderView(props) {
 
     // round input value to asset's `decimals` value
     const roundValue = (field) => {
-      if (order[field] === '') {
-        return ''
+      if (order[field] === '' || order[field].slice(-1) === '0') {
+        return order[field]
       }
       const decimals = field === 'amount' ? asset.decimals : 6
       return new Big(order[field]).round(decimals).toString()
