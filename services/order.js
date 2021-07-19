@@ -13,6 +13,12 @@ const OrderService = {
 
     const price = convertToAsaLimitPrice(order.price, order.asset.decimals)
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
+    console.log('NEW DEBUG STUFF', {
+      'order price': order.price,
+      'converted price': price,
+      numerator,
+      denominator
+    })
 
     const AlgodClient = new algodex.initAlgodClient('test')
 
