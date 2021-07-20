@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
+import Big from 'big.js'
 import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
+import { displayPrice } from 'services/display'
 
 import {
   Container,
@@ -19,36 +21,41 @@ function OrderBookView(props) {
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
 
-    return data.map((row) => (
-      <BookRow key={`sell-${row.price}`} type={type} data-testid={`order-book-${type}-row`}>
-        <BodyCopyTiny
-          fontFamily="'Roboto Mono', monospace"
-          color={`${color}.500`}
-          title={row.price.toFixed(6)}
-          m={0}
-        >
-          {row.price.toFixed(3)}
-        </BodyCopyTiny>
-        <BodyCopyTiny
-          fontFamily="'Roboto Mono', monospace"
-          color="gray.400"
-          textAlign="right"
-          title={row.amount.toFixed(asset.decimals)}
-          m={0}
-        >
-          {row.amount.toFixed(3)}
-        </BodyCopyTiny>
-        <BodyCopyTiny
-          fontFamily="'Roboto Mono', monospace"
-          color="gray.400"
-          textAlign="right"
-          title={row.total.toFixed(asset.decimals)}
-          m={0}
-        >
-          {row.total.toFixed(3)}
-        </BodyCopyTiny>
-      </BookRow>
-    ))
+    return data.map((row) => {
+      const amount = new Big(row.amount)
+      const total = new Big(row.total)
+
+      return (
+        <BookRow key={`sell-${row.price}`} type={type} data-testid={`order-book-${type}-row`}>
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color={`${color}.500`}
+            title={row.price}
+            m={0}
+          >
+            {displayPrice(row.price)}
+          </BodyCopyTiny>
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color="gray.400"
+            textAlign="right"
+            title={amount.toFixed(asset.decimals).toString()}
+            m={0}
+          >
+            {amount.toFixed(Math.min(3, asset.decimals))}
+          </BodyCopyTiny>
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color="gray.400"
+            textAlign="right"
+            title={total.toFixed(asset.decimals).toString()}
+            m={0}
+          >
+            {total.toFixed(Math.min(3, asset.decimals))}
+          </BodyCopyTiny>
+        </BookRow>
+      )
+    })
   }
 
   return (
@@ -68,7 +75,7 @@ function OrderBookView(props) {
       </SellOrders>
 
       <CurrentPrice>
-        <OrderBookPrice price={asset.price} change={priceChange} />
+        <OrderBookPrice price={asset.price} decimals={asset.decimals} change={priceChange} />
       </CurrentPrice>
 
       <BuyOrders>

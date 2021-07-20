@@ -9,6 +9,7 @@ import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import OrderService from 'services/order'
+import { convertToAsaLimitPrice } from 'services/convert'
 
 import {
   Container,
@@ -95,6 +96,15 @@ function PlaceOrderView(props) {
     }
   }, [order])
 
+  /**
+   * When asset or active wallet changes, reset the form
+   */
+  useEffect(() => {
+    setOrder({
+      ...DEFAULT_ORDER
+    })
+  }, [asset, activeWalletAddress])
+
   const handleChange = (e, field) => {
     setOrder((prev) => ({
       ...prev,
@@ -175,7 +185,10 @@ function PlaceOrderView(props) {
       sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
 
-    // disable submit button if insufficient balance
+    const isInvalid = () => {
+      return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
+    }
+
     const isBalanceExceeded = () => {
       if (order.type === 'buy') {
         return new Big(order.price).times(order.amount).gt(algoBalance)
@@ -183,7 +196,8 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
-    const isDisabled = order.total === '0' || isBalanceExceeded() || status.submitting
+    const isDisabled =
+      order.total === '0' || isInvalid() || isBalanceExceeded() || status.submitting
 
     // @todo: remove once 'both' (maker or taker) is a valid option
     const isBoth = order.execution === 'both'
@@ -214,8 +228,8 @@ function PlaceOrderView(props) {
 
     // round input value to asset's `decimals` value
     const roundValue = (field) => {
-      if (order[field] === '') {
-        return ''
+      if (order[field] === '' || order[field].slice(-1) === '0') {
+        return order[field]
       }
       const decimals = field === 'amount' ? asset.decimals : 6
       return new Big(order[field]).round(decimals).toString()
@@ -230,6 +244,7 @@ function PlaceOrderView(props) {
             name="af2Km9q"
             label="Price"
             asset="ALGO"
+            decimals={6}
             orderType={order.type}
             value={roundValue('price')}
             onChange={handleChange}
@@ -243,12 +258,13 @@ function PlaceOrderView(props) {
             name="af2Km9q"
             label="Amount"
             asset={asset.name}
+            decimals={asset.decimals}
             orderType={order.type}
             value={roundValue('amount')}
             onChange={handleChange}
             autocomplete="false"
             min="0"
-            step="0.000001"
+            step={new Big(10).pow(-1 * asset.decimals).toString()}
           />
           <AmountRange
             order={order}
@@ -262,6 +278,7 @@ function PlaceOrderView(props) {
             id="total"
             label="Total"
             asset="ALGO"
+            decimals={6}
             orderType={order.type}
             value={roundValue('total')}
             readOnly
@@ -332,7 +349,7 @@ function PlaceOrderView(props) {
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance.toFixed(6)}
+              {convertToAsaLimitPrice(asaBalance, asset.decimals)}
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>

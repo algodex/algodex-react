@@ -3,6 +3,8 @@ import { useState, useEffect, useMemo, useRef, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from 'react-query'
 import { fetchRecentTrades } from 'lib/api'
+import { convertFromAsaLimitPrice } from 'services/convert'
+import { displayPrice } from 'services/display'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
@@ -32,7 +34,7 @@ const AssetNameCell = ({ value }) => (
   </>
 )
 
-const AssetPriceCell = ({ value }) => <AssetPrice>{value.toFixed(3)}</AssetPrice>
+const AssetPriceCell = ({ value }) => <AssetPrice>{displayPrice(value)}</AssetPrice>
 
 const AssetChangeCell = ({ value }) => (
   <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
@@ -69,7 +71,7 @@ function GlobalFilter({
    * listener can be removed
    */
   const handleClick = (e) => {
-    if (!containerRef?.current.contains(e.target)) {
+    if (!containerRef?.current?.contains(e.target)) {
       onExternalClick()
       window.removeEventListener('click', handleClick)
     }
@@ -106,17 +108,19 @@ function AssetSearch({ gridSize }) {
   const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
 
   const formatPriceData = (tradingPairs = []) => {
-    return tradingPairs.map((pair) => ({
-      name: pair.asset_info.params['unit-name'],
-      price: parseFloat(parseFloat(pair.asaPrice).toFixed(3)),
+    return tradingPairs.map(({ asaPrice, asset_info: { params } }) => ({
+      name: params['unit-name'],
+      price: convertFromAsaLimitPrice(asaPrice, params.decimals),
       change: 0
     }))
   }
 
   const getAssetData = (tradingPairs = []) => {
-    return tradingPairs.map(({ asset_id, asset_info }) => ({
-      id: asset_id,
-      name: asset_info.params['unit-name']
+    return tradingPairs.map(({ asaPrice, asset_info: { index, params } }) => ({
+      id: index,
+      name: params['unit-name'],
+      decimals: params.decimals,
+      price: convertFromAsaLimitPrice(asaPrice, params.decimals)
     }))
   }
 
@@ -214,7 +218,7 @@ function AssetSearch({ gridSize }) {
     onClick: () => handleAssetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
-        handleAssetClick(row.original.name)
+        handleAssetClick(row)
       }
     }
   })

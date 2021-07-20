@@ -9,13 +9,13 @@ const ARROW_UP = 'arrow-up'
 
 describe('Order Book Price', () => {
   it('should show price', () => {
-    const { getByTestId } = render(<OrderBookPrice price={1.2345} change={-0.1} />)
+    const { getByTestId } = render(<OrderBookPrice price={1.2344} change={-0.1} />)
 
     expect(getByTestId(ORDER_BOOK_PRICE)).toHaveTextContent(1.234)
   })
 
   it('should indicate price decrease', () => {
-    const { getByTestId, queryByTestId } = render(<OrderBookPrice price={1.2345} change={-0.1} />)
+    const { getByTestId, queryByTestId } = render(<OrderBookPrice price={1.2344} change={-0.1} />)
 
     expect(getByTestId(ORDER_BOOK_PRICE)).toHaveStyle({ color: theme.colors.red['500'] })
     expect(queryByTestId(ARROW_DOWN)).toBeVisible()
@@ -23,7 +23,7 @@ describe('Order Book Price', () => {
   })
 
   it('should indicate price increase', () => {
-    const { getByTestId, queryByTestId } = render(<OrderBookPrice price={1.2345} change={0.1} />)
+    const { getByTestId, queryByTestId } = render(<OrderBookPrice price={1.2344} change={0.1} />)
 
     expect(getByTestId(ORDER_BOOK_PRICE)).toHaveStyle({ color: theme.colors.green['500'] })
     expect(queryByTestId(ARROW_DOWN)).toBeNull()
