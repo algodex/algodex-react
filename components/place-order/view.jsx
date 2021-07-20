@@ -41,7 +41,7 @@ function PlaceOrderView(props) {
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
-  const asaBalance = activeWallet?.assets?.[asset.id]?.balance || 0
+  const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -268,7 +268,8 @@ function PlaceOrderView(props) {
           />
           <AmountRange
             order={order}
-            activeWallet={activeWallet}
+            algoBalance={algoBalance}
+            asaBalance={asaBalance}
             asset={asset}
             // txnFee={txnFee}
             onChange={handleRangeChange}
@@ -349,7 +350,7 @@ function PlaceOrderView(props) {
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {convertToAsaUnits(asaBalance, asset.decimals)}
+              {asaBalance}
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>
