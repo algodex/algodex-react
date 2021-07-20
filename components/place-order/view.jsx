@@ -9,6 +9,7 @@ import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import OrderService from 'services/order'
+import { convertToAsaLimitPrice } from 'services/convert'
 
 import {
   Container,
@@ -348,7 +349,7 @@ function PlaceOrderView(props) {
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance.toFixed(asset.decimals)}
+              {convertToAsaLimitPrice(asaBalance, asset.decimals)}
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>
