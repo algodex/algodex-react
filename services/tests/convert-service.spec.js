@@ -2,8 +2,8 @@ import {
   convertFromBaseUnits,
   convertToBaseUnits,
   calculateAsaBuyAmount,
-  convertToAsaLimitPrice,
-  convertFromAsaLimitPrice
+  convertToAsaUnits,
+  convertFromAsaUnits
 } from 'services/convert'
 
 describe('convertFromBaseUnits', () => {
@@ -102,14 +102,14 @@ describe('calculateAsaBuyAmount', () => {
   })
 })
 
-describe('convertToAsaLimitPrice', () => {
+describe('convertToAsaUnits', () => {
   it(`should return the same price if the ASA decimals are the same as ALGO`, () => {
     const asset = {
       name: 'LAMP',
       decimals: 6
     }
     const price = 2.945
-    const result = convertToAsaLimitPrice(price, asset.decimals)
+    const result = convertToAsaUnits(price, asset.decimals)
     expect(result).toBe(price)
   })
 
@@ -120,19 +120,28 @@ describe('convertToAsaLimitPrice', () => {
     }
     const algoPrice = 2.945637
     const john1Price = 29456.37
-    const result = convertToAsaLimitPrice(algoPrice, asset.decimals)
+    const result = convertToAsaUnits(algoPrice, asset.decimals)
     expect(result).toBe(john1Price)
+  })
+
+  it(`should return zero if the first argument is null`, () => {
+    const asset = {
+      name: 'GABE1',
+      decimals: 2
+    }
+    const result = convertToAsaUnits(null, asset.decimals)
+    expect(result).toBe(0)
   })
 })
 
-describe('convertFromAsaLimitPrice', () => {
+describe('convertFromAsaUnits', () => {
   it(`should return the same price if the ASA decimals are the same as ALGO`, () => {
     const asset = {
       name: 'LAMP',
       decimals: 6
     }
     const price = 2.945
-    const result = convertFromAsaLimitPrice(price, asset.decimals)
+    const result = convertFromAsaUnits(price, asset.decimals)
     expect(result).toBe(price)
   })
 
@@ -143,7 +152,7 @@ describe('convertFromAsaLimitPrice', () => {
     }
     const john1Price = 0.69999958
     const algoPrice = 0.000069999958
-    const result = convertFromAsaLimitPrice(john1Price, asset.decimals)
+    const result = convertFromAsaUnits(john1Price, asset.decimals)
     expect(result).toBe(algoPrice)
   })
 })

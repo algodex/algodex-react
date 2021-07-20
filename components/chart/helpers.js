@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
-import { convertFromAsaLimitPrice } from 'services/convert'
+import { convertFromAsaUnits } from 'services/convert'
 import { displayPrice } from 'services/display'
 
 const displayConverted = (price, decimals) => {
   if (!price || !decimals) {
     return null
   }
-  const converted = convertFromAsaLimitPrice(price, decimals)
+  const converted = convertFromAsaUnits(price, decimals)
   return displayPrice(converted)
 }
 
