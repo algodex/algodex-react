@@ -33,7 +33,7 @@ const DEFAULT_ORDER = {
   price: '',
   amount: '',
   total: '0',
-  execution: 'maker'
+  execution: 'both'
 }
 
 function PlaceOrderView(props) {
@@ -199,9 +199,6 @@ function PlaceOrderView(props) {
     const isDisabled =
       order.total === '0' || isInvalid() || isBalanceExceeded() || status.submitting
 
-    // @todo: remove once 'both' (maker or taker) is a valid option
-    const isBoth = order.execution === 'both'
-
     return (
       <SubmitButton
         type="submit"
@@ -209,7 +206,7 @@ function PlaceOrderView(props) {
         size="large"
         block
         orderType={order.type}
-        disabled={isDisabled || isBoth}
+        disabled={isDisabled}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
