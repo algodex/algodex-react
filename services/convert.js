@@ -45,34 +45,39 @@ export const calculateAsaBuyAmount = (price, totalCost) => {
 }
 
 /**
- * Converts limit price in ALGOs to limit price in ASA units (for ASAs with
- * different `decimal` properties than ALGO). Used for placing taker orders.
+ * Converts limit price or balance in ALGOs to ASA units (for ASAs with
+ * different `decimal` properties than ALGO).
  *
- * Formula: algo_price * (10 ^ (6 - decimals))
+ * Formula: asa_units = algo_units * (10 ^ (6 - decimals))
  *
- * @param {Number} price the asset price in whole unit ALGOs
+ * @param {Number} toConvert a price/balance in ALGOs
  * @param {Number} decimals ASA's `decimals` property
- * @returns {Number} price in whole unit ALGOs
+ * @returns {Number} converted price/balance
  */
-export const convertToAsaLimitPrice = (price, decimals) => {
+export const convertToAsaUnits = (toConvert, decimals) => {
+  if (!toConvert) {
+    return 0
+  }
   const multiplier = new Big(10).pow(6 - decimals)
-  const algoLimitPrice = new Big(price)
-  return algoLimitPrice.times(multiplier).toNumber()
+  const algoUnits = new Big(toConvert)
+  return algoUnits.times(multiplier).toNumber()
 }
 
 /**
- * Converts limit price in ASA units to limit price in ALGOs (for ASAs with
- * different `decimal` properties than ALGO). Used for displaying maker sell
- * orders in order book.
+ * Converts limit price or balance in ASA units to ALGOs (for ASAs with
+ * different `decimal` properties than ALGO).
  *
- * Formula: asa_price * (10 ^ (decimals - 6))
+ * Formula: algo_units = asa_price * (10 ^ (decimals - 6))
  *
- * @param {Number} price the asset price in whole unit ALGOs
+ * @param {Number} toConvert a price/balance in ASA units
  * @param {Number} decimals ASA's `decimals` property
- * @returns {Number} price in whole unit ALGOs
+ * @returns {Number} converted price/balance
  */
-export const convertFromAsaLimitPrice = (price, decimals) => {
+export const convertFromAsaUnits = (toConvert, decimals) => {
+  if (!toConvert) {
+    return 0
+  }
   const multiplier = new Big(10).pow(decimals - 6)
-  const asaLimitPrice = new Big(price)
-  return asaLimitPrice.times(multiplier).toNumber()
+  const asaUnits = new Big(toConvert)
+  return asaUnits.times(multiplier).toNumber()
 }

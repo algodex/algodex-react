@@ -1,8 +1,4 @@
-import {
-  convertFromBaseUnits,
-  calculateAsaBuyAmount,
-  convertFromAsaLimitPrice
-} from 'services/convert'
+import { convertFromBaseUnits, calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 
 export const aggregateOrders = (asset, orders, type) => {
   const isBuyOrder = type === 'buy'
@@ -16,7 +12,7 @@ export const aggregateOrders = (asset, orders, type) => {
   }
 
   const reduceAggregateData = (result, order) => {
-    const price = convertFromAsaLimitPrice(order.assetLimitPriceInAlgos, asset.decimals)
+    const price = convertFromAsaUnits(order.assetLimitPriceInAlgos, asset.decimals)
 
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
     const decimals = isBuyOrder ? 6 : asset.decimals

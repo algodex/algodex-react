@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo, useRef, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from 'react-query'
 import { fetchRecentTrades } from 'lib/api'
-import { convertFromAsaLimitPrice } from 'services/convert'
+import { convertFromAsaUnits } from 'services/convert'
 import { displayPrice } from 'services/display'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
@@ -110,7 +110,7 @@ function AssetSearch({ gridSize }) {
   const formatPriceData = (tradingPairs = []) => {
     return tradingPairs.map(({ asaPrice, asset_info: { params } }) => ({
       name: params['unit-name'],
-      price: convertFromAsaLimitPrice(asaPrice, params.decimals),
+      price: convertFromAsaUnits(asaPrice, params.decimals),
       change: 0
     }))
   }
@@ -120,7 +120,7 @@ function AssetSearch({ gridSize }) {
       id: index,
       name: params['unit-name'],
       decimals: params.decimals,
-      price: convertFromAsaLimitPrice(asaPrice, params.decimals)
+      price: convertFromAsaUnits(asaPrice, params.decimals)
     }))
   }
 
