@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import Big from 'big.js'
 import { Input, Container, TickWrapper, InputWrapper, Tick } from './amount-range.css'
+import { convertToAsaUnits } from 'services/convert'
 
 function AmountRange(props) {
   const { order, activeWallet, asset, onChange } = props
@@ -9,7 +10,11 @@ function AmountRange(props) {
   const price = new Big(order.price || 0).toString()
   const amount = new Big(order.amount || 0).toString()
   const algoBalance = new Big(activeWallet.balance).toString()
-  const asaBalance = new Big(activeWallet.assets[asset.id]?.balance || 0).toString()
+  const convertedAssetBalance = convertToAsaUnits(
+    activeWallet.assets[asset.id]?.balance,
+    asset.decimals
+  )
+  const asaBalance = new Big(convertedAssetBalance).toString()
   const currentPrice = new Big(asset.price).toString()
 
   // @todo: calculate txn fees
