@@ -4,7 +4,13 @@ Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bo
 
 ## Getting Started
 
-First, run the development server:
+### Clone and install the necessary libraries
+
+```
+yarn
+```
+
+### Run the development server:
 
 ```bash
 npm run dev
