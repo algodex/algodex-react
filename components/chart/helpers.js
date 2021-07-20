@@ -1,17 +1,26 @@
 import dayjs from 'dayjs'
+import { convertFromAsaLimitPrice } from 'services/convert'
+import { displayPrice } from 'services/display'
 
-const ASSET_FIXED_DECIMALS = 4
+const displayConverted = (price, decimals) => {
+  if (!price || !decimals) {
+    return null
+  }
+  const converted = convertFromAsaLimitPrice(price, decimals)
+  return displayPrice(converted)
+}
 
 export const mapPriceData = (data) => {
+  const decimals = data?.asset_info.asset.params.decimals
   const prices =
     data?.chart_data.map(({ date, open, high, low, close }) => {
       const time = dayjs(new Date(date)).format('YYYY-MM-DD')
       return {
         time,
-        open: parseFloat(open),
-        high: parseFloat(high),
-        low: parseFloat(low),
-        close: parseFloat(close)
+        open: displayConverted(open, decimals),
+        high: displayConverted(high, decimals),
+        low: displayConverted(low, decimals),
+        close: displayConverted(close, decimals)
       }
     }) || []
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
@@ -19,12 +28,13 @@ export const mapPriceData = (data) => {
 
 export const getOhlc = (data) => {
   const lastPriceData = data?.chart_data[0] || {}
+  const decimals = data?.asset_info.asset.params.decimals
   const ohlc =
     {
-      open: parseFloat(lastPriceData?.open).toFixed(ASSET_FIXED_DECIMALS),
-      high: parseFloat(lastPriceData?.high).toFixed(ASSET_FIXED_DECIMALS),
-      low: parseFloat(lastPriceData?.low).toFixed(ASSET_FIXED_DECIMALS),
-      close: parseFloat(lastPriceData?.close).toFixed(ASSET_FIXED_DECIMALS)
+      open: displayConverted(lastPriceData?.open, decimals),
+      high: displayConverted(lastPriceData?.high, decimals),
+      low: displayConverted(lastPriceData?.low, decimals),
+      close: displayConverted(lastPriceData?.close, decimals)
     } || {}
   return ohlc
 }

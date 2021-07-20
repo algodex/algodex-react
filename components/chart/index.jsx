@@ -3,7 +3,7 @@ import Spinner from 'components/spinner'
 import { fetchPriceData } from 'lib/api'
 import millify from 'millify'
 import PropTypes from 'prop-types'
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { getAssetInfo, mapPriceData, mapVolumeData, relDiff, getOhlc } from './helpers'
 import useStore from 'store/use-store'
@@ -19,11 +19,9 @@ function Chart(props) {
   const { id: assetId } = useStore((state) => state.asset)
   const queryClient = useQueryClient()
 
-  const [intervalMs, setIntervalMs] = useState(1000)
-
   const { data, isLoading, isError } = useQuery(['priceData', { assetId }], fetchPriceData, {
     // Refetch the data every second
-    refetchInterval: intervalMs
+    refetchInterval: 1000
   })
 
   useEffect(() => {
@@ -40,8 +38,8 @@ function Chart(props) {
   const assetName = useMemo(() => getAssetName(assetInfo), [assetInfo])
   const ohlc = useMemo(() => getOhlc(data), [data])
 
-  const lastPriceData = priceData[priceData.length - 1] || null
-  const secondLastPriceData = priceData[priceData.length - 2] || null
+  const lastPriceData = parseFloat(priceData[priceData.length - 1]) || null
+  const secondLastPriceData = parseFloat(priceData[priceData.length - 2]) || null
   const dailyChange = secondLastPriceData
     ? relDiff(lastPriceData?.open, secondLastPriceData?.open)
     : 0
