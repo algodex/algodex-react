@@ -1,0 +1,14 @@
+# Portions borrowed from https://jasonmccreary.me/articles/install-apache-php-mysql-macos-docker-local-development/
+# PHP + Apache
+FROM node:16.2
+EXPOSE 3000
+
+WORKDIR /app
+
+COPY ./npmrc_readonly /root/.npmrc
+COPY ./package*.json ./
+RUN yarn
+
+COPY . ./
+
+CMD ["yarn", "dev"]
