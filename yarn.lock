@@ -24,14 +24,6 @@
   dependencies:
     tunnel "0.0.6"
 
-"@algodex/algodex-api@^1.0.4":
-  version "1.0.4"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-api/1.0.4/d57320917a065b547bc7b1572b6c63443fb69356c251a26aa47897bdfb76b41c#b8037364eb6e048c20927755178116d5c5a4ad2c"
-  integrity sha512-QzBAxh9dHG1X1Cef9v7LSulgt+WGI0sDNI5fnnrfaeADLK1VIgls2lsDeDy9b6DIJqlN7txpSW/gQi9E7fTkGw==
-  dependencies:
-    "@randlabs/myalgo-connect" "^1.0.1"
-    algosdk "^1.9.1"
-
 "@algodex/algodex-sdk@^1.0.44":
   version "1.0.44"
   resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.44/b4eff02309f31d5d349bea81a3b56aca816368768f1c697cc008fab7dde22dfe#83ca0f8c61a152092e87e4e1993dcfe7ae38dd3d"
@@ -3477,7 +3469,7 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-algo-msgpack-with-bigint@^2.1.0, algo-msgpack-with-bigint@^2.1.1:
+algo-msgpack-with-bigint@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/algo-msgpack-with-bigint/-/algo-msgpack-with-bigint-2.1.1.tgz#38bb717220525b3ff42232eefdcd9efb9ad405d6"
   integrity sha512-F1tGh056XczEaEAqu7s+hlZUDWwOBT70Eq0lfMpBP2YguSQVyxRbprLq5rELXKQOyOaixTWYhMeMQMzP0U5FoQ==
@@ -3490,22 +3482,6 @@ algosdk@^1.10.0:
     algo-msgpack-with-bigint "^2.1.1"
     buffer "^6.0.2"
     hi-base32 "^0.5.1"
-    js-sha256 "^0.9.0"
-    js-sha3 "^0.8.0"
-    js-sha512 "^0.8.0"
-    json-bigint "^1.0.0"
-    superagent "^6.1.0"
-    tweetnacl "^1.0.3"
-    url-parse "^1.5.1"
-
-algosdk@^1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/algosdk/-/algosdk-1.9.1.tgz#bc1ba4c0f763ac2bf50b3d9da3964b43496cac80"
-  integrity sha512-sKTnovuGI5R1S2qmXSpPTS/wjgGj0+DQ0nyIui5R0TV9dPK0FBr+CL5jfjnEr0HX2QTAKUPa6bd+TgkjYMFH0A==
-  dependencies:
-    algo-msgpack-with-bigint "^2.1.0"
-    buffer "^6.0.2"
-    hi-base32 "^0.5.0"
     js-sha256 "^0.9.0"
     js-sha3 "^0.8.0"
     js-sha512 "^0.8.0"
@@ -7536,7 +7512,7 @@ hey-listen@^1.0.8:
   resolved "https://registry.npmjs.org/hey-listen/-/hey-listen-1.0.8.tgz"
   integrity sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==
 
-hi-base32@^0.5.0, hi-base32@^0.5.1:
+hi-base32@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/hi-base32/-/hi-base32-0.5.1.tgz#1279f2ddae2673219ea5870c2121d2a33132857e"
   integrity sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==
