@@ -5,9 +5,10 @@ EXPOSE 3000
 
 WORKDIR /app
 
-COPY ./npmrc_readonly /root/.npmrc
+COPY ./docker/npmrc_readonly /root/.npmrc
 COPY ./package*.json ./
 RUN yarn
+# copy directories individually so we can skip large local node_modules copy
 COPY ./_templates/ ./__templates/
 COPY ./components/ ./components/
 COPY ./hooks/ ./hooks/
