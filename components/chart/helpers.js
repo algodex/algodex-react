@@ -56,10 +56,6 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
   return volumeData
 }
 
-export const getAssetInfo = (data) => {
-  return data?.asset_info || {}
-}
-
 export const relDiff = (a, b) => {
   return 100 * Math.abs((a - b) / ((a + b) / 2))
 }
