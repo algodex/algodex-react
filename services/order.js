@@ -52,12 +52,12 @@ const OrderService = {
       }
     }
 
+    const isSellOrder = order.type === 'sell'
+    const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
+
+    const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
+
     if (order.execution === 'taker') {
-      const isSellOrder = order.type === 'sell'
-      const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
-
-      const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-
       console.log(`Taker ${order.type} order`, {
         isSellOrder,
         assetId,
@@ -78,6 +78,28 @@ const OrderService = {
         allOrderBookOrders
       )
     }
+
+    // order.execution === 'both' (default)
+
+    console.log(`Maker/Taker ${order.type} order`, {
+      isSellOrder,
+      assetId,
+      address,
+      limitPrice,
+      asaAmount,
+      algoAmount
+    })
+
+    return algodex.executeOrderAsMakerAndTaker(
+      AlgodClient,
+      isSellOrder,
+      assetId,
+      address,
+      limitPrice,
+      asaAmount,
+      algoAmount,
+      allOrderBookOrders
+    )
   },
 
   getAllEscrowOrders: (orderBook) => {

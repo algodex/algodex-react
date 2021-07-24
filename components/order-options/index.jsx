@@ -39,7 +39,7 @@ function OrderOptions(props) {
         return `Your order will only execute as a taker order.`
 
       case 'both':
-        return `Your order may execute as a maker order or taker order. (Currently unavailable)`
+        return `Your order may execute as a maker order or taker order.`
 
       default:
         return null

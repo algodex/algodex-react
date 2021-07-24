@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import Big from 'big.js'
 import { Input, Container, TickWrapper, InputWrapper, Tick } from './amount-range.css'
 
 function AmountRange(props) {
   const { order, algoBalance: _algoBalance, asaBalance: _asaBalance, asset, onChange } = props
+
+  const [isMouseDown, setIsMouseDown] = useState(false)
 
   const isBuyOrder = order.type === 'buy'
   const price = new Big(order.price || 0).toString()
@@ -79,6 +82,9 @@ function AmountRange(props) {
           value={value || 0}
           onChange={handleChange}
           orderType={order.type}
+          onMouseDown={() => setIsMouseDown(true)}
+          onMouseUp={() => setIsMouseDown(false)}
+          isMouseDown={isMouseDown}
         />
       </InputWrapper>
     </Container>
