@@ -20,9 +20,17 @@ function AmountRange(props) {
   //   ? ((price * amount + txnFee) * 100) / algoBalance
   //   : (amount * 100) / asaBalance
 
-  const value = isBuyOrder
-    ? new Big(price).times(amount).times(100).div(algoBalance).toNumber()
-    : new Big(amount).times(100).div(asaBalance).toNumber()
+  const calculateValue = () => {
+    if (_algoBalance === 0 || _asaBalance === 0) {
+      return 0
+    }
+    if (isBuyOrder) {
+      return new Big(price).times(amount).times(100).div(algoBalance).toNumber()
+    }
+    return new Big(amount).times(100).div(asaBalance).toNumber()
+  }
+
+  const value = calculateValue()
 
   const rounded = new Big(value).div(5).round().times(5).toNumber()
 
