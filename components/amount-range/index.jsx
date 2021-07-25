@@ -21,13 +21,17 @@ function AmountRange(props) {
   //   : (amount * 100) / asaBalance
 
   const calculateValue = () => {
-    if (_algoBalance === 0 || _asaBalance === 0) {
-      return 0
-    }
     if (isBuyOrder) {
+      if (_algoBalance === 0) {
+        return 0
+      }
       return new Big(price).times(amount).times(100).div(algoBalance).toNumber()
+    } else {
+      if (_asaBalance === 0) {
+        return 0
+      }
+      return new Big(amount).times(100).div(asaBalance).toNumber()
     }
-    return new Big(amount).times(100).div(asaBalance).toNumber()
   }
 
   const value = calculateValue()
