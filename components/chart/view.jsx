@@ -33,7 +33,7 @@ import {
 } from './chart.css'
 
 function ChartView({
-  assetName,
+  asset,
   dailyChange,
   algoVolume,
   baseAsset,
@@ -54,8 +54,8 @@ function ChartView({
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData, data)
-  const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData, data)
+  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData, data, asset)
+  const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData, data, asset)
 
   const chartModes = {
     CANDLE: 'CANDLE',
@@ -80,26 +80,14 @@ function ChartView({
     }
   }
 
-  return (
-    <Container>
-      <>
-        <CandleStickChart
-          ref={candleChartRef}
-          isVisible={chartMode === CANDLE ? true : false}
-          data-testid="candleStickChart"
-        />
-        <AreaSeriesChart
-          ref={areaChartRef}
-          isVisible={chartMode === AREA ? true : false}
-          data-testid="areaChart"
-        />
-      </>
+  const renderChartLabel = () => {
+    return (
       <ChartLabel>
         <TopRow>
           <AssetLabelContainer>
             <AssetName>
               <BodyCopy color="gray.100" letterSpacing=".1rem" mb={0} data-testid="primaryAsset">
-                {assetName}
+                {asset.name}
               </BodyCopy>
               <BodyCopy
                 color="gray.500"
@@ -184,11 +172,27 @@ function ChartView({
           </ChartModeButton>
         </ChartOptions>
       </ChartLabel>
+    )
+  }
+
+  return (
+    <Container>
+      <>
+        <CandleStickChart
+          ref={candleChartRef}
+          isVisible={chartMode === CANDLE}
+          data-testid="candleStickChart"
+        />
+        <AreaSeriesChart
+          ref={areaChartRef}
+          isVisible={chartMode === AREA}
+          data-testid="areaChart"
+        />
+      </>
+      {renderChartLabel()}
     </Container>
   )
 }
-
-export default ChartView
 
 ChartView.propTypes = {
   candleChartRef: PropTypes.oneOfType([
@@ -199,7 +203,7 @@ ChartView.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
   ]),
-  assetName: PropTypes.string,
+  asset: PropTypes.object,
   dailyChange: PropTypes.number,
   algoVolume: PropTypes.string,
   baseAsset: PropTypes.string,
@@ -212,3 +216,5 @@ ChartView.propTypes = {
   data: PropTypes.object,
   initialChartMode: PropTypes.string
 }
+
+export default ChartView

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
+import Big from 'big.js'
 
 const UP_COLOR = '#38A169'
 const DOWN_COLOR = '#E53E3E'
@@ -8,22 +9,10 @@ const BACKGROUND_COLOR = '#171923'
 const BORDER_COLOR = '#718096'
 const TEXT_COLOR = '#CBD5E0'
 
-export default function useCandleChart(containerRef, volumeData, priceData, data) {
+export default function useCandleChart(containerRef, volumeData, priceData, data, asset) {
   const [chart, setChart] = useState()
   const [candleSeries, setCandleSeries] = useState()
   const [volumeSeries, setVolumeSeries] = useState()
-
-  useEffect(() => {
-    if (chart) {
-      if (volumeData?.length) {
-        volumeSeries?.setData(volumeData)
-      }
-      if (priceData?.length) {
-        candleSeries?.setData(priceData)
-        chart.timeScale().fitContent()
-      }
-    }
-  }, [volumeSeries, candleSeries, data, chart, volumeData, priceData])
 
   useEffect(() => {
     const initializeChart = async () => {
@@ -56,7 +45,10 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
         })
       )
     }
-    containerRef?.current && !chart && initializeChart()
+
+    if (containerRef?.current && !chart) {
+      initializeChart()
+    }
   }, [chart, containerRef, data])
 
   useEffect(() => {
@@ -102,6 +94,24 @@ export default function useCandleChart(containerRef, volumeData, priceData, data
       return () => removeListener(chartContainer)
     }
   }, [chart, containerRef, volumeData, priceData, data, candleSeries])
+
+  useEffect(() => {
+    if (chart) {
+      if (volumeData?.length) {
+        volumeSeries?.setData(volumeData)
+      }
+      if (priceData?.length) {
+        candleSeries?.setData(priceData)
+        candleSeries?.applyOptions({
+          priceFormat: {
+            precision: asset.decimals,
+            minMove: new Big(10).pow(asset.decimals * -1).toNumber()
+          }
+        })
+        chart.timeScale().fitContent()
+      }
+    }
+  }, [volumeSeries, candleSeries, data, chart, volumeData, priceData, asset.decimals])
 
   return {
     candleChart: chart

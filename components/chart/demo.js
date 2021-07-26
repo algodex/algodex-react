@@ -306,7 +306,7 @@ const volumeData = [
 ]
 
 export const DEMO_VOLUME_DATA = volumeData.map((data, i) => ({ ...data, color: colors[i] }))
-export const DEMO_ASSET_NAME = 'YLDY'
+export const DEMO_ASSET = { name: 'YLDY', decimals: 6 }
 export const DEMO_DAILY_CHANGE = 10.36
 export const DEMO_ALGO_VOLUME = 126.8456
 export const DEMO_BASE_ASSET = 'ALGO'
