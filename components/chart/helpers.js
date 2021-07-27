@@ -58,8 +58,8 @@ export const relDiff = (a, b) => {
   return 100 * Math.abs((a - b) / ((a + b) / 2))
 }
 
-export const getBidAskSpread = (orderBook, decimals) => {
-  const { buyOrders, sellOrders } = orderBook
+export const getBidAskSpread = (orderBook) => {
+  const { buyOrders, sellOrders, decimals } = orderBook
   const bidPrice = buyOrders.sort(
     (a, b) => b.assetLimitPriceInAlgos - a.assetLimitPriceInAlgos
   )?.[0]?.assetLimitPriceInAlgos

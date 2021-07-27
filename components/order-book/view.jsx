@@ -16,7 +16,7 @@ import {
 } from './order-book.css'
 
 function OrderBookView(props) {
-  const { asset, priceChange, sellData, buyData } = props
+  const { price, priceChange, decimals, sellData, buyData } = props
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -39,19 +39,19 @@ function OrderBookView(props) {
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
-            title={amount.toFixed(asset.decimals).toString()}
+            title={amount.toFixed(decimals).toString()}
             m={0}
           >
-            {amount.toFixed(Math.min(3, asset.decimals))}
+            {amount.toFixed(Math.min(3, decimals))}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
-            title={total.toFixed(asset.decimals).toString()}
+            title={total.toFixed(decimals).toString()}
             m={0}
           >
-            {total.toFixed(Math.min(3, asset.decimals))}
+            {total.toFixed(Math.min(3, decimals))}
           </BodyCopyTiny>
         </BookRow>
       )
@@ -75,7 +75,7 @@ function OrderBookView(props) {
       </SellOrders>
 
       <CurrentPrice>
-        <OrderBookPrice price={asset.price} decimals={asset.decimals} change={priceChange} />
+        <OrderBookPrice price={price} decimals={decimals} change={priceChange} />
       </CurrentPrice>
 
       <BuyOrders>
@@ -86,8 +86,9 @@ function OrderBookView(props) {
 }
 
 OrderBookView.propTypes = {
-  asset: PropTypes.object.isRequired,
+  price: PropTypes.number.isRequired,
   priceChange: PropTypes.number.isRequired,
+  decimals: PropTypes.number.isRequired,
   sellData: PropTypes.array,
   buyData: PropTypes.array
 }

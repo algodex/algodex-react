@@ -19,7 +19,7 @@ function Chart(props) {
   const assetId = asset.id
 
   const orderBook = useStore((state) => state.orderBook)
-  const { bid, ask, spread } = getBidAskSpread(orderBook, asset.decimals)
+  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
 
   const queryClient = useQueryClient()
 
