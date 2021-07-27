@@ -104,9 +104,9 @@ export default function Home() {
 
   useEffect(() => {
     if (orderBookQuery.data) {
-      setOrderBook(orderBookQuery.data)
+      setOrderBook(orderBookQuery.data, asset.decimals)
     }
-  }, [orderBookQuery.data, setOrderBook])
+  }, [orderBookQuery.data, setOrderBook, asset.decimals])
 
   const renderDashboard = () => {
     const isError = assetsQuery.isError || orderBookQuery.isError
