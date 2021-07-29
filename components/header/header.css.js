@@ -135,7 +135,7 @@ export const NavTextSm = styled.span`
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme, isActive }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
   font-weight: 600;
   ${fontSize}
   ${color}
