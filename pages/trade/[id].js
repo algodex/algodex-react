@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useQuery } from 'react-query'
 import { fetchAssetById } from 'lib/api'
@@ -40,6 +41,9 @@ const StatusContainer = styled.div`
 `
 
 export default function Home() {
+  const router = useRouter()
+  const id = Number(router.query.id)
+
   const { connect, addresses } = useMyAlgo()
 
   const wallets = useStore((state) => state.wallets)
@@ -83,34 +87,32 @@ export default function Home() {
   ])
 
   // fetch asset from API
-  const assetsQuery = useQuery(['asset', { id: 15322902 }], () => fetchAssetById(15322902))
+  const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id))
 
-  const asset = useStore((state) => state.asset)
+  const asset = assetQuery.data?.asset
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
-    if (assetsQuery.data?.asset) {
-      setAsset(assetsQuery.data.asset)
-    }
-  }, [assetsQuery.data, setAsset])
+    asset && setAsset(asset)
+  }, [asset, setAsset])
 
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
   const orderBookQuery = useQuery(
-    ['orderBook', { assetId: asset.id }],
-    () => fetchOrdersInEscrow(asset.id),
-    { enabled: !!asset.id, refetchInterval: 5000 }
+    ['orderBook', { assetId: asset?.id }],
+    () => fetchOrdersInEscrow(asset?.id),
+    { enabled: !!asset?.id, refetchInterval: 5000 }
   )
 
   useEffect(() => {
     if (orderBookQuery.data) {
-      setOrderBook(orderBookQuery.data, asset.decimals)
+      setOrderBook(orderBookQuery.data, asset?.decimals)
     }
-  }, [orderBookQuery.data, setOrderBook, asset.decimals])
+  }, [orderBookQuery.data, setOrderBook, asset])
 
   const renderDashboard = () => {
-    const isError = assetsQuery.isError || orderBookQuery.isError
-    const isLoading = assetsQuery.isLoading || orderBookQuery.isLoading || !asset.id
+    const isError = assetQuery.isError || orderBookQuery.isError
+    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading || !asset?.id
 
     if (isLoading) {
       return (
