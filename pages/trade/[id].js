@@ -93,8 +93,15 @@ export default function Home() {
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
-    asset && setAsset(asset)
-  }, [asset, setAsset])
+    if (!assetQuery.isLoading) {
+      if (asset) {
+        setAsset(asset)
+      } else {
+        console.log('Redirecting to LAMP (15322902)...')
+        router.push(`/trade/15322902`)
+      }
+    }
+  }, [asset, assetQuery.isLoading, router, setAsset])
 
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
@@ -112,7 +119,7 @@ export default function Home() {
 
   const renderDashboard = () => {
     const isError = assetQuery.isError || orderBookQuery.isError
-    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading
+    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading || !asset?.id
 
     if (isLoading) {
       return (
@@ -127,9 +134,6 @@ export default function Home() {
           <Error message="Error loading exchange data" flex />
         </StatusContainer>
       )
-    }
-    if (!asset) {
-      router.push(`/trade/15322902`)
     }
 
     return <MainLayout onWalletConnect={connect} refetchWallets={walletsQuery.refetch} />
