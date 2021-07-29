@@ -135,7 +135,9 @@ export default function Home() {
   return (
     <Container>
       <Head>
-        <title>Algodex | Algorand Decentralized Exchange</title>
+        <title>
+          {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
+        </title>
         <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
       </Head>
       <Header />
