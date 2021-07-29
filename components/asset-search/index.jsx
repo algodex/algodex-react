@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useState, useEffect, useMemo, useRef, createRef } from 'react'
 import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { fetchRecentTrades } from 'lib/api'
 import { convertFromAsaUnits } from 'services/convert'
@@ -8,7 +9,6 @@ import { displayPrice } from 'services/display'
 import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 import Search from 'components/search'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
-import useStore from 'store/use-store'
 
 // import makeData from './demo'
 
@@ -105,6 +105,8 @@ function GlobalFilter({
 }
 
 function AssetSearch({ gridSize }) {
+  const router = useRouter()
+
   const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
 
   const formatPriceData = (tradingPairs = []) => {
@@ -172,9 +174,8 @@ function AssetSearch({ gridSize }) {
     const asset = assetData.find((asset) => asset.name === row.original.name)
 
     if (asset) {
-      useStore.setState({ asset })
+      router.push(`/trade/${asset.id}`)
     }
-    // alert(`Navigate to https://algodex.com/trade/${row.original.name}-ALGO/`)
   }
 
   const columns = useMemo(

@@ -12510,10 +12510,10 @@ storybook-addon-jsx@^7.3.10:
     react-element-to-jsx-string "^14.3.1"
     storybook-pretty-props "^1.0.3"
 
-storybook-addon-next-router@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/storybook-addon-next-router/-/storybook-addon-next-router-2.0.4.tgz"
-  integrity sha512-PAlAVA2joJC36r2uRU7pL5tNPqcOlcgJNuWyyiPAG6f/sptBK4EdOKUUdU0X9NBVV6BCkiwbLH/kkPmWYRxiFw==
+storybook-addon-next-router@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/storybook-addon-next-router/-/storybook-addon-next-router-3.0.5.tgz#170c5ed6f5476b42476dfbae1b2cd2b1acf42f33"
+  integrity sha512-GgXhKRBh6nAFhQu9mtaupgdBizD57Ld42o3MFUrs6y1pKEq0/FTSy585o7u46gdEYx1IH8X48dl4qy3iBcwl8w==
 
 storybook-pretty-props@^1.0.3:
   version "1.2.1"

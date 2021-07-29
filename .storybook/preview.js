@@ -1,5 +1,6 @@
 import React from 'react'
 import { jsxDecorator } from 'storybook-addon-jsx'
+import { RouterContext } from 'next/dist/next-server/lib/router-context'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import theme from '../theme'
@@ -23,6 +24,9 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/
     }
+  },
+  nextRouter: {
+    Provider: RouterContext.Provider
   }
 }
 
