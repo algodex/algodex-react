@@ -87,7 +87,7 @@ export default function Home() {
   ])
 
   // fetch asset from API
-  const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id))
+  const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), { enabled: !!id })
 
   const asset = assetQuery.data?.asset
   const setAsset = useStore((state) => state.setAsset)
@@ -112,7 +112,7 @@ export default function Home() {
 
   const renderDashboard = () => {
     const isError = assetQuery.isError || orderBookQuery.isError
-    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading || !asset?.id
+    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading
 
     if (isLoading) {
       return (
@@ -127,6 +127,9 @@ export default function Home() {
           <Error message="Error loading exchange data" flex />
         </StatusContainer>
       )
+    }
+    if (!asset) {
+      router.push(`/trade/15322902`)
     }
 
     return <MainLayout onWalletConnect={connect} refetchWallets={walletsQuery.refetch} />
