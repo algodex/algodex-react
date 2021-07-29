@@ -174,10 +174,8 @@ function AssetSearch({ gridSize }) {
     const asset = assetData.find((asset) => asset.name === row.original.name)
 
     if (asset) {
-      // useStore.setState({ asset })
       router.push(`/trade/${asset.id}`)
     }
-    // alert(`Navigate to https://algodex.com/trade/${row.original.name}-ALGO/`)
   }
 
   const columns = useMemo(
