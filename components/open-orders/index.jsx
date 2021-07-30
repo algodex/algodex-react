@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types  */
 import { useMemo } from 'react'
-import dayjs from 'dayjs'
-// import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-
+import { mapOrderHistoryData } from './helpers'
+import { fetchOpenOrders } from 'lib/api'
+import useStore from 'store/use-store'
 import {
   OrderDate,
   OrderPrice,
@@ -13,7 +14,6 @@ import {
   OrderRole,
   OrderAmount,
   OrderFilled,
-  OrderTotal,
   StatusContainer,
   TableWrapper,
   OpenOrdersContainer
@@ -33,12 +33,16 @@ const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
 const OrderFilledCell = ({ value }) => <OrderFilled>{value}</OrderFilled>
 
-const OrderTotalCell = ({ value }) => <OrderTotal>{value}</OrderTotal>
+function OpenOrders() {
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
 
-function OpenOrders({ openOrders }) {
-  // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
+  const { data, isLoading, isError } = useQuery(
+    'openOrders',
+    () => fetchOpenOrders(activeWalletAddress),
+    { refetchInterval: 1000 }
+  )
 
-  const error = {}
+  const orderHistoryData = useMemo(() => mapOrderHistoryData(data), [data])
 
   const columns = useMemo(
     () => [
@@ -73,11 +77,6 @@ function OpenOrders({ openOrders }) {
         Cell: OrderFilledCell
       },
       {
-        Header: 'Total',
-        accessor: 'total',
-        Cell: OrderTotalCell
-      },
-      {
         Header: 'Role',
         accessor: 'role',
         Cell: OrderRoleCell
@@ -86,40 +85,14 @@ function OpenOrders({ openOrders }) {
     []
   )
 
-  const data = useMemo(
-    () => [
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.458',
-        pair: 'YLDY/ALGO',
-        type: 'BUY',
-        role: 'MAKER',
-        amount: '1000',
-        filled: '125',
-        total: '458'
-      },
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.501',
-        pair: 'MCAU/ALGO',
-        type: 'SELL',
-        role: 'TAKER',
-        amount: '9000',
-        filled: '3000',
-        total: '4600'
-      }
-    ],
-    []
-  )
-
   const renderStatus = () => {
-    if (status === 'success') {
+    if (!isLoading && !isError) {
       return null
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">Something went wrong.</BodyCopySm>}
       </StatusContainer>
     )
   }
@@ -127,7 +100,7 @@ function OpenOrders({ openOrders }) {
   return (
     <OpenOrdersContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={data} />
+        <OrdersTable columns={columns} data={orderHistoryData || []} />
       </TableWrapper>
 
       {renderStatus()}
