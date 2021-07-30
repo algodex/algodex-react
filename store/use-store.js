@@ -43,7 +43,8 @@ export const useStore = create(
         })
     })),
     {
-      name: 'algodex'
+      name: 'algodex',
+      version: 1
     }
   )
 )
