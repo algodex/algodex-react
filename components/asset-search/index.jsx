@@ -1,21 +1,21 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
-import { useState, useEffect, useMemo, useRef, createRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import { fetchRecentTrades } from 'lib/api'
+// import { useQuery } from 'react-query'
+import { searchAssets } from 'lib/api'
 import { convertFromAsaUnits } from 'services/convert'
 import { displayPrice } from 'services/display'
-import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
-import Search from 'components/search'
-import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import { useTable, useSortBy } from 'react-table'
+import SearchInput from './search'
+// import { BodyCopyTiny, BodyCopySm } from 'components/type'
 
 // import makeData from './demo'
 
 import {
   Container,
   AssetsContainer,
-  StatusContainer,
+  // StatusContainer,
   TableWrapper,
   AssetName,
   PairSlash,
@@ -34,100 +34,35 @@ const AssetNameCell = ({ value }) => (
   </>
 )
 
-const AssetPriceCell = ({ value }) => <AssetPrice>{displayPrice(value)}</AssetPrice>
+const AssetPriceCell = ({ value }) => <AssetPrice>{value && displayPrice(value)}</AssetPrice>
+
+// const AssetChangeCell = ({ value }) => (
+//   <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
+// )
 
 const AssetChangeCell = ({ value }) => (
-  <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
+  <AssetChange value={value}>{value === null ? '' : `${value}%`}</AssetChange>
 )
-
-function GlobalFilter({
-  globalFilter,
-  setGlobalFilter,
-  onSearchFocus,
-  onExternalClick,
-  containerRef,
-  isActive
-}) {
-  const [value, setValue] = useState(globalFilter)
-
-  /**
-   * This ref is forwarded to the search input
-   */
-  const inputRef = createRef()
-
-  /**
-   * Blur search bar (if focused) when flyout is hidden
-   */
-  useEffect(() => {
-    !isActive && inputRef?.current?.blur()
-  }, [inputRef, isActive])
-
-  const onChange = (value) => {
-    setGlobalFilter(value || undefined)
-  }
-
-  /**
-   * If the user clicks outside the expanded flyout, it should close, and click
-   * listener can be removed
-   */
-  const handleClick = (e) => {
-    if (!containerRef?.current?.contains(e.target)) {
-      onExternalClick()
-      window.removeEventListener('click', handleClick)
-    }
-  }
-
-  /**
-   * Focusing on the search input triggers the flyout to appear. A listener is
-   * added to detect clicks outside the expanded flyout.
-   */
-  const handleFocus = () => {
-    onSearchFocus()
-    window.addEventListener('click', handleClick)
-  }
-
-  return (
-    <Search
-      ref={inputRef}
-      value={value || ''}
-      onChange={(e) => {
-        setValue(e.target.value)
-        onChange(e.target.value)
-      }}
-      onCancel={() => {
-        setValue(undefined)
-        setGlobalFilter(undefined)
-      }}
-      onFocus={handleFocus}
-      placeholder="Search"
-    />
-  )
-}
 
 function AssetSearch({ gridSize }) {
   const router = useRouter()
 
-  const { status, data, error } = useQuery('recentTrades', fetchRecentTrades)
+  const [results, setResults] = useState([])
 
-  const formatPriceData = (tradingPairs = []) => {
-    return tradingPairs.map(({ asaPrice, asset_info: { params } }) => ({
-      name: params['unit-name'],
-      price: convertFromAsaUnits(asaPrice, params.decimals),
-      change: 0
-    }))
+  const handleSearchChange = async (query) => {
+    const res = await searchAssets(query)
+    setResults(res)
   }
 
-  const getAssetData = (tradingPairs = []) => {
-    return tradingPairs.map(({ asaPrice, asset_info: { index, params } }) => ({
-      id: index,
-      name: params['unit-name'],
-      decimals: params.decimals,
-      price: convertFromAsaUnits(asaPrice, params.decimals)
+  const searchResultsData = useMemo(() => {
+    return results.map((result) => ({
+      id: result.assetId,
+      name: result.unitName,
+      price: result.price ? convertFromAsaUnits(result.price, 6) : result.price,
+      change: result.price ? 0 : result.price
     }))
-  }
+  }, [results])
 
-  const priceData = useMemo(() => formatPriceData(data?.tradingPairs), [data])
-  const assetData = useMemo(() => getAssetData(data?.tradingPairs), [data])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -170,8 +105,7 @@ function AssetSearch({ gridSize }) {
   }
 
   const handleAssetClick = async (row) => {
-    // eslint-disable-next-line
-    const asset = assetData.find((asset) => asset.name === row.original.name)
+    const asset = searchResultsData.find((asset) => asset.name === row.original.name)
 
     if (asset) {
       router.push(`/trade/${asset.id}`)
@@ -199,20 +133,6 @@ function AssetSearch({ gridSize }) {
     []
   )
 
-  const filterTypes = useMemo(
-    () => ({
-      text: (rows, id, filterValue) => {
-        return rows.filter((row) => {
-          const rowValue = row.values[id]
-          return rowValue !== undefined
-            ? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase())
-            : true
-        })
-      }
-    }),
-    []
-  )
-
   const getRowProps = (row) => ({
     role: 'button',
     tabIndex: isActive ? '0' : '-1', // tab-navigable only when rows are visible
@@ -224,37 +144,26 @@ function AssetSearch({ gridSize }) {
     }
   })
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    state,
-    visibleColumns,
-    setGlobalFilter
-  } = useTable(
-    {
-      columns,
-      data: priceData,
-      filterTypes
-    },
-    useFilters,
-    useGlobalFilter,
-    useSortBy
-  )
-
-  const renderStatus = () => {
-    if (status === 'success') {
-      return null
-    }
-    return (
-      <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
-      </StatusContainer>
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, visibleColumns } =
+    useTable(
+      {
+        columns,
+        data: searchResultsData
+      },
+      useSortBy
     )
-  }
+
+  // const renderStatus = () => {
+  //   if (status === 'success') {
+  //     return null
+  //   }
+  //   return (
+  //     <StatusContainer>
+  //       {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+  //       {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+  //     </StatusContainer>
+  //   )
+  // }
 
   return (
     <Container isActive={isActive}>
@@ -265,9 +174,8 @@ function AssetSearch({ gridSize }) {
               <thead>
                 <tr>
                   <th ref={searchRef} colSpan={visibleColumns.length}>
-                    <GlobalFilter
-                      globalFilter={state.globalFilter}
-                      setGlobalFilter={setGlobalFilter}
+                    <SearchInput
+                      onChange={handleSearchChange}
                       onSearchFocus={handleSearchFocus}
                       onExternalClick={handleExternalClick}
                       containerRef={containerRef}
@@ -312,7 +220,7 @@ function AssetSearch({ gridSize }) {
           </TableContainer>
         </TableWrapper>
 
-        {renderStatus()}
+        {/* {renderStatus()} */}
       </AssetsContainer>
     </Container>
   )
