@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
+import Big from 'big.js'
 
 const LINE_COLOR = '#1A202C'
 const BACKGROUND_COLOR = '#171923'
@@ -11,22 +12,9 @@ const TOP_LINE_COLOR = '#38A169'
 const BOTTOM_COLOR = '#38a16911'
 const LINE_WIDTH = 2
 
-export default function useAreaChart(containerRef, volumeData, priceData, data) {
+export default function useAreaChart(containerRef, volumeData, priceData, data, asset) {
   const [chart, setChart] = useState()
   const [areaSeries, setAreaSeries] = useState()
-
-  useEffect(() => {
-    const areaSeriesData = priceData?.map(({ time, close }) => ({
-      time,
-      value: close
-    }))
-    if (chart) {
-      if (priceData?.length) {
-        areaSeries?.setData(areaSeriesData)
-        chart.timeScale().fitContent()
-      }
-    }
-  }, [areaSeries, data, chart, priceData])
 
   useEffect(() => {
     const initializeChart = async () => {
@@ -59,7 +47,10 @@ export default function useAreaChart(containerRef, volumeData, priceData, data) 
         })
       )
     }
-    containerRef?.current && !chart && initializeChart()
+
+    if (containerRef?.current && !chart) {
+      initializeChart()
+    }
   }, [chart, containerRef, data])
 
   useEffect(() => {
@@ -83,6 +74,25 @@ export default function useAreaChart(containerRef, volumeData, priceData, data) 
       return () => removeListener(chartContainer)
     }
   }, [chart, containerRef, volumeData, priceData, data, areaSeries])
+
+  useEffect(() => {
+    const areaSeriesData = priceData?.map(({ time, close }) => ({
+      time,
+      value: close
+    }))
+    if (chart) {
+      if (priceData?.length) {
+        areaSeries?.setData(areaSeriesData)
+        areaSeries?.applyOptions({
+          priceFormat: {
+            precision: asset.decimals,
+            minMove: new Big(10).pow(asset.decimals * -1).toNumber()
+          }
+        })
+        chart.timeScale().fitContent()
+      }
+    }
+  }, [areaSeries, data, chart, priceData, asset.decimals])
 
   return {
     areaChart: chart

@@ -24,10 +24,10 @@
   dependencies:
     tunnel "0.0.6"
 
-"@algodex/algodex-sdk@^1.0.44":
-  version "1.0.44"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.44/b4eff02309f31d5d349bea81a3b56aca816368768f1c697cc008fab7dde22dfe#83ca0f8c61a152092e87e4e1993dcfe7ae38dd3d"
-  integrity sha512-qFxmN/MWpnm9UGYM1baZQCBDwdnqM45RpviOeml+VMudyKiHAq/KN6FFyHpBj4B/tQkdyiPG5kZAdyz2bJxWYA==
+"@algodex/algodex-sdk@^1.0.47":
+  version "1.0.47"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.47/a743266bd6acfd953c81c6f1358c722c35e092ce83d1d358c1217e11d98245b7#daa0d21dc31c78e049cbf5fb14d1f164dbcf21d9"
+  integrity sha512-zRbRJCrB3KUwD0mjId4z/oXaFnRBJgrYv4Bq5OuWjYKRmMyEQ907eANpySnteMrTKo2No0rqAvdSg7PYzRYWNQ==
   dependencies:
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.10.0"
@@ -12510,10 +12510,10 @@ storybook-addon-jsx@^7.3.10:
     react-element-to-jsx-string "^14.3.1"
     storybook-pretty-props "^1.0.3"
 
-storybook-addon-next-router@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/storybook-addon-next-router/-/storybook-addon-next-router-2.0.4.tgz"
-  integrity sha512-PAlAVA2joJC36r2uRU7pL5tNPqcOlcgJNuWyyiPAG6f/sptBK4EdOKUUdU0X9NBVV6BCkiwbLH/kkPmWYRxiFw==
+storybook-addon-next-router@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/storybook-addon-next-router/-/storybook-addon-next-router-3.0.5.tgz#170c5ed6f5476b42476dfbae1b2cd2b1acf42f33"
+  integrity sha512-GgXhKRBh6nAFhQu9mtaupgdBizD57Ld42o3MFUrs6y1pKEq0/FTSy585o7u46gdEYx1IH8X48dl4qy3iBcwl8w==
 
 storybook-pretty-props@^1.0.3:
   version "1.2.1"

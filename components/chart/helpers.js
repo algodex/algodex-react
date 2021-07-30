@@ -1,11 +1,9 @@
+import Big from 'big.js'
 import dayjs from 'dayjs'
 import { convertFromAsaUnits } from 'services/convert'
 import { displayPrice } from 'services/display'
 
-const displayConverted = (price, decimals) => {
-  if (!price || !decimals) {
-    return null
-  }
+const displayConverted = (price = 0, decimals = 6) => {
   const converted = convertFromAsaUnits(price, decimals)
   return displayPrice(converted)
 }
@@ -56,10 +54,22 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
   return volumeData
 }
 
-export const getAssetInfo = (data) => {
-  return data?.asset_info || {}
-}
-
 export const relDiff = (a, b) => {
   return 100 * Math.abs((a - b) / ((a + b) / 2))
+}
+
+export const getBidAskSpread = (orderBook) => {
+  const { buyOrders, sellOrders, decimals } = orderBook
+  const bidPrice = buyOrders.sort(
+    (a, b) => b.assetLimitPriceInAlgos - a.assetLimitPriceInAlgos
+  )?.[0]?.assetLimitPriceInAlgos
+  const askPrice = sellOrders.sort(
+    (a, b) => a.assetLimitPriceInAlgos - b.assetLimitPriceInAlgos
+  )?.[0]?.assetLimitPriceInAlgos
+
+  const bid = displayConverted(bidPrice, decimals)
+  const ask = displayConverted(askPrice, decimals)
+  const spread = displayPrice(new Big(ask).minus(bid).abs())
+
+  return { bid, ask, spread }
 }

@@ -3,7 +3,7 @@ import {
   DEMO_BASE_ASSET,
   DEMO_ALGO_VOLUME,
   DEMO_DAILY_CHANGE,
-  DEMO_ASSET_NAME,
+  DEMO_ASSET,
   DEMO_OHLC,
   DEMO_BID,
   DEMO_ASK,
@@ -42,7 +42,7 @@ const Template = (args) => <Chart {...args} />
 
 export const NoData = Template.bind({})
 NoData.args = {
-  assetName: '',
+  asset: DEMO_ASSET,
   dailyChange: 0,
   algoVolume: 0,
   baseAsset: DEMO_BASE_ASSET,
@@ -54,7 +54,7 @@ NoData.args = {
 
 export const Candlestick = Template.bind({})
 Candlestick.args = {
-  assetName: DEMO_ASSET_NAME,
+  asset: DEMO_ASSET,
   dailyChange: DEMO_DAILY_CHANGE,
   algoVolume: DEMO_ALGO_VOLUME,
   baseAsset: DEMO_BASE_ASSET,
@@ -69,7 +69,7 @@ Candlestick.args = {
 
 export const AreaSeries = Template.bind({})
 AreaSeries.args = {
-  assetName: DEMO_ASSET_NAME,
+  asset: DEMO_ASSET,
   dailyChange: DEMO_DAILY_CHANGE,
   algoVolume: DEMO_ALGO_VOLUME,
   baseAsset: DEMO_BASE_ASSET,

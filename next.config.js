@@ -9,6 +9,20 @@ const moduleExports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     return config
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/trade/15322902',
+        permanent: true
+      },
+      {
+        source: '/trade',
+        destination: '/trade/15322902',
+        permanent: true
+      }
+    ]
   }
 }
 

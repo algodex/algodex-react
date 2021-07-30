@@ -5,7 +5,7 @@ import millify from 'millify'
 import PropTypes from 'prop-types'
 import { useMemo, useEffect } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
-import { getAssetInfo, mapPriceData, mapVolumeData, relDiff, getOhlc } from './helpers'
+import { mapPriceData, mapVolumeData, relDiff, getOhlc, getBidAskSpread } from './helpers'
 import useStore from 'store/use-store'
 import ChartView from './view'
 
@@ -14,28 +14,30 @@ const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
-const bidAndAsk = { bid: 0, ask: 0 }
 function Chart(props) {
-  const { id: assetId } = useStore((state) => state.asset)
+  const asset = useStore((state) => state.asset)
+  const assetId = asset.id
+
+  const orderBook = useStore((state) => state.orderBook)
+  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
+
   const queryClient = useQueryClient()
 
-  const { data, isLoading, isError } = useQuery(['priceData', { assetId }], fetchPriceData, {
-    // Refetch the data every second
-    refetchInterval: 1000
-  })
+  const { isLoading, isError, data } = useQuery(
+    ['priceData', { assetId }],
+    () => fetchPriceData(assetId),
+    {
+      // Refetch the data every second
+      refetchInterval: 1000
+    }
+  )
 
   useEffect(() => {
     queryClient.invalidateQueries('priceData')
   }, [assetId, queryClient])
 
-  const getAssetName = (asset) => {
-    return asset?.asset?.params['unit-name'] || ''
-  }
-
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
-  const assetInfo = useMemo(() => getAssetInfo(data), [data])
-  const assetName = useMemo(() => getAssetName(assetInfo), [assetInfo])
   const ohlc = useMemo(() => getOhlc(data), [data])
 
   const lastPriceData = parseFloat(priceData[priceData.length - 1]) || null
@@ -44,9 +46,6 @@ function Chart(props) {
     ? relDiff(lastPriceData?.open, secondLastPriceData?.open)
     : 0
   const algoVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.algoVolume || 0)
-  const bid = bidAndAsk.bid.toFixed(4)
-  const ask = bidAndAsk.ask.toFixed(4)
-  const spread = Math.abs(bidAndAsk.ask - bidAndAsk.bid).toFixed(4)
 
   if (isLoading) {
     return <Spinner flex />
@@ -64,7 +63,7 @@ function Chart(props) {
       dailyChange={dailyChange}
       spread={spread}
       algoVolume={algoVolume}
-      assetName={assetName}
+      asset={asset}
       ohlc={ohlc}
       priceData={priceData}
       volumeData={volumeData}

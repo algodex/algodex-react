@@ -1,9 +1,5 @@
 import React from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
 import Header from '.'
-import styled from 'styled-components'
 
 export default {
   title: 'Header',
@@ -13,6 +9,7 @@ export default {
 const Template = (args) => <Header {...args} />
 
 export const Default = Template.bind({})
+
 Default.args = {
   variant: 'large',
   fontSize: 2

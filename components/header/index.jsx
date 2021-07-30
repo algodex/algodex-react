@@ -2,6 +2,8 @@ import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Bell, User } from 'react-feather'
+import ActiveLink from 'components/active-link'
+
 import {
   Container,
   IconLogo,
@@ -17,6 +19,7 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+
   return (
     <Container data-testid="header-container">
       <Link href="/">
@@ -26,9 +29,15 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <NavTextLg>Trade</NavTextLg>
-        <NavTextLg>Wallet</NavTextLg>
-        <NavTextLg>Support</NavTextLg>
+        <ActiveLink href="/trade" matches={/^\/trade/}>
+          <NavTextLg>Trade</NavTextLg>
+        </ActiveLink>
+        <ActiveLink href="/wallet">
+          <NavTextLg>Wallet</NavTextLg>
+        </ActiveLink>
+        <ActiveLink href="/support">
+          <NavTextLg>Support</NavTextLg>
+        </ActiveLink>
         <NavIcon color="gray.500">
           <Bell />
         </NavIcon>
@@ -42,9 +51,15 @@ export default function Header() {
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
         <MobileNavContainer>
-          <NavTextSm>Trade</NavTextSm>
-          <NavTextSm>Wallet</NavTextSm>
-          <NavTextSm>Support</NavTextSm>
+          <ActiveLink href="/trade" matches={/^\/trade/}>
+            <NavTextSm>Trade</NavTextSm>
+          </ActiveLink>
+          <ActiveLink href="/wallet">
+            <NavTextSm>Wallet</NavTextSm>
+          </ActiveLink>
+          <ActiveLink href="/support">
+            <NavTextSm>Support</NavTextSm>
+          </ActiveLink>
           <NavTextSm>
             EN <Flag countryCode="US" svg />
           </NavTextSm>
