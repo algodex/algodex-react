@@ -43,7 +43,6 @@ function ChartView({
   spread,
   volumeData,
   priceData,
-  data,
   initialChartMode
 }) {
   const MODE_ICON_COLOR = '#f2f2f2'
@@ -54,8 +53,8 @@ function ChartView({
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData, data, asset)
-  const { areaChart } = useAreaChart(areaChartRef, volumeData, priceData, data, asset)
+  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData)
+  const { areaChart } = useAreaChart(areaChartRef, priceData)
 
   const chartModes = {
     CANDLE: 'CANDLE',
@@ -213,7 +212,6 @@ ChartView.propTypes = {
   spread: PropTypes.string,
   volumeData: PropTypes.array,
   priceData: PropTypes.array,
-  data: PropTypes.object,
   initialChartMode: PropTypes.string
 }
 

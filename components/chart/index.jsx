@@ -67,7 +67,6 @@ function Chart(props) {
       ohlc={ohlc}
       priceData={priceData}
       volumeData={volumeData}
-      data={data}
       initialChartMode="CANDLE"
       {...props}
     />
