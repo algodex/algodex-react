@@ -196,8 +196,16 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
+    const meetsMinimumAlgoAmount = () => {
+      return new Big(order.total).gt(0.5)
+    }
+
     const isDisabled =
-      order.total === '0' || isInvalid() || isBalanceExceeded() || status.submitting
+      order.total === '0' ||
+      isInvalid() ||
+      isBalanceExceeded() ||
+      !meetsMinimumAlgoAmount() ||
+      status.submitting
 
     return (
       <SubmitButton
