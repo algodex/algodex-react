@@ -1,19 +1,18 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useMemo } from 'react'
-import dayjs from 'dayjs'
-// import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
+import useStore from 'store/use-store'
+import { fetchTradeHistoryByAddress } from 'lib/api'
+import { mapTradeHistoryData } from './helpers'
 
 import {
   OrderDate,
   OrderPrice,
   OrderPair,
   OrderSide,
-  OrderRole,
   OrderAmount,
-  OrderExecuted,
-  OrderTotal,
   StatusContainer,
   TableWrapper,
   OrderHistoryContainer
@@ -25,20 +24,22 @@ const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
 
 const OrderSideCell = ({ value }) => <OrderSide value={value}>{value}</OrderSide>
 
-const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
-
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
-const OrderExecutedCell = ({ value }) => <OrderExecuted>{value}</OrderExecuted>
+function OrderHistory() {
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
 
-const OrderTotalCell = ({ value }) => <OrderTotal>{value}</OrderTotal>
+  const { data, isLoading, isError } = useQuery(
+    'tradeHistory',
+    () => fetchTradeHistoryByAddress(activeWalletAddress),
+    {
+      refetchInterval: 1000
+    }
+  )
 
-function OrderHistory({ orderHistory }) {
-  // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
-
-  const error = {}
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
 
   const columns = useMemo(
     () => [
@@ -67,60 +68,19 @@ function OrderHistory({ orderHistory }) {
         Header: 'Amount',
         accessor: 'amount',
         Cell: OrderAmountCell
-      },
-      {
-        Header: 'Executed',
-        accessor: 'executed',
-        Cell: OrderExecutedCell
-      },
-      {
-        Header: 'Total',
-        accessor: 'total',
-        Cell: OrderTotalCell
-      },
-      {
-        Header: 'Role',
-        accessor: 'role',
-        Cell: OrderRoleCell
-      }
-    ],
-    []
-  )
-
-  const data = useMemo(
-    () => [
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.458',
-        pair: 'YLDY/ALGO',
-        side: 'BUY',
-        role: 'TAKER',
-        amount: '1000',
-        executed: '125',
-        total: '458'
-      },
-      {
-        date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'),
-        price: '0.501',
-        pair: 'MCAU/ALGO',
-        side: 'SELL',
-        role: 'MAKER',
-        amount: '9000',
-        executed: '3000',
-        total: '4600'
       }
     ],
     []
   )
 
   const renderStatus = () => {
-    if (status === 'success') {
+    if (!isLoading && !isError) {
       return null
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">Something went wrong.</BodyCopySm>}
       </StatusContainer>
     )
   }
@@ -128,7 +88,7 @@ function OrderHistory({ orderHistory }) {
   return (
     <OrderHistoryContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={data} />
+        <OrdersTable columns={columns} data={tradeHistoryData || []} />
       </TableWrapper>
 
       {renderStatus()}

@@ -40,13 +40,3 @@ export const OrderSide = styled.span`
 export const OrderAmount = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
-export const OrderExecuted = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderTotal = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-
-export const OrderRole = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
