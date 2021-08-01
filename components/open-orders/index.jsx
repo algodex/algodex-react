@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { mapOrderHistoryData } from './helpers'
-import { fetchOpenOrders } from 'lib/api'
+import { fetchOpenOrdersByAddress } from 'lib/api'
 import useStore from 'store/use-store'
 import {
   OrderDate,
@@ -43,7 +43,7 @@ function OpenOrders() {
 
   const { data, isLoading, isError } = useQuery(
     'openOrders',
-    () => fetchOpenOrders(activeWalletAddress),
+    () => fetchOpenOrdersByAddress(activeWalletAddress),
     { refetchInterval: 1000 }
   )
 
