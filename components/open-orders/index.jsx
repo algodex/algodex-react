@@ -47,7 +47,7 @@ function OpenOrders() {
     { refetchInterval: 1000 }
   )
 
-  const orderHistoryData = useMemo(() => mapOpenOrdersData(data), [data])
+  const openOrdersData = useMemo(() => mapOpenOrdersData(data), [data])
 
   const columns = useMemo(
     () => [
@@ -106,7 +106,7 @@ function OpenOrders() {
   return (
     <OpenOrdersContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={orderHistoryData || []} />
+        <OrdersTable columns={columns} data={openOrdersData || []} />
       </TableWrapper>
 
       {renderStatus()}
