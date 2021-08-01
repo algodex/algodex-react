@@ -48,11 +48,7 @@ function AssetSearch({ gridSize }) {
 
   const [query, setQuery] = useState('')
 
-  const { status, data, error } = useQuery(
-    ['searchResults', { query }],
-    () => searchAssets(query),
-    { refetchInterval: 5000 }
-  )
+  const { status, data, error } = useQuery(['searchResults', { query }], () => searchAssets(query))
 
   const searchResultsData = useMemo(() => {
     const results = data || []
