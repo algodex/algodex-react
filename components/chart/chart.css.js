@@ -247,6 +247,7 @@ export const AreaSeriesChart = styled.div`
   bottom: 0;
   right: 0;
   visibility: ${({ isVisible }) => (isVisible === true ? 'visible' : 'hidden')};
+  overflow: hidden;
 `
 export const CandleStickChart = styled.div`
   position: absolute;
@@ -255,6 +256,7 @@ export const CandleStickChart = styled.div`
   bottom: 0;
   right: 0;
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
+  overflow: hidden;
 `
 export const ChartOptions = styled.div`
   display: flex;

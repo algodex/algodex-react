@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
-import Big from 'big.js'
 
 const UP_COLOR = '#38A169'
 const DOWN_COLOR = '#E53E3E'
@@ -9,111 +8,106 @@ const BACKGROUND_COLOR = '#171923'
 const BORDER_COLOR = '#718096'
 const TEXT_COLOR = '#CBD5E0'
 
-export default function useCandleChart(containerRef, volumeData, priceData, data, asset) {
-  const [chart, setChart] = useState()
-  const [candleSeries, setCandleSeries] = useState()
-  const [volumeSeries, setVolumeSeries] = useState()
-
-  useEffect(() => {
-    const initializeChart = async () => {
-      const { createChart, CrosshairMode } = await import('lightweight-charts')
-
-      setChart(
-        createChart(containerRef.current, {
-          layout: {
-            backgroundColor: BACKGROUND_COLOR,
-            textColor: TEXT_COLOR,
-            fontFamily: 'Inter'
-          },
-          grid: {
-            vertLines: {
-              color: LINE_COLOR
-            },
-            horzLines: {
-              color: LINE_COLOR
-            }
-          },
-          crosshair: {
-            mode: CrosshairMode.Normal
-          },
-          rightPriceScale: {
-            borderColor: BORDER_COLOR
-          },
-          timeScale: {
-            borderColor: BORDER_COLOR
-          }
-        })
-      )
-    }
-
-    if (containerRef?.current && !chart) {
-      initializeChart()
-    }
-  }, [chart, containerRef, data])
+export default function useCandleChart(containerRef, volumeData, priceData) {
+  const [candleChart, setCandleChart] = useState()
 
   useEffect(() => {
     const chartContainer = containerRef?.current
 
-    if (chart && !candleSeries) {
-      setCandleSeries(
-        chart.addCandlestickSeries({
-          upColor: UP_COLOR,
-          downColor: DOWN_COLOR,
-          borderDownColor: DOWN_COLOR,
-          borderUpColor: UP_COLOR,
-          wickDownColor: DOWN_COLOR,
-          wickUpColor: UP_COLOR
-        })
-      )
+    const initializeChart = async () => {
+      const { createChart, CrosshairMode } = await import('lightweight-charts')
 
-      setVolumeSeries(
-        chart.addHistogramSeries({
-          base: 0,
-          color: UP_COLOR,
-          priceFormat: {
-            type: 'volume'
+      const chart = createChart(chartContainer, {
+        layout: {
+          backgroundColor: BACKGROUND_COLOR,
+          textColor: TEXT_COLOR,
+          fontFamily: 'Inter'
+        },
+        grid: {
+          vertLines: {
+            color: LINE_COLOR
           },
-          priceScaleId: '',
-          position: 'left',
-          mode: 2,
-          autoScale: false,
-          invertScale: true,
-          alignLabels: false,
-          scaleMargins: {
-            top: 0.9983,
-            bottom: 0
+          horzLines: {
+            color: LINE_COLOR
           }
-        })
-      )
+        },
+        crosshair: {
+          mode: CrosshairMode.Normal
+        },
+        rightPriceScale: {
+          borderColor: BORDER_COLOR
+        },
+        timeScale: {
+          borderColor: BORDER_COLOR
+        }
+      })
+
+      const candleSeries = chart.addCandlestickSeries({
+        upColor: UP_COLOR,
+        downColor: DOWN_COLOR,
+        borderDownColor: DOWN_COLOR,
+        borderUpColor: UP_COLOR,
+        wickDownColor: DOWN_COLOR,
+        wickUpColor: UP_COLOR
+      })
+
+      candleSeries.applyOptions({
+        priceFormat: {
+          precision: 6,
+          minMove: 0.000001
+        }
+      })
+
+      const volumeSeries = chart.addHistogramSeries({
+        base: 0,
+        color: UP_COLOR,
+        priceFormat: {
+          type: 'volume'
+        },
+        priceScaleId: '',
+        position: 'left',
+        mode: 2,
+        autoScale: false,
+        invertScale: true,
+        alignLabels: false,
+        scaleMargins: {
+          top: 0.9983,
+          bottom: 0
+        }
+      })
+
+      setCandleChart({
+        chart,
+        candleSeries,
+        volumeSeries
+      })
     }
 
-    if (chart && chartContainer) {
-      addListener(chartContainer, () =>
-        chart.resize(chartContainer.offsetWidth, chartContainer.offsetHeight - 1)
-      )
-      return () => removeListener(chartContainer)
+    if (chartContainer) {
+      if (!candleChart) {
+        initializeChart()
+      } else if (chartContainer.getAttribute('data-event-resize') !== 'true') {
+        // add resize listener
+        addListener(chartContainer, (el) => {
+          el.setAttribute('data-event-resize', 'true')
+          candleChart.chart.resize(el.offsetWidth, el.offsetHeight - 1)
+        })
+
+        // cleanup
+        return () => removeListener(chartContainer)
+      }
     }
-  }, [chart, containerRef, volumeData, priceData, data, candleSeries])
+  }, [candleChart, containerRef])
 
   useEffect(() => {
-    if (chart) {
-      if (volumeData?.length) {
-        volumeSeries?.setData(volumeData)
-      }
-      if (priceData?.length) {
-        candleSeries?.setData(priceData)
-        candleSeries?.applyOptions({
-          priceFormat: {
-            precision: asset.decimals,
-            minMove: new Big(10).pow(asset.decimals * -1).toNumber()
-          }
-        })
-        chart.timeScale().fitContent()
-      }
+    if (candleChart) {
+      candleChart.volumeSeries.setData(volumeData)
+      candleChart.candleSeries.setData(priceData)
+      candleChart.chart.timeScale().fitContent()
     }
-  }, [volumeSeries, candleSeries, data, chart, volumeData, priceData, asset.decimals])
+  }, [candleChart, containerRef, priceData, volumeData])
 
   return {
-    candleChart: chart
+    candleChart: candleChart?.chart
   }
 }
