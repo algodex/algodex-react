@@ -13,7 +13,6 @@ import {
   OrderType,
   OrderRole,
   OrderAmount,
-  OrderFilled,
   StatusContainer,
   TableWrapper,
   OpenOrdersContainer
@@ -30,8 +29,6 @@ const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType
 const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-
-const OrderFilledCell = ({ value }) => <OrderFilled>{value}</OrderFilled>
 
 function OpenOrders() {
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
@@ -70,11 +67,6 @@ function OpenOrders() {
         Header: 'Amount',
         accessor: 'amount',
         Cell: OrderAmountCell
-      },
-      {
-        Header: 'Filled',
-        accessor: 'filled',
-        Cell: OrderFilledCell
       },
       {
         Header: 'Role',

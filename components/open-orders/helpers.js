@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { convertFromAsaUnits, calculateAsaBuyAmount, convertFromBaseUnits } from 'services/convert'
 
 export const mapOrderHistoryData = (data) => {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
@@ -16,27 +17,35 @@ export const mapOrderHistoryData = (data) => {
     return allAssetsInfo
   }, {})
 
-  const buyOrders = buyOrdersData.map(({ assetLimitPriceInAlgos, asaAmount, assetId }) => {
+  const buyOrders = buyOrdersData.map(({ asaPrice, algoAmount, assetId }) => {
+    const decimals = assetsInfo[assetId].params.decimals
+    /** @todo get formatted price and amounts from api */
+    const price = convertFromAsaUnits(asaPrice, decimals)
+    const amount = calculateAsaBuyAmount(price, algoAmount)
+
     return {
-      date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'), // Missing from API
-      price: assetLimitPriceInAlgos,
+      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'), // Missing from API
+      price,
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'BUY',
-      role: 'MAKER', // Missing from API
-      amount: asaAmount, // Bug
-      filled: '125' // Missing from API
+      role: 'MAKER',
+      amount
     }
   })
 
-  const sellOrders = sellOrdersData.map(({ assetLimitPriceInAlgos, asaAmount, assetId }) => {
+  const sellOrders = sellOrdersData.map(({ asaPrice, asaAmount, assetId }) => {
+    const decimals = 6
+    /** @todo get formatted price and amounts from api */
+    const price = convertFromAsaUnits(asaPrice, decimals)
+    const amount = convertFromBaseUnits(asaAmount, decimals)
+
     return {
-      date: dayjs(1624296854921).format('YYYY-MM-DD HH:mm:ss'), // Missing from API
-      price: assetLimitPriceInAlgos,
+      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'), // Missing from API
+      price,
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'SELL',
-      role: 'MAKER', // Missing from API
-      amount: asaAmount, // Bug
-      filled: '125' // Missing from API
+      role: 'MAKER',
+      amount
     }
   })
 
