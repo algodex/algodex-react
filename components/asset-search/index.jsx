@@ -2,20 +2,17 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
-// import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { searchAssets } from 'lib/api'
-import { convertFromAsaUnits } from 'services/convert'
 import { displayPrice } from 'services/display'
 import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
-// import { BodyCopyTiny, BodyCopySm } from 'components/type'
-
-// import makeData from './demo'
+import { BodyCopyTiny, BodyCopySm } from 'components/type'
 
 import {
   Container,
   AssetsContainer,
-  // StatusContainer,
+  StatusContainer,
   TableWrapper,
   AssetName,
   PairSlash,
@@ -34,34 +31,38 @@ const AssetNameCell = ({ value }) => (
   </>
 )
 
-const AssetPriceCell = ({ value }) => <AssetPrice>{value && displayPrice(value)}</AssetPrice>
+const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 
-// const AssetChangeCell = ({ value }) => (
-//   <AssetChange value={value}>{`${value < 0 ? '' : '+'}${value}%`}</AssetChange>
-// )
-
-const AssetChangeCell = ({ value }) => (
-  <AssetChange value={value}>{value === null ? '' : `${value}%`}</AssetChange>
-)
+const AssetChangeCell = ({ value }) => {
+  const displayChange = () => {
+    if (value === undefined) {
+      return ''
+    }
+    return `${value.toFixed(2)}%`
+  }
+  return <AssetChange value={value}>{displayChange()}</AssetChange>
+}
 
 function AssetSearch({ gridSize }) {
   const router = useRouter()
 
-  const [results, setResults] = useState([])
+  const [query, setQuery] = useState('')
 
-  const handleSearchChange = async (query) => {
-    const res = await searchAssets(query)
-    setResults(res)
-  }
+  const { status, data, error } = useQuery(
+    ['searchResults', { query }],
+    () => searchAssets(query),
+    { refetchInterval: 5000 }
+  )
 
   const searchResultsData = useMemo(() => {
+    const results = data || []
     return results.map((result) => ({
       id: result.assetId,
       name: result.unitName,
-      price: result.price ? convertFromAsaUnits(result.price, 6) : result.price,
-      change: result.price ? 0 : result.price
+      price: result.formattedPrice ? displayPrice(result.formattedPrice) : null,
+      change: result['24HourPriceChgPct']
     }))
-  }, [results])
+  }, [data])
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
@@ -153,17 +154,17 @@ function AssetSearch({ gridSize }) {
       useSortBy
     )
 
-  // const renderStatus = () => {
-  //   if (status === 'success') {
-  //     return null
-  //   }
-  //   return (
-  //     <StatusContainer>
-  //       {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-  //       {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
-  //     </StatusContainer>
-  //   )
-  // }
+  const renderStatus = () => {
+    if (status === 'success') {
+      return null
+    }
+    return (
+      <StatusContainer>
+        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+      </StatusContainer>
+    )
+  }
 
   return (
     <Container isActive={isActive}>
@@ -175,7 +176,7 @@ function AssetSearch({ gridSize }) {
                 <tr>
                   <th ref={searchRef} colSpan={visibleColumns.length}>
                     <SearchInput
-                      onChange={handleSearchChange}
+                      onChange={(q) => setQuery(q)}
                       onSearchFocus={handleSearchFocus}
                       onExternalClick={handleExternalClick}
                       containerRef={containerRef}
@@ -220,7 +221,7 @@ function AssetSearch({ gridSize }) {
           </TableContainer>
         </TableWrapper>
 
-        {/* {renderStatus()} */}
+        {renderStatus()}
       </AssetsContainer>
     </Container>
   )
