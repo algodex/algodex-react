@@ -23,12 +23,13 @@ function OrdersTable({ columns, data }) {
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
-                  {!column.isSorted ? (
-                    <SortIcon use="sortNone" size={0.625} />
-                  ) : column.isSortedDesc ? (
-                    <SortIcon use="sortDesc" size={0.625} />
-                  ) : (
-                    <SortIcon use="sortAsc" size={0.625} />
+                  {!column.disableSortBy && (
+                    <SortIcon
+                      use={
+                        !column.isSorted ? 'sortNone' : column.isSortedDesc ? 'sortDesc' : 'sortAsc'
+                      }
+                      size={0.625}
+                    />
                   )}
                 </th>
               ))}

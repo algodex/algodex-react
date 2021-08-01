@@ -13,6 +13,8 @@ import {
   OrderType,
   OrderRole,
   OrderAmount,
+  CancelOrder,
+  CancelButton,
   StatusContainer,
   TableWrapper,
   OpenOrdersContainer
@@ -29,6 +31,12 @@ const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType
 const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
+
+const CancelOrderCell = () => (
+  <CancelOrder>
+    <CancelButton>x</CancelButton>
+  </CancelOrder>
+)
 
 function OpenOrders() {
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
@@ -72,6 +80,12 @@ function OpenOrders() {
         Header: 'Role',
         accessor: 'role',
         Cell: OrderRoleCell
+      },
+      {
+        Header: '',
+        accessor: 'cancel',
+        Cell: CancelOrderCell,
+        disableSortBy: true
       }
     ],
     []

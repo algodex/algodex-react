@@ -46,3 +46,20 @@ export const OrderFilled = styled.span`
 export const OrderRole = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
+export const CancelOrder = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const CancelButton = styled.button`
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  color: inherit;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.red['500']};
+  }
+`
