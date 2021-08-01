@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { convertFromAsaUnits, calculateAsaBuyAmount, convertFromBaseUnits } from 'services/convert'
 
-export const mapOrderHistoryData = (data) => {
+export const mapOpenOrdersData = (data) => {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
     return null
   }

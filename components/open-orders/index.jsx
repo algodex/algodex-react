@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-import { mapOrderHistoryData } from './helpers'
+import { mapOpenOrdersData } from './helpers'
 import { fetchOpenOrdersByAddress } from 'lib/api'
 import useStore from 'store/use-store'
 import {
@@ -47,7 +47,7 @@ function OpenOrders() {
     { refetchInterval: 1000 }
   )
 
-  const orderHistoryData = useMemo(() => mapOrderHistoryData(data), [data])
+  const orderHistoryData = useMemo(() => mapOpenOrdersData(data), [data])
 
   const columns = useMemo(
     () => [
