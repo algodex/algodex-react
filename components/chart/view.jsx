@@ -31,10 +31,10 @@ import {
   TrendingUpIcon,
   VolumeContainer
 } from './chart.css'
+import { floatToFixed } from 'services/display'
 
 function ChartView({
   asset,
-  dailyChange,
   algoVolume,
   baseAsset,
   ohlc,
@@ -46,8 +46,6 @@ function ChartView({
   initialChartMode
 }) {
   const MODE_ICON_COLOR = '#f2f2f2'
-  const formattedDailyChange =
-    dailyChange > 0 ? `+${dailyChange.toFixed(2)}%` : `-${dailyChange.toFixed(2)}%`
   const CHART_INTERVALS = ['1D', '4H', '1H', '15m', '3m', '1m']
 
   const candleChartRef = useRef()
@@ -98,9 +96,9 @@ function ChartView({
                 {`/${baseAsset}`}
               </BodyCopy>
             </AssetName>
-            <DailyChange dailyChange={dailyChange}>
+            <DailyChange dailyChange={asset.priceChange24hr}>
               <BodyCopyTiny fontSize=".7rem" letterSpacing=".1rem" mb={1} data-testid="dailyChange">
-                {formattedDailyChange}
+                {`${floatToFixed(asset.priceChange24hr, 2)}%`}
               </BodyCopyTiny>
             </DailyChange>
           </AssetLabelContainer>
@@ -203,7 +201,6 @@ ChartView.propTypes = {
     PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
   ]),
   asset: PropTypes.object,
-  dailyChange: PropTypes.number,
   algoVolume: PropTypes.string,
   baseAsset: PropTypes.string,
   ohlc: PropTypes.object,

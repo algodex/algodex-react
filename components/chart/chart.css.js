@@ -130,7 +130,7 @@ export const TopRow = styled.div`
 
 export const DailyChange = styled.div`
   color: ${({ theme, dailyChange }) =>
-    dailyChange > 0 ? theme.colors.green[500] : theme.colors.red[500]};
+    dailyChange >= 0 ? theme.colors.green[500] : theme.colors.red[500]};
 `
 export const IntervalWrapper = styled.div`
   position: relative;

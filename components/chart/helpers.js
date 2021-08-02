@@ -54,10 +54,6 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
   return volumeData
 }
 
-export const relDiff = (a, b) => {
-  return 100 * Math.abs((a - b) / ((a + b) / 2))
-}
-
 export const getBidAskSpread = (orderBook) => {
   const { buyOrders, sellOrders, decimals } = orderBook
   const bidPrice = buyOrders.sort(
