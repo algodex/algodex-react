@@ -12,20 +12,19 @@ export const mapTradeHistoryData = (data) => {
     return allAssetsInfo
   }, {})
 
-  const tradeHistory = tradeHistoryData.map(({ unix_time, asset_id, tradeType }) => {
-    const side = tradeType === 'buyASA' ? 'BUY' : 'SELL'
-    /** @todo get formatted price from API */
-    const price = 'XXX'
-    const amount = 'XXX'
+  const tradeHistory = tradeHistoryData.map(
+    ({ unix_time, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
+      const side = tradeType === 'buyASA' ? 'BUY' : 'SELL'
 
-    return {
-      date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-      price,
-      pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
-      side,
-      amount
+      return {
+        date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+        price: formattedPrice,
+        pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
+        side,
+        amount: formattedASAAmount
+      }
     }
-  })
+  )
 
   return tradeHistory
 }

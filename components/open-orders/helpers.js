@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import { convertFromAsaUnits, calculateAsaBuyAmount, convertFromBaseUnits } from 'services/convert'
 
 export const mapOpenOrdersData = (data) => {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
@@ -17,33 +16,25 @@ export const mapOpenOrdersData = (data) => {
     return allAssetsInfo
   }, {})
 
-  const buyOrders = buyOrdersData.map(({ asaPrice, algoAmount, assetId }) => {
-    const decimals = assetsInfo[assetId].params.decimals
-    /** @todo get formatted price and amounts from api */
-    const price = convertFromAsaUnits(asaPrice, decimals)
-    const amount = calculateAsaBuyAmount(price, algoAmount)
-
+  const buyOrders = buyOrdersData.map(({ assetId, formattedPrice, formattedASAAmount }) => {
     return {
-      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'), // Missing from API
-      price,
+      /** @todo get date/time from API */
+      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      price: formattedPrice,
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'BUY',
-      amount
+      amount: formattedASAAmount
     }
   })
 
-  const sellOrders = sellOrdersData.map(({ asaPrice, asaAmount, assetId }) => {
-    const decimals = 6
-    /** @todo get formatted price and amounts from api */
-    const price = convertFromAsaUnits(asaPrice, decimals)
-    const amount = convertFromBaseUnits(asaAmount, decimals)
-
+  const sellOrders = sellOrdersData.map(({ assetId, formattedPrice, formattedASAAmount }) => {
     return {
-      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'), // Missing from API
-      price,
+      /** @todo get date/time from API */
+      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      price: formattedPrice,
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'SELL',
-      amount
+      amount: formattedASAAmount
     }
   })
 
