@@ -28,7 +28,6 @@ export const mapOpenOrdersData = (data) => {
       price,
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'BUY',
-      role: 'MAKER',
       amount
     }
   })
@@ -44,7 +43,6 @@ export const mapOpenOrdersData = (data) => {
       price,
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'SELL',
-      role: 'MAKER',
       amount
     }
   })

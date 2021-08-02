@@ -11,7 +11,6 @@ import {
   OrderPrice,
   OrderPair,
   OrderType,
-  OrderRole,
   OrderAmount,
   CancelOrder,
   CancelButton,
@@ -27,8 +26,6 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
 
 const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
-
-const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
@@ -75,11 +72,6 @@ function OpenOrders() {
         Header: 'Amount',
         accessor: 'amount',
         Cell: OrderAmountCell
-      },
-      {
-        Header: 'Role',
-        accessor: 'role',
-        Cell: OrderRoleCell
       },
       {
         Header: '',
