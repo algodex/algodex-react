@@ -1,11 +1,11 @@
 import Big from 'big.js'
 import dayjs from 'dayjs'
 import { convertFromAsaUnits } from 'services/convert'
-import { displayPrice } from 'services/display'
+import { floatToFixed } from 'services/display'
 
 const displayConverted = (price = 0, decimals = 6) => {
   const converted = convertFromAsaUnits(price, decimals)
-  return displayPrice(converted)
+  return floatToFixed(converted)
 }
 
 export const mapPriceData = (data) => {
@@ -69,7 +69,7 @@ export const getBidAskSpread = (orderBook) => {
 
   const bid = displayConverted(bidPrice, decimals)
   const ask = displayConverted(askPrice, decimals)
-  const spread = displayPrice(new Big(ask).minus(bid).abs())
+  const spread = floatToFixed(new Big(ask).minus(bid).abs())
 
   return { bid, ask, spread }
 }

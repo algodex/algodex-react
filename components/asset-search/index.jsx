@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { searchAssets } from 'lib/api'
-import { displayPrice } from 'services/display'
+import { floatToFixed } from 'services/display'
 import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
@@ -35,10 +35,10 @@ const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 
 const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
-    if (value === undefined) {
+    if (value === null) {
       return ''
     }
-    return `${value.toFixed(2)}%`
+    return `${value}%`
   }
   return <AssetChange value={value}>{displayChange()}</AssetChange>
 }
@@ -55,8 +55,10 @@ function AssetSearch({ gridSize }) {
     return results.map((result) => ({
       id: result.assetId,
       name: result.unitName,
-      price: result.formattedPrice ? displayPrice(result.formattedPrice) : null,
-      change: result.priceChg24Pct
+      price: result.formattedPrice ? floatToFixed(result.formattedPrice) : null,
+      change: !isNaN(parseFloat(result.priceChg24Pct))
+        ? floatToFixed(result.priceChg24Pct, 2)
+        : null
     }))
   }, [data])
 

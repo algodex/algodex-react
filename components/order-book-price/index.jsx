@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ArrowUp, ArrowDown } from 'react-feather'
-import { displayPrice } from 'services/display'
+import { floatToFixed } from 'services/display'
 
 const Price = styled.p`
   display: flex;
@@ -25,7 +25,7 @@ function OrderBookPrice(props) {
   return (
     <Price color={color} data-testid="order-book-price">
       {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
-      {displayPrice(price)}
+      {floatToFixed(price)}
     </Price>
   )
 }
