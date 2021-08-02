@@ -18,7 +18,7 @@ const Price = styled.p`
 
   span {
     margin-top: 0.125rem;
-    margin-left: 0.5rem;
+    margin-left: 0.75rem;
   }
 `
 
@@ -32,7 +32,7 @@ function OrderBookPrice(props) {
     <Price color={color} data-testid="order-book-price">
       {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
       {floatToFixed(price)}
-      <BodyCopySm as="span">{`(${floatToFixed(change, 2)}%)`}</BodyCopySm>
+      <BodyCopySm as="span">{`${floatToFixed(change, 2)}%`}</BodyCopySm>
     </Price>
   )
 }
