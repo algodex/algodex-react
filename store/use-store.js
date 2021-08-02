@@ -44,7 +44,7 @@ export const useStore = create(
     })),
     {
       name: 'algodex',
-      version: 1
+      version: 2
     }
   )
 )

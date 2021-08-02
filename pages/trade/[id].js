@@ -93,7 +93,7 @@ export default function Home() {
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
-    if (!assetQuery.isLoading) {
+    if (assetQuery.isSuccess) {
       if (asset) {
         setAsset(asset)
       } else {
@@ -101,7 +101,7 @@ export default function Home() {
         router.push(`/trade/15322902`)
       }
     }
-  }, [asset, assetQuery.isLoading, router, setAsset])
+  }, [asset, assetQuery.isSuccess, router, setAsset])
 
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
