@@ -79,8 +79,17 @@ export const AssetPrice = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
 
+// export const AssetChange = styled.span`
+//   color: ${({ theme, value }) => (value < 0 ? theme.colors.red['500'] : theme.colors.green['500'])};
+// `
+
 export const AssetChange = styled.span`
-  color: ${({ theme, value }) => (value < 0 ? theme.colors.red['500'] : theme.colors.green['500'])};
+  color: ${({ theme, value }) => {
+    if (value === null) {
+      return theme.colors.gray['400']
+    }
+    return value < 0 ? theme.colors.red['500'] : theme.colors.green['500']
+  }};
 `
 
 export const SortIcon = styled(Icon)``
