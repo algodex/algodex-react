@@ -56,7 +56,7 @@ function AssetSearch({ gridSize }) {
       id: result.assetId,
       name: result.unitName,
       price: result.formattedPrice ? displayPrice(result.formattedPrice) : null,
-      change: result['24HourPriceChgPct']
+      change: result.priceChg24Pct
     }))
   }, [data])
 
