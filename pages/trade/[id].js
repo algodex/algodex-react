@@ -42,7 +42,15 @@ const StatusContainer = styled.div`
 
 export default function Home() {
   const router = useRouter()
-  const id = Number(router.query.id)
+  const id = router.query.id
+  const isValidId = /^\d+$/.test(id)
+
+  useEffect(() => {
+    if (id && !isValidId) {
+      console.log('Redirecting to LAMP (15322902)...')
+      router.push(`/trade/15322902`)
+    }
+  }, [id, isValidId, router])
 
   const { connect, addresses } = useMyAlgo()
 
@@ -87,17 +95,14 @@ export default function Home() {
   ])
 
   // fetch asset from API
-  const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), { enabled: !!id })
+  const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), {
+    enabled: isValidId
+  })
 
   const asset = assetQuery.data?.asset
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
-    if (isNaN(id)) {
-      console.log('Redirecting to LAMP (15322902)...')
-      router.push(`/trade/15322902`)
-    }
-
     if (assetQuery.isSuccess) {
       if (asset.isTraded) {
         setAsset(asset)
@@ -106,7 +111,7 @@ export default function Home() {
         router.push(`/trade/15322902`)
       }
     }
-  }, [asset, assetQuery.isSuccess, id, router, setAsset])
+  }, [asset, assetQuery.isSuccess, router, setAsset])
 
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
