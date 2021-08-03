@@ -93,15 +93,20 @@ export default function Home() {
   const setAsset = useStore((state) => state.setAsset)
 
   useEffect(() => {
+    if (isNaN(id)) {
+      console.log('Redirecting to LAMP (15322902)...')
+      router.push(`/trade/15322902`)
+    }
+
     if (assetQuery.isSuccess) {
-      if (asset) {
+      if (asset.isTraded) {
         setAsset(asset)
       } else {
         console.log('Redirecting to LAMP (15322902)...')
         router.push(`/trade/15322902`)
       }
     }
-  }, [asset, assetQuery.isSuccess, router, setAsset])
+  }, [asset, assetQuery.isSuccess, id, router, setAsset])
 
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
