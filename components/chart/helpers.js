@@ -3,11 +3,13 @@ import dayjs from 'dayjs'
 import { convertFromAsaUnits } from 'services/convert'
 import { floatToFixed } from 'services/display'
 
+// @todo shouldn't need this anymore
 const displayConverted = (price = 0, decimals = 6) => {
   const converted = convertFromAsaUnits(price, decimals)
   return floatToFixed(converted)
 }
 
+// @todo use formattedPrice for OHLC when available
 export const mapPriceData = (data) => {
   const decimals = data?.asset_info.asset.params.decimals
   const prices =
@@ -24,6 +26,7 @@ export const mapPriceData = (data) => {
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
+// @todo use formattedPrice for OHLC when available
 export const getOhlc = (data) => {
   const lastPriceData = data?.chart_data[0] || {}
   const decimals = data?.asset_info.asset.params.decimals
@@ -55,16 +58,13 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
 }
 
 export const getBidAskSpread = (orderBook) => {
-  const { buyOrders, sellOrders, decimals } = orderBook
-  const bidPrice = buyOrders.sort(
-    (a, b) => b.assetLimitPriceInAlgos - a.assetLimitPriceInAlgos
-  )?.[0]?.assetLimitPriceInAlgos
-  const askPrice = sellOrders.sort(
-    (a, b) => a.assetLimitPriceInAlgos - b.assetLimitPriceInAlgos
-  )?.[0]?.assetLimitPriceInAlgos
+  const { buyOrders, sellOrders } = orderBook
 
-  const bid = displayConverted(bidPrice, decimals)
-  const ask = displayConverted(askPrice, decimals)
+  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
+  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
+
+  const bid = floatToFixed(bidPrice)
+  const ask = floatToFixed(askPrice)
   const spread = floatToFixed(new Big(ask).minus(bid).abs())
 
   return { bid, ask, spread }
