@@ -130,7 +130,7 @@ export const TopRow = styled.div`
 
 export const DailyChange = styled.div`
   color: ${({ theme, dailyChange }) =>
-    dailyChange > 0 ? theme.colors.green[500] : theme.colors.red[500]};
+    dailyChange >= 0 ? theme.colors.green[500] : theme.colors.red[500]};
 `
 export const IntervalWrapper = styled.div`
   position: relative;
@@ -247,6 +247,7 @@ export const AreaSeriesChart = styled.div`
   bottom: 0;
   right: 0;
   visibility: ${({ isVisible }) => (isVisible === true ? 'visible' : 'hidden')};
+  overflow: hidden;
 `
 export const CandleStickChart = styled.div`
   position: absolute;
@@ -255,6 +256,7 @@ export const CandleStickChart = styled.div`
   bottom: 0;
   right: 0;
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
+  overflow: hidden;
 `
 export const ChartOptions = styled.div`
   display: flex;

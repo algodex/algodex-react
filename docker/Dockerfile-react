@@ -6,22 +6,6 @@ EXPOSE 3000
 WORKDIR /app
 
 COPY ./docker/npmrc_readonly /root/.npmrc
-COPY ./package*.json ./
-RUN yarn
-# copy directories individually so we can skip large local node_modules copy
-COPY ./_templates/ ./__templates/
-COPY ./components/ ./components/
-COPY ./hooks/ ./hooks/
-COPY ./lib/ ./lib/
-COPY ./pages/ ./pages/
-COPY ./public/ ./public/
-COPY ./services/ ./services/
-COPY ./store/ ./store/
-COPY ./stories/ ./stories/
-COPY ./storybook-static/ ./storybook-static/
-COPY ./test/ ./test/
-COPY ./theme/ ./theme/
-COPY ./* ./
 COPY ./docker/react-run.sh /setup/
 
 CMD ["/bin/bash", "-c", "/setup/react-run.sh"]

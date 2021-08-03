@@ -185,6 +185,13 @@ function PlaceOrderView(props) {
       sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
 
+    const isBelowMinOrderAmount = () => {
+      if (order.type === 'buy') {
+        return new Big(order.total).lt(0.5)
+      }
+      return new Big(order.total).eq(0)
+    }
+
     const isInvalid = () => {
       return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
     }
@@ -197,7 +204,7 @@ function PlaceOrderView(props) {
     }
 
     const isDisabled =
-      order.total === '0' || isInvalid() || isBalanceExceeded() || status.submitting
+      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || status.submitting
 
     return (
       <SubmitButton
