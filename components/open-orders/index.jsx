@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types  */
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { mapOpenOrdersData } from './helpers'
 import { fetchOpenOrdersByAddress } from 'lib/api'
+import OrderService from 'services/order'
 import useStore from 'store/use-store'
 import {
   OrderDate,
@@ -12,31 +13,17 @@ import {
   OrderPair,
   OrderType,
   OrderAmount,
-  CancelOrder,
-  CancelButton,
+  OrderStatus,
+  OrderCancel,
+  OrderCancelButton,
   StatusContainer,
   TableWrapper,
   OpenOrdersContainer
 } from './open-orders.css'
 
-const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
-
-const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
-
-const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
-
-const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
-
-const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-
-const CancelOrderCell = () => (
-  <CancelOrder>
-    <CancelButton>x</CancelButton>
-  </CancelOrder>
-)
-
 function OpenOrders() {
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const [openOrdersData, setOpenOrdersData] = useState(null)
 
   const { data, isLoading, isError } = useQuery(
     'openOrders',
@@ -44,7 +31,54 @@ function OpenOrders() {
     { refetchInterval: 1000 }
   )
 
-  const openOrdersData = useMemo(() => mapOpenOrdersData(data), [data])
+  useEffect(() => {
+    if (data && data.success) {
+      setOpenOrdersData(mapOpenOrdersData(data))
+    }
+  }, [data])
+
+  const openOrdersDataMemoized = useMemo(() => openOrdersData, [openOrdersData])
+
+  const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
+
+  const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
+
+  const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
+
+  const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
+
+  const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
+
+  const OrderStatusCell = ({ value }) => <OrderStatus>{value}</OrderStatus>
+
+  const OrderCancelCell = useCallback(
+    ({ data, cell }) => {
+      const handleCancelOrder = async () => {
+        const cellIndex = cell.row.index
+        const cellData = data[cellIndex]
+
+        const { escrowAddress, ownerAddress, assetLimitPriceN, assetLimitPriceD, assetId } =
+          cellData.metadata
+        const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
+
+        setOpenOrdersData(
+          openOrdersData.map((order, index) =>
+            index === cellIndex ? { ...order, status: 'CANCELLING...' } : order
+          )
+        )
+
+        /** @todo handle errors */
+        await OrderService.closeOrder(escrowAddress, ownerAddress, orderBookEntry)
+      }
+
+      return (
+        <OrderCancel>
+          <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
+        </OrderCancel>
+      )
+    },
+    [openOrdersData]
+  )
 
   const columns = useMemo(
     () => [
@@ -74,13 +108,18 @@ function OpenOrders() {
         Cell: OrderAmountCell
       },
       {
+        Header: 'Status',
+        accessor: 'status',
+        Cell: OrderStatusCell
+      },
+      {
         Header: '',
         accessor: 'cancel',
-        Cell: CancelOrderCell,
+        Cell: OrderCancelCell,
         disableSortBy: true
       }
     ],
-    []
+    [OrderCancelCell]
   )
 
   const renderStatus = () => {
@@ -98,7 +137,7 @@ function OpenOrders() {
   return (
     <OpenOrdersContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={openOrdersData || []} />
+        <OrdersTable columns={columns} data={openOrdersDataMemoized || []} />
       </TableWrapper>
 
       {renderStatus()}

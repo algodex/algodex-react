@@ -16,27 +16,35 @@ export const mapOpenOrdersData = (data) => {
     return allAssetsInfo
   }, {})
 
-  const buyOrders = buyOrdersData.map(({ assetId, formattedPrice, formattedASAAmount }) => {
-    return {
-      /** @todo get date/time from API */
-      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-      price: formattedPrice,
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
-      type: 'BUY',
-      amount: formattedASAAmount
+  const buyOrders = buyOrdersData.map(
+    ({ assetId, formattedPrice, formattedASAAmount, ...rest }) => {
+      return {
+        /** @todo get date/time from API */
+        date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+        price: formattedPrice,
+        pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+        type: 'BUY',
+        status: 'OPEN',
+        amount: formattedASAAmount,
+        metadata: { assetId, ...rest }
+      }
     }
-  })
+  )
 
-  const sellOrders = sellOrdersData.map(({ assetId, formattedPrice, formattedASAAmount }) => {
-    return {
-      /** @todo get date/time from API */
-      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-      price: formattedPrice,
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
-      type: 'SELL',
-      amount: formattedASAAmount
+  const sellOrders = sellOrdersData.map(
+    ({ assetId, formattedPrice, formattedASAAmount, ...rest }) => {
+      return {
+        /** @todo get date/time from API */
+        date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+        price: formattedPrice,
+        pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+        type: 'SELL',
+        status: 'OPEN',
+        amount: formattedASAAmount,
+        metadata: { assetId, ...rest }
+      }
     }
-  })
+  )
 
   return [...buyOrders, ...sellOrders]
 }

@@ -46,10 +46,13 @@ export const OrderFilled = styled.span`
 export const OrderRole = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
-export const CancelOrder = styled.span`
+export const OrderStatus = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
-export const CancelButton = styled.button`
+export const OrderCancel = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const OrderCancelButton = styled.button`
   cursor: pointer;
   background: none;
   border: none;
