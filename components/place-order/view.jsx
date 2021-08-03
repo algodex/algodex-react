@@ -186,7 +186,10 @@ function PlaceOrderView(props) {
     }
 
     const isBelowMinOrderAmount = () => {
-      return new Big(order.total).lt(0.5)
+      if (order.type === 'buy') {
+        return new Big(order.total).lt(0.5)
+      }
+      return new Big(order.total).eq(0)
     }
 
     const isInvalid = () => {
