@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ArrowUp, ArrowDown } from 'react-feather'
-import { displayPrice } from 'services/display'
+import { floatToFixed } from 'services/display'
+import { BodyCopySm } from 'components/type'
 
 const Price = styled.p`
   display: flex;
@@ -14,6 +15,11 @@ const Price = styled.p`
   svg {
     margin-right: 0.5rem;
   }
+
+  span {
+    margin-top: 0.125rem;
+    margin-left: 0.75rem;
+  }
 `
 
 function OrderBookPrice(props) {
@@ -25,7 +31,8 @@ function OrderBookPrice(props) {
   return (
     <Price color={color} data-testid="order-book-price">
       {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
-      {displayPrice(price)}
+      {floatToFixed(price)}
+      <BodyCopySm as="span">{`${floatToFixed(change, 2)}%`}</BodyCopySm>
     </Price>
   )
 }

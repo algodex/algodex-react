@@ -3,7 +3,7 @@ import Big from 'big.js'
 import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
-import { displayPrice } from 'services/display'
+import { floatToFixed } from 'services/display'
 
 import {
   Container,
@@ -33,7 +33,7 @@ function OrderBookView(props) {
             title={row.price}
             m={0}
           >
-            {displayPrice(row.price)}
+            {floatToFixed(row.price)}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"

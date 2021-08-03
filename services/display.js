@@ -5,28 +5,47 @@ export const truncateAddress = (addr) => {
 }
 
 /**
- * Takes an asset price and formats it for display. Rounds price to 3 decimals,
- * or more if there are preceding zeros. The max number of decimals is 6, since
- * this is an ALGO price
+ * This is a custom implementation of Number.prototype.toFixed()
  *
- * @param {Number|String} price asset price in ALGOs
- * @returns {String} price formatted for display
+ * It accepts a float (string or number) and formats it for display using
+ * fixed-point notation. It rounds the number to `minDigits` digits after the
+ * decimal point (or more, if necessary to show a number that isn't zero).
+ *
+ * Returns a string representing the given number using fixed-point notation.
+ *
+ * The default values for `minDigits` and `maxDigits` are for rounding a price
+ * in ALGOs to at least 4 decimals (but no more than 6).
+ *
+ * @param {Number|String} float number to format
+ * @param {Number} minDigits minimum number of digits after decimal point
+ * @param {Number} maxDigits maximum number of digits after decimal point
+ * @returns {String}
  */
-export const displayPrice = (price) => {
-  const parsedPrice = parseFloat(price)
+export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
+  let numDigits
+  const absValue = new Big(float).abs().toNumber()
 
-  if (isNaN(parsedPrice)) {
-    throw new Error(`Invalid price`)
-  }
+  // checks for fractional numbers less than zero with preceding zeros after decimal point
+  if (absValue > 0 && absValue < 0.1) {
+    // if number is 0.0001, fractionalStr is '0001'
+    const fractionalStr = new Big(float).toFixed(maxDigits).toString().split('.')[1]
 
-  if (parsedPrice < 0.1) {
-    const precise = new Big(price).toPrecision(3).toString()
-
-    if (precise.length > 8) {
-      return new Big(precise).toFixed(6)
+    let precedingZeros
+    for (let i = 0; i < fractionalStr.length; i++) {
+      if (fractionalStr[i] !== '0') {
+        precedingZeros = i
+        break
+      }
     }
-    return precise
+
+    if (precedingZeros >= minDigits && precedingZeros < maxDigits) {
+      numDigits = precedingZeros + 1
+    } else {
+      numDigits = minDigits
+    }
   } else {
-    return new Big(price).toFixed(3)
+    numDigits = minDigits
   }
+
+  return new Big(float).toFixed(numDigits)
 }

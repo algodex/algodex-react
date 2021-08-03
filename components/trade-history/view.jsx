@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Big from 'big.js'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
-import { displayPrice } from 'services/display'
+import { floatToFixed } from 'services/display'
 
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
@@ -34,7 +34,7 @@ function TradeHistoryView(props) {
               title={row.price}
               m={0}
             >
-              {displayPrice(row.price)}
+              {floatToFixed(row.price)}
             </BodyCopyTiny>
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"

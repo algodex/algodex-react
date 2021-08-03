@@ -15,7 +15,7 @@ export default function OrderBook() {
       decimals={decimals}
       buyData={buyData}
       sellData={sellData}
-      priceChange={0.001}
+      priceChange={asset.priceChange24hr}
     />
   )
 }
