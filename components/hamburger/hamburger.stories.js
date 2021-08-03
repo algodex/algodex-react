@@ -23,6 +23,8 @@ export default {
   ]
 }
 
+const Template = (args) => <Hamburger {...args} />
+
 export const Default = Template.bind({})
 Default.args = {
   isOpen: false
