@@ -4,7 +4,7 @@ import { fetchTradeHistory } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
-import { convertFromBaseUnits, convertFromAsaUnits } from 'services/convert'
+import { floatToFixed } from 'services/display'
 
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
@@ -25,8 +25,8 @@ export default function TradeHistory() {
   const tradesData = data.transactions.map((txn) => ({
     id: txn.PK_trade_history_id,
     type: txn.tradeType,
-    price: convertFromAsaUnits(txn.asaPrice, asset.decimals),
-    amount: convertFromBaseUnits(txn.asaAmount, asset.decimals),
+    price: floatToFixed(txn.formattedPrice),
+    amount: txn.formattedASAAmount,
     timestamp: txn.unix_time * 1000
   }))
 
