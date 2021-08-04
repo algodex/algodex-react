@@ -29,7 +29,7 @@
     "styled-components": "^5"
   },
   "dependencies": {
-    "@algodex/algodex-sdk": "^1.0.47",
+    "@algodex/algodex-sdk": "^1.0.48",
     "@randlabs/myalgo-connect": "^1.0.1",
     "@sentry/nextjs": "^6.8.0",
     "axios": "^0.21.1",
