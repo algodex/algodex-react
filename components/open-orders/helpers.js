@@ -18,7 +18,7 @@ export const mapOpenOrdersData = (data) => {
   }, {})
 
   const buyOrders = buyOrdersData.map((order) => {
-    const { assetId, formattedPrice, formattedASAAmount, decimals } = order
+    const { assetId, formattedPrice, formattedASAAmount } = order
 
     return {
       /** @todo get date/time from API */
@@ -27,13 +27,13 @@ export const mapOpenOrdersData = (data) => {
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'BUY',
       status: 'OPEN',
-      amount: floatToFixed(formattedASAAmount, decimals, decimals),
+      amount: formattedASAAmount,
       metadata: order
     }
   })
 
   const sellOrders = sellOrdersData.map((order) => {
-    const { assetId, formattedPrice, formattedASAAmount, decimals } = order
+    const { assetId, formattedPrice, formattedASAAmount } = order
 
     return {
       /** @todo get date/time from API */
@@ -42,7 +42,7 @@ export const mapOpenOrdersData = (data) => {
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'SELL',
       status: 'OPEN',
-      amount: floatToFixed(formattedASAAmount, decimals, decimals),
+      amount: formattedASAAmount,
       metadata: order
     }
   })
