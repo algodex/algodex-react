@@ -32,7 +32,7 @@ function OrderHistory() {
   const activeWalletAddress = useStore((state) => state.activeWalletAddress)
 
   const { data, isLoading, isError } = useQuery(
-    'tradeHistory',
+    ['tradeHistory', { address: activeWalletAddress }],
     () => fetchTradeHistoryByAddress(activeWalletAddress),
     {
       refetchInterval: 1000

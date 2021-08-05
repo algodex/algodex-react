@@ -26,7 +26,7 @@ function OpenOrders() {
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
   const { data, isLoading, isError } = useQuery(
-    'openOrders',
+    ['openOrders', { address: activeWalletAddress }],
     () => fetchOpenOrdersByAddress(activeWalletAddress),
     { refetchInterval: 1000 }
   )
