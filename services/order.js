@@ -1,6 +1,8 @@
 import algodex from '@algodex/algodex-sdk'
 import { convertToBaseUnits, convertToAsaUnits } from './convert'
 
+const AlgodClient = new algodex.initAlgodClient('test')
+
 const OrderService = {
   placeOrder: (order, orderBook) => {
     console.log('OrderService.placeOrder', { order })
@@ -13,8 +15,6 @@ const OrderService = {
 
     const price = convertToAsaUnits(order.price, order.asset.decimals)
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
-
-    const AlgodClient = new algodex.initAlgodClient('test')
 
     if (order.execution === 'maker') {
       if (order.type === 'buy') {
@@ -121,6 +121,24 @@ const OrderService = {
     }
 
     return [...mapOrders(orderBook.buyOrders, 'buy'), ...mapOrders(orderBook.sellOrders, 'sell')]
+  },
+
+  /**
+   * Closes an existing order and refunds the escrow account to the owner
+   *
+   * @param {Object}       algodClient: object that has been initialized via initAlgodClient()
+   * @param {String} escrowAccountAddr: public address of the escrow account
+   * @param {String}       creatorAddr: public address of the owner of the escrow account
+   * @param {String}    orderBookEntry: blockchain order book string. For example "2500-625-0-15322902" (N-D-min-assetId)
+   * @returns {Object} Promise for when the transaction is fully confirmed
+   */
+  closeOrder: async (escrowAccountAddr, creatorAddr, orderBookEntry) => {
+    return await algodex.closeOrderFromOrderBookEntry(
+      AlgodClient,
+      escrowAccountAddr,
+      creatorAddr,
+      orderBookEntry
+    )
   }
 }
 

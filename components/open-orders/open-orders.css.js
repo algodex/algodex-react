@@ -43,9 +43,26 @@ export const OrderAmount = styled.span`
 export const OrderFilled = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
-export const OrderTotal = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
 export const OrderRole = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const OrderStatus = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const OrderCancel = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
+export const OrderCancelButton = styled.button`
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  color: inherit;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.red['500']};
+  }
 `
