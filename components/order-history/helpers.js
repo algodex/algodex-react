@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { floatToFixed } from 'services/display'
 
 export const mapTradeHistoryData = (data) => {
   if (!data || !data.transactions || !data.allAssets) {
@@ -18,7 +19,7 @@ export const mapTradeHistoryData = (data) => {
 
       return {
         date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-        price: formattedPrice,
+        price: floatToFixed(formattedPrice),
         pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
         side,
         amount: formattedASAAmount

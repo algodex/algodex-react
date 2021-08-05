@@ -7,6 +7,7 @@ import { mapOpenOrdersData } from './helpers'
 import { fetchOpenOrdersByAddress } from 'lib/api'
 import OrderService from 'services/order'
 import useStore from 'store/use-store'
+import toast from 'react-hot-toast'
 import {
   OrderDate,
   OrderPrice,
@@ -26,7 +27,7 @@ function OpenOrders() {
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
   const { data, isLoading, isError } = useQuery(
-    'openOrders',
+    ['openOrders', { address: activeWalletAddress }],
     () => fetchOpenOrdersByAddress(activeWalletAddress),
     { refetchInterval: 1000 }
   )
@@ -61,14 +62,33 @@ function OpenOrders() {
           cellData.metadata
         const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
-        setOpenOrdersData(
+        const updateOrderStatus = (statusMsg) =>
           openOrdersData.map((order, index) =>
-            index === cellIndex ? { ...order, status: 'CANCELLING...' } : order
+            index === cellIndex ? { ...order, status: statusMsg } : order
           )
+
+        setOpenOrdersData(updateOrderStatus('CANCELLING'))
+
+        const cancelOrderPromise = OrderService.closeOrder(
+          escrowAddress,
+          ownerAddress,
+          orderBookEntry
         )
 
-        /** @todo handle errors */
-        await OrderService.closeOrder(escrowAddress, ownerAddress, orderBookEntry)
+        toast.promise(cancelOrderPromise, {
+          loading: 'Awaiting confirmation...',
+          success: 'Order successfully cancelled',
+          error: 'Error cancelling order'
+        })
+
+        try {
+          const result = await cancelOrderPromise
+          setOpenOrdersData(updateOrderStatus('CANCELLED'))
+          console.log('Order successfully cancelled', result)
+        } catch (err) {
+          console.error(err)
+          setOpenOrdersData(updateOrderStatus('OPEN'))
+        }
       }
 
       return (
