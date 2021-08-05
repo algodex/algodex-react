@@ -67,7 +67,7 @@ function OpenOrders() {
             index === cellIndex ? { ...order, status: statusMsg } : order
           )
 
-        setOpenOrdersData(updateOrderStatus('CANCELLING...'))
+        setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
         const cancelOrderPromise = OrderService.closeOrder(
           escrowAddress,
@@ -83,6 +83,7 @@ function OpenOrders() {
 
         try {
           const result = await cancelOrderPromise
+          setOpenOrdersData(updateOrderStatus('CANCELLED'))
           console.log('Order successfully cancelled', result)
         } catch (err) {
           console.error(err)

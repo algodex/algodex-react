@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { floatToFixed } from 'services/display'
 
 export const mapOpenOrdersData = (data) => {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
@@ -16,35 +17,35 @@ export const mapOpenOrdersData = (data) => {
     return allAssetsInfo
   }, {})
 
-  const buyOrders = buyOrdersData.map(
-    ({ assetId, formattedPrice, formattedASAAmount, ...rest }) => {
-      return {
-        /** @todo get date/time from API */
-        date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-        price: formattedPrice,
-        pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
-        type: 'BUY',
-        status: 'OPEN',
-        amount: formattedASAAmount,
-        metadata: { assetId, ...rest }
-      }
-    }
-  )
+  const buyOrders = buyOrdersData.map((order) => {
+    const { assetId, formattedPrice, formattedASAAmount, decimals } = order
 
-  const sellOrders = sellOrdersData.map(
-    ({ assetId, formattedPrice, formattedASAAmount, ...rest }) => {
-      return {
-        /** @todo get date/time from API */
-        date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-        price: formattedPrice,
-        pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
-        type: 'SELL',
-        status: 'OPEN',
-        amount: formattedASAAmount,
-        metadata: { assetId, ...rest }
-      }
+    return {
+      /** @todo get date/time from API */
+      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      price: floatToFixed(formattedPrice),
+      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      type: 'BUY',
+      status: 'OPEN',
+      amount: floatToFixed(formattedASAAmount, decimals, decimals),
+      metadata: order
     }
-  )
+  })
+
+  const sellOrders = sellOrdersData.map((order) => {
+    const { assetId, formattedPrice, formattedASAAmount, decimals } = order
+
+    return {
+      /** @todo get date/time from API */
+      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      price: floatToFixed(formattedPrice),
+      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      type: 'SELL',
+      status: 'OPEN',
+      amount: floatToFixed(formattedASAAmount, decimals, decimals),
+      metadata: order
+    }
+  })
 
   return [...buyOrders, ...sellOrders]
 }
