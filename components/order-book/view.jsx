@@ -4,6 +4,7 @@ import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
 import { floatToFixed } from 'services/display'
+import { useStoreMemory } from 'store/use-store'
 
 import {
   Container,
@@ -18,6 +19,8 @@ import {
 function OrderBookView(props) {
   const { price, priceChange, decimals, sellData, buyData } = props
 
+  const setOrder = useStoreMemory((state) => state.setOrder)
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
 
@@ -25,8 +28,19 @@ function OrderBookView(props) {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
 
+      const handleSelectOrder = () => {
+        setOrder({
+          price: row.price
+        })
+      }
+
       return (
-        <BookRow key={`sell-${row.price}`} type={type} data-testid={`order-book-${type}-row`}>
+        <BookRow
+          onClick={handleSelectOrder}
+          key={`sell-${row.price}`}
+          type={type}
+          data-testid={`order-book-${type}-row`}
+        >
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
             color={`${color}.500`}
