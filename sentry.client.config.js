@@ -14,6 +14,7 @@ const ENVIRONMENT =
 Sentry.init({
   dsn: SENTRY_DSN || 'https://1573deb1875c4a53a47ee128a24c042f@o861560.ingest.sentry.io/5841341',
   environment: ENVIRONMENT,
+  enabled: ENVIRONMENT !== 'development',
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1.0
   // ...
