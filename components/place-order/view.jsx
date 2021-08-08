@@ -10,6 +10,7 @@ import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import OrderService from 'services/order'
 import { convertToAsaUnits } from 'services/convert'
+import { useStoreMemory } from 'store/use-store'
 
 import {
   Container,
@@ -65,7 +66,8 @@ function PlaceOrderView(props) {
     setEnableOrder({ buy, sell })
   }, [algoBalance, asaBalance])
 
-  const [order, setOrder] = useState(DEFAULT_ORDER)
+  const order = useStoreMemory((state) => state.order)
+  const setOrder = useStoreMemory((state) => state.setOrder)
 
   /**
    * When order price or amount changes, automatically calculate total (in ALGO)
@@ -94,7 +96,7 @@ function PlaceOrderView(props) {
         total
       })
     }
-  }, [order])
+  }, [order, setOrder])
 
   /**
    * When asset or active wallet changes, reset the form
@@ -103,28 +105,23 @@ function PlaceOrderView(props) {
     setOrder({
       ...DEFAULT_ORDER
     })
-  }, [asset, activeWalletAddress])
+  }, [asset, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
-    setOrder((prev) => ({
-      ...prev,
+    setOrder({
       [field || e.target.id]: e.target.value
-    }))
+    })
   }
 
   const handleRangeChange = (update) => {
-    setOrder((prev) => ({
-      ...prev,
-      ...update
-    }))
+    setOrder(update)
   }
 
   const handleOptionsChange = (e) => {
     const isChecked = e.target.checked
-    setOrder((prev) => ({
-      ...prev,
+    setOrder({
       execution: isChecked ? e.target.value : 'both'
-    }))
+    })
   }
 
   const placeOrder = (orderData) => {

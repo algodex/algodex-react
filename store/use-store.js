@@ -49,6 +49,19 @@ export const useStore = create(
   )
 )
 
+export const useStoreMemory = create(
+  immer((set) => ({
+    order: {
+      type: 'buy',
+      price: '',
+      amount: '',
+      total: '0',
+      execution: 'both'
+    },
+    setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } }))
+  }))
+)
+
 export default useStore
 
 // currentAsset: {
