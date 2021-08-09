@@ -24,7 +24,7 @@
   dependencies:
     tunnel "0.0.6"
 
-"@algodex/algodex-sdk@^1.0.51":
+"@algodex/algodex-sdk@^1.0.52":
   version "1.0.51"
   resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.51/0ecfe44ff73192caed2f40154961ae8850867675e509460abec93fabf8db7c76#195fc02a9e4173d43859f523661ba8f5d19a748e"
   integrity sha512-j+yNSJ8E4w4cHjgPywr6ec7ddWIPwmtiSiUm28pPhm6K3rEzt04OXHUonTHnKjccIXrs561xam4XuPVLLc2uTQ==
