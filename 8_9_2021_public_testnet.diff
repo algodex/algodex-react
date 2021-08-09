@@ -1,0 +1,87 @@
+diff --git a/.env.development b/.env.development
+index 275f14d..1be54ee 100644
+--- a/.env.development
++++ b/.env.development
+@@ -1,2 +1,2 @@
+ NEXT_PUBLIC_ENV=development
+-NEXT_PUBLIC_API=https://api-testnet.algodex.com
++NEXT_PUBLIC_API=https://api-testnet-public.algodex.com
+diff --git a/.env.production b/.env.production
+index ffd6cd3..a81b909 100644
+--- a/.env.production
++++ b/.env.production
+@@ -1,2 +1,2 @@
+ NEXT_PUBLIC_ENV=production
+-NEXT_PUBLIC_API=https://api-testnet.algodex.com
++NEXT_PUBLIC_API=https://api-testnet-public.algodex.com
+diff --git a/components/welcome/index.js b/components/welcome/index.js
+index 1551d62..2a4e5d1 100644
+--- a/components/welcome/index.js
++++ b/components/welcome/index.js
+@@ -5,7 +5,7 @@ export default function Welcome() {
+   return (
+     <>
+       <Title color="gray.300" mb={16} textAlign="center" lineHeight={1}>
+-        Welcome to <StyledLink href="https://www.algodex.com/">Algodex</StyledLink>
++        Welcome to <StyledLink href="https://testnet.algodex.com/">Algodex</StyledLink>
+       </Title>
+     </>
+   )
+diff --git a/package.json b/package.json
+index 5f1170d..34c487b 100644
+--- a/package.json
++++ b/package.json
+@@ -29,7 +29,7 @@
+     "styled-components": "^5"
+   },
+   "dependencies": {
+-    "@algodex/algodex-sdk": "^1.0.52",
++    "@algodex/algodex-sdk": "^1.0.53",
+     "@randlabs/myalgo-connect": "^1.0.1",
+     "@sentry/nextjs": "^6.8.0",
+     "axios": "^0.21.1",
+diff --git a/services/order.js b/services/order.js
+index 1a75596..f3c6f6d 100644
+--- a/services/order.js
++++ b/services/order.js
+@@ -1,7 +1,7 @@
+ import algodex from '@algodex/algodex-sdk'
+ import { convertToBaseUnits, convertToAsaUnits } from './convert'
+ 
+-const AlgodClient = new algodex.initAlgodClient('test')
++const AlgodClient = new algodex.initAlgodClient('public_test')
+ 
+ const OrderService = {
+   placeOrder: (order, orderBook) => {
+diff --git a/services/wallet.js b/services/wallet.js
+index d472200..f1da917 100644
+--- a/services/wallet.js
++++ b/services/wallet.js
+@@ -9,7 +9,7 @@ const WalletService = {
+     }
+ 
+     try {
+-      const AlgodClient = new algodex.initAlgodClient('test')
++      const AlgodClient = new algodex.initAlgodClient('public_test')
+ 
+       const promises = addresses.map(async (address) => {
+         const accountInfo = await AlgodClient.accountInformation(address).do()
+diff --git a/yarn.lock b/yarn.lock
+index 798096f..28f8ed3 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -24,10 +24,10 @@
+   dependencies:
+     tunnel "0.0.6"
+ 
+-"@algodex/algodex-sdk@^1.0.52":
+-  version "1.0.51"
+-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.51/0ecfe44ff73192caed2f40154961ae8850867675e509460abec93fabf8db7c76#195fc02a9e4173d43859f523661ba8f5d19a748e"
+-  integrity sha512-j+yNSJ8E4w4cHjgPywr6ec7ddWIPwmtiSiUm28pPhm6K3rEzt04OXHUonTHnKjccIXrs561xam4XuPVLLc2uTQ==
++"@algodex/algodex-sdk@^1.0.53":
++  version "1.0.53"
++  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.53/520a133c335d51b07fc379c2759f56f9aff17114d1a2cb4f60b87a2ba7cbd247#c6de1522ad377fb20ab4cf5578e8facc5896a21d"
++  integrity sha512-NYsKxHBYSfIj2vkIlZdkxMjCbo/Xykxw/L4fDl7aiY1hkwtyAe+AuwV3f6qmWnnGv0MDVoyCHtWY0zqb+QewgA==
+   dependencies:
+     "@randlabs/myalgo-connect" "^1.0.1"
+     algosdk "^1.10.0"

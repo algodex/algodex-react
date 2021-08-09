@@ -9,7 +9,7 @@ const WalletService = {
     }
 
     try {
-      const AlgodClient = new algodex.initAlgodClient('test')
+      const AlgodClient = new algodex.initAlgodClient('public_test')
 
       const promises = addresses.map(async (address) => {
         const accountInfo = await AlgodClient.accountInformation(address).do()
