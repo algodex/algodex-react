@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
+import theme from 'theme'
 
-const UP_COLOR = '#38A169'
-const DOWN_COLOR = '#E53E3E'
-const LINE_COLOR = '#1A202C'
-const BACKGROUND_COLOR = '#171923'
-const BORDER_COLOR = '#718096'
-const TEXT_COLOR = '#CBD5E0'
+const UP_COLOR = theme.colors.green[500]
+const DOWN_COLOR = theme.colors.red[500]
+const LINE_COLOR = theme.colors.gray[800]
+const BACKGROUND_COLOR = theme.colors.gray[900]
+const BORDER_COLOR = theme.colors.gray[500]
+const TEXT_COLOR = theme.colors.gray[300]
 
 export default function useCandleChart(containerRef, volumeData, priceData) {
   const [candleChart, setCandleChart] = useState()

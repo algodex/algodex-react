@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
+import theme from 'theme'
 
-const LINE_COLOR = '#1A202C'
-const BACKGROUND_COLOR = '#171923'
-const BORDER_COLOR = '#718096'
-const TEXT_COLOR = '#CBD5E0'
+const LINE_COLOR = theme.colors.gray[800]
+const BACKGROUND_COLOR = theme.colors.gray[900]
+const BORDER_COLOR = theme.colors.gray[500]
+const TEXT_COLOR = theme.colors.gray[300]
 
 const TOP_COLOR = '#248350'
-const TOP_LINE_COLOR = '#38A169'
+const TOP_LINE_COLOR = theme.colors.green[500]
 const BOTTOM_COLOR = '#38a16911'
 const LINE_WIDTH = 2
 
