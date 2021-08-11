@@ -20,7 +20,8 @@ function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
 
   const changeAmt = new Big(ohlc.close).minus(ohlc.open).toString()
-  const changePct = new Big(changeAmt).times(100).div(ohlc.open).toString()
+  const changePct =
+    parseFloat(ohlc.open) > 0 ? new Big(changeAmt).times(100).div(ohlc.open).toString() : '0'
 
   const openCloseChange = () => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
