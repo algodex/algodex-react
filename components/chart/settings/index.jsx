@@ -14,6 +14,7 @@ function ChartSettings(props) {
     return ['1m', '5m', '15m', '1h', '4h', '1d'].map((i) => (
       <>
         <ToggleInput
+          key={i}
           type="radio"
           id={`time-${i}`}
           value={i}
