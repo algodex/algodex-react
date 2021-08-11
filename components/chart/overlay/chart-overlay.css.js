@@ -22,16 +22,20 @@ export const Header = styled.header`
 `
 
 export const TradingPair = styled.h3`
-  margin-right: 1.75rem;
-  margin-bottom: 0.5rem;
+  margin-right: 1.5em;
+  margin-bottom: 0.375em;
   font-family: ${({ theme }) => theme.fontFamilies.body};
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.gray[500]};
   white-space: nowrap;
 
   span {
     color: ${({ theme }) => theme.colors.gray[100]};
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 1.25rem;
   }
 `
 
@@ -44,24 +48,28 @@ export const OhlcList = styled.dl`
 export const OhlcItem = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 0.375rem;
+  margin-bottom: 0.5em;
   font-family: 'Roboto Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
 
   &:not(:last-child) {
-    margin-right: 1.5rem;
+    margin-right: 2em;
   }
 
   dt {
     color: ${({ theme }) => theme.colors.gray[100]};
-    margin-right: 0.25rem;
+    margin-right: 0.375em;
   }
 
   dd {
     color: ${({ theme, value }) =>
       parseFloat(value) < 0 ? theme.colors.red[500] : theme.colors.green[500]};
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 0.75rem;
   }
 `
 
@@ -69,20 +77,24 @@ export const BidAskSpreadContainer = styled.div`
   display: flex;
   align-items: center;
   font-family: 'Roboto Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
   margin-left: 1.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.875em;
+
+  @media (min-width: 1024px) {
+    font-size: 0.75rem;
+  }
 `
 
 const BidAskSpreadItem = styled.span`
   color: ${({ theme }) => theme.colors.gray[100]};
-  padding: 0.125rem 0.5rem calc(0.125rem + 1px);
+  padding: 0.25em 0.625em;
   border-radius: 2px;
 
   &:not(:last-child) {
-    margin-right: 0.75rem;
+    margin-right: 1em;
   }
 `
 
@@ -96,8 +108,8 @@ export const Ask = styled(BidAskSpreadItem)`
 
 export const Spread = styled(BidAskSpreadItem)`
   background-color: ${({ theme }) => theme.colors.gray[900]};
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+  padding-left: 0.375em;
+  padding-right: 0.375em;
 `
 
 export const VolumeContainer = styled.dl`
@@ -110,16 +122,20 @@ export const Volume = styled.div`
   display: flex;
   align-items: center;
   font-family: 'Roboto Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
 
   dt {
     color: ${({ theme }) => theme.colors.gray[100]};
-    margin-right: 0.25rem;
+    margin-right: 0.375em;
   }
 
   dd {
     color: ${({ theme }) => theme.colors.gray[100]};
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 0.75rem;
   }
 `
