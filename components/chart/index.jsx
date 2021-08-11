@@ -40,7 +40,7 @@ function Chart(props) {
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
   const ohlc = useMemo(() => getOhlc(data), [data])
 
-  const algoVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.algoVolume || 0)
+  const asaVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
 
   if (isLoading) {
     return <Spinner flex />
@@ -56,12 +56,11 @@ function Chart(props) {
       ask={ask}
       baseAsset={baseAsset}
       spread={spread}
-      algoVolume={algoVolume}
+      asaVolume={asaVolume}
       asset={asset}
       ohlc={ohlc}
       priceData={priceData}
       volumeData={volumeData}
-      initialChartMode="CANDLE"
       {...props}
     />
   )
