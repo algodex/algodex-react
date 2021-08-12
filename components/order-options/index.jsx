@@ -70,7 +70,7 @@ function OrderOptions(props) {
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-maker" size="small" type={order.type}>
-                Post Only
+                Maker Only
               </OptionsButton>
               <OptionsInput
                 type="checkbox"
@@ -80,7 +80,17 @@ function OrderOptions(props) {
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
-                Immediate-or-Cancel
+                Taker Only
+              </OptionsButton>
+              <OptionsInput
+                type="checkbox"
+                id="order-both"
+                value="both"
+                checked={order.execution === 'both'}
+                onChange={handleChange}
+              />
+              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
+                Maker/Taker
               </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">
