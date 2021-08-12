@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types  */
 import { useMemo } from 'react'
-// import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
+import useStore from 'store/use-store'
+import { fetchAssetsByByAddress } from 'lib/api'
+import { mapAssetsData } from './helpers'
 
 import {
   AssetCoin,
@@ -28,16 +31,24 @@ const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
 
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 
-function Assets({ assets }) {
-  // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
+function Assets() {
+  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
 
-  const error = {}
+  const { data, isLoading, isError } = useQuery(
+    ['assets', { address: activeWalletAddress }],
+    () => fetchAssetsByByAddress(activeWalletAddress),
+    {
+      refetchInterval: 1000
+    }
+  )
+
+  const assetsData = useMemo(() => mapAssetsData(data), [data])
 
   const columns = useMemo(
     () => [
       {
-        Header: 'Coin',
-        accessor: 'coin',
+        Header: 'Unit Name',
+        accessor: 'unit',
         Cell: AssetCoinCell
       },
       {
@@ -69,36 +80,14 @@ function Assets({ assets }) {
     []
   )
 
-  const data = useMemo(
-    () => [
-      {
-        coin: 'YLDY',
-        name: 'Yieldly',
-        total: '500',
-        available: '42',
-        'in-order': '456',
-        'algo-value': '250'
-      },
-      {
-        coin: 'MCAU',
-        name: 'Meld Gold',
-        total: '1000',
-        available: '420',
-        'in-order': '580',
-        'algo-value': '12000'
-      }
-    ],
-    []
-  )
-
   const renderStatus = () => {
-    if (status === 'success') {
+    if (!isLoading && !isError) {
       return null
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">Something went wrong.</BodyCopySm>}
       </StatusContainer>
     )
   }
@@ -106,7 +95,7 @@ function Assets({ assets }) {
   return (
     <Container>
       <TableWrapper>
-        <OrdersTable columns={columns} data={data} />
+        <OrdersTable columns={columns} data={assetsData || []} />
       </TableWrapper>
 
       {renderStatus()}
