@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Container, ToggleWrapper, ToggleInput, ToggleBtn } from './chart-settings.css'
@@ -12,9 +13,8 @@ function ChartSettings(props) {
   const renderTimeIntervals = () => {
     // @todo: should be handled in view and passed as props when supported
     return ['1m', '5m', '15m', '1h', '4h', '1d'].map((i) => (
-      <>
+      <React.Fragment key={i}>
         <ToggleInput
-          key={i}
           type="radio"
           id={`time-${i}`}
           value={i}
@@ -25,7 +25,7 @@ function ChartSettings(props) {
         <ToggleBtn as="label" size="small" htmlFor={`time-${i}`}>
           {i}
         </ToggleBtn>
-      </>
+      </React.Fragment>
     ))
   }
 
