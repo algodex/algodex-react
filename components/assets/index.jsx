@@ -47,8 +47,8 @@ function Assets() {
   const columns = useMemo(
     () => [
       {
-        Header: 'Coin',
-        accessor: 'coin',
+        Header: 'Unit Name',
+        accessor: 'unit',
         Cell: AssetCoinCell
       },
       {

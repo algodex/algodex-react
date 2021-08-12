@@ -15,7 +15,7 @@ export const mapAssetsData = (data) => {
       formattedTotalAlgoEquiv
     }) => {
       return {
-        coin: unit_name,
+        unit: unit_name,
         name,
         total: formattedTotalASAAmount || '',
         available: formattedASAAvailable || '',
