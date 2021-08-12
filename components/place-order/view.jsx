@@ -118,9 +118,8 @@ function PlaceOrderView(props) {
   }
 
   const handleOptionsChange = (e) => {
-    const isChecked = e.target.checked
     setOrder({
-      execution: isChecked ? e.target.value : 'both'
+      execution: e.target.value
     })
   }
 
