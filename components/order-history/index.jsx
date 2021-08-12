@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-import useStore from 'store/use-store'
+import { useStorePersisted } from 'store/use-store'
 import { fetchTradeHistoryByAddress } from 'lib/api'
 import { mapTradeHistoryData } from './helpers'
 
@@ -29,7 +29,7 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
 function OrderHistory() {
-  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
   const { data, isLoading, isError } = useQuery(
     ['tradeHistory', { address: activeWalletAddress }],

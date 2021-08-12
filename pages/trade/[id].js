@@ -11,7 +11,7 @@ import Header from 'components/header'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
-import useStore from 'store/use-store'
+import useStore, { useStorePersisted } from 'store/use-store'
 
 const Container = styled.div`
   max-height: 100vh;
@@ -54,10 +54,10 @@ export default function Home() {
 
   const { connect, addresses } = useMyAlgo()
 
-  const wallets = useStore((state) => state.wallets)
-  const setWallets = useStore((state) => state.setWallets)
-  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStore((state) => state.setActiveWalletAddress)
+  const wallets = useStorePersisted((state) => state.wallets)
+  const setWallets = useStorePersisted((state) => state.setWallets)
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
   const setOrderBook = useStore((state) => state.setOrderBook)

@@ -10,7 +10,7 @@ import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import OrderService from 'services/order'
 import { convertToAsaUnits } from 'services/convert'
-import { useStoreMemory } from 'store/use-store'
+import { useStore } from 'store/use-store'
 
 import {
   Container,
@@ -66,8 +66,8 @@ function PlaceOrderView(props) {
     setEnableOrder({ buy, sell })
   }, [algoBalance, asaBalance])
 
-  const order = useStoreMemory((state) => state.order)
-  const setOrder = useStoreMemory((state) => state.setOrder)
+  const order = useStore((state) => state.order)
+  const setOrder = useStore((state) => state.setOrder)
 
   /**
    * When order price or amount changes, automatically calculate total (in ALGO)

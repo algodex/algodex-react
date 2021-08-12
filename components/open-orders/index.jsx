@@ -6,7 +6,7 @@ import OrdersTable from 'components/orders-table'
 import { mapOpenOrdersData } from './helpers'
 import { fetchOpenOrdersByAddress } from 'lib/api'
 import OrderService from 'services/order'
-import useStore from 'store/use-store'
+import { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
 import {
   OrderDate,
@@ -23,7 +23,7 @@ import {
 } from './open-orders.css'
 
 function OpenOrders() {
-  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
   const { data, isLoading, isError } = useQuery(
