@@ -4,7 +4,7 @@ import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
 import { floatToFixed } from 'services/display'
-import { useStoreMemory } from 'store/use-store'
+import { useStore } from 'store/use-store'
 
 import {
   Container,
@@ -19,7 +19,7 @@ import {
 function OrderBookView(props) {
   const { price, priceChange, decimals, sellData, buyData } = props
 
-  const setOrder = useStoreMemory((state) => state.setOrder)
+  const setOrder = useStore((state) => state.setOrder)
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'

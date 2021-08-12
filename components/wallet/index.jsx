@@ -1,15 +1,14 @@
 import PropTypes from 'prop-types'
-import useStore from 'store/use-store'
+import useStore, { useStorePersisted } from 'store/use-store'
 import WalletView from './view'
 
 function Wallet(props) {
   const { onWalletConnect } = props
 
-  const wallets = useStore((state) => state.wallets)
-  const activeWalletAddress = useStore((state) => state.activeWalletAddress)
+  const wallets = useStorePersisted((state) => state.wallets)
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
-
-  const setActiveWalletAddress = useStore((state) => state.setActiveWalletAddress)
 
   return (
     <WalletView

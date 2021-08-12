@@ -12,45 +12,45 @@ const immer = (config) => (set, get, api) =>
     api
   )
 
-export const useStore = create(
+export const useStorePersisted = create(
   persist(
     immer((set) => ({
-      asset: {},
-      setAsset: (asset) => set({ asset }),
-
       wallets: [],
       setWallets: (wallets) => set({ wallets }),
 
       activeWalletAddress: '',
-      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
-
-      isSignedIn: false,
-      setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
-      signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
-
-      orderBook: {
-        buyOrders: [],
-        sellOrders: [],
-        decimals: 6
-      },
-      setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }, decimals) =>
-        set({
-          orderBook: {
-            buyOrders: buyASAOrdersInEscrow,
-            sellOrders: sellASAOrdersInEscrow,
-            decimals
-          }
-        })
+      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
     })),
     {
       name: 'algodex',
-      version: 2
+      version: 3
     }
   )
 )
 
-export const useStoreMemory = create(
+export const useStore = create(
   immer((set) => ({
+    asset: {},
+    setAsset: (asset) => set({ asset }),
+
+    isSignedIn: false,
+    setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
+    signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
+
+    orderBook: {
+      buyOrders: [],
+      sellOrders: [],
+      decimals: 6
+    },
+    setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }, decimals) =>
+      set({
+        orderBook: {
+          buyOrders: buyASAOrdersInEscrow,
+          sellOrders: sellASAOrdersInEscrow,
+          decimals
+        }
+      }),
+
     order: {
       type: 'buy',
       price: '',
@@ -63,18 +63,3 @@ export const useStoreMemory = create(
 )
 
 export default useStore
-
-// currentAsset: {
-//   id: null,
-//   name: null,
-//   symbol: null,
-//   currentPrice: null,
-//   bid: null,
-//   ask: null,
-//   volume24H: null,
-//   dailyChange: null,
-//   open: null,
-//   high: null,
-//   low: null,
-//   close: null
-// }
