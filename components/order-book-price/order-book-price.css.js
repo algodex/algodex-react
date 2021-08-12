@@ -10,7 +10,8 @@ export const Price = styled.p`
   margin-left: 0.5rem;
 `
 export const PriceIcon = styled(Icon)`
-  margin-right: 0.25rem;
+  margin: 0 0.25rem 0.25rem 0;
+  align-self: flex-end;
 `
 export const PercentChange = styled(BodyCopySm)`
   color: ${({ theme, color }) => theme.colors[color]['500']};

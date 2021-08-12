@@ -10,7 +10,7 @@ function OrderBookPrice(props) {
 
   return (
     <Price data-testid="order-book-price">
-      <PriceIcon use="algoLogo" size={0.9} />
+      <PriceIcon use="algoLogo" size={0.7} />
       {floatToFixed(price)}
       <PercentChange color={color}>{`${floatToFixed(change, 2)}%`}</PercentChange>
     </Price>
