@@ -20,14 +20,16 @@ export const mapPriceData = (data) => {
 }
 
 export const getOhlc = (data) => {
-  const lastPriceData = data?.chart_data[0] || {}
-  const ohlc =
-    {
-      open: floatToFixed(lastPriceData?.formatted_open),
-      high: floatToFixed(lastPriceData?.formatted_high),
-      low: floatToFixed(lastPriceData?.formatted_low),
-      close: floatToFixed(lastPriceData?.formatted_close)
-    } || {}
+  const lastPriceData = data?.chart_data[0]
+
+  const ohlc = lastPriceData
+    ? {
+        open: floatToFixed(lastPriceData.formatted_open),
+        high: floatToFixed(lastPriceData.formatted_high),
+        low: floatToFixed(lastPriceData.formatted_low),
+        close: floatToFixed(lastPriceData.formatted_close)
+      }
+    : {}
   return ohlc
 }
 
