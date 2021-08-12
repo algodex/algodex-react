@@ -17,10 +17,10 @@ export const mapAssetsData = (data) => {
       return {
         coin: unit_name,
         name,
-        total: formattedTotalASAAmount,
-        available: formattedASAAvailable,
-        'in-order': formattedASAInOrder,
-        'algo-value': formattedTotalAlgoEquiv
+        total: formattedTotalASAAmount || '',
+        available: formattedASAAvailable || '',
+        'in-order': formattedASAInOrder || '',
+        'algo-value': formattedTotalAlgoEquiv || ''
       }
     }
   )
