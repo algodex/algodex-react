@@ -1,42 +1,35 @@
 import Big from 'big.js'
 import dayjs from 'dayjs'
-import { convertFromAsaUnits } from 'services/convert'
 import { floatToFixed } from 'services/display'
 
-// @todo shouldn't need this anymore
-const displayConverted = (price = 0, decimals = 6) => {
-  const converted = convertFromAsaUnits(price, decimals)
-  return floatToFixed(converted)
-}
-
-// @todo use formattedPrice for OHLC when available
 export const mapPriceData = (data) => {
-  const decimals = data?.asset_info.asset.params.decimals
   const prices =
-    data?.chart_data.map(({ date, open, high, low, close }) => {
-      const time = dayjs(new Date(date)).format('YYYY-MM-DD')
-      return {
-        time,
-        open: displayConverted(open, decimals),
-        high: displayConverted(high, decimals),
-        low: displayConverted(low, decimals),
-        close: displayConverted(close, decimals)
+    data?.chart_data.map(
+      ({ date, formatted_open, formatted_high, formatted_low, formatted_close }) => {
+        const time = dayjs(new Date(date)).format('YYYY-MM-DD')
+        return {
+          time,
+          open: floatToFixed(formatted_open),
+          high: floatToFixed(formatted_high),
+          low: floatToFixed(formatted_low),
+          close: floatToFixed(formatted_close)
+        }
       }
-    }) || []
+    ) || []
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
-// @todo use formattedPrice for OHLC when available
 export const getOhlc = (data) => {
-  const lastPriceData = data?.chart_data[0] || {}
-  const decimals = data?.asset_info.asset.params.decimals
-  const ohlc =
-    {
-      open: displayConverted(lastPriceData?.open, decimals),
-      high: displayConverted(lastPriceData?.high, decimals),
-      low: displayConverted(lastPriceData?.low, decimals),
-      close: displayConverted(lastPriceData?.close, decimals)
-    } || {}
+  const lastPriceData = data?.chart_data[0]
+
+  const ohlc = lastPriceData
+    ? {
+        open: floatToFixed(lastPriceData.formatted_open),
+        high: floatToFixed(lastPriceData.formatted_high),
+        low: floatToFixed(lastPriceData.formatted_low),
+        close: floatToFixed(lastPriceData.formatted_close)
+      }
+    : {}
   return ohlc
 }
 
