@@ -64,6 +64,16 @@ function OrderOptions(props) {
             <OptionsWrapper>
               <OptionsInput
                 type="checkbox"
+                id="order-both"
+                value="both"
+                checked={order.execution === 'both'}
+                onChange={handleChange}
+              />
+              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
+                Maker/Taker
+              </OptionsButton>
+              <OptionsInput
+                type="checkbox"
                 id="order-maker"
                 value="maker"
                 checked={order.execution === 'maker'}
@@ -81,16 +91,6 @@ function OrderOptions(props) {
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
                 Taker Only
-              </OptionsButton>
-              <OptionsInput
-                type="checkbox"
-                id="order-both"
-                value="both"
-                checked={order.execution === 'both'}
-                onChange={handleChange}
-              />
-              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
-                Maker/Taker
               </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">
