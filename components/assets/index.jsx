@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchAssetsByByAddress } from 'lib/api'
+import { fetchAssetsByAddress } from 'lib/api'
 import { mapAssetsData } from './helpers'
 
 import {
@@ -36,9 +36,10 @@ function Assets() {
 
   const { data, isLoading, isError } = useQuery(
     ['assets', { address: activeWalletAddress }],
-    () => fetchAssetsByByAddress(activeWalletAddress),
+    () => fetchAssetsByAddress(activeWalletAddress),
     {
-      refetchInterval: 1000
+      refetchInterval: 1000,
+      enabled: !!activeWalletAddress
     }
   )
 
