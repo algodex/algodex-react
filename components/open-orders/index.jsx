@@ -8,6 +8,7 @@ import { fetchOpenOrdersByAddress } from 'lib/api'
 import OrderService from 'services/order'
 import { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
+
 import {
   OrderDate,
   OrderPrice,
@@ -31,7 +32,7 @@ function OpenOrders() {
     () => fetchOpenOrdersByAddress(activeWalletAddress),
     {
       enabled: !!activeWalletAddress,
-      refetchInterval: 1000
+      refetchInterval: 3000
     }
   )
 
