@@ -29,7 +29,10 @@ function OpenOrders() {
   const { data, isLoading, isError } = useQuery(
     ['openOrders', { address: activeWalletAddress }],
     () => fetchOpenOrdersByAddress(activeWalletAddress),
-    { refetchInterval: 1000 }
+    {
+      enabled: !!activeWalletAddress,
+      refetchInterval: 1000
+    }
   )
 
   useEffect(() => {
