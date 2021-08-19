@@ -19,10 +19,7 @@ export const useStorePersisted = create(
       setWallets: (wallets) => set({ wallets }),
 
       activeWalletAddress: '',
-      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
-
-      hasTesnetAccess: null,
-      setHasTesnetAccess: (hasAccess) => set({ hasTesnetAccess: hasAccess })
+      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
     })),
     {
       name: 'algodex',

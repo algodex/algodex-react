@@ -15,6 +15,7 @@ import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
 import TestnetGate from 'components/testnet-gate'
 import { checkTestnetAccess } from 'lib/api'
+import Cookies from 'cookies'
 
 const Container = styled.div`
   max-height: 100vh;
@@ -171,8 +172,14 @@ Home.propTypes = {
   hasTestnetAccess: PropTypes.bool
 }
 
-export async function getServerSideProps(context) {
-  const hasTestnetAccess = await checkTestnetAccess(context.query?.loginKey)
+export async function getServerSideProps({ req, res, query }) {
+  const cookies = new Cookies(req, res)
+
+  if (query?.loginKey) {
+    cookies.set('loginKey', query.loginKey)
+  }
+
+  const hasTestnetAccess = await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
 
   return {
     props: {

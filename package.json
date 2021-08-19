@@ -34,6 +34,7 @@
     "@sentry/nextjs": "^6.11.0",
     "axios": "^0.21.1",
     "big.js": "^6.1.1",
+    "cookies": "^0.8.0",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
     "immer": "^9.0.3",
