@@ -35,7 +35,7 @@ function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
 
   const asset = useStore((state) => state.asset)
-  const isTraded = !!asset.price
+  const showOrderBook = asset.isTraded || asset.hasOrders
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
@@ -63,8 +63,8 @@ function MainLayout(props) {
         <TradeSection>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
-        <ChartSection>{isTraded ? <Chart /> : <AssetInfo />}</ChartSection>
-        <OrderBookSection>{isTraded ? <OrderBook /> : <FirstOrderMsg />}</OrderBookSection>
+        <ChartSection>{asset.isTraded ? <Chart /> : <AssetInfo />}</ChartSection>
+        <OrderBookSection>{showOrderBook ? <OrderBook /> : <FirstOrderMsg />}</OrderBookSection>
         <TradeHistorySection>
           <TradeHistory />
         </TradeHistorySection>

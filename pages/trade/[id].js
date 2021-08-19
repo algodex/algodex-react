@@ -89,14 +89,17 @@ export default function Home() {
     }
   }, [asset, assetQuery.isSuccess, router, setAsset])
 
+  // for determining whether to poll order book endpoint
+  const hasBeenOrdered = asset?.isTraded || asset?.hasOrders
+
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
-  // @todo: and asset.hasOpenOrders being true
+  // and hasBeenOrdered being true
   const orderBookQuery = useQuery(
     ['orderBook', { assetId: asset?.id }],
     () => fetchOrdersInEscrow(asset?.id),
     {
-      enabled: !!asset?.id, // && asset.hasOpenOrders,
+      enabled: !!asset?.id && hasBeenOrdered,
       refetchInterval: 5000
     }
   )
