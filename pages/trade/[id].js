@@ -12,7 +12,7 @@ import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
 
-import { Container, StatusContainer } from './trade.css'
+import { Container, StatusContainer } from 'styles/trade.css'
 
 export default function Home() {
   const router = useRouter()
@@ -116,7 +116,7 @@ export default function Home() {
     const isAssetStored = assetStore?.id
 
     const isLoading =
-      assetQuery.isLoading || orderBookQuery.isLoading || (assetQuery.isSuccess && !isAssetStored)
+      assetQuery.isLoading || orderBookQuery.isLoading || (!assetQuery.isError && !isAssetStored)
     const isError = assetQuery.isError || orderBookQuery.isError
 
     if (isLoading) {
