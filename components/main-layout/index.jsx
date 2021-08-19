@@ -13,6 +13,7 @@ import TradeHistory from 'components/trade-history'
 import { generateTradesData } from 'components/trade-history/demo'
 import Wallet from 'components/wallet'
 import useStore from 'store/use-store'
+import TestnetGate from 'components/testnet-gate'
 
 import {
   AssetsSection,
@@ -58,7 +59,9 @@ function MainLayout(props) {
       <Main ref={gridRef}>
         <MobileInterface />
         <WalletSection>
-          <Wallet onWalletConnect={onWalletConnect} />
+          <TestnetGate>
+            <Wallet onWalletConnect={onWalletConnect} />
+          </TestnetGate>
         </WalletSection>
         <TradeSection>
           <PlaceOrder refetchWallets={refetchWallets} />
