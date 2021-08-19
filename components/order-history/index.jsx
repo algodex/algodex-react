@@ -35,6 +35,7 @@ function OrderHistory() {
     ['tradeHistory', { address: activeWalletAddress }],
     () => fetchTradeHistoryByAddress(activeWalletAddress),
     {
+      enabled: !!activeWalletAddress,
       refetchInterval: 1000
     }
   )
