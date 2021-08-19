@@ -129,7 +129,7 @@ export default function Home() {
 
   const renderDashboard = () => {
     const isError = assetQuery.isError || orderBookQuery.isError
-    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading
+    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading || !asset?.id
 
     if (isLoading) {
       return (
