@@ -36,6 +36,7 @@ export default function Home() {
   const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
   const setOrderBook = useStore((state) => state.setOrderBook)
+  const assetStore = useStore((state) => state.asset)
 
   const walletAddresses = useMemo(
     () => addresses || wallets.map((w) => w.address) || [],
@@ -111,8 +112,11 @@ export default function Home() {
   }, [orderBookQuery.data, setOrderBook, asset])
 
   const renderDashboard = () => {
+    // @todo: investigate using React Query's queryCache instead of saving to Zustand store
+    const isAssetStored = assetStore?.id
+
     const isLoading =
-      assetQuery.isLoading || orderBookQuery.isLoading || (!assetQuery.isError && !asset?.id)
+      assetQuery.isLoading || orderBookQuery.isLoading || (assetQuery.isSuccess && !isAssetStored)
     const isError = assetQuery.isError || orderBookQuery.isError
 
     if (isLoading) {
