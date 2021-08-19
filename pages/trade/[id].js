@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
@@ -12,6 +13,8 @@ import Spinner from 'components/spinner'
 import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
+import TestnetGate from 'components/testnet-gate'
+import { checkTestnetAccess } from 'lib/api'
 
 const Container = styled.div`
   max-height: 100vh;
@@ -40,7 +43,7 @@ const StatusContainer = styled.div`
   display: flex;
 `
 
-export default function Home() {
+export default function Home({ hasTestnetAccess }) {
   const router = useRouter()
   const id = router.query.id
   const isValidId = /^\d+$/.test(id)
@@ -159,7 +162,21 @@ export default function Home() {
       </Head>
       <Header />
 
-      {renderDashboard()}
+      <TestnetGate hasAccess={hasTestnetAccess}>{renderDashboard()}</TestnetGate>
     </Container>
   )
+}
+
+Home.propTypes = {
+  hasTestnetAccess: PropTypes.bool
+}
+
+export async function getServerSideProps(context) {
+  const hasTestnetAccess = await checkTestnetAccess(context.query?.loginKey)
+
+  return {
+    props: {
+      hasTestnetAccess
+    }
+  }
 }
