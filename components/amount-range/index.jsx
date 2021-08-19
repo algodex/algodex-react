@@ -13,7 +13,7 @@ function AmountRange(props) {
   const amount = new Big(order.amount || 0).toString()
   const algoBalance = new Big(_algoBalance).toString()
   const asaBalance = new Big(_asaBalance).toString()
-  const currentPrice = new Big(asset.price).toString()
+  const currentPrice = new Big(asset.price || 0).toString()
 
   // @todo: calculate txn fees
   // const value = isBuyOrder

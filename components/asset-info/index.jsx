@@ -1,0 +1,101 @@
+import Image from 'next/image'
+import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
+import SvgImage from 'components/svg-image'
+import useStore from 'store/use-store'
+import theme from 'theme'
+
+import {
+  Container,
+  InfoContainer,
+  HeaderContainer,
+  AssetUrl,
+  InfoList,
+  InfoItem,
+  AlgoExplorerLink,
+  ExternalLinkIcon
+} from './asset-info.css'
+
+export default function AssetInfo() {
+  const asset = useStore((state) => state.asset)
+
+  const description = asset.info.description || 'N/A'
+
+  const renderName = () => {
+    if (asset.verified) {
+      return (
+        <>
+          {`${asset.info.fullName} `}
+          <span>
+            {`(${asset.name}) `}
+            <SvgImage use="verified" w={2} h={2} />
+          </span>
+        </>
+      )
+    }
+    return <>{`${asset.info.fullName} (${asset.name})`}</>
+  }
+
+  return (
+    <Container>
+      <InfoContainer>
+        <HeaderContainer>
+          <HeaderLg color="gray.100" mb={2}>
+            {renderName()}
+          </HeaderLg>
+          {asset.info.url && (
+            <AssetUrl>
+              <a href={asset.info.url} target="_blank" rel="noreferrer">
+                <BodyCopy as="span">{asset.info.url}</BodyCopy>
+              </a>
+            </AssetUrl>
+          )}
+        </HeaderContainer>
+        <InfoList>
+          <InfoItem>
+            <BodyCopyTiny as="dt" color="gray.500">
+              Description
+            </BodyCopyTiny>
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
+              {description}
+            </BodyCopy>
+          </InfoItem>
+          <InfoItem halfWidth>
+            <BodyCopyTiny as="dt" color="gray.500">
+              Circulating Supply
+            </BodyCopyTiny>
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+              {asset.info.supply.circulating}
+            </BodyCopy>
+          </InfoItem>
+          <InfoItem halfWidth>
+            <BodyCopyTiny as="dt" color="gray.500">
+              Total Supply
+            </BodyCopyTiny>
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+              {asset.info.supply.total}
+            </BodyCopy>
+          </InfoItem>
+          <InfoItem>
+            <BodyCopyTiny as="dt" color="gray.500">
+              ASA ID
+            </BodyCopyTiny>
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+              {asset.id}
+            </BodyCopy>
+          </InfoItem>
+        </InfoList>
+        <AlgoExplorerLink>
+          <a href={asset.info.algoExplorerUrl} target="_blank" rel="noreferrer">
+            <Image
+              src="/algo-explorer.png"
+              alt="View asset on Algo Explorer"
+              width="100"
+              height="15"
+            />
+            <ExternalLinkIcon />
+          </a>
+        </AlgoExplorerLink>
+      </InfoContainer>
+    </Container>
+  )
+}

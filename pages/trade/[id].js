@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
 import { useQuery } from 'react-query'
 import { fetchAssetById } from 'lib/api'
 import { fetchOrdersInEscrow } from 'lib/api'
@@ -13,38 +12,14 @@ import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
 
-const Container = styled.div`
-  max-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-
-  // for demo
-  p.demo {
-    flex: 1 1 0%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    margin: 0;
-    color: ${({ theme }) => theme.colors.gray['600']};
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-`
-
-const StatusContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-`
+import { Container, StatusContainer } from './trade.css'
 
 export default function Home() {
   const router = useRouter()
   const id = router.query.id
   const isValidId = /^\d+$/.test(id)
 
+  // Redirect to LAMP if `id` is invalid (contains non-numerical characters)
   useEffect(() => {
     if (id && !isValidId) {
       console.log('Redirecting to LAMP (15322902)...')
@@ -96,7 +71,8 @@ export default function Home() {
 
   // fetch asset from API
   const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), {
-    enabled: isValidId
+    enabled: isValidId,
+    refetchInterval: 3000
   })
 
   const asset = assetQuery.data?.asset
@@ -104,7 +80,7 @@ export default function Home() {
 
   useEffect(() => {
     if (assetQuery.isSuccess) {
-      if (asset.isTraded) {
+      if (asset.id) {
         setAsset(asset)
       } else {
         console.log('Redirecting to LAMP (15322902)...')
@@ -115,10 +91,14 @@ export default function Home() {
 
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
+  // @todo: and asset.hasOpenOrders being true
   const orderBookQuery = useQuery(
     ['orderBook', { assetId: asset?.id }],
     () => fetchOrdersInEscrow(asset?.id),
-    { enabled: !!asset?.id, refetchInterval: 5000 }
+    {
+      enabled: !!asset?.id, // && asset.hasOpenOrders,
+      refetchInterval: 5000
+    }
   )
 
   useEffect(() => {
@@ -128,8 +108,9 @@ export default function Home() {
   }, [orderBookQuery.data, setOrderBook, asset])
 
   const renderDashboard = () => {
+    const isLoading =
+      assetQuery.isLoading || orderBookQuery.isLoading || (!assetQuery.isError && !asset?.id)
     const isError = assetQuery.isError || orderBookQuery.isError
-    const isLoading = assetQuery.isLoading || orderBookQuery.isLoading || !asset?.id
 
     if (isLoading) {
       return (

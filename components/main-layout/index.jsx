@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import AssetSearch from 'components/asset-search'
-import { demoAssetsData } from 'components/assets/demo'
 import Chart from 'components/chart'
 import MobileInterface from 'components/mobile-interface'
-import { demoOpenOrderData } from 'components/open-orders/demo'
 import OrderBook from 'components/order-book'
-import { demoOrderHistoryData } from 'components/order-history/demo'
 import Orders from 'components/orders'
 import PlaceOrder from 'components/place-order'
 import TradeHistory from 'components/trade-history'
-import { generateTradesData } from 'components/trade-history/demo'
 import Wallet from 'components/wallet'
+import AssetInfo from 'components/asset-info'
+import FirstOrderMsg from 'components/first-order-msg'
+import { demoAssetsData } from 'components/assets/demo'
+import { demoOpenOrderData } from 'components/open-orders/demo'
+import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
 
 import {
@@ -26,8 +27,6 @@ import {
   WalletSection
 } from './main-layout.css'
 
-const DEMO_TRADES_DATA = generateTradesData(1.3766, 0.0001)
-
 const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
@@ -36,6 +35,7 @@ function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
 
   const asset = useStore((state) => state.asset)
+  const isTraded = !!asset.price
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
@@ -63,14 +63,10 @@ function MainLayout(props) {
         <TradeSection>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
-        <ChartSection>
-          <Chart />
-        </ChartSection>
-        <OrderBookSection>
-          <OrderBook />
-        </OrderBookSection>
+        <ChartSection>{isTraded ? <Chart /> : <AssetInfo />}</ChartSection>
+        <OrderBookSection>{isTraded ? <OrderBook /> : <FirstOrderMsg />}</OrderBookSection>
         <TradeHistorySection>
-          <TradeHistory assetName={asset.name} tradesData={DEMO_TRADES_DATA} />
+          <TradeHistory />
         </TradeHistorySection>
         <OrdersSection>
           <Orders
