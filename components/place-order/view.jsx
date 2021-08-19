@@ -291,7 +291,7 @@ function PlaceOrderView(props) {
               {txnFee.toFixed(3)}
             </BodyCopyTiny>
           </TxnFeeContainer> */}
-          <OrderOptions order={order} onChange={handleOptionsChange} />
+          <OrderOptions order={order} onChange={handleOptionsChange} allowTaker={asset.hasOrders} />
         </LimitOrder>
         {renderSubmit()}
       </>
