@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useStorePersisted } from 'store/use-store'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { HeaderSm, BodyCopySm } from 'components/type'
@@ -14,7 +16,14 @@ export const EmptyState = styled.div`
 `
 
 const TestnetGate = ({ children, hasAccess }) => {
-  return hasAccess ? (
+  const hasTesnetAccess = useStorePersisted((state) => state.hasTesnetAccess)
+  const setHasTesnetAccess = useStorePersisted((state) => state.setHasTesnetAccess)
+
+  useEffect(() => {
+    if (!hasTesnetAccess) setHasTesnetAccess(hasAccess)
+  }, [])
+
+  return hasTesnetAccess ? (
     children
   ) : (
     <EmptyState>
