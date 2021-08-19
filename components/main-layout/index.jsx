@@ -35,6 +35,7 @@ function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
 
   const asset = useStore((state) => state.asset)
+  const isSignedIn = useStore((state) => state.isSignedIn)
   const showOrderBook = asset.isTraded || asset.hasOrders
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
@@ -64,7 +65,9 @@ function MainLayout(props) {
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
         <ChartSection>{asset.isTraded ? <Chart /> : <AssetInfo />}</ChartSection>
-        <OrderBookSection>{showOrderBook ? <OrderBook /> : <FirstOrderMsg />}</OrderBookSection>
+        <OrderBookSection>
+          {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
+        </OrderBookSection>
         <TradeHistorySection>
           <TradeHistory />
         </TradeHistorySection>
