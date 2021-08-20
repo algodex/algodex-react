@@ -31,7 +31,7 @@ export const useStorePersisted = create(
 export const useStore = create(
   immer((set) => ({
     asset: {},
-    setAsset: (asset) => set({ asset }),
+    setAsset: (asset) => set({ asset, orderBook: { buyOrders: [], sellOrders: [] } }),
 
     isSignedIn: false,
     setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
