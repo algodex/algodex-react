@@ -52,8 +52,8 @@ function OrderBookPrice(props) {
 }
 
 OrderBookPrice.propTypes = {
-  price: PropTypes.number.isRequired,
-  change: PropTypes.number.isRequired,
+  price: PropTypes.number,
+  change: PropTypes.number,
   decimals: PropTypes.number
 }
 
