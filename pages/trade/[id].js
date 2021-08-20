@@ -179,9 +179,10 @@ export async function getServerSideProps({ req, res, query }) {
     cookies.set('loginKey', query.loginKey)
   }
 
-  const hasGateAccess = process.env.NEXT_PUBLIC_TESTNET_GATE
-    ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
-    : true
+  const hasGateAccess =
+    process.env.NEXT_PUBLIC_ENV === 'production'
+      ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
+      : true
 
   return {
     props: {
