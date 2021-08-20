@@ -107,9 +107,9 @@ export default function Home() {
 
   useEffect(() => {
     if (orderBookQuery.data) {
-      setOrderBook(orderBookQuery.data, asset?.decimals)
+      setOrderBook(orderBookQuery.data)
     }
-  }, [orderBookQuery.data, setOrderBook, asset])
+  }, [orderBookQuery.data, setOrderBook])
 
   const renderDashboard = () => {
     // @todo: investigate using React Query's queryCache instead of saving to Zustand store

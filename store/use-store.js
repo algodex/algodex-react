@@ -39,15 +39,13 @@ export const useStore = create(
 
     orderBook: {
       buyOrders: [],
-      sellOrders: [],
-      decimals: 6
+      sellOrders: []
     },
-    setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }, decimals) =>
+    setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
       set({
         orderBook: {
           buyOrders: buyASAOrdersInEscrow,
-          sellOrders: sellASAOrdersInEscrow,
-          decimals
+          sellOrders: sellASAOrdersInEscrow
         }
       }),
 
