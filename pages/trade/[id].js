@@ -155,15 +155,16 @@ export default function Home({ hasGateAccess }) {
 
   return (
     <Container>
-      <Head>
-        <title>
-          {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
-        </title>
-        <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
-      </Head>
-      <Header />
-
-      <TestnetGate hasAccess={hasGateAccess}>{renderDashboard()}</TestnetGate>
+      <TestnetGate hasAccess={hasGateAccess}>
+        <Head>
+          <title>
+            {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
+          </title>
+          <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
+        </Head>
+        <Header />
+        {renderDashboard()}
+      </TestnetGate>
     </Container>
   )
 }
@@ -182,8 +183,7 @@ export async function getServerSideProps({ req, res, query }) {
   }
 
   const hasGateAccess =
-    process.env.NEXT_PUBLIC_VERCEL_URL ===
-    'algodex-react-git-feat-alg-322-testnet-gate-algodex.vercel.app'
+    process.env.NEXT_PUBLIC_VERCEL_URL === process.env.NEXT_PUBLIC_TESTNET_DOMAIN
       ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
       : true
 

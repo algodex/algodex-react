@@ -6,6 +6,8 @@ export const EmptyState = styled.div`
   position: relative;
   flex: 1 1 0%;
   display: flex;
+  height: 100%;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
