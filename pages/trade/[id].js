@@ -169,7 +169,7 @@ export default function Home({ hasGateAccess }) {
 }
 
 Home.propTypes = {
-  hasTestnetAccess: PropTypes.bool
+  hasGateAccess: PropTypes.bool
 }
 
 export async function getServerSideProps({ req, res, query }) {
