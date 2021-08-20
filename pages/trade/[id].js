@@ -44,7 +44,7 @@ const StatusContainer = styled.div`
   display: flex;
 `
 
-export default function Home({ hasTestnetAccess }) {
+export default function Home({ hasGateAccess }) {
   const router = useRouter()
   const id = router.query.id
   const isValidId = /^\d+$/.test(id)
@@ -163,7 +163,7 @@ export default function Home({ hasTestnetAccess }) {
       </Head>
       <Header />
 
-      <TestnetGate hasAccess={hasTestnetAccess}>{renderDashboard()}</TestnetGate>
+      <TestnetGate hasAccess={hasGateAccess}>{renderDashboard()}</TestnetGate>
     </Container>
   )
 }
@@ -179,13 +179,13 @@ export async function getServerSideProps({ req, res, query }) {
     cookies.set('loginKey', query.loginKey)
   }
 
-  const hasTestnetAccess = process.env.NEXT_PUBLIC_TESTNET_GATE
+  const hasGateAccess = process.env.NEXT_PUBLIC_TESTNET_GATE
     ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
     : true
 
   return {
     props: {
-      hasTestnetAccess
+      hasGateAccess
     }
   }
 }
