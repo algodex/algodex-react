@@ -180,7 +180,7 @@ export async function getServerSideProps({ req, res, query }) {
   }
 
   const hasGateAccess =
-    process.env.NEXT_PUBLIC_ENV === 'production'
+    process.env.NEXT_PUBLIC_VERCEL_URL === 'testnet.algodex.com'
       ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
       : true
 
