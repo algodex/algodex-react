@@ -177,10 +177,13 @@ export async function getServerSideProps({ req, res, query }) {
 
   if (query?.loginKey) {
     cookies.set('loginKey', query.loginKey)
+    cookies.set('NEXT_PUBLIC_VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL)
+    cookies.set('NEXT_PUBLIC_VERCEL_ENV', process.env.NEXT_PUBLIC_VERCEL_ENV)
   }
 
   const hasGateAccess =
-    process.env.NEXT_PUBLIC_VERCEL_URL === 'testnet.algodex.com'
+    process.env.NEXT_PUBLIC_VERCEL_URL ===
+    'algodex-react-git-feat-alg-322-testnet-gate-algodex.vercel.app'
       ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
       : true
 
