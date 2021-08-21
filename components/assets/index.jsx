@@ -39,7 +39,7 @@ function Assets() {
     () => fetchAssetsByByAddress(activeWalletAddress),
     {
       enabled: !!activeWalletAddress,
-      refetchInterval: 1000
+      refetchInterval: 3000
     }
   )
 

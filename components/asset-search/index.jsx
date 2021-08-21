@@ -115,7 +115,7 @@ function AssetSearch(props) {
   }
 
   const handleAssetClick = async (row) => {
-    const asset = searchResultsData.find((asset) => asset.name === row.original.name)
+    const asset = searchResultsData.find((asset) => asset.id === row.original.id)
 
     if (asset) {
       router.push(`/trade/${asset.id}`)

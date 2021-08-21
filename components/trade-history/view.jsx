@@ -13,6 +13,8 @@ dayjs.extend(localizedFormat)
 function TradeHistoryView(props) {
   const { asset, tradesData } = props
 
+  const hasTradeHistory = tradesData.length > 0
+
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
@@ -71,7 +73,15 @@ function TradeHistoryView(props) {
         </BodyCopyTiny>
       </Header>
       <Trades>
-        <TradesWrapper>{renderHistory()}</TradesWrapper>
+        <TradesWrapper>
+          {hasTradeHistory ? (
+            renderHistory()
+          ) : (
+            <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
+              No trades completed
+            </BodyCopyTiny>
+          )}
+        </TradesWrapper>
       </Trades>
     </Container>
   )
