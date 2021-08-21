@@ -9,6 +9,7 @@ import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
 import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import SvgImage from 'components/svg-image'
 
 import {
   Container,
@@ -16,6 +17,7 @@ import {
   StatusContainer,
   TableWrapper,
   AssetNameBlock,
+  NameVerifiedWrapper,
   AssetName,
   PairSlash,
   AssetId,
@@ -31,7 +33,10 @@ const AssetNameCell = (props) => {
     <AssetNameBlock>
       <AssetName>{props.value}</AssetName>
       <PairSlash>{`/`}</PairSlash>
-      ALGO
+      <NameVerifiedWrapper>
+        ALGO
+        {props.row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
+      </NameVerifiedWrapper>
       <br />
       <AssetId>{props.row.original.id}</AssetId>
     </AssetNameBlock>
@@ -65,6 +70,7 @@ function AssetSearch(props) {
       id: result.assetId,
       name: result.unitName,
       fullName: result.assetName,
+      verified: result.verified,
       price: result.formattedPrice ? floatToFixed(result.formattedPrice) : null,
       change: !isNaN(parseFloat(result.priceChg24Pct))
         ? floatToFixed(result.priceChg24Pct, 2)

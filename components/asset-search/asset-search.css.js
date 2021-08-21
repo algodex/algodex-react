@@ -64,8 +64,21 @@ export const TableWrapper = styled.div`
     display: none;
   }
 `
+
+export const NameVerifiedWrapper = styled.span`
+  white-space: nowrap;
+`
+
 export const AssetNameBlock = styled.p`
   color: ${({ theme }) => theme.colors.gray['500']};
+
+  ${NameVerifiedWrapper} {
+    svg {
+      position: relative;
+      top: -0.125rem;
+      margin-left: 0.375rem;
+    }
+  }
 `
 
 export const AssetName = styled.strong`
