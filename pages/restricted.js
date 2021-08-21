@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { HeaderSm, BodyCopySm } from 'components/type'
 
-export const EmptyState = styled.div`
+export const Container = styled.div`
   position: relative;
   flex: 1 1 0%;
   display: flex;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -15,24 +14,17 @@ export const EmptyState = styled.div`
   text-align: center;
 `
 
-const TestnetGate = ({ children, hasAccess }) => {
-  return hasAccess ? (
-    children
-  ) : (
-    <EmptyState>
+const Restricted = () => {
+  return (
+    <Container>
       <HeaderSm color="gray.100" m={0} mb={16}>
         Welcome to the party!
       </HeaderSm>
       <BodyCopySm color="gray.500" m={0}>
         Oh... sorry. You&apos;re not invited. :/
       </BodyCopySm>
-    </EmptyState>
+    </Container>
   )
 }
 
-TestnetGate.propTypes = {
-  children: PropTypes.node,
-  hasAccess: PropTypes.bool
-}
-
-export default TestnetGate
+export default Restricted

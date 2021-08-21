@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
@@ -13,7 +12,6 @@ import Spinner from 'components/spinner'
 import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
-import TestnetGate from 'components/testnet-gate'
 import { checkTestnetAccess } from 'lib/api'
 import Cookies from 'cookies'
 
@@ -44,7 +42,7 @@ const StatusContainer = styled.div`
   display: flex;
 `
 
-export default function Home({ hasGateAccess }) {
+export default function Home() {
   const router = useRouter()
   const id = router.query.id
   const isValidId = /^\d+$/.test(id)
@@ -155,22 +153,16 @@ export default function Home({ hasGateAccess }) {
 
   return (
     <Container>
-      <TestnetGate hasAccess={hasGateAccess}>
-        <Head>
-          <title>
-            {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
-          </title>
-          <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
-        </Head>
-        <Header />
-        {renderDashboard()}
-      </TestnetGate>
+      <Head>
+        <title>
+          {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
+        </title>
+        <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
+      </Head>
+      <Header />
+      {renderDashboard()}
     </Container>
   )
-}
-
-Home.propTypes = {
-  hasGateAccess: PropTypes.bool
 }
 
 export async function getServerSideProps({ req, res, query }) {
@@ -178,18 +170,25 @@ export async function getServerSideProps({ req, res, query }) {
 
   if (query?.loginKey) {
     cookies.set('loginKey', query.loginKey)
-    cookies.set('NEXT_PUBLIC_VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL)
-    cookies.set('NEXT_PUBLIC_VERCEL_ENV', process.env.NEXT_PUBLIC_VERCEL_ENV)
   }
 
-  const hasGateAccess =
-    process.env.NEXT_PUBLIC_VERCEL_URL === process.env.NEXT_PUBLIC_TESTNET_DOMAIN
-      ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
-      : true
+  // const hasGateAccess =
+  //   process.env.NEXT_PUBLIC_VERCEL_URL === process.env.NEXT_PUBLIC_TESTNET_DOMAIN
+  //     ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
+  //     : true
+
+  const hasGateAccess = await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
+
+  if (!hasGateAccess) {
+    return {
+      redirect: {
+        destination: '/restricted',
+        permanent: false
+      }
+    }
+  }
 
   return {
-    props: {
-      hasGateAccess
-    }
+    props: {}
   }
 }
