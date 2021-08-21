@@ -31,6 +31,7 @@ export const HeaderContainer = styled.div`
       svg {
         position: relative;
         top: -0.125rem;
+        margin-left: 0.125rem;
       }
     }
   }

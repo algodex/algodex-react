@@ -14,7 +14,7 @@ function InfoFlyover(props) {
           {`${assetInfo.fullName} `}
           <span>
             {`(${assetInfo.name}) `}
-            <SvgImage use="verified" w={2} h={2} />
+            <SvgImage use="verified" w={1.5} h={1.5} />
           </span>
         </>
       )
