@@ -64,24 +64,30 @@ export const TableWrapper = styled.div`
     display: none;
   }
 `
+export const AssetNameBlock = styled.p`
+  color: ${({ theme }) => theme.colors.gray['500']};
+`
 
 export const AssetName = styled.strong`
-  font-weight: normal;
+  font-weight: 600;
   color: ${({ theme }) => theme.colors.gray['000']};
   margin-right: 0.125rem;
+  letter-spacing: 0.025rem;
 `
 
 export const PairSlash = styled.span`
   letter-spacing: 0.125rem;
 `
 
+export const AssetId = styled.span`
+  color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.3)};
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.625rem;
+`
+
 export const AssetPrice = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
-
-// export const AssetChange = styled.span`
-//   color: ${({ theme, value }) => (value < 0 ? theme.colors.red['500'] : theme.colors.green['500'])};
-// `
 
 export const AssetChange = styled.span`
   color: ${({ theme, value }) => {

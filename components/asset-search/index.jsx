@@ -14,8 +14,10 @@ import {
   AssetsContainer,
   StatusContainer,
   TableWrapper,
+  AssetNameBlock,
   AssetName,
   PairSlash,
+  AssetId,
   AssetPrice,
   AssetChange,
   SortIcon,
@@ -23,13 +25,17 @@ import {
   TableContainer
 } from './asset-search.css'
 
-const AssetNameCell = ({ value }) => (
-  <>
-    <AssetName>{value}</AssetName>
-    <PairSlash>{`/`}</PairSlash>
-    ALGO
-  </>
-)
+const AssetNameCell = (props) => {
+  return (
+    <AssetNameBlock>
+      <AssetName>{props.value}</AssetName>
+      <PairSlash>{`/`}</PairSlash>
+      ALGO
+      <br />
+      <AssetId>{props.row.original.id}</AssetId>
+    </AssetNameBlock>
+  )
+}
 
 const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 
