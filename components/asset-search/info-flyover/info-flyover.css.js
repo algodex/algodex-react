@@ -12,7 +12,7 @@ export const InfoPopup = styled.aside`
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
   pointer-events: ${({ isActive }) => (isActive ? 'auto' : 'none')};
   transform: translateY(${({ isActive }) => (isActive ? '0' : '5%')});
-  transition: opacity 75ms ease-in-out, transform 75ms ease-in-out;
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   padding: 1rem 1.5rem 0 1.5rem;
   box-shadow: 3px 3px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
 
@@ -54,7 +54,7 @@ export const InfoItem = styled.div`
 export const ChartOverlay = styled.div`
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.25);
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
   pointer-events: ${({ isActive }) => (isActive ? 'auto' : 'none')};
   transition: opacity 150ms ease-in-out;
