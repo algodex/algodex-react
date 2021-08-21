@@ -35,6 +35,23 @@ export default function AssetInfo() {
     return <>{`${asset.info.fullName} (${asset.name})`}</>
   }
 
+  const renderLink = () => {
+    const expression =
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
+    const regex = new RegExp(expression)
+
+    if (asset.info.url && regex.test(asset.info.url)) {
+      return (
+        <AssetUrl>
+          <a href={asset.info.url} target="_blank" rel="noreferrer">
+            <BodyCopy as="span">{asset.info.url}</BodyCopy>
+          </a>
+        </AssetUrl>
+      )
+    }
+    return null
+  }
+
   return (
     <Container>
       <InfoContainer>
@@ -42,13 +59,7 @@ export default function AssetInfo() {
           <HeaderLg color="gray.100" mb={2}>
             {renderName()}
           </HeaderLg>
-          {asset.info.url && (
-            <AssetUrl>
-              <a href={asset.info.url} target="_blank" rel="noreferrer">
-                <BodyCopy as="span">{asset.info.url}</BodyCopy>
-              </a>
-            </AssetUrl>
-          )}
+          {renderLink()}
         </HeaderContainer>
         <InfoList>
           <InfoItem>
