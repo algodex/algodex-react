@@ -26,6 +26,8 @@ import {
   WalletSection
 } from './main-layout.css'
 
+import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
+
 const DEMO_TRADES_DATA = generateTradesData(1.3766, 0.0001)
 
 const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
@@ -39,6 +41,8 @@ function MainLayout(props) {
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
+
+  const [showOverlay, setShowOverlay] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,6 +69,7 @@ function MainLayout(props) {
         </TradeSection>
         <ChartSection>
           <Chart />
+          <ChartOverlay isActive={showOverlay} />
         </ChartSection>
         <OrderBookSection>
           <OrderBook />
@@ -81,7 +86,7 @@ function MainLayout(props) {
           />
         </OrdersSection>
         <AssetsSection>
-          <AssetSearch gridSize={gridSize} />
+          <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
         </AssetsSection>
       </Main>
     </MainWrapper>

@@ -7,6 +7,7 @@ import { searchAssets } from 'lib/api'
 import { floatToFixed } from 'services/display'
 import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
+import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 
 import {
@@ -49,7 +50,9 @@ const AssetChangeCell = ({ value }) => {
   return <AssetChange value={value}>{displayChange()}</AssetChange>
 }
 
-function AssetSearch({ gridSize }) {
+function AssetSearch(props) {
+  const { gridSize, onInfoChange } = props
+
   const router = useRouter()
 
   const [query, setQuery] = useState('')
@@ -61,6 +64,7 @@ function AssetSearch({ gridSize }) {
     return results.map((result) => ({
       id: result.assetId,
       name: result.unitName,
+      fullName: result.assetName,
       price: result.formattedPrice ? floatToFixed(result.formattedPrice) : null,
       change: !isNaN(parseFloat(result.priceChg24Pct))
         ? floatToFixed(result.priceChg24Pct, 2)
@@ -74,6 +78,7 @@ function AssetSearch({ gridSize }) {
    */
   const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
+  const [assetInfo, setAssetInfo] = useState(null)
 
   const containerRef = useRef()
   const searchRef = useRef()
@@ -146,6 +151,14 @@ function AssetSearch({ gridSize }) {
       if (e.key === ' ' || e.key === 'Enter') {
         handleAssetClick(row)
       }
+    },
+    onMouseEnter: () => {
+      setAssetInfo(row.original)
+      onInfoChange(true)
+    },
+    onMouseLeave: () => {
+      setAssetInfo(null)
+      onInfoChange(false)
     }
   })
 
@@ -227,12 +240,14 @@ function AssetSearch({ gridSize }) {
 
         {renderStatus()}
       </AssetsContainer>
+      <InfoFlyover assetInfo={assetInfo} searchHeight={searchHeight} />
     </Container>
   )
 }
 
 AssetSearch.propTypes = {
-  gridSize: PropTypes.object.isRequired
+  gridSize: PropTypes.object.isRequired,
+  onInfoChange: PropTypes.func.isRequired
 }
 
 export default AssetSearch

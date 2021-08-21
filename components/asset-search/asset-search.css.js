@@ -35,7 +35,7 @@ export const AssetsContainer = styled.div`
   height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
   box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
-  z-index: 100;
+  z-index: 1000;
 
   @media (min-width: 1536px) {
     position: static;
