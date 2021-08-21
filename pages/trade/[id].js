@@ -172,12 +172,10 @@ export async function getServerSideProps({ req, res, query }) {
     cookies.set('loginKey', query.loginKey)
   }
 
-  // const hasGateAccess =
-  //   process.env.NEXT_PUBLIC_VERCEL_URL === process.env.NEXT_PUBLIC_TESTNET_DOMAIN
-  //     ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
-  //     : true
-
-  const hasGateAccess = await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
+  const hasGateAccess =
+    process.env.NEXT_PUBLIC_VERCEL_URL === process.env.NEXT_PUBLIC_TESTNET_DOMAIN
+      ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
+      : true
 
   if (!hasGateAccess) {
     return {
