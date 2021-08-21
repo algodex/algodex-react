@@ -16,7 +16,7 @@ import {
 } from './order-options.css'
 
 function OrderOptions(props) {
-  const { order, onChange } = props
+  const { order, onChange, allowTaker } = props
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -84,6 +84,7 @@ function OrderOptions(props) {
               </OptionsButton>
               <OptionsInput
                 type="checkbox"
+                disabled={!allowTaker}
                 id="order-taker"
                 value="taker"
                 checked={order.execution === 'taker'}
@@ -105,7 +106,12 @@ function OrderOptions(props) {
 
 OrderOptions.propTypes = {
   order: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  allowTaker: PropTypes.bool
+}
+
+OrderOptions.defaultProps = {
+  allowTaker: true
 }
 
 export default OrderOptions

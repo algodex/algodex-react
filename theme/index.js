@@ -41,7 +41,8 @@ const colors = {
 
 const fontFamilies = {
   heading: `'Alliance No.1', Inter, sans-serif`,
-  body: 'Inter, sans-serif'
+  body: 'Inter, sans-serif',
+  monospace: `'Roboto Mono', monospace`
 }
 
 const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]

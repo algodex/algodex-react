@@ -28,18 +28,32 @@ function OrderBookPrice(props) {
   const isDecrease = change < 0
   const color = isDecrease ? 'red' : 'green'
 
+  const renderPrice = () => {
+    if (!price) {
+      return '--'
+    }
+    return floatToFixed(price)
+  }
+
+  const renderChange = () => {
+    if (!change) {
+      return <BodyCopySm as="span">0.00%</BodyCopySm>
+    }
+    return <BodyCopySm as="span">{`${floatToFixed(change, 2)}%`}</BodyCopySm>
+  }
+
   return (
     <Price color={color} data-testid="order-book-price">
       {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
-      {floatToFixed(price)}
-      <BodyCopySm as="span">{`${floatToFixed(change, 2)}%`}</BodyCopySm>
+      {renderPrice()}
+      {renderChange()}
     </Price>
   )
 }
 
 OrderBookPrice.propTypes = {
-  price: PropTypes.number.isRequired,
-  change: PropTypes.number.isRequired,
+  price: PropTypes.number,
+  change: PropTypes.number,
   decimals: PropTypes.number
 }
 

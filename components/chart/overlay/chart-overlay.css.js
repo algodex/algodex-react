@@ -49,7 +49,7 @@ export const OhlcItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.5em;
-  font-family: 'Roboto Mono', monospace;
+  font-family: ${({ theme }) => theme.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
@@ -76,7 +76,7 @@ export const OhlcItem = styled.div`
 export const BidAskSpreadContainer = styled.div`
   display: flex;
   align-items: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: ${({ theme }) => theme.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
@@ -121,7 +121,7 @@ export const VolumeContainer = styled.dl`
 export const Volume = styled.div`
   display: flex;
   align-items: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: ${({ theme }) => theme.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
