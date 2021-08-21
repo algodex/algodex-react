@@ -100,8 +100,8 @@ function OrderBookView(props) {
 }
 
 OrderBookView.propTypes = {
-  price: PropTypes.number.isRequired,
-  priceChange: PropTypes.number.isRequired,
+  price: PropTypes.number,
+  priceChange: PropTypes.number,
   decimals: PropTypes.number.isRequired,
   sellData: PropTypes.array,
   buyData: PropTypes.array
