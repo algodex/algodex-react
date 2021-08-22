@@ -29,9 +29,18 @@ export const useStorePersisted = create(
 )
 
 export const useStore = create(
-  immer((set) => ({
+  immer((set, get) => ({
     asset: {},
-    setAsset: (asset) => set({ asset, orderBook: { buyOrders: [], sellOrders: [] } }),
+    setAsset: (asset) => {
+      const prevAsset = get().asset
+      const isNew = prevAsset.id !== asset.id
+      const orderBook = { buyOrders: [], sellOrders: [] }
+
+      set({
+        asset,
+        ...(isNew ? orderBook : {}) // only reset order book if asset is new
+      })
+    },
 
     isSignedIn: false,
     setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
