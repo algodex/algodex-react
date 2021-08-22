@@ -1,7 +1,7 @@
 import algodex from '@algodex/algodex-sdk'
 import { convertToBaseUnits, convertToAsaUnits } from './convert'
 
-const AlgodClient = new algodex.initAlgodClient('test')
+const AlgodClient = new algodex.initAlgodClient('public_test')
 
 const OrderService = {
   placeOrder: (order, orderBook) => {
