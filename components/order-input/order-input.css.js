@@ -64,4 +64,5 @@ export const Label = styled(InputLabel)`
 export const Asset = styled(InputLabel)`
   right: 1.25rem;
   width: 2.75rem;
+  font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
 `

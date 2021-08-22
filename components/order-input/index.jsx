@@ -2,11 +2,13 @@ import PropTypes from 'prop-types'
 import { Container, Input, Label, Asset } from './order-input.css'
 
 function OrderInput({ label, asset, orderType, ...props }) {
+  const condenseAssetName = asset?.length > 5
+
   return (
     <Container orderType={orderType}>
       <Input placeholder="0.00" {...props} />
       <Label>{label}</Label>
-      <Asset>{asset}</Asset>
+      <Asset isCondensed={condenseAssetName}>{asset}</Asset>
     </Container>
   )
 }
