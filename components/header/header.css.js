@@ -8,13 +8,15 @@ export const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   padding: 1rem;
   margin: 0;
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   position: relative;
   width: 100%;
   z-index: 99;
+
   @media (min-width: 1024px) {
+    display: flex;
     padding: 2rem;
   }
 `
