@@ -35,7 +35,7 @@ export const AssetsContainer = styled.div`
   height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
   box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
-  z-index: 100;
+  z-index: 1000;
 
   @media (min-width: 1536px) {
     position: static;
@@ -65,23 +65,42 @@ export const TableWrapper = styled.div`
   }
 `
 
+export const NameVerifiedWrapper = styled.span`
+  white-space: nowrap;
+`
+
+export const AssetNameBlock = styled.p`
+  color: ${({ theme }) => theme.colors.gray['500']};
+
+  ${NameVerifiedWrapper} {
+    svg {
+      position: relative;
+      top: -0.125rem;
+      margin-left: 0.375rem;
+    }
+  }
+`
+
 export const AssetName = styled.strong`
-  font-weight: normal;
+  font-weight: 600;
   color: ${({ theme }) => theme.colors.gray['000']};
   margin-right: 0.125rem;
+  letter-spacing: 0.025rem;
 `
 
 export const PairSlash = styled.span`
   letter-spacing: 0.125rem;
 `
 
+export const AssetId = styled.span`
+  color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.3)};
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.625rem;
+`
+
 export const AssetPrice = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
 `
-
-// export const AssetChange = styled.span`
-//   color: ${({ theme, value }) => (value < 0 ? theme.colors.red['500'] : theme.colors.green['500'])};
-// `
 
 export const AssetChange = styled.span`
   color: ${({ theme, value }) => {

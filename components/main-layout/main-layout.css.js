@@ -14,6 +14,7 @@ export const TradeSection = styled.section`
 export const ChartSection = styled.section`
   grid-area: chart;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  position: relative;
 
   @media (min-width: 1024px) and (orientation: landscape) {
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};

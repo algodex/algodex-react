@@ -7,15 +7,20 @@ import { searchAssets } from 'lib/api'
 import { floatToFixed } from 'services/display'
 import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
+import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import SvgImage from 'components/svg-image'
 
 import {
   Container,
   AssetsContainer,
   StatusContainer,
   TableWrapper,
+  AssetNameBlock,
+  NameVerifiedWrapper,
   AssetName,
   PairSlash,
+  AssetId,
   AssetPrice,
   AssetChange,
   SortIcon,
@@ -23,13 +28,20 @@ import {
   TableContainer
 } from './asset-search.css'
 
-const AssetNameCell = ({ value }) => (
-  <>
-    <AssetName>{value}</AssetName>
-    <PairSlash>{`/`}</PairSlash>
-    ALGO
-  </>
-)
+const AssetNameCell = (props) => {
+  return (
+    <AssetNameBlock>
+      <AssetName>{props.value}</AssetName>
+      <PairSlash>{`/`}</PairSlash>
+      <NameVerifiedWrapper>
+        ALGO
+        {props.row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
+      </NameVerifiedWrapper>
+      <br />
+      <AssetId>{props.row.original.id}</AssetId>
+    </AssetNameBlock>
+  )
+}
 
 const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 
@@ -43,7 +55,9 @@ const AssetChangeCell = ({ value }) => {
   return <AssetChange value={value}>{displayChange()}</AssetChange>
 }
 
-function AssetSearch({ gridSize }) {
+function AssetSearch(props) {
+  const { gridSize, onInfoChange } = props
+
   const router = useRouter()
 
   const [query, setQuery] = useState('')
@@ -55,6 +69,8 @@ function AssetSearch({ gridSize }) {
     return results.map((result) => ({
       id: result.assetId,
       name: result.unitName,
+      fullName: result.assetName,
+      verified: result.verified,
       price: result.formattedPrice ? floatToFixed(result.formattedPrice) : null,
       change: !isNaN(parseFloat(result.priceChg24Pct))
         ? floatToFixed(result.priceChg24Pct, 2)
@@ -68,6 +84,7 @@ function AssetSearch({ gridSize }) {
    */
   const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
+  const [assetInfo, setAssetInfo] = useState(null)
 
   const containerRef = useRef()
   const searchRef = useRef()
@@ -140,6 +157,14 @@ function AssetSearch({ gridSize }) {
       if (e.key === ' ' || e.key === 'Enter') {
         handleAssetClick(row)
       }
+    },
+    onMouseEnter: () => {
+      setAssetInfo(row.original)
+      onInfoChange(true)
+    },
+    onMouseLeave: () => {
+      setAssetInfo(null)
+      onInfoChange(false)
     }
   })
 
@@ -221,12 +246,14 @@ function AssetSearch({ gridSize }) {
 
         {renderStatus()}
       </AssetsContainer>
+      <InfoFlyover assetInfo={assetInfo} searchHeight={searchHeight} />
     </Container>
   )
 }
 
 AssetSearch.propTypes = {
-  gridSize: PropTypes.object.isRequired
+  gridSize: PropTypes.object.isRequired,
+  onInfoChange: PropTypes.func.isRequired
 }
 
 export default AssetSearch

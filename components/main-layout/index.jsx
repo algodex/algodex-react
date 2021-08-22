@@ -27,6 +27,8 @@ import {
   WalletSection
 } from './main-layout.css'
 
+import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
+
 const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
@@ -40,6 +42,8 @@ function MainLayout(props) {
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
+
+  const [showOverlay, setShowOverlay] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -64,7 +68,10 @@ function MainLayout(props) {
         <TradeSection>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
-        <ChartSection>{asset.isTraded ? <Chart /> : <AssetInfo />}</ChartSection>
+        <ChartSection>
+          {asset.isTraded ? <Chart /> : <AssetInfo />}
+          <ChartOverlay isActive={showOverlay} />
+        </ChartSection>
         <OrderBookSection>
           {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
         </OrderBookSection>
@@ -80,7 +87,7 @@ function MainLayout(props) {
           />
         </OrdersSection>
         <AssetsSection>
-          <AssetSearch gridSize={gridSize} />
+          <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
         </AssetsSection>
       </Main>
     </MainWrapper>
