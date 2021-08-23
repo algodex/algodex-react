@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const API_HOST = process.env.NEXT_PUBLIC_API || 'https://api-testnet.algodex.com'
 
-export const APIErrors = {
+export const API_ERRORS = {
   notModified: 'Request failed with status code 304'
 }
 
@@ -40,7 +40,7 @@ export default function useCharts(queryConfig, params) {
   const [etag, setEtag] = useState(null)
 
   const retryFunction = (failureCount, error) => {
-    if (error.message === APIErrors.notModified) {
+    if (error.message === API_ERRORS.notModified) {
       return true
     }
     return 6
