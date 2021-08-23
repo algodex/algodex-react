@@ -1,14 +1,13 @@
 import Error from 'components/error'
 import Spinner from 'components/spinner'
-import { fetchPriceData } from 'lib/api'
 import millify from 'millify'
 import PropTypes from 'prop-types'
 import { useMemo, useEffect } from 'react'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQueryClient } from 'react-query'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
 import useStore from 'store/use-store'
 import ChartView from './view'
-
+import useCharts, { queries } from 'hooks/api/useCharts'
 // Common
 const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
@@ -23,14 +22,9 @@ function Chart(props) {
 
   const queryClient = useQueryClient()
 
-  const { isLoading, isError, data } = useQuery(
-    ['priceData', { assetId }],
-    () => fetchPriceData(assetId),
-    {
-      // Refetch the data every second
-      refetchInterval: 1000
-    }
-  )
+  const { isLoading, isError, data } = useCharts(queries.getPriceData, {
+    assetId
+  })
 
   useEffect(() => {
     queryClient.invalidateQueries('priceData')
