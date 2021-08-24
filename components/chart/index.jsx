@@ -7,9 +7,8 @@ import { useQueryClient } from 'react-query'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
 import useStore from 'store/use-store'
 import ChartView from './view'
-import useCharts, { chartQueries } from 'lib/api'
+import { useCharts, chartQueries } from 'lib/api'
 
-console.log('chartQueroes', chartQueries)
 // Common
 const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'

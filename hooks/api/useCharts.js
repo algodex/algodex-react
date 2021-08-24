@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { API_ERRORS } from 'lib/api/constants'
 
-export default function useCharts(queryConfig, params) {
+export function useCharts(queryConfig, params) {
   const [etag, setEtag] = useState(null)
 
   const { key, fetchFunction, options } = queryConfig
