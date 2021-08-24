@@ -42,10 +42,12 @@ function InfoFlyover(props) {
   return (
     <InfoPopup isActive={!!assetInfo} searchHeight={searchHeight}>
       {assetInfo && (
-        <HeaderContainer>
-          <HeaderSm color="gray.100" mb={3}>
-            {renderName()}
-          </HeaderSm>
+        <>
+          <HeaderContainer>
+            <HeaderSm color="gray.100" mb={3}>
+              {renderName()}
+            </HeaderSm>
+          </HeaderContainer>
           <InfoList>
             <InfoItem>
               <BodyCopyTiny as="dt" color="gray.500">
@@ -91,7 +93,7 @@ function InfoFlyover(props) {
               </>
             )}
           </InfoList>
-        </HeaderContainer>
+        </>
       )}
     </InfoPopup>
   )
