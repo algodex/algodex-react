@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { fetchAssetById } from 'lib/api/fetch'
-import { fetchOrdersInEscrow } from 'lib/api/fetch'
+import { useOrders, ordersQueries } from 'lib/api'
 import WalletService from 'services/wallet'
 import MainLayout from 'components/main-layout'
 import Header from 'components/header'
@@ -98,12 +98,11 @@ export default function Home() {
   // fetch order book for current asset
   // this query is dependent on asset.id being defined
   // and hasBeenOrdered being true
-  const orderBookQuery = useQuery(
-    ['orderBook', { assetId: asset?.id }],
-    () => fetchOrdersInEscrow(asset?.id),
+  const orderBookQuery = useOrders(
+    ordersQueries.getOrdersInEscrow,
+    { assetId: asset?.id },
     {
-      enabled: !!asset?.id && hasBeenOrdered,
-      refetchInterval: 5000
+      enabled: !!asset?.id && hasBeenOrdered
     }
   )
 
