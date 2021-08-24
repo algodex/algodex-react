@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { API_ERRORS } from 'lib/api/constants'
 
-export function useCharts(queryConfig, params) {
+export function useOrders(queryConfig, params, options) {
   const [etag, setEtag] = useState(null)
 
-  const { key, fetchFunction, options } = queryConfig
+  const { key, fetchFunction, defaultOptions } = queryConfig
 
   const retryFunction = (failureCount, error) => {
     if (error.message === API_ERRORS.NOT_MODIFIED) {
@@ -17,6 +17,7 @@ export function useCharts(queryConfig, params) {
   const query = useQuery([key, { etag, ...(params && params) }], fetchFunction, {
     retry: retryFunction,
     keepPreviousData: true,
+    ...defaultOptions,
     ...options
   })
 
