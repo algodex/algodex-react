@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types  */
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchAssetsByByAddress } from 'lib/api/fetch'
+import { useWalletAssets, walletAssetsQueries } from 'lib/api'
 import { mapAssetsData } from './helpers'
 
 import {
@@ -34,13 +33,10 @@ const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValu
 function Assets() {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
-  const { data, isLoading, isError } = useQuery(
-    ['assets', { address: activeWalletAddress }],
-    () => fetchAssetsByByAddress(activeWalletAddress),
-    {
-      enabled: !!activeWalletAddress,
-      refetchInterval: 3000
-    }
+  const { data, isLoading, isError } = useWalletAssets(
+    walletAssetsQueries.getAssetsByAddress,
+    { address: activeWalletAddress },
+    { enabled: !!activeWalletAddress }
   )
 
   const assetsData = useMemo(() => mapAssetsData(data), [data])
