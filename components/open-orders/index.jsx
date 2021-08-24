@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types  */
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { mapOpenOrdersData } from './helpers'
-import { fetchOpenOrdersByAddress } from 'lib/api/fetch'
+import { useOrders, ordersQueries } from 'lib/api'
 import OrderService from 'services/order'
 import { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
@@ -27,12 +26,11 @@ function OpenOrders() {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
-  const { data, isLoading, isError } = useQuery(
-    ['openOrders', { address: activeWalletAddress }],
-    () => fetchOpenOrdersByAddress(activeWalletAddress),
+  const { data, isLoading, isError } = useOrders(
+    ordersQueries.getOpenOrdersByAddress,
+    { address: activeWalletAddress },
     {
-      enabled: !!activeWalletAddress,
-      refetchInterval: 3000
+      enabled: !!activeWalletAddress
     }
   )
 
