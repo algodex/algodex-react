@@ -109,7 +109,7 @@ function AssetSearch(props) {
 
   useEffect(() => {
     if (searchRef.current) {
-      const height = searchRef.current.offsetHeight
+      const height = Math.floor(searchRef.current.getBoundingClientRect().height)
       setSearchHeight(height)
     }
   }, [searchRef])

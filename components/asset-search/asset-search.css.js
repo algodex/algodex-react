@@ -176,12 +176,32 @@ export const TableContainer = styled.div`
           th {
             top: 0;
             padding: 0.5rem 1.125rem;
+            border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+            &::before {
+              content: '';
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              height: 1px;
+              background-color: ${({ theme }) => theme.colors.gray['800']};
+            }
+
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: -1px;
+              left: 0;
+              right: 0;
+              height: 1px;
+              background-color: ${({ theme }) => theme.colors.gray['700']};
+            }
           }
         }
 
         &:last-child {
           ${TableHeader} {
-            border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
             color: ${({ theme }) => theme.colors.gray['500']};
             text-align: left;
             text-transform: uppercase;
