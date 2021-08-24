@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchTradeHistoryByAddress } from 'lib/api/fetch'
+// import { fetchTradeHistoryByAddress } from 'lib/api/fetch'
+import { useTradeHistory, tradeHistoryQueries } from 'lib/api'
 import { mapTradeHistoryData } from './helpers'
 
 import {
@@ -31,14 +31,19 @@ const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 function OrderHistory() {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
-  const { data, isLoading, isError } = useQuery(
-    ['tradeHistory', { address: activeWalletAddress }],
-    () => fetchTradeHistoryByAddress(activeWalletAddress),
-    {
-      enabled: !!activeWalletAddress,
-      refetchInterval: 3000
-    }
+  const { data, isLoading, isError } = useTradeHistory(
+    tradeHistoryQueries.getTradeHistoryByAddress,
+    { address: activeWalletAddress },
+    { enabled: !!activeWalletAddress }
   )
+  // const { data, isLoading, isError } = useQuery(
+  //   ['tradeHistory', { address: activeWalletAddress }],
+  //   () => fetchTradeHistoryByAddress(activeWalletAddress),
+  //   {
+  //     enabled: !!activeWalletAddress,
+  //     refetchInterval: 3000
+  //   }
+  // )
 
   const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
 
