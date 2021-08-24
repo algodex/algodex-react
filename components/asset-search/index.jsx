@@ -50,6 +50,9 @@ const AssetChangeCell = ({ value }) => {
     if (value === null) {
       return ''
     }
+    if (value === '--') {
+      return value
+    }
     return `${value}%`
   }
   return <AssetChange value={value}>{displayChange()}</AssetChange>
@@ -66,16 +69,31 @@ function AssetSearch(props) {
 
   const searchResultsData = useMemo(() => {
     const results = data || []
-    return results.map((result) => ({
-      id: result.assetId,
-      name: result.unitName,
-      fullName: result.assetName,
-      verified: result.verified,
-      price: result.formattedPrice ? floatToFixed(result.formattedPrice) : null,
-      change: !isNaN(parseFloat(result.priceChg24Pct))
-        ? floatToFixed(result.priceChg24Pct, 2)
+
+    return results.map((result) => {
+      const price = result.formattedPrice
+        ? floatToFixed(result.formattedPrice)
+        : result.hasOrders
+        ? '--'
         : null
-    }))
+
+      const change = !isNaN(parseFloat(result.priceChg24Pct))
+        ? floatToFixed(result.priceChg24Pct, 2)
+        : result.hasOrders
+        ? '--'
+        : null
+
+      return {
+        id: result.assetId,
+        name: result.unitName,
+        fullName: result.assetName,
+        verified: result.verified,
+        liquidityAlgo: result.formattedAlgoLiquidity,
+        liquidityAsa: result.formattedASALiquidity,
+        price,
+        change
+      }
+    })
   }, [data])
 
   /**

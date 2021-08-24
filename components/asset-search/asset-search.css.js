@@ -104,7 +104,7 @@ export const AssetPrice = styled.span`
 
 export const AssetChange = styled.span`
   color: ${({ theme, value }) => {
-    if (value === null) {
+    if (value === null || value === '--') {
       return theme.colors.gray['400']
     }
     return value < 0 ? theme.colors.red['500'] : theme.colors.green['500']
