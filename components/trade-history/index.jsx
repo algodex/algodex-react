@@ -1,6 +1,5 @@
 import useStore from 'store/use-store'
-import { useQuery } from 'react-query'
-import { fetchTradeHistory } from 'lib/api/fetch'
+import { useTradeHistory, tradeHistoryQueries } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
@@ -9,12 +8,11 @@ import { floatToFixed } from 'services/display'
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
 
-  const { status, data } = useQuery(
-    ['tradeHistory', { assetId: asset.id }],
-    () => fetchTradeHistory(asset.id),
+  const { status, data } = useTradeHistory(
+    tradeHistoryQueries.getTradeHistory,
+    { assetId: asset?.id },
     {
-      enabled: asset.isTraded,
-      refetchInterval: 5000
+      enabled: asset.isTraded
     }
   )
 
