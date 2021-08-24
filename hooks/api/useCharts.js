@@ -14,7 +14,7 @@ export function useCharts(queryConfig, params) {
     return 6
   }
 
-  const query = useQuery([key, { etag, ...params }], fetchFunction, {
+  const query = useQuery([key, { etag, ...(params && params) }], fetchFunction, {
     retry: retryFunction,
     keepPreviousData: true,
     ...options
