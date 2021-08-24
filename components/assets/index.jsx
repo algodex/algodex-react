@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchAssetsByByAddress } from 'lib/api'
+import { fetchAssetsByByAddress } from 'lib/api/fetch'
 import { mapAssetsData } from './helpers'
 
 import {

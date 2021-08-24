@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchTradeHistoryByAddress } from 'lib/api'
+import { fetchTradeHistoryByAddress } from 'lib/api/fetch'
 import { mapTradeHistoryData } from './helpers'
 
 import {

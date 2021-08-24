@@ -1,6 +1,6 @@
 import useStore from 'store/use-store'
 import { useQuery } from 'react-query'
-import { fetchTradeHistory } from 'lib/api'
+import { fetchTradeHistory } from 'lib/api/fetch'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
