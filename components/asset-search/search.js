@@ -10,7 +10,8 @@ function SearchInput(props) {
   const debouncedSearchText = useDebounce(searchText, 500)
 
   useEffect(() => {
-    onChange(searchText)
+    const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
+    onChange(filteredSearchText)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText])
 
