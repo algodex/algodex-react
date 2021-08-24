@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 import { rgba, lighten } from 'polished'
+import Icon from 'components/icon'
 
 export const InfoPopup = styled.aside`
   position: absolute;
   top: 100px;
   left: calc(320px + 1.125rem);
-  width: 360px;
+  width: 480px;
   min-height: 120px;
   background-color: ${({ theme }) => lighten(0.02, theme.colors.gray['800'])};
   z-index: 999;
@@ -46,8 +47,14 @@ export const InfoItem = styled.div`
   flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
 
   &:not(:last-child) {
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem;
   }
+`
+
+export const Algos = styled(Icon)`
+  position: relative;
+  top: -0.125rem;
+  margin-left: 0.125rem;
 `
 
 // this is imported by components/main-layout
