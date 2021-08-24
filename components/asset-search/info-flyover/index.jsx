@@ -40,7 +40,11 @@ function InfoFlyover(props) {
   }
 
   return (
-    <InfoPopup isActive={!!assetInfo} searchHeight={searchHeight}>
+    <InfoPopup
+      isActive={!!assetInfo}
+      searchHeight={searchHeight}
+      isLarge={assetInfo?.hasBeenOrdered}
+    >
       {assetInfo && (
         <>
           <HeaderContainer>
@@ -58,7 +62,7 @@ function InfoFlyover(props) {
               </BodyCopy>
             </InfoItem>
 
-            {assetInfo.price.length > 0 && (
+            {assetInfo.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
                   <BodyCopyTiny as="dt" color="gray.500">
@@ -72,7 +76,7 @@ function InfoFlyover(props) {
               </>
             )}
 
-            {assetInfo.liquidityAlgo && (
+            {assetInfo.hasBeenOrdered && (
               <>
                 <InfoItem halfWidth>
                   <BodyCopyTiny as="dt" color="gray.500">

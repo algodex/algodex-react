@@ -88,6 +88,7 @@ function AssetSearch(props) {
         name: result.unitName,
         fullName: result.assetName,
         verified: result.verified,
+        hasBeenOrdered: result.isTraded || result.hasOrders,
         liquidityAlgo: result.formattedAlgoLiquidity,
         liquidityAsa: result.formattedASALiquidity,
         price,

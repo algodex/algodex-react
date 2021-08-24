@@ -6,7 +6,7 @@ export const InfoPopup = styled.aside`
   position: absolute;
   top: 100px;
   left: calc(320px + 1.125rem);
-  width: 480px;
+  width: ${({ isLarge }) => (isLarge ? '480px' : '360px')};
   background-color: ${({ theme }) => lighten(0.02, theme.colors.gray['800'])};
   z-index: 999;
   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
@@ -14,6 +14,7 @@ export const InfoPopup = styled.aside`
   transform: translateY(${({ isActive }) => (isActive ? '0' : '5%')});
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   padding: 1rem 1.5rem;
+  padding-bottom: ${({ isLarge }) => (isLarge ? '0.25rem' : '1.25rem')};
   box-shadow: 3px 3px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
 
   @media (min-width: 1536px) {
