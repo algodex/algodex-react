@@ -37,7 +37,7 @@ function OpenOrders() {
   )
 
   useEffect(() => {
-    if (data && data.success) {
+    if (data) {
       setOpenOrdersData(mapOpenOrdersData(data))
     }
   }, [data])
