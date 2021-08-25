@@ -32,12 +32,14 @@ export default function Header() {
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>Trade</NavTextLg>
         </ActiveLink>
+        {/*
         <ActiveLink href="/wallet">
           <NavTextLg>Wallet</NavTextLg>
         </ActiveLink>
         <ActiveLink href="/support">
           <NavTextLg>Support</NavTextLg>
         </ActiveLink>
+        */}
         <NavIcon color="gray.500">
           <Bell />
         </NavIcon>
@@ -54,12 +56,14 @@ export default function Header() {
           <ActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
           </ActiveLink>
+          {/*
           <ActiveLink href="/wallet">
             <NavTextSm>Wallet</NavTextSm>
           </ActiveLink>
           <ActiveLink href="/support">
             <NavTextSm>Support</NavTextSm>
           </ActiveLink>
+          */}
           <NavTextSm>
             EN <Flag countryCode="US" svg />
           </NavTextSm>
