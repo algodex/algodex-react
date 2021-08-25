@@ -163,10 +163,7 @@ export async function getServerSideProps({ req, res, query }) {
   const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL
   const TESTNET_DOMAIN = process.env.NEXT_PUBLIC_TESTNET_DOMAIN
 
-  const hasGateAccess =
-    VERCEL_URL && TESTNET_DOMAIN && VERCEL_URL === TESTNET_DOMAIN
-      ? await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
-      : true
+  const hasGateAccess = await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
 
   if (!hasGateAccess) {
     return {
