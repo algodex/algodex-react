@@ -50,13 +50,16 @@ function ChartView(props) {
 
 
   return (
+    
     <Container>
       <>
+      
         <CandleStickChart
           ref={candleChartRef}
           isVisible={chartMode === 'candle'}
           data-testid="candleStickChart"
         />
+
         <AreaSeriesChart
           ref={areaChartRef}
           isVisible={chartMode === 'area'}
