@@ -35,7 +35,8 @@ const DEMO_ASSETS_DATA = demoAssetsData
 
 function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
-
+  console.log('in main layout!!! env: ' + process.env.NEXT_PUBLIC_ENV );
+  
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const showOrderBook = asset.isTraded || asset.hasOrders

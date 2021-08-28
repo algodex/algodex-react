@@ -4,10 +4,14 @@ import PropTypes from 'prop-types'
 import { Container, ToggleWrapper, ToggleInput, ToggleBtn } from './chart-settings.css'
 
 function ChartSettings(props) {
-  const { chartMode, onChartModeClick } = props
+  const { chartMode, onChartModeClick, onChartTimeClick, chartTime } = props
 
   const handleModeClick = (e) => {
     onChartModeClick(e.target.value)
+  }
+
+  const handleTimeClick = (e) => {
+    onChartTimeClick(e.target.value)
   }
 
   const renderTimeIntervals = () => {
@@ -18,11 +22,11 @@ function ChartSettings(props) {
           type="radio"
           id={`time-${i}`}
           value={i}
-          checked={i === '1d'}
-          onChange={() => null}
-          disabled={i !== '1d'}
+          checked={i === chartTime}
+          onChange={handleTimeClick}
+          disabled={i !== '1d' && i !== '1h'}
         />
-        <ToggleBtn as="label" size="small" htmlFor={`time-${i}`}>
+        <ToggleBtn as="label" size="small" htmlFor={`time-${i}`} >
           {i}
         </ToggleBtn>
       </React.Fragment>
@@ -60,7 +64,9 @@ function ChartSettings(props) {
 
 ChartSettings.propTypes = {
   chartMode: PropTypes.string,
-  onChartModeClick: PropTypes.func
+  chartTime: PropTypes.string,
+  onChartModeClick: PropTypes.func,
+  onChartTimeClick: PropTypes.func
 }
 
 export default ChartSettings

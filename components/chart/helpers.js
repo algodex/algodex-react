@@ -5,8 +5,9 @@ import { floatToFixed } from 'services/display'
 export const mapPriceData = (data) => {
   const prices =
     data?.chart_data.map(
-      ({ date, formatted_open, formatted_high, formatted_low, formatted_close }) => {
+      ({ date, formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
         const time = dayjs(new Date(date)).format('YYYY-MM-DD')
+        //const time = unixTime
         return {
           time,
           open: floatToFixed(formatted_open),
