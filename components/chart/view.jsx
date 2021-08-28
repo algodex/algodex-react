@@ -17,7 +17,7 @@ function ChartView(props) {
   const { areaChart } = useAreaChart(areaChartRef, priceData)
 
   const [chartMode, setChartMode] = useState('candle')
-  const [chartTime, setChartTime] = useState('1d')
+  const [chartTime, setChartTime] = useState('1h')
 
   const changeMode = (mode) => {
     setChartMode(mode)

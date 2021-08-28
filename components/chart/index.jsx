@@ -21,7 +21,7 @@ function Chart(props) {
   const orderBook = useStore((state) => state.orderBook)
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
   const queryClient = useQueryClient()
-  const [chartParentTime, setParentChartTime] = useState('1d')
+  const [chartParentTime, setParentChartTime] = useState('1h')
 
   const { isLoading, isError, data } = useQuery(
     ['priceData', { assetId }],
