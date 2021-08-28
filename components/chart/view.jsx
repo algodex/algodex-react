@@ -8,7 +8,7 @@ import useCandleChart from './use-candle-chart'
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
 
 function ChartView(props) {
-  const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
+  const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData, onViewChartTimeClick } = props
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
@@ -17,6 +17,7 @@ function ChartView(props) {
   const { areaChart } = useAreaChart(areaChartRef, priceData)
 
   const [chartMode, setChartMode] = useState('candle')
+  const [chartTime, setChartTime] = useState('1d')
 
   const changeMode = (mode) => {
     setChartMode(mode)
@@ -30,14 +31,35 @@ function ChartView(props) {
     }
   }
 
+  const changeTime = (time) => {
+    setChartTime(time);
+    onViewChartTimeClick(time)
+
+    console.log(time);
+    /*alert(time);*/
+    /*setChartMode(mode)
+
+    if (mode === 'candle') {
+      const logicalRange = areaChart?.timeScale().getVisibleLogicalRange()
+      candleChart?.timeScale().setVisibleLogicalRange(logicalRange)
+    } else {
+      const logicalRange = candleChart?.timeScale().getVisibleLogicalRange()
+      areaChart?.timeScale().setVisibleLogicalRange(logicalRange)
+    }*/
+  }
+
+
   return (
+    
     <Container>
       <>
+      
         <CandleStickChart
           ref={candleChartRef}
           isVisible={chartMode === 'candle'}
           data-testid="candleStickChart"
         />
+
         <AreaSeriesChart
           ref={areaChartRef}
           isVisible={chartMode === 'area'}
@@ -53,7 +75,10 @@ function ChartView(props) {
         volume={asaVolume}
       />
       <SettingsContainer>
-        <ChartSettings chartMode={chartMode} onChartModeClick={(mode) => changeMode(mode)} />
+        <ChartSettings chartMode={chartMode} chartTime={chartTime} 
+            onChartModeClick={(mode) => changeMode(mode)} 
+            onChartTimeClick={(time) => changeTime(time)} 
+        />
       </SettingsContainer>
     </Container>
   )
