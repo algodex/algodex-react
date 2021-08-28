@@ -17,5 +17,6 @@ jobs:
           yarn
         env:
           NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
+          SENTRY_AUTH_TOKEN: b4a3e05d4cc54d4c940db6f4cda5765ae1d650cc14c74203aff4fc52cc4a4af9
       - name: Run tests
         run: yarn test
