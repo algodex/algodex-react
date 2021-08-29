@@ -63,6 +63,10 @@ const GlobalStyle = createGlobalStyle`
   *:after {
     box-sizing: inherit;
   }
+
+  a {
+    text-decoration: none;
+  }
 `
 
 export default function App({ Component, pageProps, err }) {
