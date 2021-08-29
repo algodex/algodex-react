@@ -32,6 +32,9 @@ export default function Header() {
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>Trade</NavTextLg>
         </ActiveLink>
+        <a target="_blank" href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/">
+          <NavTextLg>Docs</NavTextLg>
+        </a>
         {/*
         <ActiveLink href="/wallet">
           <NavTextLg>Wallet</NavTextLg>
@@ -55,6 +58,9 @@ export default function Header() {
         <MobileNavContainer>
           <ActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
+          </ActiveLink>
+          <ActiveLink href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/">
+            <NavTextSm>Docs</NavTextSm>
           </ActiveLink>
           {/*
           <ActiveLink href="/wallet">

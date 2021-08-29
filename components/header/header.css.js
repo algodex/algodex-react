@@ -64,23 +64,16 @@ export const Flag = styled(ReactCountryFlag)`
 export const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
-  width: 15%;
+  width: 50%;
   align-items: center;
 
-  @media (min-width: 768px) {
-    width: 10%;
-  }
-
-  @media (min-width: 1024px) {
-    width: 25%;
-  }
 
   @media (min-width: 1536px) {
-    width: 20%;
+    width: 40%;
   }
 
   @media (min-width: 1920px) {
-    width: 15%;
+    width: 30%;
   }
 `
 
