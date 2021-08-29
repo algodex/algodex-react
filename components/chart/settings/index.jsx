@@ -24,7 +24,6 @@ function ChartSettings(props) {
           value={i}
           checked={i === chartTime}
           onChange={handleTimeClick}
-          disabled={i !== '1d' && i !== '1h'}
         />
         <ToggleBtn as="label" size="small" htmlFor={`time-${i}`} >
           {i}
