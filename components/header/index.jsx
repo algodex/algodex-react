@@ -59,9 +59,9 @@ export default function Header() {
           <ActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
           </ActiveLink>
-          <ActiveLink href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/">
+          <a target="_blank" href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/">
             <NavTextSm>Docs</NavTextSm>
-          </ActiveLink>
+          </a>
           {/*
           <ActiveLink href="/wallet">
             <NavTextSm>Wallet</NavTextSm>
