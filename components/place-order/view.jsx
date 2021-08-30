@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
+import { useQueryClient } from "react-query";
 import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
@@ -68,6 +69,9 @@ function PlaceOrderView(props) {
 
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
+
+  // Get reference to query client to clear queries later
+  const queryClient = useQueryClient();
 
   /**
    * When order price or amount changes, automatically calculate total (in ALGO)
@@ -168,6 +172,10 @@ function PlaceOrderView(props) {
         ...DEFAULT_ORDER,
         type: order.type
       })
+
+      // Invalidate Queries
+      queryClient.invalidateQueries("searchResults");
+
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       Sentry.captureException(err)

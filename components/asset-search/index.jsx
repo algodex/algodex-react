@@ -65,8 +65,8 @@ function AssetSearch(props) {
 
   const [query, setQuery] = useState('')
 
-  const { status, data, error } = useQuery(['searchResults', { query }], () => searchAssets(query))
-
+  const { status, data, error } = useQuery(['searchResults', { query }], () => searchAssets(query), { refetchInterval: 20000})
+  
   const searchResultsData = useMemo(() => {
     const results = data || []
 
