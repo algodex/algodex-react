@@ -69,7 +69,9 @@ function AssetSearch(props) {
 
   const searchResultsData = useMemo(() => {
     const results = data || []
-
+    if (results == null || !Array.isArray(results)) {
+      return [];
+    }
     return results.map((result) => {
       const price = result.formattedPrice
         ? floatToFixed(result.formattedPrice)

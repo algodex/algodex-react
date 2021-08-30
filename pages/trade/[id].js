@@ -41,8 +41,18 @@ export default function Home() {
   const assetStore = useStore((state) => state.asset)
 
   const walletAddresses = useMemo(
-    () => addresses || wallets.map((w) => w.address) || [],
-    [addresses, wallets]
+
+    () => { 
+      if (addresses != null) {
+        return addresses;
+      }
+      if (wallets != null) {
+        return wallets.map((w) => w.address) || [],
+            [addresses, wallets]
+      }
+    
+
+    }
   )
 
   // fetch wallet balances from blockchain
