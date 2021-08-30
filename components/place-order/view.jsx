@@ -70,6 +70,9 @@ function PlaceOrderView(props) {
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
 
+  // Get reference to query client to clear queries later
+  const queryClient = useQueryClient();
+
   /**
    * When order price or amount changes, automatically calculate total (in ALGO)
    */
@@ -171,7 +174,6 @@ function PlaceOrderView(props) {
       })
 
       // Invalidate Queries
-      const queryClient = useQueryClient();
       queryClient.invalidateQueries("searchResults");
 
     } catch (err) {
