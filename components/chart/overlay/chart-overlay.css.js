@@ -34,10 +34,23 @@ export const TradingPair = styled.h3`
     color: ${({ theme }) => theme.colors.gray[100]};
   }
 
+  display: flex;
+  align-items: center;
+
   @media (min-width: 1024px) {
     font-size: 1.25rem;
   }
 `
+
+export const IconButton = styled.button`
+  cursor: pointer;
+  pointer-events: all;
+  border: none;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.gray[100]};
+  margin-left: .125rem;
+`
+
 
 export const OhlcList = styled.dl`
   display: flex;

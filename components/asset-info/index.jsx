@@ -4,6 +4,8 @@ import SvgImage from 'components/svg-image'
 import useStore from 'store/use-store'
 import theme from 'theme'
 
+import { ArrowLeft } from 'react-feather'
+
 import {
   Container,
   InfoContainer,
@@ -12,11 +14,14 @@ import {
   InfoList,
   InfoItem,
   AlgoExplorerLink,
-  ExternalLinkIcon
+  ExternalLinkIcon,
+  ButtonText
 } from './asset-info.css'
 
 export default function AssetInfo() {
   const asset = useStore((state) => state.asset)
+
+  const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
 
   const description = asset.info.description || 'N/A'
 
@@ -55,6 +60,12 @@ export default function AssetInfo() {
   return (
     <Container>
       <InfoContainer>
+        {asset.isTraded ? (
+          <ButtonText type="button" onClick={() => setShowAssetInfo(false)}>
+            <ArrowLeft />
+            <div>Back to Chart</div>
+          </ButtonText>
+        ) : null}
         <HeaderContainer>
           <HeaderLg color="gray.100" mb={2}>
             {renderName()}

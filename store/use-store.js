@@ -65,7 +65,12 @@ export const useStore = create(
       total: '0',
       execution: 'both'
     },
-    setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } }))
+    setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } })),
+
+    // Controls showing of Asset Info or Chart
+    showAssetInfo: false,
+    setShowAssetInfo: (bool) => set({ showAssetInfo: bool}),
+
   }))
 )
 
