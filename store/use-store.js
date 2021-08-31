@@ -67,9 +67,14 @@ export const useStore = create(
     },
     setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } })),
 
-    chartTimeInterval: "1h",
+    // Controls showing of Asset Info or Chart
+    showAssetInfo: false,
+    setShowAssetInfo: (bool) => set({ showAssetInfo: bool}),
 
+    // Controls Chart Time interval
+    chartTimeInterval: "1h",
     setChartTimeInterval: input => set({chartTimeInterval: input})
+
   }))
 )
 

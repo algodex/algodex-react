@@ -35,11 +35,12 @@ const DEMO_ASSETS_DATA = demoAssetsData
 
 function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
-  console.log('in main layout!!! env: ' + process.env.NEXT_PUBLIC_ENV );
-  
+  console.log('in main layout!!! env: ' + process.env.NEXT_PUBLIC_ENV)
+
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const showOrderBook = asset.isTraded || asset.hasOrders
+  const showAssetInfo = useStore((state) => state.showAssetInfo)
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
@@ -70,7 +71,7 @@ function MainLayout(props) {
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
         <ChartSection>
-          {asset.isTraded ? <Chart /> : <AssetInfo />}
+          {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
           <ChartOverlay isActive={showOverlay} />
         </ChartSection>
         <OrderBookSection>
