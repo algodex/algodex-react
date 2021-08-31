@@ -11,6 +11,23 @@ export const InfoContainer = styled.div`
   max-width: 40rem;
 `
 
+export const ButtonText = styled.button`
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  display: flex;
+  align-content: center;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.gray[400]};
+  padding: 5px 0;
+
+  div {
+    line-height: 24px;
+    margin-left: 5px;
+  }
+  
+`
+
 export const HeaderContainer = styled.div`
   padding-bottom: 2rem;
 
