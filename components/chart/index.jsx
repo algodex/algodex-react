@@ -14,7 +14,6 @@ const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
-
 function Chart(props) {
   const asset = useStore((state) => state.asset)
   const assetId = asset.id
@@ -51,9 +50,9 @@ function Chart(props) {
   }
 
   const changeParentTime = (time) => {
-      setParentChartTime(time);
+    setParentChartTime(time)
 
-      console.log("parent time" + time);
+    console.log('parent time' + time)
   }
 
   return (

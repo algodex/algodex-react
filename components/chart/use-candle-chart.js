@@ -39,7 +39,8 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
           borderColor: BORDER_COLOR
         },
         timeScale: {
-          borderColor: BORDER_COLOR
+          borderColor: BORDER_COLOR,
+          timeVisible: true
         }
       })
 
@@ -105,6 +106,13 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
       candleChart.volumeSeries.setData(volumeData)
       candleChart.candleSeries.setData(priceData)
       candleChart.chart.timeScale().fitContent()
+      const vslr = candleChart.chart.timeScale().getVisibleLogicalRange();
+      console.log("vslr" , vslr);
+
+      candleChart.chart.timeScale().setVisibleLogicalRange({
+        from: Math.max(0, priceData.length - 50),
+        to: priceData.length
+      });
     }
   }, [candleChart, containerRef, priceData, volumeData])
 
