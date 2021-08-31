@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import useStore, { getChartTimeInterval } from 'store/use-store'
 import { Container, ToggleWrapper, ToggleInput, ToggleBtn } from './chart-settings.css'
 
 function ChartSettings(props) {
-  const { chartMode, onChartModeClick, onChartTimeClick, chartTime } = props
+  const { chartMode, onChartModeClick } = props
+  const chartTime = useStore((state) => getChartTimeInterval(state))
+  const onChartTimeClick = useStore((state) => state.setChartTimeInterval)
 
   const handleModeClick = (e) => {
     onChartModeClick(e.target.value)
@@ -25,7 +27,7 @@ function ChartSettings(props) {
           checked={i === chartTime}
           onChange={handleTimeClick}
         />
-        <ToggleBtn as="label" size="small" htmlFor={`time-${i}`} >
+        <ToggleBtn as="label" size="small" htmlFor={`time-${i}`}>
           {i}
         </ToggleBtn>
       </React.Fragment>

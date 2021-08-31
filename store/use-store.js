@@ -65,8 +65,14 @@ export const useStore = create(
       total: '0',
       execution: 'both'
     },
-    setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } }))
+    setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } })),
+
+    chartTimeInterval: "1h",
+
+    setChartTimeInterval: input => set({chartTimeInterval: input})
   }))
 )
+
+export const getChartTimeInterval = state => state.chartTimeInterval;
 
 export default useStore

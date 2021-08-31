@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { useMemo, useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
-import useStore from 'store/use-store'
+import useStore, { getChartTimeInterval } from 'store/use-store'
 import ChartView from './view'
 
 // Common
@@ -20,11 +20,11 @@ function Chart(props) {
   const orderBook = useStore((state) => state.orderBook)
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
   const queryClient = useQueryClient()
-  const [chartParentTime, setParentChartTime] = useState('1h')
+  const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
 
   const { isLoading, isError, data } = useQuery(
     ['priceData', { assetId }],
-    () => fetchPriceData(assetId, chartParentTime),
+    () => fetchPriceData(assetId, chartTimeInterval),
     {
       // Refetch the data every second
       refetchInterval: 1000
@@ -49,12 +49,6 @@ function Chart(props) {
     return <Error message="Error loading chart" flex />
   }
 
-  const changeParentTime = (time) => {
-    setParentChartTime(time)
-
-    console.log('parent time' + time)
-  }
-
   return (
     <ChartView
       bid={bid}
@@ -66,7 +60,6 @@ function Chart(props) {
       ohlc={ohlc}
       priceData={priceData}
       volumeData={volumeData}
-      onViewChartTimeClick={(time) => changeParentTime(time)}
       {...props}
     />
   )
