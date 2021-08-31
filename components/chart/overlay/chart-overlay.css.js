@@ -49,6 +49,14 @@ export const IconButton = styled.button`
   background: transparent;
   color: ${({ theme }) => theme.colors.gray[100]};
   margin-left: .125rem;
+  padding: 0;
+
+  svg {
+    height: 16px;
+    position: relative;
+    left: -2px;
+    top: -5px;
+  }
 `
 
 
