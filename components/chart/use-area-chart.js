@@ -92,7 +92,7 @@ export default function useAreaChart(containerRef, priceData) {
       areaChart.areaSeries.setData(areaSeriesData)
 
       // Scale Chart to appropriate time range
-      const dataPointsToShow = 14;
+      const dataPointsToShow = 28;
       const lastDataPoint = priceData.length - 1;
       areaChart.chart.timeScale().setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint });
 

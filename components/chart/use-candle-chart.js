@@ -109,7 +109,7 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
       candleChart.candleSeries.setData(priceData)
   
       // Scale Chart to appropriate time range
-      const dataPointsToShow = 14;
+      const dataPointsToShow = 28;
       const lastDataPoint = priceData.length - 1;
       candleChart.chart.timeScale().setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint });
 
