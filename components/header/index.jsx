@@ -32,8 +32,14 @@ export default function Header() {
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>Trade</NavTextLg>
         </ActiveLink>
-        <a target="_blank" href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/">
+        <a
+          target="_blank"
+          href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+        >
           <NavTextLg>Docs</NavTextLg>
+        </a>
+        <a target="_blank" href="//about.algodex.com/support/">
+          <NavTextLg>Support</NavTextLg>
         </a>
         {/*
         <ActiveLink href="/wallet">
@@ -59,8 +65,14 @@ export default function Header() {
           <ActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
           </ActiveLink>
-          <a target="_blank" href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/">
+          <a
+            target="_blank"
+            href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+          >
             <NavTextSm>Docs</NavTextSm>
+          </a>
+          <a target="_blank" href="//about.algodex.com/support/">
+            <NavTextSm>Support</NavTextSm>
           </a>
           {/*
           <ActiveLink href="/wallet">
