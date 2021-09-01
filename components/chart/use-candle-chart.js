@@ -12,6 +12,7 @@ const TEXT_COLOR = theme.colors.gray[300]
 export default function useCandleChart(containerRef, volumeData, priceData) {
   const [candleChart, setCandleChart] = useState()
 
+
   useEffect(() => {
     const chartContainer = containerRef?.current
 
@@ -39,7 +40,8 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
           borderColor: BORDER_COLOR
         },
         timeScale: {
-          borderColor: BORDER_COLOR
+          borderColor: BORDER_COLOR,
+          timeVisible: true
         }
       })
 
@@ -102,11 +104,23 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
 
   useEffect(() => {
     if (candleChart) {
+      
       candleChart.volumeSeries.setData(volumeData)
       candleChart.candleSeries.setData(priceData)
-      candleChart.chart.timeScale().fitContent()
+  
+      // Scale Chart to appropriate time range
+      const dataPointsToShow = 28;
+      const lastDataPoint = priceData.length - 1;
+      candleChart.chart.timeScale().setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint });
+
+      if (priceData.length <= dataPointsToShow) {
+        // If not enough data points, scale to fit chart size
+        candleChart.chart.timeScale().fitContent();
+      }
     }
   }, [candleChart, containerRef, priceData, volumeData])
+
+
 
   return {
     candleChart: candleChart?.chart

@@ -42,7 +42,8 @@ export default function useAreaChart(containerRef, priceData) {
           borderColor: BORDER_COLOR
         },
         timeScale: {
-          borderColor: BORDER_COLOR
+          borderColor: BORDER_COLOR,
+          timeVisible: true
         }
       })
 
@@ -89,7 +90,16 @@ export default function useAreaChart(containerRef, priceData) {
         value: close
       }))
       areaChart.areaSeries.setData(areaSeriesData)
-      areaChart.chart.timeScale().fitContent()
+
+      // Scale Chart to appropriate time range
+      const dataPointsToShow = 28;
+      const lastDataPoint = priceData.length - 1;
+      areaChart.chart.timeScale().setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint });
+
+      if (priceData.length <= dataPointsToShow) {
+        // If not enough data points, scale to fit chart size
+        areaChart.chart.timeScale().fitContent();
+      }
     }
   }, [areaChart, containerRef, priceData])
 

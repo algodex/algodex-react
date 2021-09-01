@@ -71,7 +71,13 @@ export const useStore = create(
     showAssetInfo: false,
     setShowAssetInfo: (bool) => set({ showAssetInfo: bool}),
 
+    // Controls Chart Time interval
+    chartTimeInterval: "1h",
+    setChartTimeInterval: input => set({chartTimeInterval: input})
+
   }))
 )
+
+export const getChartTimeInterval = state => state.chartTimeInterval;
 
 export default useStore
