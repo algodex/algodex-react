@@ -71,6 +71,9 @@ export default function Header() {
           >
             <NavTextSm>Docs</NavTextSm>
           </a>
+          <a target="_blank" href="//about.algodex.com/support/">
+            <NavTextSm>Support</NavTextSm>
+          </a>
           {/*
           <ActiveLink href="/wallet">
             <NavTextSm>Wallet</NavTextSm>
