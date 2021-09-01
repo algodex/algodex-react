@@ -43,16 +43,13 @@ export default function Home() {
   const walletAddresses = useMemo(
 
     () => { 
-      if (addresses != null) {
+      if (!!addresses) {
         return addresses;
       }
-      if (wallets != null) {
-        return wallets.map((w) => w.address) || [],
-            [addresses, wallets]
-      }
-    
-
-    }
+      return !!wallets ? wallets.map((w) => w.address) : []
+      
+    },
+    [addresses, wallets]
   )
 
   // fetch wallet balances from blockchain

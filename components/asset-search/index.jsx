@@ -68,10 +68,10 @@ function AssetSearch(props) {
   const { status, data, error } = useQuery(['searchResults', { query }], () => searchAssets(query))
 
   const searchResultsData = useMemo(() => {
-    const results = data || []
-    if (results == null || !Array.isArray(results)) {
-      return [];
+    if (!data || !Array.isArray(data)) {
+      return []
     }
+    const results = data
     return results.map((result) => {
       const price = result.formattedPrice
         ? floatToFixed(result.formattedPrice)
