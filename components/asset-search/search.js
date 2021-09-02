@@ -43,13 +43,8 @@ function SearchInput(props) {
    * added to detect clicks outside the expanded flyout.
    */
   const handleFocus = () => {
-      console.log("focused, handleclick added");
     onSearchFocus()
     window.addEventListener('click', handleClick)
-  }
-
-  const handleBlur = () => {
-    window.removeEventListener('click', handleClick)
   }
 
   return (
@@ -59,7 +54,6 @@ function SearchInput(props) {
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
-      onBlur={handleBlur}
       placeholder="Search"
     />
   )
