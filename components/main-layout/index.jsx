@@ -60,8 +60,10 @@ function MainLayout(props) {
 
   useEffect(() => {
     const handleResize = () => {
+      console.log('handle resize called')
       if (gridRef?.current) {
         const { width, height } = gridRef.current.getBoundingClientRect()
+        console.log('set grid size', { width, height })
         setGridSize({ width, height })
       }
     }
