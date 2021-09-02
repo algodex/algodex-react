@@ -39,10 +39,10 @@ export const ChartSection = styled.section`
   }
 
   height: calc(100% - 101px);
-  display: ${({ active }) => active ? "flex" : "none"};
+  display: ${({ active }) => active ? "block" : "none"};
 
   @media (min-width: 996px) {
-    display: flex;
+    display: block;
     height: inherit;
   }
 `
@@ -127,6 +127,7 @@ export const Main = styled.main`
   inset: 0;
   flex: 1 1 0%;
 
+
   @media (min-width: 996px) {
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
@@ -184,6 +185,9 @@ export const Main = styled.main`
 
 export const MobileMenu = styled.nav`
   height: 50px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 
   & > ul {
     display: flex;
@@ -197,6 +201,8 @@ export const MobileMenu = styled.nav`
     height: 100%;
   }
 
+ 
+
   @media (min-width: 996px) {
     display: none;
   }
@@ -209,6 +215,6 @@ export const MobileMenuButton = styled(Button)`
   padding: 0;
 
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
+  
   
 `

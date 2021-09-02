@@ -54,6 +54,7 @@ function SearchInput(props) {
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
+      onTouchStart={handleFocus}
       placeholder="Search"
     />
   )

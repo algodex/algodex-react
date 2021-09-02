@@ -40,7 +40,7 @@ export const CandleStickChart = styled.div`
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   overflow: hidden;
 
-  @media (min-width: 768px) {
+  @media (min-width: 996px) {
     bottom: 2.75rem;
   }
 `
@@ -52,7 +52,7 @@ export const SettingsContainer = styled.div`
   bottom: 0;
   height: 3.5rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: 996px) {
     height: 2.75rem;
   }
 `
