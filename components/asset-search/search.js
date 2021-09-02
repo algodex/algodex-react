@@ -47,6 +47,10 @@ function SearchInput(props) {
     window.addEventListener('click', handleClick)
   }
 
+  const handleBlur = () => {
+    window.removeEventListener('click', handleClick)
+  }
+
   return (
     <Search
       ref={inputRef}
@@ -54,6 +58,7 @@ function SearchInput(props) {
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
+      onBlur={handleBlur}
       onTouchStart={handleFocus}
       placeholder="Search"
     />

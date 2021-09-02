@@ -185,8 +185,6 @@ export const Main = styled.main`
 
 export const MobileMenu = styled.nav`
   height: 50px;
-  position: fixed;
-  bottom: 0;
   width: 100%;
 
   & > ul {
