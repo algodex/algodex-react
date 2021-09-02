@@ -7,7 +7,7 @@ export const WalletSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
   display: ${({ active }) => active ? "flex" : "none"};
-  height: 20%;
+  height: calc(100% - 50px);
 
   @media (min-width: 996px) {
     display: flex;
