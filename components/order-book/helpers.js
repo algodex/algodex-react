@@ -1,25 +1,25 @@
-import { convertFromBaseUnits, calculateAsaBuyAmount } from 'services/convert'
+import { calculateAsaBuyAmount } from 'services/convert'
+import { floatToFixed } from 'services/display'
 
-export const aggregateOrders = (asset, orders, type) => {
+export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'
   let total = 0
 
   const sortOrdersToAggregate = (a, b) => {
     if (isBuyOrder) {
-      return b.assetLimitPriceInAlgos - a.assetLimitPriceInAlgos
+      return b.asaPrice - a.asaPrice
     }
-    return a.assetLimitPriceInAlgos - b.assetLimitPriceInAlgos
+    return a.asaPrice - b.asaPrice
   }
 
   const reduceAggregateData = (result, order) => {
-    const price = order.assetLimitPriceInAlgos
+    const price = floatToFixed(order.formattedPrice)
 
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
-    const decimals = isBuyOrder ? 6 : asset.decimals
 
     const amount = isBuyOrder
-      ? calculateAsaBuyAmount(price, orderAmount, decimals)
-      : convertFromBaseUnits(orderAmount, decimals)
+      ? calculateAsaBuyAmount(price, orderAmount)
+      : parseFloat(order.formattedASAAmount)
 
     total += amount
 

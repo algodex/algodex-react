@@ -3,6 +3,8 @@ import { BodyCopySm } from 'components/type'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Bell, User } from 'react-feather'
+import ActiveLink from 'components/active-link'
+
 import {
   Container,
   DesktopItem,
@@ -18,6 +20,7 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+
   return (
     <Container data-testid="header-container">
       <Link href="/">
@@ -27,15 +30,26 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <DesktopItem>
-          <BodyCopySm textTransform="uppercase">Trade</BodyCopySm>
-        </DesktopItem>
-        <DesktopItem>
-          <BodyCopySm textTransform="uppercase">Wallet</BodyCopySm>
-        </DesktopItem>
-        <DesktopItem>
-          <BodyCopySm textTransform="uppercase">Support</BodyCopySm>
-        </DesktopItem>
+        <ActiveLink href="/trade" matches={/^\/trade/}>
+          <NavTextLg>Trade</NavTextLg>
+        </ActiveLink>
+        <a
+          target="_blank"
+          href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+        >
+          <NavTextLg>Docs</NavTextLg>
+        </a>
+        <a target="_blank" href="//about.algodex.com/support/">
+          <NavTextLg>Support</NavTextLg>
+        </a>
+        {/*
+        <ActiveLink href="/wallet">
+          <NavTextLg>Wallet</NavTextLg>
+        </ActiveLink>
+        <ActiveLink href="/support">
+          <NavTextLg>Support</NavTextLg>
+        </ActiveLink>
+        */}
         <NavIcon color="gray.500">
           <Bell />
         </NavIcon>
@@ -52,9 +66,26 @@ export default function Header() {
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
         <MobileNavContainer>
-          <NavTextSm>Trade</NavTextSm>
-          <NavTextSm>Wallet</NavTextSm>
-          <NavTextSm>Support</NavTextSm>
+          <ActiveLink href="/trade" matches={/^\/trade/}>
+            <NavTextSm>Trade</NavTextSm>
+          </ActiveLink>
+          <a
+            target="_blank"
+            href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+          >
+            <NavTextSm>Docs</NavTextSm>
+          </a>
+          <a target="_blank" href="//about.algodex.com/support/">
+            <NavTextSm>Support</NavTextSm>
+          </a>
+          {/*
+          <ActiveLink href="/wallet">
+            <NavTextSm>Wallet</NavTextSm>
+          </ActiveLink>
+          <ActiveLink href="/support">
+            <NavTextSm>Support</NavTextSm>
+          </ActiveLink>
+          */}
           <NavTextSm>
             EN <Flag countryCode="US" svg />
           </NavTextSm>

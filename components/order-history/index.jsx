@@ -1,19 +1,18 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useMemo } from 'react'
-import dayjs from 'dayjs'
-// import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-import { orderHistoryData } from 'components/utils/order-history'
+import { useStorePersisted } from 'store/use-store'
+import { fetchTradeHistoryByAddress } from 'lib/api'
+import { mapTradeHistoryData } from './helpers'
+
 import {
   OrderDate,
   OrderPrice,
   OrderPair,
   OrderSide,
-  OrderRole,
   OrderAmount,
-  OrderExecuted,
-  OrderTotal,
   StatusContainer,
   TableWrapper,
   OrderHistoryContainer
@@ -25,20 +24,23 @@ const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
 
 const OrderSideCell = ({ value }) => <OrderSide value={value}>{value}</OrderSide>
 
-const OrderRoleCell = ({ value }) => <OrderRole value={value}>{value}</OrderRole>
-
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
-const OrderExecutedCell = ({ value }) => <OrderExecuted>{value}</OrderExecuted>
+function OrderHistory() {
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
-const OrderTotalCell = ({ value }) => <OrderTotal>{value}</OrderTotal>
+  const { data, isLoading, isError } = useQuery(
+    ['tradeHistory', { address: activeWalletAddress }],
+    () => fetchTradeHistoryByAddress(activeWalletAddress),
+    {
+      enabled: !!activeWalletAddress,
+      refetchInterval: 3000
+    }
+  )
 
-function OrderHistory({ orderHistory }) {
-  // const { status, data, error } = useQuery('openOrders', fetchOpenOrders)
-
-  const error = {}
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
 
   const columns = useMemo(
     () => [
@@ -67,36 +69,19 @@ function OrderHistory({ orderHistory }) {
         Header: 'Amount',
         accessor: 'amount',
         Cell: OrderAmountCell
-      },
-      {
-        Header: 'Executed',
-        accessor: 'executed',
-        Cell: OrderExecutedCell
-      },
-      {
-        Header: 'Total',
-        accessor: 'total',
-        Cell: OrderTotalCell
-      },
-      {
-        Header: 'Role',
-        accessor: 'role',
-        Cell: OrderRoleCell
       }
     ],
     []
   )
 
-  const data = useMemo(() => orderHistoryData, [])
-
   const renderStatus = () => {
-    if (status === 'success') {
+    if (!isLoading && !isError) {
       return null
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">Something went wrong.</BodyCopySm>}
       </StatusContainer>
     )
   }
@@ -104,7 +89,7 @@ function OrderHistory({ orderHistory }) {
   return (
     <OrderHistoryContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={data} />
+        <OrdersTable columns={columns} data={tradeHistoryData || []} />
       </TableWrapper>
 
       {renderStatus()}

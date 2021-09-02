@@ -20,6 +20,15 @@ import {
 } from './mobile-interface.css'
 import { BodyCopy } from 'components/type'
 
+const TypeContainer = styled.div`
+  padding: 15vh 2rem 0;
+  text-align: center;
+`
+
+const LogoContainer = styled.div`
+  padding: 4rem;
+`
+
 export default function MobileInterface() {
   const [activeTradeTab, setActiveTradeTab] = useState('PLACE_ORDER')
   const activeMobileTab = useStore((state) => state.activeMobileTab)

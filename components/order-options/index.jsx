@@ -16,7 +16,7 @@ import {
 } from './order-options.css'
 
 function OrderOptions(props) {
-  const { order, onChange } = props
+  const { order, onChange, allowTaker } = props
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -39,7 +39,7 @@ function OrderOptions(props) {
         return `Your order will only execute as a taker order.`
 
       case 'both':
-        return `Your order may execute as a maker order or taker order. (Currently unavailable)`
+        return `Your order may execute as a maker order or taker order.`
 
       default:
         return null
@@ -64,23 +64,34 @@ function OrderOptions(props) {
             <OptionsWrapper>
               <OptionsInput
                 type="checkbox"
+                id="order-both"
+                value="both"
+                checked={order.execution === 'both'}
+                onChange={handleChange}
+              />
+              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
+                Maker/Taker
+              </OptionsButton>
+              <OptionsInput
+                type="checkbox"
                 id="order-maker"
                 value="maker"
                 checked={order.execution === 'maker'}
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-maker" size="small" type={order.type}>
-                Post Only
+                Maker Only
               </OptionsButton>
               <OptionsInput
                 type="checkbox"
+                disabled={!allowTaker}
                 id="order-taker"
                 value="taker"
                 checked={order.execution === 'taker'}
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
-                Immediate-or-Cancel
+                Taker Only
               </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">
@@ -95,7 +106,12 @@ function OrderOptions(props) {
 
 OrderOptions.propTypes = {
   order: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  allowTaker: PropTypes.bool
+}
+
+OrderOptions.defaultProps = {
+  allowTaker: true
 }
 
 export default OrderOptions

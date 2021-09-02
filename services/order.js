@@ -1,5 +1,7 @@
 import algodex from '@algodex/algodex-sdk'
-import { convertToBaseUnits, convertAsaLimitPrice } from './convert'
+import { convertToBaseUnits, convertToAsaUnits } from './convert'
+
+const AlgodClient = new algodex.initAlgodClient('public_test')
 
 const OrderService = {
   placeOrder: (order, orderBook) => {
@@ -11,10 +13,8 @@ const OrderService = {
     const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
     const algoAmount = convertToBaseUnits(order.total)
 
-    const price = order.price
+    const price = convertToAsaUnits(order.price, order.asset.decimals)
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
-
-    const AlgodClient = new algodex.initAlgodClient('test')
 
     if (order.execution === 'maker') {
       if (order.type === 'buy') {
@@ -40,12 +40,12 @@ const OrderService = {
       }
     }
 
+    const isSellOrder = order.type === 'sell'
+    const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
+
+    const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
+
     if (order.execution === 'taker') {
-      const isSellOrder = order.type === 'sell'
-      const limitPrice = convertAsaLimitPrice(price, order.asset.decimals)
-
-      const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-
       console.log(`Taker ${order.type} order`, {
         isSellOrder,
         assetId,
@@ -66,6 +66,28 @@ const OrderService = {
         allOrderBookOrders
       )
     }
+
+    // order.execution === 'both' (default)
+
+    console.log(`Maker/Taker ${order.type} order`, {
+      isSellOrder,
+      assetId,
+      address,
+      limitPrice,
+      asaAmount,
+      algoAmount
+    })
+
+    return algodex.executeOrderAsMakerAndTaker(
+      AlgodClient,
+      isSellOrder,
+      assetId,
+      address,
+      limitPrice,
+      asaAmount,
+      algoAmount,
+      allOrderBookOrders
+    )
   },
 
   getAllEscrowOrders: (orderBook) => {
@@ -87,6 +109,24 @@ const OrderService = {
     }
 
     return [...mapOrders(orderBook.buyOrders, 'buy'), ...mapOrders(orderBook.sellOrders, 'sell')]
+  },
+
+  /**
+   * Closes an existing order and refunds the escrow account to the owner
+   *
+   * @param {Object}       algodClient: object that has been initialized via initAlgodClient()
+   * @param {String} escrowAccountAddr: public address of the escrow account
+   * @param {String}       creatorAddr: public address of the owner of the escrow account
+   * @param {String}    orderBookEntry: blockchain order book string. For example "2500-625-0-15322902" (N-D-min-assetId)
+   * @returns {Object} Promise for when the transaction is fully confirmed
+   */
+  closeOrder: async (escrowAccountAddr, creatorAddr, orderBookEntry) => {
+    return await algodex.closeOrderFromOrderBookEntry(
+      AlgodClient,
+      escrowAccountAddr,
+      creatorAddr,
+      orderBookEntry
+    )
   }
 }
 

@@ -30,47 +30,75 @@ const immer = (config) => (set, get, api) =>
     api
   )
 
-export const useStore = create(
+export const useStorePersisted = create(
   persist(
     immer((set) => ({
-      asset: {},
-      setAsset: (asset) => set({ asset }),
-
       wallets: [],
       setWallets: (wallets) => set({ wallets }),
 
-      isSignedIn: false,
-      setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
-      signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
-
-      activeMobileTab: mobileTabs.CHART,
-      setActiveMobileTab: (tab) => set({ activeMobileTab: tab }),
-
-      chartMode: chartModes.CANDLE,
-      setChartMode: (mode) => set({ chartMode: mode }),
-
-      orderMode: orderModes.OPEN_ORDERS,
-      setOrderMode: (mode) => set({ orderMode: mode }),
       activeWalletAddress: '',
-      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr }),
-
-      orderBook: {
-        buyOrders: [],
-        sellOrders: []
-      },
-
-      setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
-        set({
-          orderBook: {
-            buyOrders: buyASAOrdersInEscrow,
-            sellOrders: sellASAOrdersInEscrow
-          }
-        })
+      setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
     })),
     {
-      name: 'algodex'
+      name: 'algodex',
+      version: 3
     }
   )
 )
+
+export const useStore = create(
+  immer((set, get) => ({
+    asset: {},
+    setAsset: (asset) => {
+      const prevAsset = get().asset
+      const isNew = prevAsset.id !== asset.id
+      const orderBook = { buyOrders: [], sellOrders: [] }
+
+      set({
+        asset,
+        ...(isNew ? orderBook : {}) // only reset order book if asset is new
+      })
+    },
+
+    isSignedIn: false,
+    setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
+    signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
+
+    orderBook: {
+      buyOrders: [],
+      sellOrders: []
+    },
+    setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
+      set({
+        orderBook: {
+          buyOrders: buyASAOrdersInEscrow,
+          sellOrders: sellASAOrdersInEscrow
+        }
+      }),
+
+    order: {
+      type: 'buy',
+      price: '',
+      amount: '',
+      total: '0',
+      execution: 'both'
+    },
+    setOrder: (order) => set((state) => ({ order: { ...state.order, ...order } })),
+
+    // Controls showing of Asset Info or Chart
+    showAssetInfo: false,
+    setShowAssetInfo: (bool) => set({ showAssetInfo: bool}),
+
+    // Controls Chart Time interval
+    chartTimeInterval: "1h",
+    setChartTimeInterval: input => set({chartTimeInterval: input}),
+
+    activeMobileTab: mobileTabs.CHART,
+    setActiveMobileTab: (tab) => set({ activeMobileTab: tab }),
+
+  }))
+)
+
+export const getChartTimeInterval = state => state.chartTimeInterval;
 
 export default useStore

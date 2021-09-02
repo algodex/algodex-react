@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types'
+import Big from 'big.js'
 import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
+import { floatToFixed } from 'services/display'
+import { useStore } from 'store/use-store'
 
 import {
   Container,
@@ -14,41 +17,59 @@ import {
 } from './order-book.css'
 
 function OrderBookView(props) {
-  const { asset, priceChange, sellData, buyData } = props
+  const { price, priceChange, decimals, sellData, buyData } = props
+
+  const setOrder = useStore((state) => state.setOrder)
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
 
-    return data.map((row) => (
-      <BookRow key={`sell-${row.price}`} type={type} data-testid={`order-book-${type}-row`}>
-        <BodyCopyTiny
-          fontFamily="'Roboto Mono', monospace"
-          color={`${color}.500`}
-          title={row.price.toFixed(6)}
-          m={0}
+    return data.map((row) => {
+      const amount = new Big(row.amount)
+      const total = new Big(row.total)
+
+      const handleSelectOrder = () => {
+        setOrder({
+          price: row.price
+        })
+      }
+
+      return (
+        <BookRow
+          onClick={handleSelectOrder}
+          key={`sell-${row.price}`}
+          type={type}
+          data-testid={`order-book-${type}-row`}
         >
-          {row.price.toFixed(3)}
-        </BodyCopyTiny>
-        <BodyCopyTiny
-          fontFamily="'Roboto Mono', monospace"
-          color="gray.400"
-          textAlign="right"
-          title={row.amount.toFixed(asset.decimals)}
-          m={0}
-        >
-          {row.amount.toFixed(3)}
-        </BodyCopyTiny>
-        <BodyCopyTiny
-          fontFamily="'Roboto Mono', monospace"
-          color="gray.400"
-          textAlign="right"
-          title={row.total.toFixed(asset.decimals)}
-          m={0}
-        >
-          {row.total.toFixed(3)}
-        </BodyCopyTiny>
-      </BookRow>
-    ))
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color={`${color}.500`}
+            title={row.price}
+            m={0}
+          >
+            {floatToFixed(row.price)}
+          </BodyCopyTiny>
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color="gray.400"
+            textAlign="right"
+            title={amount.toFixed(decimals).toString()}
+            m={0}
+          >
+            {amount.toFixed(Math.min(3, decimals))}
+          </BodyCopyTiny>
+          <BodyCopyTiny
+            fontFamily="'Roboto Mono', monospace"
+            color="gray.400"
+            textAlign="right"
+            title={total.toFixed(decimals).toString()}
+            m={0}
+          >
+            {total.toFixed(Math.min(3, decimals))}
+          </BodyCopyTiny>
+        </BookRow>
+      )
+    })
   }
 
   return (
@@ -68,7 +89,7 @@ function OrderBookView(props) {
       </SellOrders>
 
       <CurrentPrice>
-        <OrderBookPrice price={asset.price} change={priceChange} />
+        <OrderBookPrice price={price} decimals={decimals} change={priceChange} />
       </CurrentPrice>
 
       <BuyOrders>
@@ -79,8 +100,9 @@ function OrderBookView(props) {
 }
 
 OrderBookView.propTypes = {
-  asset: PropTypes.object.isRequired,
-  priceChange: PropTypes.number.isRequired,
+  price: PropTypes.number,
+  priceChange: PropTypes.number,
+  decimals: PropTypes.number.isRequired,
   sellData: PropTypes.array,
   buyData: PropTypes.array
 }

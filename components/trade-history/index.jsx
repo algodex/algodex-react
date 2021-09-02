@@ -4,7 +4,7 @@ import { fetchTradeHistory } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
-import { convertFromBaseUnits } from 'services/convert'
+import { floatToFixed } from 'services/display'
 
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
@@ -12,7 +12,10 @@ export default function TradeHistory() {
   const { status, data } = useQuery(
     ['tradeHistory', { assetId: asset.id }],
     () => fetchTradeHistory(asset.id),
-    { refetchInterval: 5000 }
+    {
+      enabled: asset.isTraded,
+      refetchInterval: 5000
+    }
   )
 
   if (status === 'loading') {
@@ -22,13 +25,14 @@ export default function TradeHistory() {
     return <Error message="Error loading trade history" flex />
   }
 
-  const tradesData = data.transactions.map((txn) => ({
-    id: txn.PK_trade_history_id,
-    type: txn.tradeType,
-    price: parseFloat(txn.asaPrice),
-    amount: convertFromBaseUnits(txn.asaAmount, asset.decimals),
-    timestamp: txn.unix_time * 1000
-  }))
+  const tradesData =
+    data?.transactions.map((txn) => ({
+      id: txn.PK_trade_history_id,
+      type: txn.tradeType,
+      price: floatToFixed(txn.formattedPrice),
+      amount: txn.formattedASAAmount,
+      timestamp: txn.unix_time * 1000
+    })) || []
 
   return <TradeHistoryView asset={asset} tradesData={tradesData} />
 }

@@ -1,25 +1,40 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import Big from 'big.js'
 import { Input, Container, TickWrapper, InputWrapper, Tick } from './amount-range.css'
 
 function AmountRange(props) {
-  const { order, activeWallet, asset, onChange } = props
+  const { order, algoBalance: _algoBalance, asaBalance: _asaBalance, asset, onChange } = props
+
+  const [isMouseDown, setIsMouseDown] = useState(false)
 
   const isBuyOrder = order.type === 'buy'
-  const price = order.price || 0
-  const amount = order.amount || 0
-  const algoBalance = activeWallet.balance
-  const asaBalance = activeWallet.assets[asset.id]?.balance || 0
-  const currentPrice = asset.price
+  const price = new Big(order.price || 0).toString()
+  const amount = new Big(order.amount || 0).toString()
+  const algoBalance = new Big(_algoBalance).toString()
+  const asaBalance = new Big(_asaBalance).toString()
+  const currentPrice = new Big(asset.price || 0).toString()
 
   // @todo: calculate txn fees
   // const value = isBuyOrder
   //   ? ((price * amount + txnFee) * 100) / algoBalance
   //   : (amount * 100) / asaBalance
 
-  const value = isBuyOrder
-    ? new Big(price).times(amount).times(100).div(algoBalance).toNumber()
-    : new Big(amount).times(100).div(asaBalance).toNumber()
+  const calculateValue = () => {
+    if (isBuyOrder) {
+      if (_algoBalance === 0) {
+        return 0
+      }
+      return new Big(price).times(amount).times(100).div(algoBalance).toNumber()
+    } else {
+      if (_asaBalance === 0) {
+        return 0
+      }
+      return new Big(amount).times(100).div(asaBalance).toNumber()
+    }
+  }
+
+  const value = calculateValue()
 
   const rounded = new Big(value).div(5).round().times(5).toNumber()
 
@@ -45,17 +60,17 @@ function AmountRange(props) {
   // }
 
   const handleChange = (e) => {
-    if (isBuyOrder && !price) {
+    if (isBuyOrder && price === '0') {
       onChange({
         price: currentPrice,
-        amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
+        amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toString()
       })
       return
     }
 
     const newAmount = isBuyOrder
-      ? new Big(e.target.value).div(100).times(algoBalance).div(price).toNumber()
-      : new Big(e.target.value).div(100).times(asaBalance).toNumber()
+      ? new Big(e.target.value).div(100).times(algoBalance).div(price).toString()
+      : new Big(e.target.value).div(100).times(asaBalance).toString()
 
     onChange({
       amount: newAmount
@@ -79,6 +94,9 @@ function AmountRange(props) {
           value={value || 0}
           onChange={handleChange}
           orderType={order.type}
+          onMouseDown={() => setIsMouseDown(true)}
+          onMouseUp={() => setIsMouseDown(false)}
+          isMouseDown={isMouseDown}
         />
       </InputWrapper>
     </Container>
@@ -87,7 +105,8 @@ function AmountRange(props) {
 
 AmountRange.propTypes = {
   order: PropTypes.object.isRequired,
-  activeWallet: PropTypes.object.isRequired,
+  algoBalance: PropTypes.number.isRequired,
+  asaBalance: PropTypes.number.isRequired,
   asset: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }

@@ -39,10 +39,16 @@ const thumb = css`
   height: ${thumbDiameter};
   border-radius: 50%;
   background: white;
+  transition: transform 120ms;
+  transform: ${({ isMouseDown }) => (isMouseDown ? 'scale(1.1375)' : 'scale(1)')};
 `
 
 const focus = css`
-  box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
+  transition: box-shadow 120ms;
+  box-shadow: ${({ orderType, isMouseDown }) =>
+    orderType === 'sell'
+      ? `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #b23639`
+      : `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #4b9064`};
 `
 
 export const Input = styled.input.attrs({ type: 'range' })`

@@ -72,27 +72,27 @@
   font-family: 'Alliance No.1';
   font-style: normal;
   font-weight: 800;
-  src: url('AllianceNo1Black/font.woff2') format('woff2'),
-    url('AllianceNo1Black/font.woff') format('woff');
-}
-@font-face {
-  font-family: 'Alliance No.1';
-  font-style: italic;
-  font-weight: 800;
-  src: url('AllianceNo1BlackItalic/font.woff2') format('woff2'),
-    url('AllianceNo1BlackItalic/font.woff') format('woff');
-}
-@font-face {
-  font-family: 'Alliance No.1';
-  font-style: normal;
-  font-weight: 900;
   src: url('AllianceNo1ExtraBold/font.woff2') format('woff2'),
     url('AllianceNo1ExtraBold/font.woff') format('woff');
 }
 @font-face {
   font-family: 'Alliance No.1';
   font-style: italic;
-  font-weight: 900;
+  font-weight: 800;
   src: url('AllianceNo1ExtraBoldItalic/font.woff2') format('woff2'),
     url('AllianceNo1ExtraBoldItalic/font.woff') format('woff');
+}
+@font-face {
+  font-family: 'Alliance No.1';
+  font-style: normal;
+  font-weight: 900;
+  src: url('AllianceNo1Black/font.woff2') format('woff2'),
+    url('AllianceNo1Black/font.woff') format('woff');
+}
+@font-face {
+  font-family: 'Alliance No.1';
+  font-style: italic;
+  font-weight: 900;
+  src: url('AllianceNo1BlackItalic/font.woff2') format('woff2'),
+    url('AllianceNo1BlackItalic/font.woff') format('woff');
 }

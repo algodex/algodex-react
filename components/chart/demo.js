@@ -306,13 +306,12 @@ const volumeData = [
 ]
 
 export const DEMO_VOLUME_DATA = volumeData.map((data, i) => ({ ...data, color: colors[i] }))
-export const DEMO_ASSET_NAME = 'YLDY'
-export const DEMO_DAILY_CHANGE = 10.36
-export const DEMO_ALGO_VOLUME = 126.8456
+export const DEMO_ASSET = { name: 'YLDY', decimals: 6, priceChange24hr: -0.1 }
+export const DEMO_ALGO_VOLUME = '126.8456'
 export const DEMO_BASE_ASSET = 'ALGO'
 export const DEMO_OHLC = { open: 185.6423, high: 209.6563, low: 159.3689, close: 171.6985 }
-export const DEMO_BID = 191.2685
-export const DEMO_ASK = 192.6875
+export const DEMO_BID = '191.2685'
+export const DEMO_ASK = '192.6875'
 export const DEMO_SPREAD = (192.68 - 191.26).toFixed(4)
 export const DEMO_CANDLE_CHART_MODE = 'CANDLE'
 export const DEMO_AREA_CHART_MODE = 'AREA'

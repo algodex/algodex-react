@@ -29,12 +29,12 @@
     "styled-components": "^5"
   },
   "dependencies": {
-    "@algodex/algodex-api": "^1.0.4",
-    "@algodex/algodex-sdk": "^1.0.30",
+    "@algodex/algodex-sdk": "^1.0.61",
     "@randlabs/myalgo-connect": "^1.0.1",
-    "@sentry/nextjs": "^6.8.0",
+    "@sentry/nextjs": "^6.11.0",
     "axios": "^0.21.1",
     "big.js": "^6.1.1",
+    "cookies": "^0.8.0",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
     "immer": "^9.0.3",
@@ -54,7 +54,7 @@
     "react-table": "^7.7.0",
     "resize-detector": "^0.3.0",
     "storybook-addon-jsx": "^7.3.10",
-    "storybook-addon-next-router": "^2.0.4",
+    "storybook-addon-next-router": "^3.0.5",
     "styled-components": "^5.3.0",
     "styled-system": "^5.1.5",
     "zustand": "^3.5.2"

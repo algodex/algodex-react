@@ -1,10 +1,37 @@
 # algodex-react
 
-Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Note that `development` is the default branch.
 
 ## Getting Started
 
-First, run the development server:
+### Set up a Github token to make it easy to install the private algodex-sdk npm package.
+
+https://github.com/settings/tokens
+
+Copy and save the secret.
+
+In a Linux terminal (git-bash on Windows):
+
+create an ~/.npmrc file with the following contents:
+```
+//npm.pkg.github.com/:_authToken=tokensecretgoeshere
+@algodex:registry=https://npm.pkg.github.com/
+```
+or you can use npm login with your token
+```
+$ npm login --scope=@algodex --registry=https://npm.pkg.github.com
+> Username: USERNAME
+> Password: TOKEN_SECRET
+> Email: PUBLIC-EMAIL-ADDRESS
+```
+
+### Clone and install the necessary libraries
+
+```
+yarn
+```
+
+### Run the development server:
 
 ```bash
 npm run dev
@@ -13,6 +40,8 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### Further edits info (default docs):
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 

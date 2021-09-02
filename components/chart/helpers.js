@@ -1,39 +1,43 @@
+import Big from 'big.js'
 import dayjs from 'dayjs'
-
-const ASSET_FIXED_DECIMALS = 4
+import { floatToFixed } from 'services/display'
 
 export const mapPriceData = (data) => {
   const prices =
-    data?.chart_data.map(({ date, open, high, low, close }) => {
-      const time = dayjs(new Date(date)).format('YYYY-MM-DD')
-      return {
-        time,
-        open: parseFloat(open),
-        high: parseFloat(high),
-        low: parseFloat(low),
-        close: parseFloat(close)
+    data?.chart_data.map(
+      ({ date, formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+        const time = parseInt(unixTime)
+        return {
+          time: time,
+          open: floatToFixed(formatted_open),
+          high: floatToFixed(formatted_high),
+          low: floatToFixed(formatted_low),
+          close: floatToFixed(formatted_close)
+        }
       }
-    }) || []
+    ) || []
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
 export const getOhlc = (data) => {
-  const lastPriceData = data?.chart_data[0] || {}
-  const ohlc =
-    {
-      open: parseFloat(lastPriceData?.open).toFixed(ASSET_FIXED_DECIMALS),
-      high: parseFloat(lastPriceData?.high).toFixed(ASSET_FIXED_DECIMALS),
-      low: parseFloat(lastPriceData?.low).toFixed(ASSET_FIXED_DECIMALS),
-      close: parseFloat(lastPriceData?.close).toFixed(ASSET_FIXED_DECIMALS)
-    } || {}
+  const lastPriceData = data?.chart_data[0]
+
+  const ohlc = lastPriceData
+    ? {
+        open: floatToFixed(lastPriceData.formatted_open),
+        high: floatToFixed(lastPriceData.formatted_high),
+        low: floatToFixed(lastPriceData.formatted_low),
+        close: floatToFixed(lastPriceData.formatted_close)
+      }
+    : {}
   return ohlc
 }
 
 export const mapVolumeData = (data, volUpColor, volDownColor) => {
-  const mappedData = data?.chart_data?.map(({ date, asaVolume }) => {
-    const time = dayjs(new Date(date)).format('YYYY-MM-DD')
+  const mappedData = data?.chart_data?.map(({ date, asaVolume, unixTime }) => {
+    const time = parseInt(unixTime)
     return {
-      time,
+      time: time,
       value: asaVolume
     }
   })
@@ -44,10 +48,15 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
   return volumeData
 }
 
-export const getAssetInfo = (data) => {
-  return data?.asset_info || {}
-}
+export const getBidAskSpread = (orderBook) => {
+  const { buyOrders, sellOrders } = orderBook
 
-export const relDiff = (a, b) => {
-  return 100 * Math.abs((a - b) / ((a + b) / 2))
+  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
+  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
+
+  const bid = floatToFixed(bidPrice)
+  const ask = floatToFixed(askPrice)
+  const spread = floatToFixed(new Big(ask).minus(bid).abs())
+
+  return { bid, ask, spread }
 }

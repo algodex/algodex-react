@@ -34,7 +34,7 @@ export default class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Open+Sans+Condensed:wght@700&display=swap"
           />
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
           <link rel="stylesheet" href="/fonts/style.css" />

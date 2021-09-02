@@ -8,19 +8,15 @@ export const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   padding: 1rem;
   margin: 0;
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   width: 100%;
   z-index: 99;
 
-  @media (min-width: 768px) {
-    position: relative;
-    display: flex;
-    padding: 1rem;
-  }
   @media (min-width: 1024px) {
+    display: flex;
     padding: 2rem;
   }
 `
@@ -82,16 +78,9 @@ export const Flag = styled(ReactCountryFlag)`
 export const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
-  width: 30%;
+  width: 50%;
   align-items: center;
 
-  @media (min-width: 768px) {
-    width: 20%;
-  }
-
-  @media (min-width: 1024px) {
-    width: 50%;
-  }
 
   @media (min-width: 1536px) {
     width: 40%;
@@ -155,7 +144,7 @@ export const NavTextSm = styled.span`
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme, isActive }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
   font-weight: 600;
   ${fontSize}
   ${color}

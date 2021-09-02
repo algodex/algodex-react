@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
+import { useQueryClient } from "react-query";
 import Big from 'big.js'
+import * as Sentry from '@sentry/browser'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
 // import Icon from 'components/icon'
 import OrderService from 'services/order'
+import { convertToAsaUnits } from 'services/convert'
+import { useStore } from 'store/use-store'
 
 import {
   Container,
@@ -28,10 +32,10 @@ import {
 
 const DEFAULT_ORDER = {
   type: 'buy',
-  price: null,
-  amount: null,
-  total: 0,
-  execution: 'maker'
+  price: '',
+  amount: '',
+  total: '0',
+  execution: 'both'
 }
 
 function PlaceOrderView(props) {
@@ -39,7 +43,7 @@ function PlaceOrderView(props) {
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
-  const asaBalance = activeWallet?.assets?.[asset.id]?.balance || 0
+  const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -63,7 +67,11 @@ function PlaceOrderView(props) {
     setEnableOrder({ buy, sell })
   }, [algoBalance, asaBalance])
 
-  const [order, setOrder] = useState(DEFAULT_ORDER)
+  const order = useStore((state) => state.order)
+  const setOrder = useStore((state) => state.setOrder)
+
+  // Get reference to query client to clear queries later
+  const queryClient = useQueryClient();
 
   /**
    * When order price or amount changes, automatically calculate total (in ALGO)
@@ -84,7 +92,7 @@ function PlaceOrderView(props) {
 
     // const total = totalAmount.toFixed(6)
 
-    const total = price.times(amount).round(6).toNumber()
+    const total = price.times(amount).round(6).toString()
 
     if (total !== order.total) {
       setOrder({
@@ -92,35 +100,38 @@ function PlaceOrderView(props) {
         total
       })
     }
-  }, [order])
+  }, [order, setOrder])
+
+  /**
+   * When asset or active wallet changes, reset the form
+   */
+  useEffect(() => {
+    setOrder({
+      ...DEFAULT_ORDER
+    })
+  }, [asset, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
-    setOrder((prev) => ({
-      ...prev,
+    setOrder({
       [field || e.target.id]: e.target.value
-    }))
+    })
   }
 
   const handleRangeChange = (update) => {
-    setOrder((prev) => ({
-      ...prev,
-      ...update
-    }))
+    setOrder(update)
   }
 
   const handleOptionsChange = (e) => {
-    const isChecked = e.target.checked
-    setOrder((prev) => ({
-      ...prev,
-      execution: isChecked ? e.target.value : 'both'
-    }))
+    setOrder({
+      execution: e.target.value
+    })
   }
 
   const placeOrder = (orderData) => {
     return OrderService.placeOrder(orderData, orderBook)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus((prev) => ({ ...prev, submitting: true }))
 
@@ -130,31 +141,46 @@ function PlaceOrderView(props) {
       asset
     }
 
+    Sentry.addBreadcrumb({
+      category: 'order',
+      message: `${order.execution} ${order.type} order placed`,
+      data: {
+        order: orderData
+      },
+      level: Sentry.Severity.Info
+    })
+
     const orderPromise = placeOrder(orderData)
-      .then(() => {
-        setStatus({ submitted: true, submitting: false })
-
-        // update wallet balances
-        refetchWallets()
-
-        // reset order form
-        setOrder({
-          ...DEFAULT_ORDER,
-          type: order.type
-        })
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-      .finally(() => {
-        setStatus({ submitted: false, submitting: false })
-      })
 
     toast.promise(orderPromise, {
       loading: 'Awaiting confirmation...',
       success: 'Order successfully placed',
       error: 'Error placing order'
     })
+
+    try {
+      const result = await orderPromise
+      console.log('Order successfully placed', result)
+
+      setStatus({ submitted: true, submitting: false })
+
+      // update wallet balances
+      refetchWallets()
+
+      // reset order form
+      setOrder({
+        ...DEFAULT_ORDER,
+        type: order.type
+      })
+
+      // Invalidate Queries
+      queryClient.invalidateQueries("searchResults");
+
+    } catch (err) {
+      setStatus({ submitted: false, submitting: false })
+      Sentry.captureException(err)
+      console.error(err)
+    }
   }
 
   const renderSubmit = () => {
@@ -163,7 +189,17 @@ function PlaceOrderView(props) {
       sell: { variant: 'danger', text: `Sell ${asset.name}` }
     }
 
-    // disable submit button if insufficient balance
+    const isBelowMinOrderAmount = () => {
+      if (order.type === 'buy') {
+        return new Big(order.total).lt(0.5)
+      }
+      return new Big(order.total).eq(0)
+    }
+
+    const isInvalid = () => {
+      return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
+    }
+
     const isBalanceExceeded = () => {
       if (order.type === 'buy') {
         return new Big(order.price).times(order.amount).gt(algoBalance)
@@ -171,10 +207,8 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
-    const isDisabled = order.total === 0 || isBalanceExceeded() || status.submitting
-
-    // @todo: remove once 'both' (maker or taker) is a valid option
-    const isBoth = order.execution === 'both'
+    const isDisabled =
+      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || status.submitting
 
     return (
       <SubmitButton
@@ -183,7 +217,7 @@ function PlaceOrderView(props) {
         size="large"
         block
         orderType={order.type}
-        disabled={isDisabled || isBoth}
+        disabled={isDisabled}
       >
         {buttonProps[order.type].text}
       </SubmitButton>
@@ -202,11 +236,11 @@ function PlaceOrderView(props) {
 
     // round input value to asset's `decimals` value
     const roundValue = (field) => {
-      if (order[field] === null) {
-        return ''
+      if (order[field] === '' || order[field].slice(-1) === '0') {
+        return order[field]
       }
       const decimals = field === 'amount' ? asset.decimals : 6
-      return new Big(order[field]).round(decimals).toNumber()
+      return new Big(order[field]).round(decimals).toString()
     }
 
     return (
@@ -218,6 +252,7 @@ function PlaceOrderView(props) {
             name="af2Km9q"
             label="Price"
             asset="ALGO"
+            decimals={6}
             orderType={order.type}
             value={roundValue('price')}
             onChange={handleChange}
@@ -231,16 +266,18 @@ function PlaceOrderView(props) {
             name="af2Km9q"
             label="Amount"
             asset={asset.name}
+            decimals={asset.decimals}
             orderType={order.type}
             value={roundValue('amount')}
             onChange={handleChange}
             autocomplete="false"
             min="0"
-            step="0.000001"
+            step={new Big(10).pow(-1 * asset.decimals).toString()}
           />
           <AmountRange
             order={order}
-            activeWallet={activeWallet}
+            algoBalance={algoBalance}
+            asaBalance={asaBalance}
             asset={asset}
             // txnFee={txnFee}
             onChange={handleRangeChange}
@@ -250,6 +287,7 @@ function PlaceOrderView(props) {
             id="total"
             label="Total"
             asset="ALGO"
+            decimals={6}
             orderType={order.type}
             value={roundValue('total')}
             readOnly
@@ -261,7 +299,7 @@ function PlaceOrderView(props) {
               {txnFee.toFixed(3)}
             </BodyCopyTiny>
           </TxnFeeContainer> */}
-          <OrderOptions order={order} onChange={handleOptionsChange} />
+          <OrderOptions order={order} onChange={handleOptionsChange} allowTaker={asset.hasOrders} />
         </LimitOrder>
         {renderSubmit()}
       </>
@@ -320,7 +358,7 @@ function PlaceOrderView(props) {
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance.toFixed(6)}
+              {asaBalance}
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>

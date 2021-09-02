@@ -7,7 +7,6 @@ import { useState } from 'react'
 import { BodyCopySm } from 'components/type'
 
 function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
-  // 'open-orders', 'order-history', 'assets'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
   const OPEN_ORDERS_PANEL = 'open-orders'
@@ -62,6 +61,7 @@ Orders.propTypes = {
   orderHistoryData: PropTypes.array.isRequired,
   assetsData: PropTypes.array.isRequired
 }
+
 Orders.defaultProps = {
   initialPanel: 'open-orders',
   openOrderData: [],

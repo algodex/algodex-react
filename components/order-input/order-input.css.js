@@ -7,7 +7,7 @@ export const Input = styled.input`
   border: 2px solid ${({ theme }) => theme.colors.gray['700']};
   border-radius: 3px;
   padding: 0.5rem 0.75rem;
-  padding-right: 4rem;
+  padding-right: 4.5rem;
   color: ${({ theme }) => theme.colors.gray['000']};
   text-align: right;
   font-size: 1rem;
@@ -62,6 +62,7 @@ export const Label = styled(InputLabel)`
 `
 
 export const Asset = styled(InputLabel)`
-  right: 0.75rem;
+  right: 1.25rem;
   width: 2.75rem;
+  font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
 `
