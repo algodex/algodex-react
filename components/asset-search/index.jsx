@@ -140,6 +140,7 @@ function AssetSearch(props) {
    * Flyout is only hidden on smaller screens, triggered by external click
    */
   const handleExternalClick = () => {
+    console.log('external click called')
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
     !isFixed && setIsActive(false)
   }
