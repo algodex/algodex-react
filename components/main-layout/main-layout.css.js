@@ -1,14 +1,32 @@
 import styled from 'styled-components'
+import Button from "components/button";
 
 export const WalletSection = styled.section`
   grid-area: wallet;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  display: ${({ active }) => active ? "flex" : "none"};
+  height: 20%;
+
+  @media (min-width: 996px) {
+    display: flex;
+    height: inherit;
+  }
 `
 
 export const TradeSection = styled.section`
   grid-area: trade;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  display: ${({ active }) => active ? "flex" : "none"};
+
+  height: calc(100% - 50px);
+
+  @media (min-width: 996px) {
+    display: flex;
+    height: inherit;
+  }
 `
 
 export const ChartSection = styled.section`
@@ -18,6 +36,14 @@ export const ChartSection = styled.section`
 
   @media (min-width: 1024px) and (orientation: landscape) {
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
+
+  height: calc(100% - 101px);
+  display: ${({ active }) => active ? "flex" : "none"};
+
+  @media (min-width: 996px) {
+    display: flex;
+    height: inherit;
   }
 `
 
@@ -31,11 +57,29 @@ export const OrderBookSection = styled.section`
     border-right: none;
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
+
+  display: ${({ active }) => active ? "flex" : "none"};
+
+  height: calc(100% - 50px);
+
+  @media (min-width: 996px) {
+    display: flex;
+    height: inherit;
+  }
 `
 export const TradeHistorySection = styled.section`
   grid-area: history;
   display: flex;
   flex-direction: column;
+
+  display: ${({ active }) => active ? "flex" : "none"};
+
+  height: calc(100% - 50px);
+
+  @media (min-width: 996px) {
+    display: flex;
+    height: inherit;
+  }
 `
 
 export const OrdersSection = styled.section`
@@ -46,6 +90,15 @@ export const OrdersSection = styled.section`
     border-top: none;
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
+
+  display: ${({ active }) => active ? "flex" : "none"};
+
+  height: calc(100% - 50px);
+
+  @media (min-width: 996px) {
+    display: flex;
+    height: inherit;
+  }
 `
 
 export const AssetsSection = styled.section`
@@ -54,6 +107,13 @@ export const AssetsSection = styled.section`
 
   @media (min-width: 1536px) {
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
+
+  display: ${({ active }) => active ? "flex" : "none"};
+
+
+  @media (min-width: 996px) {
+    display: flex;
   }
 `
 
@@ -67,11 +127,7 @@ export const Main = styled.main`
   inset: 0;
   flex: 1 1 0%;
 
-  & > section {
-    display: none;
-  }
-
-  @media (min-width: 768px) {
+  @media (min-width: 996px) {
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
     grid-template-rows: auto 240px 1fr 1fr 180px;
@@ -83,8 +139,6 @@ export const Main = styled.main`
       'orders orders orders';
 
     & > section {
-      display: flex;
-
       // for demo
       &.demo {
         border: 1px dotted rgba(255, 255, 255, 0.125);
@@ -126,4 +180,35 @@ export const Main = styled.main`
   @media (min-width: 1920px) {
     grid-template-columns: 320px 1fr 320px 320px;
   }
+`
+
+export const MobileMenu = styled.nav`
+  height: 50px;
+
+  & > ul {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & > ul > li {
+    flex: 1;
+    height: 100%;
+  }
+
+  @media (min-width: 996px) {
+    display: none;
+  }
+`
+
+export const MobileMenuButton = styled(Button)`
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  padding: 0;
+
+  border: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  
 `

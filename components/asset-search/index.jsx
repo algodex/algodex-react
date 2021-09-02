@@ -150,6 +150,8 @@ function AssetSearch(props) {
     if (asset) {
       router.push(`/trade/${asset.id}`)
     }
+
+    setIsActive(false)
   }
 
   const columns = useMemo(
