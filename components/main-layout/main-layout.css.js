@@ -211,9 +211,8 @@ export const MobileMenu = styled.nav`
 export const MobileMenuButton = styled(Button)`
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: ${({ theme }) => theme.colors.gray['800']};;
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  
   
 `
