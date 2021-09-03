@@ -41,7 +41,14 @@ export default function Home() {
   const assetStore = useStore((state) => state.asset)
 
   const walletAddresses = useMemo(
-    () => addresses || wallets.map((w) => w.address) || [],
+
+    () => { 
+      if (!!addresses) {
+        return addresses;
+      }
+      return !!wallets ? wallets.map((w) => w.address) : []
+      
+    },
     [addresses, wallets]
   )
 
