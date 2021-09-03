@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  flex: 1 1 0%;
-  display: flex;
+  // flex: 1 1 0%;
+  // display: flex;
   position: relative;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.gray[900]};
@@ -21,10 +21,11 @@ export const AreaSeriesChart = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 3.5rem;
+  bottom: 6rem;
   right: 0;
   visibility: ${({ isVisible }) => (isVisible === true ? 'visible' : 'hidden')};
   overflow: hidden;
+  // height: 100%;
 
   @media (min-width: 768px) {
     bottom: 2.75rem;
@@ -35,7 +36,7 @@ export const CandleStickChart = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 3.5rem;
+  bottom: 6rem;
   right: 0;
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   overflow: hidden;
@@ -50,7 +51,7 @@ export const SettingsContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: 3.5rem;
+  height: 5rem;
 
   @media (min-width: 996px) {
     height: 2.75rem;

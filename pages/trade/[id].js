@@ -153,6 +153,7 @@ export default function Home() {
           {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
         </title>
         <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"></meta>
       </Head>
       <Header />
       {renderDashboard()}

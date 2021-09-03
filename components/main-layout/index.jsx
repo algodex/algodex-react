@@ -101,42 +101,41 @@ function MainLayout(props) {
             gridSize={gridSize}
           />
         </OrdersSection>
-
-        <MobileMenu>
-          <ul>
-            <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
-                Chart
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
-                Book
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
-                Trade
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
-                Orders
-              </MobileMenuButton>
-            </li>
-            {/* <li>
+      </Main>
+      <MobileMenu>
+        <ul>
+          <li>
+            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
+              Chart
+            </MobileMenuButton>
+          </li>
+          <li>
+            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
+              Book
+            </MobileMenuButton>
+          </li>
+          <li>
+            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
+              Trade
+            </MobileMenuButton>
+          </li>
+          <li>
+            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
+              Orders
+            </MobileMenuButton>
+          </li>
+          {/* <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
                 History
               </MobileMenuButton>
             </li> */}
-            <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
-                WALLET
-              </MobileMenuButton>
-            </li>
-          </ul>
-        </MobileMenu>
-      </Main>
+          <li>
+            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
+              WALLET
+            </MobileMenuButton>
+          </li>
+        </ul>
+      </MobileMenu>
     </MainWrapper>
   )
 }
