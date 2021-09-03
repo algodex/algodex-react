@@ -1,0 +1,6 @@
+.idea
+.github
+README.md
+dex.sh
+node_modules
+npm-debug.log
