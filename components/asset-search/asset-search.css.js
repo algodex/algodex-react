@@ -31,11 +31,15 @@ export const SearchTableHeader = styled.th`
 
 export const AssetsContainer = styled.div`
   position: absolute;
-  width: 320px;
+  width: 100%;
   height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
   box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
   z-index: 1000;
+
+  @media (min-width: 996px) {
+    width: 320px;
+  }
 
   @media (min-width: 1536px) {
     position: static;
@@ -59,6 +63,15 @@ export const TableWrapper = styled.div`
   inset: 0;
   overflow: hidden scroll;
   scrollbar-width: none;
+  top: 51px;
+
+  @media (min-width: 996px) {
+    top: 51px;
+  }
+
+  @media (min-width: 1536px) {
+    top: 35px;
+  }
 
   &::-webkit-scrollbar {
     display: none;
