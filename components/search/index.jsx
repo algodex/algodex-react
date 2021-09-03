@@ -8,6 +8,16 @@ import theme from '../../theme'
 const Container = styled.div`
   display: flex;
   position: relative;
+  height: 51px;
+
+  @media (min-width: 996px) {
+    top: 8px;
+    height: auto;
+  }
+
+  @media (min-width: 1536px) {
+    top: 0;
+  }
 `
 
 const SearchIcon = styled(_Search)`

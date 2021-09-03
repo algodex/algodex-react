@@ -25,7 +25,8 @@ import {
   AssetChange,
   SortIcon,
   TableHeader,
-  TableContainer
+  TableContainer,
+  SearchWrapper
 } from './asset-search.css'
 
 const AssetNameCell = (props) => {
@@ -224,21 +225,19 @@ function AssetSearch(props) {
   return (
     <Container isActive={isActive}>
       <AssetsContainer ref={containerRef} gridHeight={gridSize.height}>
+        <div ref={searchRef}>
+          <SearchInput
+            onChange={(q) => setQuery(q)}
+            onSearchFocus={handleSearchFocus}
+            onExternalClick={handleExternalClick}
+            containerRef={containerRef}
+            isActive={isActive}
+          />
+        </div>
         <TableWrapper>
           <TableContainer>
             <table {...getTableProps()}>
               <thead>
-                <tr>
-                  <th ref={searchRef} colSpan={visibleColumns.length}>
-                    <SearchInput
-                      onChange={(q) => setQuery(q)}
-                      onSearchFocus={handleSearchFocus}
-                      onExternalClick={handleExternalClick}
-                      containerRef={containerRef}
-                      isActive={isActive}
-                    />
-                  </th>
-                </tr>
                 {headerGroups.map((headerGroup) => (
                   <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column) => (

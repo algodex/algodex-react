@@ -120,6 +120,7 @@ export const AssetsSection = styled.section`
 export const MainWrapper = styled.div`
   position: relative;
   height: 100%;
+  padding-bottom: 50px;
 `
 
 export const Main = styled.main`
@@ -199,7 +200,8 @@ export const MobileMenu = styled.nav`
     height: 100%;
   }
 
- 
+  position: fixed;
+  bottom: 0;
 
   @media (min-width: 996px) {
     display: none;
@@ -209,10 +211,8 @@ export const MobileMenu = styled.nav`
 export const MobileMenuButton = styled(Button)`
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: ${({ theme }) => theme.colors.gray['800']};;
   padding: 0;
-
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  
   
 `
