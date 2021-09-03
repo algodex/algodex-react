@@ -38,7 +38,7 @@ export const useStore = create(
 
       set({
         asset,
-        ...(isNew ? orderBook : {}) // only reset order book if asset is new
+        ...(isNew ? { orderBook } : {}) // only reset order book if asset is new
       })
     },
 
