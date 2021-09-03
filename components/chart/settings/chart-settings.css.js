@@ -7,7 +7,19 @@ export const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   padding: 0 1.75rem;
-  height: 2.75rem;
+  height: 3.5rem;
+
+  flex-direction: column;
+
+  @media (orientation: landscape) {
+    flex-direction: row;
+  }
+
+  @media (min-width: 996px) {
+    flex-direction: row;
+    height: 2.75rem;
+  }
+
 `
 
 export const ToggleWrapper = styled.div`

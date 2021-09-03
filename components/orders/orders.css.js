@@ -36,8 +36,17 @@ export const Header = styled.div`
   padding: 0 1.125rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
 
-  & > *:not(:last-child) {
-    margin-right: 6rem;
+  & > * {
+    margin: 0 1rem;
+  }
+
+  justify-content: space-between;
+  @media (min-width: 996px) {
+    justify-content: flex-start;
+    & > * {
+      margin-left: 0;
+      margin-right: 6rem;
+    }
   }
 `
 

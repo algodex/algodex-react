@@ -130,8 +130,12 @@ function AssetSearch(props) {
    */
   useEffect(() => {
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
-    setIsActive(isFixed)
-    document.activeElement.blur()
+    const isMobile = window.matchMedia('(max-width: 996px)').matches
+
+    if (!isMobile) {
+      setIsActive(isFixed)
+      document.activeElement.blur()
+    }
   }, [gridSize])
 
   const handleSearchFocus = () => {
@@ -152,6 +156,8 @@ function AssetSearch(props) {
     if (asset) {
       router.push(`/trade/${asset.id}`)
     }
+
+    setIsActive(false)
   }
 
   const columns = useMemo(

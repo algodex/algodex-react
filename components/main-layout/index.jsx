@@ -24,7 +24,9 @@ import {
   OrdersSection,
   TradeHistorySection,
   TradeSection,
-  WalletSection
+  WalletSection,
+  MobileMenu,
+  MobileMenuButton
 } from './main-layout.css'
 
 import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
@@ -35,7 +37,6 @@ const DEMO_ASSETS_DATA = demoAssetsData
 
 function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
-  console.log('in main layout!!! env: ' + process.env.NEXT_PUBLIC_ENV)
 
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
@@ -46,6 +47,16 @@ function MainLayout(props) {
   const gridRef = useRef()
 
   const [showOverlay, setShowOverlay] = useState(false)
+
+  const TABS = {
+    CHART: 'CHART',
+    BOOK: 'BOOK',
+    TRADE: 'TRADE',
+    ORDERS: 'ORDERS',
+    HISTORY: 'HISTORY'
+  }
+
+  const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,24 +74,26 @@ function MainLayout(props) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <MobileInterface />
-        <WalletSection>
+        <AssetsSection active={activeMobile === TABS.CHART}>
+          <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
+        </AssetsSection>
+        <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet onWalletConnect={onWalletConnect} />
         </WalletSection>
-        <TradeSection>
+        <TradeSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
-        <ChartSection>
+        <ChartSection active={activeMobile === TABS.CHART}>
           {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
           <ChartOverlay isActive={showOverlay} />
         </ChartSection>
-        <OrderBookSection>
+        <OrderBookSection active={activeMobile === TABS.BOOK}>
           {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
         </OrderBookSection>
-        <TradeHistorySection>
+        <TradeHistorySection active={activeMobile === TABS.HISTORY}>
           <TradeHistory />
         </TradeHistorySection>
-        <OrdersSection>
+        <OrdersSection active={activeMobile === TABS.ORDERS}>
           <Orders
             openOrderData={DEMO_OPEN_ORDER_DATA}
             orderHistoryData={DEMO_ORDER_HISTORY_DATA}
@@ -88,9 +101,41 @@ function MainLayout(props) {
             gridSize={gridSize}
           />
         </OrdersSection>
-        <AssetsSection>
-          <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
-        </AssetsSection>
+
+        <MobileMenu>
+          <ul>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
+                Chart
+              </MobileMenuButton>
+            </li>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
+                Book
+              </MobileMenuButton>
+            </li>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
+                Trade
+              </MobileMenuButton>
+            </li>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
+                Orders
+              </MobileMenuButton>
+            </li>
+            {/* <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
+                History
+              </MobileMenuButton>
+            </li> */}
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
+                WALLET
+              </MobileMenuButton>
+            </li>
+          </ul>
+        </MobileMenu>
       </Main>
     </MainWrapper>
   )

@@ -5,9 +5,14 @@ export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+
   background-color: ${({ theme }) => theme.colors.background.dark};
-  padding: 0.75rem 0.625rem 1rem;
+  padding: 0.3rem;
+  
+  @media (min-width: 996px) {
+    padding: 0.75rem 0.625rem 1rem;
+    overflow: hidden;
+  }
 `
 
 const gridStyles = `
