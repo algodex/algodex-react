@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import Button from "components/button";
+import Button from 'components/button'
 
 export const WalletSection = styled.section`
   grid-area: wallet;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
-  display: ${({ active }) => active ? "flex" : "none"};
+  display: ${({ active }) => (active ? 'flex' : 'none')};
   height: calc(100% - 50px);
 
   @media (min-width: 996px) {
@@ -19,7 +19,7 @@ export const TradeSection = styled.section`
   grid-area: trade;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
-  display: ${({ active }) => active ? "flex" : "none"};
+  display: ${({ active }) => (active ? 'flex' : 'none')};
 
   height: calc(100% - 50px);
 
@@ -39,7 +39,8 @@ export const ChartSection = styled.section`
   }
 
   height: calc(100% - 101px);
-  display: ${({ active }) => active ? "block" : "none"};
+  display: ${({ active }) => (active ? 'grid' : 'none')};
+  grid-template-rows: 1fr;
 
   @media (min-width: 996px) {
     display: block;
@@ -58,7 +59,7 @@ export const OrderBookSection = styled.section`
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  display: ${({ active }) => active ? "flex" : "none"};
+  display: ${({ active }) => (active ? 'flex' : 'none')};
 
   height: calc(100% - 50px);
 
@@ -72,7 +73,7 @@ export const TradeHistorySection = styled.section`
   display: flex;
   flex-direction: column;
 
-  display: ${({ active }) => active ? "flex" : "none"};
+  display: ${({ active }) => (active ? 'flex' : 'none')};
 
   height: calc(100% - 50px);
 
@@ -91,7 +92,7 @@ export const OrdersSection = styled.section`
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  display: ${({ active }) => active ? "flex" : "none"};
+  display: ${({ active }) => (active ? 'flex' : 'none')};
 
   height: calc(100% - 50px);
 
@@ -109,8 +110,7 @@ export const AssetsSection = styled.section`
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  display: ${({ active }) => active ? "flex" : "none"};
-
+  display: ${({ active }) => (active ? 'flex' : 'none')};
 
   @media (min-width: 996px) {
     display: flex;
@@ -119,7 +119,7 @@ export const AssetsSection = styled.section`
 
 export const MainWrapper = styled.div`
   position: relative;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100);
   padding-bottom: 50px;
 `
 
@@ -127,7 +127,6 @@ export const Main = styled.main`
   position: absolute;
   inset: 0;
   flex: 1 1 0%;
-
 
   @media (min-width: 996px) {
     display: grid;
@@ -202,6 +201,7 @@ export const MobileMenu = styled.nav`
 
   position: fixed;
   bottom: 0;
+  z-index: 99;
 
   @media (min-width: 996px) {
     display: none;
@@ -211,8 +211,7 @@ export const MobileMenu = styled.nav`
 export const MobileMenuButton = styled(Button)`
   height: 100%;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['800']};;
+  background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  
 `

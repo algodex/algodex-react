@@ -73,7 +73,11 @@ export const useStore = create(
 
     // Controls Chart Time interval
     chartTimeInterval: "1h",
-    setChartTimeInterval: input => set({chartTimeInterval: input})
+    setChartTimeInterval: input => set({chartTimeInterval: input}),
+
+    // Controls Chart Mode
+    chartMode: "candle",
+    setChartMode: input => set({ chartMode: input })
 
   }))
 )
