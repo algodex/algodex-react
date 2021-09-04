@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import PropTypes from 'prop-types'
 import { HeaderSm, BodyCopySm, BodyCopyTiny, LabelMd } from 'components/type'
 import Button from 'components/button'
@@ -41,6 +42,17 @@ function WalletView(props) {
     }
   }
 
+  const copyAddress = (address) => {
+    navigator.clipboard.writeText(address).then(
+      () => {
+        toast.success('Copied wallet address to clipboard!')
+      },
+      () => {
+        toast.error('Failed to copy wallet address to clipboard')
+      }
+    )
+  }
+
   const renderBalance = (bal) => {
     const split = bal.toFixed(6).split('.')
 
@@ -66,7 +78,7 @@ function WalletView(props) {
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <LabelMd fontWeight="500" title={wallet.address}>
-          <Icon use="wallet" size={0.75} />
+          <Icon onClick={() => copyAddress(wallet.address)} use="wallet" size={0.75} />
           {wallet.name}
         </LabelMd>
         {renderBalance(wallet.balance)}
