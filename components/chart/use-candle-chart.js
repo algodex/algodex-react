@@ -12,7 +12,6 @@ const TEXT_COLOR = theme.colors.gray[300]
 export default function useCandleChart(containerRef, volumeData, priceData) {
   const [candleChart, setCandleChart] = useState()
 
-
   useEffect(() => {
     const chartContainer = containerRef?.current
 
@@ -93,7 +92,7 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
         // add resize listener
         addListener(chartContainer, (el) => {
           el.setAttribute('data-event-resize', 'true')
-          candleChart.chart.resize(el.offsetWidth, el.offsetHeight - 1)
+          candleChart.chart.resize(el.offsetWidth, el.offsetHeight)
         })
 
         // cleanup
@@ -104,23 +103,22 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
 
   useEffect(() => {
     if (candleChart) {
-      
       candleChart.volumeSeries.setData(volumeData)
       candleChart.candleSeries.setData(priceData)
-  
+
       // Scale Chart to appropriate time range
-      const dataPointsToShow = 28;
-      const lastDataPoint = priceData.length - 1;
-      candleChart.chart.timeScale().setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint });
+      const dataPointsToShow = 28
+      const lastDataPoint = priceData.length - 1
+      candleChart.chart
+        .timeScale()
+        .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
 
       if (priceData.length <= dataPointsToShow) {
         // If not enough data points, scale to fit chart size
-        candleChart.chart.timeScale().fitContent();
+        candleChart.chart.timeScale().fitContent()
       }
     }
   }, [candleChart, containerRef, priceData, volumeData])
-
-
 
   return {
     candleChart: candleChart?.chart

@@ -7,8 +7,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   padding: 0 1.75rem;
-  height: 5rem;
-
   flex-direction: column;
 
   @media (orientation: landscape) {
@@ -24,7 +22,7 @@ export const Container = styled.div`
 
 export const ToggleWrapper = styled.div`
   display: flex;
-  margin-bottom: 1.5rem;
+  // margin-bottom: 1.5rem;
 
   &:not(:last-child) {
     margin-right: 2rem;

@@ -4,6 +4,7 @@ import ChartOverlay from './overlay'
 import ChartSettings from './settings'
 import useAreaChart from './use-area-chart'
 import useCandleChart from './use-candle-chart'
+import useStore from 'store/use-store'
 
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
 
@@ -16,7 +17,8 @@ function ChartView(props) {
   const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData)
   const { areaChart } = useAreaChart(areaChartRef, priceData)
 
-  const [chartMode, setChartMode] = useState('candle')
+  const chartMode = useStore((state) => state.chartMode)
+  const setChartMode = useStore((state) => state.setChartMode)
 
   const changeMode = (mode) => {
     setChartMode(mode)

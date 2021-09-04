@@ -74,7 +74,7 @@ export default function useAreaChart(containerRef, priceData) {
         // add resize listener
         addListener(chartContainer, (el) => {
           el.setAttribute('data-event-resize', 'true')
-          areaChart.chart.resize(el.offsetWidth, el.offsetHeight - 1)
+          areaChart.chart.resize(el.offsetWidth, el.offsetHeight)
         })
 
         // cleanup
@@ -92,13 +92,15 @@ export default function useAreaChart(containerRef, priceData) {
       areaChart.areaSeries.setData(areaSeriesData)
 
       // Scale Chart to appropriate time range
-      const dataPointsToShow = 28;
-      const lastDataPoint = priceData.length - 1;
-      areaChart.chart.timeScale().setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint });
+      const dataPointsToShow = 28
+      const lastDataPoint = priceData.length - 1
+      areaChart.chart
+        .timeScale()
+        .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
 
       if (priceData.length <= dataPointsToShow) {
         // If not enough data points, scale to fit chart size
-        areaChart.chart.timeScale().fitContent();
+        areaChart.chart.timeScale().fitContent()
       }
     }
   }, [areaChart, containerRef, priceData])

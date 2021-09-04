@@ -57,7 +57,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     background: ${theme.colors.background.dark};
     color: ${theme.colors.gray['400']};
-    height: 100%;
   }
   *,
   *:before,

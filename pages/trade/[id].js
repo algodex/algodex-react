@@ -40,17 +40,12 @@ export default function Home() {
   const setOrderBook = useStore((state) => state.setOrderBook)
   const assetStore = useStore((state) => state.asset)
 
-  const walletAddresses = useMemo(
-
-    () => { 
-      if (!!addresses) {
-        return addresses;
-      }
-      return !!wallets ? wallets.map((w) => w.address) : []
-      
-    },
-    [addresses, wallets]
-  )
+  const walletAddresses = useMemo(() => {
+    if (!!addresses) {
+      return addresses
+    }
+    return !!wallets ? wallets.map((w) => w.address) : []
+  }, [addresses, wallets])
 
   // fetch wallet balances from blockchain
   const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
@@ -120,6 +115,24 @@ export default function Home() {
     }
   }, [orderBookQuery.data, setOrderBook])
 
+  useEffect(() => {
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    let vh = window.innerHeight * 0.01
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
+
+    const resize = () => {
+      // We execute the same script as before
+      let vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+    }
+
+    // We listen to the resize event
+    window.addEventListener('resize', resize)
+
+    return () => window.removeEventListener('resize', resize)
+  }, [])
+
   const renderDashboard = () => {
     // @todo: investigate using React Query's queryCache instead of saving to Zustand store
     const isAssetStored = assetStore?.id
@@ -171,7 +184,7 @@ export async function getServerSideProps({ req, res, query }) {
   const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL
   const TESTNET_DOMAIN = process.env.NEXT_PUBLIC_TESTNET_DOMAIN
 
-  const hasGateAccess = true; //await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
+  const hasGateAccess = true //await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
 
   if (!hasGateAccess) {
     return {
