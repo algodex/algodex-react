@@ -3,6 +3,10 @@ import { convertFromBaseUnits } from './convert'
 import { truncateAddress } from './display'
 
 const WalletService = {
+  getMinWalletBalance: async (accountInfo) => {
+     return await algodex.getMinWalletBalance(accountInfo)
+  },
+
   fetchWallets: async (addresses) => {
     if (addresses.length === 0) {
       return {}
