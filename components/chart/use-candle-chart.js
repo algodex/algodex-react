@@ -9,7 +9,7 @@ const BACKGROUND_COLOR = theme.colors.gray[900]
 const BORDER_COLOR = theme.colors.gray[500]
 const TEXT_COLOR = theme.colors.gray[300]
 
-export default function useCandleChart(containerRef, volumeData, priceData, autoScaleFunction) {
+export default function useCandleChart(containerRef, volumeData, priceData) {
   const [candleChart, setCandleChart] = useState()
 
   useEffect(() => {
@@ -139,12 +139,6 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
     if (candleChart) {
       candleChart.volumeSeries.setData(volumeData)
       candleChart.candleSeries.setData(priceData)
-      console.log('using effect');
-      //candleChart.chart.applyOptions({
-      //  priceScale: {
-       //     autoScale: true,
-      //  },
-    //});
 
       // Scale Chart to appropriate time range
       const dataPointsToShow = 28
