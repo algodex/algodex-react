@@ -41,16 +41,50 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
         timeScale: {
           borderColor: BORDER_COLOR,
           timeVisible: true
-        }
+        },
+
+
       })
 
+      console.log({priceData});
       const candleSeries = chart.addCandlestickSeries({
         upColor: UP_COLOR,
         downColor: DOWN_COLOR,
         borderDownColor: DOWN_COLOR,
         borderUpColor: UP_COLOR,
         wickDownColor: DOWN_COLOR,
-        wickUpColor: UP_COLOR
+        wickUpColor: UP_COLOR,
+
+       autoscaleInfoProvider: original => {
+            let visibleRange = chart.timeScale().getVisibleRange();
+            if (!visibleRange) {
+              return;
+            }
+            const rangeStart = visibleRange.from;
+            const rangeEnd = visibleRange.to;
+            let max = 0;
+            for (let i = 0; i < priceData.length; i++) {
+                const priceItem = priceData[i];
+                if (priceItem.time < rangeStart) {
+                  continue;
+                }
+                max = Math.max(priceItem.close, max);
+                max = Math.max(priceItem.open, max);
+                
+                if (priceItem.time > rangeEnd) {
+                  break;
+                }
+            }
+
+            const res = original();
+            console.log({res});
+            if (res !== null) {
+                res.priceRange.maxValue = max;
+            }
+            return res;
+        }
+              
+        
       })
 
       candleSeries.applyOptions({
