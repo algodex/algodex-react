@@ -46,7 +46,6 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
 
       })
 
-      console.log({priceData});
       const candleSeries = chart.addCandlestickSeries({
         upColor: UP_COLOR,
         downColor: DOWN_COLOR,
@@ -77,7 +76,6 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
             }
 
             const res = original();
-            console.log({res});
             if (res !== null) {
                 res.priceRange.maxValue = max;
             }
