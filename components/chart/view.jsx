@@ -8,6 +8,8 @@ import useStore from 'store/use-store'
 
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
 
+
+
 function ChartView(props) {
   const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
 
