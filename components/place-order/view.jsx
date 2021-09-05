@@ -12,6 +12,7 @@ import OrderOptions from 'components/order-options'
 import OrderService from 'services/order'
 import { convertToAsaUnits } from 'services/convert'
 import { useStore } from 'store/use-store'
+import WalletService from 'services/wallet'
 
 import {
   Container,
@@ -133,6 +134,15 @@ function PlaceOrderView(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet);
+    console.log({activeWallet});
+    if ((activeWallet.balance*1000000) < minWalletBalance + 500001) {
+      toast.error('Please fund your wallet with more ALGO before placing orders!');
+      return;
+    }
+    console.log({minWalletBalance});
+
     setStatus((prev) => ({ ...prev, submitting: true }))
 
     const orderData = {
@@ -194,6 +204,8 @@ function PlaceOrderView(props) {
         return new Big(order.total).lt(0.5)
       }
       return new Big(order.total).eq(0)
+
+
     }
 
     const isInvalid = () => {
