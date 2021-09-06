@@ -132,9 +132,18 @@ function PlaceOrderView(props) {
     return OrderService.placeOrder(orderData, orderBook)
   }
 
+  const checkPopupBlocker = () => {
+      let havePopupBlockers = ('' + window.open).indexOf('[native code]') === -1;
+      return havePopupBlockers;
+  }
+
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+    if (checkPopupBlocker()) {
+      toast.error('Please disable your popup blocker (likely in the top-right of your browser window)');
+      return;
+    }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet);
     console.log({activeWallet});
     if ((activeWallet.balance*1000000) < minWalletBalance + 500001) {
