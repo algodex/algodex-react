@@ -15,12 +15,40 @@ const LINE_WIDTH = 2
 export default function useAreaChart(containerRef, priceData) {
   const [areaChart, setAreaChart] = useState()
 
+  function autoScaleProvider(original, chart) {
+      let visibleRange = chart.timeScale().getVisibleRange();
+      if (!visibleRange) {
+        return;
+      }
+      const rangeStart = visibleRange.from;
+      const rangeEnd = visibleRange.to;
+      let max = 0;
+      for (let i = 0; i < priceData.length; i++) {
+          const priceItem = priceData[i];
+          if (priceItem.time < rangeStart) {
+            continue;
+          }
+          max = Math.max(priceItem.close, max);
+          max = Math.max(priceItem.open, max);
+          
+          if (priceItem.time > rangeEnd) {
+            break;
+          }
+      }
+
+      const res = original();
+      if (res !== null) {
+          res.priceRange.maxValue = max;
+      }
+      return res;
+  }
+
+
   useEffect(() => {
     const chartContainer = containerRef?.current
 
     const initializeChart = async () => {
       const { createChart, CrosshairMode } = await import('lightweight-charts')
-
       const chart = createChart(chartContainer, {
         layout: {
           backgroundColor: BACKGROUND_COLOR,
@@ -52,34 +80,7 @@ export default function useAreaChart(containerRef, priceData) {
         bottomColor: BOTTOM_COLOR,
         lineColor: TOP_LINE_COLOR,
         lineWidth: LINE_WIDTH,
-         autoscaleInfoProvider: original => {
-            let visibleRange = chart.timeScale().getVisibleRange();
-            if (!visibleRange) {
-              return;
-            }
-            const rangeStart = visibleRange.from;
-            const rangeEnd = visibleRange.to;
-            let max = 0;
-            for (let i = 0; i < priceData.length; i++) {
-                const priceItem = priceData[i];
-                if (priceItem.time < rangeStart) {
-                  continue;
-                }
-                max = Math.max(priceItem.close, max);
-                max = Math.max(priceItem.open, max);
-                
-                if (priceItem.time > rangeEnd) {
-                  break;
-                }
-            }
 
-            const res = original();
-            console.log({res});
-            if (res !== null) {
-                res.priceRange.maxValue = max;
-            }
-            return res;
-        }
       })
 
       areaSeries.applyOptions({
@@ -125,7 +126,11 @@ export default function useAreaChart(containerRef, priceData) {
       areaChart.chart
         .timeScale()
         .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
-
+      areaChart.areaSeries.applyOptions({
+        autoscaleInfoProvider: original => {
+            return autoScaleProvider(original, areaChart.chart);
+        }
+      })
       if (priceData.length <= dataPointsToShow) {
         // If not enough data points, scale to fit chart size
         areaChart.chart.timeScale().fitContent()
