@@ -30,6 +30,7 @@ function OrderOptions(props) {
     }
   }
 
+
   const renderMessage = () => {
     switch (order.execution) {
       case 'maker':
