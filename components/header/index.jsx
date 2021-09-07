@@ -29,7 +29,7 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <ActiveLink href="https://about.algodex.com" matches={/^\/trade/}>
+        <ActiveLink href="https://about.algodex.com">
           <NavTextLg>About</NavTextLg>
         </ActiveLink>
         <ActiveLink href="/trade" matches={/^\/trade/}>
