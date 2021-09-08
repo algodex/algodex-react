@@ -1,6 +1,7 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import produce from 'immer'
+import defaultLang from "lang/en.js";
 
 const immer = (config) => (set, get, api) =>
   config(
@@ -77,7 +78,13 @@ export const useStore = create(
 
     // Controls Chart Mode
     chartMode: "candle",
-    setChartMode: input => set({ chartMode: input })
+    setChartMode: input => set({ chartMode: input }),
+
+    // Language Object
+    lang: defaultLang,
+    setLang: lang => set({ lang })
+
+
 
   }))
 )
