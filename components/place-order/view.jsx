@@ -139,6 +139,9 @@ function PlaceOrderView(props) {
 
 
   const handleSubmit = async (e) => {
+    console.log("order submitted");
+    debugger;
+    
     e.preventDefault()
     if (checkPopupBlocker()) {
       toast.error('Please disable your popup blocker (likely in the top-right of your browser window)');
