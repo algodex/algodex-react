@@ -110,7 +110,7 @@ function PlaceOrderView(props) {
     setOrder({
       ...DEFAULT_ORDER
     })
-  }, [asset, activeWalletAddress, setOrder])
+  }, [asset.id, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
     setOrder({
@@ -139,9 +139,8 @@ function PlaceOrderView(props) {
 
 
   const handleSubmit = async (e) => {
-    console.log("order submitted");
-    debugger;
-    
+    console.log('order submitted')
+
     e.preventDefault()
     if (checkPopupBlocker()) {
       toast.error('Please disable your popup blocker (likely in the top-right of your browser window)');
@@ -202,6 +201,12 @@ function PlaceOrderView(props) {
       setStatus({ submitted: false, submitting: false })
       Sentry.captureException(err)
       console.error(err)
+      if (/PopupOpenError/.test(err)) {
+        toast.error(
+          'Please disable your popup blocker (likely in the top-right of your browser window)'
+        )
+      }
+
     }
   }
 
@@ -216,8 +221,6 @@ function PlaceOrderView(props) {
         return new Big(order.total).lt(0.5)
       }
       return new Big(order.total).eq(0)
-
-
     }
 
     const isInvalid = () => {
