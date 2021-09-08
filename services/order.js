@@ -120,7 +120,7 @@ const OrderService = {
       }))
     }
 
-    return [...mapOrders(orderBook.buyOrders, 'buy'), ...mapOrders(orderBook.sellOrders, 'sell')]
+    return mapOrders(orderBook.buyOrders, 'buy').concat(mapOrders(orderBook.sellOrders, 'sell'))
   },
 
   /**
