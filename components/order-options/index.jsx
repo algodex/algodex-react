@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { BodyCopyTiny, LabelSm } from 'components/type'
 import { ChevronDown } from 'react-feather'
+import { useRouter } from "next/router"
 
 import {
   Container,
@@ -17,6 +18,9 @@ import {
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker } = props
+
+  const router = useRouter();
+  const showMakerOnly = router.query.showMakerOnly === "true";
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -73,16 +77,21 @@ function OrderOptions(props) {
               <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
                 Maker/Taker
               </OptionsButton>
-              <OptionsInput
-                type="checkbox"
-                id="order-maker"
-                value="maker"
-                checked={order.execution === 'maker'}
-                onChange={handleChange}
-              />
-              <OptionsButton as="label" htmlFor="order-maker" size="small" type={order.type}>
-                Maker Only
-              </OptionsButton>
+              
+              {showMakerOnly && (
+                <>
+                  <OptionsInput
+                    type="checkbox"
+                    id="order-maker"
+                    value="maker"
+                    checked={order.execution === 'maker'}
+                    onChange={handleChange}
+                  />
+                  <OptionsButton as="label" htmlFor="order-maker" size="small" type={order.type}>
+                    Maker Only
+                  </OptionsButton>
+                </>
+              )}
               <OptionsInput
                 type="checkbox"
                 disabled={!allowTaker}
