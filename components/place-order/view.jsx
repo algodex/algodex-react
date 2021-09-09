@@ -13,6 +13,7 @@ import OrderService from 'services/order'
 import { convertToAsaUnits } from 'services/convert'
 import { useStore } from 'store/use-store'
 import WalletService from 'services/wallet'
+import detectMobileDisplay from "utils/detectMobileDisplay";
 
 import {
   Container,
@@ -41,7 +42,7 @@ const DEFAULT_ORDER = {
 
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
-
+  const lang = useStore(state => state.lang);
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
@@ -176,7 +177,14 @@ function PlaceOrderView(props) {
     toast.promise(orderPromise, {
       loading: 'Awaiting confirmation...',
       success: 'Order successfully placed',
-      error: 'Error placing order'
+      error: err => {
+        if (/PopupOpenError/.test(err)) {
+          const popupError = detectMobileDisplay() ? lang.ORDER.POPUP_ERROR_MESSAGE_MOBILE : lang.ORDER.POPUP_ERROR_MESSAGE
+          return popupError;
+        } 
+
+        return lang.ORDER.ERROR_MESSAGE;
+      }
     })
 
     try {
@@ -199,14 +207,11 @@ function PlaceOrderView(props) {
 
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
-      Sentry.captureException(err)
       console.error(err)
-      if (/PopupOpenError/.test(err)) {
-        toast.error(
-          'Please disable your popup blocker (likely in the top-right of your browser window)'
-        )
-      }
 
+      if (!/PopupOpenError/.test(err)) {
+        Sentry.captureException(err)
+      }
     }
   }
 
