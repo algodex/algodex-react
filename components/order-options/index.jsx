@@ -20,7 +20,7 @@ function OrderOptions(props) {
   const { order, onChange, allowTaker } = props
 
   const router = useRouter();
-  const showMakerOnly = router.query.showMakerOnly === "true";
+  const showMakerOnly = router && router.query.showMakerOnly === "true";
 
   const [isExpanded, setIsExpanded] = useState(false)
 
