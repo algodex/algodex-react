@@ -53,5 +53,7 @@ export const Header = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: inherit;
   flex: 1 1 0%;
+  position: relative;
 `
