@@ -4,11 +4,18 @@ import { ExternalLink } from 'react-feather'
 export const Container = styled.div`
   flex: 1 1 0%;
   background-color: ${({ theme }) => theme.colors.gray[900]};
+
+  @media (min-width: 996px) {
+    height: 100%;
+  }
 `
 
 export const InfoContainer = styled.div`
   padding: 4rem;
   max-width: 40rem;
+  @media (min-width: 996px) {
+    height: 100%;
+  }
 `
 
 export const ButtonText = styled.button`

@@ -9,6 +9,7 @@ export const WalletSection = styled.section`
   display: ${({ active }) => (active ? 'flex' : 'none')};
 
   @media (min-width: 996px) {
+    height: 100%;
     grid-area: wallet;
     display: flex;
   }
@@ -29,10 +30,20 @@ export const TradeSection = styled.section`
 
 export const ChartSection = styled.section`
   position: relative;
-  height: auto;
+  height: auto%;
+  width: 100%;
+
+  @media (min-width: 996px) {
+    height: 100%;
+  }
 `
 
 export const AssetsSection = styled.section`
+
+  @media (min-width: 996px) {
+    height: 100%;
+    margin-right: 5px;
+  }
   @media (min-width: 1536px) {
     display: flex;
 
@@ -69,22 +80,22 @@ export const SearchAndChartSection = styled.section`
 `
 
 export const OrderBookSection = styled.section`
+  display: ${({ active }) => (active ? 'flex' : 'none')};
 
-  display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+
+  @media (min-width: 996px) {
+    grid-area: book;
+    display: flex;
+    height: 100%;
+  }
 
   @media (min-width: 1024px) and (orientation: landscape) {
     border-right: none;
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: book;
-    display: flex;
-  }
 `
 export const TradeHistorySection = styled.section`
 
@@ -98,7 +109,7 @@ export const TradeHistorySection = styled.section`
   @media (min-width: 996px) {
     grid-area: history;
     display: flex;
-    height: inherit;
+    height: 100%;
   }
 `
 
@@ -115,6 +126,7 @@ export const OrdersSection = styled.section`
   @media (min-width: 996px) {
     grid-area: orders;
     display: flex;
+    height: 100%;
   }
 `
 
@@ -137,14 +149,7 @@ export const Main = styled.main`
   @media (min-width: 996px) {
     padding: 0.5rem;
     height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 200px 1fr 1fr 180px;
-    grid-template-areas:
-      'chart chart wallet'
-      'chart chart trade'
-      'book history trade'
-      'orders orders trade';
+
 
     & > section {
       // for demo
@@ -154,41 +159,7 @@ export const Main = styled.main`
     }
   }
 
-  @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr 280px;
-    grid-template-rows: auto 1fr 2fr 1fr 1fr;
-    grid-template-areas:
-      'chart book wallet'
-      'chart book wallet'
-      'chart book trade'
-      'orders history trade'
-      'orders history trade';
-  }
 
-  @media (min-width: 1024px) and (orientation: portrait) {
-    grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: auto 240px 1fr 1fr 280px;
-    grid-template-areas:
-      'assets assets assets'
-      'chart chart wallet'
-      'chart chart trade'
-      'book history trade'
-      'orders orders orders';
-  }
-
-  @media (min-width: 1536px) {
-    grid-template-columns: 320px 1fr 320px 320px;
-    grid-template-rows: 180px 1fr 1fr 2fr;
-    grid-template-areas:
-      'chart chart book wallet'
-      'chart chart book trade'
-      'chart chart book trade'
-      'orders orders history trade';
-  }
-
-  @media (min-width: 1920px) {
-    grid-template-columns: 320px 1fr 320px 320px;
-  }
 `
 
 export const MobileMenu = styled.nav`

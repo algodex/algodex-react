@@ -60,6 +60,10 @@ const Input = styled(TextInput)`
   font-size: 0.75rem;
   padding-left: 2.25rem;
   padding-right: 3rem;
+
+  @media (min-width: 996px) {
+    padding-right: 0.75rem;
+  }
 `
 
 const Search = forwardRef(({ value, onCancel, ...props }, ref) => {

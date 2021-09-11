@@ -10,6 +10,10 @@ export const Container = styled.div`
   overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
   height: 51px;
 
+  @media (min-width: 996px) {
+    overflow: visible;
+  }
+
   @media (min-width: 1536px) {
     flex-direction: column;
     height: auto;
