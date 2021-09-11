@@ -14,7 +14,7 @@ import { demoAssetsData } from 'components/assets/demo'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
-import OrderBookPrice from "components/order-book-price"
+import OrderBookPrice from 'components/order-book-price'
 
 import {
   AssetsSection,
@@ -28,7 +28,8 @@ import {
   WalletSection,
   MobileMenu,
   MobileMenuButton,
-  MobilePriceSection
+  MobilePriceSection,
+  SearchAndChartSection
 } from './main-layout.css'
 
 import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
@@ -76,15 +77,12 @@ function MainLayout(props) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <AssetsSection active={activeMobile === TABS.CHART}>
-          <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
-        </AssetsSection>
-        <MobilePriceSection active={activeMobile === TABS.TRADE}>
+        {/* <MobilePriceSection active={activeMobile === TABS.TRADE}>
           <h3>
             <span>{`${asset.name} `}</span> / ALGO
           </h3>
           <OrderBookPrice price={asset.price} decimals={asset.decimals} change={asset.priceChange24hr} />
-        </MobilePriceSection>
+        </MobilePriceSection> */}
 
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet onWalletConnect={onWalletConnect} />
@@ -92,10 +90,15 @@ function MainLayout(props) {
         <TradeSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
-        <ChartSection active={activeMobile === TABS.CHART}>
-          {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
-          <ChartOverlay isActive={showOverlay} />
-        </ChartSection>
+        <SearchAndChartSection active={activeMobile === TABS.CHART}>
+          <AssetsSection>
+            <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
+          </AssetsSection>
+          <ChartSection>
+            {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
+            <ChartOverlay isActive={showOverlay} />
+          </ChartSection>
+        </SearchAndChartSection>
         <OrderBookSection active={activeMobile === TABS.BOOK}>
           {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
         </OrderBookSection>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const Container = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.colors.gray[900]};
+  height: 100%;
 
   @media (min-width: 996px) {
     height: 100%;
