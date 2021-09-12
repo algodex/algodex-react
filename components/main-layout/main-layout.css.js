@@ -55,15 +55,11 @@ export const SearchAndChartSection = styled.section`
   @media (min-width: 996px) {
     display: grid;
     grid-area: chart;
-    resize: both;
-    overflow: hidden;
   }
 
   @media (min-width: 1536px) {
     grid-template-columns: 320px 1fr;
     grid-template-rows: 1fr;
-
-
   }
 
 `
