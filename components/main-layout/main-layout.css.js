@@ -178,13 +178,18 @@ export const Main = styled.main`
 
   @media (min-width: 1536px) {
     grid-template-columns: 320px 1fr 320px 320px;
-    grid-template-rows: 240px 1fr 1fr 350px;
+    grid-template-rows: 240px 1fr 1fr 2fr;
     grid-template-areas:
       'chart chart book wallet'
       'chart chart book trade'
       'chart chart book trade'
       'orders orders history trade';
   }
+
+  @media (min-width: 1920px) {
+    grid-template-columns: 320px 1fr 320px 320px;
+  }
+}
 
 `
 
