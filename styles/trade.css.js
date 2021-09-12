@@ -9,10 +9,10 @@ export const Container = styled.div`
   max-height: calc(var(--vh, 1vh) * 100);
   height: calc(var(--vh, 1vh) * 100);
 
-  // @media (min-width: 996px) {
-  //   max-height: none;
-  //   height: 100%;
-  // }
+  @media (min-width: 996px) {
+    overflow:scroll;
+    max-height: none;
+  }
 
 
   // for demo
