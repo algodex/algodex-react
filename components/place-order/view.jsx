@@ -183,6 +183,10 @@ function PlaceOrderView(props) {
           return popupError;
         } 
 
+        if (/Operation cancelled/i.test(err)) {
+          return lang.ORDER.POPUP_CANCELLED;
+        }
+
         return lang.ORDER.ERROR_MESSAGE;
       }
     })
@@ -209,9 +213,16 @@ function PlaceOrderView(props) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
 
-      if (!/PopupOpenError|blocked/.test(err)) {
-        Sentry.captureException(err)
+      if (/PopupOpenError|blocked/.test(err)) {
+        return;
       }
+
+      // ALG-417 Don't capture user initiated cancels
+      if (/Operation cancelled/i.test(err)) {
+        return;
+      }
+
+      Sentry.captureException(err)
     }
   }
 
