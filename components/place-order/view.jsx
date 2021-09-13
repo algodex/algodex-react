@@ -291,6 +291,7 @@ function PlaceOrderView(props) {
             autocomplete="false"
             min="0"
             step="0.000001"
+            inputMode="decimal"
           />
           <OrderInput
             type="number"
@@ -305,6 +306,7 @@ function PlaceOrderView(props) {
             autocomplete="false"
             min="0"
             step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
           />
           <AmountRange
             order={order}
