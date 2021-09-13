@@ -178,7 +178,7 @@ function PlaceOrderView(props) {
       loading: 'Awaiting confirmation...',
       success: 'Order successfully placed',
       error: err => {
-        if (/PopupOpenError/.test(err)) {
+        if (/PopupOpenError|blocked/.test(err)) {
           const popupError = detectMobileDisplay() ? lang.ORDER.POPUP_ERROR_MESSAGE_MOBILE : lang.ORDER.POPUP_ERROR_MESSAGE
           return popupError;
         } 
@@ -209,7 +209,7 @@ function PlaceOrderView(props) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
 
-      if (!/PopupOpenError/.test(err)) {
+      if (!/PopupOpenError|blocked/.test(err)) {
         Sentry.captureException(err)
       }
     }
