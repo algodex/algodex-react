@@ -114,6 +114,18 @@ function PlaceOrderView(props) {
   }, [asset.id, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
+    if (e.target.id === "amount" || e.target.id === "price") {
+      const decimals = e.target.id === 'amount' ? asset.decimals : 6;
+      const value = e.target.value;
+
+      // Only round if value has more digits than decimals;  
+      const decimalIndex = order[e.target.id].indexOf(".")
+      const currentDecimals = value.length - 1 - decimalIndex;
+      if (decimalIndex > -1 && currentDecimals > decimals) {
+        e.target.value = new Big(order[e.target.id]).round(decimals).toString()
+      }
+    }
+
     setOrder({
       [field || e.target.id]: e.target.value
     })
@@ -277,45 +289,48 @@ function PlaceOrderView(props) {
       )
     }
 
-    // round input value to asset's `decimals` value
-    const roundValue = (field) => {
+     // round input value to asset's `decimals` value
+     const roundValue = (field) => {
       if (order[field] === '' || order[field].slice(-1) === '0') {
         return order[field]
       }
       const decimals = field === 'amount' ? asset.decimals : 6
       return new Big(order[field]).round(decimals).toString()
     }
-
     return (
       <>
         <LimitOrder>
           <OrderInput
             type="number"
+            pattern="\d*"
             id="price"
             name="af2Km9q"
             label="Price"
             asset="ALGO"
             decimals={6}
             orderType={order.type}
-            value={roundValue('price')}
+            value={order.price}
             onChange={handleChange}
             autocomplete="false"
             min="0"
             step="0.000001"
+            inputMode="decimal"
           />
           <OrderInput
             type="number"
+            pattern="\d*"
             id="amount"
             name="af2Km9q"
             label="Amount"
             asset={asset.name}
             decimals={asset.decimals}
             orderType={order.type}
-            value={roundValue('amount')}
+            value={order.amount}
             onChange={handleChange}
             autocomplete="false"
             min="0"
             step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
           />
           <AmountRange
             order={order}
