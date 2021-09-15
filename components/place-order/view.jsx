@@ -280,6 +280,7 @@ function PlaceOrderView(props) {
         <LimitOrder>
           <OrderInput
             type="number"
+            pattern="\d*"
             id="price"
             name="af2Km9q"
             label="Price"
@@ -295,6 +296,7 @@ function PlaceOrderView(props) {
           />
           <OrderInput
             type="number"
+            pattern="\d*"
             id="amount"
             name="af2Km9q"
             label="Amount"
