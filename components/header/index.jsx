@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Bell, User } from 'react-feather'
 import ActiveLink from 'components/active-link'
+import useTranslation from "next-translate/useTranslation";
+import setLanguage from "next-translate/setLanguage";
 
 import {
   Container,
@@ -19,6 +21,7 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { t, lang } = useTranslation("common");
 
   return (
     <Container data-testid="header-container">
@@ -33,19 +36,19 @@ export default function Header() {
           target="_blank"
           href="//about.algodex.com"
         >
-        <NavTextLg>About</NavTextLg>
+        <NavTextLg>{t("header-about")}</NavTextLg>
         </a>
         <ActiveLink href="/trade" matches={/^\/trade/}>
-          <NavTextLg>Trade</NavTextLg>
+          <NavTextLg>{t("header-trade")}</NavTextLg>
         </ActiveLink>
         <a
           target="_blank"
           href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
         >
-          <NavTextLg>Docs</NavTextLg>
+          <NavTextLg>{t("header-docs")}</NavTextLg>
         </a>
         <a target="_blank" href="//about.algodex.com/support/">
-          <NavTextLg>Support</NavTextLg>
+          <NavTextLg>{t("header-support")}</NavTextLg>
         </a>
         {/*
         <ActiveLink href="/wallet">
@@ -61,9 +64,16 @@ export default function Header() {
         <NavIcon color="gray.500">
           <User />
         </NavIcon>
-        <NavTextLg>
+        <NavTextLg onClick={async () => await setLanguage("en")}>
           EN <Flag countryCode="US" svg />
         </NavTextLg>
+  
+
+        <NavTextLg onClick={async () => await setLanguage("es")}>
+          ES <Flag countryCode="ES" svg />
+        </NavTextLg>
+
+        
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>

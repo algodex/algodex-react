@@ -4,8 +4,9 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 const { withSentryConfig } = require('@sentry/nextjs')
+const nextTranslate = require("next-translate");
 
-const moduleExports = {
+const moduleExports = nextTranslate({
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     return config
@@ -24,7 +25,7 @@ const moduleExports = {
       }
     ]
   }
-}
+})
 
 const SentryWebpackPluginOptions = {
   // Additional config options for the Sentry Webpack plugin. Keep in mind that
