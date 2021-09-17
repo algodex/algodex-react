@@ -75,34 +75,6 @@ function PlaceOrderView(props) {
   // Get reference to query client to clear queries later
   const queryClient = useQueryClient();
 
-  /**
-   * When order price or amount changes, automatically calculate total (in ALGO)
-   */
-  useEffect(() => {
-    const price = new Big(order.price || 0)
-    const amount = new Big(order.amount || 0)
-
-    // @todo: calculate transaction fees in total
-    // let totalAmount = price * amount
-    // if (totalAmount > 0) {
-    //   if (order.type === 'buy') {
-    //     totalAmount += txnFee
-    //   } else {
-    //     totalAmount -= txnFee
-    //   }
-    // }
-
-    // const total = totalAmount.toFixed(6)
-
-    const total = price.times(amount).round(6).toString()
-
-    if (total !== order.total) {
-      setOrder({
-        ...order,
-        total
-      })
-    }
-  }, [order, setOrder])
 
   /**
    * When asset or active wallet changes, reset the form
@@ -114,18 +86,6 @@ function PlaceOrderView(props) {
   }, [asset.id, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
-    if (e.target.id === "amount" || e.target.id === "price") {
-      const decimals = e.target.id === 'amount' ? asset.decimals : 6;
-      const value = e.target.value;
-
-      // Only round if value has more digits than decimals;  
-      const decimalIndex = order[e.target.id].indexOf(".")
-      const currentDecimals = value.length - 1 - decimalIndex;
-      if (decimalIndex > -1 && currentDecimals > decimals) {
-        e.target.value = new Big(order[e.target.id]).round(decimals).toString()
-      }
-    }
-
     setOrder({
       [field || e.target.id]: e.target.value
     })
@@ -289,14 +249,6 @@ function PlaceOrderView(props) {
       )
     }
 
-     // round input value to asset's `decimals` value
-     const roundValue = (field) => {
-      if (order[field] === '' || order[field].slice(-1) === '0') {
-        return order[field]
-      }
-      const decimals = field === 'amount' ? asset.decimals : 6
-      return new Big(order[field]).round(decimals).toString()
-    }
     return (
       <>
         <LimitOrder>
@@ -347,7 +299,7 @@ function PlaceOrderView(props) {
             asset="ALGO"
             decimals={6}
             orderType={order.type}
-            value={roundValue('total')}
+            value={order.total}
             readOnly
             disabled
           />
