@@ -14,6 +14,7 @@ import { demoAssetsData } from 'components/assets/demo'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
+import OrderBookPrice from 'components/order-book-price'
 
 import {
   AssetsSection,
@@ -26,7 +27,9 @@ import {
   TradeSection,
   WalletSection,
   MobileMenu,
-  MobileMenuButton
+  MobileMenuButton,
+  MobilePriceSection,
+  SearchAndChartSection
 } from './main-layout.css'
 
 import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
@@ -74,19 +77,28 @@ function MainLayout(props) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <AssetsSection active={activeMobile === TABS.CHART}>
-          <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
-        </AssetsSection>
+        {/* <MobilePriceSection active={activeMobile === TABS.TRADE}>
+          <h3>
+            <span>{`${asset.name} `}</span> / ALGO
+          </h3>
+          <OrderBookPrice price={asset.price} decimals={asset.decimals} change={asset.priceChange24hr} />
+        </MobilePriceSection> */}
+
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet onWalletConnect={onWalletConnect} />
         </WalletSection>
         <TradeSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>
-        <ChartSection active={activeMobile === TABS.CHART}>
-          {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
-          <ChartOverlay isActive={showOverlay} />
-        </ChartSection>
+        <SearchAndChartSection active={activeMobile === TABS.CHART}>
+          <AssetsSection>
+            <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
+          </AssetsSection>
+          <ChartSection>
+            {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
+            <ChartOverlay isActive={showOverlay} />
+          </ChartSection>
+        </SearchAndChartSection>
         <OrderBookSection active={activeMobile === TABS.BOOK}>
           {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
         </OrderBookSection>
@@ -101,41 +113,41 @@ function MainLayout(props) {
             gridSize={gridSize}
           />
         </OrdersSection>
-      </Main>
-      <MobileMenu>
-        <ul>
-          <li>
-            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
-              Chart
-            </MobileMenuButton>
-          </li>
-          <li>
-            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
-              Book
-            </MobileMenuButton>
-          </li>
-          <li>
-            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
-              Trade
-            </MobileMenuButton>
-          </li>
-          <li>
-            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
-              Orders
-            </MobileMenuButton>
-          </li>
-          {/* <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                History
+        <MobileMenu>
+          <ul>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
+                Chart
               </MobileMenuButton>
-            </li> */}
-          <li>
-            <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
-              WALLET
-            </MobileMenuButton>
-          </li>
-        </ul>
-      </MobileMenu>
+            </li>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
+                Book
+              </MobileMenuButton>
+            </li>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
+                Trade
+              </MobileMenuButton>
+            </li>
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
+                Orders
+              </MobileMenuButton>
+            </li>
+            {/* <li>
+                <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
+                  History
+                </MobileMenuButton>
+              </li> */}
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
+                WALLET
+              </MobileMenuButton>
+            </li>
+          </ul>
+        </MobileMenu>
+      </Main>
     </MainWrapper>
   )
 }

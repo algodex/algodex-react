@@ -52,22 +52,22 @@ export const OrdersWrapper = styled.div`
   position: absolute;
   left: 0;
   right: 0;
+  overflow: visible;
 `
 
 export const SellOrders = styled.div`
   flex: 1 1 0%;
   position: relative;
-  overflow: hidden;
+  overflow: hidden scroll;
+  display: flex;
+  flex-direction: column-reverse;
 
-  ${OrdersWrapper} {
-    bottom: 0;
-  }
 `
 
 export const BuyOrders = styled.div`
   flex: 1 1 0%;
   position: relative;
-  overflow: hidden;
+  overflow: hidden scroll;
 
   ${OrdersWrapper} {
     right: 0;
