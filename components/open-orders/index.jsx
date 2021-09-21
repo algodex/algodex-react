@@ -62,7 +62,7 @@ function OpenOrders() {
         const cellIndex = cell.row.index
         const cellData = data[cellIndex]
 
-        const { escrowAddress, ownerAddress, assetLimitPriceN, assetLimitPriceD, assetId } =
+        const { escrowAddress, ownerAddress, assetLimitPriceN, assetLimitPriceD, assetId, version } =
           cellData.metadata
         const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
@@ -76,7 +76,8 @@ function OpenOrders() {
         const cancelOrderPromise = OrderService.closeOrder(
           escrowAddress,
           ownerAddress,
-          orderBookEntry
+          orderBookEntry,
+          version
         )
 
         toast.promise(cancelOrderPromise, {

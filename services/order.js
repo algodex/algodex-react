@@ -56,7 +56,7 @@ const OrderService = {
     const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
 
     const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-
+    
     if (order.execution === 'taker') {
       console.log(`Taker ${order.type} order`, {
         isSellOrder,
@@ -66,7 +66,6 @@ const OrderService = {
         asaAmount,
         algoAmount
       })
-
       return algodex.executeOrderAsTaker(
         AlgodClient,
         isSellOrder,
@@ -110,6 +109,7 @@ const OrderService = {
         n: order.assetLimitPriceN,
         d: order.assetLimitPriceD,
         min: order.minimumExecutionSizeInAlgo,
+        version: order.version,
         escrowAddr: order.escrowAddress,
         algoBalance: order.algoAmount,
         asaBalance: order.asaAmount,
@@ -119,7 +119,6 @@ const OrderService = {
         assetId: order.assetId
       }))
     }
-
     return mapOrders(orderBook.buyOrders, 'buy').concat(mapOrders(orderBook.sellOrders, 'sell'))
   },
 
@@ -130,14 +129,16 @@ const OrderService = {
    * @param {String} escrowAccountAddr: public address of the escrow account
    * @param {String}       creatorAddr: public address of the owner of the escrow account
    * @param {String}    orderBookEntry: blockchain order book string. For example "2500-625-0-15322902" (N-D-min-assetId)
+   * @param {int}              version: escrow contract version
    * @returns {Object} Promise for when the transaction is fully confirmed
    */
-  closeOrder: async (escrowAccountAddr, creatorAddr, orderBookEntry) => {
+  closeOrder: async (escrowAccountAddr, creatorAddr, orderBookEntry, version) => {
     return await algodex.closeOrderFromOrderBookEntry(
       AlgodClient,
       escrowAccountAddr,
       creatorAddr,
-      orderBookEntry
+      orderBookEntry,
+      version
     )
   }
 }
