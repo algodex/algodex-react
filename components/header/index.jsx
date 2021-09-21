@@ -55,12 +55,12 @@ export default function Header() {
           <NavTextLg>Support</NavTextLg>
         </ActiveLink>
         */}
-        <NavIcon color="gray.500">
+        {/* <NavIcon color="gray.500">
           <Bell />
         </NavIcon>
         <NavIcon color="gray.500">
           <User />
-        </NavIcon>
+        </NavIcon> */}
         <NavTextLg>
           EN <Flag countryCode="US" svg />
         </NavTextLg>
