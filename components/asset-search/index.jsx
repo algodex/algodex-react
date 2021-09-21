@@ -10,6 +10,7 @@ import SearchInput from './search'
 import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import SvgImage from 'components/svg-image'
+import useTranslation from 'next-translate/useTranslation'
 
 import {
   Container,
@@ -61,6 +62,7 @@ const AssetChangeCell = ({ value }) => {
 
 function AssetSearch(props) {
   const { gridSize, onInfoChange } = props
+  const { t } = useTranslation("assets");
 
   const router = useRouter()
 
@@ -164,17 +166,17 @@ function AssetSearch(props) {
   const columns = useMemo(
     () => [
       {
-        Header: 'Pair',
+        Header: t("pair"),
         accessor: 'name',
         Cell: AssetNameCell
       },
       {
-        Header: 'Price',
+        Header: t("price"),
         accessor: 'price',
         Cell: AssetPriceCell
       },
       {
-        Header: 'Change',
+        Header: t("change"),
         accessor: 'change',
         Cell: AssetChangeCell
       }
@@ -216,7 +218,7 @@ function AssetSearch(props) {
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
+        {status === 'loading' && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
         {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
       </StatusContainer>
     )

@@ -1,0 +1,18 @@
+{
+    "place-order": "Enviar orden",
+    "buy": "Comprar",
+    "sell": "Vender",
+    "available-balance": "Saldo disponible",
+    "limit": "Límite",
+    "price": "Precio",
+    "amount": "Monto",
+    "total": "Total",
+    "advanced-options": "Opciones avanzadas",
+    "maker-taker": "Maker/Taker",
+    "maker-taker-desc": "Tú orden se puede ejecutar como una órden de maker o una órden de taker.",
+    "maker": "Maker",
+    "taker-only": "Solo Taker",
+    "taker-only-desc": "Tú orden se ejecutará solo como una órden de taker.",
+    "not-signed-in": "No registrado",
+    "insufficient-balance": "Saldo insuficiente"
+}

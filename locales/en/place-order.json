@@ -1,0 +1,18 @@
+{
+    "place-order": "Place Order",
+    "buy": "Buy",
+    "sell": "Sell",
+    "available-balance": "Available Balance",
+    "limit": "Limit",
+    "price": "Price",
+    "amount": "Amount",
+    "total": "Total",
+    "advanced-options": "Advanced Options",
+    "maker-taker": "Maker/Taker",
+    "maker-taker-desc": "Your order may execute as a maker order or taker order.",
+    "maker": "Maker",
+    "taker-only": "Taker Only",
+    "taker-only-desc": "Your order will only execute as a taker order.",
+    "not-signed-in": "Not signed in",
+    "insufficient-balance": "Insufficient balance"
+}

@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types'
 import { HeaderSm, BodyCopy, BodyCopyTiny } from 'components/type'
 import SvgImage from 'components/svg-image'
-
+import useTranslation
+ from 'next-translate/useTranslation'
 import { InfoPopup, HeaderContainer, InfoList, InfoItem, Algos } from './info-flyover.css'
 
 function InfoFlyover(props) {
   const { assetInfo, searchHeight } = props
+  const { t } = useTranslation('assets')
 
   const renderName = () => {
     if (assetInfo.verified) {
@@ -30,7 +32,7 @@ function InfoFlyover(props) {
     return (
       <InfoItem halfWidth>
         <BodyCopyTiny as="dt" color="gray.500">
-          24 Hr Change
+          {t("24-hr-change")}
         </BodyCopyTiny>
         <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem" color={color}>
           {display}
@@ -66,7 +68,7 @@ function InfoFlyover(props) {
               <>
                 <InfoItem halfWidth>
                   <BodyCopyTiny as="dt" color="gray.500">
-                    Price <Algos use="algoLogo" size={0.625} />
+                    {t("price")} <Algos use="algoLogo" size={0.625} />
                   </BodyCopyTiny>
                   <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
                     {assetInfo.price}
@@ -80,7 +82,7 @@ function InfoFlyover(props) {
               <>
                 <InfoItem halfWidth>
                   <BodyCopyTiny as="dt" color="gray.500">
-                    Liquidity (Algos)
+                    {t("liquidity")} (Algos)
                   </BodyCopyTiny>
                   <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
                     {assetInfo.liquidityAlgo}
@@ -88,7 +90,7 @@ function InfoFlyover(props) {
                 </InfoItem>
                 <InfoItem halfWidth>
                   <BodyCopyTiny as="dt" color="gray.500">
-                    {`Liquidity (${assetInfo.name})`}
+                    {`${t("liquidity")} (${assetInfo.name})`}
                   </BodyCopyTiny>
                   <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
                     {assetInfo.liquidityAsa}

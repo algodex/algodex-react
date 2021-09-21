@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { BodyCopyTiny, LabelSm } from 'components/type'
 import { ChevronDown } from 'react-feather'
 import { useRouter } from "next/router"
+import useTranslation from 'next-translate/useTranslation'
 
 import {
   Container,
@@ -18,6 +19,7 @@ import {
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker } = props
+  const { t } = useTranslation("place-order");
 
   const router = useRouter();
   const showMakerOnly = router && router.query.showMakerOnly === "true";
@@ -41,10 +43,10 @@ function OrderOptions(props) {
         return `Your order will only execute as a maker order.`
 
       case 'taker':
-        return `Your order will only execute as a taker order.`
+        return t("taker-only-desc")
 
       case 'both':
-        return `Your order may execute as a maker order or taker order.`
+        return t("maker-taker-desc")
 
       default:
         return null
@@ -58,7 +60,7 @@ function OrderOptions(props) {
         onKeyDown={handleKeyDown}
         tabIndex="0"
       >
-        <LabelSm color="gray.500">Advanced Options</LabelSm>
+        <LabelSm color="gray.500">{t("advanced-options")}</LabelSm>
         <ArrowContainer>
           <ChevronDown />
         </ArrowContainer>
@@ -75,7 +77,7 @@ function OrderOptions(props) {
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
-                Maker/Taker
+                {t("maker-taker")}
               </OptionsButton>
               
               {showMakerOnly && (
@@ -101,7 +103,7 @@ function OrderOptions(props) {
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
-                Taker Only
+                {t("taker-only")}
               </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">

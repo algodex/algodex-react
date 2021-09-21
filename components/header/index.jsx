@@ -21,7 +21,7 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const { t, lang } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   return (
     <Container data-testid="header-container">
