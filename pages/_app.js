@@ -71,8 +71,9 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function App({ Component, pageProps, err }) {
-  const TRACKING_ID = 'G-K9FCKCJN2L'
+  const TRACKING_ID = 'UA-195819772-1'
   ReactGA.initialize(TRACKING_ID)
+  ReactGA.pageview('/')
   const [queryClient] = useState(() => new QueryClient())
   return (
     <>
