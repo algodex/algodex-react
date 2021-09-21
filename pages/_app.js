@@ -5,6 +5,7 @@ import { Hydrate } from 'react-query/hydration'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
+import ReactGA from 'react-ga'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -88,8 +89,9 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function App({ Component, pageProps, err }) {
+  const TRACKING_ID = 'G-K9FCKCJN2L'
+  ReactGA.initialize(TRACKING_ID)
   const [queryClient] = useState(() => new QueryClient())
-
   return (
     <>
       <GlobalStyle />
