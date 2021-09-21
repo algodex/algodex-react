@@ -72,8 +72,8 @@ const GlobalStyle = createGlobalStyle`
 
 export default function App({ Component, pageProps, err }) {
   const TRACKING_ID = 'G-K9FCKCJN2L'
-  const [queryClient] = useState(() => new QueryClient())
   ReactGA.initialize(TRACKING_ID)
+  const [queryClient] = useState(() => new QueryClient())
   return (
     <>
       <GlobalStyle />
