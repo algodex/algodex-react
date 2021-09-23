@@ -26,7 +26,7 @@ import {
 } from './open-orders.css'
 
 function OpenOrders() {
-  const { t } = useTranslation("orders");
+  const { t, lang } = useTranslation("orders");
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
@@ -146,7 +146,7 @@ function OpenOrders() {
         disableSortBy: true
       }
     ],
-    [OrderCancelCell]
+    [OrderCancelCell, lang]
   )
 
   const renderStatus = () => {

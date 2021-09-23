@@ -1,5 +1,6 @@
 {
   "connect-wallet-button": "Connect Wallet",
+  "connect-another-wallet-button": "Connect Another Wallet",
   "wallet": "Wallet",
   "balance": "Balance",
   "start-by": "Start by connecting an Algorand wallet",

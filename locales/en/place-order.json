@@ -14,5 +14,11 @@
     "taker-only": "Taker Only",
     "taker-only-desc": "Your order will only execute as a taker order.",
     "not-signed-in": "Not signed in",
-    "insufficient-balance": "Insufficient balance"
+    "insufficient-balance": "Insufficient balance",
+    "awaiting-confirmation": "Awaiting confirmation...",
+    "order-success": "Order successfully placed",
+    "error-placing-order": "Error placing order",
+    "disable-popup": "Please disable your popup blocker (likely in the top-right of your browser window)",
+    "disable-popup-mobile": "Please disable your popup blocker",
+    "order-cancelled": "Order cancelled."
 }

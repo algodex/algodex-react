@@ -4,5 +4,10 @@
     "price": "Price",
     "change": "Change",
     "24-hr-change": "24 Hr Change",
-    "liquidity": "Liquidity"
+    "liquidity": "Liquidity",
+    "loading": "loading",
+    "back-to-chart": "Back to Chart",
+    "description": "Description",
+    "circulating-supply": "Circulating Supply",
+    "total-supply": "Total Supply"
 }

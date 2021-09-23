@@ -30,7 +30,7 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
 function OrderHistory() {
-  const { t } = useTranslation("orders");
+  const { t, lang } = useTranslation("orders");
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
   const { data, isLoading, isError } = useQuery(
@@ -42,7 +42,7 @@ function OrderHistory() {
     }
   )
 
-  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data, { buyText: t("buy"), sellText: t("sell")}), [data])
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data, { buyText: t("buy"), sellText: t("sell")}), [data, lang])
 
   const columns = useMemo(
     () => [
@@ -73,7 +73,7 @@ function OrderHistory() {
         Cell: OrderAmountCell
       }
     ],
-    []
+    [lang]
   )
 
   const renderStatus = () => {

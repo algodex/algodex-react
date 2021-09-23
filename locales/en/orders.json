@@ -19,5 +19,7 @@
     "error-cancelling": "Error cancelling order",
     "loading": "Loading",
     "error": "Something went wrong.",
-    "name": "Name"
+    "name": "Name",
+    "buy": "Buy",
+    "sell": "Sell"
 }

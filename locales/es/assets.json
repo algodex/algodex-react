@@ -2,8 +2,12 @@
     "search": "buscar",
     "pair": "par",
     "price": "precio",
-    "change": "Change",
-    "24-hr-change": "24 Hr Change",
+    "change": "Cambio",
+    "24-hr-change": "Cambio de 24 horas",
     "liquidity": "liquidez",
-    "loading": "cargando"
+    "loading": "cargando",
+    "back-to-chart": "Volver al gráfico",
+    "description": "Descripción",
+    "circulating-supply": "Suministro circulante",
+    "total-supply": "Suministro total"
 }

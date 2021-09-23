@@ -33,7 +33,8 @@ const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 
 function Assets() {
-  const { t } = useTranslation("orders");
+  const { t, lang } = useTranslation("orders");
+
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
   const { data, isLoading, isError } = useQuery(
@@ -80,7 +81,7 @@ function Assets() {
         Cell: AssetAlgoValueCell
       }
     ],
-    []
+    [lang]
   )
 
   const renderStatus = () => {

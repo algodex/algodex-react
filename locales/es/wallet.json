@@ -1,5 +1,6 @@
 {
-    "connect-wallet-button": "Conectar Billetera",
+    "connect-wallet-button": "Conectar billetera",
+    "connect-another-wallet-button": "Conectar otra billetera",
     "wallet": "Billetera",
     "balance": "Saldo",
     "start-by": "Comience conectando una billetera Algorand",

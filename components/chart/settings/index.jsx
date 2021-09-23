@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import useStore, { getChartTimeInterval } from 'store/use-store'
 import { Container, ToggleWrapper, ToggleInput, ToggleBtn } from './chart-settings.css'
+import useTranslation from 'next-translate/useTranslation'
 
 function ChartSettings(props) {
   const { chartMode, onChartModeClick } = props
+  const { t } = useTranslation("chart");
   const chartTime = useStore((state) => getChartTimeInterval(state))
   const onChartTimeClick = useStore((state) => state.setChartTimeInterval)
 
@@ -45,7 +47,7 @@ function ChartSettings(props) {
           onChange={handleModeClick}
         />
         <ToggleBtn as="label" size="small" htmlFor="mode-candle">
-          Candle
+          {t("candle")}
         </ToggleBtn>
         <ToggleInput
           type="radio"
@@ -55,7 +57,7 @@ function ChartSettings(props) {
           onChange={handleModeClick}
         />
         <ToggleBtn as="label" size="small" htmlFor="mode-area">
-          Area
+          {t("area")}
         </ToggleBtn>
       </ToggleWrapper>
       <ToggleWrapper>{renderTimeIntervals()}</ToggleWrapper>

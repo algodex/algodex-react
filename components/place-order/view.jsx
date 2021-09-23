@@ -44,7 +44,6 @@ const DEFAULT_ORDER = {
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
   const { t } = useTranslation("place-order");
-  const lang = useStore(state => state.lang);
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
@@ -149,19 +148,19 @@ function PlaceOrderView(props) {
     const orderPromise = placeOrder(orderData)
 
     toast.promise(orderPromise, {
-      loading: 'Awaiting confirmation...',
-      success: 'Order successfully placed',
+      loading: t("awaiting-confirmation"),
+      success: t("order-success"),
       error: err => {
         if (/PopupOpenError|blocked/.test(err)) {
-          const popupError = detectMobileDisplay() ? lang.ORDER.POPUP_ERROR_MESSAGE_MOBILE : lang.ORDER.POPUP_ERROR_MESSAGE
+          const popupError = detectMobileDisplay() ? t("disable-popup-mobile") :t("disable-popup")
           return popupError;
         } 
 
         if (/Operation cancelled/i.test(err)) {
-          return lang.ORDER.POPUP_CANCELLED;
+          return t("order-cancelled");
         }
 
-        return lang.ORDER.ERROR_MESSAGE;
+        return t("error-placing-order");
       }
     })
 

@@ -62,7 +62,7 @@ const AssetChangeCell = ({ value }) => {
 
 function AssetSearch(props) {
   const { gridSize, onInfoChange } = props
-  const { t } = useTranslation("assets");
+  const { t, lang } = useTranslation("assets");
 
   const router = useRouter()
 
@@ -181,7 +181,7 @@ function AssetSearch(props) {
         Cell: AssetChangeCell
       }
     ],
-    []
+    [lang]
   )
 
   const getRowProps = (row) => ({

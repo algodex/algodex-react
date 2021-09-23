@@ -6,7 +6,7 @@ import Icon from 'components/icon'
 import SvgImage from 'components/svg-image'
 import useTranslation from "next-translate/useTranslation";
 
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Container,
   ButtonContainer,
@@ -88,11 +88,13 @@ function WalletView(props) {
       </WalletRow>
     ))
   }
-  const [WalletButtonText, SetWalletButtonText] = useState(t("connect-wallet"))
+
   const getButtonState = () => {
     onConnectClick()
-    SetWalletButtonText(t("connect-another-wallet"))
   }
+
+  const WalletButtonText = wallets.length > 0 ? t("connect-another-wallet-button") : t("connect-wallet-button");
+
   return (
     <Container>
       <ButtonContainer>
