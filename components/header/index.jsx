@@ -85,10 +85,10 @@ export default function Header() {
 
           <LanguageDropDown>
             {i18n.locales.map((localeCd) => (
-              <LanguageItem>
+              <LanguageItem key={localeCd}>
                 <Link href={asPath} locale={localeCd}>
                   <a href="#">
-                    <NavTextLg key={localeCd}>
+                    <NavTextLg>
                       {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
                     </NavTextLg>
                   </a>
