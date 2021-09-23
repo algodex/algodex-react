@@ -25,7 +25,7 @@ export const Header = styled.header`
 export const Trades = styled.div`
   flex: 1 1 0%;
   position: relative;
-  overflow: hidden;
+  overflow: hidden scroll;
 `
 
 export const TradesWrapper = styled.div`
@@ -34,6 +34,7 @@ export const TradesWrapper = styled.div`
   top: 0;
   left: 0;
   right: 0;
+  overflow: visible;
 `
 
 export const TradesRow = styled.div`

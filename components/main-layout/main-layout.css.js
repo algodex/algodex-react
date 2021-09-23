@@ -2,35 +2,44 @@ import styled from 'styled-components'
 import Button from 'components/button'
 
 export const WalletSection = styled.section`
-  grid-area: wallet;
+  grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
   display: ${({ active }) => (active ? 'flex' : 'none')};
-  height: calc(100% - 50px);
 
   @media (min-width: 996px) {
+    grid-area: wallet;
     display: flex;
-    height: inherit;
   }
 `
 
 export const TradeSection = styled.section`
-  grid-area: trade;
+  grid-area: 1 / 1 / 3 / 3;
+
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  height: calc(100% - 50px);
+  display: ${({ active }) => (active ? 'block' : 'none')};
+  overflow: hidden scroll;
 
   @media (min-width: 996px) {
+    grid-area: trade;
     display: flex;
-    height: inherit;
   }
 `
 
 export const ChartSection = styled.section`
-  grid-area: chart;
+  position: relative;
+  height: auto;
+`
+
+export const AssetsSection = styled.section`
+  @media (min-width: 1536px) {
+    display: flex;
+  }
+`
+
+
+export const SearchAndChartSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   position: relative;
 
@@ -38,18 +47,23 @@ export const ChartSection = styled.section`
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  height: calc(100% - 101px);
   display: ${({ active }) => (active ? 'grid' : 'none')};
-  grid-template-rows: 1fr;
+  grid-template-rows: 50px 1fr;
 
   @media (min-width: 996px) {
-    display: block;
-    height: inherit;
+    display: grid;
+    grid-area: chart;
   }
+
+  @media (min-width: 1536px) {
+    grid-template-columns: 320px 1fr;
+    grid-template-rows: 1fr;
+  }
+
 `
 
 export const OrderBookSection = styled.section`
-  grid-area: book;
+
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -61,15 +75,13 @@ export const OrderBookSection = styled.section`
 
   display: ${({ active }) => (active ? 'flex' : 'none')};
 
-  height: calc(100% - 50px);
-
   @media (min-width: 996px) {
+    grid-area: book;
     display: flex;
-    height: inherit;
   }
 `
 export const TradeHistorySection = styled.section`
-  grid-area: history;
+
   display: flex;
   flex-direction: column;
 
@@ -78,66 +90,61 @@ export const TradeHistorySection = styled.section`
   height: calc(100% - 50px);
 
   @media (min-width: 996px) {
+    grid-area: history;
     display: flex;
     height: inherit;
   }
 `
 
 export const OrdersSection = styled.section`
-  grid-area: orders;
+
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
   @media (min-width: 1024px) and (orientation: landscape) {
     border-top: none;
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
-
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  height: calc(100% - 50px);
-
-  @media (min-width: 996px) {
-    display: flex;
-    height: inherit;
-  }
-`
-
-export const AssetsSection = styled.section`
-  grid-area: assets;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  @media (min-width: 1536px) {
-    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-
   display: ${({ active }) => (active ? 'flex' : 'none')};
 
   @media (min-width: 996px) {
+    grid-area: orders;
     display: flex;
   }
 `
+
+
 
 export const MainWrapper = styled.div`
   position: relative;
   height: calc(var(--vh, 1vh) * 100);
-  padding-bottom: 50px;
+  min-height: 500px;
+
+  @media (min-width: 996px) {
+    min-height: 100%;
+    height: auto;
+  }
+
 `
 
 export const Main = styled.main`
-  position: absolute;
-  inset: 0;
-  flex: 1 1 0%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  overflow: hidden scroll;
+  height: calc(var(--vh, 1vh) * 100);
+
 
   @media (min-width: 996px) {
+    padding: 0.5rem;
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: auto 240px 1fr 1fr 180px;
+    grid-template-rows: 240px 1fr 1fr 180px;
     grid-template-areas:
-      'assets assets assets'
       'chart chart wallet'
       'chart chart trade'
       'book history trade'
-      'orders orders orders';
+      'orders orders trade';
 
     & > section {
       // for demo
@@ -148,12 +155,13 @@ export const Main = styled.main`
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: 1fr 320px 280px;
-    grid-template-rows: auto 240px 2fr 2fr;
+    grid-template-columns: 2fr 1fr 280px;
+    grid-template-rows: auto 1fr 2fr 1fr 1fr;
     grid-template-areas:
-      'assets assets assets'
+      'chart book wallet'
       'chart book wallet'
       'chart book trade'
+      'orders history trade'
       'orders history trade';
   }
 
@@ -172,15 +180,17 @@ export const Main = styled.main`
     grid-template-columns: 320px 1fr 320px 320px;
     grid-template-rows: 240px 1fr 1fr 2fr;
     grid-template-areas:
-      'assets chart book wallet'
-      'assets chart book trade'
-      'assets chart book trade'
+      'chart chart book wallet'
+      'chart chart book trade'
+      'chart chart book trade'
       'orders orders history trade';
   }
 
   @media (min-width: 1920px) {
     grid-template-columns: 320px 1fr 320px 320px;
   }
+}
+
 `
 
 export const MobileMenu = styled.nav`
@@ -195,12 +205,11 @@ export const MobileMenu = styled.nav`
   }
 
   & > ul > li {
-    flex: 1;
+    flex: 1 0 auto;
     height: 100%;
   }
 
-  position: fixed;
-  bottom: 0;
+
   z-index: 99;
 
   @media (min-width: 996px) {
@@ -214,4 +223,34 @@ export const MobileMenuButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
+`
+
+export const MobilePriceSection = styled.section`
+  grid-area: 1 / 1 / 2 / 2;
+  height: 50px;
+
+  display: ${({ active }) => (active ? 'grid' : 'none')};
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  justify-content: space-around;
+  align-content: center;
+  padding: 1.125rem;
+  h3 {
+    font-family: ${({ theme }) => theme.fontFamilies.body};
+    font-size: 1rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.gray[500]};
+    white-space: nowrap;
+
+    span {
+      color: ${({ theme }) => theme.colors.gray[100]};
+    }
+
+    display: flex;
+    align-items: center;
+
+    @media (min-width: 1024px) {
+      font-size: 1.25rem;
+    }
+  }
 `

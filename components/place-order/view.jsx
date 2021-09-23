@@ -77,34 +77,6 @@ function PlaceOrderView(props) {
   // Get reference to query client to clear queries later
   const queryClient = useQueryClient();
 
-  /**
-   * When order price or amount changes, automatically calculate total (in ALGO)
-   */
-  useEffect(() => {
-    const price = new Big(order.price || 0)
-    const amount = new Big(order.amount || 0)
-
-    // @todo: calculate transaction fees in total
-    // let totalAmount = price * amount
-    // if (totalAmount > 0) {
-    //   if (order.type === 'buy') {
-    //     totalAmount += txnFee
-    //   } else {
-    //     totalAmount -= txnFee
-    //   }
-    // }
-
-    // const total = totalAmount.toFixed(6)
-
-    const total = price.times(amount).round(6).toString()
-
-    if (total !== order.total) {
-      setOrder({
-        ...order,
-        total
-      })
-    }
-  }, [order, setOrder])
 
   /**
    * When asset or active wallet changes, reset the form
@@ -185,6 +157,10 @@ function PlaceOrderView(props) {
           return popupError;
         } 
 
+        if (/Operation cancelled/i.test(err)) {
+          return lang.ORDER.POPUP_CANCELLED;
+        }
+
         return lang.ORDER.ERROR_MESSAGE;
       }
     })
@@ -211,9 +187,16 @@ function PlaceOrderView(props) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
 
-      if (!/PopupOpenError|blocked/.test(err)) {
-        Sentry.captureException(err)
+      if (/PopupOpenError|blocked/.test(err)) {
+        return;
       }
+
+      // ALG-417 Don't capture user initiated cancels
+      if (/Operation cancelled/i.test(err)) {
+        return;
+      }
+
+      Sentry.captureException(err)
     }
   }
 
@@ -268,45 +251,40 @@ function PlaceOrderView(props) {
       )
     }
 
-    // round input value to asset's `decimals` value
-    const roundValue = (field) => {
-      if (order[field] === '' || order[field].slice(-1) === '0') {
-        return order[field]
-      }
-      const decimals = field === 'amount' ? asset.decimals : 6
-      return new Big(order[field]).round(decimals).toString()
-    }
-
     return (
       <>
         <LimitOrder>
           <OrderInput
             type="number"
+            pattern="\d*"
             id="price"
             name="af2Km9q"
             label={t("price")}
             asset="ALGO"
             decimals={6}
             orderType={order.type}
-            value={roundValue('price')}
+            value={order.price}
             onChange={handleChange}
             autocomplete="false"
             min="0"
             step="0.000001"
+            inputMode="decimal"
           />
           <OrderInput
             type="number"
+            pattern="\d*"
             id="amount"
             name="af2Km9q"
             label={t("amount")}
             asset={asset.name}
             decimals={asset.decimals}
             orderType={order.type}
-            value={roundValue('amount')}
+            value={order.amount}
             onChange={handleChange}
             autocomplete="false"
             min="0"
             step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
           />
           <AmountRange
             order={order}
@@ -323,7 +301,7 @@ function PlaceOrderView(props) {
             asset="ALGO"
             decimals={6}
             orderType={order.type}
-            value={roundValue('total')}
+            value={order.total}
             readOnly
             disabled
           />

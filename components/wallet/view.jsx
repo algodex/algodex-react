@@ -6,6 +6,7 @@ import Icon from 'components/icon'
 import SvgImage from 'components/svg-image'
 import useTranslation from "next-translate/useTranslation";
 
+import React, { useState } from 'react'
 import {
   Container,
   ButtonContainer,
@@ -44,7 +45,6 @@ function WalletView(props) {
       !isWalletActive(addr) && onSetActiveWallet(addr)
     }
   }
-
   const copyAddress = (address) => {
     navigator.clipboard.writeText(address).then(
       () => {
@@ -88,16 +88,20 @@ function WalletView(props) {
       </WalletRow>
     ))
   }
-
+  const [WalletButtonText, SetWalletButtonText] = useState(t("connect-wallet"))
+  const getButtonState = () => {
+    onConnectClick()
+    SetWalletButtonText(t("connect-another-wallet"))
+  }
   return (
     <Container>
       <ButtonContainer>
         <Button
           variant={getButtonVariant()}
-          onClick={onConnectClick}
+          onClick={getButtonState}
           data-testid="connect-wallet-btn"
         >
-          {t("connect-wallet-button")}
+          {WalletButtonText}
         </Button>
       </ButtonContainer>
       {isSignedIn ? (

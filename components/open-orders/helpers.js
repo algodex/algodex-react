@@ -18,11 +18,11 @@ export const mapOpenOrdersData = (data) => {
   }, {})
 
   const buyOrders = buyOrdersData.map((order) => {
-    const { assetId, formattedPrice, formattedASAAmount } = order
-
+    const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     return {
       /** @todo get date/time from API */
-      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
+      unix_time: unix_time,
       price: floatToFixed(formattedPrice),
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'BUY',
@@ -33,11 +33,12 @@ export const mapOpenOrdersData = (data) => {
   })
 
   const sellOrders = sellOrdersData.map((order) => {
-    const { assetId, formattedPrice, formattedASAAmount } = order
+    const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
 
     return {
       /** @todo get date/time from API */
-      date: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
+      unix_time: unix_time,
       price: floatToFixed(formattedPrice),
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
       type: 'SELL',
@@ -47,5 +48,7 @@ export const mapOpenOrdersData = (data) => {
     }
   })
 
-  return [...buyOrders, ...sellOrders]
+  const allOrders = [...buyOrders, ...sellOrders]
+  allOrders.sort( (a, b) => (a.unix_time < b.unix_time) ? 1 : -1 )
+  return allOrders
 }

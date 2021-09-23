@@ -5,6 +5,7 @@ import { Hydrate } from 'react-query/hydration'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
+import ReactGA from 'react-ga'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -67,11 +68,31 @@ const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
   }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: ${theme.colors.gray[700]};
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${theme.colors.gray[600]};
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${theme.colors.gray[500]};
+  }
+  ::-webkit-scrollbar-corner {
+    background: ${theme.colors.gray[700]};
+  }
 `
 
 export default function App({ Component, pageProps, err }) {
+  const TRACKING_ID = 'UA-195819772-1'
+  ReactGA.initialize(TRACKING_ID)
+  ReactGA.pageview('/')
   const [queryClient] = useState(() => new QueryClient())
-
   return (
     <>
       <GlobalStyle />

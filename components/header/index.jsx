@@ -58,15 +58,19 @@ export default function Header() {
           <NavTextLg>Support</NavTextLg>
         </ActiveLink>
         */}
-        <NavIcon color="gray.500">
+        {/* <NavIcon color="gray.500">
           <Bell />
         </NavIcon>
         <NavIcon color="gray.500">
           <User />
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
+        </NavIcon> */}
+        <Link href="/" locale="en">
+        <NavTextLg>
           EN <Flag countryCode="US" svg />
         </NavTextLg>
+        </Link>
   
 
         <NavTextLg onClick={async () => await setLanguage("es")}>
