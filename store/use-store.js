@@ -5,7 +5,6 @@ import defaultLang from 'lang/en.js'
 import Big from 'big.js'
 
 export const roundValue = (value, decimalLimit) => {
-  console.log('rounding', value)
   if (value === '' || value.slice(-1) === '0') {
     return value
   }
@@ -15,7 +14,6 @@ export const roundValue = (value, decimalLimit) => {
 
   if (hasDecimals && split[1].length >= decimalLimit) {
     const rounded = new Big(value).round(decimalLimit, Big.roundDown).toString()
-    console.log("rounded", rounded);
     return rounded
   }
 
