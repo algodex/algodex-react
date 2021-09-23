@@ -6,6 +6,7 @@ import { parseThemeColor } from '../../theme'
 const Svg = styled.svg`
   display: inline-block;
   vertical-align: middle;
+  cursor: pointer;
 
   ${({ color, use }) =>
     ICONS[use].format === 'data' &&
