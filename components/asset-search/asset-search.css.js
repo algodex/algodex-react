@@ -130,7 +130,8 @@ export const TableHeader = styled.th`
 export const TableContainer = styled.div`
   table {
     position: relative;
-    border-spacing: 0;
+    border-collapse: separate;
+    border-spacing: 10px 1px;
     border: none;
     width: 100%;
 

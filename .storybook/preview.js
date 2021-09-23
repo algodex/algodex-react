@@ -48,8 +48,8 @@ const GlobalStyle = createGlobalStyle`
     content: none;
   }
   table {
-    border-collapse: collapse;
-    border-spacing: 0;
+    border-collapse: separate;
+    border-spacing: 4px 1px;
   }
 
   html,
