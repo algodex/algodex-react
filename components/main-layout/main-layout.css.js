@@ -135,11 +135,11 @@ export const Main = styled.main`
 
 
   @media (min-width: 996px) {
-    padding: 0.5rem;
     height: 100%;
+    min-height: 900px;
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 240px 1fr 1fr 180px;
+    grid-template-rows: 240px 200px 300px 300px;
     grid-template-areas:
       'chart chart wallet'
       'chart chart trade'
@@ -155,40 +155,23 @@ export const Main = styled.main`
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr 280px;
-    grid-template-rows: auto 1fr 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
       'chart book wallet'
-      'chart book wallet'
       'chart book trade'
-      'orders history trade'
       'orders history trade';
   }
 
-  @media (min-width: 1024px) and (orientation: portrait) {
-    grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: auto 240px 1fr 1fr 280px;
-    grid-template-areas:
-      'assets assets assets'
-      'chart chart wallet'
-      'chart chart trade'
-      'book history trade'
-      'orders orders orders';
-  }
-
   @media (min-width: 1536px) {
-    grid-template-columns: 320px 1fr 320px 320px;
-    grid-template-rows: 240px 1fr 1fr 2fr;
+    grid-template-columns: 1fr 3fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
       'chart chart book wallet'
-      'chart chart book trade'
       'chart chart book trade'
       'orders orders history trade';
   }
 
-  @media (min-width: 1920px) {
-    grid-template-columns: 320px 1fr 320px 320px;
-  }
 }
 
 `
