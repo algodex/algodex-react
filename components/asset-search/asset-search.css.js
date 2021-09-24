@@ -147,9 +147,9 @@ export const TableContainer = styled.div`
       }
 
       &:nth-child(odd) {
-        td {
-          background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
-        }
+        // td {
+        //   background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
+        // }
       }
 
       &:nth-child(odd),

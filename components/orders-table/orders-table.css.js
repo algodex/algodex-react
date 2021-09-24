@@ -22,9 +22,10 @@ export const Container = styled.div`
       }
 
       &:nth-child(odd) {
-        td {
-          background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
-        }
+        // td {
+        //   background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
+        //   border: none;
+        // }
       }
 
       &:nth-child(odd),
@@ -41,7 +42,7 @@ export const Container = styled.div`
     td {
       margin: 0;
       padding: 0.5rem 0;
-      color: ${({ theme }) => theme.colors.gray['600']};
+      color: ${({ theme }) => theme.colors.gray['800']};
       font-size: 0.75rem;
       line-height: 1.25;
 
