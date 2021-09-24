@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
 
-export const mapTradeHistoryData = (data) => {
+export const mapTradeHistoryData = (data, { buyText = "BUY", sellText = "SELL"}) => {
   if (!data || !data.transactions || !data.allAssets) {
     return null
   }
@@ -15,7 +15,7 @@ export const mapTradeHistoryData = (data) => {
 
   const tradeHistory = tradeHistoryData.map(
     ({ unix_time, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
-      const side = tradeType === 'buyASA' ? 'BUY' : 'SELL'
+      const side = tradeType === 'buyASA' ? buyText : sellText
 
       return {
         date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),

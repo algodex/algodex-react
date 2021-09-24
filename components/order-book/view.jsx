@@ -15,9 +15,11 @@ import {
   BuyOrders,
   CurrentPrice
 } from './order-book.css'
+import useTranslation from 'next-translate/useTranslation'
 
 function OrderBookView(props) {
   const { price, priceChange, decimals, sellData, buyData } = props
+  const { t } = useTranslation("common")
 
   const setOrder = useStore((state) => state.setOrder)
 
@@ -77,10 +79,10 @@ function OrderBookView(props) {
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Amount
+          {t("amount")}
         </BodyCopyTiny>
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Total
+          {t("total")}
         </BodyCopyTiny>
       </Header>
 

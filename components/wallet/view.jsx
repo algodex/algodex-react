@@ -4,7 +4,9 @@ import { HeaderSm, BodyCopySm, BodyCopyTiny, LabelMd } from 'components/type'
 import Button from 'components/button'
 import Icon from 'components/icon'
 import SvgImage from 'components/svg-image'
-import React, { useState } from 'react'
+import useTranslation from "next-translate/useTranslation";
+
+import React from 'react'
 import {
   Container,
   ButtonContainer,
@@ -19,6 +21,8 @@ import {
 
 function WalletView(props) {
   const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
+
+  const { t } = useTranslation("wallet");
 
   const getButtonVariant = () => {
     return isSignedIn ? 'secondary' : 'primary'
@@ -84,11 +88,13 @@ function WalletView(props) {
       </WalletRow>
     ))
   }
-  const [WalletButtonText, SetWalletButtonText] = useState('Connect Wallet ')
+
   const getButtonState = () => {
     onConnectClick()
-    SetWalletButtonText('Connect Another Wallet')
   }
+
+  const WalletButtonText = wallets.length > 0 ? t("connect-another-wallet-button") : t("connect-wallet-button");
+
   return (
     <Container>
       <ButtonContainer>
@@ -103,9 +109,9 @@ function WalletView(props) {
       {isSignedIn ? (
         <>
           <Header>
-            <BodyCopyTiny color="gray.500">Wallet</BodyCopyTiny>
+            <BodyCopyTiny color="gray.500">{t("wallet")}</BodyCopyTiny>
             <BodyCopyTiny color="gray.500" textAlign="right">
-              Balance
+              {t("balance")}
             </BodyCopyTiny>
           </Header>
           <Wallets>
@@ -118,10 +124,10 @@ function WalletView(props) {
             <SvgImage use="walletArrow" h={4} color="gray.600" />
           </Arrow>
           <HeaderSm color="gray.100" m={0} mb={16}>
-            Start by connecting an Algorand wallet
+            {t("start-by")}
           </HeaderSm>
           <BodyCopySm color="gray.500" m={0}>
-            Once you&apos;ve connected a wallet using MyAlgo you can begin trading
+            {t("once-connected")}
           </BodyCopySm>
         </EmptyState>
       )}

@@ -14,6 +14,7 @@ import { convertToAsaUnits } from 'services/convert'
 import { useStore } from 'store/use-store'
 import WalletService from 'services/wallet'
 import detectMobileDisplay from "utils/detectMobileDisplay";
+import useTranslation from 'next-translate/useTranslation';
 
 import {
   Container,
@@ -42,7 +43,7 @@ const DEFAULT_ORDER = {
 
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
-  const lang = useStore(state => state.lang);
+  const { t } = useTranslation("place-order");
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
@@ -147,19 +148,19 @@ function PlaceOrderView(props) {
     const orderPromise = placeOrder(orderData)
 
     toast.promise(orderPromise, {
-      loading: 'Awaiting confirmation...',
-      success: 'Order successfully placed',
+      loading: t("awaiting-confirmation"),
+      success: t("order-success"),
       error: err => {
         if (/PopupOpenError|blocked/.test(err)) {
-          const popupError = detectMobileDisplay() ? lang.ORDER.POPUP_ERROR_MESSAGE_MOBILE : lang.ORDER.POPUP_ERROR_MESSAGE
+          const popupError = detectMobileDisplay() ? t("disable-popup-mobile") :t("disable-popup")
           return popupError;
         } 
 
         if (/Operation cancelled/i.test(err)) {
-          return lang.ORDER.POPUP_CANCELLED;
+          return t("order-cancelled");
         }
 
-        return lang.ORDER.ERROR_MESSAGE;
+        return t("error-placing-order");
       }
     })
 
@@ -200,8 +201,8 @@ function PlaceOrderView(props) {
 
   const renderSubmit = () => {
     const buttonProps = {
-      buy: { variant: 'primary', text: `Buy ${asset.name}` },
-      sell: { variant: 'danger', text: `Sell ${asset.name}` }
+      buy: { variant: 'primary', text: `${t("buy")} ${asset.name}` },
+      sell: { variant: 'danger', text: `${t("sell")} ${asset.name}` }
     }
 
     const isBelowMinOrderAmount = () => {
@@ -244,7 +245,7 @@ function PlaceOrderView(props) {
       // @todo: make this better, this is a placeholder
       return (
         <BodyCopy color="gray.500" textAlign="center" m={32}>
-          Insufficient balance
+          {t("insufficient-balance")}
         </BodyCopy>
       )
     }
@@ -257,7 +258,7 @@ function PlaceOrderView(props) {
             pattern="\d*"
             id="price"
             name="af2Km9q"
-            label="Price"
+            label={t("price")}
             asset="ALGO"
             decimals={6}
             orderType={order.type}
@@ -273,7 +274,7 @@ function PlaceOrderView(props) {
             pattern="\d*"
             id="amount"
             name="af2Km9q"
-            label="Amount"
+            label={t("amount")}
             asset={asset.name}
             decimals={asset.decimals}
             orderType={order.type}
@@ -295,7 +296,7 @@ function PlaceOrderView(props) {
           <OrderInput
             type="number"
             id="total"
-            label="Total"
+            label={t("total")}
             asset="ALGO"
             decimals={6}
             orderType={order.type}
@@ -321,7 +322,7 @@ function PlaceOrderView(props) {
       // @todo: make this better, this is a placeholder
       return (
         <BodyCopy color="gray.500" textAlign="center" m={16}>
-          Not signed in
+          {t("not-signed-in")}
         </BodyCopy>
       )
     }
@@ -337,7 +338,7 @@ function PlaceOrderView(props) {
             onChange={(e) => handleChange(e, 'type')}
           />
           <BuyButton as="label" htmlFor="type-buy">
-            Buy
+            {t("buy")}
           </BuyButton>
           <ToggleInput
             type="radio"
@@ -347,13 +348,13 @@ function PlaceOrderView(props) {
             onChange={(e) => handleChange(e, 'type')}
           />
           <SellButton as="label" htmlFor="type-sell">
-            Sell
+            {t("sell")}
           </SellButton>
         </ToggleWrapper>
 
         <AvailableBalance>
           <BodyCopyTiny color="gray.500" mb={10}>
-            Available Balance
+            {t("available-balance")}
           </BodyCopyTiny>
           <BalanceRow>
             <LabelMd color="gray.400" fontWeight="500">
@@ -374,7 +375,7 @@ function PlaceOrderView(props) {
         </AvailableBalance>
 
         <Tabs orderType={order.type}>
-          <Tab isActive>Limit</Tab>
+          <Tab isActive>{t("limit")}</Tab>
         </Tabs>
 
         {renderLimitOrder()}
@@ -386,7 +387,7 @@ function PlaceOrderView(props) {
     <Container data-testid="place-order">
       <Header>
         <HeaderCaps color="gray.500" mb={1}>
-          Place Order
+          {t("place-order")}
         </HeaderCaps>
       </Header>
       {renderForm()}

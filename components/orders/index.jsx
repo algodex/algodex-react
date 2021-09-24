@@ -4,8 +4,10 @@ import PropTypes from 'prop-types'
 import Assets from 'components/assets'
 import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
 function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
+  const { t } = useTranslation("orders");
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
   const OPEN_ORDERS_PANEL = 'open-orders'
@@ -32,19 +34,19 @@ function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
           isActive={selectedPanel === OPEN_ORDERS_PANEL}
           onClick={() => setSelectedPanel(OPEN_ORDERS_PANEL)}
         >
-          Open Orders
+          {t("open-orders")}
         </Tab>
         <Tab
           isActive={selectedPanel === ORDER_HISTORY_PANEL}
           onClick={() => setSelectedPanel(ORDER_HISTORY_PANEL)}
         >
-          Order History
+          {t("order-history")}
         </Tab>
         <Tab
           isActive={selectedPanel === ASSETS_PANEL}
           onClick={() => setSelectedPanel(ASSETS_PANEL)}
         >
-          Assets
+          {t("assets")}
         </Tab>
       </Header>
       {renderPanel(selectedPanel)}

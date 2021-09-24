@@ -1,0 +1,11 @@
+{
+    "header-about": "Acerca de",
+    "header-trade": "Comercio",
+    "header-docs": "documentos",
+    "header-support": "soporte",
+    "price": "Precio",
+    "amount": "Monto",
+    "total": "Total",
+    "time": "Tiempo",
+    "no-trades-completed": "No se completaron operaciones"
+}

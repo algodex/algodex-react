@@ -5,7 +5,7 @@ import Header from './index'
 jest.mock('next/router', () => ({
   useRouter() {
     return {
-      asPath: () => '/trade/15322902'
+      asPath: '/trade/15322902'
     }
   }
 }))

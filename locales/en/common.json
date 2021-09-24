@@ -1,0 +1,13 @@
+{
+    "header-about": "about",
+    "header-trade": "trade",
+    "header-docs": "docs",
+    "header-support": "support",
+    "price": "Price",
+    "amount": "Amount",
+    "total": "Total",
+    "time": "Time",
+    "no-trades-completed": "No trades completed",
+    "candle": "candle",
+    "area": "area"
+}

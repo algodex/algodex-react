@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import Icon from 'components/icon'
 import { BodyCopyTiny } from 'components/type'
+import useTranslation from 'next-translate/useTranslation'
 
 const Text = styled(BodyCopyTiny)`
   display: flex;
@@ -14,9 +15,10 @@ const Text = styled(BodyCopyTiny)`
 `
 
 export default function PriceHeader() {
+  const { t } = useTranslation("common");
   return (
     <Text>
-      Price
+      {t("price")}
       <Icon use="algoLogo" size={0.625} />
     </Text>
   )

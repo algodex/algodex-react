@@ -1,7 +1,6 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import produce from 'immer'
-import defaultLang from 'lang/en.js'
 import Big from 'big.js'
 
 export const roundValue = (value, decimalLimit) => {
@@ -114,9 +113,6 @@ export const useStore = create(
     chartMode: 'candle',
     setChartMode: (input) => set({ chartMode: input }),
 
-    // Language Object
-    lang: defaultLang,
-    setLang: (lang) => set({ lang })
   }))
 )
 

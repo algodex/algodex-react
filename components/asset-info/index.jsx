@@ -17,8 +17,10 @@ import {
   ExternalLinkIcon,
   ButtonText
 } from './asset-info.css'
+import useTranslation from 'next-translate/useTranslation'
 
 export default function AssetInfo() {
+  const { t } = useTranslation("assets");
   const asset = useStore((state) => state.asset)
 
   const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
@@ -63,7 +65,7 @@ export default function AssetInfo() {
         {asset.isTraded ? (
           <ButtonText type="button" onClick={() => setShowAssetInfo(false)}>
             <ArrowLeft />
-            <div>Back to Chart</div>
+            <div>{t("back-to-chart")}</div>
           </ButtonText>
         ) : null}
         <HeaderContainer>
@@ -75,7 +77,7 @@ export default function AssetInfo() {
         <InfoList>
           <InfoItem>
             <BodyCopyTiny as="dt" color="gray.500">
-              Description
+              {t("description")}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
               {description}
@@ -83,7 +85,7 @@ export default function AssetInfo() {
           </InfoItem>
           <InfoItem halfWidth>
             <BodyCopyTiny as="dt" color="gray.500">
-              Circulating Supply
+              {t("circulating-supply")}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.info.supply.circulating}
@@ -91,7 +93,7 @@ export default function AssetInfo() {
           </InfoItem>
           <InfoItem halfWidth>
             <BodyCopyTiny as="dt" color="gray.500">
-              Total Supply
+              {t("total-supply")}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.info.supply.total}

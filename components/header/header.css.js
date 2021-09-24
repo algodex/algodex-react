@@ -63,18 +63,9 @@ export const Flag = styled(ReactCountryFlag)`
 
 export const Navigation = styled.nav`
   display: flex;
-  justify-content: space-between;
-  width: 50%;
+  justify-content: flex-end;
+  width: 75%;
   align-items: center;
-
-
-  @media (min-width: 1536px) {
-    width: 40%;
-  }
-
-  @media (min-width: 1920px) {
-    width: 30%;
-  }
 `
 
 export const NavTextLg = styled.span`
@@ -120,6 +111,7 @@ export const NavTextLg = styled.span`
   @media (min-width: 1024px) {
     color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
     display: flex;
+    margin: 0 15px;
   }
 `
 
@@ -261,4 +253,32 @@ export const MenuContainer = styled.div`
   @media (min-width: 1024px) {
     display: none;
   }
+`
+
+export const LanguagesContainer = styled.ul`
+  width: 100px;
+  &:hover, &:focus-within {
+    ul {
+      position: absolute;
+      display: block;
+      top: 20px;
+      width: 100px;
+    }
+  }
+`
+
+export const LanguageItem = styled.li`
+  display: block;
+  height: 50px;
+
+  span {
+    line-height: 50px;
+  }
+`
+export const LanguageDropDown = styled.ul`
+  background-color:  ${({ theme }) => theme.colors.gray[900]};
+  display: none;
+  max-height: 500px;
+  overflow: scroll;
+
 `

@@ -8,10 +8,12 @@ import { floatToFixed } from 'services/display'
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+import useTranslation from 'next-translate/useTranslation'
 dayjs.extend(localizedFormat)
 
 function TradeHistoryView(props) {
   const { asset, tradesData } = props
+  const { t } = useTranslation("common");
 
   const hasTradeHistory = tradesData.length > 0
 
@@ -66,10 +68,10 @@ function TradeHistoryView(props) {
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Amount
+          {t("amount")}
         </BodyCopyTiny>
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          Time
+          {t("time")}
         </BodyCopyTiny>
       </Header>
       <Trades>
@@ -78,7 +80,7 @@ function TradeHistoryView(props) {
             renderHistory()
           ) : (
             <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
-              No trades completed
+              {t("no-trades-completed")}
             </BodyCopyTiny>
           )}
         </TradesWrapper>

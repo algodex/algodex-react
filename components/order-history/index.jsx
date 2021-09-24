@@ -6,6 +6,7 @@ import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
 import { fetchTradeHistoryByAddress } from 'lib/api'
 import { mapTradeHistoryData } from './helpers'
+import useTranslation from 'next-translate/useTranslation'
 
 import {
   OrderDate,
@@ -29,6 +30,7 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
 function OrderHistory() {
+  const { t, lang } = useTranslation("orders");
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
   const { data, isLoading, isError } = useQuery(
@@ -40,38 +42,38 @@ function OrderHistory() {
     }
   )
 
-  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data, { buyText: t("buy"), sellText: t("sell")}), [data, lang])
 
   const columns = useMemo(
     () => [
       {
-        Header: 'Date',
+        Header: t("date"),
         accessor: 'date',
         Cell: OrderDateCell
       },
       {
-        Header: 'Pair',
+        Header: t("pair"),
         accessor: 'pair',
         Cell: OrderPairCell
       },
       {
-        Header: 'Side',
+        Header: t("side"),
         accessor: 'side',
         Cell: OrderSideCell
       },
 
       {
-        Header: 'Price (ALGO)',
+        Header: t("price") + ' (ALGO)',
         accessor: 'price',
         Cell: OrderPriceCell
       },
       {
-        Header: 'Amount',
+        Header: t("amount"),
         accessor: 'amount',
         Cell: OrderAmountCell
       }
     ],
-    []
+    [lang]
   )
 
   const renderStatus = () => {
@@ -80,8 +82,8 @@ function OrderHistory() {
     }
     return (
       <StatusContainer>
-        {isLoading && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {isError && <BodyCopySm color="gray.400">Something went wrong.</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">{t.error}</BodyCopySm>}
       </StatusContainer>
     )
   }

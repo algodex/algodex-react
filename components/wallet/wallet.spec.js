@@ -18,7 +18,7 @@ describe('Wallet', () => {
         />
       )
 
-      expect(getByText(/Start by connecting an Algorand wallet/i)).toBeVisible()
+      expect(getByText(/wallet:start-by/i)).toBeVisible()
     })
 
     it('should show primary connect button', () => {

@@ -1,0 +1,8 @@
+{
+  "connect-wallet-button": "Connect Wallet",
+  "connect-another-wallet-button": "Connect Another Wallet",
+  "wallet": "Wallet",
+  "balance": "Balance",
+  "start-by": "Start by connecting an Algorand wallet",
+  "once-connected": "Once you've connected a wallet using MyAlgo you can begin trading"
+}

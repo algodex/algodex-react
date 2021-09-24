@@ -9,6 +9,8 @@ import OrderService from 'services/order'
 import { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
 
+import useTranslation from 'next-translate/useTranslation'
+
 import {
   OrderDate,
   OrderPrice,
@@ -24,6 +26,7 @@ import {
 } from './open-orders.css'
 
 function OpenOrders() {
+  const { t, lang } = useTranslation("orders");
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
@@ -81,9 +84,9 @@ function OpenOrders() {
         )
 
         toast.promise(cancelOrderPromise, {
-          loading: 'Awaiting confirmation...',
-          success: 'Order successfully cancelled',
-          error: 'Error cancelling order'
+          loading: t("awaiting-confirmation"),
+          success: t("order-cancelled"),
+          error: t("error-cancelling")
         })
 
         try {
@@ -108,32 +111,32 @@ function OpenOrders() {
   const columns = useMemo(
     () => [
       {
-        Header: 'Date',
+        Header: t("date"),
         accessor: 'date',
         Cell: OrderDateCell
       },
       {
-        Header: 'Pair',
+        Header: t("pair"),
         accessor: 'pair',
         Cell: OrderPairCell
       },
       {
-        Header: 'Price (ALGO)',
+        Header: t("price") + ' (ALGO)',
         accessor: 'price',
         Cell: OrderPriceCell
       },
       {
-        Header: 'Type',
+        Header: t("type"),
         accessor: 'type',
         Cell: OrderTypeCell
       },
       {
-        Header: 'Amount',
+        Header: t("amount"),
         accessor: 'amount',
         Cell: OrderAmountCell
       },
       {
-        Header: 'Status',
+        Header: t("status"),
         accessor: 'status',
         Cell: OrderStatusCell
       },
@@ -144,7 +147,7 @@ function OpenOrders() {
         disableSortBy: true
       }
     ],
-    [OrderCancelCell]
+    [OrderCancelCell, lang]
   )
 
   const renderStatus = () => {
@@ -153,8 +156,8 @@ function OpenOrders() {
     }
     return (
       <StatusContainer>
-        {isLoading && <BodyCopyTiny color="gray.600">Loading&hellip;</BodyCopyTiny>}
-        {isError && <BodyCopySm color="gray.400">Something went wrong.</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">{t("error")}</BodyCopySm>}
       </StatusContainer>
     )
   }

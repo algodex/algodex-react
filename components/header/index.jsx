@@ -1,8 +1,10 @@
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import { useState } from 'react'
-import { Bell, User } from 'react-feather'
 import ActiveLink from 'components/active-link'
+import useTranslation from 'next-translate/useTranslation'
+import { useRouter } from 'next/router'
+import i18n from '../../i18n.json'
 
 import {
   Container,
@@ -11,14 +13,25 @@ import {
   Navigation,
   NavTextLg,
   NavTextSm,
-  NavIcon,
   Flag,
   MobileNavigation,
-  MobileNavContainer
+  MobileNavContainer,
+  LanguagesContainer,
+  LanguageItem,
+  LanguageDropDown
 } from './header.css'
+
+// Map locale code to the flag used in 'react-country-flag'
+const localeToFlags = {
+  en: 'US',
+  es: 'ES'
+}
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { asPath, locale } = useRouter()
+
+  const { t } = useTranslation('common')
 
   return (
     <Container data-testid="header-container">
@@ -29,23 +42,20 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <a
-          target="_blank"
-          href="//about.algodex.com"
-        >
-        <NavTextLg>About</NavTextLg>
+        <a target="_blank" href="//about.algodex.com">
+          <NavTextLg>{t('header-about')}</NavTextLg>
         </a>
         <ActiveLink href="/trade" matches={/^\/trade/}>
-          <NavTextLg>Trade</NavTextLg>
+          <NavTextLg>{t('header-trade')}</NavTextLg>
         </ActiveLink>
         <a
           target="_blank"
           href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
         >
-          <NavTextLg>Docs</NavTextLg>
+          <NavTextLg>{t('header-docs')}</NavTextLg>
         </a>
         <a target="_blank" href="//about.algodex.com/support/">
-          <NavTextLg>Support</NavTextLg>
+          <NavTextLg>{t('header-support')}</NavTextLg>
         </a>
         {/*
         <ActiveLink href="/wallet">
@@ -60,10 +70,33 @@ export default function Header() {
         </NavIcon>
         <NavIcon color="gray.500">
           <User />
+        </NavIcon>
+        <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
-        <NavTextLg>
-          EN <Flag countryCode="US" svg />
-        </NavTextLg>
+
+        <LanguagesContainer>
+          <Link href={asPath} locale={locale}>
+            <a href="#">
+              <NavTextLg>
+                {locale} <Flag countryCode={localeToFlags[locale]} svg />
+              </NavTextLg>
+            </a>
+          </Link>
+
+          <LanguageDropDown>
+            {i18n.locales.map((localeCd) => (
+              <LanguageItem key={localeCd}>
+                <Link href={asPath} locale={localeCd}>
+                  <a href="#">
+                    <NavTextLg>
+                      {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+                    </NavTextLg>
+                  </a>
+                </Link>
+              </LanguageItem>
+            ))}
+          </LanguageDropDown>
+        </LanguagesContainer>
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
