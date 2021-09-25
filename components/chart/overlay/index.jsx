@@ -23,7 +23,7 @@ function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
 
   const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
-  const currentPrice = !!asset.price ? new Big(asset.price) : 0
+  const currentPrice = !!asset.price ? new Big(asset.price) : new Big(0)
   const changeAmt = !!asset.priceChange24hr ? currentPrice.div(new Big(1+asset.priceChange24hr)).toString() : "0"
   const changePct = !!asset.priceChange24hr ? new Big(asset.priceChange24hr) : new Big(0)
   
