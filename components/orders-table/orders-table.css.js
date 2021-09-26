@@ -14,6 +14,12 @@ export const Container = styled.div`
     border-spacing: 0;
     border: none;
     width: 100%;
+    min-width: 600px;
+    overflow: scroll;
+
+    @media only (min-width: 996px) {
+      min-width: unset;
+    }
 
     tr {
       &:hover {
