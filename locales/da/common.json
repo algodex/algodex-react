@@ -1,0 +1,16 @@
+{
+    "header-about": "Over",
+    "header-trade": "Handelen",
+    "header-docs": "Documenten",
+    "header-support": "Hulp",
+    "price": "Prijs",
+    "amount": "Hoeveelheid",
+    "total": "Totaal",
+    "time": "Tijd",
+    "no-trades-completed": "Geen transactie voltooid",
+    "mobilefooter-CHART":"Grafiek",
+    "mobilefooter-BOOK":"Boek",
+    "mobilefooter-TRADE":"Handelen",
+    "mobilefooter-ORDERS":"Orders",
+    "mobilefooter-WALLET":"Portemonee"
+}

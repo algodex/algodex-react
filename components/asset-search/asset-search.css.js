@@ -217,6 +217,7 @@ export const TableContainer = styled.div`
             text-transform: uppercase;
             font-weight: 500;
             user-select: none;
+            word-break: break-all;
 
             ${SortIcon} {
               position: relative;
