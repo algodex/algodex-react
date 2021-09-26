@@ -9,5 +9,10 @@
     "time": "Time",
     "no-trades-completed": "No trades completed",
     "candle": "candle",
-    "area": "area"
+    "area": "area",
+    "mobilefooter-CHART":"CHART",
+    "mobilefooter-BOOK":"BOOK",
+    "mobilefooter-TRADE":"TRADE",
+    "mobilefooter-ORDERS":"ORDERS",
+    "mobilefooter-WALLET":"WALLET"
 }

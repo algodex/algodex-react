@@ -7,5 +7,10 @@
     "amount": "Monto",
     "total": "Total",
     "time": "Tiempo",
-    "no-trades-completed": "No se completaron operaciones"
+    "no-trades-completed": "No se completaron operaciones",
+    "mobilefooter-CHART":"GRÁFICO",
+    "mobilefooter-BOOK":"LIBRO DE ÓRDENES",
+    "mobilefooter-TRADE":"INTERCAMBIAR",
+    "mobilefooter-ORDERS":"ÓRDENES",
+    "mobilefooter-WALLET":"BILLETERA"
 }

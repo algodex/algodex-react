@@ -15,7 +15,7 @@ import { demoOpenOrderData } from 'components/open-orders/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
 import OrderBookPrice from 'components/order-book-price'
-
+import useTranslation from 'next-translate/useTranslation'
 import {
   AssetsSection,
   ChartSection,
@@ -40,7 +40,7 @@ const DEMO_ASSETS_DATA = demoAssetsData
 
 function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
-
+  const { t } = useTranslation("common");
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const showOrderBook = asset.isTraded || asset.hasOrders
@@ -117,22 +117,22 @@ function MainLayout(props) {
           <ul>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
-                Chart
+              {t("mobilefooter-CHART")}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
-                Book
+              {t("mobilefooter-BOOK")}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
-                Trade
+              {t("mobilefooter-TRADE")}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
-                Orders
+              {t("mobilefooter-ORDERS")}
               </MobileMenuButton>
             </li>
             {/* <li>
@@ -142,7 +142,7 @@ function MainLayout(props) {
               </li> */}
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
-                WALLET
+              {t("mobilefooter-WALLET")}
               </MobileMenuButton>
             </li>
           </ul>
