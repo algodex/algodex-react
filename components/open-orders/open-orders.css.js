@@ -16,7 +16,7 @@ export const TableWrapper = styled.div`
   padding: 0;
   position: absolute;
   inset: 0;
-  overflow: hidden scroll;
+  overflow: scroll;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
