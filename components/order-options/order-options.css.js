@@ -61,7 +61,6 @@ export const Container = styled.div`
 `
 
 export const ExpandContentWrapper = styled.div`
-  position: absolute;
   inset: -0.5rem;
   padding: 0.5rem;
   overflow-y: hidden;
