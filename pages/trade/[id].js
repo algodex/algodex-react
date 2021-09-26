@@ -20,6 +20,7 @@ export default function Home() {
   const router = useRouter()
   const id = router.query.id
   const isValidId = /^\d+$/.test(id)
+  const adminWalletAddr = router.query.adminWalletAddr;
 
   // Redirect to LAMP if `id` is invalid (contains non-numerical characters)
   useEffect(() => {
@@ -41,11 +42,14 @@ export default function Home() {
   const assetStore = useStore((state) => state.asset)
 
   const walletAddresses = useMemo(() => {
+    if (adminWalletAddr) {
+      return [adminWalletAddr];
+    }
     if (!!addresses) {
       return addresses
     }
     return !!wallets ? wallets.map((w) => w.address) : []
-  }, [addresses, wallets])
+  }, [addresses, wallets, adminWalletAddr])
 
   // fetch wallet balances from blockchain
   const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
