@@ -1,5 +1,5 @@
 {
-  "locales": ["en", "es"],
+  "locales": ["da", "en", "es"],
   "defaultLocale": "en",
   "pages": {
     "*": ["common", "wallet", "place-order", "assets", "orders", "chart"],

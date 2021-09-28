@@ -24,7 +24,8 @@ import {
 // Map locale code to the flag used in 'react-country-flag'
 const localeToFlags = {
   en: 'US',
-  es: 'ES'
+  es: 'ES',
+  da: "NL"
 }
 
 export default function Header() {
