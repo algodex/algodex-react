@@ -47,6 +47,9 @@ function PlaceOrderView(props) {
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
+  const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance);
+
+
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -85,6 +88,17 @@ function PlaceOrderView(props) {
       ...DEFAULT_ORDER
     })
   }, [asset.id, activeWalletAddress, setOrder])
+
+  useEffect(async () => {
+    if (activeWallet) {
+      const minBalance = await WalletService.getMinWalletBalance(activeWallet);
+      const total = new Big(algoBalance);
+      const min = new Big(minBalance).div(1000000).plus(0.1);
+      const max = total.minus(min);
+      setMaxSpendableAlgo(max.toString());
+    }
+
+  }, [activeWallet, algoBalance])
 
   const handleChange = (e, field) => {
     setOrder({
@@ -218,7 +232,7 @@ function PlaceOrderView(props) {
 
     const isBalanceExceeded = () => {
       if (order.type === 'buy') {
-        return new Big(order.price).times(order.amount).gt(algoBalance)
+        return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
       }
       return new Big(order.amount).gt(asaBalance)
     }
@@ -287,7 +301,7 @@ function PlaceOrderView(props) {
           />
           <AmountRange
             order={order}
-            algoBalance={algoBalance}
+            algoBalance={maxSpendableAlgo}
             asaBalance={asaBalance}
             asset={asset}
             // txnFee={txnFee}
@@ -361,7 +375,7 @@ function PlaceOrderView(props) {
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {algoBalance.toFixed(6)}
+              {maxSpendableAlgo} / {algoBalance.toFixed(6)}
             </LabelMd>
           </BalanceRow>
           <BalanceRow>
