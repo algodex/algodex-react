@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
-import { useQueryClient } from "react-query";
+import { useQueryClient } from 'react-query'
 import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
@@ -13,8 +13,10 @@ import OrderService from 'services/order'
 import { convertToAsaUnits } from 'services/convert'
 import { useStore } from 'store/use-store'
 import WalletService from 'services/wallet'
-import detectMobileDisplay from "utils/detectMobileDisplay";
-import useTranslation from 'next-translate/useTranslation';
+import detectMobileDisplay from 'utils/detectMobileDisplay'
+import useTranslation from 'next-translate/useTranslation'
+import { usePopperTooltip } from 'react-popper-tooltip'
+import 'react-popper-tooltip/dist/styles.css'
 
 import {
   Container,
@@ -43,13 +45,14 @@ const DEFAULT_ORDER = {
 
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
-  const { t } = useTranslation("place-order");
+  const { t } = useTranslation('place-order')
+  const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
+    usePopperTooltip()
+
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
-  const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance);
-
-
+  const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -77,8 +80,7 @@ function PlaceOrderView(props) {
   const setOrder = useStore((state) => state.setOrder)
 
   // Get reference to query client to clear queries later
-  const queryClient = useQueryClient();
-
+  const queryClient = useQueryClient()
 
   /**
    * When asset or active wallet changes, reset the form
@@ -90,14 +92,18 @@ function PlaceOrderView(props) {
   }, [asset.id, activeWalletAddress, setOrder])
 
   useEffect(async () => {
+    let isSubscribed = true
     if (activeWallet) {
-      const minBalance = await WalletService.getMinWalletBalance(activeWallet);
-      const total = new Big(algoBalance);
-      const min = new Big(minBalance).div(1000000).plus(0.1);
-      const max = total.minus(min);
-      setMaxSpendableAlgo(max.toString());
+      const minBalance = await WalletService.getMinWalletBalance(activeWallet)
+      if (isSubscribed) {
+        const total = new Big(algoBalance)
+        const min = new Big(minBalance).div(1000000).plus(0.1)
+        const max = total.minus(min)
+        setMaxSpendableAlgo(max.toString())
+      }
     }
 
+    return () => (isSubscribed = false)
   }, [activeWallet, algoBalance])
 
   const handleChange = (e, field) => {
@@ -121,26 +127,27 @@ function PlaceOrderView(props) {
   }
 
   const checkPopupBlocker = () => {
-      let havePopupBlockers = ('' + window.open).indexOf('[native code]') === -1;
-      return havePopupBlockers;
+    let havePopupBlockers = ('' + window.open).indexOf('[native code]') === -1
+    return havePopupBlockers
   }
-
 
   const handleSubmit = async (e) => {
     console.log('order submitted')
 
     e.preventDefault()
     if (checkPopupBlocker()) {
-      toast.error('Please disable your popup blocker (likely in the top-right of your browser window)');
-      return;
+      toast.error(
+        'Please disable your popup blocker (likely in the top-right of your browser window)'
+      )
+      return
     }
-    const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet);
-    console.log({activeWallet});
-    if ((activeWallet.balance*1000000) < minWalletBalance + 500001) {
-      toast.error('Please fund your wallet with more ALGO before placing orders!');
-      return;
+    const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
+    console.log({ activeWallet })
+    if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
+      toast.error('Please fund your wallet with more ALGO before placing orders!')
+      return
     }
-    console.log({minWalletBalance});
+    console.log({ minWalletBalance })
 
     setStatus((prev) => ({ ...prev, submitting: true }))
 
@@ -162,19 +169,19 @@ function PlaceOrderView(props) {
     const orderPromise = placeOrder(orderData)
 
     toast.promise(orderPromise, {
-      loading: t("awaiting-confirmation"),
-      success: t("order-success"),
-      error: err => {
+      loading: t('awaiting-confirmation'),
+      success: t('order-success'),
+      error: (err) => {
         if (/PopupOpenError|blocked/.test(err)) {
-          const popupError = detectMobileDisplay() ? t("disable-popup-mobile") :t("disable-popup")
-          return popupError;
-        } 
-
-        if (/Operation cancelled/i.test(err)) {
-          return t("order-cancelled");
+          const popupError = detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+          return popupError
         }
 
-        return t("error-placing-order");
+        if (/Operation cancelled/i.test(err)) {
+          return t('order-cancelled')
+        }
+
+        return t('error-placing-order')
       }
     })
 
@@ -194,19 +201,18 @@ function PlaceOrderView(props) {
       })
 
       // Invalidate Queries
-      queryClient.invalidateQueries("searchResults");
-
+      queryClient.invalidateQueries('searchResults')
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
 
       if (/PopupOpenError|blocked/.test(err)) {
-        return;
+        return
       }
 
       // ALG-417 Don't capture user initiated cancels
       if (/Operation cancelled/i.test(err)) {
-        return;
+        return
       }
 
       Sentry.captureException(err)
@@ -215,8 +221,8 @@ function PlaceOrderView(props) {
 
   const renderSubmit = () => {
     const buttonProps = {
-      buy: { variant: 'primary', text: `${t("buy")} ${asset.name}` },
-      sell: { variant: 'danger', text: `${t("sell")} ${asset.name}` }
+      buy: { variant: 'primary', text: `${t('buy')} ${asset.name}` },
+      sell: { variant: 'danger', text: `${t('sell')} ${asset.name}` }
     }
 
     const isBelowMinOrderAmount = () => {
@@ -259,7 +265,7 @@ function PlaceOrderView(props) {
       // @todo: make this better, this is a placeholder
       return (
         <BodyCopy color="gray.500" textAlign="center" m={32}>
-          {t("insufficient-balance")}
+          {t('insufficient-balance')}
         </BodyCopy>
       )
     }
@@ -272,7 +278,7 @@ function PlaceOrderView(props) {
             pattern="\d*"
             id="price"
             name="af2Km9q"
-            label={t("price")}
+            label={t('price')}
             asset="ALGO"
             decimals={6}
             orderType={order.type}
@@ -288,7 +294,7 @@ function PlaceOrderView(props) {
             pattern="\d*"
             id="amount"
             name="af2Km9q"
-            label={t("amount")}
+            label={t('amount')}
             asset={asset.name}
             decimals={asset.decimals}
             orderType={order.type}
@@ -310,7 +316,7 @@ function PlaceOrderView(props) {
           <OrderInput
             type="number"
             id="total"
-            label={t("total")}
+            label={t('total')}
             asset="ALGO"
             decimals={6}
             orderType={order.type}
@@ -336,7 +342,7 @@ function PlaceOrderView(props) {
       // @todo: make this better, this is a placeholder
       return (
         <BodyCopy color="gray.500" textAlign="center" m={16}>
-          {t("not-signed-in")}
+          {t('not-signed-in')}
         </BodyCopy>
       )
     }
@@ -352,7 +358,7 @@ function PlaceOrderView(props) {
             onChange={(e) => handleChange(e, 'type')}
           />
           <BuyButton as="label" htmlFor="type-buy">
-            {t("buy")}
+            {t('buy')}
           </BuyButton>
           <ToggleInput
             type="radio"
@@ -362,20 +368,26 @@ function PlaceOrderView(props) {
             onChange={(e) => handleChange(e, 'type')}
           />
           <SellButton as="label" htmlFor="type-sell">
-            {t("sell")}
+            {t('sell')}
           </SellButton>
         </ToggleWrapper>
 
         <AvailableBalance>
           <BodyCopyTiny color="gray.500" mb={10}>
-            {t("available-balance")}
+            {t('available-balance')}
           </BodyCopyTiny>
           <BalanceRow>
             <LabelMd color="gray.400" fontWeight="500">
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {maxSpendableAlgo} / {algoBalance.toFixed(6)}
+              <span ref={setTriggerRef}>{maxSpendableAlgo}</span>
+              {visible && (
+                <div ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container' })}>
+                  <div {...getArrowProps({ className: 'tooltip-arrow' })} />
+                  {algoBalance.toFixed(6)}
+                </div>
+              )}
             </LabelMd>
           </BalanceRow>
           <BalanceRow>
@@ -389,7 +401,7 @@ function PlaceOrderView(props) {
         </AvailableBalance>
 
         <Tabs orderType={order.type}>
-          <Tab isActive>{t("limit")}</Tab>
+          <Tab isActive>{t('limit')}</Tab>
         </Tabs>
 
         {renderLimitOrder()}
@@ -401,7 +413,7 @@ function PlaceOrderView(props) {
     <Container data-testid="place-order">
       <Header>
         <HeaderCaps color="gray.500" mb={1}>
-          {t("place-order")}
+          {t('place-order')}
         </HeaderCaps>
       </Header>
       {renderForm()}
