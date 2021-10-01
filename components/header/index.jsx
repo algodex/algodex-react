@@ -25,7 +25,7 @@ import {
 const localeToFlags = {
   en: 'US',
   es: 'ES',
-  da: "NL"
+  nl: 'NL'
 }
 
 export default function Header() {
