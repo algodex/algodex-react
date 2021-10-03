@@ -26,6 +26,7 @@ const localeToFlags = {
   en: 'US',
   es: 'ES',
   da: "NL",
+  ch: 'CN',
   tr: 'TR'
 }
 

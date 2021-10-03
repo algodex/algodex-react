@@ -1,0 +1,16 @@
+{
+    "header-about": "概要",
+    "header-trade": "交易",
+    "header-docs": "文档",
+    "header-support": "帮助",
+    "price": "价格",
+    "amount": "数额",
+    "total": "总数",
+    "time": "时间",
+    "no-trades-completed": "交易没有完成",
+    "mobilefooter-CHART":"图表",
+    "mobilefooter-BOOK":"订单本",
+    "mobilefooter-TRADE":"交易",
+    "mobilefooter-ORDERS":"订单",
+    "mobilefooter-WALLET":"钱包"
+}
