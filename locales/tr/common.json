@@ -1,0 +1,16 @@
+{
+    "header-about": "HAKKINDA",
+    "header-trade": "ALIM-SATIM",
+    "header-docs": "DÖKÜMAN",
+    "header-support": "DESTEK",
+    "price": "Fiyat",
+    "amount": "Miktar",
+    "total": "Toplam",
+    "time": "ZAMAN",
+    "no-trades-completed": "İşleminiz tamamlanamadı",
+    "mobilefooter-CHART":"Grafik",
+    "mobilefooter-BOOK":"defter",
+    "mobilefooter-TRADE":"ALIM-SATIM",
+    "mobilefooter-ORDERS":"Emirler",
+    "mobilefooter-WALLET":"CÜZDAN"
+}
