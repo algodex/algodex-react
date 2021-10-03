@@ -11,7 +11,6 @@ export const Container = styled.div`
   overflow: hidden scroll;
   scrollbar-width: none;
 
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -100,6 +99,14 @@ export const AvailableBalance = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 `
 
+export const IconTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.gray['300']};
+`
+
+
+
 export const BalanceRow = styled.div`
   display: flex;
   align-items: center;
@@ -143,4 +150,37 @@ export const SubmitButton = styled(Button)`
   &:focus {
     box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
   }
+`
+
+export const IconButton = styled.button`
+  cursor: pointer;
+  pointer-events: all;
+  border: none;
+  background: transparent;
+  margin-left: 0.125rem;
+  padding: 0;
+  height: 15px;
+ 
+  svg {
+    height: 15px;
+    fill: ${({ theme }) => theme.colors.gray[500]};
+    color: ${({ theme }) => theme.colors.gray[900]};
+  }
+`
+
+export const Tooltip = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray[600]};
+  color: ${({ theme }) => theme.colors.gray[400]};
+  width: 260px;
+  letter-spacing: 0.2em;
+
+  --tooltipBackground: ${({ theme }) => theme.colors.gray[600]};
+  --tooltipBorder: ${({ theme }) => theme.colors.gray[600]};
+  
+  border-radius: 3px;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+  
 `

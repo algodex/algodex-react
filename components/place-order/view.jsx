@@ -4,11 +4,11 @@ import toast from 'react-hot-toast'
 import { useQueryClient } from 'react-query'
 import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
-import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny } from 'components/type'
+import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny, LabelSm } from 'components/type'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
-// import Icon from 'components/icon'
+import Icon from 'components/icon'
 import OrderService from 'services/order'
 import { convertToAsaUnits } from 'services/convert'
 import { useStore } from 'store/use-store'
@@ -32,8 +32,12 @@ import {
   Tabs,
   LimitOrder,
   // TxnFeeContainer,
-  SubmitButton
+  SubmitButton,
+  IconButton,
+  Tooltip,
+  IconTextContainer
 } from './place-order.css'
+import { Info } from 'react-feather'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -47,7 +51,7 @@ function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
   const { t } = useTranslation('place-order')
   const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
-    usePopperTooltip()
+    usePopperTooltip({ placement: "bottom-start", delayShow: 200, delayHide: 200 })
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
@@ -96,10 +100,12 @@ function PlaceOrderView(props) {
     if (activeWallet) {
       const minBalance = await WalletService.getMinWalletBalance(activeWallet)
       if (isSubscribed) {
-        const total = new Big(algoBalance)
-        const min = new Big(minBalance).div(1000000).plus(0.1)
-        const max = total.minus(min)
-        setMaxSpendableAlgo(max.toString())
+        // const total = algoBalance * 1000000;
+        // const max = (total - minBalance - 100000) / 1000000;
+        const total = new Big(algoBalance);
+        const min = new Big(minBalance).div(1000000);
+        const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber();
+        setMaxSpendableAlgo(Math.max(0, max))
       }
     }
 
@@ -373,21 +379,50 @@ function PlaceOrderView(props) {
         </ToggleWrapper>
 
         <AvailableBalance>
-          <BodyCopyTiny color="gray.500" mb={10}>
-            {t('available-balance')}
-          </BodyCopyTiny>
+          <IconTextContainer>
+            <BodyCopyTiny color="gray.500" mb={10} style={{ display: "flex", alignItems: "center"}}>
+              {t('available-balance')}
+              <IconButton ref={setTriggerRef} type="button">
+                <Info />
+              </IconButton>
+            </BodyCopyTiny>
+            {visible && (
+                <Tooltip ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container' })}>
+                  <div {...getArrowProps({ className: 'tooltip-arrow' })} />
+                  <BalanceRow>
+                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                      Available:
+                    </LabelMd>
+                    <IconTextContainer>
+                      <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                        {maxSpendableAlgo}
+                      </LabelMd>
+                      <Icon use="algoLogo" size={0.625} />
+                    </IconTextContainer>
+                  </BalanceRow>
+                  <BalanceRow>
+                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                      Total:
+                    </LabelMd>
+                    <IconTextContainer>
+                      <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                        {algoBalance}
+                      </LabelMd>
+                      <Icon use="algoLogo" size={0.625} />
+                    </IconTextContainer>
+                  </BalanceRow>
+                  <BalanceRow>
+                    <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*Total balance includes {new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString()} that must be kept in wallet to allow trades</LabelSm>
+                  </BalanceRow>
+                </Tooltip>
+              )}
+          </IconTextContainer>
           <BalanceRow>
             <LabelMd color="gray.400" fontWeight="500">
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              <span ref={setTriggerRef}>{maxSpendableAlgo}</span>
-              {visible && (
-                <div ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container' })}>
-                  <div {...getArrowProps({ className: 'tooltip-arrow' })} />
-                  {algoBalance.toFixed(6)}
-                </div>
-              )}
+              {maxSpendableAlgo}
             </LabelMd>
           </BalanceRow>
           <BalanceRow>
