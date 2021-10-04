@@ -1,0 +1,16 @@
+{
+    "header-about": "Giới thiêu",
+    "header-trade": "Giao dịch",
+    "header-docs": "Tài liệu",
+    "header-support": "Hỗ trợ",
+    "price": "Giá",
+    "amount": "Số lượng",
+    "total": "Tổng cộng",
+    "time": "Thời gian khớp",
+    "no-trades-completed": "Chưa có giao dịch",
+    "mobilefooter-CHART":"ĐỒ THỊ",
+    "mobilefooter-BOOK":"SỔ",
+    "mobilefooter-TRADE":"GIAO DỊCH",
+    "mobilefooter-ORDERS":"LỆNH",
+    "mobilefooter-WALLET":"VÍ"
+}
