@@ -168,19 +168,3 @@ export const IconButton = styled.button`
   }
 `
 
-export const Tooltip = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray[600]};
-  color: ${({ theme }) => theme.colors.gray[400]};
-  width: 260px;
-  letter-spacing: 0.2em;
-
-  --tooltipBackground: ${({ theme }) => theme.colors.gray[600]};
-  --tooltipBorder: ${({ theme }) => theme.colors.gray[600]};
-  
-  border-radius: 3px;
-
-  :last-child {
-    margin-bottom: 0;
-  }
-  
-`

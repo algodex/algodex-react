@@ -63,18 +63,22 @@ function PlaceOrderView(props) {
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
   // const txnFee = isAsaOptedIn ? 0.002 : 0.003
 
-  const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
+  // const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
 
+  const enableOrder = {
+    buy: maxSpendableAlgo > 0,
+    sell: asaBalance > 0
+  };
   /**
    * Buy orders are enabled if active wallet has an ALGO balance > 0
    * Sell orders are enabled if active wallet has an ASA balance > 0
    */
-  useEffect(() => {
-    const buy = algoBalance > 0
-    const sell = asaBalance > 0
+  // useEffect(() => {
+  //   const buy = algoBalance > 0
+  //   const sell = asaBalance > 0
 
-    setEnableOrder({ buy, sell })
-  }, [algoBalance, asaBalance])
+  //   setEnableOrder({ buy, sell })
+  // }, [algoBalance, asaBalance])
 
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
@@ -104,7 +108,7 @@ function PlaceOrderView(props) {
     }
 
     return () => (isSubscribed = false)
-  }, [activeWallet, algoBalance])
+  }, [activeWallet])
 
   const handleChange = (e, field) => {
     setOrder({
@@ -373,41 +377,41 @@ function PlaceOrderView(props) {
         </ToggleWrapper>
 
         <AvailableBalance>
-          <IconTextContainer>
-            <BodyCopyTiny color="gray.500" mb={10} style={{ display: "flex", alignItems: "center"}}>
+          <IconTextContainer style={{marginBottom: "10px"}}>
+            <BodyCopyTiny color="gray.500" >
               {t('available-balance')}
-              <Tooltip renderButton={setTriggerRef => (
-                <IconButton ref={setTriggerRef} type="button">
-                  <Info />
-                </IconButton>
-              )}>
-                <BalanceRow>
-                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {t("orders:available")}:
-                    </LabelMd>
-                    <IconTextContainer>
-                      <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                        {maxSpendableAlgo}
-                      </LabelMd>
-                      <Icon use="algoLogo" size={0.625} />
-                    </IconTextContainer>
-                  </BalanceRow>
-                  <BalanceRow>
-                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {t("total")}:
-                    </LabelMd>
-                    <IconTextContainer>
-                      <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                        {algoBalance}
-                      </LabelMd>
-                      <Icon use="algoLogo" size={0.625} />
-                    </IconTextContainer>
-                  </BalanceRow>
-                  <BalanceRow>
-                    <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*{t("max-spend-explanation", { amount: new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString() })}</LabelSm>
-                  </BalanceRow>
-              </Tooltip>
             </BodyCopyTiny>
+            <Tooltip renderButton={setTriggerRef => (
+              <IconButton ref={setTriggerRef} type="button">
+                <Info />
+              </IconButton>
+            )}>
+              <BalanceRow>
+                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                    {t("orders:available")}:
+                  </LabelMd>
+                  <IconTextContainer>
+                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                      {maxSpendableAlgo}
+                    </LabelMd>
+                    <Icon use="algoLogo" size={0.625} />
+                  </IconTextContainer>
+                </BalanceRow>
+                <BalanceRow>
+                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                    {t("total")}:
+                  </LabelMd>
+                  <IconTextContainer>
+                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                      {algoBalance}
+                    </LabelMd>
+                    <Icon use="algoLogo" size={0.625} />
+                  </IconTextContainer>
+                </BalanceRow>
+                <BalanceRow>
+                  <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*{t("max-spend-explanation", { amount: new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString() })}</LabelSm>
+                </BalanceRow>
+            </Tooltip>
           </IconTextContainer>
           <BalanceRow>
             <LabelMd color="gray.400" fontWeight="500">
