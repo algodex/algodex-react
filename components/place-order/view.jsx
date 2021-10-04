@@ -383,7 +383,7 @@ function PlaceOrderView(props) {
               )}>
                 <BalanceRow>
                     <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      Available:
+                      {t("orders:available")}:
                     </LabelMd>
                     <IconTextContainer>
                       <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
@@ -394,7 +394,7 @@ function PlaceOrderView(props) {
                   </BalanceRow>
                   <BalanceRow>
                     <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      Total:
+                      {t("total")}:
                     </LabelMd>
                     <IconTextContainer>
                       <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
@@ -404,7 +404,7 @@ function PlaceOrderView(props) {
                     </IconTextContainer>
                   </BalanceRow>
                   <BalanceRow>
-                    <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*Total balance includes {new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString()} that must be kept in wallet to allow trades</LabelSm>
+                    <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*{t("max-spend-explanation", { amount: new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString() })}</LabelSm>
                   </BalanceRow>
               </Tooltip>
             </BodyCopyTiny>
