@@ -35,7 +35,7 @@ export const OrderPair = styled.span`
 `
 export const OrderSide = styled.span`
   color: ${({ theme, value }) =>
-    value === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
+    (''+value).toUpperCase() === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
 `
 export const OrderAmount = styled.span`
   color: ${({ theme }) => theme.colors.gray['000']};
