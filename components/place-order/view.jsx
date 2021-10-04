@@ -50,7 +50,7 @@ function PlaceOrderView(props) {
   const { t } = useTranslation('place-order')
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
-  const algoBalance = activeWallet?.balance
+  const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
 
@@ -81,7 +81,7 @@ function PlaceOrderView(props) {
         const min = new Big(minBalance).div(1000000);
         const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber();
         setMaxSpendableAlgo(Math.max(0, max))
-  }});
+  }, enabled: !!(activeWallet && activeWallet.address) });
 
   // Get reference to query client to clear queries later
   const queryClient = useQueryClient()
