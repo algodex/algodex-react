@@ -15,8 +15,7 @@ import { useStore } from 'store/use-store'
 import WalletService from 'services/wallet'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import useTranslation from 'next-translate/useTranslation'
-import { usePopperTooltip } from 'react-popper-tooltip'
-import 'react-popper-tooltip/dist/styles.css'
+import { Tooltip } from "components/tooltip";
 
 import {
   Container,
@@ -34,7 +33,6 @@ import {
   // TxnFeeContainer,
   SubmitButton,
   IconButton,
-  Tooltip,
   IconTextContainer
 } from './place-order.css'
 import { Info } from 'react-feather'
@@ -50,8 +48,6 @@ const DEFAULT_ORDER = {
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
   const { t } = useTranslation('place-order')
-  const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
-    usePopperTooltip({ placement: "bottom-start", delayShow: 200, delayHide: 200 })
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance
@@ -100,8 +96,6 @@ function PlaceOrderView(props) {
     if (activeWallet) {
       const minBalance = await WalletService.getMinWalletBalance(activeWallet)
       if (isSubscribed) {
-        // const total = algoBalance * 1000000;
-        // const max = (total - minBalance - 100000) / 1000000;
         const total = new Big(algoBalance);
         const min = new Big(minBalance).div(1000000);
         const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber();
@@ -382,14 +376,12 @@ function PlaceOrderView(props) {
           <IconTextContainer>
             <BodyCopyTiny color="gray.500" mb={10} style={{ display: "flex", alignItems: "center"}}>
               {t('available-balance')}
-              <IconButton ref={setTriggerRef} type="button">
-                <Info />
-              </IconButton>
-            </BodyCopyTiny>
-            {visible && (
-                <Tooltip ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container' })}>
-                  <div {...getArrowProps({ className: 'tooltip-arrow' })} />
-                  <BalanceRow>
+              <Tooltip renderButton={setTriggerRef => (
+                <IconButton ref={setTriggerRef} type="button">
+                  <Info />
+                </IconButton>
+              )}>
+                <BalanceRow>
                     <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
                       Available:
                     </LabelMd>
@@ -414,8 +406,8 @@ function PlaceOrderView(props) {
                   <BalanceRow>
                     <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*Total balance includes {new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString()} that must be kept in wallet to allow trades</LabelSm>
                   </BalanceRow>
-                </Tooltip>
-              )}
+              </Tooltip>
+            </BodyCopyTiny>
           </IconTextContainer>
           <BalanceRow>
             <LabelMd color="gray.400" fontWeight="500">
