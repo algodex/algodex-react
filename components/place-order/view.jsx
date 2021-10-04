@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
-import { useQueryClient } from 'react-query'
+import { useQueryClient, useQuery } from 'react-query'
 import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
 import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny, LabelSm } from 'components/type'
@@ -63,25 +63,25 @@ function PlaceOrderView(props) {
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
   // const txnFee = isAsaOptedIn ? 0.002 : 0.003
 
-  // const [enableOrder, setEnableOrder] = useState({ buy: false, sell: false })
-
-  const enableOrder = {
-    buy: maxSpendableAlgo > 0,
-    sell: asaBalance > 0
-  };
   /**
    * Buy orders are enabled if active wallet has an ALGO balance > 0
    * Sell orders are enabled if active wallet has an ASA balance > 0
    */
-  // useEffect(() => {
-  //   const buy = algoBalance > 0
-  //   const sell = asaBalance > 0
+  const enableOrder = {
+    buy: maxSpendableAlgo > 0,
+    sell: asaBalance > 0
+  };
 
-  //   setEnableOrder({ buy, sell })
-  // }, [algoBalance, asaBalance])
 
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
+
+  useQuery(["minWalletBalance", {activeWallet}], async () => await WalletService.getMinWalletBalance(activeWallet), { onSuccess: minBalance => {
+      const total = new Big(algoBalance);
+        const min = new Big(minBalance).div(1000000);
+        const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber();
+        setMaxSpendableAlgo(Math.max(0, max))
+  }});
 
   // Get reference to query client to clear queries later
   const queryClient = useQueryClient()
@@ -95,20 +95,6 @@ function PlaceOrderView(props) {
     })
   }, [asset.id, activeWalletAddress, setOrder])
 
-  useEffect(async () => {
-    let isSubscribed = true
-    if (activeWallet) {
-      const minBalance = await WalletService.getMinWalletBalance(activeWallet)
-      if (isSubscribed) {
-        const total = new Big(algoBalance);
-        const min = new Big(minBalance).div(1000000);
-        const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber();
-        setMaxSpendableAlgo(Math.max(0, max))
-      }
-    }
-
-    return () => (isSubscribed = false)
-  }, [activeWallet])
 
   const handleChange = (e, field) => {
     setOrder({
