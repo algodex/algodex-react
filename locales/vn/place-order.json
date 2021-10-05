@@ -20,5 +20,6 @@
     "error-placing-order": "Có lỗi khi đặt lệnh",
     "disable-popup": "Vui lòng tắt tính năng chặn popup (ở trên cùng bên phải thanh địa chỉ của bạn)",
     "disable-popup-mobile": "Vui lòng tắt tính năng chặn popup",
-    "order-cancelled": "Lệnh đã được hủy"
+    "order-cancelled": "Lệnh đã được hủy",
+    "max-spend-explanation": "Tổng số dư bao gồm {{amount}} Algos phải được giữ trong ví để cho phép giao dịch"
 }
