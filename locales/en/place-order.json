@@ -20,5 +20,6 @@
     "error-placing-order": "Error placing order",
     "disable-popup": "Please disable your popup blocker (likely in the top-right of your browser window)",
     "disable-popup-mobile": "Please disable your popup blocker",
-    "order-cancelled": "Order cancelled."
+    "order-cancelled": "Order cancelled.",
+    "max-spend-explanation": "Total balance includes {{amount}} Algos that must be kept in wallet to allow trades"
 }

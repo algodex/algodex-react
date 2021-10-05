@@ -20,5 +20,6 @@
     "error-placing-order": "Error al realizar el pedido",
     "disable-popup": "Desactive su bloqueador de ventanas emergentes (probablemente en la parte superior derecha de la ventana de su navegador)",
     "disable-popup-mobile": "Desactive su bloqueador de ventanas emergentes",
-    "order-cancelled": "Orden cancelada."
+    "order-cancelled": "Orden cancelada.",
+    "max-spend-explanation": "El saldo total incluye {{amount}} Algos que deben almacenarse en la billetera para poder comerciar"
 }
