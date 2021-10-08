@@ -9,7 +9,7 @@ const TEXT_COLOR = theme.colors.gray[300]
 
 const TOP_COLOR = '#248350'
 const TOP_LINE_COLOR = theme.colors.green[500]
-const BOTTOM_COLOR = '#38a16911'
+const BOTTOM_COLOR = 'rgba(56, 161, 105, 0.17)'
 const LINE_WIDTH = 2
 
 export default function useAreaChart(containerRef, priceData) {
