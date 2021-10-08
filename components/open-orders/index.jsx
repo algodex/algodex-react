@@ -8,6 +8,7 @@ import { fetchOpenOrdersByAddress } from 'lib/api'
 import OrderService from 'services/order'
 import { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
+import Link from "next/link";
 
 import useTranslation from 'next-translate/useTranslation'
 
@@ -51,7 +52,10 @@ function OpenOrders() {
 
   const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
-  const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
+  const OrderPairCell = ({ value, row }) => {
+    const assetId = row?.original?.metadata?.assetId;
+    return (<Link href={`/trade/${assetId}`}><OrderPair>{value}</OrderPair></Link>)
+  }
 
   const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
 

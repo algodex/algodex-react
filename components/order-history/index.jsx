@@ -7,6 +7,7 @@ import { useStorePersisted } from 'store/use-store'
 import { fetchTradeHistoryByAddress } from 'lib/api'
 import { mapTradeHistoryData } from './helpers'
 import useTranslation from 'next-translate/useTranslation'
+import Link from "next/link";
 
 import {
   OrderDate,
@@ -21,7 +22,10 @@ import {
 
 const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 
-const OrderPairCell = ({ value }) => <OrderPair>{value}</OrderPair>
+const OrderPairCell = ({ value, row }) => {
+  const assetId = row?.original?.metadata?.assetId;
+  return (<Link href={`/trade/${assetId}`}><OrderPair>{value}</OrderPair></Link>)
+}
 
 const OrderSideCell = ({ value }) => <OrderSide value={value}>{value}</OrderSide>
 
