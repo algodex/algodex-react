@@ -26,7 +26,7 @@ function autoScaleProvider(original, chart, priceData) {
         max = Math.max(priceItem.open, max);
         max = Math.max(priceItem.high, max);
         if (min == -1) {
-          min = priceItem.close;
+          min = priceItem.open;
         }
         min = Math.min(priceItem.close, min);
         min = Math.min(priceItem.low, min);
