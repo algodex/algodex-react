@@ -8,7 +8,43 @@ import useStore from 'store/use-store'
 
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
 
+function autoScaleProvider(original, chart, priceData) {
+    let visibleRange = chart.timeScale().getVisibleRange();
+    if (!visibleRange) {
+      return;
+    }
+    const rangeStart = visibleRange.from;
+    const rangeEnd = visibleRange.to;
+    let max = 0;
+    let min = -1;
+    for (let i = 0; i < priceData.length; i++) {
+        const priceItem = priceData[i];
+        if (priceItem.time < rangeStart) {
+          continue;
+        }
+        max = Math.max(priceItem.close, max);
+        max = Math.max(priceItem.open, max);
+        max = Math.max(priceItem.high, max);
+        if (min == -1) {
+          min = priceItem.close;
+        }
+        min = Math.min(priceItem.close, min);
+        min = Math.min(priceItem.low, min);
+        min = Math.min(priceItem.open, min);
+        if (priceItem.time > rangeEnd) {
+          break;
+        }
+        
+    }
 
+    const res = original();
+    if (res !== null) {
+        res.priceRange.maxValue = max;
+        res.priceRange.minValue = min;
+    }
+
+    return res;
+}
 
 function ChartView(props) {
   const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
@@ -16,8 +52,8 @@ function ChartView(props) {
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData)
-  const { areaChart } = useAreaChart(areaChartRef, priceData)
+  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData, autoScaleProvider)
+  const { areaChart } = useAreaChart(areaChartRef, priceData, autoScaleProvider)
 
   const chartMode = useStore((state) => state.chartMode)
   const setChartMode = useStore((state) => state.setChartMode)
