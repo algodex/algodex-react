@@ -38,7 +38,7 @@ function autoScaleProvider(original, chart, priceData) {
     }
 
     const res = original();
-    if (res !== null) {
+    if (res !== null && min != -1) {
         res.priceRange.maxValue = max;
         res.priceRange.minValue = min;
     }
