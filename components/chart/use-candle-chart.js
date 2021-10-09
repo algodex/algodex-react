@@ -11,37 +11,8 @@ const TEXT_COLOR = theme.colors.gray[300]
 
 
 
-export default function useCandleChart(containerRef, volumeData, priceData) {
+export default function useCandleChart(containerRef, volumeData, priceData, autoScaleProvider) {
   const [candleChart, setCandleChart] = useState()
-
-  function autoScaleProvider(original, chart) {
-      let visibleRange = chart.timeScale().getVisibleRange();
-      if (!visibleRange) {
-        return;
-      }
-      const rangeStart = visibleRange.from;
-      const rangeEnd = visibleRange.to;
-      let max = 0;
-      for (let i = 0; i < priceData.length; i++) {
-          const priceItem = priceData[i];
-          if (priceItem.time < rangeStart) {
-            continue;
-          }
-          max = Math.max(priceItem.close, max);
-          max = Math.max(priceItem.open, max);
-          
-          if (priceItem.time > rangeEnd) {
-            break;
-          }
-      }
-
-      const res = original();
-      if (res !== null) {
-          res.priceRange.maxValue = max;
-      }
-      return res;
-  }
-
   
   useEffect(() => {
     const chartContainer = containerRef?.current
@@ -153,7 +124,7 @@ export default function useCandleChart(containerRef, volumeData, priceData) {
 
       candleChart.candleSeries.applyOptions({
         autoscaleInfoProvider: original => {
-            return autoScaleProvider(original, candleChart.chart);
+            return autoScaleProvider(original, candleChart.chart, priceData);
         }
       })
 

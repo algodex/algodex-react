@@ -12,37 +12,8 @@ const TOP_LINE_COLOR = theme.colors.green[500]
 const BOTTOM_COLOR = 'rgba(56, 161, 105, 0.17)'
 const LINE_WIDTH = 2
 
-export default function useAreaChart(containerRef, priceData) {
+export default function useAreaChart(containerRef, priceData, autoScaleProvider) {
   const [areaChart, setAreaChart] = useState()
-
-  function autoScaleProvider(original, chart) {
-      let visibleRange = chart.timeScale().getVisibleRange();
-      if (!visibleRange) {
-        return;
-      }
-      const rangeStart = visibleRange.from;
-      const rangeEnd = visibleRange.to;
-      let max = 0;
-      for (let i = 0; i < priceData.length; i++) {
-          const priceItem = priceData[i];
-          if (priceItem.time < rangeStart) {
-            continue;
-          }
-          max = Math.max(priceItem.close, max);
-          max = Math.max(priceItem.open, max);
-          
-          if (priceItem.time > rangeEnd) {
-            break;
-          }
-      }
-
-      const res = original();
-      if (res !== null) {
-          res.priceRange.maxValue = max;
-      }
-      return res;
-  }
-
 
   useEffect(() => {
     const chartContainer = containerRef?.current
@@ -128,7 +99,7 @@ export default function useAreaChart(containerRef, priceData) {
         .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
       areaChart.areaSeries.applyOptions({
         autoscaleInfoProvider: original => {
-            return autoScaleProvider(original, areaChart.chart);
+            return autoScaleProvider(original, areaChart.chart, priceData);
         }
       })
       if (priceData.length <= dataPointsToShow) {
