@@ -88,17 +88,28 @@ export default function Header() {
           </Link>
 
           <LanguageDropDown>
-            {i18n.locales.map((localeCd) => (
-              <LanguageItem key={localeCd}>
-                <Link href={asPath} locale={localeCd}>
-                  <a href="#">
-                    <NavTextLg>
-                      {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                    </NavTextLg>
-                  </a>
-                </Link>
-              </LanguageItem>
-            ))}
+            <LanguageItem key={locale}>
+              <Link href={asPath} locale={locale}>
+                <a href="#">
+                  <NavTextLg>
+                    {locale} <Flag countryCode={localeToFlags[locale]} svg />
+                  </NavTextLg>
+                </a>
+              </Link>
+            </LanguageItem>
+            {i18n.locales
+              .filter((localeCd) => localeCd !== locale)
+              .map((localeCd) => (
+                <LanguageItem key={localeCd}>
+                  <Link href={asPath} locale={localeCd}>
+                    <a href="#">
+                      <NavTextLg>
+                        {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+                      </NavTextLg>
+                    </a>
+                  </Link>
+                </LanguageItem>
+              ))}
           </LanguageDropDown>
         </LanguagesContainer>
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
