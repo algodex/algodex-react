@@ -6,6 +6,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
 import ReactGA from 'react-ga'
+import "tailwindcss/tailwind.css"
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -85,6 +86,12 @@ const GlobalStyle = createGlobalStyle`
   }
   ::-webkit-scrollbar-corner {
     background: ${theme.colors.gray[700]};
+  }
+
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
   }
 `
 
