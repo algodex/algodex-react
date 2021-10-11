@@ -28,11 +28,12 @@ import {
 } from './assets.css'
 
 const AssetCoinCell = (props) => {
+  
   return (
     <AssetNameBlock>
       <AssetName>{props.value}</AssetName>
       <br />
-      <AssetId>TEST</AssetId>
+      <AssetId>{props.row.original.id}</AssetId>
     </AssetNameBlock>
   )
 }

@@ -12,10 +12,12 @@ export const mapAssetsData = (data) => {
       formattedTotalASAAmount,
       formattedASAAvailable,
       formattedASAInOrder,
-      formattedTotalAlgoEquiv
+      formattedTotalAlgoEquiv,
+      assetId
     }) => {
       return {
         unit: unit_name,
+        id: assetId,
         name,
         total: formattedTotalASAAmount || '',
         available: formattedASAAvailable || '',
