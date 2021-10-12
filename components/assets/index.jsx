@@ -6,7 +6,14 @@ import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
 import { fetchAssetsByByAddress } from 'lib/api'
 import { mapAssetsData } from './helpers'
+import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
+import {
+  AssetId,
+  AssetNameBlock,
+  PairSlash,
+  NameVerifiedWrapper
+} from 'components/asset-search/asset-search.css.js'
 
 import {
   AssetCoin,
@@ -20,9 +27,18 @@ import {
   Container
 } from './assets.css'
 
-const AssetCoinCell = ({ value }) => <AssetCoin>{value}</AssetCoin>
+const AssetCoinCell = (props) => {
+  
+  return (
+    <AssetNameBlock>
+      <AssetName>{props.value}</AssetName>
+      <br />
+      <AssetId>{props.row.original.id}</AssetId>
+    </AssetNameBlock>
+  )
+}
 
-const AssetNameCell = ({ value }) => <AssetName>{value}</AssetName>
+const AssetNameCell = ({ value }) => <AssetCoin>{value}</AssetCoin>
 
 const AssetTotalCell = ({ value }) => <AssetTotal>{value}</AssetTotal>
 
