@@ -153,6 +153,26 @@ export const Tick = styled.div`
   background: ${({ theme, isActive }) =>
     isActive ? theme.colors.gray['000'] : theme.colors.gray['700']};
 
+  transform: ${({ amt }) => {
+    let offset = 0
+    switch (amt) {
+      case 20:
+        offset = 3
+        break
+      case 40:
+        offset = 2
+        break
+      case 60:
+        offset = -1
+        break
+      case 80:
+        offset = -3
+        break
+    }
+
+    return `translateX(calc(${offset} * ${tickWidth} / 2))`
+  }};
+
   &:first-child {
     transform: translateX(1px);
     &::after {
@@ -166,6 +186,8 @@ export const Tick = styled.div`
       transform: translateX(calc(-100% + 0.375rem));
     }
   }
+
+
 `
 
 export const InputWrapper = styled.div`
