@@ -28,7 +28,8 @@ const localeToFlags = {
   nl: 'NL',
   ch: 'CN',
   tr: 'TR',
-  vn: 'VN'
+  vn: 'VN',
+  se: 'SE'
 }
 
 export default function Header() {
