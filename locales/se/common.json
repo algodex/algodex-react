@@ -1,0 +1,16 @@
+{
+    "header-about": "OM",
+    "header-trade": "HANDLA",
+    "header-docs": "DOKUMENTATION",
+    "header-support": "SUPPORT",
+    "price": "Pris",
+    "amount": "Belopp",
+    "total": "Totalt",
+    "time": "TID",
+    "no-trades-completed": "Ingen trade genomförd",
+    "mobilefooter-CHART":"Diagram",
+    "mobilefooter-BOOK":"Bok",
+    "mobilefooter-TRADE":"Trade",
+    "mobilefooter-ORDERS":"Ordrar",
+    "mobilefooter-WALLET":"Plånbok"
+}
