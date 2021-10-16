@@ -51,7 +51,6 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
           borderColor: BORDER_COLOR,
           timeVisible: true,
           tickMarkFormatter: (time, tickMarkType, locale) => {
-            console.log({tickMarkType});
             const date = new Date(time * 1000);
             let m = null;
             if (tickMarkType == 3) {
