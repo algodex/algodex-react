@@ -50,9 +50,7 @@ function autoScaleProvider(original, chart, priceData) {
 function ChartView(props) {
   const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
   const [currentPrices, setCurrentPrices] = useState(props);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [timeToPrice, setTimeToPrice] = useState([]);
-  const [timeToVolume, setTimeToVolume] = useState([]);
+  const [currentLogical, setCurrentLogical] = useState(priceData.length - 1);
   
   const candleChartRef = useRef()
   const areaChartRef = useRef()
@@ -76,24 +74,13 @@ function ChartView(props) {
     }
   }
 
-  const updateHoverPrices = () => {
+  const updateHoverPrices = (logical) => {
     if (priceData == null || volumeData == null) {
       return;
     }
 
-    const convertTimeToData = (accum, entry) => {
-          accum[entry.time] = entry;
-          return accum;
-    };
-    if (timeToPrice.length == 0) {
-      setTimeToPrice(priceData.reduce(convertTimeToData, []));
-    }
-    if (timeToVolume.length == 0) {
-      setTimeToVolume(volumeData.reduce(convertTimeToData, []));
-    }
-
-    const priceEntry = timeToPrice[currentTime];
-    const volumeEntry = timeToVolume[currentTime];
+    const priceEntry = priceData[logical];
+    const volumeEntry = volumeData[logical];
 
     const prices = {
       ...currentPrices
@@ -106,6 +93,9 @@ function ChartView(props) {
     setCurrentPrices(prices);
   };
 
+  const mouseOut = (ev) => {
+    setCurrentPrices(props);
+  };
   const mouseMove = (ev) => {
     const chart = chartMode === 'candle' ? candleChart : areaChart;
     if (chart == null) {
@@ -115,15 +105,15 @@ function ChartView(props) {
 
     const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
     const x = ev.clientX - rect.left;
-    const unixTime = candleChart.timeScale().coordinateToTime(x);
-    if (unixTime != currentTime) {
-      setCurrentTime(unixTime);
-      updateHoverPrices();
+    const logical = candleChart.timeScale().coordinateToLogical(x);
+    if (logical != currentLogical) {
+      setCurrentLogical(logical);
+      updateHoverPrices(logical);
     }
   };
 
   return (
-    <Container onMouseMove={(ev)=> mouseMove(ev)}>
+    <Container onMouseMove={(ev)=> mouseMove(ev)} onMouseOut={(ev) => mouseOut(ev)}>
       <>
         <CandleStickChart
           ref={candleChartRef}
