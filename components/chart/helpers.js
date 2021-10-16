@@ -12,7 +12,7 @@ export const mapPriceData = (data) => {
           open: floatToFixed(formatted_open),
           high: floatToFixed(formatted_high),
           low: floatToFixed(formatted_low),
-          close: floatToFixed(formatted_close),
+          close: floatToFixed(formatted_close)
         }
       }
     ) || []
