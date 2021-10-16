@@ -50,6 +50,10 @@ function autoScaleProvider(original, chart, priceData) {
 function ChartView(props) {
   const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
   const [currentPrices, setCurrentPrices] = useState(props);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [timeToPrice, setTimeToPrice] = useState([]);
+  const [timeToVolume, setTimeToVolume] = useState([]);
+  
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
@@ -58,6 +62,7 @@ function ChartView(props) {
 
   const chartMode = useStore((state) => state.chartMode)
   const setChartMode = useStore((state) => state.setChartMode)
+
 
   const changeMode = (mode) => {
     setChartMode(mode)
@@ -71,22 +76,24 @@ function ChartView(props) {
     }
   }
 
-  const mouseMove = (ev) => {
-    const chart = chartMode === 'candle' ? candleChart : areaChart;
-    if (chart == null) {
+  const updateHoverPrices = () => {
+    if (priceData == null || volumeData == null) {
       return;
     }
 
-    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
-    const x = ev.clientX - rect.left;
-    const unixTime = candleChart.timeScale().coordinateToTime(x);
+    const convertTimeToData = (accum, entry) => {
+          accum[entry.time] = entry;
+          return accum;
+    };
+    if (timeToPrice.length == 0) {
+      setTimeToPrice(priceData.reduce(convertTimeToData, []));
+    }
+    if (timeToVolume.length == 0) {
+      setTimeToVolume(volumeData.reduce(convertTimeToData, []));
+    }
 
-    const priceEntry = priceData.filter((entry) => {
-      return entry.time == unixTime
-    })[0];
-    const volumeEntry = volumeData.filter((entry) => {
-      return entry.time == unixTime
-    })[0];
+    const priceEntry = timeToPrice[currentTime];
+    const volumeEntry = timeToVolume[currentTime];
 
     const prices = {
       ...currentPrices
@@ -94,10 +101,26 @@ function ChartView(props) {
     prices.ohlc = {
       ...priceEntry
     };
-    prices.asaVolume = millify(volumeEntry.value || 0); 
+    prices.asaVolume = volumeEntry != null ? millify(volumeEntry.value) : '0'; 
 
     setCurrentPrices(prices);
-  }
+  };
+
+  const mouseMove = (ev) => {
+    const chart = chartMode === 'candle' ? candleChart : areaChart;
+    if (chart == null) {
+      setCurrentPrices(props);
+      return;
+    }
+
+    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const unixTime = candleChart.timeScale().coordinateToTime(x);
+    if (unixTime != currentTime) {
+      setCurrentTime(unixTime);
+      updateHoverPrices();
+    }
+  };
 
   return (
     <Container onMouseMove={(ev)=> mouseMove(ev)}>
