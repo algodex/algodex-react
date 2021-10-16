@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import ChartOverlay from './overlay'
 import ChartSettings from './settings'
@@ -52,6 +52,11 @@ function ChartView(props) {
   const [currentPrices, setCurrentPrices] = useState(props);
   const [currentLogical, setCurrentLogical] = useState(priceData.length - 1);
   
+  useMemo( () => {
+    setCurrentPrices(props);
+    setCurrentLogical(priceData.length - 1);
+  }, [asset]);
+
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
