@@ -5,14 +5,14 @@ import { floatToFixed } from 'services/display'
 export const mapPriceData = (data) => {
   const prices =
     data?.chart_data.map(
-      ({ date, formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+      ({ date, formatted_open, formatted_high, formatted_low, formatted_close, unixTime, asaVolume }) => {
         const time = parseInt(unixTime)
         return {
           time: time,
           open: floatToFixed(formatted_open),
           high: floatToFixed(formatted_high),
           low: floatToFixed(formatted_low),
-          close: floatToFixed(formatted_close)
+          close: floatToFixed(formatted_close),
         }
       }
     ) || []

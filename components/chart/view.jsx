@@ -5,8 +5,9 @@ import ChartSettings from './settings'
 import useAreaChart from './use-area-chart'
 import useCandleChart from './use-candle-chart'
 import useStore from 'store/use-store'
-
+import ReactDOM from 'react-dom';
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
+import millify from 'millify'
 
 function autoScaleProvider(original, chart, priceData) {
     let visibleRange = chart.timeScale().getVisibleRange();
@@ -48,7 +49,7 @@ function autoScaleProvider(original, chart, priceData) {
 
 function ChartView(props) {
   const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
-
+  const [currentPrices, setCurrentPrices] = useState(props);
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
@@ -70,8 +71,36 @@ function ChartView(props) {
     }
   }
 
+  const mouseMove = (ev) => {
+    const chart = chartMode === 'candle' ? candleChart : areaChart;
+    if (chart == null) {
+      return;
+    }
+
+    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const unixTime = candleChart.timeScale().coordinateToTime(x);
+
+    const priceEntry = priceData.filter((entry) => {
+      return entry.time == unixTime
+    })[0];
+    const volumeEntry = volumeData.filter((entry) => {
+      return entry.time == unixTime
+    })[0];
+
+    const prices = {
+      ...currentPrices
+    };
+    prices.ohlc = {
+      ...priceEntry
+    };
+    prices.asaVolume = millify(volumeEntry.value || 0); 
+
+    setCurrentPrices(prices);
+  }
+
   return (
-    <Container>
+    <Container onMouseMove={(ev)=> mouseMove(ev)}>
       <>
         <CandleStickChart
           ref={candleChartRef}
@@ -86,12 +115,12 @@ function ChartView(props) {
         />
       </>
       <ChartOverlay
-        asset={asset}
-        ohlc={ohlc}
-        bid={bid}
-        ask={ask}
-        spread={spread}
-        volume={asaVolume}
+        asset={currentPrices.asset}
+        ohlc={currentPrices.ohlc}
+        bid={currentPrices.bid}
+        ask={currentPrices.ask}
+        spread={currentPrices.spread}
+        volume={currentPrices.asaVolume}
       />
       <SettingsContainer>
         <ChartSettings chartMode={chartMode} onChartModeClick={(mode) => changeMode(mode)} />
