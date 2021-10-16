@@ -78,7 +78,6 @@ function ChartView(props) {
     if (priceData == null || volumeData == null) {
       return;
     }
-
     const priceEntry = priceData[logical];
     const volumeEntry = volumeData[logical];
 
@@ -106,6 +105,12 @@ function ChartView(props) {
     const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
     const x = ev.clientX - rect.left;
     const logical = candleChart.timeScale().coordinateToLogical(x);
+    
+    if (logical >= priceData.length || logical >= volumeData.length) {
+      setCurrentPrices(props);
+      return;
+    }
+
     if (logical != currentLogical) {
       setCurrentLogical(logical);
       updateHoverPrices(logical);
