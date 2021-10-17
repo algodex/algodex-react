@@ -31,6 +31,7 @@ import {
 } from './asset-search.css'
 
 const AssetNameCell = (props) => {
+  // console.log(props.row.original)
   return (
     <AssetNameBlock>
       <AssetName>{props.value}</AssetName>
