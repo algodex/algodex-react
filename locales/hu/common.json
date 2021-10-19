@@ -1,0 +1,16 @@
+{
+    "header-about": "NÉVJEGY",
+    "header-trade": "KERESKEDÉS",
+    "header-docs": "DOKSI",
+    "header-support": "TÁMOGATÁS",
+    "price": "Ár",
+    "amount": "Mennyiség",
+    "total": "Összesen",
+    "time": "IDŐ",
+    "no-trades-completed": " Nincs lezárt kötés ",
+    "mobilefooter-CHART":"GRAFIKON",
+    "mobilefooter-BOOK":" AJÁNLATI KÖNYV",
+    "mobilefooter-TRADE":"KERESKEDÉS",
+    "mobilefooter-ORDERS":"AJÁNLATOK",
+    "mobilefooter-WALLET":"TÁRCA"
+}
