@@ -4,7 +4,7 @@
     "assets": "TILLGÅNGAR",
     "date": "DATUM",
     "pair": "PAR",
-    "price": "PRIS (ALGO)",
+    "price": "PRIS",
     "type": "TYP",
     "amount": "BELOPP",
     "status": "STATUS",
