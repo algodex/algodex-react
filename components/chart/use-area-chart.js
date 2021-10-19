@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
 import theme from 'theme'
+import moment from 'moment'
 
 const LINE_COLOR = theme.colors.gray[800]
 const BACKGROUND_COLOR = theme.colors.gray[900]
@@ -21,6 +22,13 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
     const initializeChart = async () => {
       const { createChart, CrosshairMode } = await import('lightweight-charts')
       const chart = createChart(chartContainer, {
+        localization: {        
+          timeFormatter: (unixTime) => {
+            const s = new Date(unixTime * 1000);
+            const m = moment(s).format('lll');
+            return m;
+          },
+        },
         layout: {
           backgroundColor: BACKGROUND_COLOR,
           textColor: TEXT_COLOR,
@@ -42,7 +50,17 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
         },
         timeScale: {
           borderColor: BORDER_COLOR,
-          timeVisible: true
+          timeVisible: true,
+          tickMarkFormatter: (time, tickMarkType, locale) => {
+            const date = new Date(time * 1000);
+            let m = null;
+            if (tickMarkType == 3) {
+              m = moment(date).format("LT");
+            } else {
+              m = moment(date).format("ll");
+            }
+            return m;
+          },
         }
       })
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
 import theme from 'theme'
-
+import moment from 'moment'
 const UP_COLOR = theme.colors.green[500]
 const DOWN_COLOR = theme.colors.red[500]
 const LINE_COLOR = theme.colors.gray[800]
@@ -21,6 +21,13 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
       const { createChart, CrosshairMode } = await import('lightweight-charts')
 
       const chart = createChart(chartContainer, {
+        localization: {        
+          timeFormatter: (unixTime) => {
+            const s = new Date(unixTime * 1000);
+            const m = moment(s).format('lll');
+            return m;
+          },
+        },
         layout: {
           backgroundColor: BACKGROUND_COLOR,
           textColor: TEXT_COLOR,
@@ -42,7 +49,18 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
         },
         timeScale: {
           borderColor: BORDER_COLOR,
-          timeVisible: true
+          timeVisible: true,
+          tickMarkFormatter: (time, tickMarkType, locale) => {
+            const date = new Date(time * 1000);
+            let m = null;
+            if (tickMarkType == 3) {
+              m = moment(date).format("LT");
+            } else {
+              m = moment(date).format("ll");
+            }
+            return m;
+          },
+
         },
 
 

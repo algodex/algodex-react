@@ -1,12 +1,13 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import ChartOverlay from './overlay'
 import ChartSettings from './settings'
 import useAreaChart from './use-area-chart'
 import useCandleChart from './use-candle-chart'
 import useStore from 'store/use-store'
-
+import ReactDOM from 'react-dom';
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
+import millify from 'millify'
 
 function autoScaleProvider(original, chart, priceData) {
     let visibleRange = chart.timeScale().getVisibleRange();
@@ -48,6 +49,13 @@ function autoScaleProvider(original, chart, priceData) {
 
 function ChartView(props) {
   const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
+  const [currentPrices, setCurrentPrices] = useState(props);
+  const [currentLogical, setCurrentLogical] = useState(priceData.length - 1);
+  
+  useMemo( () => {
+    setCurrentPrices(props);
+    setCurrentLogical(priceData.length - 1);
+  }, [asset]);
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
@@ -57,6 +65,7 @@ function ChartView(props) {
 
   const chartMode = useStore((state) => state.chartMode)
   const setChartMode = useStore((state) => state.setChartMode)
+
 
   const changeMode = (mode) => {
     setChartMode(mode)
@@ -70,8 +79,51 @@ function ChartView(props) {
     }
   }
 
+  const updateHoverPrices = (logical) => {
+    if (priceData == null || volumeData == null) {
+      return;
+    }
+    const priceEntry = priceData[logical];
+    const volumeEntry = volumeData[logical];
+
+    const prices = {
+      ...currentPrices
+    };
+    prices.ohlc = {
+      ...priceEntry
+    };
+    prices.asaVolume = volumeEntry != null ? millify(volumeEntry.value) : '0'; 
+
+    setCurrentPrices(prices);
+  };
+
+  const mouseOut = (ev) => {
+    setCurrentPrices(props);
+  };
+  const mouseMove = (ev) => {
+    const chart = chartMode === 'candle' ? candleChart : areaChart;
+    if (chart == null) {
+      setCurrentPrices(props);
+      return;
+    }
+
+    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const logical = candleChart.timeScale().coordinateToLogical(x);
+    
+    if (logical >= priceData.length || logical >= volumeData.length) {
+      setCurrentPrices(props);
+      return;
+    }
+
+    if (logical != currentLogical) {
+      setCurrentLogical(logical);
+      updateHoverPrices(logical);
+    }
+  };
+
   return (
-    <Container>
+    <Container onMouseMove={(ev)=> mouseMove(ev)} onMouseOut={(ev) => mouseOut(ev)}>
       <>
         <CandleStickChart
           ref={candleChartRef}
@@ -86,12 +138,12 @@ function ChartView(props) {
         />
       </>
       <ChartOverlay
-        asset={asset}
-        ohlc={ohlc}
-        bid={bid}
-        ask={ask}
-        spread={spread}
-        volume={asaVolume}
+        asset={currentPrices.asset}
+        ohlc={currentPrices.ohlc}
+        bid={currentPrices.bid}
+        ask={currentPrices.ask}
+        spread={currentPrices.spread}
+        volume={currentPrices.asaVolume}
       />
       <SettingsContainer>
         <ChartSettings chartMode={chartMode} onChartModeClick={(mode) => changeMode(mode)} />
