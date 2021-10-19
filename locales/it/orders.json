@@ -4,7 +4,7 @@
     "assets": "ATTIVO",
     "date": "DATA",
     "pair": "COPPIA",
-    "price": "PREZZO(ALGO)",
+    "price": "PREZZO",
     "type": "TIPO",
     "amount": "IMPORTO",
     "status": "STATO",
