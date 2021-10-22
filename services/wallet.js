@@ -1,4 +1,4 @@
-import algodex from '@algodex/algodex-sdk'
+import algodex from '@algodex/sdk'
 import { convertFromBaseUnits } from './convert'
 import { truncateAddress } from './display'
 

@@ -1,10 +1,10 @@
-# algodex-react
+npm# algodex-react
 
 Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Note that `development` is the default branch.
 
 ## Getting Started
 
-### Set up a Github token to make it easy to install the private algodex-sdk npm package.
+### Set up a Github token to make it easy to install the private sdk npm package.
 
 https://github.com/settings/tokens
 
