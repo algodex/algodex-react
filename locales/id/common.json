@@ -1,0 +1,16 @@
+{
+    "header-about": "TENTANG ",
+    "header-trade": "PERDAGANGAN",
+    "header-docs": "DOKUMEN ",
+    "header-support": "BANTUAN",
+    "price": "Harga",
+    "amount": "Nilai",
+    "total": "Jumlah",
+    "time": "WAKTU",
+    "no-trades-completed": "Tidak ada perdagangan  ",
+    "mobilefooter-CHART":"GRAFIK",
+    "mobilefooter-BOOK":" BUKU",
+    "mobilefooter-TRADE":"PERDAGANGAN",
+    "mobilefooter-ORDERS":"PESANAN",
+    "mobilefooter-WALLET":"DOMPET"
+}
