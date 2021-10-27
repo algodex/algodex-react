@@ -115,7 +115,7 @@ function OrderOptions(props) {
             </BodyCopyTiny>
 
             <div className="flex flex-row justify-between mt-5 align-middle">
-              <span className="text-sm font-semibold py-1">Order Size Filtering:</span>
+              <span className="text-sm font-semibold py-1">{t("order-size-filtering")}:</span>
               <div className="relative">
                 <input 
                 className="bg-gray-900 h-7 w-14 rounded-sm border-2 border-gray-700 pr-5 text-right appearance-none" 
@@ -140,8 +140,8 @@ function OrderOptions(props) {
             </div>
             <OrderSizeFilter value={orderFilter} onChange={setOrderFilter}></OrderSizeFilter>
             <div className="flex justify-between text-gray-500 text-sm">
-              <span class="block">Less Lag</span>
-              <span class="block">Better Execution</span>  
+              <span class="block">{t("better-execution")}</span>  
+              <span class="block">{t("less-lag")}</span>
             </div>
 
           </ExpandContent>
