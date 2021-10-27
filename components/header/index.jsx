@@ -29,6 +29,8 @@ const localeToFlags = {
   ch: 'CN',
   tr: 'TR',
   vn: 'VN',
+  se: 'SE',
+  ir: 'IR',
   it: 'IT',
   se: 'SE',
   hu: 'HU'
