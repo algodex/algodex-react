@@ -1,0 +1,16 @@
+{
+    "header-about": "INFORMAZIONI",
+    "header-trade": "SCAMBIO",
+    "header-docs": "DOCUMENTI",
+    "header-support": "SUPPORTO",
+    "price": "Prezzo",
+    "amount": "Controvalore",
+    "total": "Totale",
+    "time": "TEMPO",
+    "no-trades-completed": "Nessuno scambio completato",
+    "mobilefooter-CHART":"GRAFICO",
+    "mobilefooter-BOOK":"LIBRO",
+    "mobilefooter-TRADE":"SCAMBIO",
+    "mobilefooter-ORDERS":"ORDINI",
+    "mobilefooter-WALLET":"PORTAFOGLIO"
+}
