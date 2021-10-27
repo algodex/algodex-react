@@ -1,0 +1,16 @@
+{
+    "header-about": "درباره",
+    "header-trade": "ترید",
+    "header-docs": "مدارک",
+    "header-support": "پشتیبانی",
+    "price": "قیمت",
+    "amount": "مقدار",
+    "total": "جمع کل",
+    "time": "زمان",
+    "no-trades-completed": " هیچ معامله ای کامل نشده است ",
+    "mobilefooter-CHART":"چارت",
+    "mobilefooter-BOOK":" رزرو کردن",
+    "mobilefooter-TRADE":"معامله",
+    "mobilefooter-ORDERS":"سفارشات",
+    "mobilefooter-WALLET":"کیف"
+}

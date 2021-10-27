@@ -1,0 +1,13 @@
+{
+    "search": "CERCA",
+    "pair": "COPPIA",
+    "price": "PREZZO",
+    "change": "Cambio",
+    "24-hr-change": "Cambio 24 Ore",
+    "liquidity": "Liquidità",
+    "loading": "CARICAMENTO...",
+    "back-to-chart": "Ritorna al grafico",
+    "description": "Descrizione",
+    "circulating-supply": "Ammontare circolante",
+    "total-supply": "Ammontare totale"
+}
