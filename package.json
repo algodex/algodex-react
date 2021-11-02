@@ -31,7 +31,6 @@
   "dependencies": {
     "@algodex/sdk": "^1.0.73",
     "@algodex/components": "^0.0.0-development",
-    "@algodex/service": "^1.0.1",
     "@randlabs/myalgo-connect": "^1.1.1",
     "@sentry/nextjs": "^6.13.3",
     "axios": "^0.21.4",
@@ -65,6 +64,8 @@
     "zustand": "^3.5.14"
   },
   "devDependencies": {
+    "@algodex/cli": "^0.0.0-development",
+    "@algodex/service": "^1.0.1",
     "@babel/core": "^7.15.8",
     "@emotion/babel-plugin": "^11.3.0",
     "@storybook/addon-actions": "^6.3.12",

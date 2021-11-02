@@ -4,7 +4,8 @@ overrides:
   styled-components: ^5
 
 specifiers:
-  '@algodex/components': '*'
+  '@algodex/cli': ^0.0.0-development
+  '@algodex/components': ^0.0.0-development
   '@algodex/sdk': ^1.0.73
   '@algodex/service': ^1.0.1
   '@babel/core': ^7.15.8
@@ -67,7 +68,6 @@ specifiers:
 dependencies:
   '@algodex/components': link:../components
   '@algodex/sdk': link:../sdk
-  '@algodex/service': link:../service
   '@randlabs/myalgo-connect': 1.1.1
   '@sentry/nextjs': 6.13.3_next@10.2.3+react@17.0.2
   axios: 0.21.4
@@ -101,6 +101,8 @@ dependencies:
   zustand: 3.6.0_react@17.0.2
 
 devDependencies:
+  '@algodex/cli': link:../cli
+  '@algodex/service': link:../service
   '@babel/core': 7.15.8
   '@emotion/babel-plugin': 11.3.0_@babel+core@7.15.8
   '@storybook/addon-actions': 6.3.12_react-dom@17.0.2+react@17.0.2
