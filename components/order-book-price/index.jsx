@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ArrowUp, ArrowDown } from 'react-feather'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 import { BodyCopySm } from 'components/type'
 
 const Price = styled.p`

@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Big from 'big.js'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 
 import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-history.css'
 
@@ -13,7 +13,7 @@ dayjs.extend(localizedFormat)
 
 function TradeHistoryView(props) {
   const { asset, tradesData } = props
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common')
 
   const hasTradeHistory = tradesData.length > 0
 
@@ -68,10 +68,10 @@ function TradeHistoryView(props) {
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t("amount")}
+          {t('amount')}
         </BodyCopyTiny>
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t("time")}
+          {t('time')}
         </BodyCopyTiny>
       </Header>
       <Trades>
@@ -80,7 +80,7 @@ function TradeHistoryView(props) {
             renderHistory()
           ) : (
             <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
-              {t("no-trades-completed")}
+              {t('no-trades-completed')}
             </BodyCopyTiny>
           )}
         </TradesWrapper>

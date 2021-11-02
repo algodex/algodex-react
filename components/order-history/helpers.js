@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 
-export const mapTradeHistoryData = (data, { buyText = "BUY", sellText = "SELL"}) => {
+export const mapTradeHistoryData = (data, { buyText = 'BUY', sellText = 'SELL' }) => {
   if (!data || !data.transactions || !data.allAssets) {
     return null
   }
@@ -13,7 +13,7 @@ export const mapTradeHistoryData = (data, { buyText = "BUY", sellText = "SELL"})
     return allAssetsInfo
   }, {})
 
-  const tradeHistory = tradeHistoryData.map(
+  return tradeHistoryData.map(
     ({ unix_time, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
       const side = tradeType === 'buyASA' ? buyText : sellText
 
@@ -26,6 +26,4 @@ export const mapTradeHistoryData = (data, { buyText = "BUY", sellText = "SELL"})
       }
     }
   )
-
-  return tradeHistory
 }

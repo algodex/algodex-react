@@ -1,5 +1,5 @@
 import algodex from '@algodex/sdk'
-import { convertToBaseUnits, convertToAsaUnits } from './convert'
+import { convertToBaseUnits, convertToAsaUnits } from '@algodex/common/lib/utility/convert.js'
 
 const AlgodClient = new algodex.initAlgodClient('public_test')
 
@@ -125,7 +125,6 @@ const OrderService = {
   /**
    * Closes an existing order and refunds the escrow account to the owner
    *
-   * @param {Object}       algodClient: object that has been initialized via initAlgodClient()
    * @param {String} escrowAccountAddr: public address of the escrow account
    * @param {String}       creatorAddr: public address of the owner of the escrow account
    * @param {String}    orderBookEntry: blockchain order book string. For example "2500-625-0-15322902" (N-D-min-assetId)

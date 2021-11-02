@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { searchAssets } from 'lib/api'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
 import InfoFlyover from './info-flyover'
@@ -26,8 +26,7 @@ import {
   AssetChange,
   SortIcon,
   TableHeader,
-  TableContainer,
-  SearchWrapper
+  TableContainer
 } from './asset-search.css'
 
 const AssetNameCell = (props) => {
@@ -63,7 +62,7 @@ const AssetChangeCell = ({ value }) => {
 
 function AssetSearch(props) {
   const { gridSize, onInfoChange } = props
-  const { t, lang } = useTranslation("assets");
+  const { t, lang } = useTranslation('assets')
 
   const router = useRouter()
 
@@ -80,8 +79,8 @@ function AssetSearch(props) {
     if (!data || !Array.isArray(data)) {
       return []
     }
-    const results = data
-    return results.map((result) => {
+
+    return data.map((result) => {
       const price = result.formattedPrice
         ? floatToFixed(result.formattedPrice)
         : result.hasOrders
@@ -167,17 +166,17 @@ function AssetSearch(props) {
   const columns = useMemo(
     () => [
       {
-        Header: t("pair"),
+        Header: t('pair'),
         accessor: 'name',
         Cell: AssetNameCell
       },
       {
-        Header: t("price"),
+        Header: t('price'),
         accessor: 'price',
         Cell: AssetPriceCell
       },
       {
-        Header: t("change"),
+        Header: t('change'),
         accessor: 'change',
         Cell: AssetChangeCell
       }
@@ -204,14 +203,13 @@ function AssetSearch(props) {
     }
   })
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, visibleColumns } =
-    useTable(
-      {
-        columns,
-        data: searchResultsData
-      },
-      useSortBy
-    )
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+    {
+      columns,
+      data: searchResultsData
+    },
+    useSortBy
+  )
 
   const renderStatus = () => {
     if (status === 'success') {
@@ -219,7 +217,9 @@ function AssetSearch(props) {
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
+        {status === 'loading' && (
+          <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
+        )}
         {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
       </StatusContainer>
     )

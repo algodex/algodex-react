@@ -1,11 +1,10 @@
 import Big from 'big.js'
-import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 
 export const mapPriceData = (data) => {
   const prices =
     data?.chart_data.map(
-      ({ date, formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
         const time = parseInt(unixTime)
         return {
           time: time,
@@ -22,7 +21,7 @@ export const mapPriceData = (data) => {
 export const getOhlc = (data) => {
   const lastPriceData = data?.chart_data[0]
 
-  const ohlc = lastPriceData
+  return lastPriceData
     ? {
         open: floatToFixed(lastPriceData.formatted_open),
         high: floatToFixed(lastPriceData.formatted_high),
@@ -30,11 +29,10 @@ export const getOhlc = (data) => {
         close: floatToFixed(lastPriceData.formatted_close)
       }
     : {}
-  return ohlc
 }
 
 export const mapVolumeData = (data, volUpColor, volDownColor) => {
-  const mappedData = data?.chart_data?.map(({ date, asaVolume, unixTime }) => {
+  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
     const time = parseInt(unixTime)
     return {
       time: time,
@@ -44,8 +42,8 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
   const volumeColors = data?.chart_data.map(({ open, close }) =>
     open > close ? volDownColor : volUpColor
   )
-  const volumeData = mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
-  return volumeData
+
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
 }
 
 export const getBidAskSpread = (orderBook) => {

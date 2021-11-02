@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 
 export const mapOpenOrdersData = (data) => {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
@@ -49,6 +49,6 @@ export const mapOpenOrdersData = (data) => {
   })
 
   const allOrders = [...buyOrders, ...sellOrders]
-  allOrders.sort( (a, b) => (a.unix_time < b.unix_time) ? 1 : -1 )
+  allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
   return allOrders
 }

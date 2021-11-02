@@ -1,5 +1,5 @@
-import { calculateAsaBuyAmount } from 'services/convert'
-import { floatToFixed } from 'services/display'
+import { calculateAsaBuyAmount } from '@algodex/common/lib/utility/convert.js'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 
 export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'

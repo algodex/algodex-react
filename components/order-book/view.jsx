@@ -3,7 +3,7 @@ import Big from 'big.js'
 import OrderBookPrice from 'components/order-book-price'
 import { BodyCopyTiny } from 'components/type'
 import PriceHeader from 'components/price-header'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 import { useStore } from 'store/use-store'
 
 import {
@@ -19,7 +19,7 @@ import useTranslation from 'next-translate/useTranslation'
 
 function OrderBookView(props) {
   const { price, priceChange, decimals, sellData, buyData } = props
-  const { t } = useTranslation("common")
+  const { t } = useTranslation('common')
 
   const setOrder = useStore((state) => state.setOrder)
 
@@ -79,10 +79,10 @@ function OrderBookView(props) {
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t("amount")}
+          {t('amount')}
         </BodyCopyTiny>
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t("total")}
+          {t('total')}
         </BodyCopyTiny>
       </Header>
 

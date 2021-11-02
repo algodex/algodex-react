@@ -4,7 +4,7 @@ import { fetchTradeHistory } from 'lib/api'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@algodex/common/lib/utility/display.js'
 
 export default function TradeHistory() {
   const asset = useStore((state) => state.asset)
