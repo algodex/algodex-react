@@ -53,7 +53,7 @@ export const Container = styled.div`
       &:first-child {
         padding-left: 1.125rem;
       }
-      padding-right: .5rem;
+      padding-right: 0.5rem;
     }
 
     thead {
@@ -69,7 +69,7 @@ export const Container = styled.div`
           font-weight: 500;
           user-select: none;
           white-space: nowrap;
-          padding-right: .5rem;
+          padding-right: 0.5rem;
         }
       }
     }

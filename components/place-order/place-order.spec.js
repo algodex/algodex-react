@@ -1,8 +1,8 @@
 import React from 'react'
 import { render } from '../../test/test-utils'
 import PlaceOrderView from './view'
-import WalletService from "services/wallet";
-jest.mock("services/wallet")
+import WalletService from 'services/wallet'
+jest.mock('services/wallet')
 
 const PLACE_ORDER = 'place-order'
 

@@ -1,5 +1,6 @@
 import { usePopperTooltip } from 'react-popper-tooltip'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 export const TooltipContainer = styled.div`
   &.tooltip-container {
     --tooltipBackground: ${({ theme }) => theme.colors.gray[600]};
@@ -120,7 +121,7 @@ export const TooltipContainer = styled.div`
   width: 260px;
 `
 
-export const Tooltip = (props) => {
+export default function Tooltip(props) {
   const { renderButton } = props
   const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
     usePopperTooltip({ delayShow: 200, delayHide: 200 })
@@ -129,7 +130,10 @@ export const Tooltip = (props) => {
     <>
       {renderButton(setTriggerRef)}
       {visible && (
-        <TooltipContainer ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container'})}>
+        <TooltipContainer
+          ref={setTooltipRef}
+          {...getTooltipProps({ className: 'tooltip-container' })}
+        >
           <div {...getArrowProps({ className: 'tooltip-arrow' })} />
           {props.children}
         </TooltipContainer>
@@ -138,4 +142,7 @@ export const Tooltip = (props) => {
   )
 }
 
-export default Tooltip
+Tooltip.propTypes = {
+  renderButton: PropTypes.any,
+  children: PropTypes.any
+}

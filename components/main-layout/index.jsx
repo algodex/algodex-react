@@ -10,12 +10,12 @@ import Chart from 'components/chart'
 // import Wallet from 'components/wallet'
 import AssetInfo from 'components/asset-info'
 // import FirstOrderMsg from 'components/first-order-msg'
-import { demoAssetsData } from 'components/assets/demo'
-import { demoOpenOrderData } from 'components/open-orders/demo'
-import { demoOrderHistoryData } from 'components/order-history/demo'
+// import { demoAssetsData } from 'components/assets/demo'
+// import { demoOpenOrderData } from 'components/open-orders/demo'
+// import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
-import OrderBookPrice from 'components/order-book-price'
-import useTranslation from 'next-translate/useTranslation'
+// import OrderBookPrice from 'components/order-book-price'
+// import useTranslation from 'next-translate/useTranslation'
 import {
   // AssetsSection,
   ChartSection
@@ -38,7 +38,7 @@ import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
 // const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 // const DEMO_ASSETS_DATA = demoAssetsData
 
-function MainLayout(props) {
+function MainLayout(/*props*/) {
   // const { onWalletConnect, refetchWallets } = props
   // const { t } = useTranslation('common')
   const asset = useStore((state) => state.asset)
@@ -46,20 +46,20 @@ function MainLayout(props) {
   // const showOrderBook = asset.isTraded || asset.hasOrders
   const showAssetInfo = useStore((state) => state.showAssetInfo)
 
-  const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
+  const [, /*gridSize*/ setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
 
-  const [showOverlay, setShowOverlay] = useState(false)
+  const [showOverlay /*setShowOverlay*/] = useState(false)
 
-  const TABS = {
-    CHART: 'CHART',
-    BOOK: 'BOOK',
-    TRADE: 'TRADE',
-    ORDERS: 'ORDERS',
-    HISTORY: 'HISTORY'
-  }
+  // const TABS = {
+  //   CHART: 'CHART',
+  //   BOOK: 'BOOK',
+  //   TRADE: 'TRADE',
+  //   ORDERS: 'ORDERS',
+  //   HISTORY: 'HISTORY'
+  // }
 
-  const [activeMobile, setActiveMobile] = useState(TABS.CHART)
+  // const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   useEffect(() => {
     const handleResize = () => {

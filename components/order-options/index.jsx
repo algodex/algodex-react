@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { BodyCopyTiny, LabelSm } from 'components/type'
 import { ChevronDown } from 'react-feather'
-import { useRouter } from "next/router"
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
 import {
@@ -19,10 +19,10 @@ import {
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker } = props
-  const { t } = useTranslation("place-order");
+  const { t } = useTranslation('place-order')
 
-  const router = useRouter();
-  const showMakerOnly = router && router.query.showMakerOnly === "true";
+  const router = useRouter()
+  const showMakerOnly = router && router.query.showMakerOnly === 'true'
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -36,17 +36,16 @@ function OrderOptions(props) {
     }
   }
 
-
   const renderMessage = () => {
     switch (order.execution) {
       case 'maker':
         return `Your order will only execute as a maker order.`
 
       case 'taker':
-        return t("taker-only-desc")
+        return t('taker-only-desc')
 
       case 'both':
-        return t("maker-taker-desc")
+        return t('maker-taker-desc')
 
       default:
         return null
@@ -60,7 +59,7 @@ function OrderOptions(props) {
         onKeyDown={handleKeyDown}
         tabIndex="0"
       >
-        <LabelSm color="gray.500">{t("advanced-options")}</LabelSm>
+        <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>
         <ArrowContainer>
           <ChevronDown />
         </ArrowContainer>
@@ -77,9 +76,9 @@ function OrderOptions(props) {
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
-                {t("maker-taker")}
+                {t('maker-taker')}
               </OptionsButton>
-              
+
               {showMakerOnly && (
                 <>
                   <OptionsInput
@@ -103,7 +102,7 @@ function OrderOptions(props) {
                 onChange={handleChange}
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
-                {t("taker-only")}
+                {t('taker-only')}
               </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">

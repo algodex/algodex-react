@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import useMyAlgo from 'hooks/use-my-algo'
+// import useMyAlgo from 'hooks/use-my-algo'
 
 // import { Container } from 'styles/trade.css'
 import Spinner from 'components/spinner'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+// import ChartView from '../chart/view'
 
 export const Page = styled.div`
   display: flex;
@@ -93,7 +95,7 @@ export default function PageLayout({
   contentPromise = import('components/layout-page-content'),
   contentProps
 }) {
-  const { connect } = useMyAlgo()
+  // const { connect } = useMyAlgo()
   console.log('Redraw')
   const gridRef = useRef()
   const longTest = (comp) =>
@@ -135,7 +137,7 @@ export default function PageLayout({
       <Header {...headerProps} />
       <Grid ref={gridRef}>
         <PageWrapper>
-          {/*{children}*/}
+          {children}
           <Content {...contentProps} />
           <Sidebar {...sidebarProps} />
           <Footer {...footerProps} />
@@ -143,4 +145,21 @@ export default function PageLayout({
       </Grid>
     </Page>
   )
+}
+
+PageLayout.propTypes = {
+  description: PropTypes.string,
+  title: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
+  headerPromise: PropTypes.shape({
+    then: PropTypes.func.isRequired,
+    catch: PropTypes.func.isRequired
+  }),
+  headerProps: PropTypes.any,
+  sidebarPromise: PropTypes.instanceOf(Promise),
+  sidebarProps: PropTypes.any,
+  footerPromise: PropTypes.instanceOf(Promise),
+  footerProps: PropTypes.any,
+  contentPromise: PropTypes.instanceOf(Promise),
+  contentProps: PropTypes.any
 }

@@ -48,12 +48,14 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
+        {/* eslint-disable-next-line */}
         <a target="_blank" href="//about.algodex.com" rel="noreferrer">
           <NavTextLg>{t('common')['header-about']}</NavTextLg>
         </a>
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('common')['header-trade']}</NavTextLg>
         </ActiveLink>
+        {/* eslint-disable-next-line */}
         <a
           target="_blank"
           href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
@@ -61,6 +63,7 @@ export default function Header() {
         >
           <NavTextLg>{t('common')['header-docs']}</NavTextLg>
         </a>
+        {/* eslint-disable-next-line */}
         <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
           <NavTextLg>{t('common')['header-support']}</NavTextLg>
         </a>
@@ -83,7 +86,7 @@ export default function Header() {
 
         <LanguagesContainer>
           <Link href={asPath} locale={language}>
-            <a href="#">
+            <a href="# ">
               <NavTextLg>
                 {language} <Flag countryCode={localeToFlags[language]} svg />
               </NavTextLg>
@@ -93,7 +96,7 @@ export default function Header() {
           <LanguageDropDown>
             <LanguageItem key={language}>
               <Link href={asPath} locale={language}>
-                <a href="#">
+                <a href="#/">
                   <NavTextLg>
                     {language} <Flag countryCode={localeToFlags[language]} svg />
                   </NavTextLg>
@@ -105,7 +108,7 @@ export default function Header() {
               .map((localeCd) => (
                 <LanguageItem key={localeCd}>
                   <Link href={asPath} locale={localeCd}>
-                    <a href="#">
+                    <a href="#/">
                       <NavTextLg>
                         {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
                       </NavTextLg>

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 // import { demoAssetsData } from 'components/assets/demo'
 // import { demoOpenOrderData } from 'components/open-orders/demo'
 // import { demoOrderHistoryData } from 'components/order-history/demo'
-import useStore from 'store/use-store'
+// import useStore from 'store/use-store'
 // import { OrdersSection, TradeHistorySection } from './footer.css'
 
 // const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
@@ -13,7 +13,7 @@ import useStore from 'store/use-store'
 // const DEMO_ASSETS_DATA = demoAssetsData
 
 function PageFooter(/*props*/) {
-  const asset = useStore((state) => state.asset)
+  // const asset = useStore((state) => state.asset)
   // const isSignedIn = useStore((state) => state.isSignedIn)
   // const showOrderBook = asset.isTraded || asset.hasOrders
 
@@ -41,7 +41,7 @@ function PageFooter(/*props*/) {
     handleResize()
 
     return () => removeEventListener('resize', handleResize)
-  }, [])
+  })
 
   return (
     <div>

@@ -3,7 +3,7 @@ import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useStore from 'store/use-store'
 import theme from 'theme'
-// import explorerPic from '../../public/algo-explorer.png'
+
 import { ArrowLeft } from 'react-feather'
 
 import {
@@ -58,9 +58,7 @@ export default function AssetInfo() {
     }
     return null
   }
-  const myLoader = ({ src, width, quality }) => {
-    return `https://example.com/${src}?w=${width}&q=${quality || 75}`
-  }
+
   return (
     <Container>
       <InfoContainer>
