@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "export": "next export",
     "test": "jest",
     "jest": "jest --watch",
     "lint": "eslint --fix .",
@@ -29,9 +30,9 @@
     "styled-components": "^5"
   },
   "dependencies": {
-    "@algodex/sdk": "^1.0.73",
     "@algodex/common": "0.0.0-development",
     "@algodex/components": "^0.0.0-development",
+    "@algodex/sdk": "^1.0.73",
     "@randlabs/myalgo-connect": "^1.1.1",
     "@sentry/nextjs": "^6.13.3",
     "axios": "^0.21.4",
@@ -44,6 +45,7 @@
     "millify": "^4.0.0",
     "moment": "^2.29.1",
     "next": "10.2.3",
+    "next-export-i18n": "^1.1.0",
     "next-translate": "^1.1.1",
     "polished": "^4.1.3",
     "react": "17.0.2",

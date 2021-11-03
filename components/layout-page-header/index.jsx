@@ -38,7 +38,7 @@ export default function Header() {
   const { asPath, locale } = useRouter()
 
   const { t } = useTranslation('common')
-
+  console.log(t)
   return (
     <Container data-testid="header-container">
       <Link href="/">
@@ -48,7 +48,7 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <a target="_blank" href="//about.algodex.com">
+        <a target="_blank" href="//about.algodex.com" rel="noreferrer">
           <NavTextLg>{t('header-about')}</NavTextLg>
         </a>
         <ActiveLink href="/trade" matches={/^\/trade/}>
@@ -57,10 +57,11 @@ export default function Header() {
         <a
           target="_blank"
           href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+          rel="noreferrer"
         >
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </a>
-        <a target="_blank" href="//about.algodex.com/support/">
+        <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
           <NavTextLg>{t('header-support')}</NavTextLg>
         </a>
         {/*
@@ -124,10 +125,11 @@ export default function Header() {
           <a
             target="_blank"
             href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+            rel="noreferrer"
           >
             <NavTextSm>Docs</NavTextSm>
           </a>
-          <a target="_blank" href="//about.algodex.com/support/">
+          <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
           </a>
           {/*

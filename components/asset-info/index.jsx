@@ -1,9 +1,9 @@
-import Image from 'next/image'
+// import Image from 'next/image'
 import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useStore from 'store/use-store'
 import theme from 'theme'
-
+// import explorerPic from '../../public/algo-explorer.png'
 import { ArrowLeft } from 'react-feather'
 
 import {
@@ -20,7 +20,7 @@ import {
 import useTranslation from 'next-translate/useTranslation'
 
 export default function AssetInfo() {
-  const { t } = useTranslation("assets");
+  const { t } = useTranslation('assets')
   const asset = useStore((state) => state.asset)
 
   const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
@@ -58,14 +58,16 @@ export default function AssetInfo() {
     }
     return null
   }
-
+  const myLoader = ({ src, width, quality }) => {
+    return `https://example.com/${src}?w=${width}&q=${quality || 75}`
+  }
   return (
     <Container>
       <InfoContainer>
         {asset.isTraded ? (
           <ButtonText type="button" onClick={() => setShowAssetInfo(false)}>
             <ArrowLeft />
-            <div>{t("back-to-chart")}</div>
+            <div>{t('back-to-chart')}</div>
           </ButtonText>
         ) : null}
         <HeaderContainer>
@@ -77,7 +79,7 @@ export default function AssetInfo() {
         <InfoList>
           <InfoItem>
             <BodyCopyTiny as="dt" color="gray.500">
-              {t("description")}
+              {t('description')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
               {description}
@@ -85,7 +87,7 @@ export default function AssetInfo() {
           </InfoItem>
           <InfoItem halfWidth>
             <BodyCopyTiny as="dt" color="gray.500">
-              {t("circulating-supply")}
+              {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.info.supply.circulating}
@@ -93,7 +95,7 @@ export default function AssetInfo() {
           </InfoItem>
           <InfoItem halfWidth>
             <BodyCopyTiny as="dt" color="gray.500">
-              {t("total-supply")}
+              {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.info.supply.total}
@@ -110,12 +112,14 @@ export default function AssetInfo() {
         </InfoList>
         <AlgoExplorerLink>
           <a href={asset.info.algoExplorerUrl} target="_blank" rel="noreferrer">
-            <Image
-              src="/algo-explorer.png"
-              alt="View asset on Algo Explorer"
-              width="100"
-              height="15"
-            />
+            {/*<Image*/}
+            {/*  // loader={myLoader}*/}
+            {/*  src="/algo-explorer.png"*/}
+            {/*  // src={explorerPic}*/}
+            {/*  alt="View asset on Algo Explorer"*/}
+            {/*  width="100"*/}
+            {/*  height="15"*/}
+            {/*/>*/}
             <ExternalLinkIcon />
           </a>
         </AlgoExplorerLink>

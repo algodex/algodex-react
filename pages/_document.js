@@ -31,6 +31,7 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <link rel="stylesheet" hred="/style.css" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             rel="stylesheet"

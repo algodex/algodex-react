@@ -4,28 +4,30 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 const { withSentryConfig } = require('@sentry/nextjs')
-const nextTranslate = require("next-translate");
+const nextTranslate = require('next-translate')
 
-const moduleExports = nextTranslate({
+const moduleExports = {
+  ...nextTranslate(),
+  i18n: undefined,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     return config
-  },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/trade/15322902',
-        permanent: true
-      },
-      {
-        source: '/trade',
-        destination: '/trade/15322902',
-        permanent: true
-      }
-    ]
   }
-})
+  // async redirects() {
+  //   return [
+  //     // {
+  //     //   source: '/',
+  //     //   destination: '/trade/15322902',
+  //     //   permanent: true
+  //     // }
+  //     // {
+  //     //   source: '/trade',
+  //     //   destination: '/trade/15322902',
+  //     //   permanent: true
+  //     // }
+  //   ]
+  // }
+}
 
 const SentryWebpackPluginOptions = {
   // Additional config options for the Sentry Webpack plugin. Keep in mind that
@@ -41,4 +43,5 @@ const SentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions)
+// module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions)
+module.exports = moduleExports
