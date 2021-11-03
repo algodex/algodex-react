@@ -7,7 +7,7 @@
 // import WalletService from 'services/wallet'
 // import MainLayout from 'components/main-layout'
 // import Header from 'components/layout-page-header'
-import PageLayout from 'components/layout-page'
+// import PageLayout from 'components/layout-page'
 // import Spinner from 'components/spinner'
 // import Error from 'components/error'
 // import useMyAlgo from 'hooks/use-my-algo'
@@ -164,14 +164,14 @@ export default function Home() {
   // }
 
   return (
-    <PageLayout
+    <div
       // title={asset?.name && `${asset.name} to ALGO ` + 'Algodex | Algorand Decentralized Exchange'}
       title="Algodex | Algorand Decentralized Exchange"
       description={'Decentralized exchange for trading Algorand ASAs'}
       // contentPromise={import('components/main-layout')}
     >
       {/*{renderDashboard()}*/}
-    </PageLayout>
+    </div>
   )
 }
 

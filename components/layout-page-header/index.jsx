@@ -2,7 +2,7 @@ import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import { useState } from 'react'
 import ActiveLink from 'components/active-link'
-import useTranslation from 'next-translate/useTranslation'
+import { useTranslation } from 'next-export-i18n'
 import { useRouter } from 'next/router'
 import i18n from '../../i18n.json'
 
@@ -36,9 +36,9 @@ const localeToFlags = {
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { asPath, locale } = useRouter()
-
   const { t } = useTranslation('common')
-  console.log(t)
+  const language = locale ? locale : navigator.language.split('-')[0]
+  console.log(language)
   return (
     <Container data-testid="header-container">
       <Link href="/">
@@ -49,20 +49,20 @@ export default function Header() {
       </Link>
       <Navigation>
         <a target="_blank" href="//about.algodex.com" rel="noreferrer">
-          <NavTextLg>{t('header-about')}</NavTextLg>
+          <NavTextLg>{t('common')['header-about']}</NavTextLg>
         </a>
         <ActiveLink href="/trade" matches={/^\/trade/}>
-          <NavTextLg>{t('header-trade')}</NavTextLg>
+          <NavTextLg>{t('common')['header-trade']}</NavTextLg>
         </ActiveLink>
         <a
           target="_blank"
           href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
           rel="noreferrer"
         >
-          <NavTextLg>{t('header-docs')}</NavTextLg>
+          <NavTextLg>{t('common')['header-docs']}</NavTextLg>
         </a>
         <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
-          <NavTextLg>{t('header-support')}</NavTextLg>
+          <NavTextLg>{t('common')['header-support']}</NavTextLg>
         </a>
         {/*
         <ActiveLink href="/wallet">
@@ -82,26 +82,26 @@ export default function Header() {
         </NavIcon> */}
 
         <LanguagesContainer>
-          <Link href={asPath} locale={locale}>
+          <Link href={asPath} locale={language}>
             <a href="#">
               <NavTextLg>
-                {locale} <Flag countryCode={localeToFlags[locale]} svg />
+                {language} <Flag countryCode={localeToFlags[language]} svg />
               </NavTextLg>
             </a>
           </Link>
 
           <LanguageDropDown>
-            <LanguageItem key={locale}>
-              <Link href={asPath} locale={locale}>
+            <LanguageItem key={language}>
+              <Link href={asPath} locale={language}>
                 <a href="#">
                   <NavTextLg>
-                    {locale} <Flag countryCode={localeToFlags[locale]} svg />
+                    {language} <Flag countryCode={localeToFlags[language]} svg />
                   </NavTextLg>
                 </a>
               </Link>
             </LanguageItem>
             {i18n.locales
-              .filter((localeCd) => localeCd !== locale)
+              .filter((localeCd) => localeCd !== language)
               .map((localeCd) => (
                 <LanguageItem key={localeCd}>
                   <Link href={asPath} locale={localeCd}>

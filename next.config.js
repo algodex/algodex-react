@@ -7,12 +7,12 @@ const { withSentryConfig } = require('@sentry/nextjs')
 const nextTranslate = require('next-translate')
 
 const moduleExports = {
-  ...nextTranslate(),
-  i18n: undefined,
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Important: return the modified config
-    return config
-  }
+  extends: [
+    //...
+    'plugin:@next/next/recommended'
+  ]
+  // ...nextTranslate(),
+  // i18n: undefined,
   // async redirects() {
   //   return [
   //     // {
