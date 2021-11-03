@@ -1,0 +1,16 @@
+{
+    "header-about": "Quant a",
+    "header-trade": "Intercanvi",
+    "header-docs": "Docs",
+    "header-support": "Suport",
+    "price": "Preu",
+    "amount": "Quantitat",
+    "total": "Total",
+    "time": "Temps",
+    "no-trades-completed": " No s'ha completat cap comerç ",
+    "mobilefooter-CHART":"GRÀFIC",
+    "mobilefooter-BOOK":" LLIBRE (Llibreta de comandes)",
+    "mobilefooter-TRADE":"COMERÇ",
+    "mobilefooter-ORDERS":"ORDERS",
+    "mobilefooter-WALLET":"CARTERA"
+}
