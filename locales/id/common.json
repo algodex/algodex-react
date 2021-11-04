@@ -1,0 +1,16 @@
+{
+    "header-about": "MENGENAINYA",
+    "header-trade": "DAGANGAN",
+    "header-docs": "DOKUMEN",
+    "header-support": "BANTUAN",
+    "price": "Harga",
+    "amount": "Nilai",
+    "total": "Jumlah",
+    "time": "MASA",
+    "no-trades-completed": " Tiada dagangan ",
+    "mobilefooter-CHART":"CARTA",
+    "mobilefooter-BOOK":" BUKU",
+    "mobilefooter-TRADE":"BERDAGANG",
+    "mobilefooter-ORDERS":"PESANAN",
+    "mobilefooter-WALLET":"WALLET"
+}
