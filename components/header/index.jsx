@@ -30,6 +30,8 @@ const localeToFlags = {
   tr: 'TR',
   vn: 'VN',
   se: 'SE',
+  hu: 'HU',
+  iq: 'IQ',
   id: 'ID',
   ir: 'IR',
   it: 'IT',
