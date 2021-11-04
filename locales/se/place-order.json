@@ -21,5 +21,8 @@
     "disable-popup": "Var snäll och avaktivera din popup-blockerare. (hittas vid övre högre hörnet i din webbläsare)",
     "disable-popup-mobile": "Var snäll och avaktivera din popup-blockerare.",
     "order-cancelled": "Order avbruten.",
-    "max-spend-explanation": "Det totala saldot innehåller {{amount}} Något som måste lagras i plånboken för att kunna handlas"
+    "max-spend-explanation": "Det totala saldot innehåller {{amount}} Något som måste lagras i plånboken för att kunna handlas",
+    "order-size-filtering": "Beställningsstorleksfiltrering",
+    "less-lag": "Mindre fördröjning",
+    "better-execution": "Bättre utförande"
 }
