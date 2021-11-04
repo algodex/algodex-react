@@ -13,7 +13,7 @@
     "total": "ยอดรวม",
     "available": "คงเหลือ",
     "in-order": "อยู่ในคำสั่งซื้อ",
-    "algo-value": "มูลค่า (ALGO)",
+    "algo-value": "มูลค่า",
     "awaiting-confirmation": "รอการยืนยัน",
     "order-cancelled": "รอการยืนยัน",
     "error-cancelling": "เกิดข้อผิดพลาดในการยกเลิกคำสั่งซื้อ",
