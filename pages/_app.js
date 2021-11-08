@@ -6,6 +6,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
 import ReactGA from 'react-ga'
+import { EventEmitter } from '../events'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -100,7 +101,9 @@ export default function App({ Component, pageProps, err }) {
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
-            <Component {...pageProps} err={err} />
+            <EventEmitter>
+              <Component {...pageProps} err={err} />
+            </EventEmitter>
           </Hydrate>
         </QueryClientProvider>
       </ThemeProvider>

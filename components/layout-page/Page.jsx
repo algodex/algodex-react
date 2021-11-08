@@ -5,7 +5,7 @@ import { default as DefaultHeader } from 'components/layout-page-header'
 import Spinner from 'components/spinner'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-
+import { useEvent } from '../../events'
 export const Page = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,10 +80,13 @@ export default function PageLayout({
   const longTest = (comp, delay) =>
     new Promise((resolve) => {
       setTimeout(() => {
-        console.log('something')
         resolve(comp)
       }, delay)
     })
+
+  useEvent('loaded', (data) => {
+    console.log('Loaded:', data)
+  })
 
   // Import Components
   const Sidebar = dynamic(() => longTest(sidebarPromise, 1000), { loading })

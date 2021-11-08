@@ -20,6 +20,7 @@ import {
   LanguageItem,
   LanguageDropDown
 } from './header.css'
+import { useEventDispatch } from '../../events'
 
 // Map locale code to the flag used in 'react-country-flag'
 const localeToFlags = {
@@ -38,7 +39,11 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { asPath, locale } = useRouter()
   const { t } = useTranslation('common')
-
+  const dispatcher = useEventDispatch()
+  useEffect(() => {
+    console.log('Dispatch: loaded')
+    dispatcher('loaded', 'header')
+  }, [dispatcher])
   useEffect(() => {
     setLanguage(locale ? locale : navigator.language.split('-')[0])
   }, [locale])
