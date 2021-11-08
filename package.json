@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "dex",
+    "watch-dev": "next dev",
     "build": "next build",
     "start": "next start",
     "export": "next export",
@@ -56,7 +57,7 @@
     "zustand": "^3.5.14"
   },
   "devDependencies": {
-    "@algodex/cli": "^1.0.0",
+    "@algodex/cli": "^1.0.1",
     "@algodex/service": "^1.0.1",
     "@babel/core": "^7.15.8",
     "@emotion/babel-plugin": "^11.3.0",

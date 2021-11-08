@@ -1,6 +1,6 @@
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ActiveLink from 'components/active-link'
 import { useTranslation } from 'next-export-i18n'
 import { useRouter } from 'next/router'
@@ -34,11 +34,15 @@ const localeToFlags = {
 }
 
 export default function Header() {
+  const [language, setLanguage] = useState('en')
   const [isOpen, setIsOpen] = useState(false)
   const { asPath, locale } = useRouter()
   const { t } = useTranslation('common')
-  const language = locale ? locale : navigator.language.split('-')[0]
-  console.log(language)
+
+  useEffect(() => {
+    setLanguage(locale ? locale : navigator.language.split('-')[0])
+  }, [locale])
+
   return (
     <Container data-testid="header-container">
       <Link href="/">
