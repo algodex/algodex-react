@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@algodex/common": "^1.0.0",
-    "@algodex/sdk": "^1.0.73",
+    "@algodex/sdk": "npm:@algodex/algodex-sdk@^1.0.73",
     "@randlabs/myalgo-connect": "^1.1.1",
     "@sentry/nextjs": "^6.13.3",
     "axios": "^0.21.4",
