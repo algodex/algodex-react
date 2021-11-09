@@ -82,7 +82,7 @@ export const useUserStore = create(
         })
     })),
     {
-      name: 'assets',
+      name: 'user',
       version: 3
     }
   )
