@@ -4,7 +4,7 @@
     "assets": "ASET",
     "date": "TANGGAL",
     "pair": "PASANGAN",
-    "price": "HARGA (ALGO)",
+    "price": "HARGA",
     "type": "JENIS",
     "amount": "NILAI",
     "status": "STATUS",
