@@ -40,6 +40,7 @@
     "framer-motion": "^4.1.17",
     "immer": "^9.0.3",
     "lightweight-charts": "^3.3.0",
+    "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "moment": "^2.29.1",
     "next": "10.2.3",

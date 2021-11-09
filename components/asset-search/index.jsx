@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
@@ -11,7 +11,7 @@ import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-
+import { useAssetsStore, useUserStore } from 'store/use-store'
 import {
   Container,
   AssetsContainer,
@@ -26,12 +26,10 @@ import {
   AssetChange,
   SortIcon,
   TableHeader,
-  TableContainer,
-  SearchWrapper
+  TableContainer
 } from './asset-search.css'
 
 const AssetNameCell = (props) => {
-  // console.log(props.row.original)
   return (
     <AssetNameBlock>
       <AssetName>{props.value}</AssetName>
@@ -62,52 +60,83 @@ const AssetChangeCell = ({ value }) => {
 }
 
 function AssetSearch(props) {
+  // Persist User Settings
+  const searchState = useUserStore((state) => state.search)
+  const setSearchState = useUserStore((state) => state.setSearch)
+
+  // Persist Queries until PouchDB and/or React-Query v3
+  const assets = useAssetsStore((state) => state.assets)
+  const setAssets = useAssetsStore((state) => state.setAssets)
+
   const { gridSize, onInfoChange } = props
-  const { t, lang } = useTranslation("assets");
+  const { t, lang } = useTranslation('assets')
 
   const router = useRouter()
 
   const [query, setQuery] = useState('')
 
   // Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
+
   const { status, data, error } = useQuery(
     ['searchResults', { query }],
     () => searchAssets(query),
     { refetchInterval: query ? 20000 : 3000 }
   )
 
+  const mapSearchResults = ({
+    assetId,
+    assetName,
+    formattedPrice,
+    priceChg24Pct,
+    hasOrders,
+    isTraded,
+    verified,
+    unitName,
+    formattedASALiquidity,
+    formattedAlgoLiquidity
+  }) => {
+    const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
+
+    const change = !isNaN(parseFloat(priceChg24Pct))
+      ? floatToFixed(priceChg24Pct, 2)
+      : hasOrders
+      ? '--'
+      : null
+
+    return {
+      id: assetId,
+      name: unitName,
+      fullName: assetName,
+      verified: verified,
+      hasBeenOrdered: isTraded || hasOrders,
+      liquidityAlgo: formattedAlgoLiquidity,
+      liquidityAsa: formattedASALiquidity,
+      price,
+      change
+    }
+  }
+
+  // Use Memo for Search Results
   const searchResultsData = useMemo(() => {
-    if (!data || !Array.isArray(data)) {
+    if (!assets || Object.keys(assets).length === 0) {
       return []
     }
-    const results = data
-    return results.map((result) => {
-      const price = result.formattedPrice
-        ? floatToFixed(result.formattedPrice)
-        : result.hasOrders
-        ? '--'
-        : null
+    return Object.keys(assets).map((key) => assets[key])
+  }, [assets])
 
-      const change = !isNaN(parseFloat(result.priceChg24Pct))
-        ? floatToFixed(result.priceChg24Pct, 2)
-        : result.hasOrders
-        ? '--'
-        : null
-
-      return {
-        id: result.assetId,
-        name: result.unitName,
-        fullName: result.assetName,
-        verified: result.verified,
-        hasBeenOrdered: result.isTraded || result.hasOrders,
-        liquidityAlgo: result.formattedAlgoLiquidity,
-        liquidityAsa: result.formattedASALiquidity,
-        price,
-        change
-      }
-    })
-  }, [data])
-
+  // Use Effect to persist Assets to the Local Store
+  useEffect(() => {
+    if (Array.isArray(data)) {
+      setAssets(
+        data.map(mapSearchResults).reduce((prev, item) => {
+          if (typeof prev[item.id] === 'undefined') {
+            prev[item.id] = item
+          }
+          return prev
+        }, {})
+      )
+    }
+  }, [data, setAssets])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -149,35 +178,38 @@ function AssetSearch(props) {
   /**
    * Flyout is only hidden on smaller screens, triggered by external click
    */
-  const handleExternalClick = () => {
+  const handleExternalClick = useCallback(() => {
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
     !isFixed && setIsActive(false)
-  }
+  }, [setIsActive])
 
-  const handleAssetClick = async (row) => {
-    const asset = searchResultsData.find((asset) => asset.id === row.original.id)
+  const handleAssetClick = useCallback(
+    async (row) => {
+      const asset = assets[row.original.id]
 
-    if (asset) {
-      router.push(`/trade/${asset.id}`)
-    }
+      if (asset) {
+        router.push(`/trade/${asset.id}`)
+      }
 
-    setIsActive(false)
-  }
+      setIsActive(false)
+    },
+    [assets, router]
+  )
 
   const columns = useMemo(
     () => [
       {
-        Header: t("pair"),
+        Header: t('pair'),
         accessor: 'name',
         Cell: AssetNameCell
       },
       {
-        Header: t("price"),
+        Header: t('price'),
         accessor: 'price',
         Cell: AssetPriceCell
       },
       {
-        Header: t("change"),
+        Header: t('change'),
         accessor: 'change',
         Cell: AssetChangeCell
       }
@@ -204,22 +236,34 @@ function AssetSearch(props) {
     }
   })
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, visibleColumns } =
-    useTable(
-      {
-        columns,
-        data: searchResultsData
-      },
-      useSortBy
-    )
-
+  const {
+    state: tableState,
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable(
+    {
+      columns,
+      data: searchResultsData,
+      autoResetSortBy: false,
+      initialState: searchState
+    },
+    useSortBy
+  )
+  useEffect(() => {
+    setSearchState(tableState)
+  }, [tableState, setSearchState])
   const renderStatus = () => {
     if (status === 'success') {
       return null
     }
     return (
       <StatusContainer>
-        {status === 'loading' && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
+        {status === 'loading' && (
+          <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
+        )}
         {status === 'error' && <BodyCopySm color="gray.400">Error: {error.message}</BodyCopySm>}
       </StatusContainer>
     )

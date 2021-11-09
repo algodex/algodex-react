@@ -8,15 +8,14 @@ export const roundValue = (value, decimalLimit) => {
     return value
   }
 
-  const split = value.toString().split(".");
-  const hasDecimals = split.length > 1;
+  const split = value.toString().split('.')
+  const hasDecimals = split.length > 1
 
   if (hasDecimals && split[1].length >= decimalLimit) {
-    const rounded = new Big(value).round(decimalLimit, Big.roundDown).toString()
-    return rounded
+    return new Big(value).round(decimalLimit, Big.roundDown).toString()
   }
 
-  return value;
+  return value
 }
 
 const immer = (config) => (set, get, api) =>
@@ -44,7 +43,50 @@ export const useStorePersisted = create(
     }
   )
 )
-
+export const useAssetsStore = create(
+  persist(
+    immer((set, get) => ({
+      getCount: () => Object.keys(get().assets).length,
+      assets: {},
+      setAssets: (assets) =>
+        set({
+          assets: {
+            ...get().assets,
+            ...assets
+          }
+        })
+    })),
+    {
+      name: 'assets',
+      version: 3
+    }
+  )
+)
+export const useUserStore = create(
+  persist(
+    immer((set, get) => ({
+      search: {
+        sortBy: [
+          {
+            id: 'price',
+            desc: true
+          }
+        ]
+      },
+      setSearch: (search) =>
+        set({
+          search: {
+            ...get().search,
+            ...search
+          }
+        })
+    })),
+    {
+      name: 'assets',
+      version: 3
+    }
+  )
+)
 export const useStore = create(
   immer((set, get) => ({
     asset: {},
@@ -83,15 +125,21 @@ export const useStore = create(
       execution: 'both'
     },
     setOrder: (order) =>
-      set((state) => { 
+      set((state) => {
         // Always Round order price, amount, and recalculate total
-        const priceChanged = order.price !== state.order.price;
-        const amountChanged = order.amount !== state.order.amount;
+        const priceChanged = order.price !== state.order.price
+        const amountChanged = order.amount !== state.order.amount
         const price = typeof order.price === 'undefined' ? state.order.price : order.price
-        const amount = typeof order.amount === "undefined" ? state.order.amount : order.amount
-        order.price = priceChanged ? roundValue(price, 6) : state.order.price;
-        order.amount = amountChanged ? roundValue(amount, state.asset.decimals) : state.order.amount;
-        order.total = priceChanged || amountChanged ? new Big(order.price || 0).times(new Big(order.amount || 0)).round(6).toString() : state.order.total;
+        const amount = typeof order.amount === 'undefined' ? state.order.amount : order.amount
+        order.price = priceChanged ? roundValue(price, 6) : state.order.price
+        order.amount = amountChanged ? roundValue(amount, state.asset.decimals) : state.order.amount
+        order.total =
+          priceChanged || amountChanged
+            ? new Big(order.price || 0)
+                .times(new Big(order.amount || 0))
+                .round(6)
+                .toString()
+            : state.order.total
 
         return {
           order: {
@@ -100,7 +148,7 @@ export const useStore = create(
           }
         }
       }),
-      
+
     // Controls showing of Asset Info or Chart
     showAssetInfo: false,
     setShowAssetInfo: (bool) => set({ showAssetInfo: bool }),
@@ -111,8 +159,7 @@ export const useStore = create(
 
     // Controls Chart Mode
     chartMode: 'candle',
-    setChartMode: (input) => set({ chartMode: input }),
-
+    setChartMode: (input) => set({ chartMode: input })
   }))
 )
 
