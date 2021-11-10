@@ -4,14 +4,14 @@ import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { searchAssets } from 'lib/api'
-import { floatToFixed } from 'services/display'
 import { useTable, useSortBy } from 'react-table'
 import SearchInput from './search'
 import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-import { useAssetsStore, useUserStore } from 'store/index'
+import useAssetsStore, { mapToQueryResult, mapToSearchResults } from 'store/use-assets'
+import { useUserStore } from 'store/index'
 import {
   Container,
   AssetsContainer,
@@ -59,76 +59,65 @@ const AssetChangeCell = ({ value }) => {
   return <AssetChange value={value}>{displayChange()}</AssetChange>
 }
 
-function AssetSearch(props) {
+function AssetSearch({ gridSize, onInfoChange }) {
   // Persist User Settings
+  // @todo Replace with PouchDB
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
 
   // Persist Queries until PouchDB and/or React-Query v3
+  // @see https://react-query.tanstack.com/plugins/persistQueryClient
   const assets = useAssetsStore((state) => state.assets)
   const setAssets = useAssetsStore((state) => state.setAssets)
 
-  const { gridSize, onInfoChange } = props
+  // Component State
   const { t, lang } = useTranslation('assets')
-
   const router = useRouter()
-
   const [query, setQuery] = useState('')
 
-  // Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
+  let options = {}
 
-  const { status, data, error } = useQuery(
-    ['searchResults', { query }],
-    () => searchAssets(query),
-    { refetchInterval: query ? 20000 : 3000, staleTime: 3000 }
-  )
-
-  const mapSearchResults = ({
-    assetId,
-    assetName,
-    formattedPrice,
-    priceChg24Pct,
-    hasOrders,
-    isTraded,
-    verified,
-    unitName,
-    formattedASALiquidity,
-    formattedAlgoLiquidity
-  }) => {
-    const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
-
-    const change = !isNaN(parseFloat(priceChg24Pct))
-      ? floatToFixed(priceChg24Pct, 2)
-      : hasOrders
-      ? '--'
-      : null
-
-    return {
-      id: assetId,
-      name: unitName,
-      fullName: assetName,
-      verified: verified,
-      hasBeenOrdered: isTraded || hasOrders,
-      liquidityAlgo: formattedAlgoLiquidity,
-      liquidityAsa: formattedASALiquidity,
-      price,
-      change
-    }
+  /**
+   * Client Rehydration
+   *
+   * Used when Query is not active on the initial render
+   */
+  if (Object.keys(assets).length > 0) {
+    options.initialData = Object.keys(assets)
+      .map((key) => assets[key])
+      .map(mapToQueryResult)
   }
 
-  // Use Memo for Search Results
-  const searchResultsData = useMemo(() => {
-    if (!assets || Object.keys(assets).length === 0) {
-      return []
+  /**
+   * Search Results Query
+   * Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
+   * @see https://react-query.tanstack.com/reference/useQuery
+   * @type {{refetchInterval: (number), staleTime: number, initialData: Array}}
+   */
+  const { status, data, error, isFetched } = useQuery(
+    ['searchResults', { query }],
+    () => searchAssets(query),
+    {
+      refetchInterval: query ? 20000 : 3000,
+      staleTime: 3000,
+      ...options
     }
-    return Object.keys(assets).map((key) => assets[key])
-  }, [assets])
+  )
 
-  // Use Effect to persist Assets to the Local Store
+  /**
+   * Search Query to LocalStorage
+   *
+   * Set the persistent localstorage with the latest fetched data.
+   * This is used during the first render and when the user is offline.
+   *
+   * @todo Dehydrate Full Query state
+   * @todo Migrate to PouchDB | persistQueryClient
+   * @see https://react-query.tanstack.com/plugins/persistQueryClient
+   */
   useEffect(() => {
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) && isFetched) {
       setAssets(
-        data.map(mapSearchResults).reduce((prev, item) => {
+        data.map(mapToSearchResults).reduce((prev, item) => {
           if (typeof prev[item.id] === 'undefined') {
             prev[item.id] = item
           }
@@ -136,7 +125,7 @@ function AssetSearch(props) {
         }, {})
       )
     }
-  }, [data, setAssets])
+  }, [data, setAssets, isFetched])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -147,7 +136,9 @@ function AssetSearch(props) {
 
   const containerRef = useRef()
   const searchRef = useRef()
-
+  /**
+   * Get the client height
+   */
   useEffect(() => {
     if (searchRef.current) {
       const height = Math.floor(searchRef.current.getBoundingClientRect().height)
@@ -171,18 +162,27 @@ function AssetSearch(props) {
     }
   }, [gridSize])
 
-  const handleSearchFocus = () => {
+  /**
+   *
+   * @type {(function(): void)|*}
+   */
+  const handleSearchFocus = useCallback(() => {
     !isActive && setIsActive(true)
-  }
+  }, [setIsActive, isActive])
 
   /**
    * Flyout is only hidden on smaller screens, triggered by external click
+   * @type {(function(): void)|*}
    */
   const handleExternalClick = useCallback(() => {
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
     !isFixed && setIsActive(false)
   }, [setIsActive])
 
+  /**
+   *
+   * @type {(function(*): Promise<void>)|*}
+   */
   const handleAssetClick = useCallback(
     async (row) => {
       const asset = assets[row.original.id]
@@ -196,6 +196,11 @@ function AssetSearch(props) {
     [assets, router]
   )
 
+  /**
+   * React-Table Columns
+   * @see https://react-table.tanstack.com/docs/api/useTable#column-options
+   * @type {Object}
+   */
   const columns = useMemo(
     () => [
       {
@@ -217,6 +222,11 @@ function AssetSearch(props) {
     [lang]
   )
 
+  /**
+   *
+   * @param row
+   * @returns {*}
+   */
   const getRowProps = (row) => ({
     role: 'button',
     tabIndex: isActive ? '0' : '-1', // tab-navigable only when rows are visible
@@ -246,7 +256,7 @@ function AssetSearch(props) {
   } = useTable(
     {
       columns,
-      data: searchResultsData,
+      data: Object.keys(assets).map((key) => assets[key]),
       autoResetSortBy: false,
       initialState: searchState
     },
