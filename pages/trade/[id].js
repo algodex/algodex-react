@@ -11,7 +11,6 @@ import Spinner from 'components/spinner'
 import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
-import { checkTestnetAccess } from 'lib/api'
 import Cookies from 'cookies'
 
 import { Container, StatusContainer } from 'styles/trade.css'
@@ -20,7 +19,7 @@ export default function Home() {
   const router = useRouter()
   const id = router.query.id
   const isValidId = /^\d+$/.test(id)
-  const adminWalletAddr = router.query.adminWalletAddr;
+  const adminWalletAddr = router.query.adminWalletAddr
 
   // Redirect to LAMP if `id` is invalid (contains non-numerical characters)
   useEffect(() => {
@@ -43,17 +42,18 @@ export default function Home() {
 
   const walletAddresses = useMemo(() => {
     if (adminWalletAddr) {
-      return [adminWalletAddr];
+      return [adminWalletAddr]
     }
-    if (!!addresses) {
+    if (addresses) {
       return addresses
     }
-    return !!wallets ? wallets.map((w) => w.address) : []
+    return wallets ? wallets.map((w) => w.address) : []
   }, [addresses, wallets, adminWalletAddr])
 
   // fetch wallet balances from blockchain
   const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
-    refetchInterval: 5000
+    refetchInterval: 5000,
+    staleTime: 5000
   })
 
   useEffect(() => {
@@ -81,7 +81,8 @@ export default function Home() {
   // fetch asset from API
   const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), {
     enabled: isValidId,
-    refetchInterval: 3000
+    refetchInterval: 3000,
+    staleTime: 3000
   })
 
   const asset = assetQuery.data?.asset
@@ -109,7 +110,8 @@ export default function Home() {
     () => fetchOrdersInEscrow(asset?.id),
     {
       enabled: !!asset?.id && hasBeenOrdered,
-      refetchInterval: 5000
+      refetchInterval: 5000,
+      stale: 5000
     }
   )
 
@@ -170,7 +172,7 @@ export default function Home() {
           {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
         </title>
         <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"></meta>
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
       </Head>
       <Header />
       {renderDashboard()}

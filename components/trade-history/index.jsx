@@ -14,7 +14,8 @@ export default function TradeHistory() {
     () => fetchTradeHistory(asset.id),
     {
       enabled: asset.isTraded,
-      refetchInterval: 5000
+      refetchInterval: 5000,
+      staleTime: 5000
     }
   )
 

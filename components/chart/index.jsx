@@ -3,7 +3,7 @@ import Spinner from 'components/spinner'
 import { fetchPriceData } from 'lib/api'
 import millify from 'millify'
 import PropTypes from 'prop-types'
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
 import useStore, { getChartTimeInterval } from 'store/use-store'
@@ -27,7 +27,8 @@ function Chart(props) {
     () => fetchPriceData(assetId, chartTimeInterval),
     {
       // Refetch the data every second
-      refetchInterval: 1000
+      refetchInterval: 3000,
+      staleTime: 3000
     }
   )
 
