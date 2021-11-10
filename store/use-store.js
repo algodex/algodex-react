@@ -18,7 +18,7 @@ export const roundValue = (value, decimalLimit) => {
   return value
 }
 
-const immer = (config) => (set, get, api) =>
+export const immer = (config) => (set, get, api) =>
   config(
     (partial, replace) => {
       const nextState = typeof partial === 'function' ? produce(partial) : partial
@@ -27,6 +27,9 @@ const immer = (config) => (set, get, api) =>
     get,
     api
   )
+
+export const createStore = ({ config, options, localstorage = false }) =>
+  localstorage ? create(persist(immer(config), options)) : create(immer(config))
 
 export const useStorePersisted = create(
   persist(
@@ -39,50 +42,6 @@ export const useStorePersisted = create(
     })),
     {
       name: 'algodex',
-      version: 3
-    }
-  )
-)
-export const useAssetsStore = create(
-  persist(
-    immer((set, get) => ({
-      getCount: () => Object.keys(get().assets).length,
-      assets: {},
-      setAssets: (assets) =>
-        set({
-          assets: {
-            ...get().assets,
-            ...assets
-          }
-        })
-    })),
-    {
-      name: 'assets',
-      version: 3
-    }
-  )
-)
-export const useUserStore = create(
-  persist(
-    immer((set, get) => ({
-      search: {
-        sortBy: [
-          {
-            id: 'price',
-            desc: true
-          }
-        ]
-      },
-      setSearch: (search) =>
-        set({
-          search: {
-            ...get().search,
-            ...search
-          }
-        })
-    })),
-    {
-      name: 'user',
       version: 3
     }
   )

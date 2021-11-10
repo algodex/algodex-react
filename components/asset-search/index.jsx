@@ -11,7 +11,7 @@ import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-import { useAssetsStore, useUserStore } from 'store/use-store'
+import { useAssetsStore, useUserStore } from 'store/index'
 import {
   Container,
   AssetsContainer,
@@ -80,7 +80,7 @@ function AssetSearch(props) {
   const { status, data, error } = useQuery(
     ['searchResults', { query }],
     () => searchAssets(query),
-    { refetchInterval: query ? 20000 : 3000 }
+    { refetchInterval: query ? 20000 : 3000, staleTime: 3000 }
   )
 
   const mapSearchResults = ({
