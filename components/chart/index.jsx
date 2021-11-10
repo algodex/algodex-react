@@ -1,6 +1,6 @@
 import Error from 'components/error'
 import Spinner from 'components/spinner'
-import { fetchPriceData } from 'lib/api'
+import { fetchAssetById, fetchPriceData } from 'lib/api'
 import millify from 'millify'
 import PropTypes from 'prop-types'
 import { useMemo, useEffect } from 'react'
@@ -15,8 +15,21 @@ const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
 function Chart(props) {
-  const asset = useStore((state) => state.asset)
-  const assetId = asset.id
+  // const asset = useStore((state) => state.asset)
+
+  const assetQuery = useQuery(
+    ['asset', { id: props.assetId }],
+    () => fetchAssetById(props.assetId),
+    {
+      refetchInterval: 3000,
+      staleTime: 3000
+    }
+  )
+
+  const asset = assetQuery.data?.asset
+
+  const assetId = props.assetId
+
   const orderBook = useStore((state) => state.orderBook)
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
   const queryClient = useQueryClient()
@@ -42,11 +55,11 @@ function Chart(props) {
 
   const asaVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
 
-  if (isLoading) {
+  if (isLoading || assetQuery.isLoading) {
     return <Spinner flex />
   }
 
-  if (isError) {
+  if (isError || assetQuery.isError) {
     return <Error message="Error loading chart" flex />
   }
 
