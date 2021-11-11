@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import AssetSearch from 'components/asset-search'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import Spinner from 'components/spinner'
@@ -24,8 +23,6 @@ import {
   SearchAndChartSection
 } from './main-layout.css'
 
-import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
-
 const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
@@ -45,7 +42,7 @@ const loading = () => (
 function MainLayout() {
   console.log('Main Layout Render Counter')
 
-  // const AssetSearch = dynamic(() => import('components/asset-search'), { loading })
+  const AssetSearch = dynamic(() => import('components/asset-search'), { loading })
   const Chart = dynamic(() => import('components/chart'), { loading })
   const OrderBook = dynamic(() => import('components/order-book'), { loading })
   const Orders = dynamic(() => import('components/orders'), { loading })
@@ -62,8 +59,6 @@ function MainLayout() {
 
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
-
-  const [showOverlay, setShowOverlay] = useState(false)
 
   const TABS = {
     CHART: 'CHART',
@@ -102,19 +97,14 @@ function MainLayout() {
           <Wallet />
         </WalletSection>
         <TradeSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder
-            refetchWallets={() => {
-              console.log('Refetch')
-            }}
-          />
+          <PlaceOrder />
         </TradeSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
-            <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
+            <AssetSearch gridSize={gridSize} />
           </AssetsSection>
           <ChartSection>
             {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
-            <ChartOverlay isActive={showOverlay} />
           </ChartSection>
         </SearchAndChartSection>
         <OrderBookSection active={activeMobile === TABS.BOOK}>

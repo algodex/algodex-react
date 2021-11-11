@@ -105,7 +105,7 @@ export function mapToSearchResults({
     change
   }
 }
-function AssetSearch({ gridSize, onInfoChange }) {
+function AssetSearch({ gridSize }) {
   // @todo Replace with PouchDB
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -252,11 +252,11 @@ function AssetSearch({ gridSize, onInfoChange }) {
     },
     onMouseEnter: () => {
       setAssetInfo(row.original)
-      onInfoChange(true)
+      // onInfoChange(true)
     },
     onMouseLeave: () => {
       setAssetInfo(null)
-      onInfoChange(false)
+      // onInfoChange(false)
     }
   })
 
@@ -356,8 +356,7 @@ function AssetSearch({ gridSize, onInfoChange }) {
 }
 
 AssetSearch.propTypes = {
-  gridSize: PropTypes.object.isRequired,
-  onInfoChange: PropTypes.func.isRequired
+  gridSize: PropTypes.object.isRequired
 }
 
 export default AssetSearch
