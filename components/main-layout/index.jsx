@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
+import AssetSearch from 'components/asset-search'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import Spinner from 'components/spinner'
@@ -44,7 +45,7 @@ const loading = () => (
 function MainLayout() {
   console.log('Main Layout Render Counter')
 
-  const AssetSearch = dynamic(() => import('components/asset-search'), { loading })
+  // const AssetSearch = dynamic(() => import('components/asset-search'), { loading })
   const Chart = dynamic(() => import('components/chart'), { loading })
   const OrderBook = dynamic(() => import('components/order-book'), { loading })
   const Orders = dynamic(() => import('components/orders'), { loading })
