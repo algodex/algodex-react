@@ -366,7 +366,7 @@ function AssetSearch({ gridRef }) {
 }
 
 AssetSearch.propTypes = {
-  gridSize: PropTypes.object.isRequired
+  gridRef: PropTypes.object.isRequired
 }
 
 export default AssetSearch
