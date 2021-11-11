@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -34,9 +35,9 @@ const localeToFlags = {
   iq: 'IQ',
   id: 'ID',
   ir: 'IR',
-  it: 'IT',
-  se: 'SE',
-  hu: 'HU'
+  it: 'IT'
+  // se: 'SE',
+  // hu: 'HU'
 }
 
 export default function Header() {
@@ -54,7 +55,7 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <a target="_blank" href="//about.algodex.com">
+        <a target="_blank" href="//about.algodex.com" rel="noreferrer">
           <NavTextLg>{t('header-about')}</NavTextLg>
         </a>
         <ActiveLink href="/trade" matches={/^\/trade/}>
@@ -63,10 +64,11 @@ export default function Header() {
         <a
           target="_blank"
           href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+          rel="noreferrer"
         >
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </a>
-        <a target="_blank" href="//about.algodex.com/support/">
+        <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
           <NavTextLg>{t('header-support')}</NavTextLg>
         </a>
         {/*
@@ -130,10 +132,11 @@ export default function Header() {
           <a
             target="_blank"
             href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+            rel="noreferrer"
           >
             <NavTextSm>Docs</NavTextSm>
           </a>
-          <a target="_blank" href="//about.algodex.com/support/">
+          <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
           </a>
           {/*

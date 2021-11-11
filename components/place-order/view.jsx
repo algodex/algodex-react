@@ -53,7 +53,7 @@ function PlaceOrderView(props) {
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
-  const [orderFilter, setOrderFilter] = useState(0);
+  const [orderFilter, setOrderFilter] = useState(0)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -120,11 +120,14 @@ function PlaceOrderView(props) {
   }
 
   const placeOrder = (orderData) => {
-
     // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
     let filteredOrderBook = {
-      buyOrders: orderBook.buyOrders.filter(orders => new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000))),
-      sellOrders: orderBook.sellOrders.filter(orders => new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000)))
+      buyOrders: orderBook.buyOrders.filter((orders) =>
+        new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000))
+      ),
+      sellOrders: orderBook.sellOrders.filter((orders) =>
+        new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000))
+      )
     }
     return OrderService.placeOrder(orderData, filteredOrderBook)
   }
@@ -333,7 +336,13 @@ function PlaceOrderView(props) {
               {txnFee.toFixed(3)}
             </BodyCopyTiny>
           </TxnFeeContainer> */}
-          <OrderOptions order={order} onChange={handleOptionsChange} allowTaker={asset.hasOrders} orderFilter={orderFilter} setOrderFilter={setOrderFilter} />
+          <OrderOptions
+            order={order}
+            onChange={handleOptionsChange}
+            allowTaker={asset.hasOrders}
+            orderFilter={orderFilter}
+            setOrderFilter={setOrderFilter}
+          />
         </LimitOrder>
         {renderSubmit()}
       </>

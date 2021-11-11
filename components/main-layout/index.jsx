@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import AssetSearch from 'components/asset-search'
 import Chart from 'components/chart'
-import MobileInterface from 'components/mobile-interface'
+// import MobileInterface from 'components/mobile-interface'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
 import PlaceOrder from 'components/place-order'
@@ -14,7 +14,7 @@ import { demoAssetsData } from 'components/assets/demo'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
-import OrderBookPrice from 'components/order-book-price'
+// import OrderBookPrice from 'components/order-book-price'
 import useTranslation from 'next-translate/useTranslation'
 import {
   AssetsSection,
@@ -28,7 +28,7 @@ import {
   WalletSection,
   MobileMenu,
   MobileMenuButton,
-  MobilePriceSection,
+  // MobilePriceSection,
   SearchAndChartSection
 } from './main-layout.css'
 
@@ -40,7 +40,7 @@ const DEMO_ASSETS_DATA = demoAssetsData
 
 function MainLayout(props) {
   const { onWalletConnect, refetchWallets } = props
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common')
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const showOrderBook = asset.isTraded || asset.hasOrders
@@ -117,22 +117,22 @@ function MainLayout(props) {
           <ul>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
-              {t("mobilefooter-CHART")}
+                {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
-              {t("mobilefooter-BOOK")}
+                {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
-              {t("mobilefooter-TRADE")}
+                {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
-              {t("mobilefooter-ORDERS")}
+                {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
             {/* <li>
@@ -142,7 +142,7 @@ function MainLayout(props) {
               </li> */}
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
-              {t("mobilefooter-WALLET")}
+                {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>
           </ul>

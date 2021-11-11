@@ -38,7 +38,6 @@ export const AssetsSection = styled.section`
   }
 `
 
-
 export const SearchAndChartSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   position: relative;
@@ -59,11 +58,9 @@ export const SearchAndChartSection = styled.section`
     grid-template-columns: 320px 1fr;
     grid-template-rows: 1fr;
   }
-
 `
 
 export const OrderBookSection = styled.section`
-
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -81,7 +78,6 @@ export const OrderBookSection = styled.section`
   }
 `
 export const TradeHistorySection = styled.section`
-
   display: flex;
   flex-direction: column;
 
@@ -97,7 +93,6 @@ export const TradeHistorySection = styled.section`
 `
 
 export const OrdersSection = styled.section`
-
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -112,8 +107,6 @@ export const OrdersSection = styled.section`
   }
 `
 
-
-
 export const MainWrapper = styled.div`
   position: relative;
   height: calc(var(--vh, 1vh) * 100);
@@ -123,7 +116,6 @@ export const MainWrapper = styled.div`
     min-height: 100%;
     height: auto;
   }
-
 `
 
 export const Main = styled.main`
@@ -191,7 +183,6 @@ export const MobileMenu = styled.nav`
     flex: 1 0 auto;
     height: 100%;
   }
-
 
   z-index: 99;
 

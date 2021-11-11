@@ -37,7 +37,6 @@ export const AssetsContainer = styled.div`
   box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
   z-index: 1000;
 
-
   @media (min-width: 1536px) {
     position: static;
     display: block;
