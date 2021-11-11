@@ -56,8 +56,6 @@ function MainLayout() {
   const isSignedIn = useStore((state) => state.isSignedIn)
   const showOrderBook = asset.isTraded || asset.hasOrders
   const showAssetInfo = useStore((state) => state.showAssetInfo)
-
-  const [gridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
 
   const TABS = {
@@ -101,7 +99,7 @@ function MainLayout() {
         </TradeSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
-            <AssetSearch gridSize={gridSize} />
+            <AssetSearch gridRef={gridRef} />
           </AssetsSection>
           <ChartSection>
             {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
@@ -118,7 +116,6 @@ function MainLayout() {
             openOrderData={DEMO_OPEN_ORDER_DATA}
             orderHistoryData={DEMO_ORDER_HISTORY_DATA}
             assetData={DEMO_ASSETS_DATA}
-            gridSize={gridSize}
           />
         </OrdersSection>
         <MobileMenu>

@@ -105,7 +105,7 @@ export function mapToSearchResults({
     change
   }
 }
-function AssetSearch({ gridSize }) {
+function AssetSearch({ gridRef }) {
   // @todo Replace with PouchDB
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -113,7 +113,7 @@ function AssetSearch({ gridSize }) {
   const setQuery = useUserStore((state) => state.setQuery)
   const { t, lang } = useTranslation('assets')
   const router = useRouter()
-
+  const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
   /**
    * Search Results Query
    * Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
@@ -200,12 +200,11 @@ function AssetSearch({ gridSize }) {
   const handleAssetClick = useCallback(
     (row) => {
       const asset = row.original
-
       if (asset) {
         router.push(`/trade/${asset.id}`)
+      } else {
+        setIsActive(false)
       }
-
-      setIsActive(false)
     },
     [router]
   )
@@ -293,7 +292,18 @@ function AssetSearch({ gridSize }) {
       </StatusContainer>
     )
   }
+  useEffect(() => {
+    const handleResize = () => {
+      if (gridRef?.current) {
+        const { width, height } = gridRef.current.getBoundingClientRect()
+        setGridSize({ width, height })
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
 
+    return () => removeEventListener('resize', handleResize)
+  }, [gridRef, setGridSize])
   return (
     <Container isActive={isActive}>
       <AssetsContainer ref={containerRef} gridHeight={gridSize.height}>
