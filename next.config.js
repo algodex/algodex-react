@@ -13,9 +13,6 @@ const moduleExports = nextPWA(
       disable: false,
       register: true,
       skipWaiting: true
-      // fallbacks: {
-      //   image: '/fallback.png'
-      // }
     },
     async redirects() {
       return [
