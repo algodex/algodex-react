@@ -10,16 +10,15 @@ const moduleExports = nextPWA(
   nextTranslate({
     pwa: {
       dest: 'public',
-      disable: process.env.NODE_ENV === 'development',
-      skipWaiting: true
+      disable: process.env.NODE_ENV === 'development'
     },
     async redirects() {
       return [
-        {
-          source: '/',
-          destination: '/trade/15322902',
-          permanent: true
-        },
+        // {
+        //   source: '/',
+        //   destination: '/trade/15322902',
+        //   permanent: true
+        // },
         {
           source: '/trade',
           destination: '/trade/15322902',

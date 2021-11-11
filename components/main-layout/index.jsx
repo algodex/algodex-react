@@ -1,21 +1,13 @@
+import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import AssetSearch from 'components/asset-search'
-import Chart from 'components/chart'
-// import MobileInterface from 'components/mobile-interface'
-import OrderBook from 'components/order-book'
-import Orders from 'components/orders'
-import PlaceOrder from 'components/place-order'
-import TradeHistory from 'components/trade-history'
-import Wallet from 'components/wallet'
-import AssetInfo from 'components/asset-info'
-import FirstOrderMsg from 'components/first-order-msg'
+import styled from 'styled-components'
+import useTranslation from 'next-translate/useTranslation'
+import Spinner from 'components/spinner'
 import { demoAssetsData } from 'components/assets/demo'
 import { demoOpenOrderData } from 'components/open-orders/demo'
 import { demoOrderHistoryData } from 'components/order-history/demo'
 import useStore from 'store/use-store'
-// import OrderBookPrice from 'components/order-book-price'
-import useTranslation from 'next-translate/useTranslation'
+
 import {
   AssetsSection,
   ChartSection,
@@ -28,7 +20,6 @@ import {
   WalletSection,
   MobileMenu,
   MobileMenuButton,
-  // MobilePriceSection,
   SearchAndChartSection
 } from './main-layout.css'
 
@@ -38,8 +29,30 @@ const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
 const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
 
-function MainLayout(props) {
-  const { onWalletConnect, refetchWallets } = props
+const CenterSpinner = styled.div`
+  background-color: transparent;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const loading = () => (
+  <CenterSpinner>
+    <Spinner />
+  </CenterSpinner>
+)
+function MainLayout() {
+  console.log('Main Layout Render Counter')
+
+  const AssetSearch = dynamic(() => import('components/asset-search'), { loading })
+  const Chart = dynamic(() => import('components/chart'), { loading })
+  const OrderBook = dynamic(() => import('components/order-book'), { loading })
+  const Orders = dynamic(() => import('components/orders'), { loading })
+  const TradeHistory = dynamic(() => import('components/trade-history'), { loading })
+  const PlaceOrder = dynamic(() => import('components/place-order'), { loading })
+  const Wallet = dynamic(() => import('components/wallet'), { loading })
+  const AssetInfo = dynamic(() => import('components/asset-info'), { loading })
+  const FirstOrderMsg = dynamic(() => import('components/first-order-msg'), { loading })
   const { t } = useTranslation('common')
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
@@ -85,10 +98,14 @@ function MainLayout(props) {
         </MobilePriceSection> */}
 
         <WalletSection active={activeMobile === TABS.WALLET}>
-          <Wallet onWalletConnect={onWalletConnect} />
+          <Wallet />
         </WalletSection>
         <TradeSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder refetchWallets={refetchWallets} />
+          <PlaceOrder
+            refetchWallets={() => {
+              console.log('Refetch')
+            }}
+          />
         </TradeSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
@@ -150,11 +167,6 @@ function MainLayout(props) {
       </Main>
     </MainWrapper>
   )
-}
-
-MainLayout.propTypes = {
-  onWalletConnect: PropTypes.func.isRequired,
-  refetchWallets: PropTypes.func.isRequired
 }
 
 export default MainLayout

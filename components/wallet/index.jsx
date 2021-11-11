@@ -1,15 +1,50 @@
-import PropTypes from 'prop-types'
 import useStore, { useStorePersisted } from 'store/use-store'
 import WalletView from './view'
+import useMyAlgo from '../../hooks/use-my-algo'
+import { useEffect, useMemo } from 'react'
+import { useQuery } from 'react-query'
+import WalletService from '../../services/wallet'
 
-function Wallet(props) {
-  const { onWalletConnect } = props
+function Wallet() {
+  const { connect: onWalletConnect, addresses } = useMyAlgo()
 
   const wallets = useStorePersisted((state) => state.wallets)
+  const setWallets = useStorePersisted((state) => state.setWallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
+  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
 
+  const walletAddresses = useMemo(() => {
+    if (addresses) {
+      return addresses
+    }
+    return wallets ? wallets.map((w) => w.address) : []
+  }, [addresses, wallets])
+
+  // fetch wallet balances from blockchain
+  const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses))
+  useEffect(() => {
+    if (walletsQuery.data?.wallets) {
+      setWallets(walletsQuery.data.wallets)
+
+      if (!isSignedIn) {
+        setIsSignedIn(true)
+      }
+
+      if (!walletAddresses.includes(activeWalletAddress)) {
+        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
+      }
+    }
+  }, [
+    activeWalletAddress,
+    isSignedIn,
+    setActiveWalletAddress,
+    setIsSignedIn,
+    setWallets,
+    walletAddresses,
+    walletsQuery.data
+  ])
   return (
     <WalletView
       wallets={wallets}
@@ -19,10 +54,6 @@ function Wallet(props) {
       onSetActiveWallet={setActiveWalletAddress}
     />
   )
-}
-
-Wallet.propTypes = {
-  onWalletConnect: PropTypes.func.isRequired
 }
 
 export default Wallet

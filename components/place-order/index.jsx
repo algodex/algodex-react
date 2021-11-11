@@ -1,10 +1,7 @@
-import PropTypes from 'prop-types'
 import PlaceOrderView from './view'
 import useStore, { useStorePersisted } from 'store/use-store'
 
-function PlaceOrder(props) {
-  const { refetchWallets } = props
-
+function PlaceOrder() {
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const asset = useStore((state) => state.asset)
@@ -18,13 +15,8 @@ function PlaceOrder(props) {
       activeWalletAddress={activeWalletAddress}
       isSignedIn={isSignedIn}
       orderBook={orderBook}
-      refetchWallets={refetchWallets}
     />
   )
-}
-
-PlaceOrder.propTypes = {
-  refetchWallets: PropTypes.func.isRequired
 }
 
 export default PlaceOrder
