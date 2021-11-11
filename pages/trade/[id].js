@@ -51,10 +51,7 @@ export default function Home() {
   }, [addresses, wallets, adminWalletAddr])
 
   // fetch wallet balances from blockchain
-  const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
-    refetchInterval: 5000,
-    staleTime: 5000
-  })
+  const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses))
 
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
@@ -80,9 +77,7 @@ export default function Home() {
 
   // fetch asset from API
   const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), {
-    enabled: isValidId,
-    refetchInterval: 3000,
-    staleTime: 3000
+    enabled: isValidId
   })
 
   const asset = assetQuery.data?.asset
@@ -109,9 +104,7 @@ export default function Home() {
     ['orderBook', { assetId: asset?.id }],
     () => fetchOrdersInEscrow(asset?.id),
     {
-      enabled: !!asset?.id && hasBeenOrdered,
-      refetchInterval: 5000,
-      stale: 5000
+      enabled: !!asset?.id && hasBeenOrdered
     }
   )
 
@@ -187,8 +180,8 @@ export async function getServerSideProps({ req, res, query }) {
     cookies.set('loginKey', query.loginKey)
   }
 
-  const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  const TESTNET_DOMAIN = process.env.NEXT_PUBLIC_TESTNET_DOMAIN
+  // const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL
+  // const TESTNET_DOMAIN = process.env.NEXT_PUBLIC_TESTNET_DOMAIN
 
   const hasGateAccess = true //await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
 
