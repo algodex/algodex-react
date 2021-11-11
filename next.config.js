@@ -9,9 +9,7 @@ const nextPWA = require('next-pwa')
 const moduleExports = nextPWA(
   nextTranslate({
     pwa: {
-      dest: 'public',
-      disable: false,
-      register: true,
+      disable: process.env.NODE_ENV === 'development',
       skipWaiting: true
     },
     async redirects() {
