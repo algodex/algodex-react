@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import Spinner from 'components/spinner'
@@ -57,7 +57,7 @@ function MainLayout() {
   const showOrderBook = asset.isTraded || asset.hasOrders
   const showAssetInfo = useStore((state) => state.showAssetInfo)
 
-  const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
+  const [gridSize] = useState({ width: 0, height: 0 })
   const gridRef = useRef()
 
   const TABS = {
@@ -70,18 +70,18 @@ function MainLayout() {
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (gridRef?.current) {
-        const { width, height } = gridRef.current.getBoundingClientRect()
-        setGridSize({ width, height })
-      }
-    }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => removeEventListener('resize', handleResize)
-  }, [])
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (gridRef?.current) {
+  //       const { width, height } = gridRef.current.getBoundingClientRect()
+  //       setGridSize({ width, height })
+  //     }
+  //   }
+  //   window.addEventListener('resize', handleResize)
+  //   handleResize()
+  //
+  //   return () => removeEventListener('resize', handleResize)
+  // }, [])
 
   return (
     <MainWrapper>
