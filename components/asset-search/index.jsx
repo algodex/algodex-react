@@ -200,10 +200,9 @@ function AssetSearch({ gridRef }) {
   const handleAssetClick = useCallback(
     (row) => {
       const asset = row.original
+      setIsActive(false)
       if (asset) {
         router.push(`/trade/${asset.id}`)
-      } else {
-        setIsActive(false)
       }
     },
     [router]
