@@ -21,6 +21,9 @@
     "disable-popup": "Gelieve je pop-up blocker uit te zetten (waarschijnlijk rechtsboven in je beeldscherm)",
     "disable-popup-mobile": "Gelieve je pop-up blocker uit te zetten",
     "order-cancelled": "Order geannuleerd.",
-    "max-spend-explanation": "Het totale saldo omvat {{amount}} Algos die in de portemonnee moeten worden opgeslagen om te kunnen handelen"
+    "max-spend-explanation": "Het totale saldo omvat {{amount}} Algos die in de portemonnee moeten worden opgeslagen om te kunnen handelen",
+    "order-size-filtering": "Ordergrootte filteren",
+    "less-lag": "Minder vertraging",
+    "better-execution": "Betere uitvoering"
 
 }

@@ -21,6 +21,9 @@
     "disable-popup": "Lütfen reklam(pop-up) engeleyiciğinizi kapatın(genellikle taraycınızın sağ üst köşesinde yer alır)",
     "disable-popup-mobile": "Lütfen reklam(pop-up) engeleyiciğinizi kapatın.",
     "order-cancelled": "Emir iptal edildi.",
-    "max-spend-explanation": "Toplam bakiye, ticaret yapabilmek için cüzdanda saklanması gereken {{amount}} Algo içerir."
+    "max-spend-explanation": "Toplam bakiye, ticaret yapabilmek için cüzdanda saklanması gereken {{amount}} Algo içerir.",
+    "order-size-filtering": "Sipariş boyutu filtreleme",
+    "less-lag": "Daha Az Gecikme",
+    "better-execution": "Daha İyi Yürütme"
 
 }

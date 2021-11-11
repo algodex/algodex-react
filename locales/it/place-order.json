@@ -21,5 +21,8 @@
     "disable-popup": "Disabilitare il blocco dei popup (solitamente in alto a destra della finestra del tuo browser)",
     "disable-popup-mobile": "Disabilitare il blocco dei popup (solitamente in alto a destra della finestra del tuo browser)",
     "order-cancelled": "Ordine cancellato.",
-    "max-spend-explanation": "saldo totale include {{amount}} algoritmi che devono essere mantenuti nel portafoglio per consentire le negoziazioni"
+    "max-spend-explanation": "saldo totale include {{amount}} algoritmi che devono essere mantenuti nel portafoglio per consentire le negoziazioni",
+    "order-size-filtering": "Filtraggio delle dimensioni dell'ordine",
+    "less-lag": "Meno ritardo",
+    "better-execution": "Migliore esecuzione"
 }
