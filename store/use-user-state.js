@@ -1,6 +1,10 @@
 import { createStore } from './use-store'
-
+import _ from 'lodash'
 const userState = (set, get) => ({
+  query: '',
+  setQuery: (query) => {
+    set({ query })
+  },
   search: {
     sortBy: [
       {
@@ -15,6 +19,11 @@ const userState = (set, get) => ({
         ...get().search,
         ...search
       }
+    }),
+  accounts: {},
+  setAccounts: (accounts) =>
+    set({
+      accounts: _.merge(get().accounts, accounts)
     })
 })
 

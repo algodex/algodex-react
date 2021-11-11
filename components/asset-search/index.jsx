@@ -10,7 +10,7 @@ import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-import useAssetsStore, { mapToQueryResult, mapToSearchResults } from 'store/use-assets'
+import useAssetsStore, { /*mapToQueryResult,*/ mapToSearchResults } from 'store/use-assets'
 import { useUserStore } from 'store/index'
 import {
   Container,
@@ -64,7 +64,8 @@ function AssetSearch({ gridSize, onInfoChange }) {
   // @todo Replace with PouchDB
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
-
+  const query = useUserStore((state) => state.query)
+  const setQuery = useUserStore((state) => state.setQuery)
   // Persist Queries until PouchDB and/or React-Query v3
   // @see https://react-query.tanstack.com/plugins/persistQueryClient
   const assets = useAssetsStore((state) => state.assets)
@@ -73,21 +74,21 @@ function AssetSearch({ gridSize, onInfoChange }) {
   // Component State
   const { t, lang } = useTranslation('assets')
   const router = useRouter()
-  const [query, setQuery] = useState('')
 
-  let options = {}
+  //let options = {}
 
   /**
    * Client Rehydration
    *
    * Used when Query is not active on the initial render
+   * @TODO: Rehydrate Query State
    */
-  if (Object.keys(assets).length > 0) {
-    options.initialData = Object.keys(assets)
-      .map((key) => assets[key])
-      .map(mapToQueryResult)
-  }
-
+  // if (Object.keys(assets).length > 0) {
+  //   console.log(Object.keys(assets).length)
+  //   options.initialData = Object.keys(assets)
+  //     .map((key) => assets[key])
+  //     .map(mapToQueryResult)
+  // }
   /**
    * Search Results Query
    * Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
@@ -99,8 +100,8 @@ function AssetSearch({ gridSize, onInfoChange }) {
     () => searchAssets(query),
     {
       refetchInterval: query ? 20000 : 3000,
-      staleTime: 3000,
-      ...options
+      staleTime: 3000
+      // ...options
     }
   )
 
@@ -126,6 +127,25 @@ function AssetSearch({ gridSize, onInfoChange }) {
       )
     }
   }, [data, setAssets, isFetched])
+
+  /**
+   * Handle Search Data
+   * @type {Array}
+   */
+  const searchResultData = useMemo(() => {
+    // Return nothing if no data exists
+    if ((!data || !Array.isArray(data)) && Object.keys(assets).length === 0) {
+      return []
+    }
+    // If there is data, use it
+    if (data || Array.isArray(data)) {
+      return data.map(mapToSearchResults)
+    }
+    // Return cache if still fetching
+    else if (!isFetched) {
+      return Object.keys(assets).map((key) => assets[key])
+    }
+  }, [data, assets, isFetched])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -256,7 +276,8 @@ function AssetSearch({ gridSize, onInfoChange }) {
   } = useTable(
     {
       columns,
-      data: Object.keys(assets).map((key) => assets[key]),
+      // data: Object.keys(assets).map((key) => assets[key]),
+      data: searchResultData,
       autoResetSortBy: false,
       initialState: searchState
     },
@@ -284,6 +305,7 @@ function AssetSearch({ gridSize, onInfoChange }) {
       <AssetsContainer ref={containerRef} gridHeight={gridSize.height}>
         <div ref={searchRef}>
           <SearchInput
+            initialText={query}
             onChange={(q) => setQuery(q)}
             onSearchFocus={handleSearchFocus}
             onExternalClick={handleExternalClick}

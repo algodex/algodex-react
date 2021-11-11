@@ -4,9 +4,9 @@ import Search from 'components/search'
 import useDebounce from 'hooks/use-debounce'
 
 function SearchInput(props) {
-  const { onChange, onSearchFocus, onExternalClick, containerRef, isActive } = props
+  const { initialText, onChange, onSearchFocus, onExternalClick, containerRef, isActive } = props
 
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState(initialText)
   const debouncedSearchText = useDebounce(searchText, 500)
 
   useEffect(() => {
@@ -60,6 +60,7 @@ function SearchInput(props) {
 }
 
 SearchInput.propTypes = {
+  initialText: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
   onCancel: PropTypes.func,
