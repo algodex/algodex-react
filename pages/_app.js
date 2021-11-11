@@ -105,13 +105,14 @@ export default function App({ Component, pageProps, err }) {
     defaultOptions: {
       refetchInterval: 5000,
       staleTime: 3000,
-      cacheTime: 1000 * 60 * 60 * 24
+      cacheTime: 300000
     }
   })
   if (typeof window !== 'undefined') {
     const localStoragePersistor = createWebStoragePersistor({
       storage: window.localStorage,
-      throttleTime: 10000
+      throttleTime: 1000,
+      maxAge: 10000
     })
     persistQueryClient({
       queryClient,
