@@ -4,6 +4,7 @@ import { RouterContext } from 'next/dist/next-server/lib/router-context'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import theme from '../theme'
+import "tailwindcss/tailwind.css"
 
 const queryClient = new QueryClient()
 
