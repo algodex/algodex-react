@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
+import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental'
 import { Hydrate } from 'react-query/hydration'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
 import ReactGA from 'react-ga'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -92,7 +94,24 @@ export default function App({ Component, pageProps, err }) {
   const TRACKING_ID = 'UA-195819772-1'
   ReactGA.initialize(TRACKING_ID)
   ReactGA.pageview('/')
-  const [queryClient] = useState(() => new QueryClient())
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      refetchInterval: 5000,
+      staleTime: 3000,
+      cacheTime: 1000 * 60 * 60 * 24
+    }
+  })
+  if (typeof window !== 'undefined') {
+    const localStoragePersistor = createWebStoragePersistor({
+      storage: window.localStorage,
+      throttleTime: 10000
+    })
+    persistQueryClient({
+      queryClient,
+      persistor: localStoragePersistor
+    })
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -100,6 +119,7 @@ export default function App({ Component, pageProps, err }) {
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
+            <ReactQueryDevtools initialIsOpen={false} />
             <Component {...pageProps} err={err} />
           </Hydrate>
         </QueryClientProvider>

@@ -10,7 +10,7 @@ import InfoFlyover from './info-flyover'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-import useAssetsStore, { /*mapToQueryResult,*/ mapToSearchResults } from 'store/use-assets'
+import { floatToFixed } from 'services/display'
 import { useUserStore } from 'store/index'
 import {
   Container,
@@ -59,36 +59,61 @@ const AssetChangeCell = ({ value }) => {
   return <AssetChange value={value}>{displayChange()}</AssetChange>
 }
 
+/**
+ * Map a Query Result to a Search Result
+ * @param assetId
+ * @param assetName
+ * @param formattedPrice
+ * @param priceChg24Pct
+ * @param hasOrders
+ * @param isTraded
+ * @param verified
+ * @param unitName
+ * @param formattedASALiquidity
+ * @param formattedAlgoLiquidity
+ * @returns {Object}
+ */
+export function mapToSearchResults({
+  assetId,
+  assetName,
+  formattedPrice,
+  priceChg24Pct,
+  hasOrders,
+  isTraded,
+  verified,
+  unitName,
+  formattedASALiquidity,
+  formattedAlgoLiquidity
+}) {
+  const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
+
+  const change = !isNaN(parseFloat(priceChg24Pct))
+    ? floatToFixed(priceChg24Pct, 2)
+    : hasOrders
+    ? '--'
+    : null
+
+  return {
+    id: assetId,
+    name: unitName,
+    fullName: assetName,
+    verified: verified,
+    hasBeenOrdered: isTraded || hasOrders,
+    liquidityAlgo: formattedAlgoLiquidity,
+    liquidityAsa: formattedASALiquidity,
+    price,
+    change
+  }
+}
 function AssetSearch({ gridSize, onInfoChange }) {
-  // Persist User Settings
   // @todo Replace with PouchDB
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
-  // Persist Queries until PouchDB and/or React-Query v3
-  // @see https://react-query.tanstack.com/plugins/persistQueryClient
-  const assets = useAssetsStore((state) => state.assets)
-  const setAssets = useAssetsStore((state) => state.setAssets)
-
-  // Component State
   const { t, lang } = useTranslation('assets')
   const router = useRouter()
 
-  //let options = {}
-
-  /**
-   * Client Rehydration
-   *
-   * Used when Query is not active on the initial render
-   * @TODO: Rehydrate Query State
-   */
-  // if (Object.keys(assets).length > 0) {
-  //   console.log(Object.keys(assets).length)
-  //   options.initialData = Object.keys(assets)
-  //     .map((key) => assets[key])
-  //     .map(mapToQueryResult)
-  // }
   /**
    * Search Results Query
    * Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
@@ -99,34 +124,9 @@ function AssetSearch({ gridSize, onInfoChange }) {
     ['searchResults', { query }],
     () => searchAssets(query),
     {
-      refetchInterval: query ? 20000 : 3000,
-      staleTime: 3000
-      // ...options
+      refetchInterval: query ? 20000 : 5000
     }
   )
-
-  /**
-   * Search Query to LocalStorage
-   *
-   * Set the persistent localstorage with the latest fetched data.
-   * This is used during the first render and when the user is offline.
-   *
-   * @todo Dehydrate Full Query state
-   * @todo Migrate to PouchDB | persistQueryClient
-   * @see https://react-query.tanstack.com/plugins/persistQueryClient
-   */
-  useEffect(() => {
-    if (Array.isArray(data) && isFetched) {
-      setAssets(
-        data.map(mapToSearchResults).reduce((prev, item) => {
-          if (typeof prev[item.id] === 'undefined') {
-            prev[item.id] = item
-          }
-          return prev
-        }, {})
-      )
-    }
-  }, [data, setAssets, isFetched])
 
   /**
    * Handle Search Data
@@ -134,19 +134,12 @@ function AssetSearch({ gridSize, onInfoChange }) {
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if (((!data || !Array.isArray(data)) && Object.keys(assets).length === 0) || isLoading) {
+    if (!data || !Array.isArray(data) || isLoading || !isFetched) {
       return []
     }
-
     // If there is data, use it
-    if (data || Array.isArray(data)) {
-      return data.map(mapToSearchResults)
-    }
-    // Return cache if still fetching and loading
-    else if (!isFetched) {
-      return Object.keys(assets).map((key) => assets[key])
-    }
-  }, [data, assets, isFetched, isLoading])
+    return data.map(mapToSearchResults)
+  }, [data, isFetched, isLoading])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -205,8 +198,8 @@ function AssetSearch({ gridSize, onInfoChange }) {
    * @type {(function(*): Promise<void>)|*}
    */
   const handleAssetClick = useCallback(
-    async (row) => {
-      const asset = assets[row.original.id]
+    (row) => {
+      const asset = row.original
 
       if (asset) {
         router.push(`/trade/${asset.id}`)
@@ -214,7 +207,7 @@ function AssetSearch({ gridSize, onInfoChange }) {
 
       setIsActive(false)
     },
-    [assets, router]
+    [router]
   )
 
   /**
