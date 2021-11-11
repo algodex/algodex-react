@@ -95,7 +95,7 @@ function AssetSearch({ gridSize, onInfoChange }) {
    * @see https://react-query.tanstack.com/reference/useQuery
    * @type {{refetchInterval: (number), staleTime: number, initialData: Array}}
    */
-  const { status, data, error, isFetched } = useQuery(
+  const { status, data, error, isFetched, isLoading } = useQuery(
     ['searchResults', { query }],
     () => searchAssets(query),
     {
@@ -134,18 +134,19 @@ function AssetSearch({ gridSize, onInfoChange }) {
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if ((!data || !Array.isArray(data)) && Object.keys(assets).length === 0) {
+    if (((!data || !Array.isArray(data)) && Object.keys(assets).length === 0) || isLoading) {
       return []
     }
+
     // If there is data, use it
     if (data || Array.isArray(data)) {
       return data.map(mapToSearchResults)
     }
-    // Return cache if still fetching
+    // Return cache if still fetching and loading
     else if (!isFetched) {
       return Object.keys(assets).map((key) => assets[key])
     }
-  }, [data, assets, isFetched])
+  }, [data, assets, isFetched, isLoading])
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
