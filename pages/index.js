@@ -1,15 +1,19 @@
 import Head from 'next/head'
-import MainLayout from 'components/main-layout'
 import Header from 'components/header'
 
+/**
+ * Landing Page
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const IndexPage = () => {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>Algodex | Algorand Decentralized Exchange</title>
       </Head>
       <Header />
-      <MainLayout />
+      <div>TODO: Landing Page</div>
     </>
   )
 }

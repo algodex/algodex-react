@@ -55,22 +55,31 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <a target="_blank" href="//about.algodex.com" rel="noreferrer">
+        <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
-        </a>
+        </ActiveLink>
+        {/*<a target="_blank" href="//about.algodex.com" rel="noreferrer">*/}
+        {/*  <NavTextLg>{t('header-about')}</NavTextLg>*/}
+        {/*</a>*/}
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </ActiveLink>
-        <a
-          target="_blank"
-          href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
-          rel="noreferrer"
-        >
+        <ActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
-        </a>
-        <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
+        </ActiveLink>
+        {/*<a*/}
+        {/*  target="_blank"*/}
+        {/*  href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"*/}
+        {/*  rel="noreferrer"*/}
+        {/*>*/}
+        {/*  <NavTextLg>{t('header-docs')}</NavTextLg>*/}
+        {/*</a>*/}
+        <ActiveLink href="/support" matches={/^\/support/}>
           <NavTextLg>{t('header-support')}</NavTextLg>
-        </a>
+        </ActiveLink>
+        {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
+        {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
+        {/*</a>*/}
         {/*
         <ActiveLink href="/wallet">
           <NavTextLg>Wallet</NavTextLg>
