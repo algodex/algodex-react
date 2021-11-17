@@ -1,41 +1,29 @@
-//import dynamic from 'next/dynamic'
 import { useRef, useState } from 'react'
 import AssetSearch from 'components/asset-search'
-import Chart from 'components/chart'
-// import MobileInterface from 'components/mobile-interface'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
 import PlaceOrder from 'components/place-order'
 import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
-import AssetInfo from 'components/asset-info'
-import FirstOrderMsg from 'components/first-order-msg'
-// import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
-// import Spinner from 'components/spinner'
-import { demoAssetsData } from 'components/assets/demo'
-import { demoOpenOrderData } from 'components/open-orders/demo'
-import { demoOrderHistoryData } from 'components/order-history/demo'
-import useStore from 'store/use-store'
+import Spinner from 'components/spinner'
 
 import {
   AssetsSection,
-  ChartSection,
+  ContentSection,
   Main,
   MainWrapper,
-  OrderBookSection,
-  OrdersSection,
-  TradeHistorySection,
-  TradeSection,
+  AssetOrderBookSection,
+  WalletOrdersSection,
+  AssetTradeHistorySection,
+  PlaceOrderSection,
   WalletSection,
   MobileMenu,
   MobileMenuButton,
   SearchAndChartSection
 } from './main-layout.css'
-
-const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
-const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
-const DEMO_ASSETS_DATA = demoAssetsData
+import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 
 // const CenterSpinner = styled.div`
 //   background-color: transparent;
@@ -44,30 +32,36 @@ const DEMO_ASSETS_DATA = demoAssetsData
 //   justify-content: center;
 //   align-items: center;
 // `
-// const loading = () => (
-//   <CenterSpinner>
-//     <Spinner />
-//   </CenterSpinner>
-// )
-function MainLayout() {
-  console.log('Main Layout Render Counter')
 
-  // const AssetSearch = dynamic(() => import('components/asset-search'), { loading })
-  // const Chart = dynamic(() => import('components/chart'), { loading })
-  // const OrderBook = dynamic(() => import('components/order-book'), { loading })
-  // const Orders = dynamic(() => import('components/orders'), { loading })
-  // const TradeHistory = dynamic(() => import('components/trade-history'), { loading })
-  // const PlaceOrder = dynamic(() => import('components/place-order'), { loading })
-  // const Wallet = dynamic(() => import('components/wallet'), { loading })
-  // const AssetInfo = dynamic(() => import('components/asset-info'), { loading })
-  // const FirstOrderMsg = dynamic(() => import('components/first-order-msg'), { loading })
+// const Controls = ({ asset }) => {
+//   console.log(asset)
+//   return (
+//     <>
+//       <PlaceOrderSection active={activeMobile === TABS.BOOK}>
+//         {showOrderBook ? (
+//           <OrderBook asset={asset} />
+//         ) : (
+//           <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+//         )}
+//       </PlaceOrderSection>
+//       <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
+//         <TradeHistory asset={asset} />
+//       </AssetTradeHistorySection>
+//     </>
+//   )
+// }
+
+/**
+ * @param asset
+ * @param children
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function MainLayout({ asset, children }) {
+  console.debug(`Main Layout Render Counter ${asset?.id}`)
+  const { isFallback } = useRouter()
   const { t } = useTranslation('common')
-  const asset = useStore((state) => state.asset)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const showOrderBook = asset.isTraded || asset.hasOrders
-  const showAssetInfo = useStore((state) => state.showAssetInfo)
   const gridRef = useRef()
-
   const TABS = {
     CHART: 'CHART',
     BOOK: 'BOOK',
@@ -78,56 +72,41 @@ function MainLayout() {
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (gridRef?.current) {
-  //       const { width, height } = gridRef.current.getBoundingClientRect()
-  //       setGridSize({ width, height })
-  //     }
-  //   }
-  //   window.addEventListener('resize', handleResize)
-  //   handleResize()
-  //
-  //   return () => removeEventListener('resize', handleResize)
-  // }, [])
-
+  // If the Server failed to load data
+  if (isFallback) {
+    return <Spinner flex />
+  }
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        {/* <MobilePriceSection active={activeMobile === TABS.TRADE}>
-          <h3>
-            <span>{`${asset.name} `}</span> / ALGO
-          </h3>
-          <OrderBookPrice price={asset.price} decimals={asset.decimals} change={asset.priceChange24hr} />
-        </MobilePriceSection> */}
-
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet />
         </WalletSection>
-        <TradeSection active={activeMobile === TABS.TRADE}>
+        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder />
-        </TradeSection>
+        </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
             <AssetSearch gridRef={gridRef} />
           </AssetsSection>
-          <ChartSection>
-            {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
-          </ChartSection>
+          <ContentSection>
+            {children}
+            {/*{asset?.id && router.pathname.match('trade') && <Chart asset={asset} />}*/}
+            {/*{asset?.id && router.pathname.match('asset') && <AssetInfo asset={asset} />}*/}
+          </ContentSection>
         </SearchAndChartSection>
-        <OrderBookSection active={activeMobile === TABS.BOOK}>
-          {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
-        </OrderBookSection>
-        <TradeHistorySection active={activeMobile === TABS.HISTORY}>
-          <TradeHistory />
-        </TradeHistorySection>
-        <OrdersSection active={activeMobile === TABS.ORDERS}>
-          <Orders
-            openOrderData={DEMO_OPEN_ORDER_DATA}
-            orderHistoryData={DEMO_ORDER_HISTORY_DATA}
-            assetData={DEMO_ASSETS_DATA}
-          />
-        </OrdersSection>
+
+        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
+          <OrderBook explorerAsset={asset} />
+        </AssetOrderBookSection>
+
+        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
+          <TradeHistory asset={asset} />
+        </AssetTradeHistorySection>
+
+        <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
+          <Orders asset={asset} />
+        </WalletOrdersSection>
         <MobileMenu>
           <ul>
             <li>
@@ -166,5 +145,8 @@ function MainLayout() {
     </MainWrapper>
   )
 }
-
+MainLayout.propTypes = {
+  asset: PropTypes.object,
+  children: PropTypes.any
+}
 export default MainLayout

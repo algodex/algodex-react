@@ -14,8 +14,8 @@ const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
-function Chart(props) {
-  const asset = useStore((state) => state.asset)
+function Chart({ asset, ...rest }) {
+  // const asset = useStore((state) => state.asset)
   const assetId = asset.id
   const orderBook = useStore((state) => state.orderBook)
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
@@ -61,7 +61,7 @@ function Chart(props) {
       ohlc={ohlc}
       priceData={priceData}
       volumeData={volumeData}
-      {...props}
+      {...rest}
     />
   )
 }
@@ -69,5 +69,5 @@ function Chart(props) {
 export default Chart
 
 Chart.propTypes = {
-  assetId: PropTypes.number
+  asset: PropTypes.object.isRequired
 }

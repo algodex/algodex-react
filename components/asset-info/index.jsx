@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import Image from 'next/image'
 import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
 import SvgImage from 'components/svg-image'
-import useStore from 'store/use-store'
+import Link from 'next/link'
+
 import theme from 'theme'
 
 import { ArrowLeft } from 'react-feather'
@@ -18,28 +20,35 @@ import {
   ButtonText
 } from './asset-info.css'
 import useTranslation from 'next-translate/useTranslation'
+import { useAssetPrice } from '../../hooks/Algodex'
+import { Fragment } from 'react'
 
-export default function AssetInfo() {
+const AssetInfo = ({ explorerAsset }) => {
   const { t } = useTranslation('assets')
-  const asset = useStore((state) => state.asset)
 
-  const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
+  const description =
+    explorerAsset.description || explorerAsset?.verified_info?.description || 'N/A'
 
-  const description = asset.info.description || 'N/A'
-
+  const { data: dexAsset } = useAssetPrice({
+    id: explorerAsset.id,
+    options: {
+      refetchInterval: 3000,
+      enabled: typeof explorerAsset?.id !== 'undefined'
+    }
+  })
   const renderName = () => {
-    if (asset.verified) {
+    if (explorerAsset.verified) {
       return (
         <>
-          {`${asset.info.fullName} `}
+          {`${explorerAsset.fullName} `}
           <span>
-            {`(${asset.name}) `}
+            {`(${explorerAsset.name}) `}
             <SvgImage use="verified" w={2} h={2} />
           </span>
         </>
       )
     }
-    return <>{`${asset.info.fullName} (${asset.name})`}</>
+    return <>{`${explorerAsset.fullName} (${explorerAsset.name})`}</>
   }
 
   const renderLink = () => {
@@ -47,11 +56,11 @@ export default function AssetInfo() {
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,7}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
     const regex = new RegExp(expression)
 
-    if (asset.info.url && regex.test(asset.info.url)) {
+    if (explorerAsset.url && regex.test(explorerAsset.url)) {
       return (
         <AssetUrl>
-          <a href={asset.info.url} target="_blank" rel="noreferrer">
-            <BodyCopy as="span">{asset.info.url}</BodyCopy>
+          <a href={explorerAsset.url} target="_blank" rel="noreferrer">
+            <BodyCopy as="span">{explorerAsset.url}</BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -62,11 +71,13 @@ export default function AssetInfo() {
   return (
     <Container>
       <InfoContainer>
-        {asset.isTraded ? (
-          <ButtonText type="button" onClick={() => setShowAssetInfo(false)}>
-            <ArrowLeft />
-            <div>{t('back-to-chart')}</div>
-          </ButtonText>
+        {dexAsset?.isTraded ? (
+          <Link shallow={true} href={`/trade/${explorerAsset.id}`}>
+            <ButtonText type="button">
+              <ArrowLeft />
+              <div>{t('back-to-chart')}</div>
+            </ButtonText>
+          </Link>
         ) : null}
         <HeaderContainer>
           <HeaderLg color="gray.100" mb={2}>
@@ -88,7 +99,7 @@ export default function AssetInfo() {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.info.supply.circulating}
+              {explorerAsset.circulating || 'TODO'}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -96,7 +107,7 @@ export default function AssetInfo() {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.info.supply.total}
+              {explorerAsset.total}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -104,12 +115,42 @@ export default function AssetInfo() {
               ASA ID
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.id}
+              {explorerAsset.id}
             </BodyCopy>
           </InfoItem>
+          {/*<InfoItem>*/}
+          {/*  <BodyCopyTiny as="dt" color="gray.500">*/}
+          {/*    {t('total-transactions')}*/}
+          {/*  </BodyCopyTiny>*/}
+          {/*  <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
+          {/*    {explorerAsset.txns}*/}
+          {/*  </BodyCopy>*/}
+          {/*</InfoItem>*/}
+          {/* TODO: Verified Info */}
+          {dexAsset?.isTraded ? (
+            <Fragment>
+              <InfoItem>
+                <BodyCopyTiny as="dt" color="gray.500">
+                  Price
+                </BodyCopyTiny>
+                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                  {dexAsset.price} ALGO
+                </BodyCopy>
+              </InfoItem>
+              <InfoItem>
+                <BodyCopyTiny as="dt" color="gray.500">
+                  Change
+                </BodyCopyTiny>
+                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                  {dexAsset.price24Change}%
+                </BodyCopy>
+              </InfoItem>
+            </Fragment>
+          ) : null}
         </InfoList>
         <AlgoExplorerLink>
-          <a href={asset.info.algoExplorerUrl} target="_blank" rel="noreferrer">
+          {/*TODO: Accredit Explorer for Information Provided*/}
+          <a href={explorerAsset.explorerUrl} target="_blank" rel="noreferrer">
             <Image
               src="/algo-explorer.png"
               alt="View asset on Algo Explorer"
@@ -123,3 +164,7 @@ export default function AssetInfo() {
     </Container>
   )
 }
+AssetInfo.propTypes = {
+  explorerAsset: PropTypes.object.isRequired
+}
+export default AssetInfo

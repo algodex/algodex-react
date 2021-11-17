@@ -22,9 +22,7 @@ const Price = styled.p`
   }
 `
 
-function OrderBookPrice(props) {
-  const { price, change } = props
-
+function OrderBookPrice({ price, change }) {
   const isDecrease = change < 0
   const color = isDecrease ? 'red' : 'green'
 

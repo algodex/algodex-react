@@ -21,6 +21,7 @@ import {
   LanguageItem,
   LanguageDropDown
 } from './header.css'
+import AssetSearch from "../asset-search";
 
 // Map locale code to the flag used in 'react-country-flag'
 const localeToFlags = {

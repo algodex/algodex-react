@@ -1,16 +1,13 @@
 import Head from 'next/head'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import MainLayout from 'components/main-layout'
 import Header from 'components/header'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import Chart from '../../components/chart'
-import { useExplorerAssetInfo } from '../../hooks/AlgoExplorer'
+import Spinner from 'components/spinner'
+import useUserStore from 'store/use-user-state'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import useUserStore from '../../store/use-user-state'
-import Spinner from '../../components/spinner'
-
-import { fetchExplorerAssetInfo } from '../../lib/algoexplorer'
+import { useExplorerAssetInfo } from 'hooks/AlgoExplorer'
 
 export const Container = styled.div`
   display: flex;
@@ -44,50 +41,38 @@ export const StatusContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
 `
-export async function getStaticPaths() {
-  // const assets = await getAllAlgorandAssets()
-  // console.log(assets.length)
-  // const paths = assets
-  //   .filter((asset) => asset.deleted)
-  //   .map((asset) => ({
-  //     params: { id: asset.id.toString() }
-  //   }))
-  // return { paths, fallback: true }
-  return { paths: [{ params: { id: `21401037` } }], fallback: true }
-}
 
-export async function getStaticProps({ params: { id } }) {
-  let staticExplorerAsset
-  try {
-    staticExplorerAsset = await fetchExplorerAssetInfo(id)
-  } catch ({ response: { status } }) {
-    switch (status) {
-      case 404:
-        return {
-          notFound: true
-        }
-    }
-  }
-
-  return {
-    props: { staticExplorerAsset }
-  }
-}
-
-const TradePage = ({ staticExplorerAsset }) => {
-  console.debug('Trade Page Render')
+/**
+ * Page Component
+ *
+ * @param {string} title
+ * @param {string} description
+ * @param {Object} staticExplorerAsset
+ * @param {JSX.Element|JSX.Element[]} children
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const Page = ({
+  title = 'Algodex | Decentralized Algorand Exchange',
+  description = 'Decentralized exchange for trading Algorand ASAs',
+  staticExplorerAsset,
+  children
+}) => {
   const router = useRouter()
   const [explorerAsset, setExplorerAsset] = useState(staticExplorerAsset)
 
-  const title = 'Algodex | Algorand Decentralized Exchange'
-  const prefix = explorerAsset?.name ? `${explorerAsset.name} to ALGO` : ''
+  const isRouted = typeof router.query.id !== 'undefined'
+  const isShallow = isRouted && parseInt(router.query.id) !== explorerAsset?.id
 
+  console.debug(`Page Render: ${staticExplorerAsset?.id || 'Missing'}`, isRouted, isShallow)
+
+  // Add Asset to User Storage
   const addAsset = useUserStore((state) => state.addAsset)
 
   let options = {
-    enabled:
-      typeof router.query.id !== 'undefined' && parseInt(router.query.id) !== explorerAsset?.id
+    enabled: isShallow
   }
+
   if (
     typeof router.query.id !== 'undefined' &&
     parseInt(router.query.id) === staticExplorerAsset?.id
@@ -109,23 +94,26 @@ const TradePage = ({ staticExplorerAsset }) => {
       setExplorerAsset(data)
     }
   }, [explorerAsset, addAsset, data])
-  // Render
+
   return (
     <Container>
       <Head>
-        <title>{`${prefix} ${title}`}</title>
-        <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
       </Head>
       <Header />
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
-        {!isLoading && explorerAsset?.id && <Chart asset={explorerAsset} />}
+        {!isLoading && explorerAsset?.id && children}
       </MainLayout>
     </Container>
   )
 }
-TradePage.propTypes = {
-  staticExplorerAsset: PropTypes.object
+Page.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  staticExplorerAsset: PropTypes.object,
+  children: PropTypes.any
 }
-export default TradePage
+export default Page

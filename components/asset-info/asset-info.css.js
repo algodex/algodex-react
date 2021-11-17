@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import styled from 'styled-components'
 import { ExternalLink } from 'react-feather'
 
@@ -11,7 +12,7 @@ export const InfoContainer = styled.div`
   max-width: 40rem;
 `
 
-export const ButtonText = styled.button`
+export const ButtonText = forwardRef(styled.button`
   background-color: transparent;
   padding: 0;
   border: none;
@@ -25,7 +26,7 @@ export const ButtonText = styled.button`
     line-height: 24px;
     margin-left: 5px;
   }
-`
+`)
 
 export const HeaderContainer = styled.div`
   padding-bottom: 2rem;

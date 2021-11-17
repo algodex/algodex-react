@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import Big from 'big.js'
 import { floatToFixed } from 'services/display'
 import { Info } from 'react-feather'
-
+import Link from 'next/link'
 import {
   Container,
   Header,
@@ -17,12 +17,9 @@ import {
   Volume,
   IconButton
 } from './chart-overlay.css'
-import useStore from 'store/use-store'
 
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
-
-  const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
   const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
   const changeAmt = asset.priceChange24hr
     ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
@@ -42,9 +39,11 @@ function ChartOverlay(props) {
           <div>
             <span>{`${asset.name} `}</span> / ALGO
           </div>
-          <IconButton type="button" onClick={() => setShowAssetInfo(true)}>
-            <Info />
-          </IconButton>
+          <Link shallow={true} href={`/asset/${asset.id}`}>
+            <IconButton type="button">
+              <Info />
+            </IconButton>
+          </Link>
         </TradingPair>
         <OhlcList>
           <OhlcItem value={ohlc.open}>

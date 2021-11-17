@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
-import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental'
+// import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
+// import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental'
 import { Hydrate } from 'react-query/hydration'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { Toaster } from 'react-hot-toast'
@@ -54,9 +54,12 @@ const GlobalStyle = createGlobalStyle`
     border-collapse: collapse;
     border-spacing: 0;
   }
-
+  #__next{
+    height:100%;
+  }
   html,
   body {
+    height: 100%;
     box-sizing: border-box;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     background: ${theme.colors.background.dark};
@@ -103,21 +106,23 @@ export default function App({ Component, pageProps, err }) {
   ReactGA.pageview('/')
   const queryClient = new QueryClient({
     defaultOptions: {
-      refetchInterval: 5000,
-      staleTime: 3000,
-      cacheTime: 300000
+      queries: {
+        // refetchInterval: 5000,
+        staleTime: 3000,
+        cacheTime: 300000
+      }
     }
   })
   if (typeof window !== 'undefined') {
-    const localStoragePersistor = createWebStoragePersistor({
-      storage: window.localStorage,
-      throttleTime: 1000,
-      maxAge: 10000
-    })
-    persistQueryClient({
-      queryClient,
-      persistor: localStoragePersistor
-    })
+    // const localStoragePersistor = createWebStoragePersistor({
+    //   storage: window.localStorage,
+    //   throttleTime: 1000,
+    //   maxAge: 10000
+    // })
+    // persistQueryClient({
+    //   queryClient,
+    //   persistor: localStoragePersistor
+    // })
   }
 
   return (

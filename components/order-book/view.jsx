@@ -16,13 +16,21 @@ import {
   CurrentPrice
 } from './order-book.css'
 import useTranslation from 'next-translate/useTranslation'
+import { useAssetPrice } from '../../hooks/Algodex'
+import Spinner from '../spinner'
 
-function OrderBookView(props) {
-  const { price, priceChange, decimals, sellData, buyData } = props
+function OrderBookView({ asset: { id, decimals }, sellData, buyData }) {
   const { t } = useTranslation('common')
 
   const setOrder = useStore((state) => state.setOrder)
 
+  const { data, isLoading } = useAssetPrice({
+    id,
+    options: {
+      refetchInterval: 3000,
+      enabled: typeof id !== 'undefined'
+    }
+  })
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
 
@@ -73,7 +81,9 @@ function OrderBookView(props) {
       )
     })
   }
-
+  if (isLoading) {
+    return <Spinner flex />
+  }
   return (
     <Container>
       <Header>
@@ -91,7 +101,7 @@ function OrderBookView(props) {
       </SellOrders>
 
       <CurrentPrice>
-        <OrderBookPrice price={price} decimals={decimals} change={priceChange} />
+        <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
       </CurrentPrice>
 
       <BuyOrders>
@@ -102,9 +112,7 @@ function OrderBookView(props) {
 }
 
 OrderBookView.propTypes = {
-  price: PropTypes.number,
-  priceChange: PropTypes.number,
-  decimals: PropTypes.number.isRequired,
+  asset: PropTypes.object.isRequired,
   sellData: PropTypes.array,
   buyData: PropTypes.array
 }

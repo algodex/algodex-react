@@ -1,12 +1,24 @@
 import Head from 'next/head'
+import styled from 'styled-components'
+import Header from '../components/header'
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: ${({ theme }) => theme.colors.background.dark};
+  color: ${({ theme }) => theme.colors.gray['400']};
+`
 const OfflinePage = () => (
   <>
     <Head>
-      <title>next-pwa example</title>
+      <title>Internet Error | Algodex</title>
     </Head>
-    <h1>This is offline fallback page</h1>
-    <h2>When offline, any page route will fallback to this page</h2>
+    <Header />
+    <Container>
+      <h1>You are offline!</h1>
+    </Container>
   </>
 )
 export default OfflinePage
