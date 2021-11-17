@@ -14,11 +14,11 @@ const moduleExports = nextPWA(
     },
     async redirects() {
       return [
-        // {
-        //   source: '/',
-        //   destination: '/trade/15322902',
-        //   permanent: true
-        // },
+        {
+          source: '/',
+          destination: '/trade/15322902',
+          permanent: true
+        },
         {
           source: '/trade',
           destination: '/trade/15322902',

@@ -58,13 +58,20 @@ const Page = ({
   staticExplorerAsset,
   children
 }) => {
-  const router = useRouter()
+  const { query, isFallback } = useRouter()
   const [explorerAsset, setExplorerAsset] = useState(staticExplorerAsset)
 
-  const isRouted = typeof router.query.id !== 'undefined'
-  const isShallow = isRouted && parseInt(router.query.id) !== explorerAsset?.id
+  const id = parseInt(query.id)
+  const isRouted = typeof query.id !== 'undefined'
+  const isShallow = isRouted && id !== explorerAsset?.id
+  const isStatic = isRouted && id === staticExplorerAsset?.id
 
-  console.debug(`Page Render: ${staticExplorerAsset?.id || 'Missing'}`, isRouted, isShallow)
+  console.debug(`Page Render: ${staticExplorerAsset?.id || 'Missing'}`, {
+    isRouted,
+    isShallow,
+    isStatic,
+    isFallback
+  })
 
   // Add Asset to User Storage
   const addAsset = useUserStore((state) => state.addAsset)
@@ -73,14 +80,12 @@ const Page = ({
     enabled: isShallow
   }
 
-  if (
-    typeof router.query.id !== 'undefined' &&
-    parseInt(router.query.id) === staticExplorerAsset?.id
-  ) {
+  if (isStatic) {
     options.initialData = staticExplorerAsset
   }
+
   const { data, isLoading } = useExplorerAssetInfo({
-    id: router.query.id || explorerAsset?.id,
+    id: query.id || explorerAsset?.id,
     options
   })
 
@@ -105,7 +110,7 @@ const Page = ({
       <Header />
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
-        {!isLoading && explorerAsset?.id && children}
+        {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}
       </MainLayout>
     </Container>
   )
