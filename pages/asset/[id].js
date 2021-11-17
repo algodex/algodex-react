@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { fetchExplorerAssetInfo } from 'lib/algoexplorer'
 import AssetInfo from 'components/asset-info'
 import Page from 'components/Page'
+import { fetchAssets } from '../../lib/api'
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -42,15 +43,13 @@ export const StatusContainer = styled.div`
  * @returns {Promise<{paths: [{params: {id: string}}], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  // const assets = await getAllAlgorandAssets()
-  // console.log(assets.length)
-  // const paths = assets
-  //   .filter((asset) => asset.deleted)
-  //   .map((asset) => ({
-  //     params: { id: asset.id.toString() }
-  //   }))
-  // return { paths, fallback: true }
-  return { paths: [{ params: { id: `185` } }], fallback: true }
+  const assets = await fetchAssets()
+  const paths = assets
+    .filter((asset) => !asset.isTraded)
+    .map((asset) => ({
+      params: { id: asset.id.toString() }
+    }))
+  return { paths, fallback: true }
 }
 
 export async function getStaticProps({ params: { id } }) {
