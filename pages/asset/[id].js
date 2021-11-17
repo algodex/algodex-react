@@ -44,11 +44,9 @@ export const StatusContainer = styled.div`
  */
 export async function getStaticPaths() {
   const assets = await fetchAssets()
-  const paths = assets
-    .filter((asset) => !asset.isTraded)
-    .map((asset) => ({
-      params: { id: asset.id.toString() }
-    }))
+  const paths = assets.map((asset) => ({
+    params: { id: asset.id.toString() }
+  }))
   return { paths, fallback: true }
 }
 
