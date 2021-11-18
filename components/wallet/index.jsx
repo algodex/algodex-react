@@ -1,9 +1,9 @@
 import useStore, { useStorePersisted } from 'store/use-store'
 import WalletView from './view'
-import useMyAlgo from '../../hooks/use-my-algo'
+import useMyAlgo from 'hooks/useMyAlgo'
 import { useEffect, useMemo } from 'react'
 import { useQuery } from 'react-query'
-import WalletService from '../../services/wallet'
+import WalletService from 'services/wallet'
 
 function Wallet() {
   const { connect: onWalletConnect, addresses } = useMyAlgo()
