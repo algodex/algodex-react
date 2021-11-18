@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query'
-import { fetchTradeHistory } from 'lib/api'
+import { fetchTradeHistory } from 'services/algodex'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'

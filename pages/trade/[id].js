@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Chart from '../../components/chart'
+import Chart from 'components/chart'
 import Page from 'components/Page'
-import { fetchExplorerAssetInfo } from '../../lib/algoexplorer'
-import { fetchAssets } from '../../lib/api'
+import { fetchExplorerAssetInfo } from 'services/algoexplorer'
+import { fetchAssets } from 'services/algodex'
 
 export const Container = styled.div`
   display: flex;
@@ -38,6 +38,10 @@ export const StatusContainer = styled.div`
   display: flex;
 `
 
+/**
+ * Fetch Traded Asset Paths
+ * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
+ */
 export async function getStaticPaths() {
   const assets = await fetchAssets()
   const paths = assets
@@ -46,19 +50,24 @@ export async function getStaticPaths() {
       params: { id: asset.id.toString() }
     }))
   return { paths, fallback: true }
-  // return { paths: [{ params: { id: `21401037` } }], fallback: true }
 }
 
+/**
+ * Get Explorer Asset Info
+ *
+ * @param id
+ * @returns {object} Response Object or Redirect Object
+ */
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
   } catch ({ response: { status } }) {
-    switch (status) {
-      case 404:
-        return {
-          notFound: true
-        }
+    return {
+      redirect: {
+        destination: `/asset/${id}`,
+        permanent: false
+      }
     }
   }
 
@@ -67,9 +76,20 @@ export async function getStaticProps({ params: { id } }) {
   }
 }
 
+/**
+ * Trade Page
+ *
+ * Display a chart of historical orders. Takes an Algorand Asset
+ * and displays a chart. If an asset is not traded it will route to
+ * /asset/{asset.id} then fallback to 404 if /asset/{asset.id} is not
+ * found
+ *
+ * @param {object} staticExplorerAsset The Explorer Response
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const TradePage = ({ staticExplorerAsset }) => {
   console.debug('Trade Page Render')
-  //
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
 

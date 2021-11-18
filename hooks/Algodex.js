@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
-import { fetchAssetPrice, searchAssets } from 'lib/api'
+import { fetchAssetPrice, searchAssets } from 'services/algodex'
 import withQuery, { routeQueryError } from 'hooks/withQuery'
 import { floatToFixed } from 'services/display'
 /**

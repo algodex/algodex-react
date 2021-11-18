@@ -1,11 +1,12 @@
 import axios from 'axios'
 
+const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
 export const ALGORAND_API = process.env.NEXT_ALGORAND_API || 'https://testnet.algoexplorerapi.io'
 export const ALGORAND_INDEXER_API =
   process.env.NEXT_ALGORAND_INDEXER_API || 'https://testnet.algoexplorerapi.io/idx2'
 
-console.log('process.env.NEXT_ALGORAND_API: ' + process.env.NEXT_ALGORAND_API)
-console.log('ALGORAND_HOST: ' + ALGORAND_API)
+DEBUG && console.debug('process.env.NEXT_ALGORAND_API: ' + process.env.NEXT_ALGORAND_API)
+DEBUG && console.info('ALGORAND_HOST: ' + ALGORAND_API)
 
 /**
  * @see https://testnet.algoexplorerapi.io/idx2/v2/assets/185
@@ -65,24 +66,38 @@ export const indexerAssetMap = ({ asset }) => ({
 /**
  * Fetch all assets from Algorand
  *
- * @returns {Promise<*>}
+ * @see https://developer.algorand.org/docs/rest-apis/indexer/#get-v2assets
+ * @returns {Promise<Object>}
  */
 export async function getAllAlgorandAssets() {
-  console.log('Get All Algorand Assets')
+  DEBUG && console.debug('Get All Algorand Assets')
   let {
     data: { assets, 'next-token': token }
-  } = await axios.get(`${ALGORAND_INDEXER_API}/v2/assets?limit=250`)
+  } = await getAlgorandIndexAssets({ limit: 250 })
 
   let response = mapAlgorandToAlgodexByType('index-asset', assets)
 
   while (token) {
-    console.log(`Fetching at ${token}`)
+    DEBUG && console.debug(`Fetching at ${token}`)
     const {
       data: { assets: nextAssets, 'next-token': nextToken }
-    } = await axios.get(`${ALGORAND_INDEXER_API}/v2/assets?limit=250&next=${token}`)
+    } = await getAlgorandIndexAssets({ token, limit: 250 })
+
     response = response.concat(mapAlgorandToAlgodexByType('index-asset', nextAssets))
+
     token = nextToken
   }
-  console.log(`Return ${response.length} Algorand Assets ${response[0].id}`)
+  DEBUG && console.debug(`Return ${response.length} Algorand Assets ${response[0].id}`)
   return response
+}
+
+/**
+ * Get Algorand Assets
+ * @see https://developer.algorand.org/docs/rest-apis/indexer/#get-v2assets
+ * @param params
+ * @returns {Promise<AxiosResponse<Object>>}
+ */
+export async function getAlgorandIndexAssets(params) {
+  DEBUG && console.debug(`getAlgorandIndexAssets(${JSON.stringify(params)})`)
+  return await axios.get(`${ALGORAND_INDEXER_API}/v2/assets`, { params })
 }

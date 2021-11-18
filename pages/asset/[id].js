@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { fetchExplorerAssetInfo } from 'lib/algoexplorer'
-import { fetchAssets } from 'lib/api'
+import { fetchExplorerAssetInfo } from 'services/algoexplorer'
+import { fetchAssets } from 'services/algodex'
 import Page from 'components/Page'
 import AssetInfo from 'components/asset-info'
 

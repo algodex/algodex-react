@@ -1,6 +1,6 @@
 import Error from 'components/error'
 import Spinner from 'components/spinner'
-import { fetchPriceData } from 'lib/api'
+import { fetchPriceData } from 'services/algodex'
 import millify from 'millify'
 import PropTypes from 'prop-types'
 import { useMemo, useEffect } from 'react'

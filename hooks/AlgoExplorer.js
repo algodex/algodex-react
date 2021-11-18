@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
-import { fetchExplorerAssetInfo } from 'lib/algoexplorer'
+import { fetchExplorerAssetInfo } from 'services/algoexplorer'
+import { routeQueryError } from 'hooks/withQuery'
 import { useEffect } from 'react'
+const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
 
 /**
  * Use Asset
@@ -12,7 +14,7 @@ import { useEffect } from 'react'
  * @todo: Refactor to use Algorand
  */
 export const useExplorerAssetInfo = ({ id, options }) => {
-  console.debug(`useExplorerAssetInfo ${id}`, options)
+  DEBUG && console.debug(`useExplorerAssetInfo(${id})`, options)
   const router = useRouter()
 
   const { data, isError, error, ...rest } = useQuery(
@@ -24,14 +26,7 @@ export const useExplorerAssetInfo = ({ id, options }) => {
   useEffect(() => {
     let mounted = true
     if (mounted) {
-      if (isError && error.message.match(404)) {
-        router.push('/404')
-      } else if (isError && error.message.match(403)) {
-        router.push('/403')
-      } else if (isError) {
-        console.log(error)
-        // router.push('/500')
-      }
+      routeQueryError({ isError, error, router })
     }
     return () => (mounted = false)
   }, [router, data, isError, error])
