@@ -1,0 +1,16 @@
+{
+    "header-about": "เกี่ยวกับ",
+    "header-trade": "ซื้อ-ขาย",
+    "header-docs": "เอกสาร",
+    "header-support": "ช่วยเหลือ",
+    "price": "ราคา",
+    "amount": "จำนวน",
+    "total": "ยอดรวม",
+    "time": "เวลา",
+    "no-trades-completed": "ไม่มีการซื้อขายเสร็จสิ้น  ",
+    "mobilefooter-CHART":"แผนภูมิ",
+    "mobilefooter-BOOK":"หนังสือ (หนังสือสั่งซื้อ) ",
+    "mobilefooter-TRADE":"ซื้อขาย",
+    "mobilefooter-ORDERS":"คำสั่งซื้อ",
+    "mobilefooter-WALLET":"กระเป๋าสตางค์"
+}

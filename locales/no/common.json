@@ -1,0 +1,16 @@
+{
+    "header-about": "Om",
+    "header-trade": "HANDEL",
+    "header-docs": "DOCS",
+    "header-support": "BRUKERSTØTTE",
+    "price": "Pris",
+    "amount": "Beløp",
+    "total": "Total",
+    "time": "Tid",
+    "no-trades-completed": "Ingen handel fullført  ",
+    "mobilefooter-CHART":"SKJEMA",
+    "mobilefooter-BOOK":"BOK (bestillingsbok) ",
+    "mobilefooter-TRADE":"HANDEL",
+    "mobilefooter-ORDERS":"ORDRENE",
+    "mobilefooter-WALLET":"LOMMEBOK"
+}

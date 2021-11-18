@@ -1,13 +1,13 @@
 {
-    "search": "Carian",
+    "search": "CARI",
     "pair": "PASANGAN",
     "price": "HARGA",
-    "change": "Perubahan",
-    "24-hr-change": "Perubahan 24H",
-    "liquidity": "Kecairan",
-    "loading": "KEMASKINI...",
-    "back-to-chart": "Kembali ke Carta",
+    "change": "Ganti/Ubah",
+    "24-hr-change": "Perubahan 24 jam",
+    "liquidity": "Likuiditas",
+    "loading": "MEMUAT...",
+    "back-to-chart": "Kembali ke grafik",
     "description": "Keterangan",
-    "circulating-supply": "Bekalan Teredar",
-    "total-supply": "Jumlah Bekalan"
+    "circulating-supply": "Sirkulasi Suplai",
+    "total-supply": "Total Pasokan"
 }
