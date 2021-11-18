@@ -1,5 +1,5 @@
 {
-  "locales": ["ch", "en", "es", "hu", "id", "iq", "it", "ir", "nl", "my", "se", "tr", "vn"],
+  "locales": ["ch", "en", "es", "hu", "id", "in", "iq", "ir", "it", "my", "nl", "se", "tr", "vn"],
   "defaultLocale": "en",
   "pages": {
     "*": ["common", "wallet", "place-order", "assets", "orders", "chart"],
