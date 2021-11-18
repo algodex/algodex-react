@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { fetchExplorerAssetInfo } from 'lib/algoexplorer'
-import AssetInfo from 'components/asset-info'
+import { fetchAssets } from 'lib/api'
 import Page from 'components/Page'
-import { fetchAssets } from '../../lib/api'
+import AssetInfo from 'components/asset-info'
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,6 +51,14 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
+/**
+ * Asset By ID Props
+ *
+ * Generate Static Props for an Asset
+ *
+ * @param id
+ * @returns {Promise<{props: {staticExplorerAsset: {circulating, total, decimals, name, verified, txid, fullName, id, url, timestamp, txns}}}|{notFound: boolean}>}
+ */
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset
   try {
