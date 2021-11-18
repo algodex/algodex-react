@@ -1,0 +1,13 @@
+{
+    "search": "Cerca",
+    "pair": "Par",
+    "price": "Preu",
+    "change": "Canviar",
+    "24-hr-change": "Canvi de 24 hores",
+    "liquidity": "Liquiditat",
+    "loading": "CARREGANT...",
+    "back-to-chart": "Tornar al gràfic",
+    "description": "Description",
+    "circulating-supply": "Subministrament circulant",
+    "total-supply": "Subministrament total"
+}

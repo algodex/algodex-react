@@ -1,16 +1,16 @@
 {
-    "header-about": "MENGENAINYA",
-    "header-trade": "DAGANGAN",
-    "header-docs": "DOKUMEN",
+    "header-about": "TENTANG ",
+    "header-trade": "PERDAGANGAN",
+    "header-docs": "DOKUMEN ",
     "header-support": "BANTUAN",
     "price": "Harga",
     "amount": "Nilai",
     "total": "Jumlah",
-    "time": "MASA",
-    "no-trades-completed": " Tiada dagangan ",
-    "mobilefooter-CHART":"CARTA",
+    "time": "WAKTU",
+    "no-trades-completed": "  Tidak ada perdagangan yang selesai",
+    "mobilefooter-CHART":"BAGAN",
     "mobilefooter-BOOK":" BUKU",
-    "mobilefooter-TRADE":"BERDAGANG",
+    "mobilefooter-TRADE":"PERDAGANGAN",
     "mobilefooter-ORDERS":"PESANAN",
-    "mobilefooter-WALLET":"WALLET"
+    "mobilefooter-WALLET":"DOMPET"
 }

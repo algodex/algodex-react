@@ -1,0 +1,16 @@
+{
+    "header-about": "हमारे बारे में",
+    "header-trade": "व्यापार",
+    "header-docs": "दस्तावेज़",
+    "header-support": "सहयोग",
+    "price": "कीमत",
+    "amount": "राशि",
+    "total": "कुल",
+    "time": "समय",
+    "no-trades-completed": " कोई व्यापार पूरा नहीं हुआ ",
+    "mobilefooter-CHART":"चार्ट",
+    "mobilefooter-BOOK":"बुक (ऑर्डर बुक) ",
+    "mobilefooter-TRADE":"व्यापार",
+    "mobilefooter-ORDERS":"आदेश",
+    "mobilefooter-WALLET":"बटुआ"
+}
