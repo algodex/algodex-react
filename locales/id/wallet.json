@@ -1,8 +1,8 @@
 {
-  "connect-wallet-button": "SAMBUNG WALLET ",
-  "connect-another-wallet-button": " Sambung Wallet Lain",
-  "wallet": "Wallet",
-  "balance": "BAKI",
-  "start-by": "  Mula sambungan wallet Algo  ",
-  "once-connected": "Setelah dihubungkan dengan MyAlgo wallet anda boleh mula berdagang "
+  "connect-wallet-button": "HUBUNGKAN DOMPET ",
+  "connect-another-wallet-button": " Hubungkan Dompet Lain",
+  "wallet": "DOMPET",
+  "balance": "SALDO",
+  "start-by": " Mulai dengan menghubungkan dompet Algorand   ",
+  "once-connected": "Setelah Anda menghubungkan dompet menggunakan MyAlgo, Anda dapat memulai Perdagangan "
 }
