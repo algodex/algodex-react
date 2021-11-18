@@ -1,7 +1,7 @@
 import { useState, useEffect, createRef } from 'react'
 import PropTypes from 'prop-types'
 import Search from 'components/search'
-import useDebounce from 'hooks/use-debounce'
+import useDebounce from 'hooks/useDebounce'
 
 function SearchInput(props) {
   const { initialText, onChange, onSearchFocus, onExternalClick, containerRef, isActive } = props
