@@ -29,15 +29,15 @@ const localeToFlags = {
   ch: 'CN',
   tr: 'TR',
   vn: 'VN',
-  se: 'SE',
-  hu: 'HU',
-  iq: 'IQ',
   id: 'ID',
+  iq: 'IQ',
+  my: 'MY',
   ir: 'IR',
   it: 'IT',
   se: 'SE',
   hu: 'HU',
-  th: 'TH'
+  th: 'TH',
+  in: 'IN'
 }
 
 export default function Header() {
