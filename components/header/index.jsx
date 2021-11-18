@@ -36,6 +36,7 @@ const localeToFlags = {
   it: 'IT',
   se: 'SE',
   hu: 'HU',
+  no: 'NO',
   ct: 'ES',
   th: 'TH',
   in: 'IN'
