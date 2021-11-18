@@ -21,6 +21,8 @@
     "disable-popup": "请禁用您的弹出窗口阻止程序（可能在浏览器窗口的右上角）",
     "disable-popup-mobile": "请禁用您的弹出窗口阻止程序",
     "order-cancelled": "订单取消",
-    "max-spend-explanation": "总余额包括 {{amount}} 个必须存储在钱包中才能进行交易的 Algo"
-
+    "max-spend-explanation": "总余额包括 {{amount}} 个必须存储在钱包中才能进行交易的 Algo",
+    "order-size-filtering": "订单大小过滤",
+    "less-lag": "减少滞后",
+    "better-execution": "更好的执行"
 }

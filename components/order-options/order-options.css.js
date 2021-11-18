@@ -38,7 +38,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 0.5rem 0 0.75rem;
 
   ${ExpandToggle} {
     &:focus {
@@ -55,15 +54,14 @@ export const Container = styled.div`
   }
 
   ${ExpandContainer} {
-    height: ${({ isExpanded }) => (isExpanded ? '5rem' : '0')};
+    height: ${({ isExpanded }) => (isExpanded ? 'auto' : '0')};
     overflow: ${({ isExpanded }) => (isExpanded ? 'visible' : 'auto')};
   }
 `
 
 export const ExpandContentWrapper = styled.div`
   inset: -0.5rem;
-  padding: 0.5rem;
-  overflow-y: hidden;
+  padding: 0.5rem 0;
 `
 
 export const ExpandContent = styled.div`

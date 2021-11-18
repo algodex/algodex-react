@@ -8,6 +8,7 @@ Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bo
 
 https://github.com/settings/tokens
 
+Make sure you add the "read:packages" permission.
 Copy and save the secret.
 
 In a Linux terminal (git-bash on Windows):
