@@ -43,7 +43,7 @@ export const routeQueryError = ({ isError, error, router }) => {
   if (isError && error.message.match(404)) {
     router.push('/404')
   } else if (isError && error.message.match(403)) {
-    router.push('/403')
+    router.push('/unauthorized')
   } else if (isError) {
     router.push('/500')
   }
