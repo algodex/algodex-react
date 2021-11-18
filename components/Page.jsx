@@ -8,6 +8,7 @@ import useUserStore from 'store/use-user-state'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useExplorerAssetInfo } from 'hooks/AlgoExplorer'
+const DEBUG = process.env.NEXT_DEBUG
 
 export const Container = styled.div`
   display: flex;
@@ -66,18 +67,20 @@ const Page = ({
   const isShallow = isRouted && id !== explorerAsset?.id
   const isStatic = isRouted && id === staticExplorerAsset?.id
 
-  console.debug(`Page Render: ${staticExplorerAsset?.id || 'Missing'}`, {
-    isRouted,
-    isShallow,
-    isStatic,
-    isFallback
-  })
+  DEBUG &&
+    console.debug(`Page Render: ${staticExplorerAsset?.id || 'Missing'}`, {
+      isRouted,
+      isShallow,
+      isStatic,
+      isFallback
+    })
 
   // Add Asset to User Storage
   const addAsset = useUserStore((state) => state.addAsset)
 
   let options = {
-    enabled: isShallow
+    enabled: isRouted || isShallow,
+    refetchInterval: 200000
   }
 
   if (isStatic) {
