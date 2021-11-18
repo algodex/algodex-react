@@ -3,7 +3,7 @@
     "buy": "Mua",
     "sell": "Bán",
     "available-balance": "Khả dụng",
-    "limit": "LLệnh limit",
+    "limit": "Lệnh limit",
     "price": "Giá",
     "amount": "Số lượng",
     "total": "Tổng cộng",
@@ -21,5 +21,8 @@
     "disable-popup": "Vui lòng tắt tính năng chặn popup (ở trên cùng bên phải thanh địa chỉ của bạn)",
     "disable-popup-mobile": "Vui lòng tắt tính năng chặn popup",
     "order-cancelled": "Lệnh đã được hủy",
-    "max-spend-explanation": "Tổng số dư bao gồm {{amount}} Algos phải được giữ trong ví để cho phép giao dịch"
+    "max-spend-explanation": "Tổng số dư bao gồm {{amount}} Algos phải được giữ trong ví để cho phép giao dịch",
+    "order-size-filtering": "Lọc kích thước đơn hàng",
+    "less-lag": "Ít trễ hơn",
+    "better-execution": "Thực thi tốt hơn"
 }
