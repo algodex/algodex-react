@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useState, useEffect, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { useRouter } from 'next/router'
+import useUserStore from 'store/use-user-state'
 import SearchInput from './search'
 import InfoFlyover from './info-flyover'
 import AssetSearchTable from 'components/asset-search/table'
@@ -41,8 +41,9 @@ export const AssetsContainer = styled.div`
   }
 `
 function AssetSearch({ gridRef }) {
-  const router = useRouter()
-  const [query, setQuery] = useState('')
+  const query = useUserStore((state) => state.query)
+  const setQuery = useUserStore((state) => state.setQuery)
+  // const [query, setQuery] = useState('')
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
 
   /**
@@ -101,29 +102,14 @@ function AssetSearch({ gridRef }) {
    *
    * @type {(function(*): Promise<void>)|*}
    */
-  const handleAssetClick = useCallback(
-    (row) => {
-      const asset = row.original
-      setIsActive(false)
-      console.log(asset)
-      if (asset) {
-        // setSelectedAsset(asset.id)
-        // router.push(`/trade/${asset.id}`, undefined, { shallow: true })
-        console.log('Cliccked')
-        // if (asset.isTraded) {
-        //   router.push(`/trade/${asset.id}`, undefined, { shallow: true })
-        // } else {
-        //   router.push(`/asset/${asset.id}`, undefined, { shallow: true })
-        // }
-      }
-    },
-    [router]
-  )
+  const handleAssetClick = useCallback(() => {
+    setIsActive(false)
+  }, [setIsActive])
   const handleAssetFocus = useCallback(
     (asset) => {
       setAssetInfo(asset)
     },
-    [assetInfo, setAssetInfo]
+    [setAssetInfo]
   )
   const handleAssetLeave = useCallback(() => {
     setAssetInfo(null)
