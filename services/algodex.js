@@ -12,11 +12,12 @@ import axios from 'axios'
 // TODO: Implement getLogger() from '@algodex/common'
 const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
 
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com/algodex-backend'
+export const PUBLIC_API = process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com'
+
+export const API_HOST = `${PUBLIC_API}/algodex-backend`
 
 DEBUG && console.debug('process.env.NEXT_PUBLIC_API: ' + process.env.NEXT_PUBLIC_API)
-DEBUG && console.debug('API_HOST: ' + API_HOST)
+console.debug('API_HOST: ' + API_HOST)
 
 let urlToEtag
 let urlToLastResp
