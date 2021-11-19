@@ -45,7 +45,8 @@ export const routeQueryError = ({ isError, error, router }) => {
   } else if (isError && error.message.match(403)) {
     router.push('/unauthorized')
   } else if (isError) {
-    router.push('/500')
+    // router.push('/500')
+    console.error(error)
   }
 }
 export default withQuery
