@@ -24,11 +24,6 @@ export const Container = styled.div`
   }
 `
 
-export const StatusContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-`
-
 /**
  * Page Component
  *
