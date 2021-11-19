@@ -1,21 +1,12 @@
-import { useQuery } from 'react-query'
-import { fetchTradeHistory } from 'services/algodex'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import TradeHistoryView from './view'
 import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
+import { useAssetTradeQuery } from 'hooks/useAlgodex'
 
 export default function TradeHistory({ asset }) {
-  const { status, data } = useQuery(
-    ['tradeHistory', { assetId: asset?.id }],
-    () => fetchTradeHistory(asset.id),
-    {
-      enabled: typeof asset !== 'undefined',
-      refetchInterval: 5000,
-      staleTime: 5000
-    }
-  )
+  const { status, data } = useAssetTradeQuery({ asset })
 
   if (status === 'loading') {
     return <Spinner flex />

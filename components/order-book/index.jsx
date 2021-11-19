@@ -2,13 +2,12 @@ import { useState } from 'react'
 import { aggregateOrders } from './helpers'
 import OrderBookView from './view'
 import useStore from 'store/use-store'
-import { useQuery } from 'react-query'
-import { fetchOrdersInEscrow } from 'services/algodex'
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import FirstOrderMsg from '../first-order-msg'
-import Spinner from '../spinner'
-import Error from '../error'
+import FirstOrderMsg from 'components/first-order-msg'
+import Spinner from 'components/spinner'
+import Error from 'components/error'
+import { useAssetOrdersQuery } from 'hooks/useAlgodex'
 
 /**
  * @param asset
@@ -19,16 +18,9 @@ export default function OrderBook({ explorerAsset }) {
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
   const isSignedIn = useStore((state) => state.isSignedIn)
-  // const hasBeenOrdered = asset?.isTraded || asset?.hasOrders
 
   // Orderbook Query
-  const { data, isLoading, isError } = useQuery(
-    ['orderBook', { assetId: explorerAsset?.id }],
-    () => fetchOrdersInEscrow(explorerAsset?.id),
-    {
-      enabled: typeof explorerAsset?.id !== 'undefined'
-    }
-  )
+  const { data, isLoading, isError } = useAssetOrdersQuery({ asset: explorerAsset })
 
   // Massage Orders
   useEffect(() => {
@@ -41,7 +33,7 @@ export default function OrderBook({ explorerAsset }) {
       setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, explorerAsset.decimals, 'sell'))
       setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, explorerAsset.decimals, 'buy'))
     }
-  }, [data, setSellOrders, setBuyOrders, explorerAsset])
+  }, [isLoading, data, setSellOrders, setBuyOrders, explorerAsset])
 
   // Invalid
   if (!explorerAsset?.id || isLoading) {

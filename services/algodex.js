@@ -92,8 +92,8 @@ export async function fetchRecentTrades() {
  * @param {string} interval Time interval to aggregate data on
  * @returns {Promise<Object>}
  */
-export async function fetchPriceData(id, interval) {
-  DEBUG && console.debug(`fetchPriceData(${id}, ${interval})`)
+export async function fetchAssetChart(id, interval) {
+  DEBUG && console.debug(`fetchAssetChart(${id}, ${interval})`)
   const res = await getEtagResponse(`${API_HOST}/charts2.php?assetId=${id}&chartTime=${interval}`)
   return res.data
 }
@@ -103,8 +103,8 @@ export async function fetchPriceData(id, interval) {
  * @param {number|string} id Unique Asset Identifier
  * @returns {Promise<Object>}
  */
-export async function fetchOrdersInEscrow(id) {
-  DEBUG && console.debug(`fetchOrdersInEscrow(${id})`)
+export async function fetchAssetOrders(id) {
+  DEBUG && console.debug(`fetchAssetOrders(${id})`)
   let url = `${API_HOST}/orders.php?assetId=${id}`
   const res = await getEtagResponse(url)
 
@@ -134,7 +134,7 @@ export async function fetchOpenOrdersByAddress(address, includeAssetInfo = true)
  * @param {string | number} id
  * @returns {Promise<Object>}
  */
-export async function fetchTradeHistory(id) {
+export async function fetchAssetTradeHistory(id) {
   DEBUG && console.debug(`fetchTradeHistoryByAddress(${id})`)
   const res = await getEtagResponse(`${API_HOST}/trade_history.php?assetId=${id}`)
   return res.data
@@ -163,7 +163,7 @@ export async function fetchAssetsByByAddress(walletAddress) {
 export async function searchAssets(query) {
   console.debug(`searchAssets(${query})`)
   const res = await getEtagResponse(`${API_HOST}/asset_search.php?query=${query}`)
-  return res.data
+  return { assets: res.data }
 }
 
 export async function checkTestnetAccess(loginKey) {

@@ -14,7 +14,8 @@ import {
 import Link from 'next/link'
 import { useEffect, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
-import { mapToSearchResults, useSearchResults } from 'hooks/Algodex'
+import { mapToSearchResults } from 'hooks/useAlgodex'
+import { withSearchResultsQuery } from 'hooks/withAlgodex'
 import useUserStore from 'store/use-user-state'
 import { BodyCopySm, BodyCopyTiny } from '../type'
 import SvgImage from '../svg-image'
@@ -26,8 +27,9 @@ const Loading = () => {
   return <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
 }
 const Error = ({ message }) => <BodyCopySm color="gray.400">Error: {message}</BodyCopySm>
+
 Error.propTypes = {
-  message: PropTypes.string.isRequired
+  message: PropTypes.string
 }
 const AssetNameCell = ({ value, row }) => {
   return (
@@ -44,12 +46,12 @@ const AssetNameCell = ({ value, row }) => {
   )
 }
 AssetNameCell.propTypes = {
-  value: PropTypes.any.isRequired,
-  row: PropTypes.object.isRequired
+  value: PropTypes.any,
+  row: PropTypes.object
 }
 const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 AssetPriceCell.propTypes = {
-  value: PropTypes.any.isRequired
+  value: PropTypes.any
 }
 const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
@@ -64,30 +66,20 @@ const AssetChangeCell = ({ value }) => {
   return <AssetChange value={value}>{displayChange()}</AssetChange>
 }
 AssetChangeCell.propTypes = {
-  value: PropTypes.any.isRequired
+  value: PropTypes.any
 }
 
 const AssetSearchTable = ({
   searchHeight,
-  query,
   isActive,
   onAssetFocus,
   onAssetLeave,
-  onAssetClick
+  onAssetClick,
+  assets
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const { t, lang } = useTranslation('assets')
-  /**
-   * Search Results Query
-   * Refetch Interval should be 20 seconds when there is a query, 3 seconds when using the base cached search
-   * @see https://react-query.tanstack.com/reference/useQuery
-   * @type {{refetchInterval: (number), staleTime: number, initialData: Array}}
-   */
-  const { data, isLoading, isError } = useSearchResults({
-    query,
-    options: { refetchInterval: 5000 }
-  })
 
   /**
    * Handle Search Data
@@ -95,13 +87,13 @@ const AssetSearchTable = ({
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if (!data || !Array.isArray(data)) {
+    if (!assets || !Array.isArray(assets)) {
       return []
     } else {
       // If there is data, use it
-      return data.map(mapToSearchResults)
+      return assets.map(mapToSearchResults)
     }
-  }, [data])
+  }, [assets])
   /**
    * React-Table Columns
    * @see https://react-table.tanstack.com/docs/api/useTable#column-options
@@ -168,12 +160,7 @@ const AssetSearchTable = ({
   useEffect(() => {
     setSearchState(tableState)
   }, [tableState, setSearchState])
-  if (isLoading) {
-    return <Loading />
-  }
-  if (isError) {
-    return <Error message={'Error loading search!'} />
-  }
+
   return (
     <TableWrapper>
       <TableContainer>
@@ -230,9 +217,10 @@ const AssetSearchTable = ({
 AssetSearchTable.propTypes = {
   searchHeight: PropTypes.number,
   query: PropTypes.string.isRequired,
+  assets: PropTypes.array.isRequired,
   isActive: PropTypes.bool,
   onAssetFocus: PropTypes.func,
   onAssetLeave: PropTypes.func,
   onAssetClick: PropTypes.func
 }
-export default AssetSearchTable
+export default withSearchResultsQuery(AssetSearchTable, { loading: Loading, error: Error })

@@ -141,6 +141,7 @@ function AssetSearch({ gridRef }) {
         </div>
         <AssetSearchTable
           query={query}
+          options={{ refetchInterval: 5000 }}
           onAssetClick={handleAssetClick}
           onAssetFocus={handleAssetFocus}
           onAssetLeave={handleAssetLeave}
