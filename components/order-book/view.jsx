@@ -81,9 +81,6 @@ function OrderBookView({ asset: { id, decimals }, sellData, buyData }) {
       )
     })
   }
-  if (isLoading) {
-    return <Spinner flex />
-  }
   return (
     <Container>
       <Header>
@@ -101,7 +98,10 @@ function OrderBookView({ asset: { id, decimals }, sellData, buyData }) {
       </SellOrders>
 
       <CurrentPrice>
-        <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
+        {isLoading && <Spinner flex />}
+        {!isLoading && (
+          <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
+        )}
       </CurrentPrice>
 
       <BuyOrders>
