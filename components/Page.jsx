@@ -22,20 +22,6 @@ export const Container = styled.div`
     overflow: scroll;
     max-height: none;
   }
-
-  // for demo
-  p.demo {
-    flex: 1 1 0%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    margin: 0;
-    color: ${({ theme }) => theme.colors.gray['600']};
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
 `
 
 export const StatusContainer = styled.div`
@@ -49,6 +35,7 @@ export const StatusContainer = styled.div`
  * @param {string} title
  * @param {string} description
  * @param {Object} staticExplorerAsset
+ * @param {boolean} noFollow
  * @param {JSX.Element|JSX.Element[]} children
  * @returns {JSX.Element}
  * @constructor
@@ -57,6 +44,7 @@ const Page = ({
   title = 'Algodex | Decentralized Algorand Exchange',
   description = 'Decentralized exchange for trading Algorand ASAs',
   staticExplorerAsset,
+  noFollow = false,
   children
 }) => {
   const { query, isFallback } = useRouter()
@@ -109,6 +97,7 @@ const Page = ({
         <title>{title}</title>
         <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+        {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
       <MainLayout asset={explorerAsset}>
@@ -122,6 +111,7 @@ Page.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   staticExplorerAsset: PropTypes.object,
-  children: PropTypes.any
+  noFollow: PropTypes.bool,
+  children: PropTypes.func
 }
 export default Page

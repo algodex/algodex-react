@@ -92,11 +92,10 @@ const AssetPage = ({ staticExplorerAsset }) => {
   console.debug(`Asset Page Render: ${staticExplorerAsset?.id || 'Missing'}`)
 
   // Page Title
-  const title = 'Algodex | Algorand Decentralized Exchange'
-  const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} Information` : ''
+  const title = staticExplorerAsset?.name ? staticExplorerAsset.name : 'Algodex Exchange'
 
   return (
-    <Page title={`${title} | ${prefix}`} staticExplorerAsset={staticExplorerAsset}>
+    <Page title={title} staticExplorerAsset={staticExplorerAsset}>
       {({ asset }) => <AssetInfo explorerAsset={asset} />}
     </Page>
   )

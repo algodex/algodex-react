@@ -98,6 +98,7 @@ const TradePage = ({ staticExplorerAsset }) => {
       title={`${prefix} ${title}`}
       description={'Decentralized exchange for trading Algorand ASAs'}
       staticExplorerAsset={staticExplorerAsset}
+      noFollow={true}
     >
       {({ asset }) => <Chart asset={asset} />}
     </Page>
