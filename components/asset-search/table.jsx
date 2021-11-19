@@ -172,7 +172,7 @@ const AssetSearchTable = ({
     return <Loading />
   }
   if (isError) {
-    return <Error />
+    return <Error message={'Error loading search!'} />
   }
   return (
     <TableWrapper>
@@ -208,7 +208,7 @@ const AssetSearchTable = ({
 
               const path = hasPrice ? '/trade' : '/asset'
               return (
-                <Link key={r} shallow={true} href={`${path}/${row.original.id}`}>
+                <Link key={r} href={`${path}/${row.original.id}`}>
                   <tr key={r} {...row.getRowProps(getRowProps(row))}>
                     {row.cells.map((cell, rc) => {
                       return (

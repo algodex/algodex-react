@@ -39,7 +39,7 @@ function ChartOverlay(props) {
           <div>
             <span>{`${asset.name} `}</span> / ALGO
           </div>
-          <Link shallow={true} href={`/asset/${asset.id}`}>
+          <Link href={`/asset/${asset.id}`}>
             <IconButton type="button">
               <Info />
             </IconButton>
