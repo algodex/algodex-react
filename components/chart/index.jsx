@@ -3,8 +3,8 @@ import Spinner from 'components/spinner'
 import { fetchPriceData } from 'services/algodex'
 import millify from 'millify'
 import PropTypes from 'prop-types'
-import { useMemo, useEffect } from 'react'
-import { useQuery, useQueryClient } from 'react-query'
+import { useMemo } from 'react'
+import { useQuery } from 'react-query'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
 import useStore, { getChartTimeInterval } from 'store/use-store'
 import ChartView from './view'
@@ -19,7 +19,7 @@ function Chart({ asset, ...rest }) {
   const assetId = asset.id
   const orderBook = useStore((state) => state.orderBook)
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
   const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
 
   const { isLoading, isError, data } = useQuery(
@@ -32,9 +32,9 @@ function Chart({ asset, ...rest }) {
     }
   )
 
-  useEffect(() => {
-    queryClient.invalidateQueries('priceData')
-  }, [assetId, queryClient])
+  // useEffect(() => {
+  //   queryClient.invalidateQueries('priceData')
+  // }, [assetId, queryClient])
 
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
