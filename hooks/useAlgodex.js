@@ -15,9 +15,9 @@ const refetchInterval = 3000
 
 /**
  * Use Search Results Query
- * @param {object} props The props of the parent
+ * @param {Object} props The props of the parent
  * @param {string} props.query Search Query
- * @param {object} props.options useQuery Options
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<{assets: *}, unknown>}
  */
 export const useSearchResultsQuery = ({
@@ -30,9 +30,9 @@ export const useSearchResultsQuery = ({
 /**
  * Use Asset Price Query
  *
- * @param {object} props The props of the parent
- * @param {object} props.asset An instance of an Asset
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.asset An instance of an Asset
+ * @param {Object} [props.options] useQuery Options
  * @todo: Consolidate with Search
  * @returns {UseQueryResult<*, unknown>}
  */
@@ -46,10 +46,10 @@ export const useAssetPriceQuery = ({
 
 /**
  * Use Asset Chart Query
- * @param {object} props The props of the parent
- * @param {object} props.asset An instance of an Asset
+ * @param {Object} props The props of the parent
+ * @param {Object} props.asset An instance of an Asset
  * @param {string} props.chartInterval Interval to aggregate chart by
- * @param {object} props.options useQuery Options
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<Object, unknown>}
  */
 export const useAssetChartQuery = ({
@@ -63,9 +63,9 @@ export const useAssetChartQuery = ({
 
 /**
  * Use Asset Orders Query
- * @param {object} props The props of the parent
- * @param {object} props.asset An instance of an Asset
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.asset An instance of an Asset
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<Object, unknown>}
  */
 export const useAssetOrdersQuery = ({
@@ -78,9 +78,9 @@ export const useAssetOrdersQuery = ({
 
 /**
  * Use Asset Trade History Query
- * @param {object} props The props of the parent
- * @param {object} props.asset An instance of an Asset
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.asset An instance of an Asset
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<Object, unknown>}
  */
 export const useAssetTradeHistoryQuery = ({
@@ -95,9 +95,9 @@ export const useAssetTradeHistoryQuery = ({
 /**
  * Use Wallet Assets Query
  *
- * @param {object} props The props of the parent
- * @param {object} props.wallet An instance of a Wallet
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.wallet An instance of a Wallet
+ * @param {Object} [props.options] useQuery Options
  * @todo: Fetch Wallet Assets from on-chain
  * @returns {UseQueryResult<T, unknown>}
  */
@@ -112,9 +112,9 @@ export const useWalletAssetsQuery = ({
 /**
  * Use Wallet Orders Query
  *
- * @param {object} props The props of the parent
- * @param {object} props.wallet An instance of a Wallet
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.wallet An instance of a Wallet
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<Object, unknown>}
  */
 export const useWalletOrdersQuery = ({
@@ -125,9 +125,9 @@ export const useWalletOrdersQuery = ({
 /**
  * Use Wallet Trade History
  *
- * @param {object} props The props of the parent
- * @param {object} props.wallet An instance of a Wallet
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.wallet An instance of a Wallet
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<Object, unknown>}
  */
 export const useWalletTradeHistory = ({
@@ -140,9 +140,9 @@ export const useWalletTradeHistory = ({
 
 /**
  * Use Wallet Minimum Balance Query
- * @param {object} props The props of the parent
- * @param {object} props.wallet An instance of a Wallet
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.wallet An instance of a Wallet
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<*, unknown>}
  */
 export const useWalletMinBalanceQuery = ({
@@ -159,9 +159,9 @@ export const useWalletMinBalanceQuery = ({
 
 /**
  * Use Wallets Query
- * @param {object} props The props of the parent
- * @param {object} props.wallets A list of Wallet Addresses
- * @param {object} props.options useQuery Options
+ * @param {Object} props The props of the parent
+ * @param {Object} props.wallets A list of Wallet Addresses
+ * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<{}|{wallets: unknown[]}|undefined, unknown>}
  */
 export const useWalletsQuery = ({
