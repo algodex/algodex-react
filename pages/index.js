@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Header from 'components/header'
 import styled from 'styled-components'
-import MainLayout from '../components/main-layout'
 
 export const Container = styled.div`
   display: flex;
@@ -28,9 +27,7 @@ const IndexPage = () => {
         <title>Algodex | Algorand Decentralized Exchange</title>
       </Head>
       <Header />
-      <MainLayout>
-        <div>TODO: Landing Page</div>
-      </MainLayout>
+      <div>TODO: Landing Page</div>
     </Container>
   )
 }

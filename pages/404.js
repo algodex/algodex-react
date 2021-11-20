@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import Head from 'next/head'
 import Header from 'components/header'
-import MainLayout from '../components/main-layout'
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -23,11 +22,9 @@ export default function Custom404() {
         <title>Not Found</title>
       </Head>
       <Header />
-      <MainLayout>
-        <Container>
-          <h1>404 - Page Not Found</h1>
-        </Container>
-      </MainLayout>
+      <Container>
+        <h1>404 - Page Not Found</h1>
+      </Container>
     </>
   )
 }
