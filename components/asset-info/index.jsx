@@ -20,7 +20,7 @@ import {
   ButtonText
 } from './asset-info.css'
 import useTranslation from 'next-translate/useTranslation'
-import { useAssetPrice } from '../../hooks/Algodex'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { Fragment } from 'react'
 
 const AssetInfo = ({ explorerAsset }) => {
@@ -29,13 +29,7 @@ const AssetInfo = ({ explorerAsset }) => {
   const description =
     explorerAsset.description || explorerAsset?.verified_info?.description || 'N/A'
 
-  const { data: dexAsset } = useAssetPrice({
-    id: explorerAsset.id,
-    options: {
-      refetchInterval: 3000,
-      enabled: typeof explorerAsset?.id !== 'undefined'
-    }
-  })
+  const { data: dexAsset } = useAssetPriceQuery({ asset: explorerAsset })
   const renderName = () => {
     if (explorerAsset.verified) {
       return (
