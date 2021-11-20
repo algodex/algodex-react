@@ -96,7 +96,7 @@ const AssetPage = ({ staticExplorerAsset }) => {
 
   return (
     <Page title={title} staticExplorerAsset={staticExplorerAsset}>
-      {({ asset }) => <AssetInfo explorerAsset={asset} />}
+      {({ asset }) => <AssetInfo asset={asset} />}
     </Page>
   )
 }

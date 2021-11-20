@@ -23,26 +23,25 @@ import useTranslation from 'next-translate/useTranslation'
 import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { Fragment } from 'react'
 
-const AssetInfo = ({ explorerAsset }) => {
+const AssetInfo = ({ asset }) => {
   const { t } = useTranslation('assets')
 
-  const description =
-    explorerAsset.description || explorerAsset?.verified_info?.description || 'N/A'
+  const description = asset.description || asset?.verified_info?.description || 'N/A'
 
-  const { data: dexAsset } = useAssetPriceQuery({ asset: explorerAsset })
+  const { data: dexAsset } = useAssetPriceQuery({ asset })
   const renderName = () => {
-    if (explorerAsset.verified) {
+    if (asset.verified) {
       return (
         <>
-          {`${explorerAsset.fullName} `}
+          {`${asset.fullName} `}
           <span>
-            {`(${explorerAsset.name}) `}
+            {`(${asset.name}) `}
             <SvgImage use="verified" w={2} h={2} />
           </span>
         </>
       )
     }
-    return <>{`${explorerAsset.fullName} (${explorerAsset.name})`}</>
+    return <>{`${asset.fullName} (${asset.name})`}</>
   }
 
   const renderLink = () => {
@@ -50,11 +49,11 @@ const AssetInfo = ({ explorerAsset }) => {
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,7}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
     const regex = new RegExp(expression)
 
-    if (explorerAsset.url && regex.test(explorerAsset.url)) {
+    if (asset.url && regex.test(asset.url)) {
       return (
         <AssetUrl>
-          <a href={explorerAsset.url} target="_blank" rel="noreferrer">
-            <BodyCopy as="span">{explorerAsset.url}</BodyCopy>
+          <a href={asset.url} target="_blank" rel="noreferrer">
+            <BodyCopy as="span">{asset.url}</BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -66,7 +65,7 @@ const AssetInfo = ({ explorerAsset }) => {
     <Container>
       <InfoContainer>
         {dexAsset?.isTraded ? (
-          <Link shallow={true} href={`/trade/${explorerAsset.id}`}>
+          <Link shallow={true} href={`/trade/${asset.id}`}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
@@ -93,7 +92,7 @@ const AssetInfo = ({ explorerAsset }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {explorerAsset.circulating || 'TODO'}
+              {asset.circulating || 'TODO'}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -101,7 +100,7 @@ const AssetInfo = ({ explorerAsset }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {explorerAsset.total}
+              {asset.total}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -109,7 +108,7 @@ const AssetInfo = ({ explorerAsset }) => {
               ASA ID
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {explorerAsset.id}
+              {asset.id}
             </BodyCopy>
           </InfoItem>
           {/*<InfoItem>*/}
@@ -117,7 +116,7 @@ const AssetInfo = ({ explorerAsset }) => {
           {/*    {t('total-transactions')}*/}
           {/*  </BodyCopyTiny>*/}
           {/*  <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
-          {/*    {explorerAsset.txns}*/}
+          {/*    {asset.txns}*/}
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
@@ -144,7 +143,7 @@ const AssetInfo = ({ explorerAsset }) => {
         </InfoList>
         <AlgoExplorerLink>
           {/*TODO: Accredit Explorer for Information Provided*/}
-          <a href={explorerAsset.explorerUrl} target="_blank" rel="noreferrer">
+          <a href={asset.explorerUrl} target="_blank" rel="noreferrer">
             <Image
               src="/algo-explorer.png"
               alt="View asset on Algo Explorer"
@@ -159,6 +158,6 @@ const AssetInfo = ({ explorerAsset }) => {
   )
 }
 AssetInfo.propTypes = {
-  explorerAsset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired
 }
 export default AssetInfo

@@ -10,7 +10,7 @@ export default {
 
 const TradePageTemplate = (args) => <Page {...args}>{({ asset }) => <Chart asset={asset} />}</Page>
 const AssetPageTemplate = (args) => (
-  <Page {...args}>{({ asset }) => <AssetInfo explorerAsset={asset} />}</Page>
+  <Page {...args}>{({ asset }) => <AssetInfo asset={asset} />}</Page>
 )
 const asset = {
   id: 15322902,
