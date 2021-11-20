@@ -114,11 +114,15 @@ function PlaceOrderView(props) {
   }
 
   const placeOrder = (orderData) => {
-
     // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
     let filteredOrderBook = {
-      buyOrders: orderBook.buyOrders.filter(orders => new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000))),
-      sellOrders: orderBook.sellOrders.filter(orders => new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000)))
+      buyOrders: orderBook.buyOrders.filter((order) =>
+        new Big(order.algoAmount).gte(new Big(orderFilter).times(1000000))
+      ),
+      sellOrders: orderBook.sellOrders.filter((order) => {
+        const equivAlgoAmount = new Big(order.formattedASAAmount).times(order.formattedPrice)
+        return equivAlgoAmount.gte(new Big(orderFilter))
+      })
     }
     return OrderService.placeOrder(orderData, filteredOrderBook)
   }
