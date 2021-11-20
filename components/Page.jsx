@@ -7,7 +7,7 @@ import Spinner from 'components/spinner'
 import useUserStore from 'store/use-user-state'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useExplorerAssetInfo } from 'hooks/AlgoExplorer'
+import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 const DEBUG = process.env.NEXT_DEBUG
 
 export const Container = styled.div`
