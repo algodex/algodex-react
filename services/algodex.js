@@ -83,7 +83,7 @@ export async function fetchRecentTrades() {
 }
 
 /**
- * Fetch Chart Price Data by Asset ID
+ * Fetch Asset's Chart
  *
  * Returns OHLCV(Open, High, Low, Close, Volume) response from the API.
  * Used in lightweight-charts to display the Candlestick and Area views.
@@ -99,7 +99,7 @@ export async function fetchAssetChart(id, interval) {
 }
 
 /**
- * Fetch Orders by Asset ID
+ * Fetch Asset's Orders
  * @param {number|string} id Unique Asset Identifier
  * @returns {Promise<Object>}
  */
@@ -113,14 +113,14 @@ export async function fetchAssetOrders(id) {
 
 /**
  *
- * Fetch Open Orders
+ * Fetch Wallet's Orders
  *
  * @TODO: Deprecate includeAssetInfo
  * @param {string} address Account Address
  * @param {boolean} includeAssetInfo Should fetch asset info
  * @returns {Promise<Object>}
  */
-export async function fetchOpenOrdersByAddress(address, includeAssetInfo = true) {
+export async function fetchWalletOrders(address, includeAssetInfo = true) {
   DEBUG && console.debug(`fetchOpenOrdersByAddress(${address}, ${includeAssetInfo})`)
   const res = await getEtagResponse(
     `${API_HOST}/orders.php?ownerAddr=${address}&getAssetInfo=${includeAssetInfo}`
@@ -129,53 +129,57 @@ export async function fetchOpenOrdersByAddress(address, includeAssetInfo = true)
 }
 
 /**
- * Fetch Trade History by Asset ID
+ * Fetch Asset's Trade History
  *
  * @param {string | number} id
  * @returns {Promise<Object>}
  */
 export async function fetchAssetTradeHistory(id) {
-  DEBUG && console.debug(`fetchTradeHistoryByAddress(${id})`)
+  DEBUG && console.debug(`fetchAssetTradeHistory(${id})`)
   const res = await getEtagResponse(`${API_HOST}/trade_history.php?assetId=${id}`)
   return res.data
 }
 
 /**
- *
+ * Fetch Wallet's Trade History
  * @param {string} address
- * @param includeAssetInfo
+ * @param {boolean} includeAssetInfo
  * @returns {Promise<Object>}
  */
-export async function fetchTradeHistoryByAddress(address, includeAssetInfo = true) {
-  DEBUG && console.debug(`fetchTradeHistoryByAddress(${address}, ${includeAssetInfo})`)
+export async function fetchWalletTradeHistory(address, includeAssetInfo = true) {
+  DEBUG && console.debug(`fetchWalletTradeHistory(${address}, ${includeAssetInfo})`)
   const res = await getEtagResponse(
     `${API_HOST}/trade_history.php?ownerAddr=${address}&getAssetInfo=${includeAssetInfo}`
   )
   return res.data
 }
 
-export async function fetchAssetsByByAddress(walletAddress) {
-  console.debug(`fetchAssetsByByAddress(${walletAddress})`)
-  const res = await getEtagResponse(`${API_HOST}/wallet_assets.php?ownerAddr=${walletAddress}`)
+/**
+ * Fetch Wallet's Assets
+ * @param {string} address
+ * @returns {Promise<Object>}
+ */
+export async function fetchWalletAssets(address) {
+  console.debug(`fetchWalletAssets(${address})`)
+  const res = await getEtagResponse(`${API_HOST}/wallet_assets.php?ownerAddr=${address}`)
   return res.data
 }
 
+/**
+ * Search for Assets
+ * @param {string} query
+ * @returns {Promise<{assets: any}>}
+ */
 export async function searchAssets(query) {
   console.debug(`searchAssets(${query})`)
   const res = await getEtagResponse(`${API_HOST}/asset_search.php?query=${query}`)
   return { assets: res.data }
 }
 
-export async function checkTestnetAccess(loginKey) {
-  console.debug(`checkTestnetAccess(${loginKey})`)
-  if (!loginKey) {
-    return false
-  }
-
-  const res = await getEtagResponse(`${API_HOST}/validate_login_id.php?loginKey=${loginKey}`)
-
-  return res.data?.success
-}
+/**
+ * Fetch Assets
+ * @returns {Promise<*|*[]>}
+ */
 export async function fetchAssets() {
   console.debug(`fetchAssets()`)
   const {
@@ -183,51 +187,16 @@ export async function fetchAssets() {
   } = await getEtagResponse(`${API_HOST}/assets.php`)
   return typeof data !== 'undefined' ? data : []
 }
+
+/**
+ * Fetch Asset's Price
+ * @param {string|number} id
+ * @returns {Promise<*>}
+ */
 export async function fetchAssetPrice(id) {
   console.debug(`fetchAssetPrice(${id})`)
   const {
     data: { data }
   } = await getEtagResponse(`${API_HOST}/assets.php?id=${id}`)
   return typeof data !== 'undefined' ? data[0] : {}
-}
-
-// @todo: need a dedicated asset by ID endpoint
-export async function fetchAssetById(id) {
-  console.debug(`fetchAssetById(${id})`)
-  // Get Price Data
-  const { data: result } = await getEtagResponse(`${API_HOST}/assets.php?id=${id}`)
-  console.log(result)
-  // const { price, price24Change: priceChange24hr, isTraded, unix_time } = result.data[0]
-  // const hasOrders = typeof isTraded !== 'undefined'
-
-  // Get Asset Params
-  // const { asset: assetInfo } = await fetchAssetInfo(id)
-  // console.log(assetInfo)
-  // const {
-  //   params: { decimals, total, name: fullName, 'unit-name': name, description, url }
-  // } = assetInfo
-  // console.log(assetInfo)
-  // Check verified status
-  // const {
-  //   assetInfo: { verified }
-  // } = await fetchExplorerSearchv1(id)
-  // console.log(decimals)
-  // return {
-  //   asset: {
-  //     id: parseInt(id),
-  //     name,
-  //     description: description || 'N/A',
-  //     decimals: decimals || 0,
-  //     price: price || null,
-  //     priceChange24hr: priceChange24hr || null,
-  //     isTraded: isTraded || false,
-  //     hasOrders: hasOrders || false,
-  //     unix_time: unix_time || null,
-  //     verified: verified || false,
-  //     total: total || null,
-  //     fullName: fullName || null,
-  //     url: url || isTraded ? `/trade/${id}` : `/asset/${id}`,
-  //     algoExplorerUrl: `${EXPLORER_HTML_HOST}/asset/${id}`
-  //   }
-  // }
 }

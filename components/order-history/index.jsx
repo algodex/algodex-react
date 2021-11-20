@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
+import { useWalletTradeHistory } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchTradeHistoryByAddress } from 'services/algodex'
 import { mapTradeHistoryData } from './helpers'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
@@ -41,15 +40,9 @@ function OrderHistory() {
   const { t, lang } = useTranslation('orders')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
-  const { data, isLoading, isError } = useQuery(
-    ['tradeHistory', { address: activeWalletAddress }],
-    () => fetchTradeHistoryByAddress(activeWalletAddress),
-    {
-      enabled: !!activeWalletAddress,
-      refetchInterval: 3000,
-      staleTime: 3000
-    }
-  )
+  const { data, isLoading, isError } = useWalletTradeHistory({
+    wallet: { address: activeWalletAddress }
+  })
 
   const tradeHistoryData = useMemo(
     () => mapTradeHistoryData(data, { buyText: t('buy'), sellText: t('sell') }),

@@ -14,7 +14,7 @@ import {
 import Link from 'next/link'
 import { useEffect, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
-import { mapToSearchResults } from 'hooks/useAlgodex'
+import { mapToSearchResults } from './helpers'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
 import useUserStore from 'store/use-user-state'
 import { BodyCopySm, BodyCopyTiny } from '../type'

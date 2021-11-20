@@ -1,19 +1,12 @@
 /* eslint-disable react/prop-types  */
 import { useMemo } from 'react'
-import { useQuery } from 'react-query'
+import { useWalletAssetsQuery } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { useStorePersisted } from 'store/use-store'
-import { fetchAssetsByByAddress } from 'services/algodex'
 import { mapAssetsData } from './helpers'
-// import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-import {
-  AssetId,
-  AssetNameBlock
-  // PairSlash,
-  // NameVerifiedWrapper
-} from 'components/asset-search/asset-search.css.js'
+import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
 
 import {
   AssetCoin,
@@ -52,14 +45,9 @@ function Assets() {
 
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
-  const { data, isLoading, isError } = useQuery(
-    ['assets', { address: activeWalletAddress }],
-    () => fetchAssetsByByAddress(activeWalletAddress),
-    {
-      enabled: !!activeWalletAddress,
-      refetchInterval: 3000
-    }
-  )
+  const { data, isLoading, isError } = useWalletAssetsQuery({
+    wallet: { address: activeWalletAddress }
+  })
 
   const assetsData = useMemo(() => mapAssetsData(data), [data])
 

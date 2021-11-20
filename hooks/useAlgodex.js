@@ -1,61 +1,17 @@
 import { useQuery } from 'react-query'
 import {
+  searchAssets,
   fetchAssetPrice,
   fetchAssetChart,
-  searchAssets,
   fetchAssetOrders,
-  fetchAssetTradeHistory
+  fetchAssetTradeHistory,
+  fetchWalletAssets,
+  fetchWalletOrders,
+  fetchWalletTradeHistory
 } from 'services/algodex'
-import { floatToFixed } from 'services/display'
+import WalletService from 'services/wallet'
 
 const refetchInterval = 3000
-/**
- * Map a Query Result to a Search Result
- * @todo: Fix API response and don't map on client
- * @param assetId
- * @param assetName
- * @param formattedPrice
- * @param priceChg24Pct
- * @param hasOrders
- * @param isTraded
- * @param verified
- * @param unitName
- * @param formattedASALiquidity
- * @param formattedAlgoLiquidity
- * @returns {Object}
- */
-export const mapToSearchResults = ({
-  assetId,
-  assetName,
-  formattedPrice,
-  priceChg24Pct,
-  hasOrders,
-  isTraded,
-  verified,
-  unitName,
-  formattedASALiquidity,
-  formattedAlgoLiquidity
-}) => {
-  const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
-
-  const change = !isNaN(parseFloat(priceChg24Pct))
-    ? floatToFixed(priceChg24Pct, 2)
-    : hasOrders
-    ? '--'
-    : null
-
-  return {
-    id: assetId,
-    name: unitName,
-    fullName: assetName,
-    verified: verified,
-    hasBeenOrdered: isTraded || hasOrders,
-    liquidityAlgo: formattedAlgoLiquidity,
-    liquidityAsa: formattedASALiquidity,
-    price,
-    change
-  }
-}
 
 /**
  * Use Search Results Query
@@ -77,6 +33,7 @@ export const useSearchResultsQuery = ({
  * @param {object} props The props of the parent
  * @param {object} props.asset An instance of an Asset
  * @param {object} props.options useQuery Options
+ * @todo: Consolidate with Search
  * @returns {UseQueryResult<*, unknown>}
  */
 export const useAssetPriceQuery = ({
@@ -119,7 +76,14 @@ export const useAssetOrdersQuery = ({
   }
 }) => useQuery(['assetOrders', { id }], () => fetchAssetOrders(id), options)
 
-export const useAssetTradeQuery = ({
+/**
+ * Use Asset Trade History Query
+ * @param {object} props The props of the parent
+ * @param {object} props.asset An instance of an Asset
+ * @param {object} props.options useQuery Options
+ * @returns {UseQueryResult<Object, unknown>}
+ */
+export const useAssetTradeHistoryQuery = ({
   asset: { id },
   options = {
     enabled: typeof id !== 'undefined',
@@ -127,3 +91,82 @@ export const useAssetTradeQuery = ({
     staleTime: 3000
   }
 }) => useQuery(['assetTradeHistory', { id }], () => fetchAssetTradeHistory(id), options)
+
+/**
+ * Use Wallet Assets Query
+ *
+ * @param {object} props The props of the parent
+ * @param {object} props.wallet An instance of a Wallet
+ * @param {object} props.options useQuery Options
+ * @todo: Fetch Wallet Assets from on-chain
+ * @returns {UseQueryResult<T, unknown>}
+ */
+export const useWalletAssetsQuery = ({
+  wallet: { address },
+  options = {
+    enabled: typeof address !== 'undefined',
+    refetchInterval
+  }
+}) => useQuery(['walletAssets', { address }], () => fetchWalletAssets(address), options)
+
+/**
+ * Use Wallet Orders Query
+ *
+ * @param {object} props The props of the parent
+ * @param {object} props.wallet An instance of a Wallet
+ * @param {object} props.options useQuery Options
+ * @returns {UseQueryResult<Object, unknown>}
+ */
+export const useWalletOrdersQuery = ({
+  wallet: { address },
+  options = { enabled: typeof address !== 'undefined', refetchInterval }
+}) => useQuery(['walletOrders', { address }], () => fetchWalletOrders(address), options)
+
+/**
+ * Use Wallet Trade History
+ *
+ * @param {object} props The props of the parent
+ * @param {object} props.wallet An instance of a Wallet
+ * @param {object} props.options useQuery Options
+ * @returns {UseQueryResult<Object, unknown>}
+ */
+export const useWalletTradeHistory = ({
+  wallet: { address },
+  options = {
+    enabled: typeof address !== 'undefined',
+    refetchInterval
+  }
+}) => useQuery(['walletTradeHistory', { address }], () => fetchWalletTradeHistory(address), options)
+
+/**
+ * Use Wallet Minimum Balance Query
+ * @param {object} props The props of the parent
+ * @param {object} props.wallet An instance of a Wallet
+ * @param {object} props.options useQuery Options
+ * @returns {UseQueryResult<*, unknown>}
+ */
+export const useWalletMinBalanceQuery = ({
+  wallet,
+  options = {
+    enabled: typeof wallet !== 'undefined'
+  }
+}) =>
+  useQuery(
+    ['walletMinBalance', { address: wallet?.address }],
+    async () => await WalletService.getMinWalletBalance(wallet),
+    options
+  )
+
+/**
+ * Use Wallets Query
+ * @param {object} props The props of the parent
+ * @param {object} props.wallets A list of Wallet Addresses
+ * @param {object} props.options useQuery Options
+ * @returns {UseQueryResult<{}|{wallets: unknown[]}|undefined, unknown>}
+ */
+export const useWalletsQuery = ({
+  wallets,
+  options = {
+    enabled: typeof wallets !== 'undefined'
+  }
+}) => useQuery('wallets', () => WalletService.fetchWallets(wallets), options)

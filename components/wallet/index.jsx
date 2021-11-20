@@ -1,9 +1,8 @@
 import useStore, { useStorePersisted } from 'store/use-store'
 import WalletView from './view'
 import useMyAlgo from 'hooks/useMyAlgo'
+import { useWalletsQuery } from 'hooks/useAlgodex'
 import { useEffect, useMemo } from 'react'
-import { useQuery } from 'react-query'
-import WalletService from 'services/wallet'
 
 function Wallet() {
   const { connect: onWalletConnect, addresses } = useMyAlgo()
@@ -23,7 +22,7 @@ function Wallet() {
   }, [addresses, wallets])
 
   // fetch wallet balances from blockchain
-  const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses))
+  const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
       setWallets(walletsQuery.data.wallets)

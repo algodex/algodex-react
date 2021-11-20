@@ -3,10 +3,10 @@ import Error from 'components/error'
 import TradeHistoryView from './view'
 import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
-import { useAssetTradeQuery } from 'hooks/useAlgodex'
+import { useAssetTradeHistoryQuery } from 'hooks/useAlgodex'
 
 export default function TradeHistory({ asset }) {
-  const { status, data } = useAssetTradeQuery({ asset })
+  const { status, data } = useAssetTradeHistoryQuery({ asset })
 
   if (status === 'loading') {
     return <Spinner flex />

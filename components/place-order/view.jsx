@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
-import { useQuery, useQueryClient } from 'react-query'
+import Error from 'components/error'
 import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
+import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
@@ -35,6 +36,7 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { Info } from 'react-feather'
+import Spinner from '../spinner'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -75,23 +77,22 @@ function PlaceOrderView(props) {
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
 
-  useQuery(
-    ['minWalletBalance', { activeWallet }],
-    async () => await WalletService.getMinWalletBalance(activeWallet),
-    {
-      onSuccess: (minBalance) => {
-        const total = new Big(algoBalance)
-        const min = new Big(minBalance).div(1000000)
-        const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
-        setMaxSpendableAlgo(Math.max(0, max))
-      },
-      enabled: !!(activeWallet && activeWallet.address),
-      staleTime: 3000
-    }
-  )
+  const {
+    data: minBalance,
+    isLoading,
+    isError
+  } = useWalletMinBalanceQuery({
+    wallet: wallets.find((wallet) => wallet.address === activeWalletAddress)
+  })
 
-  // Get reference to query client to clear queries later
-  const queryClient = useQueryClient()
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      const total = new Big(algoBalance)
+      const min = new Big(minBalance).div(1000000)
+      const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
+      setMaxSpendableAlgo(Math.max(0, max))
+    }
+  }, [minBalance, algoBalance, isLoading, isError])
 
   /**
    * When asset or active wallet changes, reset the form
@@ -199,9 +200,6 @@ function PlaceOrderView(props) {
         ...DEFAULT_ORDER,
         type: order.type
       })
-
-      // Invalidate Queries
-      queryClient.invalidateQueries('searchResults')
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
@@ -455,7 +453,8 @@ function PlaceOrderView(props) {
       </Form>
     )
   }
-
+  if (isError) return <Error />
+  if (isLoading) return <Spinner flex />
   return (
     <Container data-testid="place-order">
       <Header>
