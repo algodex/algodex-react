@@ -25,32 +25,6 @@ import {
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
-// const CenterSpinner = styled.div`
-//   background-color: transparent;
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `
-
-// const Controls = ({ asset }) => {
-//   console.log(asset)
-//   return (
-//     <>
-//       <PlaceOrderSection active={activeMobile === TABS.BOOK}>
-//         {showOrderBook ? (
-//           <OrderBook asset={asset} />
-//         ) : (
-//           <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
-//         )}
-//       </PlaceOrderSection>
-//       <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-//         <TradeHistory asset={asset} />
-//       </AssetTradeHistorySection>
-//     </>
-//   )
-// }
-
 /**
  * @param asset
  * @param children
@@ -58,7 +32,7 @@ import { useRouter } from 'next/router'
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Layout Render Counter ${asset?.id}`)
+  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const { isFallback } = useRouter()
   const { t } = useTranslation('common')
   const gridRef = useRef()
@@ -146,7 +120,7 @@ function MainLayout({ asset, children }) {
   )
 }
 MainLayout.propTypes = {
-  asset: PropTypes.object,
+  asset: PropTypes.object.isRequired,
   children: PropTypes.any
 }
 export default MainLayout
