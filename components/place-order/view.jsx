@@ -114,6 +114,7 @@ function PlaceOrderView(props) {
   }
 
   const placeOrder = (orderData) => {
+    // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
     let filteredOrderBook = {
       buyOrders: orderBook.buyOrders.filter((order) =>
         new Big(order.algoAmount).gte(new Big(orderFilter).times(1000000))
