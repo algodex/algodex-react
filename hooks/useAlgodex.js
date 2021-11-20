@@ -148,7 +148,7 @@ export const useWalletTradeHistory = ({
 export const useWalletMinBalanceQuery = ({
   wallet,
   options = {
-    enabled: typeof wallet !== 'undefined'
+    enabled: typeof wallet !== 'undefined' && typeof wallet.address !== 'undefined'
   }
 }) =>
   useQuery(
