@@ -6,7 +6,7 @@ import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
-function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
+function Orders({ initialPanel }) {
   const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -17,11 +17,11 @@ function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <OpenOrders openOrders={openOrderData} />
+        return <OpenOrders />
       case ORDER_HISTORY_PANEL:
-        return <OrderHistory orderHistory={orderHistoryData} />
+        return <OrderHistory />
       case ASSETS_PANEL:
-        return <Assets assets={assetsData} />
+        return <Assets />
       default:
         return null
     }
