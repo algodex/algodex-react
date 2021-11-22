@@ -57,21 +57,17 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder />
+          <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
             <AssetSearch gridRef={gridRef} />
           </AssetsSection>
-          <ContentSection>
-            {children}
-            {/*{asset?.id && router.pathname.match('trade') && <Chart asset={asset} />}*/}
-            {/*{asset?.id && router.pathname.match('asset') && <AssetInfo asset={asset} />}*/}
-          </ContentSection>
+          <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          <OrderBook explorerAsset={asset} />
+          <OrderBook asset={asset} />
         </AssetOrderBookSection>
 
         <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
@@ -79,7 +75,7 @@ function MainLayout({ asset, children }) {
         </AssetTradeHistorySection>
 
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
-          <Orders asset={asset} />
+          <Orders />
         </WalletOrdersSection>
         <MobileMenu>
           <ul>

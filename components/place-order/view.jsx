@@ -47,7 +47,7 @@ const DEFAULT_ORDER = {
 }
 
 function PlaceOrderView(props) {
-  const { asset, wallets, activeWalletAddress, isSignedIn, orderBook } = props
+  const { asset, wallets, activeWalletAddress, orderBook } = props
   const { t } = useTranslation('place-order')
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
@@ -342,15 +342,6 @@ function PlaceOrderView(props) {
   }
 
   const renderForm = () => {
-    if (!isSignedIn) {
-      // @todo: make this better, this is a placeholder
-      return (
-        <BodyCopy color="gray.500" textAlign="center" m={16}>
-          {t('not-signed-in')}
-        </BodyCopy>
-      )
-    }
-
     return (
       <Form onSubmit={handleSubmit} autocomplete="off">
         <ToggleWrapper>
@@ -471,7 +462,6 @@ PlaceOrderView.propTypes = {
   asset: PropTypes.object.isRequired,
   wallets: PropTypes.array.isRequired,
   activeWalletAddress: PropTypes.string.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
   orderBook: PropTypes.object.isRequired
 }
 

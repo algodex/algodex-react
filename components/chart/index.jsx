@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
 import useStore, { getChartTimeInterval } from 'store/use-store'
 import ChartView from './view'
-import { useAssetChartQuery } from '../../hooks/useAlgodex'
+import { useAssetChartQuery, useAssetOrdersQuery } from '../../hooks/useAlgodex'
 
 // Common
 const VOLUME_UP_COLOR = '#2fb16c2c'
@@ -14,7 +14,16 @@ const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
 function Chart({ asset, ...rest }) {
-  const orderBook = useStore((state) => state.orderBook)
+  const { data: assetOrders } = useAssetOrdersQuery({ asset })
+
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
   const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
 
