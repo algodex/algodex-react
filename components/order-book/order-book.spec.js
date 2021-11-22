@@ -13,15 +13,7 @@ describe('Order Book', () => {
     decimals: 6
   }
   it('should not show rows if no data is provided', () => {
-    const { queryByTestId } = render(
-      <OrderBookView
-        price={asset.price}
-        priceChange={-0.0001}
-        decimals={asset.decimals}
-        sellData={[]}
-        buyData={[]}
-      />
-    )
+    const { queryByTestId } = render(<OrderBookView asset={asset} sellData={[]} buyData={[]} />)
 
     expect(queryByTestId(SELL_ROW)).toBeNull()
     expect(queryByTestId(BUY_ROW)).toBeNull()
@@ -31,13 +23,7 @@ describe('Order Book', () => {
     const orderData = [{ price: 1.0, amount: 123, total: 123 }]
 
     const { queryByTestId } = render(
-      <OrderBookView
-        price={asset.price}
-        priceChange={-0.0001}
-        decimals={asset.decimals}
-        sellData={orderData}
-        buyData={orderData}
-      />
+      <OrderBookView asset={asset} sellData={orderData} buyData={orderData} />
     )
 
     expect(queryByTestId(SELL_ROW)).not.toBeNull()

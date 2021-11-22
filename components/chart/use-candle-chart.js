@@ -9,11 +9,9 @@ const BACKGROUND_COLOR = theme.colors.gray[900]
 const BORDER_COLOR = theme.colors.gray[500]
 const TEXT_COLOR = theme.colors.gray[300]
 
-
-
 export default function useCandleChart(containerRef, volumeData, priceData, autoScaleProvider) {
   const [candleChart, setCandleChart] = useState()
-  
+
   useEffect(() => {
     const chartContainer = containerRef?.current
 
@@ -21,12 +19,12 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
       const { createChart, CrosshairMode } = await import('lightweight-charts')
 
       const chart = createChart(chartContainer, {
-        localization: {        
+        localization: {
           timeFormatter: (unixTime) => {
-            const s = new Date(unixTime * 1000);
-            const m = moment(s).format('lll');
-            return m;
-          },
+            const s = new Date(unixTime * 1000)
+            const m = moment(s).format('lll')
+            return m
+          }
         },
         layout: {
           backgroundColor: BACKGROUND_COLOR,
@@ -50,20 +48,17 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
         timeScale: {
           borderColor: BORDER_COLOR,
           timeVisible: true,
-          tickMarkFormatter: (time, tickMarkType, locale) => {
-            const date = new Date(time * 1000);
-            let m = null;
+          tickMarkFormatter: (time, tickMarkType) => {
+            const date = new Date(time * 1000)
+            let m = null
             if (tickMarkType == 3) {
-              m = moment(date).format("LT");
+              m = moment(date).format('LT')
             } else {
-              m = moment(date).format("ll");
+              m = moment(date).format('ll')
             }
-            return m;
-          },
-
-        },
-
-
+            return m
+          }
+        }
       })
 
       let candleSeries = chart.addCandlestickSeries({
@@ -72,7 +67,7 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
         borderDownColor: DOWN_COLOR,
         borderUpColor: UP_COLOR,
         wickDownColor: DOWN_COLOR,
-        wickUpColor: UP_COLOR,
+        wickUpColor: UP_COLOR
       })
 
       candleSeries.applyOptions({
@@ -141,12 +136,10 @@ export default function useCandleChart(containerRef, volumeData, priceData, auto
       }
 
       candleChart.candleSeries.applyOptions({
-        autoscaleInfoProvider: original => {
-            return autoScaleProvider(original, candleChart.chart, priceData);
+        autoscaleInfoProvider: (original) => {
+          return autoScaleProvider(original, candleChart.chart, priceData)
         }
       })
-
-
     }
   }, [candleChart, containerRef, priceData, volumeData])
 

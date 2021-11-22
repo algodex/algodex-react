@@ -1,0 +1,7 @@
+# TODO: SEO Sitemaps and Optimization
+User-agent: *
+Disallow: /en/trade
+
+# Allow all crawlers
+User-agent: *
+Allow: /

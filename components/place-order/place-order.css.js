@@ -105,8 +105,6 @@ export const IconTextContainer = styled.div`
   color: ${({ theme }) => theme.colors.gray['300']};
 `
 
-
-
 export const BalanceRow = styled.div`
   display: flex;
   align-items: center;
@@ -160,11 +158,10 @@ export const IconButton = styled.button`
   margin-left: 0.125rem;
   padding: 0;
   height: 15px;
- 
+
   svg {
     height: 15px;
     fill: ${({ theme }) => theme.colors.gray[500]};
     color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
-

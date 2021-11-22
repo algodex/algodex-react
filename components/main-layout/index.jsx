@@ -1,56 +1,41 @@
-import { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
+import {
+  AssetOrderBookSection,
+  AssetTradeHistorySection,
+  AssetsSection,
+  ContentSection,
+  Main,
+  MainWrapper,
+  MobileMenu,
+  MobileMenuButton,
+  PlaceOrderSection,
+  SearchAndChartSection,
+  WalletOrdersSection,
+  WalletSection
+} from './main-layout.css'
+import { useRef, useState } from 'react'
+
 import AssetSearch from 'components/asset-search'
-import Chart from 'components/chart'
-import MobileInterface from 'components/mobile-interface'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
 import PlaceOrder from 'components/place-order'
+import PropTypes from 'prop-types'
+import Spinner from 'components/spinner'
 import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
-import AssetInfo from 'components/asset-info'
-import FirstOrderMsg from 'components/first-order-msg'
-import { demoAssetsData } from 'components/assets/demo'
-import { demoOpenOrderData } from 'components/open-orders/demo'
-import { demoOrderHistoryData } from 'components/order-history/demo'
-import useStore from 'store/use-store'
-import OrderBookPrice from 'components/order-book-price'
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import {
-  AssetsSection,
-  ChartSection,
-  Main,
-  MainWrapper,
-  OrderBookSection,
-  OrdersSection,
-  TradeHistorySection,
-  TradeSection,
-  WalletSection,
-  MobileMenu,
-  MobileMenuButton,
-  MobilePriceSection,
-  SearchAndChartSection
-} from './main-layout.css'
 
-import { ChartOverlay } from '../asset-search/info-flyover/info-flyover.css'
-
-const DEMO_OPEN_ORDER_DATA = demoOpenOrderData
-const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
-const DEMO_ASSETS_DATA = demoAssetsData
-
-function MainLayout(props) {
-  const { onWalletConnect, refetchWallets } = props
-  const { t } = useTranslation("common");
-  const asset = useStore((state) => state.asset)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const showOrderBook = asset.isTraded || asset.hasOrders
-  const showAssetInfo = useStore((state) => state.showAssetInfo)
-
-  const [gridSize, setGridSize] = useState({ width: 0, height: 0 })
+/**
+ * @param asset
+ * @param children
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function MainLayout({ asset, children }) {
+  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const { isFallback } = useRouter()
+  const { t } = useTranslation('common')
   const gridRef = useRef()
-
-  const [showOverlay, setShowOverlay] = useState(false)
-
   const TABS = {
     CHART: 'CHART',
     BOOK: 'BOOK',
@@ -61,78 +46,61 @@ function MainLayout(props) {
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (gridRef?.current) {
-        const { width, height } = gridRef.current.getBoundingClientRect()
-        setGridSize({ width, height })
-      }
-    }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => removeEventListener('resize', handleResize)
-  }, [])
-
+  // If the Server failed to load data
+  if (isFallback) {
+    return <Spinner flex />
+  }
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        {/* <MobilePriceSection active={activeMobile === TABS.TRADE}>
-          <h3>
-            <span>{`${asset.name} `}</span> / ALGO
-          </h3>
-          <OrderBookPrice price={asset.price} decimals={asset.decimals} change={asset.priceChange24hr} />
-        </MobilePriceSection> */}
-
         <WalletSection active={activeMobile === TABS.WALLET}>
-          <Wallet onWalletConnect={onWalletConnect} />
+          <Wallet />
         </WalletSection>
-        <TradeSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder refetchWallets={refetchWallets} />
-        </TradeSection>
+        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
+          {/* <PlaceOrder /> */}
+        </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
-            <AssetSearch gridSize={gridSize} onInfoChange={(show) => setShowOverlay(show)} />
+            <AssetSearch gridRef={gridRef} />
           </AssetsSection>
-          <ChartSection>
-            {asset.isTraded && !showAssetInfo ? <Chart /> : <AssetInfo />}
-            <ChartOverlay isActive={showOverlay} />
-          </ChartSection>
+          <ContentSection>
+            {children}
+            {/*{asset?.id && router.pathname.match('trade') && <Chart asset={asset} />}*/}
+            {/*{asset?.id && router.pathname.match('asset') && <AssetInfo asset={asset} />}*/}
+          </ContentSection>
         </SearchAndChartSection>
-        <OrderBookSection active={activeMobile === TABS.BOOK}>
-          {showOrderBook ? <OrderBook /> : <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />}
-        </OrderBookSection>
-        <TradeHistorySection active={activeMobile === TABS.HISTORY}>
-          <TradeHistory />
-        </TradeHistorySection>
-        <OrdersSection active={activeMobile === TABS.ORDERS}>
-          <Orders
-            openOrderData={DEMO_OPEN_ORDER_DATA}
-            orderHistoryData={DEMO_ORDER_HISTORY_DATA}
-            assetData={DEMO_ASSETS_DATA}
-            gridSize={gridSize}
-          />
-        </OrdersSection>
+
+        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
+          <OrderBook explorerAsset={asset} />
+        </AssetOrderBookSection>
+
+        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
+          <TradeHistory asset={asset} />
+        </AssetTradeHistorySection>
+
+        <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
+          <Orders asset={asset} />
+        </WalletOrdersSection>
         <MobileMenu>
           <ul>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
-              {t("mobilefooter-CHART")}
+                {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
-              {t("mobilefooter-BOOK")}
+                {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
-              {t("mobilefooter-TRADE")}
+                {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
-              {t("mobilefooter-ORDERS")}
+                {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
             {/* <li>
@@ -142,7 +110,7 @@ function MainLayout(props) {
               </li> */}
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
-              {t("mobilefooter-WALLET")}
+                {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>
           </ul>
@@ -151,10 +119,8 @@ function MainLayout(props) {
     </MainWrapper>
   )
 }
-
 MainLayout.propTypes = {
-  onWalletConnect: PropTypes.func.isRequired,
-  refetchWallets: PropTypes.func.isRequired
+  asset: PropTypes.object.isRequired,
+  children: PropTypes.any
 }
-
 export default MainLayout

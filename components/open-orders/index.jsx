@@ -1,14 +1,12 @@
 /* eslint-disable react/prop-types  */
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import { useQuery } from 'react-query'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { mapOpenOrdersData } from './helpers'
-import { fetchOpenOrdersByAddress } from 'lib/api'
 import OrderService from 'services/order'
 import { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
-import Link from "next/link";
+import Link from 'next/link'
 
 import useTranslation from 'next-translate/useTranslation'
 
@@ -25,20 +23,16 @@ import {
   TableWrapper,
   OpenOrdersContainer
 } from './open-orders.css'
+import { useWalletOrdersQuery } from '../../hooks/useAlgodex'
 
 function OpenOrders() {
-  const { t, lang } = useTranslation("orders");
+  const { t, lang } = useTranslation('orders')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
 
-  const { data, isLoading, isError } = useQuery(
-    ['openOrders', { address: activeWalletAddress }],
-    () => fetchOpenOrdersByAddress(activeWalletAddress),
-    {
-      enabled: !!activeWalletAddress,
-      refetchInterval: 3000
-    }
-  )
+  const { data, isLoading, isError } = useWalletOrdersQuery({
+    wallet: { address: activeWalletAddress }
+  })
 
   useEffect(() => {
     if (data) {
@@ -53,8 +47,12 @@ function OpenOrders() {
   const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
   const OrderPairCell = ({ value, row }) => {
-    const assetId = row?.original?.metadata?.assetId;
-    return (<Link href={`/trade/${assetId}`}><OrderPair>{value}</OrderPair></Link>)
+    const assetId = row?.original?.metadata?.assetId
+    return (
+      <Link href={`/trade/${assetId}`}>
+        <OrderPair>{value}</OrderPair>
+      </Link>
+    )
   }
 
   const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
@@ -69,8 +67,14 @@ function OpenOrders() {
         const cellIndex = cell.row.index
         const cellData = data[cellIndex]
 
-        const { escrowAddress, ownerAddress, assetLimitPriceN, assetLimitPriceD, assetId, version } =
-          cellData.metadata
+        const {
+          escrowAddress,
+          ownerAddress,
+          assetLimitPriceN,
+          assetLimitPriceD,
+          assetId,
+          version
+        } = cellData.metadata
         const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
         const updateOrderStatus = (statusMsg) =>
@@ -88,9 +92,9 @@ function OpenOrders() {
         )
 
         toast.promise(cancelOrderPromise, {
-          loading: t("awaiting-confirmation"),
-          success: t("order-cancelled"),
-          error: t("error-cancelling")
+          loading: t('awaiting-confirmation'),
+          success: t('order-cancelled'),
+          error: t('error-cancelling')
         })
 
         try {
@@ -115,32 +119,32 @@ function OpenOrders() {
   const columns = useMemo(
     () => [
       {
-        Header: t("date"),
+        Header: t('date'),
         accessor: 'date',
         Cell: OrderDateCell
       },
       {
-        Header: t("pair"),
+        Header: t('pair'),
         accessor: 'pair',
         Cell: OrderPairCell
       },
       {
-        Header: t("price") + ' (ALGO)',
+        Header: t('price') + ' (ALGO)',
         accessor: 'price',
         Cell: OrderPriceCell
       },
       {
-        Header: t("type"),
+        Header: t('type'),
         accessor: 'type',
         Cell: OrderTypeCell
       },
       {
-        Header: t("amount"),
+        Header: t('amount'),
         accessor: 'amount',
         Cell: OrderAmountCell
       },
       {
-        Header: t("status"),
+        Header: t('status'),
         accessor: 'status',
         Cell: OrderStatusCell
       },
@@ -160,8 +164,8 @@ function OpenOrders() {
     }
     return (
       <StatusContainer>
-        {isLoading && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
-        {isError && <BodyCopySm color="gray.400">{t("error")}</BodyCopySm>}
+        {isLoading && <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>}
+        {isError && <BodyCopySm color="gray.400">{t('error')}</BodyCopySm>}
       </StatusContainer>
     )
   }

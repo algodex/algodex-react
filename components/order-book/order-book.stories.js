@@ -32,18 +32,14 @@ const asset = {
 
 export const Default = Template.bind({})
 Default.args = {
-  price: asset.price,
-  priceChange: -0.1,
-  decimals: asset.decimals,
+  asset: asset,
   sellData: generateBookData(1.3766, 0.0001),
   buyData: generateBookData(1.3764, -0.0001)
 }
 
 export const LowOrders = Template.bind({})
 LowOrders.args = {
-  price: asset.price,
-  priceChange: 0.1,
-  decimals: asset.decimals,
+  asset: asset,
   sellData: generateBookData(1.3766, (randomInt(1, 5) * 0.0001).toFixed(4), randomInt(5, 15)),
   buyData: generateBookData(1.3764, -(randomInt(1, 5) * 0.0001).toFixed(4), randomInt(5, 15))
 }

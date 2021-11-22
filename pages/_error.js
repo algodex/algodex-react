@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import NextErrorComponent from 'next/error'
-
 import * as Sentry from '@sentry/nextjs'
 
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
+const NextError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -15,7 +14,7 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   return <NextErrorComponent statusCode={statusCode} />
 }
 
-MyError.getInitialProps = async ({ res, err, asPath }) => {
+NextError.getInitialProps = async ({ res, err, asPath }) => {
   const errorInitialProps = await NextErrorComponent.getInitialProps({
     res,
     err
@@ -57,4 +56,4 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
   return errorInitialProps
 }
 
-export default MyError
+export default NextError

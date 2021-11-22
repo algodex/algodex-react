@@ -14,7 +14,7 @@ export const WalletSection = styled.section`
   }
 `
 
-export const TradeSection = styled.section`
+export const PlaceOrderSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
 
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -27,7 +27,7 @@ export const TradeSection = styled.section`
   }
 `
 
-export const ChartSection = styled.section`
+export const ContentSection = styled.section`
   position: relative;
   height: auto;
 `
@@ -37,7 +37,6 @@ export const AssetsSection = styled.section`
     display: flex;
   }
 `
-
 
 export const SearchAndChartSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -59,11 +58,9 @@ export const SearchAndChartSection = styled.section`
     grid-template-columns: 320px 1fr;
     grid-template-rows: 1fr;
   }
-
 `
 
-export const OrderBookSection = styled.section`
-
+export const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -80,8 +77,7 @@ export const OrderBookSection = styled.section`
     display: flex;
   }
 `
-export const TradeHistorySection = styled.section`
-
+export const AssetTradeHistorySection = styled.section`
   display: flex;
   flex-direction: column;
 
@@ -96,8 +92,7 @@ export const TradeHistorySection = styled.section`
   }
 `
 
-export const OrdersSection = styled.section`
-
+export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -112,8 +107,6 @@ export const OrdersSection = styled.section`
   }
 `
 
-
-
 export const MainWrapper = styled.div`
   position: relative;
   height: calc(var(--vh, 1vh) * 100);
@@ -123,7 +116,6 @@ export const MainWrapper = styled.div`
     min-height: 100%;
     height: auto;
   }
-
 `
 
 export const Main = styled.main`
@@ -191,7 +183,6 @@ export const MobileMenu = styled.nav`
     flex: 1 0 auto;
     height: 100%;
   }
-
 
   z-index: 99;
 

@@ -1,11 +1,17 @@
 import React from 'react'
 import { jsxDecorator } from 'storybook-addon-jsx'
-import { RouterContext } from 'next/dist/next-server/lib/router-context'
+import { RouterContext } from 'next/dist/shared/lib/router-context'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import theme from '../theme'
 import "tailwindcss/tailwind.css"
-
+import I18nProvider from 'next-translate/I18nProvider'
+import commonEN from '../locales/en/common.json'
+import ordersEN from '../locales/en/orders.json'
+import assetsEN from '../locales/en/assets.json'
+import placeOrderEN from '../locales/en/place-order.json'
+import walletEN from '../locales/en/wallet.json'
+import chartEN from '../locales/en/chart.json'
 const queryClient = new QueryClient()
 
 const GlobalStyle = createGlobalStyle`
@@ -85,7 +91,19 @@ export const decorators = [
   (Story) => (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
+        <I18nProvider
+            lang={'en'}
+            namespaces={{
+              common: commonEN,
+              orders: ordersEN,
+              assets: assetsEN,
+              'place-order': placeOrderEN,
+              chart: chartEN,
+              wallet: walletEN
+            }}
+        >
         {Story()}
+        </I18nProvider>
       </QueryClientProvider>
     </ThemeProvider>
   ),

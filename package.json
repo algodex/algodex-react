@@ -2,18 +2,23 @@
   "name": "algodex-react",
   "version": "0.1.0",
   "private": true,
+  "browserslist": [
+    "defaults"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "test": "jest",
+    "badge": "jest && jest-coverage-badges output ./assets",
     "jest": "jest --watch",
     "lint": "eslint --fix .",
     "format": "prettier --write './**/*.{js,jsx,css,md,json}' --config ./.prettierrc.json",
     "storybook": "start-storybook -p 6006 --no-dll -s ./public",
     "build-storybook": "build-storybook",
     "cypress": "cypress open",
-    "chromatic": "npx chromatic --project-token=ef5af38aec3a"
+    "chromatic": "npx chromatic --project-token=ef5af38aec3a",
+    "translate": "node bin/translate.js"
   },
   "husky": {
     "hooks": {
@@ -39,9 +44,11 @@
     "framer-motion": "^4.1.17",
     "immer": "^9.0.3",
     "lightweight-charts": "^3.3.0",
+    "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "moment": "^2.29.1",
-    "next": "10.2.3",
+    "next": "^11.1.2",
+    "next-pwa": "^5.4.0",
     "next-translate": "^1.0.7",
     "polished": "^4.1.3",
     "react": "17.0.2",
@@ -60,6 +67,7 @@
     "storybook-addon-next-router": "^3.0.5",
     "styled-components": "^5.3.0",
     "styled-system": "^5.1.5",
+    "translate": "^1.4.0",
     "zustand": "^3.5.2"
   },
   "devDependencies": {
@@ -87,6 +95,7 @@
     "husky": "^6.0.0",
     "hygen-cra": "^1.0.0",
     "jest": "^27.0.1",
+    "jest-coverage-badges": "^1.1.2",
     "lint-staged": "^11.0.0",
     "postcss": "^8.3.9",
     "prettier": "2.3.0",

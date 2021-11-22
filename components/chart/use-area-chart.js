@@ -22,12 +22,12 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
     const initializeChart = async () => {
       const { createChart, CrosshairMode } = await import('lightweight-charts')
       const chart = createChart(chartContainer, {
-        localization: {        
+        localization: {
           timeFormatter: (unixTime) => {
-            const s = new Date(unixTime * 1000);
-            const m = moment(s).format('lll');
-            return m;
-          },
+            const s = new Date(unixTime * 1000)
+            const m = moment(s).format('lll')
+            return m
+          }
         },
         layout: {
           backgroundColor: BACKGROUND_COLOR,
@@ -51,16 +51,16 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
         timeScale: {
           borderColor: BORDER_COLOR,
           timeVisible: true,
-          tickMarkFormatter: (time, tickMarkType, locale) => {
-            const date = new Date(time * 1000);
-            let m = null;
+          tickMarkFormatter: (time, tickMarkType) => {
+            const date = new Date(time * 1000)
+            let m = null
             if (tickMarkType == 3) {
-              m = moment(date).format("LT");
+              m = moment(date).format('LT')
             } else {
-              m = moment(date).format("ll");
+              m = moment(date).format('ll')
             }
-            return m;
-          },
+            return m
+          }
         }
       })
 
@@ -68,8 +68,7 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
         topColor: TOP_COLOR,
         bottomColor: BOTTOM_COLOR,
         lineColor: TOP_LINE_COLOR,
-        lineWidth: LINE_WIDTH,
-
+        lineWidth: LINE_WIDTH
       })
 
       areaSeries.applyOptions({
@@ -116,8 +115,8 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
         .timeScale()
         .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
       areaChart.areaSeries.applyOptions({
-        autoscaleInfoProvider: original => {
-            return autoScaleProvider(original, areaChart.chart, priceData);
+        autoscaleInfoProvider: (original) => {
+          return autoScaleProvider(original, areaChart.chart, priceData)
         }
       })
       if (priceData.length <= dataPointsToShow) {

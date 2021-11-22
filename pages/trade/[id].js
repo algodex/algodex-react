@@ -1,205 +1,111 @@
-import { useEffect, useMemo } from 'react'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import { fetchAssetById } from 'lib/api'
-import { fetchOrdersInEscrow } from 'lib/api'
-import WalletService from 'services/wallet'
-import MainLayout from 'components/main-layout'
-import Header from 'components/header'
-import Spinner from 'components/spinner'
-import Error from 'components/error'
-import useMyAlgo from 'hooks/use-my-algo'
-import useStore, { useStorePersisted } from 'store/use-store'
-import { checkTestnetAccess } from 'lib/api'
-import Cookies from 'cookies'
+import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import Chart from 'components/chart'
+import Page from 'components/Page'
+import { fetchExplorerAssetInfo } from 'services/algoexplorer'
+import { fetchAssets } from 'services/algodex'
 
-import { Container, StatusContainer } from 'styles/trade.css'
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
 
-export default function Home() {
-  const router = useRouter()
-  const id = router.query.id
-  const isValidId = /^\d+$/.test(id)
-  const adminWalletAddr = router.query.adminWalletAddr;
+  overflow: hidden;
+  max-height: calc(var(--vh, 1vh) * 100);
+  height: calc(var(--vh, 1vh) * 100);
 
-  // Redirect to LAMP if `id` is invalid (contains non-numerical characters)
-  useEffect(() => {
-    if (id && !isValidId) {
-      console.log('Redirecting to LAMP (15322902)...')
-      router.push(`/trade/15322902`)
-    }
-  }, [id, isValidId, router])
-
-  const { connect, addresses } = useMyAlgo()
-
-  const wallets = useStorePersisted((state) => state.wallets)
-  const setWallets = useStorePersisted((state) => state.setWallets)
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
-  const setOrderBook = useStore((state) => state.setOrderBook)
-  const assetStore = useStore((state) => state.asset)
-
-  const walletAddresses = useMemo(() => {
-    if (adminWalletAddr) {
-      return [adminWalletAddr];
-    }
-    if (!!addresses) {
-      return addresses
-    }
-    return !!wallets ? wallets.map((w) => w.address) : []
-  }, [addresses, wallets, adminWalletAddr])
-
-  // fetch wallet balances from blockchain
-  const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
-    refetchInterval: 5000
-  })
-
-  useEffect(() => {
-    if (walletsQuery.data?.wallets) {
-      setWallets(walletsQuery.data.wallets)
-
-      if (!isSignedIn) {
-        setIsSignedIn(true)
-      }
-
-      if (!walletAddresses.includes(activeWalletAddress)) {
-        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-      }
-    }
-  }, [
-    activeWalletAddress,
-    isSignedIn,
-    setActiveWalletAddress,
-    setIsSignedIn,
-    setWallets,
-    walletAddresses,
-    walletsQuery.data
-  ])
-
-  // fetch asset from API
-  const assetQuery = useQuery(['asset', { id }], () => fetchAssetById(id), {
-    enabled: isValidId,
-    refetchInterval: 3000
-  })
-
-  const asset = assetQuery.data?.asset
-  const setAsset = useStore((state) => state.setAsset)
-
-  useEffect(() => {
-    if (assetQuery.isSuccess) {
-      if (asset.id) {
-        setAsset(asset)
-      } else {
-        console.log('Redirecting to LAMP (15322902)...')
-        router.push(`/trade/15322902`)
-      }
-    }
-  }, [asset, assetQuery.isSuccess, router, setAsset])
-
-  // for determining whether to poll order book endpoint
-  const hasBeenOrdered = asset?.isTraded || asset?.hasOrders
-
-  // fetch order book for current asset
-  // this query is dependent on asset.id being defined
-  // and hasBeenOrdered being true
-  const orderBookQuery = useQuery(
-    ['orderBook', { assetId: asset?.id }],
-    () => fetchOrdersInEscrow(asset?.id),
-    {
-      enabled: !!asset?.id && hasBeenOrdered,
-      refetchInterval: 5000
-    }
-  )
-
-  useEffect(() => {
-    if (orderBookQuery.data) {
-      setOrderBook(orderBookQuery.data)
-    }
-  }, [orderBookQuery.data, setOrderBook])
-
-  useEffect(() => {
-    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-    let vh = window.innerHeight * 0.01
-    // Then we set the value in the --vh custom property to the root of the document
-    document.documentElement.style.setProperty('--vh', `${vh}px`)
-
-    const resize = () => {
-      // We execute the same script as before
-      let vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-    }
-
-    // We listen to the resize event
-    window.addEventListener('resize', resize)
-
-    return () => window.removeEventListener('resize', resize)
-  }, [])
-
-  const renderDashboard = () => {
-    // @todo: investigate using React Query's queryCache instead of saving to Zustand store
-    const isAssetStored = assetStore?.id
-
-    const isLoading =
-      assetQuery.isLoading || orderBookQuery.isLoading || (!assetQuery.isError && !isAssetStored)
-    const isError = assetQuery.isError || orderBookQuery.isError
-
-    if (isLoading) {
-      return (
-        <StatusContainer>
-          <Spinner flex />
-        </StatusContainer>
-      )
-    }
-    if (isError) {
-      return (
-        <StatusContainer>
-          <Error message="Error loading exchange data" flex />
-        </StatusContainer>
-      )
-    }
-
-    return <MainLayout onWalletConnect={connect} refetchWallets={walletsQuery.refetch} />
+  @media (min-width: 996px) {
+    overflow: scroll;
+    max-height: none;
   }
 
-  return (
-    <Container>
-      <Head>
-        <title>
-          {asset?.name && `${asset.name} to ALGO `}Algodex | Algorand Decentralized Exchange
-        </title>
-        <meta name="description" content="Decentralized exchange for trading Algorand ASAs" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"></meta>
-      </Head>
-      <Header />
-      {renderDashboard()}
-    </Container>
-  )
+  // for demo
+  p.demo {
+    flex: 1 1 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    color: ${({ theme }) => theme.colors.gray['600']};
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+`
+
+export const StatusContainer = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+`
+
+/**
+ * Fetch Traded Asset Paths
+ * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
+ */
+export async function getStaticPaths() {
+  const assets = await fetchAssets()
+  const paths = assets
+    .filter((asset) => asset.isTraded)
+    .map((asset) => ({
+      params: { id: asset.id.toString() }
+    }))
+  return { paths, fallback: true }
 }
 
-export async function getServerSideProps({ req, res, query }) {
-  const cookies = new Cookies(req, res)
-
-  if (query?.loginKey) {
-    cookies.set('loginKey', query.loginKey)
-  }
-
-  const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  const TESTNET_DOMAIN = process.env.NEXT_PUBLIC_TESTNET_DOMAIN
-
-  const hasGateAccess = true //await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
-
-  if (!hasGateAccess) {
+/**
+ * Get Explorer Asset Info
+ *
+ * @param id
+ * @returns {object} Response Object or Redirect Object
+ */
+export async function getStaticProps({ params: { id } }) {
+  let staticExplorerAsset
+  try {
+    staticExplorerAsset = await fetchExplorerAssetInfo(id)
+  } catch ({ response: { status } }) {
     return {
       redirect: {
-        destination: '/restricted',
+        destination: `/asset/${id}`,
         permanent: false
       }
     }
   }
 
   return {
-    props: {}
+    props: { staticExplorerAsset }
   }
 }
+
+/**
+ * Trade Page
+ *
+ * Display a chart of historical orders. Takes an Algorand Asset
+ * and displays a chart. If an asset is not traded it will route to
+ * /asset/{asset.id} then fallback to 404 if /asset/{asset.id} is not
+ * found
+ *
+ * @param {object} staticExplorerAsset The Explorer Response
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const TradePage = ({ staticExplorerAsset }) => {
+  console.debug('Trade Page Render')
+  const title = 'Algodex | Algorand Decentralized Exchange'
+  const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
+
+  return (
+    <Page
+      title={`${prefix} ${title}`}
+      description={'Decentralized exchange for trading Algorand ASAs'}
+      staticExplorerAsset={staticExplorerAsset}
+      noFollow={true}
+    >
+      {({ asset }) => <Chart asset={asset} />}
+    </Page>
+  )
+}
+
+TradePage.propTypes = {
+  staticExplorerAsset: PropTypes.object
+}
+export default TradePage

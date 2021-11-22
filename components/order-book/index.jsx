@@ -1,21 +1,60 @@
+import { useState } from 'react'
 import { aggregateOrders } from './helpers'
 import OrderBookView from './view'
 import useStore from 'store/use-store'
+import { useEffect } from 'react'
+import PropTypes from 'prop-types'
+import FirstOrderMsg from 'components/first-order-msg'
+import Spinner from 'components/spinner'
+import Error from 'components/error'
+import { useAssetOrdersQuery } from 'hooks/useAlgodex'
 
-export default function OrderBook() {
-  const asset = useStore((state) => state.asset)
-  const { sellOrders, buyOrders } = useStore((state) => state.orderBook)
+/**
+ * @param asset
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function OrderBook({ explorerAsset }) {
+  const [sellOrders, setSellOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
+  const isSignedIn = useStore((state) => state.isSignedIn)
 
-  const sellData = aggregateOrders(sellOrders, asset.decimals, 'sell')
-  const buyData = aggregateOrders(buyOrders, asset.decimals, 'buy')
+  // Orderbook Query
+  const { data, isLoading, isError } = useAssetOrdersQuery({ asset: explorerAsset })
 
-  return (
-    <OrderBookView
-      price={asset.price}
-      decimals={asset.decimals}
-      buyData={buyData}
-      sellData={sellData}
-      priceChange={asset.priceChange24hr}
-    />
-  )
+  // Massage Orders
+  useEffect(() => {
+    if (
+      data &&
+      !isLoading &&
+      typeof data.sellASAOrdersInEscrow !== 'undefined' &&
+      typeof data.buyASAOrdersInEscrow !== 'undefined'
+    ) {
+      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, explorerAsset.decimals, 'sell'))
+      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, explorerAsset.decimals, 'buy'))
+    }
+  }, [isLoading, data, setSellOrders, setBuyOrders, explorerAsset])
+
+  // Invalid
+  if (!explorerAsset?.id || isLoading) {
+    return <Spinner flex />
+  }
+
+  // Is in error
+  if (isError || (!explorerAsset?.id && !isLoading)) {
+    return <Error message={'Issue fetching Orderbook'} />
+  }
+
+  // Has no orders
+  if (typeof sellOrders !== 'undefined' && typeof buyOrders !== 'undefined') {
+    if (sellOrders.length === 0 && buyOrders.length === 0) {
+      return <FirstOrderMsg asset={explorerAsset} isSignedIn={isSignedIn} />
+    }
+  }
+
+  // Return OrderBook
+  return <OrderBookView asset={explorerAsset} buyData={buyOrders} sellData={sellOrders} />
+}
+OrderBook.propTypes = {
+  explorerAsset: PropTypes.object.isRequired
 }
