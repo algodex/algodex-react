@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useWalletTradeHistory } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-import { useStorePersisted } from 'store/use-store'
+import useStore, { useStorePersisted } from 'store/use-store'
 import { mapTradeHistoryData } from './helpers'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
@@ -39,9 +39,13 @@ const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 function OrderHistory() {
   const { t, lang } = useTranslation('orders')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-
+  const isSignedIn = useStore((state) => state.isSignedIn)
   const { data, isLoading, isError } = useWalletTradeHistory({
-    wallet: { address: activeWalletAddress }
+    wallet: { address: activeWalletAddress },
+    options: {
+      enabled: isSignedIn,
+      refetchInterval: 3000
+    }
   })
 
   const tradeHistoryData = useMemo(

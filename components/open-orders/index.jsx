@@ -4,7 +4,7 @@ import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import { mapOpenOrdersData } from './helpers'
 import OrderService from 'services/order'
-import { useStorePersisted } from 'store/use-store'
+import useStore, { useStorePersisted } from 'store/use-store'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 
@@ -29,9 +29,13 @@ function OpenOrders() {
   const { t, lang } = useTranslation('orders')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
-
+  const isSignedIn = useStore((state) => state.isSignedIn)
   const { data, isLoading, isError } = useWalletOrdersQuery({
-    wallet: { address: activeWalletAddress }
+    wallet: { address: activeWalletAddress },
+    options: {
+      enabled: isSignedIn,
+      refetchInterval: 3000
+    }
   })
 
   useEffect(() => {
