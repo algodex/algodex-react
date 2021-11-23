@@ -70,10 +70,10 @@ const userState = (set, get) => ({
    */
   search: {
     sortBy: [
-      {
-        id: 'price',
-        desc: true
-      }
+      // {
+      //   id: 'price',
+      //   desc: true
+      // }
     ]
   },
   /**
