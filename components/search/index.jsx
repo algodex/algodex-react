@@ -1,8 +1,11 @@
-import { forwardRef } from 'react'
+import { X as CancelIcon, Search as _Search } from 'react-feather'
+
+import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
-import { Search as _Search, X as CancelIcon } from 'react-feather'
-import styled from 'styled-components'
 import TextInput from 'components/text-input'
+import { forwardRef } from 'react'
+import { mdiCheckboxBlankOutline } from '@mdi/js'
+import styled from 'styled-components'
 import theme from '../../theme'
 
 const Container = styled.div`
@@ -70,7 +73,7 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
   }
 
   return (
-    <Container>
+    <Container style={{ display: 'flex', flexDirection: 'column', margin: '0.5rem' }}>
       <Input ref={ref} value={value} onKeyDown={handleKeyDown} {...props} />
       <SearchIcon color={theme.colors.gray['500']} size={16} />
       {onCancel && value !== '' && (
@@ -78,6 +81,22 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
           <CancelIcon color={theme.colors.gray['500']} size={16} />
         </CancelButton>
       )}
+      <Container 
+        style={{ 
+          marginTop: '1rem',
+          display: 'flex',
+          alignItem: 'center',
+          alignContent: 'center'
+        }}
+      >
+        <Icon
+          path={mdiCheckboxBlankOutline}
+          title="Checkbox icon"
+          size={0.7}
+          color={theme.colors.gray['500']}
+        />
+        <p style={{ fontSize: '12px' }}>View Verified Assets Only</p>
+      </Container>
     </Container>
   )
 })

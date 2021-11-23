@@ -11,16 +11,17 @@ import {
   TableHeader,
   TableWrapper
 } from './asset-search.css'
-import Link from 'next/link'
+import { BodyCopySm, BodyCopyTiny } from '../type'
 import { useEffect, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
-import { mapToSearchResults } from './helpers'
-import { withSearchResultsQuery } from 'hooks/withAlgodex'
-import useUserStore from 'store/use-user-state'
-import { BodyCopySm, BodyCopyTiny } from '../type'
-import SvgImage from '../svg-image'
-import useTranslation from 'next-translate/useTranslation'
+
+import Link from 'next/link'
 import PropTypes from 'prop-types'
+import SvgImage from '../svg-image'
+import { mapToSearchResults } from './helpers'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from 'store/use-user-state'
+import { withSearchResultsQuery } from 'hooks/withAlgodex'
 
 const Loading = () => {
   const { t } = useTranslation('assets')
@@ -163,7 +164,7 @@ const AssetSearchTable = ({
 
   return (
     <TableWrapper>
-      <TableContainer>
+      <TableContainer style={{ marginTop: '5rem' }}>
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, h) => (
