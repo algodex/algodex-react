@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
-import { useState, useEffect, useRef, useCallback } from 'react'
-import PropTypes from 'prop-types'
-import useUserStore from 'store/use-user-state'
-import SearchInput from './search'
-import InfoFlyover from './info-flyover'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import AssetSearchTable from 'components/asset-search/table'
-import styled from 'styled-components'
+import InfoFlyover from './info-flyover'
+import PropTypes from 'prop-types'
+import SearchInput from './search'
 import { rgba } from 'polished'
+import styled from 'styled-components'
+import useUserStore from 'store/use-user-state'
 
 export const Container = styled.div`
   flex: 1 1 0%;
