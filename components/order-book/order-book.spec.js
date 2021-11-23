@@ -7,8 +7,8 @@ const BUY_ROW = 'order-book-buy-row'
 
 describe('Order Book', () => {
   const asset = {
-    id: 123,
-    name: 'YDLY',
+    id: 15322902,
+    name: 'LAMP',
     price: 1.3765,
     decimals: 6
   }
