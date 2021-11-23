@@ -47,51 +47,51 @@ export const useStorePersisted = create(
   )
 )
 export const useStore = create(
-  immer((set, get) => ({
-    asset: {
-      id: 15322902,
-      name: 'LAMP',
-      decimals: 6,
-      price: 0,
-      priceChange24hr: 0,
-      isTraded: true,
-      hasOrders: true,
-      verified: false,
-      info: {
-        fullName: 'Lamps',
-        algoExplorerUrl: 'https://testnet.algoexplorer.io/asset/15322902',
-        supply: {
-          circulating: '99989.339745',
-          total: '100000.000000'
-        }
-      }
-    },
-    setAsset: (asset) => {
-      const prevAsset = get().asset
-      const isNew = prevAsset.id !== asset.id
-      const orderBook = { buyOrders: [], sellOrders: [] }
-
-      set({
-        asset,
-        ...(isNew ? { orderBook } : {}) // only reset order book if asset is new
-      })
-    },
+  immer((set) => ({
+    // asset: {
+    //   id: 15322902,
+    //   name: 'LAMP',
+    //   decimals: 6,
+    //   price: 0,
+    //   priceChange24hr: 0,
+    //   isTraded: true,
+    //   hasOrders: true,
+    //   verified: false,
+    //   info: {
+    //     fullName: 'Lamps',
+    //     algoExplorerUrl: 'https://testnet.algoexplorer.io/asset/15322902',
+    //     supply: {
+    //       circulating: '99989.339745',
+    //       total: '100000.000000'
+    //     }
+    //   }
+    // },
+    // setAsset: (asset) => {
+    //   const prevAsset = get().asset
+    //   const isNew = prevAsset.id !== asset.id
+    //   const orderBook = { buyOrders: [], sellOrders: [] }
+    //
+    //   set({
+    //     asset,
+    //     ...(isNew ? { orderBook } : {}) // only reset order book if asset is new
+    //   })
+    // },
 
     isSignedIn: false,
     setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
     signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
 
-    orderBook: {
-      buyOrders: [],
-      sellOrders: []
-    },
-    setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
-      set({
-        orderBook: {
-          buyOrders: buyASAOrdersInEscrow,
-          sellOrders: sellASAOrdersInEscrow
-        }
-      }),
+    // orderBook: {
+    //   buyOrders: [],
+    //   sellOrders: []
+    // },
+    // setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
+    //   set({
+    //     orderBook: {
+    //       buyOrders: buyASAOrdersInEscrow,
+    //       sellOrders: sellASAOrdersInEscrow
+    //     }
+    //   }),
 
     order: {
       type: 'buy',
