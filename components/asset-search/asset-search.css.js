@@ -1,6 +1,6 @@
-import styled from 'styled-components'
-import { rgba } from 'polished'
 import Icon from 'components/icon'
+import { rgba } from 'polished'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -185,7 +185,7 @@ export const TableContainer = styled.div`
         &:first-child {
           th {
             top: 0;
-            padding: 0.5rem 1.125rem;
+            padding: 0.5rem -1rem;
             border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 
             &::before {
