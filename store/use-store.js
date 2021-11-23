@@ -100,7 +100,7 @@ export const useStore = create(
       total: '0',
       execution: 'both'
     },
-    setOrder: (order) =>
+    setOrder: (order, asset) =>
       set((state) => {
         // Always Round order price, amount, and recalculate total
         const priceChanged = order.price !== state.order.price
@@ -108,7 +108,7 @@ export const useStore = create(
         const price = typeof order.price === 'undefined' ? state.order.price : order.price
         const amount = typeof order.amount === 'undefined' ? state.order.amount : order.amount
         order.price = priceChanged ? roundValue(price, 6) : state.order.price
-        order.amount = amountChanged ? roundValue(amount, state.asset.decimals) : state.order.amount
+        order.amount = amountChanged ? roundValue(amount, asset.decimals) : state.order.amount
         order.total =
           priceChanged || amountChanged
             ? new Big(order.price || 0)

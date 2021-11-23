@@ -98,25 +98,34 @@ function PlaceOrderView(props) {
    * When asset or active wallet changes, reset the form
    */
   useEffect(() => {
-    setOrder({
-      ...DEFAULT_ORDER
-    })
-  }, [asset.id, activeWalletAddress, setOrder])
+    setOrder(
+      {
+        ...DEFAULT_ORDER
+      },
+      asset
+    )
+  }, [asset, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
-    setOrder({
-      [field || e.target.id]: e.target.value
-    })
+    setOrder(
+      {
+        [field || e.target.id]: e.target.value
+      },
+      asset
+    )
   }
 
   const handleRangeChange = (update) => {
-    setOrder(update)
+    setOrder(update, asset)
   }
 
   const handleOptionsChange = (e) => {
-    setOrder({
-      execution: e.target.value
-    })
+    setOrder(
+      {
+        execution: e.target.value
+      },
+      asset
+    )
   }
 
   const placeOrder = (orderData) => {
@@ -197,10 +206,13 @@ function PlaceOrderView(props) {
       setStatus({ submitted: true, submitting: false })
 
       // reset order form
-      setOrder({
-        ...DEFAULT_ORDER,
-        type: order.type
-      })
+      setOrder(
+        {
+          ...DEFAULT_ORDER,
+          type: order.type
+        },
+        asset
+      )
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)

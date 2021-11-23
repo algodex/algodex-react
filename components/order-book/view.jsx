@@ -35,9 +35,12 @@ function OrderBookView({ asset, sellData, buyData }) {
       const total = new Big(row.total)
 
       const handleSelectOrder = () => {
-        setOrder({
-          price: row.price
-        })
+        setOrder(
+          {
+            price: row.price
+          },
+          asset
+        )
       }
 
       return (
