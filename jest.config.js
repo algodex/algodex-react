@@ -9,7 +9,11 @@ module.exports = {
       branches: 10
     }
   },
-  collectCoverageFrom: ['**/components/**/*.{js,jsx}', '!**/components/**/*.stories.{js,jsx}'],
+  collectCoverageFrom: [
+    '**/components/**/*.{js,jsx}',
+    '!**/components/**/*.stories.{js,jsx}',
+    '!**/components/**/*demo.{js,jsx}'
+  ],
   coverageReporters: ['json-summary', 'text', 'lcov'],
   moduleNameMapper: {
     '^components(.*)$': '<rootDir>/components$1',
