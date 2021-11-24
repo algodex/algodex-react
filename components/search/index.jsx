@@ -100,7 +100,6 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
           onKeyDown={handleKeyDown}
           {...props}
         />
-        {/* <SearchIcon color={theme.colors.gray['500']} size={16} /> */}
         {onCancel && value !== '' && (
           <CancelButton onClick={onCancel}>
             <CancelIcon color={theme.colors.gray['500']} size={16} />
