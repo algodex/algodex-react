@@ -1,5 +1,5 @@
 import { X as CancelIcon, Search as _Search } from 'react-feather'
-import { mdiCheckboxBlankOutline, mdiMagnify } from '@mdi/js'
+import { mdiCheckDecagram, mdiCheckboxBlankOutline, mdiMagnify } from '@mdi/js'
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
@@ -13,7 +13,8 @@ const Container = styled.div`
   position: relative;
   height: 51px;
   border: solid 1px ${({ theme }) => theme.colors.gray['500']};
-  border-radius: 5px;
+  border-radius: 4px;
+  margin: 0 2rem;
 
   @media (min-width: 996px) {
     top: 8px;
@@ -75,46 +76,53 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
   }
 
   return (
-    <Container
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        margin: '0.5rem'
-      }}
-    >
-      <Icon path={mdiMagnify} title="Search icon" size={0.9} color={theme.colors.gray['500']} />
-      <Input
-        hasOutline={false}
-        hasBackgroundColor={false}
-        className="focus:outline-none"
-        ref={ref}
-        value={value}
-        onKeyDown={handleKeyDown}
-        {...props}
-      />
-      {/* <SearchIcon color={theme.colors.gray['500']} size={16} /> */}
-      {onCancel && value !== '' && (
-        <CancelButton onClick={onCancel}>
-          <CancelIcon color={theme.colors.gray['500']} size={16} />
-        </CancelButton>
-      )}
-      {/* <Container
+    <div>
+      <Container
         style={{
-          marginTop: '1rem',
           display: 'flex',
-          alignItem: 'center',
-          alignContent: 'center'
+          alignItems: 'center',
+          margin: '0.4rem 0.9rem'
         }}
       >
+        <Icon
+          path={mdiMagnify}
+          style={{ marginLeft: '0.5rem' }}
+          title="Search icon"
+          size={0.85}
+          color={theme.colors.gray['500']}
+        />
+        <Input
+          hasOutline={false}
+          hasBackgroundColor={false}
+          className="focus:outline-none"
+          ref={ref}
+          value={value}
+          onKeyDown={handleKeyDown}
+          {...props}
+        />
+        {/* <SearchIcon color={theme.colors.gray['500']} size={16} /> */}
+        {onCancel && value !== '' && (
+          <CancelButton onClick={onCancel}>
+            <CancelIcon color={theme.colors.gray['500']} size={16} />
+          </CancelButton>
+        )}
+      </Container>
+      <div style={{ display: 'flex', alignItems: 'center', marginLeft: '1rem' }}>
         <Icon
           path={mdiCheckboxBlankOutline}
           title="Checkbox icon"
           size={0.7}
           color={theme.colors.gray['500']}
         />
-        <p style={{ fontSize: '12px' }}>View Verified Assets Only</p>
-      </Container> */}
-    </Container>
+        <p style={{ fontSize: '12px', margin: '0rem 0.3rem' }}>View Verified Assets Only</p>
+        <Icon
+          path={mdiCheckDecagram}
+          title="Checkbox icon"
+          size={0.7}
+          color={theme.colors.gray['500']}
+        />
+      </div>
+    </div>
   )
 })
 

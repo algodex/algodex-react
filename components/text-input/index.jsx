@@ -11,13 +11,12 @@ const TextInput = styled.input.attrs(({ type, hasOutline, hasBackgroundColor }) 
   border: ${({ theme, hasOutline }) =>
     hasOutline ? `2px solid ${theme.colors.gray['700']}` : 'none'};
   border-radius: 3px;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem;
   color: ${({ theme }) => theme.colors.gray['000']};
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
   line-height: 1;
   min-height: 2.5rem;
-  
 
   // &:focus {
   //   outline: 0;
@@ -27,7 +26,7 @@ const TextInput = styled.input.attrs(({ type, hasOutline, hasBackgroundColor }) 
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray['600']};
-    font-size: large;
+    font-size: medium;
   }
 
   &[disabled] {
