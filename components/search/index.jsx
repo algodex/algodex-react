@@ -1,10 +1,10 @@
 import { X as CancelIcon, Search as _Search } from 'react-feather'
+import { mdiCheckboxBlankOutline, mdiMagnify } from '@mdi/js'
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import TextInput from 'components/text-input'
 import { forwardRef } from 'react'
-import { mdiCheckboxBlankOutline } from '@mdi/js'
 import styled from 'styled-components'
 import theme from '../../theme'
 
@@ -12,6 +12,8 @@ const Container = styled.div`
   display: flex;
   position: relative;
   height: 51px;
+  border: solid 1px ${({ theme }) => theme.colors.gray['500']};
+  border-radius: 5px;
 
   @media (min-width: 996px) {
     top: 8px;
@@ -61,8 +63,8 @@ const CancelButton = styled.button.attrs({
 
 const Input = styled(TextInput)`
   font-size: 0.75rem;
-  padding-left: 2.25rem;
-  padding-right: 3rem;
+  // padding-left: 2.25rem;
+  // padding-right: 3rem;
 `
 
 const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
@@ -73,16 +75,31 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
   }
 
   return (
-    <Container style={{ display: 'flex', flexDirection: 'column', margin: '0.5rem' }}>
-      <Input ref={ref} value={value} onKeyDown={handleKeyDown} {...props} />
-      <SearchIcon color={theme.colors.gray['500']} size={16} />
+    <Container
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0.5rem'
+      }}
+    >
+      <Icon path={mdiMagnify} title="Search icon" size={0.9} color={theme.colors.gray['500']} />
+      <Input
+        hasOutline={false}
+        hasBackgroundColor={false}
+        className="focus:outline-none"
+        ref={ref}
+        value={value}
+        onKeyDown={handleKeyDown}
+        {...props}
+      />
+      {/* <SearchIcon color={theme.colors.gray['500']} size={16} /> */}
       {onCancel && value !== '' && (
         <CancelButton onClick={onCancel}>
           <CancelIcon color={theme.colors.gray['500']} size={16} />
         </CancelButton>
       )}
-      <Container 
-        style={{ 
+      {/* <Container
+        style={{
           marginTop: '1rem',
           display: 'flex',
           alignItem: 'center',
@@ -96,7 +113,7 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
           color={theme.colors.gray['500']}
         />
         <p style={{ fontSize: '12px' }}>View Verified Assets Only</p>
-      </Container>
+      </Container> */}
     </Container>
   )
 })
