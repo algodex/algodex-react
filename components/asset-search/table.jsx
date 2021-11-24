@@ -15,10 +15,13 @@ import { BodyCopySm, BodyCopyTiny } from '../type'
 import { useEffect, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
+import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import SvgImage from '../svg-image'
 import { mapToSearchResults } from './helpers'
+import { mdiStar } from '@mdi/js'
+import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
@@ -35,7 +38,10 @@ Error.propTypes = {
 const AssetNameCell = ({ value, row }) => {
   return (
     <AssetNameBlock>
-      <AssetName>{value}</AssetName>
+      <div className="flex">
+        <Icon path={mdiStar} title="Checkbox icon" size={0.7} color={theme.colors.gray['500']} />
+        <AssetName className="flex">{value}</AssetName>
+      </div>
       <PairSlash>{`/`}</PairSlash>
       <NameVerifiedWrapper>
         ALGO
@@ -46,6 +52,25 @@ const AssetNameCell = ({ value, row }) => {
     </AssetNameBlock>
   )
 }
+// const AssetNameCell = ({ value, row }) => {
+//   return (
+//     <AssetNameBlock>
+//       <div className="flex">
+//         <AssetName className="flex">
+//           <Icon path={mdiStar} title="Checkbox icon" size={0.7} color={theme.colors.gray['500']} />
+//           {value}
+//         </AssetName>
+//         <PairSlash>{`/`}</PairSlash>
+//         <NameVerifiedWrapper>
+//           ALGO
+//           {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
+//         </NameVerifiedWrapper>
+//       </div>
+//       <br />
+//       <AssetId>{row.original.id}</AssetId>
+//     </AssetNameBlock>
+//   )
+// }
 AssetNameCell.propTypes = {
   value: PropTypes.any,
   row: PropTypes.object
@@ -177,13 +202,13 @@ const AssetSearchTable = ({
                   >
                     {column.render('Header')}
 
-                    {!column.isSorted ? (
+                    {/* {!column.isSorted ? (
                       <SortIcon use="sortNone" size={0.625} />
                     ) : column.isSortedDesc ? (
                       <SortIcon use="sortDesc" size={0.625} />
                     ) : (
                       <SortIcon use="sortAsc" size={0.625} />
-                    )}
+                    )} */}
                   </TableHeader>
                 ))}
               </tr>
