@@ -163,8 +163,8 @@ const AssetSearchTable = ({
   }, [tableState, setSearchState])
 
   return (
-    <TableWrapper>
-      <TableContainer style={{ marginTop: '5rem' }}>
+    <TableWrapper className="mt-12">
+      <TableContainer>
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, h) => (

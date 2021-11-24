@@ -129,8 +129,8 @@ function AssetSearch({ gridRef }) {
   }, [gridRef, setGridSize])
   return (
     <Container isActive={isActive}>
-      <AssetsContainer ref={containerRef} gridHeight={gridSize.height}>
-        <div ref={searchRef}>
+      <AssetsContainer className="flex" ref={containerRef} gridHeight={gridSize.height}>
+        <div style={{ minHeight: '5rem' }} ref={searchRef}>
           <SearchInput
             initialText={query}
             onChange={(q) => setQuery(q)}

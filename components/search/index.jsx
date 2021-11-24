@@ -14,7 +14,7 @@ const Container = styled.div`
   height: 51px;
   border: solid 1px ${({ theme }) => theme.colors.gray['500']};
   border-radius: 4px;
-  margin: 0 2rem;
+  // margin: 0 2rem;
 
   @media (min-width: 996px) {
     top: 8px;
@@ -77,16 +77,10 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
 
   return (
     <div>
-      <Container
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          margin: '0.4rem 0.9rem'
-        }}
-      >
+      <Container className="flex items-center ml-4 mr-4 mt-2 mb-2">
         <Icon
           path={mdiMagnify}
-          style={{ marginLeft: '0.5rem' }}
+          className="ml-2"
           title="Search icon"
           size={0.85}
           color={theme.colors.gray['500']}
@@ -106,14 +100,14 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
           </CancelButton>
         )}
       </Container>
-      <div style={{ display: 'flex', alignItems: 'center', marginLeft: '1rem' }}>
+      <div className="flex items-center ml-6">
         <Icon
           path={mdiCheckboxBlankOutline}
           title="Checkbox icon"
           size={0.7}
           color={theme.colors.gray['500']}
         />
-        <p style={{ fontSize: '12px', margin: '0rem 0.3rem' }}>View Verified Assets Only</p>
+        <p className="mx-1.5 my-0 text-xs">View Verified Assets Only</p>
         <Icon
           path={mdiCheckDecagram}
           title="Checkbox icon"
