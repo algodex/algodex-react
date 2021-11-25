@@ -12,6 +12,7 @@ import {
   TableWrapper
 } from './asset-search.css'
 import { BodyCopySm, BodyCopyTiny } from '../type'
+import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useEffect, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
@@ -20,7 +21,6 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import SvgImage from '../svg-image'
 import { mapToSearchResults } from './helpers'
-import { mdiStar } from '@mdi/js'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
@@ -37,19 +37,40 @@ Error.propTypes = {
 }
 const AssetNameCell = ({ value, row }) => {
   return (
-    <AssetNameBlock>
-      <div className="flex">
-        <Icon path={mdiStar} title="Checkbox icon" size={0.7} color={theme.colors.gray['500']} />
-        <AssetName className="flex">{value}</AssetName>
+    <div className="flex items-start">
+      <Icon
+        className="mr-1"
+        path={mdiStar}
+        title="Checkbox icon"
+        size={0.6}
+        color={theme.colors.gray['500']}
+      />
+      <div className="flex flex-col">
+        <div>
+          <AssetNameBlock>
+            <AssetName>{value}</AssetName>
+            <PairSlash>{`/`}</PairSlash>
+            <NameVerifiedWrapper>
+              ALGO
+              {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
+            </NameVerifiedWrapper>
+          </AssetNameBlock>
+        </div>
+        <br />
+        {/* <AssetId>{row.original.id}</AssetId> */}
+        <div className="flex item-center -mt-3">
+          <div className="mr-1">
+            <AssetId>{row.original.id}</AssetId>
+          </div>
+          <Icon
+            path={mdiCheckDecagram}
+            title="Checkbox icon"
+            size={0.6}
+            color={theme.colors.gray['500']}
+          />
+        </div>
       </div>
-      <PairSlash>{`/`}</PairSlash>
-      <NameVerifiedWrapper>
-        ALGO
-        {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
-      </NameVerifiedWrapper>
-      <br />
-      <AssetId>{row.original.id}</AssetId>
-    </AssetNameBlock>
+    </div>
   )
 }
 // const AssetNameCell = ({ value, row }) => {
