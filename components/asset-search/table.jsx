@@ -149,7 +149,19 @@ const AssetSearchTable = ({
   const columns = useMemo(
     () => [
       {
-        Header: t('pair'),
+        // Header: t('pair'),
+        Header: () => (
+          <span>
+            <Icon
+              className="mr-1"
+              path={mdiStar}
+              title="Checkbox icon"
+              size={0.6}
+              color={theme.colors.gray['500']}
+            />
+            {t('pair')}
+          </span>
+        ),
         accessor: 'name',
         Cell: AssetNameCell
       },
@@ -214,7 +226,11 @@ const AssetSearchTable = ({
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, h) => (
-              <tr key={h} {...headerGroup.getHeaderGroupProps()}>
+              <tr
+                // style={{ borderTop: 'solid 1px #2D3748' }}
+                key={h}
+                {...headerGroup.getHeaderGroupProps()}
+              >
                 {headerGroup.headers.map((column, c) => (
                   <TableHeader
                     key={c}
@@ -223,13 +239,13 @@ const AssetSearchTable = ({
                   >
                     {column.render('Header')}
 
-                    {/* {!column.isSorted ? (
+                    {!column.isSorted ? (
                       <SortIcon use="sortNone" size={0.625} />
                     ) : column.isSortedDesc ? (
                       <SortIcon use="sortDesc" size={0.625} />
                     ) : (
                       <SortIcon use="sortAsc" size={0.625} />
-                    )} */}
+                    )}
                   </TableHeader>
                 ))}
               </tr>
