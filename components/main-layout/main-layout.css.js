@@ -55,7 +55,7 @@ export const SearchAndChartSection = styled.section`
   }
 
   @media (min-width: 1536px) {
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: 365px 1fr;
     grid-template-rows: 1fr;
   }
 `
