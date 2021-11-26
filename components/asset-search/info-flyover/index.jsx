@@ -1,8 +1,9 @@
+import { Algos, HeaderContainer, InfoItem, InfoList, InfoPopup } from './info-flyover.css'
+import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/type'
+
 import PropTypes from 'prop-types'
-import { HeaderSm, BodyCopy, BodyCopyTiny } from 'components/type'
 import SvgImage from 'components/svg-image'
 import useTranslation from 'next-translate/useTranslation'
-import { InfoPopup, HeaderContainer, InfoList, InfoItem, Algos } from './info-flyover.css'
 
 function InfoFlyover(props) {
   const { assetInfo, searchHeight } = props
