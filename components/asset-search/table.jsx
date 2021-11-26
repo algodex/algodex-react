@@ -244,6 +244,14 @@ const AssetSearchTable = ({
     setSearchState(tableState)
   }, [tableState, setSearchState])
 
+  const renderTableData = (cell, rc) => {
+    return (
+      <td key={rc} {...cell.getCellProps()}>
+        {cell.render('Cell')}
+      </td>
+    )
+  }
+
   return (
     <TableWrapper className="mt-12">
       <TableContainer>
@@ -285,11 +293,7 @@ const AssetSearchTable = ({
                 <Link key={r} href={`${path}/${row.original.id}`}>
                   <tr key={r} {...row.getRowProps(getRowProps(row))}>
                     {row.cells.map((cell, rc) => {
-                      return (
-                        <td key={rc} {...cell.getCellProps()}>
-                          {cell.render('Cell')}
-                        </td>
-                      )
+                      return renderTableData(cell, rc)
                     })}
                   </tr>
                 </Link>
