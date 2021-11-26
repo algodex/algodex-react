@@ -1,8 +1,9 @@
-import { forwardRef } from 'react'
+import { X as CancelIcon, Search as _Search } from 'react-feather'
+
 import PropTypes from 'prop-types'
-import { Search as _Search, X as CancelIcon } from 'react-feather'
-import styled from 'styled-components'
 import TextInput from 'components/text-input'
+import { forwardRef } from 'react'
+import styled from 'styled-components'
 import theme from '../../theme'
 
 const Container = styled.div`
@@ -19,6 +20,8 @@ const Container = styled.div`
     top: 0;
   }
 `
+
+
 
 const SearchIcon = styled(_Search)`
   position: absolute;
