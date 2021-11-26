@@ -130,7 +130,7 @@ function AssetSearch({ gridRef }) {
   return (
     <Container isActive={isActive}>
       <AssetsContainer className="flex" ref={containerRef} gridHeight={gridSize.height}>
-        <div style={{ minHeight: '5rem' }} ref={searchRef}>
+        <div ref={searchRef}>
           <SearchInput
             initialText={query}
             onChange={(q) => setQuery(q)}
@@ -140,13 +140,15 @@ function AssetSearch({ gridRef }) {
             isActive={isActive}
           />
         </div>
-        <AssetSearchTable
-          query={query}
-          options={{ refetchInterval: 5000 }}
-          onAssetClick={handleAssetClick}
-          onAssetFocus={handleAssetFocus}
-          onAssetLeave={handleAssetLeave}
-        />
+        <div style={{ marginTop: '0.4rem', borderTop: 'solid 1px #2D3748' }}>
+          <AssetSearchTable
+            query={query}
+            options={{ refetchInterval: 5000 }}
+            onAssetClick={handleAssetClick}
+            onAssetFocus={handleAssetFocus}
+            onAssetLeave={handleAssetLeave}
+          />
+        </div>
       </AssetsContainer>
       <InfoFlyover assetInfo={assetInfo} searchHeight={searchHeight} />
     </Container>

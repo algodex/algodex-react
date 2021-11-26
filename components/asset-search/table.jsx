@@ -69,7 +69,6 @@ const AssetNameCell = ({ value, row }) => {
           </AssetNameBlock>
         </div>
         <br />
-        {/* <AssetId>{row.original.id}</AssetId> */}
         <div className="flex item-center -mt-3">
           <div className="mr-1">
             <AssetId>{row.original.id}</AssetId>
@@ -85,25 +84,7 @@ const AssetNameCell = ({ value, row }) => {
     </div>
   )
 }
-// const AssetNameCell = ({ value, row }) => {
-//   return (
-//     <AssetNameBlock>
-//       <div className="flex">
-//         <AssetName className="flex">
-//           <Icon path={mdiStar} title="Checkbox icon" size={0.7} color={theme.colors.gray['500']} />
-//           {value}
-//         </AssetName>
-//         <PairSlash>{`/`}</PairSlash>
-//         <NameVerifiedWrapper>
-//           ALGO
-//           {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
-//         </NameVerifiedWrapper>
-//       </div>
-//       <br />
-//       <AssetId>{row.original.id}</AssetId>
-//     </AssetNameBlock>
-//   )
-// }
+
 AssetNameCell.propTypes = {
   value: PropTypes.any,
   row: PropTypes.object
@@ -244,12 +225,34 @@ const AssetSearchTable = ({
     setSearchState(tableState)
   }, [tableState, setSearchState])
 
-  const renderTableData = (cell, rc) => {
-    return (
-      <td key={rc} {...cell.getCellProps()}>
-        {cell.render('Cell')}
-      </td>
-    )
+  const renderTableData = (cell, rc, hasPrice) => {
+    if (rc === 1) {
+      return (
+        <td
+          style={{
+            borderRight: 'solid 1px #2D3747'
+          }}
+          key={rc}
+          {...cell.getCellProps()}
+        >
+          <span>{cell.render('Cell')}</span>
+          <br />
+          {hasPrice ? <span>$4.10 USD</span> : ''}
+        </td>
+      )
+    } else {
+      return (
+        <td
+          style={{
+            borderRight: 'solid 1px #2D3747'
+          }}
+          key={rc}
+          {...cell.getCellProps()}
+        >
+          {cell.render('Cell')}
+        </td>
+      )
+    }
   }
 
   return (
@@ -265,6 +268,7 @@ const AssetSearchTable = ({
               >
                 {headerGroup.headers.map((column, c) => (
                   <TableHeader
+                    style={{ borderRight: 'solid 1px #2D3748' }}
                     key={c}
                     searchHeight={searchHeight}
                     {...column.getHeaderProps(column.getSortByToggleProps())}
@@ -293,7 +297,7 @@ const AssetSearchTable = ({
                 <Link key={r} href={`${path}/${row.original.id}`}>
                   <tr key={r} {...row.getRowProps(getRowProps(row))}>
                     {row.cells.map((cell, rc) => {
-                      return renderTableData(cell, rc)
+                      return renderTableData(cell, rc, hasPrice)
                     })}
                   </tr>
                 </Link>

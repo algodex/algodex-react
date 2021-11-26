@@ -123,6 +123,7 @@ export const AssetChange = styled.span`
 export const SortIcon = styled(Icon)``
 
 export const TableHeader = styled.th`
+  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   top: ${({ searchHeight }) => (searchHeight ? `${searchHeight}px` : '51px')};
 `
 
