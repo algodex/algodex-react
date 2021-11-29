@@ -61,9 +61,9 @@ function MainLayout({ asset, children }) {
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
-            <AssetSearch gridRef={gridRef} />
+            <AssetSearch style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
           </AssetsSection>
-          <ContentSection>{children}</ContentSection>
+          <ContentSection style={{ marginTop: '2rem' }} className="mt-8">{children}</ContentSection>
         </SearchAndChartSection>
 
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>

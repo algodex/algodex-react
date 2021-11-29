@@ -128,9 +128,14 @@ function AssetSearch({ gridRef }) {
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize])
   return (
-    <Container isActive={isActive}>
-      <AssetsContainer className="flex" ref={containerRef} gridHeight={gridSize.height}>
-        <div ref={searchRef}>
+    <Container style={{ height: '6rem' }} isActive={isActive}>
+      <AssetsContainer
+        style={{ width: '100%' }}
+        className="flex"
+        ref={containerRef}
+        gridHeight={gridSize.height}
+      >
+        <div style={{ width: '100%' }} ref={searchRef}>
           <SearchInput
             initialText={query}
             onChange={(q) => setQuery(q)}

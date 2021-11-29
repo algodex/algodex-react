@@ -1,24 +1,24 @@
-/* eslint-disable react/prop-types  */
-import { useMemo } from 'react'
-import { useWalletAssetsQuery } from 'hooks/useAlgodex'
-import { BodyCopyTiny, BodyCopySm } from 'components/type'
-import OrdersTable from 'components/orders-table'
-import useStore, { useStorePersisted } from 'store/use-store'
-import { mapAssetsData } from './helpers'
-import useTranslation from 'next-translate/useTranslation'
-import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
-
 import {
+  AssetAlgoValue,
+  AssetAvailable,
   AssetCoin,
+  AssetInOrder,
   AssetName,
   AssetTotal,
-  AssetAvailable,
-  AssetInOrder,
-  AssetAlgoValue,
+  Container,
   StatusContainer,
-  TableWrapper,
-  Container
+  TableWrapper
 } from './assets.css'
+import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
+import { BodyCopySm, BodyCopyTiny } from 'components/type'
+import useStore, { useStorePersisted } from 'store/use-store'
+
+import OrdersTable from 'components/orders-table'
+import { mapAssetsData } from './helpers'
+/* eslint-disable react/prop-types  */
+import { useMemo } from 'react'
+import useTranslation from 'next-translate/useTranslation'
+import { useWalletAssetsQuery } from 'hooks/useAlgodex'
 
 const AssetCoinCell = (props) => {
   return (
@@ -104,7 +104,7 @@ function Assets() {
   }
 
   return (
-    <Container>
+    <Container style={{ height: '6rem' }}>
       <TableWrapper>
         <OrdersTable columns={columns} data={assetsData || []} />
       </TableWrapper>
