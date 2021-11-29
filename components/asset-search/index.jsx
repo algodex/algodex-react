@@ -140,7 +140,7 @@ function AssetSearch({ gridRef }) {
             isActive={isActive}
           />
         </div>
-        <div style={{ marginTop: '0.4rem', borderTop: 'solid 1px #2D3748' }}>
+        <div className="mt-1.5" style={{ borderTop: 'solid 1px #2D3748' }}>
           <AssetSearchTable
             query={query}
             options={{ refetchInterval: 5000 }}

@@ -142,14 +142,8 @@ const AssetSearchTable = ({
   const columns = useMemo(
     () => [
       {
-        // Header: () => (
-        //   <div style={{ letterSpacing: '0.04em' }}>
-        //     {t('price')}
-        //     <AlgoIcon className="mb-1 ml-1" use="algoLogo" size={0.625} />
-        //   </div>
-        // ),
         Header: () => (
-          <div className="inline-flex" style={{ letterSpacing: '0.04em' }}>
+          <div className="inline-flex">
             <Icon
               className="mr-1"
               path={mdiStar}
@@ -166,7 +160,7 @@ const AssetSearchTable = ({
       {
         // Header: t('price'),
         Header: () => (
-          <div className="inline-flex" style={{ letterSpacing: '0.04em' }}>
+          <div className="inline-flex">
             {t('price')}
             <AlgoIcon className="mt-0.5 ml-1" use="algoLogo" size={0.625} />
           </div>
@@ -176,7 +170,7 @@ const AssetSearchTable = ({
       },
       {
         // Header: t('change'),
-        Header: () => <div className="inline-flex" style={{ letterSpacing: '0.04em' }}>{t('change')}</div>,
+        Header: () => <div className="inline-flex">{t('change')}</div>,
         accessor: 'change',
         Cell: AssetChangeCell
       }
@@ -261,14 +255,9 @@ const AssetSearchTable = ({
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, h) => (
-              <tr
-                // style={{ borderTop: 'solid 1px #2D3748' }}
-                key={h}
-                {...headerGroup.getHeaderGroupProps()}
-              >
+              <tr key={h} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column, c) => (
                   <TableHeader
-                    style={{ borderRight: 'solid 1px #2D3748' }}
                     key={c}
                     searchHeight={searchHeight}
                     {...column.getHeaderProps(column.getSortByToggleProps())}
