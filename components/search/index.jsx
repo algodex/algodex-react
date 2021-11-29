@@ -26,13 +26,6 @@ const Container = styled.div`
   }
 `
 
-// const SearchIcon = styled(_Search)`
-//   position: absolute;
-//   left: 0.75rem;
-//   top: 50%;
-//   transform: translateY(-50%);
-// `
-
 const CancelButton = styled.button.attrs({
   type: 'button'
 })`
