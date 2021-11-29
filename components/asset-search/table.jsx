@@ -22,22 +22,22 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import SvgImage from '../svg-image'
 import { mapToSearchResults } from './helpers'
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
 
-const Text = styled(BodyCopyTiny)`
-  display: flex;
-  align-items: center;
-  margin: 0;
-  color: ${({ theme }) => theme.colors.gray['500']};
+// const Text = styled(BodyCopyTiny)`
+//   display: flex;
+//   align-items: center;
+//   margin: 0;
+//   color: ${({ theme }) => theme.colors.gray['500']};
 
-  svg {
-    margin-left: 0.25rem;
-  }
-`
+//   svg {
+//     margin-left: 0.25rem;
+//   }
+// `
 const Loading = () => {
   const { t } = useTranslation('assets')
   return <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
@@ -134,6 +134,7 @@ const AssetSearchTable = ({
       return assets.map(mapToSearchResults)
     }
   }, [assets])
+
   /**
    * React-Table Columns
    * @see https://react-table.tanstack.com/docs/api/useTable#column-options
@@ -142,35 +143,39 @@ const AssetSearchTable = ({
   const columns = useMemo(
     () => [
       {
-        Header: () => (
-          <div className="inline-flex">
-            <Icon
-              className="mr-1"
-              path={mdiStar}
-              title="Checkbox icon"
-              size={0.5}
-              color={theme.colors.gray['500']}
-            />
-            {t('pair')}
-          </div>
-        ),
+        Header: function pair() {
+          return (
+            <div className="inline-flex">
+              <Icon
+                className="mr-1"
+                path={mdiStar}
+                title="Checkbox icon"
+                size={0.5}
+                color={theme.colors.gray['500']}
+              />
+              {t('pair')}
+            </div>
+          )
+        },
         accessor: 'name',
         Cell: AssetNameCell
       },
       {
-        // Header: t('price'),
-        Header: () => (
-          <div className="inline-flex">
-            {t('price')}
-            <AlgoIcon className="mt-0.5 ml-1" use="algoLogo" size={0.625} />
-          </div>
-        ),
+        Header: function price() {
+          return (
+            <div className="inline-flex">
+              {t('price')}
+              <AlgoIcon className="mt-0.5 ml-1" use="algoLogo" size={0.625} />
+            </div>
+          )
+        },
         accessor: 'price',
         Cell: AssetPriceCell
       },
       {
-        // Header: t('change'),
-        Header: () => <div className="inline-flex">{t('change')}</div>,
+        Header: function change() {
+          return <div className="inline-flex">{t('change')}</div>
+        },
         accessor: 'change',
         Cell: AssetChangeCell
       }
