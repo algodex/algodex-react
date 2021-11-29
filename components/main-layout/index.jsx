@@ -103,11 +103,11 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
-            {/* <li>
-                <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                  History
-                </MobileMenuButton>
-              </li> */}
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
+                History
+              </MobileMenuButton>
+            </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
                 {t('mobilefooter-WALLET')}
