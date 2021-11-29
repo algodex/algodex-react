@@ -1,6 +1,7 @@
-import { X as CancelIcon, Search as _Search } from 'react-feather'
 import { mdiCheckDecagram, mdiCheckboxBlankOutline, mdiMagnify } from '@mdi/js'
 
+// import { X as CancelIcon, Search as _Search } from 'react-feather'
+import { X as CancelIcon } from 'react-feather'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import TextInput from 'components/text-input'
