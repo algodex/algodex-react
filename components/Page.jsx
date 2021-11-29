@@ -1,13 +1,15 @@
-import Head from 'next/head'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import MainLayout from 'components/main-layout'
-import Header from 'components/header'
-import Spinner from 'components/spinner'
-import useUserStore from 'store/use-user-state'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+
+import Head from 'next/head'
+import Header from 'components/header'
+import MainLayout from 'components/main-layout'
+import PropTypes from 'prop-types'
+import Spinner from 'components/spinner'
+import styled from 'styled-components'
 import { useExplorerAssetInfo } from 'hooks/AlgoExplorer'
+import { useRouter } from 'next/router'
+import useUserStore from 'store/use-user-state'
+
 const DEBUG = process.env.NEXT_DEBUG
 
 export const Container = styled.div`
