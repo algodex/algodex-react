@@ -48,7 +48,7 @@ const DEFAULT_ORDER = {
 }
 
 function PlaceOrderView(props) {
-  const { asset, wallets, activeWalletAddress, isSignedIn, orderBook } = props
+  const { asset, wallets, activeWalletAddress, orderBook } = props
   const { t } = useTranslation('place-order')
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
@@ -99,36 +99,46 @@ function PlaceOrderView(props) {
    * When asset or active wallet changes, reset the form
    */
   useEffect(() => {
-    setOrder({
-      ...DEFAULT_ORDER
-    })
-  }, [asset.id, activeWalletAddress, setOrder])
+    setOrder(
+      {
+        ...DEFAULT_ORDER
+      },
+      asset
+    )
+  }, [asset, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
-    setOrder({
-      [field || e.target.id]: e.target.value
-    })
+    setOrder(
+      {
+        [field || e.target.id]: e.target.value
+      },
+      asset
+    )
   }
 
   const handleRangeChange = (update) => {
-    setOrder(update)
+    setOrder(update, asset)
   }
 
   const handleOptionsChange = (e) => {
-    setOrder({
-      execution: e.target.value
-    })
+    setOrder(
+      {
+        execution: e.target.value
+      },
+      asset
+    )
   }
 
   const placeOrder = (orderData) => {
     // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
     let filteredOrderBook = {
-      buyOrders: orderBook.buyOrders.filter((orders) =>
-        new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000))
+      buyOrders: orderBook.buyOrders.filter((order) =>
+        new Big(order.algoAmount).gte(new Big(orderFilter).times(1000000))
       ),
-      sellOrders: orderBook.sellOrders.filter((orders) =>
-        new Big(orders.algoAmount).gte(new Big(orderFilter).times(1000000))
-      )
+      sellOrders: orderBook.sellOrders.filter((order) => {
+        const equivAlgoAmount = new Big(order.formattedASAAmount).times(order.formattedPrice)
+        return equivAlgoAmount.gte(new Big(orderFilter))
+      })
     }
     return OrderService.placeOrder(orderData, filteredOrderBook)
   }
@@ -197,10 +207,13 @@ function PlaceOrderView(props) {
       setStatus({ submitted: true, submitting: false })
 
       // reset order form
-      setOrder({
-        ...DEFAULT_ORDER,
-        type: order.type
-      })
+      setOrder(
+        {
+          ...DEFAULT_ORDER,
+          type: order.type
+        },
+        asset
+      )
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
@@ -332,7 +345,7 @@ function PlaceOrderView(props) {
           <OrderOptions
             order={order}
             onChange={handleOptionsChange}
-            allowTaker={asset.hasOrders}
+            allowTaker={typeof asset !== 'undefined'}
             orderFilter={orderFilter}
             setOrderFilter={setOrderFilter}
           />
@@ -343,15 +356,6 @@ function PlaceOrderView(props) {
   }
 
   const renderForm = () => {
-    if (!isSignedIn) {
-      // @todo: make this better, this is a placeholder
-      return (
-        <BodyCopy color="gray.500" textAlign="center" m={16}>
-          {t('not-signed-in')}
-        </BodyCopy>
-      )
-    }
-
     return (
       <Form onSubmit={handleSubmit} autocomplete="off">
         <ToggleWrapper>
@@ -472,7 +476,6 @@ PlaceOrderView.propTypes = {
   asset: PropTypes.object.isRequired,
   wallets: PropTypes.array.isRequired,
   activeWalletAddress: PropTypes.string.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
   orderBook: PropTypes.object.isRequired
 }
 

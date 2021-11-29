@@ -17,7 +17,7 @@ import { useRef, useState } from 'react'
 import AssetSearch from 'components/asset-search'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
-// import PlaceOrder from 'components/place-order'
+import PlaceOrder from 'components/place-order'
 import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import TradeHistory from 'components/trade-history'
@@ -57,21 +57,17 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {/* <PlaceOrder /> */}
+          <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
             <AssetSearch gridRef={gridRef} />
           </AssetsSection>
-          <ContentSection>
-            {children}
-            {/*{asset?.id && router.pathname.match('trade') && <Chart asset={asset} />}*/}
-            {/*{asset?.id && router.pathname.match('asset') && <AssetInfo asset={asset} />}*/}
-          </ContentSection>
+          <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          <OrderBook explorerAsset={asset} />
+          <OrderBook asset={asset} />
         </AssetOrderBookSection>
 
         <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
@@ -79,7 +75,7 @@ function MainLayout({ asset, children }) {
         </AssetTradeHistorySection>
 
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
-          <Orders asset={asset} />
+          <Orders />
         </WalletOrdersSection>
         <MobileMenu>
           <ul>

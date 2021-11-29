@@ -1,22 +1,59 @@
 import PlaceOrderView from './view'
 import useStore, { useStorePersisted } from 'store/use-store'
-
-function PlaceOrder() {
+import PropTypes from 'prop-types'
+import { useAssetOrdersQuery } from '../../hooks/useAlgodex'
+import Spinner from '../spinner'
+import Error from '../error'
+import { useMemo } from 'react'
+import { BodyCopy, HeaderCaps } from 'components/type'
+import useTranslation from 'next-translate/useTranslation'
+import { Header, Container } from './place-order.css'
+function PlaceOrder({ asset }) {
+  const { t } = useTranslation('place-order')
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
-  const orderBook = useStore((state) => state.orderBook)
+  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+  if (!isSignedIn) {
+    return (
+      <Container data-testid="place-order">
+        <Header>
+          <HeaderCaps color="gray.500" mb={1}>
+            {t('place-order')}
+          </HeaderCaps>
+        </Header>
+        <BodyCopy color="gray.500" textAlign="center" m={16}>
+          {t('not-signed-in')}
+        </BodyCopy>
+      </Container>
+    )
+  }
+  if (isLoading) {
+    return <Spinner flex />
+  }
+  if (isError) {
+    return <Error />
+  }
 
   return (
     <PlaceOrderView
       asset={asset}
       wallets={wallets}
       activeWalletAddress={activeWalletAddress}
-      isSignedIn={isSignedIn}
       orderBook={orderBook}
     />
   )
 }
 
+PlaceOrder.propTypes = {
+  asset: PropTypes.object.isRequired
+}
 export default PlaceOrder

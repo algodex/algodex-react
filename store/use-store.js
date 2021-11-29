@@ -47,51 +47,51 @@ export const useStorePersisted = create(
   )
 )
 export const useStore = create(
-  immer((set, get) => ({
-    asset: {
-      id: 15322902,
-      name: 'LAMP',
-      decimals: 6,
-      price: 0,
-      priceChange24hr: 0,
-      isTraded: true,
-      hasOrders: true,
-      verified: false,
-      info: {
-        fullName: 'Lamps',
-        algoExplorerUrl: 'https://testnet.algoexplorer.io/asset/15322902',
-        supply: {
-          circulating: '99989.339745',
-          total: '100000.000000'
-        }
-      }
-    },
-    setAsset: (asset) => {
-      const prevAsset = get().asset
-      const isNew = prevAsset.id !== asset.id
-      const orderBook = { buyOrders: [], sellOrders: [] }
-
-      set({
-        asset,
-        ...(isNew ? { orderBook } : {}) // only reset order book if asset is new
-      })
-    },
+  immer((set) => ({
+    // asset: {
+    //   id: 15322902,
+    //   name: 'LAMP',
+    //   decimals: 6,
+    //   price: 0,
+    //   priceChange24hr: 0,
+    //   isTraded: true,
+    //   hasOrders: true,
+    //   verified: false,
+    //   info: {
+    //     fullName: 'Lamps',
+    //     algoExplorerUrl: 'https://testnet.algoexplorer.io/asset/15322902',
+    //     supply: {
+    //       circulating: '99989.339745',
+    //       total: '100000.000000'
+    //     }
+    //   }
+    // },
+    // setAsset: (asset) => {
+    //   const prevAsset = get().asset
+    //   const isNew = prevAsset.id !== asset.id
+    //   const orderBook = { buyOrders: [], sellOrders: [] }
+    //
+    //   set({
+    //     asset,
+    //     ...(isNew ? { orderBook } : {}) // only reset order book if asset is new
+    //   })
+    // },
 
     isSignedIn: false,
     setIsSignedIn: (isSignedIn) => set({ isSignedIn }),
     signOut: () => set({ wallets: [], activeWallet: '', isSignedIn: false }),
 
-    orderBook: {
-      buyOrders: [],
-      sellOrders: []
-    },
-    setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
-      set({
-        orderBook: {
-          buyOrders: buyASAOrdersInEscrow,
-          sellOrders: sellASAOrdersInEscrow
-        }
-      }),
+    // orderBook: {
+    //   buyOrders: [],
+    //   sellOrders: []
+    // },
+    // setOrderBook: ({ buyASAOrdersInEscrow, sellASAOrdersInEscrow }) =>
+    //   set({
+    //     orderBook: {
+    //       buyOrders: buyASAOrdersInEscrow,
+    //       sellOrders: sellASAOrdersInEscrow
+    //     }
+    //   }),
 
     order: {
       type: 'buy',
@@ -100,7 +100,7 @@ export const useStore = create(
       total: '0',
       execution: 'both'
     },
-    setOrder: (order) =>
+    setOrder: (order, asset) =>
       set((state) => {
         // Always Round order price, amount, and recalculate total
         const priceChanged = order.price !== state.order.price
@@ -108,7 +108,7 @@ export const useStore = create(
         const price = typeof order.price === 'undefined' ? state.order.price : order.price
         const amount = typeof order.amount === 'undefined' ? state.order.amount : order.amount
         order.price = priceChanged ? roundValue(price, 6) : state.order.price
-        order.amount = amountChanged ? roundValue(amount, state.asset.decimals) : state.order.amount
+        order.amount = amountChanged ? roundValue(amount, asset.decimals) : state.order.amount
         order.total =
           priceChanged || amountChanged
             ? new Big(order.price || 0)

@@ -14,13 +14,13 @@ import { useAssetOrdersQuery } from 'hooks/useAlgodex'
  * @returns {JSX.Element}
  * @constructor
  */
-export default function OrderBook({ explorerAsset }) {
+export default function OrderBook({ asset }) {
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
   const isSignedIn = useStore((state) => state.isSignedIn)
 
   // Orderbook Query
-  const { data, isLoading, isError } = useAssetOrdersQuery({ asset: explorerAsset })
+  const { data, isLoading, isError } = useAssetOrdersQuery({ asset })
 
   // Massage Orders
   useEffect(() => {
@@ -30,31 +30,31 @@ export default function OrderBook({ explorerAsset }) {
       typeof data.sellASAOrdersInEscrow !== 'undefined' &&
       typeof data.buyASAOrdersInEscrow !== 'undefined'
     ) {
-      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, explorerAsset.decimals, 'sell'))
-      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, explorerAsset.decimals, 'buy'))
+      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, asset.decimals, 'sell'))
+      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, asset.decimals, 'buy'))
     }
-  }, [isLoading, data, setSellOrders, setBuyOrders, explorerAsset])
+  }, [isLoading, data, setSellOrders, setBuyOrders, asset])
 
   // Invalid
-  if (!explorerAsset?.id || isLoading) {
+  if (!asset?.id || isLoading) {
     return <Spinner flex />
   }
 
   // Is in error
-  if (isError || (!explorerAsset?.id && !isLoading)) {
+  if (isError || (!asset?.id && !isLoading)) {
     return <Error message={'Issue fetching Orderbook'} />
   }
 
   // Has no orders
   if (typeof sellOrders !== 'undefined' && typeof buyOrders !== 'undefined') {
     if (sellOrders.length === 0 && buyOrders.length === 0) {
-      return <FirstOrderMsg asset={explorerAsset} isSignedIn={isSignedIn} />
+      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
     }
   }
 
   // Return OrderBook
-  return <OrderBookView asset={explorerAsset} buyData={buyOrders} sellData={sellOrders} />
+  return <OrderBookView asset={asset} buyData={buyOrders} sellData={sellOrders} />
 }
 OrderBook.propTypes = {
-  explorerAsset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired
 }

@@ -6,7 +6,7 @@ import MainLayout from 'components/main-layout'
 import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import styled from 'styled-components'
-import { useExplorerAssetInfo } from 'hooks/AlgoExplorer'
+import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 
