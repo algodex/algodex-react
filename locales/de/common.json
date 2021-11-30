@@ -1,0 +1,16 @@
+{
+    "header-about": "Über uns",
+    "header-trade": "Handel",
+    "header-docs": "Dokumentation",
+    "header-support": "Support",
+    "price": "Preis",
+    "amount": "Anzahl",
+    "total": "Gesamt",
+    "time": "Zeit",
+    "no-trades-completed": " Kein Trade ausgeführt ",
+    "mobilefooter-CHART":"Chart",
+    "mobilefooter-BOOK":" Orderbuch",
+    "mobilefooter-TRADE":"Datum",
+    "mobilefooter-ORDERS":"Orders",
+    "mobilefooter-WALLET":"Wallet"
+}

@@ -27,14 +27,16 @@ const OrderPairCell = ({ value, row }) => {
   return (<Link href={`/trade/${assetId}`}><OrderPair>{value}</OrderPair></Link>)
 }
 
-const OrderSideCell = ({ value }) => <OrderSide value={value}>{value}</OrderSide>
 
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
 function OrderHistory() {
-  const { t, lang } = useTranslation("orders");
+  const { t, lang } = useTranslation('orders')
+  
+  const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
   const { data, isLoading, isError } = useQuery(
@@ -45,8 +47,7 @@ function OrderHistory() {
       refetchInterval: 3000
     }
   )
-
-  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data, { buyText: t("buy"), sellText: t("sell")}), [data, lang])
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data, lang])
 
   const columns = useMemo(
     () => [
