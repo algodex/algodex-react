@@ -8,7 +8,7 @@ const Checkbox = ({ isChecked, onCheckFn }) => {
       onClick={onCheckFn}
       className={`${
         !isChecked ? 'appearance-none' : ''
-      } bg-transparent border w-4 h-4 checked:bg-blue-600 checked:border-transparent`}
+      } border border-gray-500 w-3.5 h-3.5 checked:bg-blue-600 checked:border-transparent`}
     />
   )
 }
