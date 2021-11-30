@@ -23,7 +23,6 @@ import {
   SearchAndChartSection
 } from './main-layout.css'
 import PropTypes from 'prop-types'
-import { useRouter } from 'next/router'
 
 /**
  * @param asset
@@ -33,7 +32,7 @@ import { useRouter } from 'next/router'
  */
 function MainLayout({ asset, children }) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { isFallback } = useRouter()
+
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const TABS = {
@@ -45,10 +44,8 @@ function MainLayout({ asset, children }) {
   }
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
-
-  // If the Server failed to load data
-  if (isFallback) {
-    return <Spinner flex />
+  if (!asset) {
+    return <Spinner flex={true} />
   }
   return (
     <MainWrapper>
@@ -116,7 +113,7 @@ function MainLayout({ asset, children }) {
   )
 }
 MainLayout.propTypes = {
-  asset: PropTypes.object.isRequired,
+  asset: PropTypes.object,
   children: PropTypes.any
 }
 export default MainLayout

@@ -1,6 +1,9 @@
 import { createStore } from './use-store'
 import _ from 'lodash'
 const userState = (set, get) => ({
+  // Controls showing of Asset Info or Chart
+  showAssetInfo: false,
+  setShowAssetInfo: (bool) => set({ showAssetInfo: bool }),
   /**
    * Assets should be a reduced list keyed by Asset ID
    *
