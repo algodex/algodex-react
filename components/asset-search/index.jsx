@@ -128,7 +128,7 @@ function AssetSearch({ gridRef }) {
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize])
   return (
-    <Container style={{ height: '6rem' }} isActive={isActive}>
+    <Container style={{ minHeight: '6rem' }} isActive={isActive}>
       <AssetsContainer
         style={{ width: '100%' }}
         className="flex"

@@ -1,5 +1,5 @@
-import { createStore } from './use-store'
 import _ from 'lodash'
+import { createStore } from './use-store'
 const userState = (set, get) => ({
   /**
    * Assets should be a reduced list keyed by Asset ID
@@ -7,6 +7,11 @@ const userState = (set, get) => ({
    * This list is composed of a Algodex Assets Query and
    */
   assets: {},
+  /**
+   * Favourite should be a reduced list keyed by Asset ID and UserID
+   *
+   */
+  favourites: {},
   /**
    * Add Assets
    *
