@@ -1,11 +1,12 @@
+import { forwardRef, useState } from 'react'
 import { mdiCheckDecagram, mdiCheckboxBlankOutline, mdiMagnify } from '@mdi/js'
 
 // import { X as CancelIcon, Search as _Search } from 'react-feather'
 import { X as CancelIcon } from 'react-feather'
+import Checkbox from 'components/checkbox'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import TextInput from 'components/text-input'
-import { forwardRef } from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
 
@@ -63,6 +64,8 @@ const Input = styled(TextInput)`
 `
 
 const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
+  const [isChecked, setIsChecked] = useState(false)
+  
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       onCancel()
@@ -95,12 +98,13 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
         )}
       </Container>
       <div className="flex items-center ml-6">
-        <Icon
+        <Checkbox isChecked={isChecked} onCheckFn={() => setIsChecked(!isChecked)} />
+        {/* <Icon
           path={mdiCheckboxBlankOutline}
           title="Checkbox icon"
           size={0.7}
           color={theme.colors.gray['500']}
-        />
+        /> */}
         <p className="mx-1.5 my-0 text-xs">View Verified Assets Only</p>
         <Icon
           path={mdiCheckDecagram}

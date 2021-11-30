@@ -53,7 +53,7 @@ const AssetNameCell = ({ value, row }) => {
       <Icon
         className="mr-1"
         path={mdiStar}
-        title="Checkbox icon"
+        title="Star icon"
         size={0.5}
         color={theme.colors.gray['500']}
       />
@@ -75,9 +75,9 @@ const AssetNameCell = ({ value, row }) => {
           </div>
           <Icon
             path={mdiCheckDecagram}
-            title="Checkbox icon"
+            title="Decagram icon"
             size={0.5}
-            color={theme.colors.gray['500']}
+            color={row.original.verified ? theme.colors.green['500'] : theme.colors.gray['500']}
           />
         </div>
       </div>
