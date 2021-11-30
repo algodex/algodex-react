@@ -2,9 +2,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTable, useSortBy } from 'react-table'
-
 import { Container, SortIcon } from './orders-table.css'
+import Link from 'next/link'
 
+/**
+ * WARNING! This is also an Assets Table!
+ * @param columns
+ * @param data
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function OrdersTable({ columns, data }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
@@ -39,12 +46,15 @@ function OrdersTable({ columns, data }) {
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row)
+            const assetId = row?.original?.metadata?.assetId || row?.original?.id
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                })}
-              </tr>
+              <Link href={`/trade/${assetId}`}>
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })}
+                </tr>
+              </Link>
             )
           })}
         </tbody>

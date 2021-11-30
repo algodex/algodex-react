@@ -22,7 +22,7 @@ import {
 const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 
 const OrderPairCell = ({ value, row }) => {
-  const assetId = row?.original?.metadata?.assetId
+  const assetId = row?.original?.id
   return (
     <Link href={`/trade/${assetId}`}>
       <OrderPair>{value}</OrderPair>
