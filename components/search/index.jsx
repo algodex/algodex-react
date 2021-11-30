@@ -64,7 +64,7 @@ const Input = styled(TextInput)`
 `
 
 const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
-  const [isChecked, setIsChecked] = useState(false)
+  const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -98,19 +98,16 @@ const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
         )}
       </Container>
       <div className="flex items-center ml-6">
-        <Checkbox isChecked={isChecked} onCheckFn={() => setIsChecked(!isChecked)} />
-        {/* <Icon
-          path={mdiCheckboxBlankOutline}
-          title="Checkbox icon"
-          size={0.7}
-          color={theme.colors.gray['500']}
-        /> */}
+        <Checkbox
+          isChecked={isListingVerifiedAssets}
+          onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
+        />
         <p className="mx-1.5 my-0 text-xs">View Verified Assets Only</p>
         <Icon
           path={mdiCheckDecagram}
           title="Checkbox icon"
           size={0.7}
-          color={theme.colors.gray['500']}
+          color={isListingVerifiedAssets ? theme.colors.green['500'] : theme.colors.gray['500']}
         />
       </div>
     </div>
