@@ -57,7 +57,7 @@ function OpenOrders() {
     return (<Link href={`/trade/${assetId}`}><OrderPair>{value}</OrderPair></Link>)
   }
 
-  const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
+  const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
 
   const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
