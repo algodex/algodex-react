@@ -5,7 +5,7 @@ const Checkbox = ({ isChecked, onCheckFn }) => {
     <input
       type="checkbox"
       checked={isChecked}
-      onClick={onCheckFn}
+      onChange={onCheckFn}
       className={`${
         !isChecked ? 'appearance-none' : ''
       } border border-gray-500 w-3.5 h-3.5 checked:bg-blue-600 checked:border-transparent`}
