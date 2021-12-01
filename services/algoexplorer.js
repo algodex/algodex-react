@@ -140,3 +140,16 @@ export async function fetchAssetInfoV2(id) {
   } = await axios.get(`${EXPLORER_INDEXER_API}/v2/assets/${id}?include-all=true`)
   return toExplorerAssetV2(asset)
 }
+
+/**
+ * Get Algorand price
+ *
+ *
+ * Retrieve price of Algorand from the Algorand Indexer
+ *
+ * @see https://price.algoexplorerapi.io/price/algo-usd
+ */
+export async function fetchAlgorandPrice() {
+  const { data } = await axios.get(`${EXPLORER_ALGORAND_PRICE}`)
+  return data
+}

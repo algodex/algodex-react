@@ -5,6 +5,7 @@ import AssetSearchTable from 'components/asset-search/table'
 import InfoFlyover from './info-flyover'
 import PropTypes from 'prop-types'
 import SearchInput from './search'
+import { fetchAlgorandPrice } from 'services/algoexplorer'
 import { rgba } from 'polished'
 import styled from 'styled-components'
 import useUserStore from 'store/use-user-state'
@@ -56,6 +57,7 @@ function AssetSearch({ gridRef }) {
   const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
   const [assetInfo, setAssetInfo] = useState(null)
+  const [algoPrice, setAlgoPrice] = useState(0)
   const containerRef = useRef()
   const searchRef = useRef()
   /**
@@ -67,6 +69,23 @@ function AssetSearch({ gridRef }) {
       setSearchHeight(height)
     }
   }, [searchRef])
+
+  /**
+   * Fetch price of Algorand from Algorand explorer
+   * and save the data as state.
+   * This will be used to determine price of assets.
+   */
+  const handleAlgorandPrice = useCallback(async () => {
+    const { price } = await fetchAlgorandPrice()
+    setAlgoPrice(price)
+  }, [setAlgoPrice])
+
+  /**
+   * Effect to appropriately fetch Algorand Price
+   */
+  useEffect(() => {
+    handleAlgorandPrice()
+  }, [handleAlgorandPrice])
 
   /**
    * The `gridSize` prop changes on window resize, so this is equivalent to a
@@ -156,6 +175,7 @@ function AssetSearch({ gridRef }) {
             onAssetClick={handleAssetClick}
             onAssetFocus={handleAssetFocus}
             onAssetLeave={handleAssetLeave}
+            algoPrice={algoPrice}
             isListingVerifiedAssets={isListingVerifiedAssets}
             setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           />

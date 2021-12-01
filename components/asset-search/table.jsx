@@ -116,7 +116,8 @@ const AssetSearchTable = ({
   onAssetLeave,
   onAssetClick,
   assets,
-  isListingVerifiedAssets
+  isListingVerifiedAssets,
+  algoPrice
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -240,7 +241,7 @@ const AssetSearchTable = ({
         >
           <span>{cell.render('Cell')}</span>
           <br />
-          {hasPrice ? <span>$4.10 USD</span> : ''}
+          {hasPrice ? <span>{(algoPrice * cell.value).toLocaleString()} USD</span> : ''}
         </td>
       )
     } else {
@@ -315,6 +316,7 @@ AssetSearchTable.propTypes = {
   onAssetFocus: PropTypes.func,
   onAssetLeave: PropTypes.func,
   onAssetClick: PropTypes.func,
-  isListingVerifiedAssets: PropTypes.bool
+  isListingVerifiedAssets: PropTypes.bool,
+  algoPrice: PropTypes.number
 }
 export default withSearchResultsQuery(AssetSearchTable, { loading: Loading, error: Error })
