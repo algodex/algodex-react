@@ -7,7 +7,7 @@ import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
 import useTranslation from 'next-translate/useTranslation'
 import Spinner from 'components/spinner'
-
+import { useEvent } from 'hooks/useEvents'
 import {
   AssetsSection,
   ContentSection,
@@ -44,6 +44,18 @@ function MainLayout({ asset, children }) {
   }
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
+  /**
+   * Use Clicked Events
+   *
+   * This is only used to switch to MobileMenu Chart view
+   * when the Next/Router navigates to a shallow route
+   */
+  useEvent('clicked', (data) => {
+    if (data === 'asset') {
+      console.log('CLicked', data)
+      setActiveMobile(TABS.CHART)
+    }
+  })
   if (!asset) {
     return <Spinner flex={true} />
   }

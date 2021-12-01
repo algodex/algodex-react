@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useWalletTradeHistory } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
 import useStore, { useStorePersisted } from 'store/use-store'
 import { mapTradeHistoryData } from './helpers'
+import { useEventDispatch } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 
@@ -22,10 +23,16 @@ import {
 const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 
 const OrderPairCell = ({ value, row }) => {
+  const dispatcher = useEventDispatch()
   const assetId = row?.original?.id
+  const onClick = useCallback(() => {
+    dispatcher('clicked', 'asset')
+  }, [dispatcher])
   return (
     <Link href={`/trade/${assetId}`}>
-      <OrderPair>{value}</OrderPair>
+      <button onClick={onClick}>
+        <OrderPair>{value}</OrderPair>
+      </button>
     </Link>
   )
 }

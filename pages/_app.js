@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { EventEmitter } from 'hooks/useEvents'
 // import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
 // import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental'
 import { Hydrate } from 'react-query/hydration'
@@ -133,7 +134,9 @@ export default function App({ Component, pageProps, err }) {
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
             <ReactQueryDevtools initialIsOpen={false} />
-            <Component {...pageProps} err={err} />
+            <EventEmitter>
+              <Component {...pageProps} err={err} />
+            </EventEmitter>
           </Hydrate>
         </QueryClientProvider>
       </ThemeProvider>
