@@ -55,6 +55,9 @@ function MainLayout({ asset, children }) {
       console.log('CLicked', data)
       setActiveMobile(TABS.CHART)
     }
+    if (data === 'order') {
+      setActiveMobile(TABS.TRADE)
+    }
   })
   if (!asset) {
     return <Spinner flex={true} />
