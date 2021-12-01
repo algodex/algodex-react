@@ -37,7 +37,6 @@ const OrderPairCell = ({ value, row }) => {
   )
 }
 
-
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
