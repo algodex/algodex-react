@@ -47,16 +47,18 @@ const Error = ({ message }) => <BodyCopySm color="gray.400">Error: {message}</Bo
 Error.propTypes = {
   message: PropTypes.string
 }
-const AssetNameCell = ({ value, row }) => {
+const AssetNameCell = ({ favouriteFn, value, row }) => {
   return (
     <div className="flex items-start">
-      <Icon
-        className="mr-1"
-        path={mdiStar}
-        title="Star icon"
-        size={0.5}
-        color={theme.colors.gray['500']}
-      />
+      <div role="button" onClick={favouriteFn} onKeyDown={favouriteFn} tabIndex={0}>
+        {/* <Icon
+          className="mr-1"
+          path={mdiStar}
+          title="Star icon"
+          size={0.5}
+          color={theme.colors.gray['500']}
+        /> */}
+      </div>
       <div className="flex flex-col">
         <div>
           <AssetNameBlock>
@@ -87,7 +89,8 @@ const AssetNameCell = ({ value, row }) => {
 
 AssetNameCell.propTypes = {
   value: PropTypes.any,
-  row: PropTypes.object
+  row: PropTypes.object,
+  favouriteFn: PropTypes.func
 }
 const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 AssetPriceCell.propTypes = {
@@ -121,6 +124,7 @@ const AssetSearchTable = ({
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
+  const toggleFavourite = useUserStore((state) => state.setFavourite)
   const { t, lang } = useTranslation('assets')
 
   /**
@@ -229,14 +233,38 @@ const AssetSearchTable = ({
     setSearchState(tableState)
   }, [tableState, setSearchState])
 
-  const renderTableData = (cell, rc, hasPrice) => {
-    if (rc === 1) {
+  const toggleFavouritesFn = (assetId) => {
+    console.log(assetId, 'asset id')
+  }
+
+  const renderTableData = (cell, idx, hasPrice) => {
+    if (idx === 0) {
+      return (
+        <td
+          className="flex item-center"
+          style={{
+            borderRight: 'solid 1px #2D3747'
+          }}
+          key={idx}
+          {...cell.getCellProps()}
+        >
+          <Icon
+            className="mr-1"
+            path={mdiStar}
+            title="Star icon"
+            size={0.5}
+            color={theme.colors.gray['500']}
+          />
+          {cell.render('Cell')}
+        </td>
+      )
+    } else if (idx === 1) {
       return (
         <td
           style={{
             borderRight: 'solid 1px #2D3747'
           }}
-          key={rc}
+          key={idx}
           {...cell.getCellProps()}
         >
           <span>{cell.render('Cell')}</span>
@@ -250,7 +278,7 @@ const AssetSearchTable = ({
           style={{
             borderRight: 'solid 1px #2D3747'
           }}
-          key={rc}
+          key={idx}
           {...cell.getCellProps()}
         >
           {cell.render('Cell')}
@@ -317,6 +345,6 @@ AssetSearchTable.propTypes = {
   onAssetLeave: PropTypes.func,
   onAssetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
-  algoPrice: PropTypes.number
+  algoPrice: PropTypes.any
 }
 export default withSearchResultsQuery(AssetSearchTable, { loading: Loading, error: Error })

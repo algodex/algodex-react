@@ -11,7 +11,7 @@ const userState = (set, get) => ({
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *
    */
-  favourites: {},
+  favorites: {},
   /**
    * Add Assets
    *
