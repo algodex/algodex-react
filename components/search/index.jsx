@@ -1,5 +1,4 @@
-import { forwardRef, useState } from 'react'
-import { mdiCheckDecagram, mdiCheckboxBlankOutline, mdiMagnify } from '@mdi/js'
+import { mdiCheckDecagram, mdiMagnify } from '@mdi/js'
 
 // import { X as CancelIcon, Search as _Search } from 'react-feather'
 import { X as CancelIcon } from 'react-feather'
@@ -7,6 +6,7 @@ import Checkbox from 'components/checkbox'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import TextInput from 'components/text-input'
+import { forwardRef } from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
 
@@ -63,61 +63,63 @@ const Input = styled(TextInput)`
   // padding-right: 3rem;
 `
 
-const Search = forwardRef(({ value, onCancel, ...props }, ref) => {
-  const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
-  
-  const handleKeyDown = (e) => {
-    if (e.key === 'Escape') {
-      onCancel()
+const Search = forwardRef(
+  ({ isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, ...props }, ref) => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onCancel()
+      }
     }
-  }
 
-  return (
-    <div>
-      <Container className="flex items-center ml-4 mr-4 mt-2 mb-2">
-        <Icon
-          path={mdiMagnify}
-          className="ml-2"
-          title="Search icon"
-          size={0.85}
-          color={theme.colors.gray['500']}
-        />
-        <Input
-          hasOutline={false}
-          hasBackgroundColor={false}
-          className="focus:outline-none"
-          ref={ref}
-          value={value}
-          onKeyDown={handleKeyDown}
-          {...props}
-        />
-        {onCancel && value !== '' && (
-          <CancelButton onClick={onCancel}>
-            <CancelIcon color={theme.colors.gray['500']} size={16} />
-          </CancelButton>
-        )}
-      </Container>
-      <div className="flex items-center ml-6">
-        <Checkbox
-          isChecked={isListingVerifiedAssets}
-          onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
-        />
-        <p className="mx-1.5 my-0 text-xs">View Verified Assets Only</p>
-        <Icon
-          path={mdiCheckDecagram}
-          title="Checkbox icon"
-          size={0.7}
-          color={isListingVerifiedAssets ? theme.colors.green['500'] : theme.colors.gray['500']}
-        />
+    return (
+      <div>
+        <Container className="flex items-center ml-4 mr-4 mt-2 mb-2">
+          <Icon
+            path={mdiMagnify}
+            className="ml-2"
+            title="Search icon"
+            size={0.85}
+            color={theme.colors.gray['500']}
+          />
+          <Input
+            hasOutline={false}
+            hasBackgroundColor={false}
+            className="focus:outline-none"
+            ref={ref}
+            value={value}
+            onKeyDown={handleKeyDown}
+            {...props}
+          />
+          {onCancel && value !== '' && (
+            <CancelButton onClick={onCancel}>
+              <CancelIcon color={theme.colors.gray['500']} size={16} />
+            </CancelButton>
+          )}
+        </Container>
+        <div className="flex items-center ml-6">
+          <Checkbox
+            isChecked={isListingVerifiedAssets}
+            onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
+          />
+          <p className="mx-1.5 my-0 text-xs">View Verified Assets Only</p>
+          <Icon
+            path={mdiCheckDecagram}
+            title="Checkbox icon"
+            size={0.7}
+            color={isListingVerifiedAssets ? theme.colors.green['500'] : theme.colors.gray['500']}
+          />
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 
 Search.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
+  isListingVerifiedAssets: PropTypes.bool,
+  setIsListingVerifiedAssets: PropTypes.func
 }
 
 Search.defaultProps = {

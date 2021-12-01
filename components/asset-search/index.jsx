@@ -47,6 +47,8 @@ function AssetSearch({ gridRef }) {
   // const [query, setQuery] = useState('')
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
 
+  const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
+
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
@@ -143,6 +145,8 @@ function AssetSearch({ gridRef }) {
             onExternalClick={handleExternalClick}
             containerRef={containerRef}
             isActive={isActive}
+            isListingVerifiedAssets={isListingVerifiedAssets}
+            setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           />
         </div>
         <div className="mt-1.5" style={{ borderTop: 'solid 1px #2D3748' }}>
@@ -152,6 +156,8 @@ function AssetSearch({ gridRef }) {
             onAssetClick={handleAssetClick}
             onAssetFocus={handleAssetFocus}
             onAssetLeave={handleAssetLeave}
+            isListingVerifiedAssets={isListingVerifiedAssets}
+            setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           />
         </div>
       </AssetsContainer>

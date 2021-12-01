@@ -115,7 +115,8 @@ const AssetSearchTable = ({
   onAssetFocus,
   onAssetLeave,
   onAssetClick,
-  assets
+  assets,
+  isListingVerifiedAssets
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -129,11 +130,14 @@ const AssetSearchTable = ({
     // Return nothing if no data exists
     if (!assets || !Array.isArray(assets)) {
       return []
+    } else if (isListingVerifiedAssets) {
+      // Return only verified assets
+      return assets.filter((asset) => asset.verified)
     } else {
       // If there is data, use it
       return assets.map(mapToSearchResults)
     }
-  }, [assets])
+  }, [assets, isListingVerifiedAssets])
 
   /**
    * React-Table Columns
@@ -310,6 +314,7 @@ AssetSearchTable.propTypes = {
   isActive: PropTypes.bool,
   onAssetFocus: PropTypes.func,
   onAssetLeave: PropTypes.func,
-  onAssetClick: PropTypes.func
+  onAssetClick: PropTypes.func,
+  isListingVerifiedAssets: PropTypes.bool
 }
 export default withSearchResultsQuery(AssetSearchTable, { loading: Loading, error: Error })

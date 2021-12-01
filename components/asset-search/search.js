@@ -5,7 +5,16 @@ import Search from 'components/search'
 import useDebounce from 'hooks/useDebounce'
 
 function SearchInput(props) {
-  const { initialText, onChange, onSearchFocus, onExternalClick, containerRef, isActive } = props
+  const {
+    initialText,
+    onChange,
+    onSearchFocus,
+    onExternalClick,
+    containerRef,
+    isActive,
+    isListingVerifiedAssets,
+    setIsListingVerifiedAssets
+  } = props
 
   const [searchText, setSearchText] = useState(initialText)
   const debouncedSearchText = useDebounce(searchText, 500)
@@ -56,6 +65,8 @@ function SearchInput(props) {
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
       placeholder="Search"
+      isListingVerifiedAssets={isListingVerifiedAssets}
+      setIsListingVerifiedAssets={setIsListingVerifiedAssets}
     />
   )
 }
@@ -68,7 +79,9 @@ SearchInput.propTypes = {
   onSearchFocus: PropTypes.func,
   onExternalClick: PropTypes.func,
   containerRef: PropTypes.object,
-  isActive: PropTypes.bool
+  isActive: PropTypes.bool,
+  isListingVerifiedAssets: PropTypes.bool,
+  setIsListingVerifiedAssets: PropTypes.func
 }
 
 export default SearchInput
