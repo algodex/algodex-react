@@ -6,6 +6,12 @@
 const { withSentryConfig } = require('@sentry/nextjs')
 const nextTranslate = require("next-translate");
 
+const getDefaultAsset = () => {
+  // Default to LAMP (available on Testnet only)
+  return process.env.NEXT_PUBLIC_DEFAULT_ASSET || 15322902
+}
+const defaultAsset = getDefaultAsset()
+
 const moduleExports = nextTranslate({
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
@@ -15,12 +21,12 @@ const moduleExports = nextTranslate({
     return [
       {
         source: '/',
-        destination: '/trade/15322902',
+        destination: '/trade/' + defaultAsset,
         permanent: true
       },
       {
         source: '/trade',
-        destination: '/trade/15322902',
+        destination: '/trade/' + defaultAsset,
         permanent: true
       }
     ]

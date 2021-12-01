@@ -13,8 +13,10 @@ import useMyAlgo from 'hooks/use-my-algo'
 import useStore, { useStorePersisted } from 'store/use-store'
 import { checkTestnetAccess } from 'lib/api'
 import Cookies from 'cookies'
-
 import { Container, StatusContainer } from 'styles/trade.css'
+import { getDefaultAsset } from 'services/environment'
+
+const defaultAsset = getDefaultAsset()
 
 export default function Home() {
   const router = useRouter()
@@ -25,8 +27,8 @@ export default function Home() {
   // Redirect to LAMP if `id` is invalid (contains non-numerical characters)
   useEffect(() => {
     if (id && !isValidId) {
-      console.log('Redirecting to LAMP (15322902)...')
-      router.push(`/trade/15322902`)
+      console.log('Redirecting to Asset (' + defaultAsset + ')...')
+      router.push('/trade/' + defaultAsset)
     }
   }, [id, isValidId, router])
 
@@ -92,8 +94,8 @@ export default function Home() {
       if (asset.id) {
         setAsset(asset)
       } else {
-        console.log('Redirecting to LAMP (15322902)...')
-        router.push(`/trade/15322902`)
+        console.log('Redirecting to Asset (' + defaultAsset + ')...')
+        router.push('/trade/' + defaultAsset)
       }
     }
   }, [asset, assetQuery.isSuccess, router, setAsset])
@@ -184,9 +186,6 @@ export async function getServerSideProps({ req, res, query }) {
   if (query?.loginKey) {
     cookies.set('loginKey', query.loginKey)
   }
-
-  const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  const TESTNET_DOMAIN = process.env.NEXT_PUBLIC_TESTNET_DOMAIN
 
   const hasGateAccess = true //await checkTestnetAccess(query?.loginKey || cookies.get('loginKey'))
 
