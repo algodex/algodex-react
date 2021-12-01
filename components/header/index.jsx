@@ -40,7 +40,8 @@ const localeToFlags = {
   ct: 'ES',
   th: 'TH',
   in: 'IN',
-  de: 'DE'
+  de: 'DE',
+  kr: 'KR'
 }
 
 export default function Header() {
