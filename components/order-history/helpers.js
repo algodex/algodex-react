@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
 
-export const mapTradeHistoryData = (data, { buyText = 'BUY', sellText = 'SELL' }) => {
+export const mapTradeHistoryData = (data) => {
+  const buyText = 'BUY'
+  const sellText = 'SELL'
   if (!data || !data.transactions || !data.allAssets) {
     return null
   }

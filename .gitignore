@@ -40,3 +40,6 @@ yarn-error.log*
 
 # VS Code workspace
 *.code-workspace
+
+# NPM Config for Algodex private repo
+.npmrc
