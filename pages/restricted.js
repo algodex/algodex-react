@@ -1,15 +1,8 @@
 import Header from 'components/header'
 import { AlertTriangle } from 'react-feather'
 import { useRouter } from 'next/router'
+import Modal from "components/modal"
 
-
-const Modal = (props) => {
-  return (
-    <div className="h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5" {...props}>
-      {props.children}
-    </div>
-  )
-}
 
 const Input = (props) => {
   return (
