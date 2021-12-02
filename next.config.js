@@ -4,6 +4,12 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 const { withSentryConfig } = require('@sentry/nextjs')
+
+const getDefaultAsset = () => {
+  // Default to LAMP (available on Testnet only)
+  return process.env.NEXT_PUBLIC_DEFAULT_ASSET || 15322902
+}
+const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
 const nextPWA = require('next-pwa')
 const moduleExports = nextPWA(
@@ -16,12 +22,12 @@ const moduleExports = nextPWA(
       return [
         {
           source: '/',
-          destination: '/trade/15322902',
+          destination: '/trade/' + defaultAsset,
           permanent: true
         },
         {
           source: '/trade',
-          destination: '/trade/15322902',
+          destination: '/trade/' + defaultAsset,
           permanent: true
         }
       ]
