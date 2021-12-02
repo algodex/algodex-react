@@ -47,18 +47,9 @@ const Error = ({ message }) => <BodyCopySm color="gray.400">Error: {message}</Bo
 Error.propTypes = {
   message: PropTypes.string
 }
-const AssetNameCell = ({ favouriteFn, value, row }) => {
+const AssetNameCell = ({ value, row }) => {
   return (
     <div className="flex items-start">
-      <div role="button" onClick={favouriteFn} onKeyDown={favouriteFn} tabIndex={0}>
-        {/* <Icon
-          className="mr-1"
-          path={mdiStar}
-          title="Star icon"
-          size={0.5}
-          color={theme.colors.gray['500']}
-        /> */}
-      </div>
       <div className="flex flex-col">
         <div>
           <AssetNameBlock>
@@ -89,8 +80,7 @@ const AssetNameCell = ({ favouriteFn, value, row }) => {
 
 AssetNameCell.propTypes = {
   value: PropTypes.any,
-  row: PropTypes.object,
-  favouriteFn: PropTypes.func
+  row: PropTypes.object
 }
 const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
 AssetPriceCell.propTypes = {
@@ -246,9 +236,12 @@ const AssetSearchTable = ({
             borderRight: 'solid 1px #2D3747'
           }}
           key={idx}
-          {...cell.getCellProps()}
         >
           <Icon
+            role="button"
+            onClick={() => toggleFavouritesFn(123)}
+            onKeyDown={() => toggleFavouritesFn(123)}
+            tabIndex={0}
             className="mr-1"
             path={mdiStar}
             title="Star icon"
