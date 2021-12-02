@@ -2,6 +2,8 @@ import Header from 'components/header'
 import { AlertTriangle } from 'react-feather'
 import { useRouter } from 'next/router'
 import Modal from "components/Modal"
+import Image from "next/image";
+// import warning from "../public/icon-warning.png";
 
 
 const Input = (props) => {
@@ -24,7 +26,7 @@ const Restricted = () => {
         <Modal>
           <div className="flex flex-col md:flex-row text-center md:text-left h-full bg-gray-700 ">
             <div className="mt-4 md:mt-0 mx-8 md:mx-12 flex justify-center items-center ">
-              <AlertTriangle className="object-center" width={50} height={50} />
+              <Image src={"/icon-warning.png"} alt="Warning" width={40} height={40} />
             </div>
             <div className="mx-8 mb-8 flex-1 md:m-4 md:ml-0">
               <p className="my-4">At this time, Algodex is not available in your region (USA).</p>
