@@ -22,6 +22,8 @@ import useTranslation from 'next-translate/useTranslation'
 import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { Fragment, useCallback } from 'react'
 import { useUserStore } from '../../store'
+import { floatToFixed } from 'services/display'
+import { convertFromBaseUnits } from 'services/convert'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
@@ -135,7 +137,7 @@ const AssetInfo = ({ asset, price }) => {
                   Price
                 </BodyCopyTiny>
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-                  {dexAsset.price} ALGO
+                  {floatToFixed(convertFromBaseUnits(dexAsset.price, asset.decimals))} ALGO
                 </BodyCopy>
               </InfoItem>
               <InfoItem>
