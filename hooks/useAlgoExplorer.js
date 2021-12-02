@@ -5,6 +5,8 @@ import { routeQueryError } from 'hooks/withQuery'
 import { useEffect } from 'react'
 const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
 
+const refetchInterval = 3000
+
 /**
  * Use Asset
  * @param id
@@ -33,3 +35,17 @@ export const useExplorerAssetInfo = ({ id, options }) => {
 
   return { data, isError, error, ...rest }
 }
+
+/**
+ * Use Search Results Query
+ * @param {Object} props The props of the parent
+ * @param {string} props.query Search Query
+ * @param {Object} [props.options] useQuery Options
+ * @returns {UseQueryResult<{assets: *}, unknown>}
+ */
+export const useFetchAlgorandPriceQuery = ({
+  query = '',
+  options = {
+    refetchInterval: query === '' ? refetchInterval : 20000
+  }
+} = {}) => useQuery(['fetchAlgorandPrice', { query }], () => fetchAlgorandPrice(query), options)

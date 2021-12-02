@@ -144,7 +144,6 @@ export async function fetchAssetInfoV2(id) {
 /**
  * Get Algorand price
  *
- *
  * Retrieve price of Algorand from the Algorand Indexer
  *
  * @see https://price.algoexplorerapi.io/price/algo-usd
