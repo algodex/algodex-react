@@ -25,7 +25,6 @@ export const ButtonText = styled.button`
     line-height: 24px;
     margin-left: 5px;
   }
-  
 `
 
 export const HeaderContainer = styled.div`

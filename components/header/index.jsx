@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -20,6 +21,7 @@ import {
   LanguageItem,
   LanguageDropDown
 } from './header.css'
+import AssetSearch from "../asset-search";
 
 // Map locale code to the flag used in 'react-country-flag'
 const localeToFlags = {
@@ -58,21 +60,31 @@ export default function Header() {
         </a>
       </Link>
       <Navigation>
-        <a target="_blank" href="//about.algodex.com">
+        <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
-        </a>
+        </ActiveLink>
+        {/*<a target="_blank" href="//about.algodex.com" rel="noreferrer">*/}
+        {/*  <NavTextLg>{t('header-about')}</NavTextLg>*/}
+        {/*</a>*/}
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </ActiveLink>
-        <a
-          target="_blank"
-          href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
-        >
+        <ActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
-        </a>
-        <a target="_blank" href="//about.algodex.com/support/">
+        </ActiveLink>
+        {/*<a*/}
+        {/*  target="_blank"*/}
+        {/*  href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"*/}
+        {/*  rel="noreferrer"*/}
+        {/*>*/}
+        {/*  <NavTextLg>{t('header-docs')}</NavTextLg>*/}
+        {/*</a>*/}
+        <ActiveLink href="/support" matches={/^\/support/}>
           <NavTextLg>{t('header-support')}</NavTextLg>
-        </a>
+        </ActiveLink>
+        {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
+        {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
+        {/*</a>*/}
         {/*
         <ActiveLink href="/wallet">
           <NavTextLg>Wallet</NavTextLg>
@@ -134,10 +146,11 @@ export default function Header() {
           <a
             target="_blank"
             href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+            rel="noreferrer"
           >
             <NavTextSm>Docs</NavTextSm>
           </a>
-          <a target="_blank" href="//about.algodex.com/support/">
+          <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
           </a>
           {/*

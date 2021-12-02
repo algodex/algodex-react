@@ -18,7 +18,7 @@ describe('Wallet', () => {
         />
       )
 
-      expect(getByText(/wallet:start-by/i)).toBeVisible()
+      expect(getByText(/Connect Wallet/i)).toBeVisible()
     })
 
     it('should show primary connect button', () => {

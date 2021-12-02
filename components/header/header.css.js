@@ -257,7 +257,8 @@ export const MenuContainer = styled.div`
 
 export const LanguagesContainer = styled.ul`
   width: 100px;
-  &:hover, &:focus-within {
+  &:hover,
+  &:focus-within {
     ul {
       position: absolute;
       display: block;
@@ -276,9 +277,8 @@ export const LanguageItem = styled.li`
   }
 `
 export const LanguageDropDown = styled.ul`
-  background-color:  ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.colors.gray[900]};
   display: none;
   max-height: 500px;
   overflow: scroll;
-
 `

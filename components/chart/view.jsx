@@ -5,57 +5,56 @@ import ChartSettings from './settings'
 import useAreaChart from './use-area-chart'
 import useCandleChart from './use-candle-chart'
 import useStore from 'store/use-store'
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
 import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
 import millify from 'millify'
 
 function autoScaleProvider(original, chart, priceData) {
-    let visibleRange = chart.timeScale().getVisibleRange();
-    if (!visibleRange) {
-      return;
+  let visibleRange = chart.timeScale().getVisibleRange()
+  if (!visibleRange) {
+    return
+  }
+  const rangeStart = visibleRange.from
+  const rangeEnd = visibleRange.to
+  let max = 0
+  let min = -1
+  for (let i = 0; i < priceData.length; i++) {
+    const priceItem = priceData[i]
+    if (priceItem.time < rangeStart) {
+      continue
     }
-    const rangeStart = visibleRange.from;
-    const rangeEnd = visibleRange.to;
-    let max = 0;
-    let min = -1;
-    for (let i = 0; i < priceData.length; i++) {
-        const priceItem = priceData[i];
-        if (priceItem.time < rangeStart) {
-          continue;
-        }
-        max = Math.max(priceItem.close, max);
-        max = Math.max(priceItem.open, max);
-        max = Math.max(priceItem.high, max);
-        if (min == -1) {
-          min = priceItem.open;
-        }
-        min = Math.min(priceItem.close, min);
-        min = Math.min(priceItem.low, min);
-        min = Math.min(priceItem.open, min);
-        if (priceItem.time > rangeEnd) {
-          break;
-        }
-        
+    max = Math.max(priceItem.close, max)
+    max = Math.max(priceItem.open, max)
+    max = Math.max(priceItem.high, max)
+    if (min == -1) {
+      min = priceItem.open
     }
+    min = Math.min(priceItem.close, min)
+    min = Math.min(priceItem.low, min)
+    min = Math.min(priceItem.open, min)
+    if (priceItem.time > rangeEnd) {
+      break
+    }
+  }
 
-    const res = original();
-    if (res !== null && min != -1) {
-        res.priceRange.maxValue = max;
-        res.priceRange.minValue = min;
-    }
+  const res = original()
+  if (res !== null && min != -1) {
+    res.priceRange.maxValue = max
+    res.priceRange.minValue = min
+  }
 
-    return res;
+  return res
 }
 
 function ChartView(props) {
-  const { asset, asaVolume, ohlc, bid, ask, spread, volumeData, priceData } = props
-  const [currentPrices, setCurrentPrices] = useState(props);
-  const [currentLogical, setCurrentLogical] = useState(priceData.length - 1);
-  
-  useMemo( () => {
-    setCurrentPrices(props);
-    setCurrentLogical(priceData.length - 1);
-  }, [asset]);
+  const { asset, volumeData, priceData } = props
+  const [currentPrices, setCurrentPrices] = useState(props)
+  const [currentLogical, setCurrentLogical] = useState(priceData.length - 1)
+
+  useMemo(() => {
+    setCurrentPrices(props)
+    setCurrentLogical(priceData.length - 1)
+  }, [asset])
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
@@ -65,7 +64,6 @@ function ChartView(props) {
 
   const chartMode = useStore((state) => state.chartMode)
   const setChartMode = useStore((state) => state.setChartMode)
-
 
   const changeMode = (mode) => {
     setChartMode(mode)
@@ -81,49 +79,50 @@ function ChartView(props) {
 
   const updateHoverPrices = (logical) => {
     if (priceData == null || volumeData == null) {
-      return;
+      return
     }
-    const priceEntry = priceData[logical];
-    const volumeEntry = volumeData[logical];
+    const priceEntry = priceData[logical]
+    const volumeEntry = volumeData[logical]
 
     const prices = {
       ...currentPrices
-    };
+    }
     prices.ohlc = {
       ...priceEntry
-    };
-    prices.asaVolume = volumeEntry != null ? millify(volumeEntry.value) : '0'; 
+    }
+    prices.asaVolume = volumeEntry != null ? millify(volumeEntry.value) : '0'
 
-    setCurrentPrices(prices);
-  };
+    setCurrentPrices(prices)
+  }
 
-  const mouseOut = (ev) => {
-    setCurrentPrices(props);
-  };
+  const mouseOut = () => {
+    setCurrentPrices(props)
+  }
   const mouseMove = (ev) => {
-    const chart = chartMode === 'candle' ? candleChart : areaChart;
+    const chart = chartMode === 'candle' ? candleChart : areaChart
     if (chart == null) {
-      setCurrentPrices(props);
-      return;
+      setCurrentPrices(props)
+      return
     }
 
-    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect();
-    const x = ev.clientX - rect.left;
-    const logical = candleChart.timeScale().coordinateToLogical(x);
-    
+    /* eslint-disable */
+    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect()
+    const x = ev.clientX - rect.left
+    const logical = candleChart.timeScale().coordinateToLogical(x)
+
     if (logical >= priceData.length || logical >= volumeData.length) {
-      setCurrentPrices(props);
-      return;
+      setCurrentPrices(props)
+      return
     }
 
     if (logical != currentLogical) {
-      setCurrentLogical(logical);
-      updateHoverPrices(logical);
+      setCurrentLogical(logical)
+      updateHoverPrices(logical)
     }
-  };
+  }
 
   return (
-    <Container onMouseMove={(ev)=> mouseMove(ev)} onMouseOut={(ev) => mouseOut(ev)}>
+    <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={(ev) => mouseOut(ev)}>
       <>
         <CandleStickChart
           ref={candleChartRef}

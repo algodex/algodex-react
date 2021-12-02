@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
-import { useQueryClient, useQuery } from 'react-query'
+import Error from 'components/error'
 import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
-import { HeaderCaps, LabelMd, BodyCopy, BodyCopyTiny, LabelSm } from 'components/type'
+import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
+import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import OrderInput from 'components/order-input'
 import AmountRange from 'components/amount-range'
 import OrderOptions from 'components/order-options'
@@ -15,27 +16,27 @@ import { useStore } from 'store/use-store'
 import WalletService from 'services/wallet'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import useTranslation from 'next-translate/useTranslation'
-import { Tooltip } from "components/tooltip";
+import { Tooltip } from 'components/tooltip'
 
 import {
-  Container,
-  Header,
-  Form,
-  ToggleWrapper,
-  ToggleInput,
-  BuyButton,
-  SellButton,
   AvailableBalance,
   BalanceRow,
+  BuyButton,
+  Container,
+  Form,
+  Header,
+  IconButton,
+  IconTextContainer,
+  LimitOrder,
+  SellButton,
+  SubmitButton,
   Tab,
   Tabs,
-  LimitOrder,
-  // TxnFeeContainer,
-  SubmitButton,
-  IconButton,
-  IconTextContainer
+  ToggleInput,
+  ToggleWrapper
 } from './place-order.css'
 import { Info } from 'react-feather'
+import Spinner from '../spinner'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -46,14 +47,14 @@ const DEFAULT_ORDER = {
 }
 
 function PlaceOrderView(props) {
-  const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
+  const { asset, wallets, activeWalletAddress, orderBook } = props
   const { t } = useTranslation('place-order')
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
-  const [orderFilter, setOrderFilter] = useState(0);
+  const [orderFilter, setOrderFilter] = useState(0)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -71,46 +72,60 @@ function PlaceOrderView(props) {
   const enableOrder = {
     buy: maxSpendableAlgo > 0,
     sell: asaBalance > 0
-  };
-
+  }
 
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
 
-  useQuery(["minWalletBalance", {activeWallet}], async () => await WalletService.getMinWalletBalance(activeWallet), { onSuccess: minBalance => {
-      const total = new Big(algoBalance);
-        const min = new Big(minBalance).div(1000000);
-        const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber();
-        setMaxSpendableAlgo(Math.max(0, max))
-  }, enabled: !!(activeWallet && activeWallet.address) });
+  const {
+    data: minBalance,
+    isLoading,
+    isError
+  } = useWalletMinBalanceQuery({
+    wallet: wallets.find((wallet) => wallet.address === activeWalletAddress)
+  })
 
-  // Get reference to query client to clear queries later
-  const queryClient = useQueryClient()
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      const total = new Big(algoBalance)
+      const min = new Big(minBalance).div(1000000)
+      const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
+      setMaxSpendableAlgo(Math.max(0, max))
+    }
+  }, [minBalance, algoBalance, isLoading, isError])
 
   /**
    * When asset or active wallet changes, reset the form
    */
   useEffect(() => {
-    setOrder({
-      ...DEFAULT_ORDER
-    })
-  }, [asset.id, activeWalletAddress, setOrder])
-
+    setOrder(
+      {
+        ...DEFAULT_ORDER
+      },
+      asset
+    )
+  }, [asset, activeWalletAddress, setOrder])
 
   const handleChange = (e, field) => {
-    setOrder({
-      [field || e.target.id]: e.target.value
-    })
+    setOrder(
+      {
+        [field || e.target.id]: e.target.value
+      },
+      asset
+    )
   }
 
   const handleRangeChange = (update) => {
-    setOrder(update)
+    setOrder(update, asset)
   }
 
   const handleOptionsChange = (e) => {
-    setOrder({
-      execution: e.target.value
-    })
+    setOrder(
+      {
+        execution: e.target.value
+      },
+      asset
+    )
   }
 
   const placeOrder = (orderData) => {
@@ -128,8 +143,7 @@ function PlaceOrderView(props) {
   }
 
   const checkPopupBlocker = () => {
-    let havePopupBlockers = ('' + window.open).indexOf('[native code]') === -1
-    return havePopupBlockers
+    return ('' + window.open).indexOf('[native code]') === -1
   }
 
   const handleSubmit = async (e) => {
@@ -174,8 +188,7 @@ function PlaceOrderView(props) {
       success: t('order-success'),
       error: (err) => {
         if (/PopupOpenError|blocked/.test(err)) {
-          const popupError = detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-          return popupError
+          return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
         }
 
         if (/Operation cancelled/i.test(err)) {
@@ -192,17 +205,14 @@ function PlaceOrderView(props) {
 
       setStatus({ submitted: true, submitting: false })
 
-      // update wallet balances
-      refetchWallets()
-
       // reset order form
-      setOrder({
-        ...DEFAULT_ORDER,
-        type: order.type
-      })
-
-      // Invalidate Queries
-      queryClient.invalidateQueries('searchResults')
+      setOrder(
+        {
+          ...DEFAULT_ORDER,
+          type: order.type
+        },
+        asset
+      )
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
@@ -331,7 +341,13 @@ function PlaceOrderView(props) {
               {txnFee.toFixed(3)}
             </BodyCopyTiny>
           </TxnFeeContainer> */}
-          <OrderOptions order={order} onChange={handleOptionsChange} allowTaker={asset.hasOrders} orderFilter={orderFilter} setOrderFilter={setOrderFilter} />
+          <OrderOptions
+            order={order}
+            onChange={handleOptionsChange}
+            allowTaker={typeof asset !== 'undefined'}
+            orderFilter={orderFilter}
+            setOrderFilter={setOrderFilter}
+          />
         </LimitOrder>
         {renderSubmit()}
       </>
@@ -339,15 +355,6 @@ function PlaceOrderView(props) {
   }
 
   const renderForm = () => {
-    if (!isSignedIn) {
-      // @todo: make this better, this is a placeholder
-      return (
-        <BodyCopy color="gray.500" textAlign="center" m={16}>
-          {t('not-signed-in')}
-        </BodyCopy>
-      )
-    }
-
     return (
       <Form onSubmit={handleSubmit} autocomplete="off">
         <ToggleWrapper>
@@ -374,40 +381,54 @@ function PlaceOrderView(props) {
         </ToggleWrapper>
 
         <AvailableBalance>
-          <IconTextContainer style={{marginBottom: "10px"}}>
-            <BodyCopyTiny color="gray.500" >
-              {t('available-balance')}
-            </BodyCopyTiny>
-            <Tooltip renderButton={setTriggerRef => (
-              <IconButton ref={setTriggerRef} type="button">
-                <Info />
-              </IconButton>
-            )}>
+          <IconTextContainer style={{ marginBottom: '10px' }}>
+            <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
+            <Tooltip
+              renderButton={(setTriggerRef) => (
+                <IconButton ref={setTriggerRef} type="button">
+                  <Info />
+                </IconButton>
+              )}
+            >
               <BalanceRow>
+                <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                  {t('orders:available')}:
+                </LabelMd>
+                <IconTextContainer>
                   <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {t("orders:available")}:
+                    {maxSpendableAlgo}
                   </LabelMd>
-                  <IconTextContainer>
-                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {maxSpendableAlgo}
-                    </LabelMd>
-                    <Icon use="algoLogo" size={0.625} />
-                  </IconTextContainer>
-                </BalanceRow>
-                <BalanceRow>
+                  <Icon use="algoLogo" size={0.625} />
+                </IconTextContainer>
+              </BalanceRow>
+              <BalanceRow>
+                <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                  {t('total')}:
+                </LabelMd>
+                <IconTextContainer>
                   <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {t("total")}:
+                    {algoBalance}
                   </LabelMd>
-                  <IconTextContainer>
-                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {algoBalance}
-                    </LabelMd>
-                    <Icon use="algoLogo" size={0.625} />
-                  </IconTextContainer>
-                </BalanceRow>
-                <BalanceRow>
-                  <LabelSm color="gray.300" fontWeight="400"  textTransform="initial" lineHeight="0.9rem" letterSpacing="0.1em" letterSpacing="0.15em">&nbsp;*{t("max-spend-explanation", { amount: new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString() })}</LabelSm>
-                </BalanceRow>
+                  <Icon use="algoLogo" size={0.625} />
+                </IconTextContainer>
+              </BalanceRow>
+              <BalanceRow>
+                <LabelSm
+                  color="gray.300"
+                  fontWeight="400"
+                  textTransform="initial"
+                  lineHeight="0.9rem"
+                  letterSpacing="0.1em"
+                >
+                  &nbsp;*
+                  {t('max-spend-explanation', {
+                    amount: new Big(algoBalance)
+                      .minus(new Big(maxSpendableAlgo))
+                      .round(6)
+                      .toString()
+                  })}
+                </LabelSm>
+              </BalanceRow>
             </Tooltip>
           </IconTextContainer>
           <BalanceRow>
@@ -436,7 +457,8 @@ function PlaceOrderView(props) {
       </Form>
     )
   }
-
+  if (isError) return <Error />
+  if (isLoading) return <Spinner flex />
   return (
     <Container data-testid="place-order">
       <Header>
@@ -453,9 +475,7 @@ PlaceOrderView.propTypes = {
   asset: PropTypes.object.isRequired,
   wallets: PropTypes.array.isRequired,
   activeWalletAddress: PropTypes.string.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
-  orderBook: PropTypes.object.isRequired,
-  refetchWallets: PropTypes.func.isRequired
+  orderBook: PropTypes.object.isRequired
 }
 
 export default PlaceOrderView
