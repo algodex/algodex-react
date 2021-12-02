@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
-import { fetchExplorerAssetInfo } from 'services/algoexplorer'
+import { fetchExplorerAssetInfo, fetchAlgorandPrice } from 'services/algoexplorer'
 import { routeQueryError } from 'hooks/withQuery'
 import { useEffect } from 'react'
 const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false

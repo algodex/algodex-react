@@ -224,10 +224,6 @@ const AssetSearchTable = ({
     setSearchState(tableState)
   }, [tableState, setSearchState])
 
-  useEffect(() => {
-    console.log(favouritesState, 'sdfs')
-  }, [favouritesState])
-
   const toggleFavouritesFn = (assetId) => {
     toggleFavourite(assetId)
   }
