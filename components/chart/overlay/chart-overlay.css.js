@@ -48,7 +48,7 @@ export const IconButton = styled.button`
   border: none;
   background: transparent;
   color: ${({ theme }) => theme.colors.gray[100]};
-  margin-left: .125rem;
+  margin-left: 0.125rem;
   padding: 0;
 
   svg {
@@ -58,7 +58,6 @@ export const IconButton = styled.button`
     top: -5px;
   }
 `
-
 
 export const OhlcList = styled.dl`
   display: flex;

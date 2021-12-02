@@ -15,10 +15,10 @@ const Text = styled(BodyCopyTiny)`
 `
 
 export default function PriceHeader() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common')
   return (
     <Text>
-      {t("price")}
+      {t('price')}
       <Icon use="algoLogo" size={0.625} />
     </Text>
   )

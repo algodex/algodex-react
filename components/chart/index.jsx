@@ -1,39 +1,36 @@
 import Error from 'components/error'
 import Spinner from 'components/spinner'
-import { fetchPriceData } from 'lib/api'
 import millify from 'millify'
 import PropTypes from 'prop-types'
-import { useMemo, useEffect, useState } from 'react'
-import { useQuery, useQueryClient } from 'react-query'
+import { useMemo } from 'react'
 import { mapPriceData, mapVolumeData, getOhlc, getBidAskSpread } from './helpers'
 import useStore, { getChartTimeInterval } from 'store/use-store'
 import ChartView from './view'
+import { useAssetChartQuery, useAssetOrdersQuery } from '../../hooks/useAlgodex'
 
 // Common
 const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
-function Chart(props) {
-  const asset = useStore((state) => state.asset)
-  const assetId = asset.id
-  const orderBook = useStore((state) => state.orderBook)
-  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
-  const queryClient = useQueryClient()
-  const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
+function Chart({ asset, ...rest }) {
+  const { data: assetOrders } = useAssetOrdersQuery({ asset })
 
-  const { isLoading, isError, data } = useQuery(
-    ['priceData', { assetId }],
-    () => fetchPriceData(assetId, chartTimeInterval),
-    {
-      // Refetch the data every second
-      refetchInterval: 1000
-    }
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
   )
 
-  useEffect(() => {
-    queryClient.invalidateQueries('priceData')
-  }, [assetId, queryClient])
+  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
+  const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
+
+  const { isLoading, isError, data } = useAssetChartQuery({
+    asset,
+    chartInterval: chartTimeInterval
+  })
 
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
@@ -60,7 +57,7 @@ function Chart(props) {
       ohlc={ohlc}
       priceData={priceData}
       volumeData={volumeData}
-      {...props}
+      {...rest}
     />
   )
 }
@@ -68,5 +65,5 @@ function Chart(props) {
 export default Chart
 
 Chart.propTypes = {
-  assetId: PropTypes.number
+  asset: PropTypes.object.isRequired
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Input, Container, TickWrapper, InputWrapper, Tick } from './order-size-filter.css'
 
@@ -22,8 +22,8 @@ function OrderSizeFilter(props) {
           max={100}
           step={5}
           value={value || 0}
-          onChange={e => onChange(e.target.value)}
-        //   orderType={order.type}
+          onChange={(e) => onChange(e.target.value)}
+          //   orderType={order.type}
           onMouseDown={() => setIsMouseDown(true)}
           onMouseUp={() => setIsMouseDown(false)}
           isMouseDown={isMouseDown}
@@ -34,7 +34,8 @@ function OrderSizeFilter(props) {
 }
 
 OrderSizeFilter.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.any
 }
 
 export default OrderSizeFilter

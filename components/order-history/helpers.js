@@ -20,6 +20,7 @@ export const mapTradeHistoryData = (data) => {
       const side = tradeType === 'buyASA' ? buyText : sellText
 
       return {
+        id: asset_id,
         date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
         price: floatToFixed(formattedPrice),
         pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,

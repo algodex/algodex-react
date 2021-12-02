@@ -43,9 +43,8 @@ const thumb = css`
   transition: transform 120ms;
   transform: ${({ isMouseDown }) => (isMouseDown ? 'scale(1.1375)' : 'scale(1)')};
   position: relative;
-  left: ${({ value, min, max}) => `calc(${thumbDiameter} * (-0.5 + ${(value - min) / (max - min)}))` };
-
-
+  left: ${({ value, min, max }) =>
+    `calc(${thumbDiameter} * (-0.5 + ${(value - min) / (max - min)}))`};
 `
 
 const focus = css`
@@ -155,7 +154,6 @@ export const Tick = styled.div`
   height: 1rem;
   background: ${({ theme, isActive }) =>
     isActive ? theme.colors.gray['000'] : theme.colors.gray['700']};
-
 
   &:first-child {
     transform: translateX(1px);

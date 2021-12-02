@@ -1,11 +1,11 @@
 import Big from 'big.js'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
 
 export const mapPriceData = (data) => {
   const prices =
     data?.chart_data.map(
-      ({ date, formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
         const time = parseInt(unixTime)
         return {
           time: time,
@@ -34,7 +34,7 @@ export const getOhlc = (data) => {
 }
 
 export const mapVolumeData = (data, volUpColor, volDownColor) => {
-  const mappedData = data?.chart_data?.map(({ date, asaVolume, unixTime }) => {
+  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
     const time = parseInt(unixTime)
     return {
       time: time,

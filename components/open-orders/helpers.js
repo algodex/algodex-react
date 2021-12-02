@@ -49,6 +49,6 @@ export const mapOpenOrdersData = (data) => {
   })
 
   const allOrders = [...buyOrders, ...sellOrders]
-  allOrders.sort( (a, b) => (a.unix_time < b.unix_time) ? 1 : -1 )
+  allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
   return allOrders
 }

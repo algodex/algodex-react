@@ -21,8 +21,6 @@ const Container = styled.div`
   }
 `
 
-
-
 const SearchIcon = styled(_Search)`
   position: absolute;
   left: 0.75rem;

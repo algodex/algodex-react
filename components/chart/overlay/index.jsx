@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import Big from 'big.js'
 import { floatToFixed } from 'services/display'
 import { Info } from 'react-feather'
-
 import {
   Container,
   Header,
@@ -17,21 +16,26 @@ import {
   Volume,
   IconButton
 } from './chart-overlay.css'
-import useStore from 'store/use-store'
+import { useUserStore } from '../../../store'
+import { useCallback } from 'react'
 
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
+  const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
+  const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
+  const changeAmt = asset.priceChange24hr
+    ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
+    : '0'
+  const changePct = asset.priceChange24hr ? new Big(asset.priceChange24hr) : new Big(0)
 
-  const setShowAssetInfo = useStore((state) => state.setShowAssetInfo)
-  const currentPrice = !!asset.price ? new Big(asset.price) : new Big(0)
-  const changeAmt = !!asset.priceChange24hr ? currentPrice.sub(currentPrice.div(new Big(1+(asset.priceChange24hr/100)))).toString() : "0"
-  const changePct = !!asset.priceChange24hr ? new Big(asset.priceChange24hr) : new Big(0)
-  
   const openCloseChange = () => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
 
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
   }
+  const onClick = useCallback(() => {
+    setShowAssetInfo(true)
+  }, [asset])
 
   return (
     <Container>
@@ -40,7 +44,8 @@ function ChartOverlay(props) {
           <div>
             <span>{`${asset.name} `}</span> / ALGO
           </div>
-          <IconButton type="button" onClick={() => setShowAssetInfo(true)}>
+
+          <IconButton onClick={onClick} type="button">
             <Info />
           </IconButton>
         </TradingPair>

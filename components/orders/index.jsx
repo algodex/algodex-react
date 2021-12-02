@@ -6,8 +6,8 @@ import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
-function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
-  const { t } = useTranslation("orders");
+function Orders({ initialPanel }) {
+  const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
   const OPEN_ORDERS_PANEL = 'open-orders'
@@ -17,11 +17,11 @@ function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <OpenOrders openOrders={openOrderData} />
+        return <OpenOrders />
       case ORDER_HISTORY_PANEL:
-        return <OrderHistory orderHistory={orderHistoryData} />
+        return <OrderHistory />
       case ASSETS_PANEL:
-        return <Assets assets={assetsData} />
+        return <Assets />
       default:
         return null
     }
@@ -34,19 +34,19 @@ function Orders({ initialPanel, openOrderData, orderHistoryData, assetsData }) {
           isActive={selectedPanel === OPEN_ORDERS_PANEL}
           onClick={() => setSelectedPanel(OPEN_ORDERS_PANEL)}
         >
-          {t("open-orders")}
+          {t('open-orders')}
         </Tab>
         <Tab
           isActive={selectedPanel === ORDER_HISTORY_PANEL}
           onClick={() => setSelectedPanel(ORDER_HISTORY_PANEL)}
         >
-          {t("order-history")}
+          {t('order-history')}
         </Tab>
         <Tab
           isActive={selectedPanel === ASSETS_PANEL}
           onClick={() => setSelectedPanel(ASSETS_PANEL)}
         >
-          {t("assets")}
+          {t('assets')}
         </Tab>
       </Header>
       {renderPanel(selectedPanel)}
