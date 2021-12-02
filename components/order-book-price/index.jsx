@@ -32,7 +32,7 @@ function OrderBookPrice({ price, decimals, change }) {
       return '--'
     }
 
-    return floatToFixed(convertFromBaseUnits(price, decimals))
+    return floatToFixed(decimals !== 6 ? convertFromBaseUnits(price, decimals) : price)
   }
 
   const renderChange = () => {

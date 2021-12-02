@@ -137,7 +137,12 @@ const AssetInfo = ({ asset, price }) => {
                   Price
                 </BodyCopyTiny>
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-                  {floatToFixed(convertFromBaseUnits(dexAsset.price, asset.decimals))} ALGO
+                  {floatToFixed(
+                    asset.decimals !== 6
+                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
+                      : dexAsset.price
+                  )}{' '}
+                  ALGO
                 </BodyCopy>
               </InfoItem>
               <InfoItem>
