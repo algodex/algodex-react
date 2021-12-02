@@ -115,6 +115,7 @@ const AssetSearchTable = ({
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
+  const favouritesState = useUserStore((state) => state.favourites)
   const { t, lang } = useTranslation('assets')
 
   /**
@@ -223,8 +224,16 @@ const AssetSearchTable = ({
     setSearchState(tableState)
   }, [tableState, setSearchState])
 
+  useEffect(() => {
+    console.log(favouritesState, 'sdfs')
+  }, [favouritesState])
+
   const toggleFavouritesFn = (assetId) => {
-    console.log(assetId, 'asset id')
+    toggleFavourite(assetId)
+  }
+
+  const handleFavouritesFn = (id) => {
+    return favouritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['500']
   }
 
   const renderTableData = (cell, idx, hasPrice) => {
@@ -239,14 +248,14 @@ const AssetSearchTable = ({
         >
           <Icon
             role="button"
-            onClick={() => toggleFavouritesFn(123)}
-            onKeyDown={() => toggleFavouritesFn(123)}
+            onClick={() => toggleFavouritesFn(cell?.row.original?.id)}
+            onKeyDown={() => toggleFavouritesFn(cell?.row.original?.id)}
             tabIndex={0}
             className="mr-1"
             path={mdiStar}
             title="Star icon"
             size={0.5}
-            color={theme.colors.gray['500']}
+            color={handleFavouritesFn(cell?.row?.original?.id)}
           />
           {cell.render('Cell')}
         </td>

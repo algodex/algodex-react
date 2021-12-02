@@ -11,7 +11,24 @@ const userState = (set, get) => ({
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *
    */
-  favorites: {},
+  favourites: {},
+
+  setFavourite: (assetId) => {
+    set({
+      favourites: [assetId].reduce((previous, asset) => {
+        delete previous['1234']
+        // If asset does not exist
+        if (previous[asset] === undefined) {
+          previous[asset] = true
+        } else {
+          // Delete item if it has been added previously
+          delete previous[asset]
+        }
+
+        return previous
+      }, get().favourites)
+    })
+  },
   /**
    * Add Assets
    *
