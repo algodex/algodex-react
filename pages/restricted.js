@@ -1,7 +1,7 @@
 import Header from 'components/header'
 import { AlertTriangle } from 'react-feather'
 import { useRouter } from 'next/router'
-import Modal from "components/modal"
+import Modal from "components/Modal"
 
 
 const Input = (props) => {
