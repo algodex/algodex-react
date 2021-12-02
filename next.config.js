@@ -4,34 +4,36 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 const { withSentryConfig } = require('@sentry/nextjs')
-const nextTranslate = require("next-translate");
 
 const getDefaultAsset = () => {
   // Default to LAMP (available on Testnet only)
   return process.env.NEXT_PUBLIC_DEFAULT_ASSET || 15322902
 }
 const defaultAsset = getDefaultAsset()
-
-const moduleExports = nextTranslate({
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Important: return the modified config
-    return config
-  },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/trade/' + defaultAsset,
-        permanent: true
-      },
-      {
-        source: '/trade',
-        destination: '/trade/' + defaultAsset,
-        permanent: true
-      }
-    ]
-  }
-})
+const nextTranslate = require('next-translate')
+const nextPWA = require('next-pwa')
+const moduleExports = nextPWA(
+  nextTranslate({
+    pwa: {
+      dest: 'public',
+      disable: process.env.NODE_ENV === 'development'
+    },
+    async redirects() {
+      return [
+        {
+          source: '/',
+          destination: '/trade/' + defaultAsset,
+          permanent: true
+        },
+        {
+          source: '/trade',
+          destination: '/trade/' + defaultAsset,
+          permanent: true
+        }
+      ]
+    }
+  })
+)
 
 const SentryWebpackPluginOptions = {
   // Additional config options for the Sentry Webpack plugin. Keep in mind that
@@ -48,3 +50,4 @@ const SentryWebpackPluginOptions = {
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
 module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions)
+// module.exports = moduleExports

@@ -17,7 +17,6 @@ export const Container = styled.div`
     flex-direction: row;
     height: 2.75rem;
   }
-
 `
 
 export const ToggleWrapper = styled.div`

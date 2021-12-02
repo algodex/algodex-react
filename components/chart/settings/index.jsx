@@ -6,7 +6,7 @@ import useTranslation from 'next-translate/useTranslation'
 
 function ChartSettings(props) {
   const { chartMode, onChartModeClick } = props
-  const { t } = useTranslation("chart");
+  const { t } = useTranslation('chart')
   const chartTime = useStore((state) => getChartTimeInterval(state))
   const onChartTimeClick = useStore((state) => state.setChartTimeInterval)
 
@@ -47,7 +47,7 @@ function ChartSettings(props) {
           onChange={handleModeClick}
         />
         <ToggleBtn as="label" size="small" htmlFor="mode-candle">
-          {t("candle")}
+          {t('candle')}
         </ToggleBtn>
         <ToggleInput
           type="radio"
@@ -57,7 +57,7 @@ function ChartSettings(props) {
           onChange={handleModeClick}
         />
         <ToggleBtn as="label" size="small" htmlFor="mode-area">
-          {t("area")}
+          {t('area')}
         </ToggleBtn>
       </ToggleWrapper>
       <ToggleWrapper>{renderTimeIntervals()}</ToggleWrapper>
