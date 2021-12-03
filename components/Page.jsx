@@ -15,8 +15,8 @@ export const Container = styled.div`
   flex-direction: column;
 
   overflow: hidden;
-  max-height: calc(var(--vh, 1vh) * 100);
-  height: calc(var(--vh, 1vh) * 100);
+  max-height: 100%;
+  height: 100%;
 
   @media (min-width: 996px) {
     overflow: scroll;
