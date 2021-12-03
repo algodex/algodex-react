@@ -1,0 +1,16 @@
+{
+    "header-about": "Popularny",
+    "header-trade": "O nas",
+    "header-docs": "Operacja handlowa",
+    "header-support": "Dokuments",
+    "price": "Pomoc",
+    "amount": "Cena",
+    "total": "Kwota",
+    "time": "Suma",
+    "no-trades-completed": " Czas ",
+    "mobilefooter-CHART":"Wykres",
+    "mobilefooter-BOOK":" Arkusz Zleceń",
+    "mobilefooter-TRADE":"Operacja handlowa",
+    "mobilefooter-ORDERS":"Zlecen",
+    "mobilefooter-WALLET":"Portfel"
+}
