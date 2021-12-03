@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import Image from 'next/image'
 import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
 import SvgImage from 'components/svg-image'
-import Link from 'next/link'
 
 import theme from 'theme'
 
@@ -21,14 +20,25 @@ import {
 } from './asset-info.css'
 import useTranslation from 'next-translate/useTranslation'
 import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import { Fragment } from 'react'
+import { Fragment, useCallback } from 'react'
+import { useUserStore } from '../../store'
+import { floatToFixed } from 'services/display'
+import { convertFromBaseUnits } from 'services/convert'
 
-const AssetInfo = ({ asset }) => {
+const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
-
+  const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
-
-  const { data: dexAsset } = useAssetPriceQuery({ asset })
+  const onClick = useCallback(() => {
+    setShowAssetInfo(false)
+  }, [asset])
+  const { data: dexAsset } = useAssetPriceQuery({
+    asset,
+    options: {
+      enabled: price?.isTraded || false,
+      initialData: price
+    }
+  })
   const renderName = () => {
     if (asset.verified) {
       return (
@@ -65,12 +75,12 @@ const AssetInfo = ({ asset }) => {
     <Container>
       <InfoContainer>
         {dexAsset?.isTraded ? (
-          <Link shallow={true} href={`/trade/${asset.id}`}>
+          <button onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
             </ButtonText>
-          </Link>
+          </button>
         ) : null}
         <HeaderContainer>
           <HeaderLg color="gray.100" mb={2}>
@@ -127,7 +137,12 @@ const AssetInfo = ({ asset }) => {
                   Price
                 </BodyCopyTiny>
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-                  {dexAsset.price} ALGO
+                  {floatToFixed(
+                    asset.decimals !== 6
+                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
+                      : dexAsset.price
+                  )}{' '}
+                  ALGO
                 </BodyCopy>
               </InfoItem>
               <InfoItem>
@@ -158,6 +173,7 @@ const AssetInfo = ({ asset }) => {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired,
+  price: PropTypes.object
 }
 export default AssetInfo

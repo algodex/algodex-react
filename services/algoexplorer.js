@@ -150,5 +150,5 @@ export async function fetchAssetInfoV2(id) {
  */
 export async function fetchAlgorandPrice() {
   const { data } = await axios.get(`${EXPLORER_ALGORAND_PRICE}`)
-  return data
+  return { algoPrice: data.price }
 }

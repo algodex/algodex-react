@@ -1,3 +1,13 @@
+/* eslint-disable react/prop-types  */
+import { useCallback, useMemo } from 'react'
+import { useWalletAssetsQuery } from 'hooks/useAlgodex'
+import { BodyCopyTiny, BodyCopySm } from 'components/type'
+import OrdersTable from 'components/orders-table'
+import useStore, { useStorePersisted } from 'store/use-store'
+import { mapAssetsData } from './helpers'
+import useTranslation from 'next-translate/useTranslation'
+import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
+import Link from 'next/link'
 import {
   AssetAlgoValue,
   AssetAvailable,
@@ -9,28 +19,39 @@ import {
   StatusContainer,
   TableWrapper
 } from './assets.css'
-import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
-import { BodyCopySm, BodyCopyTiny } from 'components/type'
-import useStore, { useStorePersisted } from 'store/use-store'
-
-import OrdersTable from 'components/orders-table'
-import { mapAssetsData } from './helpers'
-/* eslint-disable react/prop-types  */
-import { useMemo } from 'react'
-import useTranslation from 'next-translate/useTranslation'
-import { useWalletAssetsQuery } from 'hooks/useAlgodex'
+import { useEventDispatch } from '../../hooks/useEvents'
 
 const AssetCoinCell = (props) => {
+  const dispatcher = useEventDispatch()
+  const onClick = useCallback(() => {
+    dispatcher('clicked', 'asset')
+  }, [dispatcher])
   return (
-    <AssetNameBlock>
-      <AssetName>{props.value}</AssetName>
-      <br />
-      <AssetId>{props.row.original.id}</AssetId>
-    </AssetNameBlock>
+    <Link href={`/trade/${props.row.original.id}`}>
+      <button onClick={onClick}>
+        <AssetNameBlock>
+          <AssetName>{props.value}</AssetName>
+          <br />
+          <AssetId>{props.row.original.id}</AssetId>
+        </AssetNameBlock>
+      </button>
+    </Link>
   )
 }
 
-const AssetNameCell = ({ value }) => <AssetCoin>{value}</AssetCoin>
+const AssetNameCell = ({ value, row }) => {
+  const dispatcher = useEventDispatch()
+  const onClick = useCallback(() => {
+    dispatcher('clicked', 'asset')
+  }, [dispatcher])
+  return (
+    <Link href={`/trade/${row.original.id}`}>
+      <button onClick={onClick}>
+        <AssetCoin>{value}</AssetCoin>
+      </button>
+    </Link>
+  )
+}
 
 const AssetTotalCell = ({ value }) => <AssetTotal>{value}</AssetTotal>
 

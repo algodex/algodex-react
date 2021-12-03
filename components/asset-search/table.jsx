@@ -232,7 +232,7 @@ const AssetSearchTable = ({
     return favouritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['500']
   }
 
-  const renderTableData = (cell, idx, hasPrice) => {
+  const renderTableData = (cell, idx) => {
     if (idx === 0) {
       return (
         <td
@@ -267,7 +267,7 @@ const AssetSearchTable = ({
         >
           <span>{cell.render('Cell')}</span>
           <br />
-          {hasPrice ? <span>{(algoPrice * cell.value).toLocaleString()} USD</span> : ''}
+          {cell?.value != '--' ? <span>{(algoPrice * cell.value).toLocaleString()} USD</span> : ''}
         </td>
       )
     } else {
@@ -315,14 +315,11 @@ const AssetSearchTable = ({
           <tbody {...getTableBodyProps()}>
             {rows.map((row, r) => {
               prepareRow(row)
-              const hasPrice = row.original.price !== '--'
-
-              const path = hasPrice ? '/trade' : '/asset'
               return (
-                <Link key={r} href={`${path}/${row.original.id}`}>
+                <Link key={r} href={`/trade/${row.original.id}`}>
                   <tr key={r} {...row.getRowProps(getRowProps(row))}>
                     {row.cells.map((cell, rc) => {
-                      return renderTableData(cell, rc, hasPrice)
+                      return renderTableData(cell, rc)
                     })}
                   </tr>
                 </Link>

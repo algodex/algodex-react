@@ -167,6 +167,7 @@ export const useWalletMinBalanceQuery = ({
 export const useWalletsQuery = ({
   wallets,
   options = {
-    enabled: typeof wallets !== 'undefined'
+    enabled: typeof wallets !== 'undefined',
+    refetchInterval
   }
 }) => useQuery('wallets', () => WalletService.fetchWallets(wallets), options)

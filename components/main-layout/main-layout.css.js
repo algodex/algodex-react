@@ -109,7 +109,7 @@ export const WalletOrdersSection = styled.section`
 
 export const MainWrapper = styled.div`
   position: relative;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
   min-height: 500px;
 
   @media (min-width: 996px) {
@@ -123,7 +123,7 @@ export const Main = styled.main`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   overflow: hidden scroll;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
 
 
   @media (min-width: 996px) {

@@ -24,6 +24,7 @@ import {
   OpenOrdersContainer
 } from './open-orders.css'
 import { useWalletOrdersQuery } from '../../hooks/useAlgodex'
+import { useEventDispatch } from '../../hooks/useEvents'
 
 function OpenOrders() {
   const { t, lang } = useTranslation('orders')
@@ -51,15 +52,21 @@ function OpenOrders() {
   const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
   const OrderPairCell = ({ value, row }) => {
+    const dispatcher = useEventDispatch()
     const assetId = row?.original?.metadata?.assetId
+    const onClick = useCallback(() => {
+      dispatcher('clicked', 'asset')
+    }, [dispatcher])
     return (
       <Link href={`/trade/${assetId}`}>
-        <OrderPair>{value}</OrderPair>
+        <button onClick={onClick}>
+          <OrderPair>{value}</OrderPair>
+        </button>
       </Link>
     )
   }
 
-  const OrderTypeCell = ({ value }) => <OrderType value={value}>{value}</OrderType>
+  const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
 
   const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 

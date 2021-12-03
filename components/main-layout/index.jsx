@@ -22,7 +22,7 @@ import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
-import { useRouter } from 'next/router'
+import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
 /**
@@ -33,7 +33,7 @@ import useTranslation from 'next-translate/useTranslation'
  */
 function MainLayout({ asset, children }) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { isFallback } = useRouter()
+
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const TABS = {
@@ -45,10 +45,23 @@ function MainLayout({ asset, children }) {
   }
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
-
-  // If the Server failed to load data
-  if (isFallback) {
-    return <Spinner flex />
+  /**
+   * Use Clicked Events
+   *
+   * This is only used to switch to MobileMenu Chart view
+   * when the Next/Router navigates to a shallow route
+   */
+  useEvent('clicked', (data) => {
+    if (data === 'asset') {
+      console.log('CLicked', data)
+      setActiveMobile(TABS.CHART)
+    }
+    if (data === 'order') {
+      setActiveMobile(TABS.TRADE)
+    }
+  })
+  if (!asset) {
+    return <Spinner flex={true} />
   }
   return (
     <MainWrapper>
@@ -118,7 +131,7 @@ function MainLayout({ asset, children }) {
   )
 }
 MainLayout.propTypes = {
-  asset: PropTypes.object.isRequired,
+  asset: PropTypes.object,
   children: PropTypes.any
 }
 export default MainLayout

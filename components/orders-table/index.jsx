@@ -2,9 +2,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTable, useSortBy } from 'react-table'
-
 import { Container, SortIcon } from './orders-table.css'
 
+/**
+ * WARNING! This is also an Assets Table!
+ * @param columns
+ * @param data
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function OrdersTable({ columns, data }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {

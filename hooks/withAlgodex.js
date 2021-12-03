@@ -1,4 +1,5 @@
 import { useAssetPriceQuery, useSearchResultsQuery } from './useAlgodex'
+
 import { useFetchAlgorandPriceQuery } from './useAlgoExplorer'
 import withQuery from 'hooks/withQuery'
 
@@ -26,7 +27,7 @@ export const withAssetPriceQuery = (Component, options) =>
   })
 
 /**
- * With Search Results Query
+ * With Algorand Price Query
  * @param {JSX.Element| Function} Component Component to wrap
  * @param {object} options Options to pass to withQuery
  * @returns {JSX.Element}
