@@ -1,0 +1,16 @@
+{
+    "header-about": "À PROPOS",
+    "header-trade": "ÉCHANGER",
+    "header-docs": "DOCUMENTS",
+    "header-support": "SUPPORT",
+    "price": "Prix",
+    "amount": "Montant",
+    "total": "Total",
+    "time": "TEMPS",
+    "no-trades-completed": " Aucun échange complété ",
+    "mobilefooter-CHART":"GRAPHIQUE",
+    "mobilefooter-BOOK":"CARNET (carnet d'ordres) ",
+    "mobilefooter-TRADE":"ÉCHANGER",
+    "mobilefooter-ORDERS":"ORDRES",
+    "mobilefooter-WALLET":"PORTEFEUILLE"
+}
