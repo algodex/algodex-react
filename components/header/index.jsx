@@ -43,6 +43,7 @@ const localeToFlags = {
   th: 'TH',
   in: 'IN',
   de: 'DE',
+  kr: 'KR',
   fr: 'FR',
   pl: 'PL'
 }
