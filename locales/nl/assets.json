@@ -9,5 +9,6 @@
     "back-to-chart": "Terug naar grafiek",
     "description": "Omschrijving",
     "circulating-supply": "Supply in omloop",
-    "total-supply": "Totale supply"
+    "total-supply": "Totale supply",
+    "view-verified-asset": "Alleen geverifieerde activa bekijken"
 }

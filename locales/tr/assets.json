@@ -9,5 +9,6 @@
     "back-to-chart": "Grafiğe geri dön",
     "description": "Açıklama",
     "circulating-supply": "Dolaşımdaki arz",
-    "total-supply": "Toplam arz"
+    "total-supply": "Toplam arz",
+    "view-verified-asset": "Yalnızca Doğrulanmış Varlıkları Görüntüle"
 }

@@ -9,5 +9,6 @@
     "back-to-chart": "Vissza a grafikonra",
     "description": "Leírás",
     "circulating-supply": "Kibocsátott Mennyiség",
-    "total-supply": "Összes Mennyiség"
+    "total-supply": "Összes Mennyiség",
+    "view-verified-asset": "Csak ellenőrzött eszközök megtekintése"
 }
