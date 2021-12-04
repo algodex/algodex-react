@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
-import { useMemo } from 'react'
-import { useQuery } from 'react-query'
+import { useCallback, useMemo } from 'react'
+import { useWalletTradeHistory } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/type'
 import OrdersTable from 'components/orders-table'
-import { useStorePersisted } from 'store/use-store'
-import { fetchTradeHistoryByAddress } from 'lib/api'
+import useStore, { useStorePersisted } from 'store/use-store'
 import { mapTradeHistoryData } from './helpers'
+import { useEventDispatch } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import Link from "next/link";
+import Link from 'next/link'
 
 import {
   OrderDate,
@@ -23,10 +23,19 @@ import {
 const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 
 const OrderPairCell = ({ value, row }) => {
-  const assetId = row?.original?.metadata?.assetId;
-  return (<Link href={`/trade/${assetId}`}><OrderPair>{value}</OrderPair></Link>)
+  const dispatcher = useEventDispatch()
+  const assetId = row?.original?.id
+  const onClick = useCallback(() => {
+    dispatcher('clicked', 'asset')
+  }, [dispatcher])
+  return (
+    <Link href={`/trade/${assetId}`}>
+      <button onClick={onClick}>
+        <OrderPair>{value}</OrderPair>
+      </button>
+    </Link>
+  )
 }
-
 
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 
@@ -34,46 +43,44 @@ const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 
 function OrderHistory() {
   const { t, lang } = useTranslation('orders')
-  
   const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
-
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-
-  const { data, isLoading, isError } = useQuery(
-    ['tradeHistory', { address: activeWalletAddress }],
-    () => fetchTradeHistoryByAddress(activeWalletAddress),
-    {
-      enabled: !!activeWalletAddress,
+  const isSignedIn = useStore((state) => state.isSignedIn)
+  const { data, isLoading, isError } = useWalletTradeHistory({
+    wallet: { address: activeWalletAddress },
+    options: {
+      enabled: isSignedIn,
       refetchInterval: 3000
     }
-  )
+  })
+
   const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data, lang])
 
   const columns = useMemo(
     () => [
       {
-        Header: t("date"),
+        Header: t('date'),
         accessor: 'date',
         Cell: OrderDateCell
       },
       {
-        Header: t("pair"),
+        Header: t('pair'),
         accessor: 'pair',
         Cell: OrderPairCell
       },
       {
-        Header: t("side"),
+        Header: t('side'),
         accessor: 'side',
         Cell: OrderSideCell
       },
 
       {
-        Header: t("price") + ' (ALGO)',
+        Header: t('price') + ' (ALGO)',
         accessor: 'price',
         Cell: OrderPriceCell
       },
       {
-        Header: t("amount"),
+        Header: t('amount'),
         accessor: 'amount',
         Cell: OrderAmountCell
       }
@@ -87,7 +94,7 @@ function OrderHistory() {
     }
     return (
       <StatusContainer>
-        {isLoading && <BodyCopyTiny color="gray.600">{t("loading")}&hellip;</BodyCopyTiny>}
+        {isLoading && <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>}
         {isError && <BodyCopySm color="gray.400">{t.error}</BodyCopySm>}
       </StatusContainer>
     )

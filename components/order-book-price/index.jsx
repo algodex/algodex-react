@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { ArrowUp, ArrowDown } from 'react-feather'
 import { floatToFixed } from 'services/display'
 import { BodyCopySm } from 'components/type'
+import { convertFromBaseUnits } from 'services/convert'
 
 const Price = styled.p`
   display: flex;
@@ -22,9 +23,7 @@ const Price = styled.p`
   }
 `
 
-function OrderBookPrice(props) {
-  const { price, change } = props
-
+function OrderBookPrice({ price, decimals, change }) {
   const isDecrease = change < 0
   const color = isDecrease ? 'red' : 'green'
 
@@ -32,7 +31,8 @@ function OrderBookPrice(props) {
     if (!price) {
       return '--'
     }
-    return floatToFixed(price)
+
+    return floatToFixed(decimals !== 6 ? convertFromBaseUnits(price, decimals) : price)
   }
 
   const renderChange = () => {

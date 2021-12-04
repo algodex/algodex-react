@@ -1,5 +1,4 @@
-
-import styled from "styled-components";
+import styled from 'styled-components'
 export const IconButton = styled.button`
   cursor: pointer;
   pointer-events: all;
@@ -15,4 +14,3 @@ export const IconButton = styled.button`
     color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
-
