@@ -20,9 +20,7 @@ import AlgoIcon from 'components/icon'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import SvgImage from '../svg-image'
 import { mapToSearchResults } from './helpers'
-// import styled from 'styled-components'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
@@ -57,7 +55,7 @@ const AssetNameCell = ({ value, row }) => {
             <PairSlash>{`/`}</PairSlash>
             <NameVerifiedWrapper>
               ALGO
-              {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />}
+              {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
             </NameVerifiedWrapper>
           </AssetNameBlock>
         </div>

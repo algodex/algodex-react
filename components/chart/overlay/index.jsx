@@ -1,23 +1,27 @@
-import PropTypes from 'prop-types'
-import Big from 'big.js'
-import { floatToFixed } from 'services/display'
-import { Info } from 'react-feather'
 import {
+  Ask,
+  Bid,
+  BidAskSpreadContainer,
   Container,
   Header,
-  TradingPair,
-  OhlcList,
+  IconButton,
   OhlcItem,
-  BidAskSpreadContainer,
-  Bid,
-  Ask,
+  OhlcList,
   Spread,
-  VolumeContainer,
+  TradingPair,
   Volume,
-  IconButton
+  VolumeContainer
 } from './chart-overlay.css'
-import { useUserStore } from '../../../store'
+
+import Big from 'big.js'
+import Icon from '@mdi/react'
+import { Info } from 'react-feather'
+import PropTypes from 'prop-types'
+import { floatToFixed } from 'services/display'
+import { mdiCheckDecagram } from '@mdi/js'
+import theme from '../../../theme'
 import { useCallback } from 'react'
+import { useUserStore } from '../../../store'
 
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
@@ -40,14 +44,21 @@ function ChartOverlay(props) {
   return (
     <Container>
       <Header>
-        <TradingPair>
+        <TradingPair className="flex item-center">
+          <Icon
+            path={mdiCheckDecagram}
+            title="Decagram icon"
+            size={1}
+            color={asset?.verified ? theme.colors.green['500'] : theme.colors.gray['500']}
+          />
           <div>
-            <span>{`${asset.name} `}</span> / ALGO
+            &nbsp;<span>{`${asset.name} `}</span> / ALGO
           </div>
-
-          <IconButton onClick={onClick} type="button">
-            <Info />
-          </IconButton>
+          <div>
+            <IconButton onClick={onClick} type="button">
+              <Info />
+            </IconButton>
+          </div>
         </TradingPair>
         <OhlcList>
           <OhlcItem value={ohlc.open}>

@@ -171,5 +171,4 @@ AssetSearch.propTypes = {
   gridRef: PropTypes.object.isRequired
 }
 
-// export default AssetSearch
 export default withfetchAlgorandPriceQuery(AssetSearch)
