@@ -3,6 +3,7 @@ import { createRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Search from 'components/search'
 import useDebounce from 'hooks/useDebounce'
+import useTranslation from 'next-translate/useTranslation'
 
 function SearchInput(props) {
   const {
@@ -15,7 +16,7 @@ function SearchInput(props) {
     isListingVerifiedAssets,
     setIsListingVerifiedAssets
   } = props
-
+  const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
   const debouncedSearchText = useDebounce(searchText, 500)
 
@@ -64,7 +65,7 @@ function SearchInput(props) {
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
-      placeholder="Search"
+      placeholder={`${t('search')}`}
       isListingVerifiedAssets={isListingVerifiedAssets}
       setIsListingVerifiedAssets={setIsListingVerifiedAssets}
     />

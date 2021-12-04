@@ -9,6 +9,7 @@ import TextInput from 'components/text-input'
 import { forwardRef } from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
+import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
   display: flex;
@@ -65,6 +66,7 @@ const Input = styled(TextInput)`
 
 const Search = forwardRef(
   ({ isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, ...props }, ref) => {
+    const { t } = useTranslation('assets')
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onCancel()
@@ -101,7 +103,7 @@ const Search = forwardRef(
             isChecked={isListingVerifiedAssets}
             onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
           />
-          <p className="mx-1.5 my-0 text-xs">View Verified Assets Only</p>
+          <p className="mx-1.5 my-0 text-xs">{t('view-verified-asset')}</p>
           <Icon
             path={mdiCheckDecagram}
             title="Checkbox icon"
