@@ -1,5 +1,5 @@
 module.exports = {
-  purge:  ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
@@ -40,11 +40,15 @@ module.exports = {
           800: '#822727',
           900: '#63171B'
         }
+      },
+      backgroundImage: {
+        unauthorized: "url('/unauthorized.png')",
+        'unauthorized-mobile': "url('/m-unauthorized.png')"
       }
-    },
+    }
   },
   variants: {
-    extend: {},
+    extend: {}
   },
-  plugins: [],
+  plugins: []
 }
