@@ -1,5 +1,3 @@
-import { mdiCheckDecagram, mdiMagnify } from '@mdi/js'
-
 // import { X as CancelIcon, Search as _Search } from 'react-feather'
 import { X as CancelIcon } from 'react-feather'
 import Checkbox from 'components/checkbox'
@@ -7,6 +5,7 @@ import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import TextInput from 'components/text-input'
 import { forwardRef } from 'react'
+import { mdiMagnify } from '@mdi/js'
 import styled from 'styled-components'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
