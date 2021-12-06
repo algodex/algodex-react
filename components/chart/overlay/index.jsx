@@ -45,12 +45,14 @@ function ChartOverlay(props) {
     <Container>
       <Header>
         <TradingPair className="flex item-center">
-          <Icon
-            path={mdiCheckDecagram}
-            title="Decagram icon"
-            size={1}
-            color={asset?.verified ? theme.colors.green['500'] : theme.colors.gray['500']}
-          />
+          {asset?.verified && (
+            <Icon
+              path={mdiCheckDecagram}
+              title="Verified Asset"
+              size={0.7}
+              color={theme.colors.gray['500']}
+            />
+          )}
           <div>
             &nbsp;<span>{`${asset.name} `}</span> / ALGO
           </div>

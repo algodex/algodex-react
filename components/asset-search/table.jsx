@@ -26,16 +26,6 @@ import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
 
-// const Text = styled(BodyCopyTiny)`
-//   display: flex;
-//   align-items: center;
-//   margin: 0;
-//   color: ${({ theme }) => theme.colors.gray['500']};
-
-//   svg {
-//     margin-left: 0.25rem;
-//   }
-// `
 const Loading = () => {
   const { t } = useTranslation('assets')
   return <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
@@ -64,12 +54,14 @@ const AssetNameCell = ({ value, row }) => {
           <div className="mr-1">
             <AssetId>{row.original.id}</AssetId>
           </div>
-          <Icon
-            path={mdiCheckDecagram}
-            title="Decagram icon"
-            size={0.5}
-            color={row.original.verified ? theme.colors.green['500'] : theme.colors.gray['500']}
-          />
+          {row.original.verified && (
+            <Icon
+              path={mdiCheckDecagram}
+              title="Decagram icon"
+              size={0.5}
+              color={theme.colors.gray['500']}
+            />
+          )}
         </div>
       </div>
     </div>
@@ -227,7 +219,7 @@ const AssetSearchTable = ({
   }
 
   const handleFavouritesFn = (id) => {
-    return favouritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['500']
+    return favouritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
   }
 
   const renderTableData = (cell, idx) => {

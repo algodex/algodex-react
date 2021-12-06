@@ -104,12 +104,6 @@ const Search = forwardRef(
             onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
           />
           <p className="mx-1.5 my-0 text-xs">{t('view-verified-asset')}</p>
-          <Icon
-            path={mdiCheckDecagram}
-            title="Checkbox icon"
-            size={0.7}
-            color={isListingVerifiedAssets ? theme.colors.green['500'] : theme.colors.gray['500']}
-          />
         </div>
       </div>
     )
