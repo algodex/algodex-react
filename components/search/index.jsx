@@ -64,7 +64,10 @@ const Input = styled(TextInput)`
 `
 
 const Search = forwardRef(
-  ({ isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, ...props }, ref) => {
+  (
+    { isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, isActive, ...props },
+    ref
+  ) => {
     const { t } = useTranslation('assets')
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -97,7 +100,7 @@ const Search = forwardRef(
             </CancelButton>
           )}
         </Container>
-        <div className="flex items-center ml-6">
+        <div className={`${isActive ? '' : 'xs:invisible'} visible flex items-center ml-6`}>
           <Checkbox
             isChecked={isListingVerifiedAssets}
             onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
@@ -114,7 +117,8 @@ Search.propTypes = {
   placeholder: PropTypes.string,
   onCancel: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
-  setIsListingVerifiedAssets: PropTypes.func
+  setIsListingVerifiedAssets: PropTypes.func,
+  isActive: PropTypes.bool
 }
 
 Search.defaultProps = {

@@ -62,6 +62,7 @@ function SearchInput(props) {
     <Search
       ref={inputRef}
       value={searchText}
+      isActive={isActive}
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
