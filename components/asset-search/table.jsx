@@ -20,7 +20,7 @@ import AlgoIcon from 'components/icon'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { flatten } from "lodash";
+import { flatten } from 'lodash'
 import { mapToSearchResults } from './helpers'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
@@ -161,7 +161,6 @@ const AssetSearchTable = ({
         Cell: AssetNameCell
       },
       {
-        // Header: function price() {
         Header: () => {
           return (
             <div className="inline-flex">
