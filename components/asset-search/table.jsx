@@ -14,12 +14,13 @@ import {
 import { BodyCopySm, BodyCopyTiny } from '../type'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useEffect, useMemo } from 'react'
-import { useSortBy, useTable } from 'react-table'
+import { useRowSelect, useSortBy, useTable } from 'react-table'
 
 import AlgoIcon from 'components/icon'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { flatten } from "lodash";
 import { mapToSearchResults } from './helpers'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
@@ -100,7 +101,9 @@ const AssetSearchTable = ({
   onAssetClick,
   assets,
   isListingVerifiedAssets,
-  algoPrice
+  algoPrice,
+  isFilteringByFavourites,
+  setIsFilteringByFavourites
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -118,12 +121,18 @@ const AssetSearchTable = ({
       return []
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
-      return assets.filter((asset) => asset.verified)
+      return assets.filter((asset) => asset.verified).map(mapToSearchResults)
+    } else if (isFilteringByFavourites) {
+      // Filter assets by favourites
+      const result = Object.keys(favouritesState).map((assetId) => {
+        return assets.filter((asset) => asset.assetId == parseInt(assetId, 10))
+      })
+      return flatten(result).map(mapToSearchResults)
     } else {
       // If there is data, use it
       return assets.map(mapToSearchResults)
     }
-  }, [assets, isListingVerifiedAssets])
+  }, [assets, isListingVerifiedAssets, isFilteringByFavourites])
 
   /**
    * React-Table Columns
@@ -133,10 +142,11 @@ const AssetSearchTable = ({
   const columns = useMemo(
     () => [
       {
-        Header: function pair() {
+        Header: () => {
           return (
             <div className="inline-flex">
               <Icon
+                onClick={(e) => filterByFavouritesFn(e)}
                 className="mr-1"
                 path={mdiStar}
                 title="Checkbox icon"
@@ -151,7 +161,8 @@ const AssetSearchTable = ({
         Cell: AssetNameCell
       },
       {
-        Header: function price() {
+        // Header: function price() {
+        Header: () => {
           return (
             <div className="inline-flex">
               {t('price')}
@@ -163,15 +174,20 @@ const AssetSearchTable = ({
         Cell: AssetPriceCell
       },
       {
-        Header: function change() {
+        Header: () => {
           return <div className="inline-flex">{t('change')}</div>
         },
         accessor: 'change',
         Cell: AssetChangeCell
       }
     ],
-    [lang]
+    [lang, isFilteringByFavourites]
   )
+
+  const filterByFavouritesFn = (e) => {
+    e.stopPropagation()
+    setIsFilteringByFavourites(!isFilteringByFavourites)
+  }
 
   /**
    *
@@ -208,7 +224,8 @@ const AssetSearchTable = ({
       autoResetSortBy: false,
       initialState: searchState
     },
-    useSortBy
+    useSortBy,
+    useRowSelect
   )
   useEffect(() => {
     setSearchState(tableState)
@@ -330,6 +347,8 @@ AssetSearchTable.propTypes = {
   onAssetLeave: PropTypes.func,
   onAssetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
-  algoPrice: PropTypes.any
+  algoPrice: PropTypes.any,
+  isFilteringByFavourites: PropTypes.bool,
+  setIsFilteringByFavourites: PropTypes.func
 }
 export default withSearchResultsQuery(AssetSearchTable, { loading: Loading, error: Error })
