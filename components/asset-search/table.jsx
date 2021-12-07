@@ -151,7 +151,9 @@ const AssetSearchTable = ({
                 path={mdiStar}
                 title="Checkbox icon"
                 size={0.5}
-                color={theme.colors.gray['500']}
+                color={
+                  isFilteringByFavourites ? theme.colors.amber['400'] : theme.colors.gray['500']
+                }
               />
               {t('pair')}
             </div>
