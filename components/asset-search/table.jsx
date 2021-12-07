@@ -58,7 +58,7 @@ const AssetNameCell = ({ value, row }) => {
           {row.original.verified && (
             <Icon
               path={mdiCheckDecagram}
-              title="Decagram icon"
+              title="Verified asset"
               size={0.5}
               color={theme.colors.gray['500']}
             />
@@ -149,7 +149,7 @@ const AssetSearchTable = ({
                 onClick={(e) => filterByFavouritesFn(e)}
                 className="mr-1"
                 path={mdiStar}
-                title="Checkbox icon"
+                title="View favourited items"
                 size={0.5}
                 color={
                   isFilteringByFavourites ? theme.colors.amber['400'] : theme.colors.gray['500']
@@ -257,7 +257,7 @@ const AssetSearchTable = ({
             tabIndex={0}
             className="mr-1"
             path={mdiStar}
-            title="Star icon"
+            title="Favourite item"
             size={0.5}
             color={handleFavouritesFn(cell?.row?.original?.id)}
           />
