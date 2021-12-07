@@ -1,14 +1,14 @@
 {
-    "search": "Keresés",
-    "pair": "PÁR",
-    "price": "ÁR",
-    "change": "Változás",
-    "24-hr-change": "24 órás változás",
-    "liquidity": "Likviditás",
-    "loading": "BETÖLTÉS",
-    "back-to-chart": "Vissza a grafikonra",
-    "description": "Leírás",
-    "circulating-supply": "Kibocsátott Mennyiség",
-    "total-supply": "Összes Mennyiség",
-    "view-verified-asset": "Csak ellenőrzött eszközök megtekintése"
+  "search": "Keresés",
+  "pair": "PÁR",
+  "price": "ÁR",
+  "change": "Változás",
+  "24-hr-change": "24 órás változás",
+  "liquidity": "Likviditás",
+  "loading": "BETÖLTÉS",
+  "back-to-chart": "Vissza a grafikonra",
+  "description": "Leírás",
+  "circulating-supply": "Kibocsátott Mennyiség",
+  "total-supply": "Összes Mennyiség",
+  "view-verified-asset": "Csak ellenőrzött eszközök megtekintése"
 }

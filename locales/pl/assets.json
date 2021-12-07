@@ -9,5 +9,6 @@
     "back-to-chart": "Powrót do wykresu",
     "description": "Opis",
     "circulating-supply": "Podaż w obiegu",
-    "total-supply": "Całkowita podaż"
+    "total-supply": "Całkowita podaż",
+    "view-verified-asset": "Wyświetl tylko zweryfikowane zasoby"
 }
