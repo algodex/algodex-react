@@ -1,0 +1,8 @@
+{
+  "connect-wallet-button": "지갑 연결 ",
+  "connect-another-wallet-button": "다른 지갑 연결 ",
+  "wallet": "지갑",
+  "balance": "잔액",
+  "start-by": "   알고랜드 지갑(Algorand wallet)을 연결하여 시작하기 ",
+  "once-connected": "마이알고(MyAlgo)를 사용하여 지갑을 연결하면 거래를 시작할 수 있습니다 "
+}

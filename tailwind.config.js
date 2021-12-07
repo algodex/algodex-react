@@ -56,6 +56,10 @@ module.exports = {
           800: '#822727',
           900: '#63171B'
         }
+      },
+      backgroundImage: {
+        unauthorized: "url('/unauthorized.png')",
+        'unauthorized-mobile': "url('/m-unauthorized.png')"
       }
     }
   },

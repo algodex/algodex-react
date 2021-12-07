@@ -1,0 +1,16 @@
+{
+    "header-about": "소개",
+    "header-trade": "거래",
+    "header-docs": "문서",
+    "header-support": "지원",
+    "price": "가격",
+    "amount": "수량",
+    "total": "합계",
+    "time": "시간",
+    "no-trades-completed": "거래가 완료되지 않았습니다.  ",
+    "mobilefooter-CHART":"차트",
+    "mobilefooter-BOOK":"오더북 ",
+    "mobilefooter-TRADE":"거래",
+    "mobilefooter-ORDERS":"주문",
+    "mobilefooter-WALLET":"지갑"
+}
