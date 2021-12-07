@@ -14,11 +14,11 @@ const userState = (set, get) => ({
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *
    */
-  favourites: {},
+  favorites: {},
 
   setFavourite: (assetId) => {
     set({
-      favourites: [assetId].reduce((previous, asset) => {
+      favorites: [assetId].reduce((previous, asset) => {
         // If asset does not exist
         if (previous[asset] === undefined) {
           previous[asset] = true
@@ -28,7 +28,7 @@ const userState = (set, get) => ({
         }
 
         return previous
-      }, get().favourites)
+      }, get().favorites)
     })
   },
   /**

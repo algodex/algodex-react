@@ -46,7 +46,7 @@ function AssetSearch({ gridRef, algoPrice }) {
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
-  const [isFilteringByFavourites, setIsFilteringByFavourites] = useState(false)
+  const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
 
   /**
@@ -159,8 +159,8 @@ function AssetSearch({ gridRef, algoPrice }) {
             algoPrice={algoPrice}
             isListingVerifiedAssets={isListingVerifiedAssets}
             setIsListingVerifiedAssets={setIsListingVerifiedAssets}
-            isFilteringByFavourites={isFilteringByFavourites}
-            setIsFilteringByFavourites={setIsFilteringByFavourites}
+            isFilteringByFavorites={isFilteringByFavorites}
+            setIsFilteringByFavorites={setIsFilteringByFavorites}
           />
         </div>
       </AssetsContainer>

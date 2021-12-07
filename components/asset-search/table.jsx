@@ -102,13 +102,13 @@ const AssetSearchTable = ({
   assets,
   isListingVerifiedAssets,
   algoPrice,
-  isFilteringByFavourites,
-  setIsFilteringByFavourites
+  isFilteringByFavorites,
+  setIsFilteringByFavorites
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
-  const favouritesState = useUserStore((state) => state.favourites)
+  const favoritesState = useUserStore((state) => state.favorites)
   const { t, lang } = useTranslation('assets')
 
   /**
@@ -122,9 +122,9 @@ const AssetSearchTable = ({
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
       return assets.filter((asset) => asset.verified).map(mapToSearchResults)
-    } else if (isFilteringByFavourites) {
-      // Filter assets by favourites
-      const result = Object.keys(favouritesState).map((assetId) => {
+    } else if (isFilteringByFavorites) {
+      // Filter assets by favorites
+      const result = Object.keys(favoritesState).map((assetId) => {
         return assets.filter((asset) => asset.assetId == parseInt(assetId, 10))
       })
       return flatten(result).map(mapToSearchResults)
@@ -132,7 +132,7 @@ const AssetSearchTable = ({
       // If there is data, use it
       return assets.map(mapToSearchResults)
     }
-  }, [assets, isListingVerifiedAssets, isFilteringByFavourites])
+  }, [assets, isListingVerifiedAssets, isFilteringByFavorites])
 
   /**
    * React-Table Columns
@@ -146,13 +146,13 @@ const AssetSearchTable = ({
           return (
             <div className="inline-flex">
               <Icon
-                onClick={(e) => filterByFavouritesFn(e)}
+                onClick={(e) => filterByFavoritesFn(e)}
                 className="mr-1"
                 path={mdiStar}
                 title="View favourited items"
                 size={0.5}
                 color={
-                  isFilteringByFavourites ? theme.colors.amber['400'] : theme.colors.gray['500']
+                  isFilteringByFavorites ? theme.colors.amber['400'] : theme.colors.gray['500']
                 }
               />
               {t('pair')}
@@ -182,12 +182,12 @@ const AssetSearchTable = ({
         Cell: AssetChangeCell
       }
     ],
-    [lang, isFilteringByFavourites]
+    [lang, isFilteringByFavorites]
   )
 
-  const filterByFavouritesFn = (e) => {
+  const filterByFavoritesFn = (e) => {
     e.stopPropagation()
-    setIsFilteringByFavourites(!isFilteringByFavourites)
+    setIsFilteringByFavorites(!isFilteringByFavorites)
   }
 
   /**
@@ -232,12 +232,12 @@ const AssetSearchTable = ({
     setSearchState(tableState)
   }, [tableState, setSearchState])
 
-  const toggleFavouritesFn = (assetId) => {
+  const toggleFavoritesFn = (assetId) => {
     toggleFavourite(assetId)
   }
 
-  const handleFavouritesFn = (id) => {
-    return favouritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
+  const handleFavoritesFn = (id) => {
+    return favoritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
   }
 
   const renderTableData = (cell, idx) => {
@@ -252,14 +252,14 @@ const AssetSearchTable = ({
         >
           <Icon
             role="button"
-            onClick={() => toggleFavouritesFn(cell?.row.original?.id)}
-            onKeyDown={() => toggleFavouritesFn(cell?.row.original?.id)}
+            onClick={() => toggleFavoritesFn(cell?.row.original?.id)}
+            onKeyDown={() => toggleFavoritesFn(cell?.row.original?.id)}
             tabIndex={0}
             className="mr-1"
             path={mdiStar}
             title="Favourite item"
             size={0.5}
-            color={handleFavouritesFn(cell?.row?.original?.id)}
+            color={handleFavoritesFn(cell?.row?.original?.id)}
           />
           {cell.render('Cell')}
         </td>
@@ -349,7 +349,7 @@ AssetSearchTable.propTypes = {
   onAssetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,
-  isFilteringByFavourites: PropTypes.bool,
-  setIsFilteringByFavourites: PropTypes.func
+  isFilteringByFavorites: PropTypes.bool,
+  setIsFilteringByFavorites: PropTypes.func
 }
 export default withSearchResultsQuery(AssetSearchTable, { loading: Loading, error: Error })
