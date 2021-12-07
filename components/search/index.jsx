@@ -102,7 +102,7 @@ const Search = forwardRef(
             isChecked={isListingVerifiedAssets}
             onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
           />
-          <p className="mx-1.5 my-0 text-xs">{t('view-verified-asset')}</p>
+          <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
         </div>
       </div>
     )
