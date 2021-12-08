@@ -20,7 +20,7 @@ import {
 } from './wallet.css'
 
 function WalletView(props) {
-  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
+  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onConnectClickIntegration, onSetActiveWallet, walletConnectAddresses } = props
 
   const { t } = useTranslation("wallet");
 
@@ -89,8 +89,16 @@ function WalletView(props) {
     ))
   }
 
+  // Pass in different connect methods depending on wallet providers
   const getButtonState = () => {
     onConnectClick()
+  }
+
+  const getButtonIntegrationState = () => {
+    console.log("eric Hit")
+    onConnectClickIntegration()
+    console.log(walletConnectAddresses)
+    // console.log(walletConnectAddresses.connector["_accounts"][0])
   }
 
   const WalletButtonText = wallets.length > 0 ? t("connect-another-wallet-button") : t("connect-wallet-button");
@@ -105,6 +113,14 @@ function WalletView(props) {
         >
           {WalletButtonText}
         </Button>
+        <Button
+          variant={getButtonVariant()}
+          onClick={getButtonIntegrationState}
+          data-testid="connect-wallet-btn"
+        >
+          WalletConnectIntegrationButton
+        </Button>
+
       </ButtonContainer>
       {isSignedIn ? (
         <>

@@ -39,7 +39,7 @@ const DEMO_ORDER_HISTORY_DATA = demoOrderHistoryData
 const DEMO_ASSETS_DATA = demoAssetsData
 
 function MainLayout(props) {
-  const { onWalletConnect, refetchWallets } = props
+  const { onWalletConnect, refetchWallets, onWalletConnectIntegration, walletConnectAddresses } = props
   const { t } = useTranslation("common");
   const asset = useStore((state) => state.asset)
   const isSignedIn = useStore((state) => state.isSignedIn)
@@ -85,8 +85,9 @@ function MainLayout(props) {
         </MobilePriceSection> */}
 
         <WalletSection active={activeMobile === TABS.WALLET}>
-          <Wallet onWalletConnect={onWalletConnect} />
+          <Wallet onWalletConnect={onWalletConnect} onWalletConnectIntegration={onWalletConnectIntegration} walletConnectAddresses={walletConnectAddresses} />
         </WalletSection>
+    
         <TradeSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder refetchWallets={refetchWallets} />
         </TradeSection>

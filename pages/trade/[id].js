@@ -10,6 +10,7 @@ import Header from 'components/header'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
 import useMyAlgo from 'hooks/use-my-algo'
+import useWalletConnect from 'hooks/use-wallet-connect'
 import useStore, { useStorePersisted } from 'store/use-store'
 import { checkTestnetAccess } from 'lib/api'
 import Cookies from 'cookies'
@@ -30,7 +31,17 @@ export default function Home() {
     }
   }, [id, isValidId, router])
 
+
+
+  
+  const { walletConnect, walletConnectAddresses, walletConnection } = useWalletConnect()
+
+  // walletConnect()
+ 
+
+
   const { connect, addresses } = useMyAlgo()
+
 
   const wallets = useStorePersisted((state) => state.wallets)
   const setWallets = useStorePersisted((state) => state.setWallets)
@@ -48,6 +59,7 @@ export default function Home() {
     if (!!addresses) {
       return addresses
     }
+
     return !!wallets ? wallets.map((w) => w.address) : []
   }, [addresses, wallets, adminWalletAddr])
 
@@ -55,6 +67,14 @@ export default function Home() {
   const walletsQuery = useQuery('wallets', () => WalletService.fetchWallets(walletAddresses), {
     refetchInterval: 5000
   })
+
+  const walletsIntegrationQuery = useQuery('wallets', () => WalletService.fetchWallets(walletConnectAddresses), {
+    refetchInterval: 5000
+
+  })
+
+  
+  console.log({walletAddresses})
 
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
@@ -134,6 +154,8 @@ export default function Home() {
     // We listen to the resize event
     window.addEventListener('resize', resize)
 
+    // walletConnect()
+
     return () => window.removeEventListener('resize', resize)
   }, [])
 
@@ -160,7 +182,7 @@ export default function Home() {
       )
     }
 
-    return <MainLayout onWalletConnect={connect} refetchWallets={walletsQuery.refetch} />
+    return <MainLayout onWalletConnect={connect} onWalletConnectIntegration={walletConnect} walletConnectAddresses={walletConnection} refetchWallets={walletsQuery.refetch} />
   }
 
   return (
