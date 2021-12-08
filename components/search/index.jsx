@@ -14,7 +14,7 @@ const Container = styled.div`
   display: flex;
   position: relative;
   height: 51px;
-  border: solid 1px ${({ theme }) => theme.colors.gray['500']};
+  border: solid 1px ${({ theme }) => theme.colors.gray['700']};
   border-radius: 4px;
   // margin: 0 2rem;
 

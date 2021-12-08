@@ -8,7 +8,7 @@ const Checkbox = ({ isChecked, onCheckFn, classProps }) => {
       onChange={onCheckFn}
       className={`${classProps} ${
         !isChecked ? 'appearance-none' : ''
-      } border border-gray-500 w-3.5 h-3.5 checked:bg-blue-600 checked:border-transparent`}
+      } border border-gray-700 w-3.5 h-3.5 checked:bg-blue-600 checked:border-transparent`}
     />
   )
 }
