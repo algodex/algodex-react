@@ -14,7 +14,7 @@ import {
 } from './header.css'
 
 import ActiveLink from 'components/active-link'
-import AssetSearch from "../asset-search";
+// import AssetSearch from "../asset-search";
 /* eslint-disable */
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
