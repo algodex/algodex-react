@@ -44,3 +44,6 @@ yarn-error.log*
 
 # NPM Config for Algodex private repo
 .npmrc
+
+# Remove package lock
+package-lock.json
