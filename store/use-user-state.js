@@ -1,5 +1,5 @@
-import { createStore } from './use-store'
 import _ from 'lodash'
+import { createStore } from './use-store'
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
@@ -10,6 +10,27 @@ const userState = (set, get) => ({
    * This list is composed of a Algodex Assets Query and
    */
   assets: {},
+  /**
+   * Favourite should be a reduced list keyed by Asset ID and UserID
+   *
+   */
+  favorites: {},
+
+  setFavourite: (assetId) => {
+    set({
+      favorites: [assetId].reduce((previous, asset) => {
+        // If asset does not exist
+        if (previous[asset] === undefined) {
+          previous[asset] = true
+        } else {
+          // Delete item if it has been added previously
+          delete previous[asset]
+        }
+
+        return previous
+      }, get().favorites)
+    })
+  },
   /**
    * Add Assets
    *

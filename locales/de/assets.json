@@ -9,5 +9,6 @@
     "back-to-chart": "Zurück zum Chart",
     "description": "Beschreibung",
     "circulating-supply": "Menge im Umlauf",
-    "total-supply": "Gesamtmenge"
+    "total-supply": "Gesamtmenge",
+    "view-verified-asset": "Nur bestätigte Assets anzeigen"
 }

@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types, react/jsx-key  */
-import { useState, useEffect, useRef, useCallback } from 'react'
-import PropTypes from 'prop-types'
-import useUserStore from 'store/use-user-state'
-import SearchInput from './search'
-import InfoFlyover from './info-flyover'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import AssetSearchTable from 'components/asset-search/table'
-import styled from 'styled-components'
+import InfoFlyover from './info-flyover'
+import PropTypes from 'prop-types'
+import SearchInput from './search'
 import { rgba } from 'polished'
+import styled from 'styled-components'
+import useUserStore from 'store/use-user-state'
+import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -40,17 +42,18 @@ export const AssetsContainer = styled.div`
     box-shadow: none;
   }
 `
-function AssetSearch({ gridRef }) {
+function AssetSearch({ gridRef, algoPrice }) {
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
-  // const [query, setQuery] = useState('')
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
+  const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
+  const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
-  const [isActive, setIsActive] = useState(false)
+  const [isActive, setIsActive] = useState(true)
   const [searchHeight, setSearchHeight] = useState(0)
   const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -127,9 +130,14 @@ function AssetSearch({ gridRef }) {
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize])
   return (
-    <Container isActive={isActive}>
-      <AssetsContainer ref={containerRef} gridHeight={gridSize.height}>
-        <div ref={searchRef}>
+    <Container style={{ minHeight: '4rem' }} isActive={isActive}>
+      <AssetsContainer
+        style={{ width: '100%' }}
+        className="flex"
+        ref={containerRef}
+        gridHeight={gridSize.height}
+      >
+        <div style={{ width: '100%' }} ref={searchRef}>
           <SearchInput
             initialText={query}
             onChange={(q) => setQuery(q)}
@@ -137,15 +145,24 @@ function AssetSearch({ gridRef }) {
             onExternalClick={handleExternalClick}
             containerRef={containerRef}
             isActive={isActive}
+            isListingVerifiedAssets={isListingVerifiedAssets}
+            setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           />
         </div>
-        <AssetSearchTable
-          query={query}
-          options={{ refetchInterval: 5000 }}
-          onAssetClick={handleAssetClick}
-          onAssetFocus={handleAssetFocus}
-          onAssetLeave={handleAssetLeave}
-        />
+        <div className="mt-1.5" style={{ borderTop: 'solid 1px #2D3748' }}>
+          <AssetSearchTable
+            query={query}
+            options={{ refetchInterval: 5000 }}
+            onAssetClick={handleAssetClick}
+            onAssetFocus={handleAssetFocus}
+            onAssetLeave={handleAssetLeave}
+            algoPrice={algoPrice}
+            isListingVerifiedAssets={isListingVerifiedAssets}
+            setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+            isFilteringByFavorites={isFilteringByFavorites}
+            setIsFilteringByFavorites={setIsFilteringByFavorites}
+          />
+        </div>
       </AssetsContainer>
       <InfoFlyover assetInfo={assetInfo} searchHeight={searchHeight} />
     </Container>
@@ -156,4 +173,4 @@ AssetSearch.propTypes = {
   gridRef: PropTypes.object.isRequired
 }
 
-export default AssetSearch
+export default withfetchAlgorandPriceQuery(AssetSearch)

@@ -1,11 +1,22 @@
-import { useState, useEffect, createRef } from 'react'
+import { createRef, useEffect, useState } from 'react'
+
 import PropTypes from 'prop-types'
 import Search from 'components/search'
 import useDebounce from 'hooks/useDebounce'
+import useTranslation from 'next-translate/useTranslation'
 
 function SearchInput(props) {
-  const { initialText, onChange, onSearchFocus, onExternalClick, containerRef, isActive } = props
-
+  const {
+    initialText,
+    onChange,
+    onSearchFocus,
+    onExternalClick,
+    containerRef,
+    isActive,
+    isListingVerifiedAssets,
+    setIsListingVerifiedAssets
+  } = props
+  const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
   const debouncedSearchText = useDebounce(searchText, 500)
 
@@ -51,10 +62,13 @@ function SearchInput(props) {
     <Search
       ref={inputRef}
       value={searchText}
+      isActive={isActive}
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
-      placeholder="Search"
+      placeholder={`${t('search')}`}
+      isListingVerifiedAssets={isListingVerifiedAssets}
+      setIsListingVerifiedAssets={setIsListingVerifiedAssets}
     />
   )
 }
@@ -67,7 +81,9 @@ SearchInput.propTypes = {
   onSearchFocus: PropTypes.func,
   onExternalClick: PropTypes.func,
   containerRef: PropTypes.object,
-  isActive: PropTypes.bool
+  isActive: PropTypes.bool,
+  isListingVerifiedAssets: PropTypes.bool,
+  setIsListingVerifiedAssets: PropTypes.func
 }
 
 export default SearchInput

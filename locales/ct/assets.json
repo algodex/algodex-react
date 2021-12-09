@@ -9,5 +9,6 @@
     "back-to-chart": "Tornar al gràfic",
     "description": "Description",
     "circulating-supply": "Subministrament circulant",
-    "total-supply": "Subministrament total"
+    "total-supply": "Subministrament total",
+    "view-verified-asset": "Mostra només els actius verificats"
 }

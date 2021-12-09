@@ -9,5 +9,6 @@
     "back-to-chart": "Ritorna al grafico",
     "description": "Descrizione",
     "circulating-supply": "Ammontare circolante",
-    "total-supply": "Ammontare totale"
+    "total-supply": "Ammontare totale",
+    "view-verified-asset": "Visualizza solo asset verificati"
 }

@@ -34,6 +34,8 @@
     "styled-components": "^5"
   },
   "dependencies": {
+    "@mdi/js": "^6.5.95",
+    "@mdi/react": "^1.5.0",
     "@algodex/algodex-sdk": "^1.0.79",
     "@randlabs/myalgo-connect": "^1.0.1",
     "@sentry/nextjs": "^6.11.0",

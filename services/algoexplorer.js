@@ -3,11 +3,13 @@ import { indexerAssetMap } from './algorand'
 export const EXPLORER_API = process.env.NEXT_EXPLORER_API || 'https://testnet.algoexplorerapi.io'
 export const EXPLORER_INDEXER_API =
   process.env.NEXT_EXPLORER_INDEXER_API || 'https://indexer.testnet.algoexplorerapi.io'
+export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/algo-usd'
 
 console.debug('NEXT_EXPLORER_API: ' + process.env.NEXT_EXPLORER_API)
 console.debug('EXPLORER_API: ' + EXPLORER_API)
 console.debug('NEXT_EXPLORER_INDEXER_API: ' + process.env.NEXT_EXPLORER_INDEXER_API)
 console.debug('EXPLORER_INDEXER_API: ' + EXPLORER_INDEXER_API)
+console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
 
 /**
  * @see https://testnet.algoexplorerapi.io/idx2/v2/assets/185
@@ -137,4 +139,16 @@ export async function fetchAssetInfoV2(id) {
     data: { asset }
   } = await axios.get(`${EXPLORER_INDEXER_API}/v2/assets/${id}?include-all=true`)
   return toExplorerAssetV2(asset)
+}
+
+/**
+ * Get Algorand price
+ *
+ * Retrieve price of Algorand from the Algorand Indexer
+ *
+ * @see https://price.algoexplorerapi.io/price/algo-usd
+ */
+export async function fetchAlgorandPrice() {
+  const { data } = await axios.get(`${EXPLORER_ALGORAND_PRICE}`)
+  return { algoPrice: data.price }
 }
