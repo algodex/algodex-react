@@ -15,7 +15,7 @@ import {
 import { BodyCopySm, BodyCopyTiny } from '../type'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useEffect, useMemo } from 'react'
-import { useRowSelect, useSortBy, useTable } from 'react-table'
+import { useRowSelect, useSortBy, useTable, useFlexLayout } from 'react-table'
 
 import AlgoIcon from 'components/icon'
 import Icon from '@mdi/react'
@@ -161,6 +161,9 @@ const AssetSearchTable = ({
           )
         },
         accessor: 'name',
+        minWidth: 35,
+        width: 35,
+        maxWidth: 35,
         Cell: AssetNameCell
       },
       {
@@ -173,6 +176,9 @@ const AssetSearchTable = ({
           )
         },
         accessor: 'price',
+        minWidth: 35,
+        width: 35,
+        maxWidth: 35,
         Cell: AssetPriceCell
       },
       {
@@ -180,6 +186,9 @@ const AssetSearchTable = ({
           return <div className="inline-flex">{t('change')}</div>
         },
         accessor: 'change',
+        minWidth: 35,
+        width: 35,
+        maxWidth: 35,
         Cell: AssetChangeCell
       }
     ],
@@ -227,7 +236,8 @@ const AssetSearchTable = ({
       initialState: searchState
     },
     useSortBy,
-    useRowSelect
+    useRowSelect,
+    useFlexLayout
   )
   useEffect(() => {
     setSearchState(tableState)
@@ -244,7 +254,17 @@ const AssetSearchTable = ({
   const renderTableData = (cell, idx) => {
     if (idx === 0) {
       return (
-        <TableData className="flex item-center" key={idx}>
+        <TableData
+          role="cell"
+          className="flex item-center" 
+          key={idx}
+          style={{
+            boxSizing: 'border-box',
+            flex: '35 0 auto',
+            minWidth: '35px',
+            width: '35px'
+          }}
+        >
           <Icon
             role="button"
             onClick={() => toggleFavoritesFn(cell?.row.original?.id)}
