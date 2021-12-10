@@ -246,7 +246,9 @@ const AssetSearchTable = ({
         <td
           className="flex item-center"
           style={{
-            borderRight: 'solid 1px #2D3747'
+            borderRight: 'solid 1px #2D3747',
+            width: '10rem',
+            maxWidth: '10rem'
           }}
           key={idx}
         >
@@ -268,7 +270,9 @@ const AssetSearchTable = ({
       return (
         <td
           style={{
-            borderRight: 'solid 1px #2D3747'
+            borderRight: 'solid 1px #2D3747',
+            width: '10rem',
+            maxWidth: '10rem'
           }}
           key={idx}
           {...cell.getCellProps()}
@@ -282,7 +286,9 @@ const AssetSearchTable = ({
       return (
         <td
           style={{
-            borderRight: 'solid 1px #2D3747'
+            borderRight: 'solid 1px #2D3747',
+            width: '10rem',
+            maxWidth: '10rem'
           }}
           key={idx}
           {...cell.getCellProps()}
