@@ -12,6 +12,7 @@ import {
   NavTextSm,
   Navigation
 } from './header.css'
+import theme from '../../theme'
 
 import ActiveLink from 'components/active-link'
 // import AssetSearch from "../asset-search";
@@ -55,7 +56,7 @@ export default function Header() {
   const { t } = useTranslation('common')
 
   return (
-    <Container data-testid="header-container">
+    <Container className="flex" data-testid="header-container">
       <Link href="/">
         <a>
           <InlineLogo src="/logo-inline-dark.svg" />
@@ -139,6 +140,16 @@ export default function Header() {
               ))}
           </LanguageDropDown>
         </LanguagesContainer>
+        <div style={{
+          background: theme.colors.gray['700'],
+          padding: '0.3rem 0.5rem',
+          borderRadius: '3px',
+        }}>
+          <NavTextSm>
+            EN<Flag countryCode="US" svg />
+          </NavTextSm>
+        </div> &nbsp;&nbsp;&nbsp;
+        
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
