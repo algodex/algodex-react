@@ -230,3 +230,9 @@ export const TableContainer = styled.div`
     }
   }
 `
+
+export const TableData = styled.td`
+  border-right: solid 1px #2d3747;
+  width: 10rem;
+  max-width: 10rem;
+`

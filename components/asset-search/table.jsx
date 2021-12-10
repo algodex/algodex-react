@@ -9,7 +9,8 @@ import {
   SortIcon,
   TableContainer,
   TableHeader,
-  TableWrapper
+  TableWrapper,
+  TableData
 } from './asset-search.css'
 import { BodyCopySm, BodyCopyTiny } from '../type'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
@@ -243,15 +244,7 @@ const AssetSearchTable = ({
   const renderTableData = (cell, idx) => {
     if (idx === 0) {
       return (
-        <td
-          className="flex item-center"
-          style={{
-            borderRight: 'solid 1px #2D3747',
-            width: '10rem',
-            maxWidth: '10rem'
-          }}
-          key={idx}
-        >
+        <TableData className="flex item-center" key={idx}>
           <Icon
             role="button"
             onClick={() => toggleFavoritesFn(cell?.row.original?.id)}
@@ -264,37 +257,21 @@ const AssetSearchTable = ({
             color={handleFavoritesFn(cell?.row?.original?.id)}
           />
           {cell.render('Cell')}
-        </td>
+        </TableData>
       )
     } else if (idx === 1) {
       return (
-        <td
-          style={{
-            borderRight: 'solid 1px #2D3747',
-            width: '10rem',
-            maxWidth: '10rem'
-          }}
-          key={idx}
-          {...cell.getCellProps()}
-        >
+        <TableData key={idx} {...cell.getCellProps()}>
           <span>{cell.render('Cell')}</span>
           <br />
           {cell?.value != '--' ? <span>{(algoPrice * cell.value).toLocaleString()} USD</span> : ''}
-        </td>
+        </TableData>
       )
     } else {
       return (
-        <td
-          style={{
-            borderRight: 'solid 1px #2D3747',
-            width: '10rem',
-            maxWidth: '10rem'
-          }}
-          key={idx}
-          {...cell.getCellProps()}
-        >
+        <TableData key={idx} {...cell.getCellProps()}>
           {cell.render('Cell')}
-        </td>
+        </TableData>
       )
     }
   }
