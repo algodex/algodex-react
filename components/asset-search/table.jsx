@@ -255,8 +255,7 @@ const AssetSearchTable = ({
     if (idx === 0) {
       return (
         <TableData
-          role="cell"
-          className="flex item-center" 
+          className="flex item-center"
           key={idx}
           style={{
             boxSizing: 'border-box',
