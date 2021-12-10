@@ -1,13 +1,14 @@
-import { useRef, useState, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
+import { useMemo, useRef, useState } from 'react'
+
 import ChartOverlay from './overlay'
 import ChartSettings from './settings'
+import PropTypes from 'prop-types'
+import ReactDOM from 'react-dom'
+import millify from 'millify'
 import useAreaChart from './use-area-chart'
 import useCandleChart from './use-candle-chart'
 import useStore from 'store/use-store'
-import ReactDOM from 'react-dom'
-import { AreaSeriesChart, CandleStickChart, Container, SettingsContainer } from './chart.css'
-import millify from 'millify'
 
 function autoScaleProvider(original, chart, priceData) {
   let visibleRange = chart.timeScale().getVisibleRange()

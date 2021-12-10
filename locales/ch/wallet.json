@@ -1,9 +1,8 @@
 {
-    "connect-wallet-button": "连接钱包",
-    "connect-another-wallet-button": "连接另一个钱包",
-    "wallet": "钱包",
-    "balance": "余额",
-    "start-by": "连接一个Algorand钱包",
-    "once-connected": "使用 MyAlgo 连接钱包后，您就可以开始交易"
-  }
-  
+  "connect-wallet-button": "连接钱包",
+  "connect-another-wallet-button": "连接另一个钱包",
+  "wallet": "钱包",
+  "balance": "余额",
+  "start-by": "连接一个Algorand钱包",
+  "once-connected": "使用 MyAlgo 连接钱包后，您就可以开始交易"
+}

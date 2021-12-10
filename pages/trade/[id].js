@@ -1,10 +1,11 @@
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import Chart from 'components/chart'
-import AssetInfo from 'components/asset-info'
-import Page from 'components/Page'
-import { fetchExplorerAssetInfo } from 'services/algoexplorer'
 import { fetchAssetPrice, fetchAssets } from 'services/algodex'
+
+import AssetInfo from 'components/asset-info'
+import Chart from 'components/chart'
+import Page from 'components/Page'
+import PropTypes from 'prop-types'
+import { fetchExplorerAssetInfo } from 'services/algoexplorer'
+import styled from 'styled-components'
 import { useUserStore } from '../../store'
 
 export const Container = styled.div`

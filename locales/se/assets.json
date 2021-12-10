@@ -9,5 +9,6 @@
     "back-to-chart": "Tillbaka till diagram",
     "description": "Beskrivning",
     "circulating-supply": "cirkulerande tillgångar",
-    "total-supply": "totalt antal tillgångar"
+    "total-supply": "totalt antal tillgångar",
+    "view-verified-asset": "Visa endast verifierade tillgångar"
 }

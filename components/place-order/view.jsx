@@ -1,22 +1,4 @@
-import { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import toast from 'react-hot-toast'
-import Error from 'components/error'
-import Big from 'big.js'
 import * as Sentry from '@sentry/browser'
-import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
-import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
-import OrderInput from 'components/order-input'
-import AmountRange from 'components/amount-range'
-import OrderOptions from 'components/order-options'
-import Icon from 'components/icon'
-import OrderService from 'services/order'
-import { convertToAsaUnits } from 'services/convert'
-import { useStore } from 'store/use-store'
-import WalletService from 'services/wallet'
-import detectMobileDisplay from 'utils/detectMobileDisplay'
-import useTranslation from 'next-translate/useTranslation'
-import { Tooltip } from 'components/tooltip'
 
 import {
   AvailableBalance,
@@ -35,8 +17,27 @@ import {
   ToggleInput,
   ToggleWrapper
 } from './place-order.css'
+import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
+import { useEffect, useState } from 'react'
+
+import AmountRange from 'components/amount-range'
+import Big from 'big.js'
+import Error from 'components/error'
+import Icon from 'components/icon'
 import { Info } from 'react-feather'
+import OrderInput from 'components/order-input'
+import OrderOptions from 'components/order-options'
+import OrderService from 'services/order'
+import PropTypes from 'prop-types'
 import Spinner from '../spinner'
+import { Tooltip } from 'components/tooltip'
+import WalletService from 'services/wallet'
+import { convertToAsaUnits } from 'services/convert'
+import detectMobileDisplay from 'utils/detectMobileDisplay'
+import toast from 'react-hot-toast'
+import { useStore } from 'store/use-store'
+import useTranslation from 'next-translate/useTranslation'
+import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 
 const DEFAULT_ORDER = {
   type: 'buy',

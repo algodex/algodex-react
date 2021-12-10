@@ -1,28 +1,29 @@
-import { useRef, useState } from 'react'
-import AssetSearch from 'components/asset-search'
-import OrderBook from 'components/order-book'
-import Orders from 'components/orders'
-import PlaceOrder from 'components/place-order'
-import TradeHistory from 'components/trade-history'
-import Wallet from 'components/wallet'
-import useTranslation from 'next-translate/useTranslation'
-import Spinner from 'components/spinner'
-import { useEvent } from 'hooks/useEvents'
 import {
+  AssetOrderBookSection,
+  AssetTradeHistorySection,
   AssetsSection,
   ContentSection,
   Main,
   MainWrapper,
-  AssetOrderBookSection,
-  WalletOrdersSection,
-  AssetTradeHistorySection,
-  PlaceOrderSection,
-  WalletSection,
   MobileMenu,
   MobileMenuButton,
-  SearchAndChartSection
+  PlaceOrderSection,
+  SearchAndChartSection,
+  WalletOrdersSection,
+  WalletSection
 } from './main-layout.css'
+import { useRef, useState } from 'react'
+
+import AssetSearch from 'components/asset-search'
+import OrderBook from 'components/order-book'
+import Orders from 'components/orders'
+import PlaceOrder from 'components/place-order'
 import PropTypes from 'prop-types'
+import Spinner from 'components/spinner'
+import TradeHistory from 'components/trade-history'
+import Wallet from 'components/wallet'
+import { useEvent } from 'hooks/useEvents'
+import useTranslation from 'next-translate/useTranslation'
 
 /**
  * @param asset
@@ -73,7 +74,7 @@ function MainLayout({ asset, children }) {
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
-            <AssetSearch gridRef={gridRef} />
+            <AssetSearch style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
           </AssetsSection>
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
@@ -111,11 +112,11 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
-            {/* <li>
-                <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                  History
-                </MobileMenuButton>
-              </li> */}
+            <li>
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
+                History
+              </MobileMenuButton>
+            </li>
             <li>
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
                 {t('mobilefooter-WALLET')}

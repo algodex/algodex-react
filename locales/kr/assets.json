@@ -9,5 +9,6 @@
     "back-to-chart": "차트로 돌아가기",
     "description": "설명",
     "circulating-supply": "유통 공급량",
-    "total-supply": "총 공급량"
+    "total-supply": "총 공급량",
+    "view-verified-asset": "확인된 자산만 보기"
 }

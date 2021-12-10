@@ -1,5 +1,5 @@
-import styled from 'styled-components'
 import Button from 'components/button'
+import styled from 'styled-components'
 
 export const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -55,7 +55,7 @@ export const SearchAndChartSection = styled.section`
   }
 
   @media (min-width: 1536px) {
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 365px 1fr;
     grid-template-rows: 1fr;
   }
 `

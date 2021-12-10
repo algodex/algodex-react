@@ -9,5 +9,6 @@
     "back-to-chart": "Tilbake til diagrammet",
     "description": "Beskrivning",
     "circulating-supply": "Sirkulerende forsyning",
-    "total-supply": "Totalt tilbud"
+    "total-supply": "Totalt tilbud",
+    "view-verified-asset": "Se kun bekreftede eiendeler"
 }

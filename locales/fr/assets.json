@@ -9,5 +9,6 @@
     "back-to-chart": "Retour au Graphique",
     "description": "Description",
     "circulating-supply": "Offre en Circulation",
-    "total-supply": "Offre Totale"
+    "total-supply": "Offre Totale",
+    "view-verified-asset": "Afficher uniquement les actifs vérifiés"
 }

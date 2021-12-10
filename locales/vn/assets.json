@@ -1,13 +1,14 @@
 {
-    "search": "Tìm kiếm",
-    "pair": "Cặp giao dịch",
-    "price": "Giá",
-    "change": "Thay đổi",
-    "24-hr-change": "Thay đổi trong 24 giờ",
-    "liquidity": "Tính thanh khoản",
-    "loading": "Đang tải...",
-    "back-to-chart": "Trở về Chart",
-    "description": "Mô tả",
-    "circulating-supply": "LỆNH LIMIT",
-    "total-supply": "Tổng nguồn cung"
+  "search": "Tìm kiếm",
+  "pair": "Cặp giao dịch",
+  "price": "Giá",
+  "change": "Thay đổi",
+  "24-hr-change": "Thay đổi trong 24 giờ",
+  "liquidity": "Tính thanh khoản",
+  "loading": "Đang tải...",
+  "back-to-chart": "Trở về Chart",
+  "description": "Mô tả",
+  "circulating-supply": "LỆNH LIMIT",
+  "total-supply": "Chỉ xem các tài sản đã được xác minh",
+  "view-verified-asset": "Chỉ xem các tài sản đã được xác minh"
 }

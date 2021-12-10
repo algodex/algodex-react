@@ -1,13 +1,14 @@
 {
-    "search": "buscar",
-    "pair": "par",
-    "price": "precio",
-    "change": "Cambio",
-    "24-hr-change": "Cambio de 24 horas",
-    "liquidity": "liquidez",
-    "loading": "cargando",
-    "back-to-chart": "Volver al gráfico",
-    "description": "Descripción",
-    "circulating-supply": "Suministro circulante",
-    "total-supply": "Suministro total"
+  "search": "buscar",
+  "pair": "par",
+  "price": "precio",
+  "change": "Cambio",
+  "24-hr-change": "Cambio de 24 horas",
+  "liquidity": "liquidez",
+  "loading": "cargando",
+  "back-to-chart": "Volver al gráfico",
+  "description": "Descripción",
+  "circulating-supply": "Suministro circulante",
+  "total-supply": "Suministro total",
+  "view-verified-asset": "Ver solo activos verificados"
 }

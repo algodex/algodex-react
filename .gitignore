@@ -8,6 +8,7 @@ public/workbox-*.js
 /node_modules
 /.pnp
 .pnp.js
+.npmrc
 
 # testing
 /coverage
@@ -43,3 +44,6 @@ yarn-error.log*
 
 # NPM Config for Algodex private repo
 .npmrc
+
+# Remove package lock
+package-lock.json
