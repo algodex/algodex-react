@@ -9,15 +9,15 @@ import useTranslation from 'next-translate/useTranslation'
 import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
 import Link from 'next/link'
 import {
+  AssetAlgoValue,
+  AssetAvailable,
   AssetCoin,
+  AssetInOrder,
   AssetName,
   AssetTotal,
-  AssetAvailable,
-  AssetInOrder,
-  AssetAlgoValue,
+  Container,
   StatusContainer,
-  TableWrapper,
-  Container
+  TableWrapper
 } from './assets.css'
 import { useEventDispatch } from '../../hooks/useEvents'
 
@@ -125,7 +125,7 @@ function Assets() {
   }
 
   return (
-    <Container>
+    <Container style={{ height: '6rem' }}>
       <TableWrapper>
         <OrdersTable columns={columns} data={assetsData || []} />
       </TableWrapper>

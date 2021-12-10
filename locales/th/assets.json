@@ -9,5 +9,6 @@
     "back-to-chart": "กลับไปที่แผนภูมิ",
     "description": "คำอธิบาย",
     "circulating-supply": "อุปทานหมุนเวียน",
-    "total-supply": "อุปทานทั้งหมด"
+    "total-supply": "อุปทานทั้งหมด",
+    "view-verified-asset": "ดูสินทรัพย์ที่ตรวจสอบแล้วเท่านั้น"
 }

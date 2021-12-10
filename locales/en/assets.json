@@ -9,5 +9,6 @@
     "back-to-chart": "Back to Chart",
     "description": "Description",
     "circulating-supply": "Circulating Supply",
-    "total-supply": "Total Supply"
+    "total-supply": "Total Supply",
+    "view-verified-asset": "View Verified Assets Only"
 }

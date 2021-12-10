@@ -1,13 +1,14 @@
 {
-    "search": "搜索",
-    "pair": "交易对",
-    "price": "价格",
-    "change": "改变",
-    "24-hr-change": "24 小时改变",
-    "liquidity": "流动性",
-    "loading": "加载",
-    "back-to-chart": "返回价格表",
-    "description": "概要",
-    "circulating-supply": "流通供应量",
-    "total-supply": "总供应量"
+  "search": "搜索",
+  "pair": "交易对",
+  "price": "价格",
+  "change": "改变",
+  "24-hr-change": "24 小时改变",
+  "liquidity": "流动性",
+  "loading": "加载",
+  "back-to-chart": "返回价格表",
+  "description": "概要",
+  "circulating-supply": "流通供应量",
+  "total-supply": "总供应量",
+  "view-verified-asset": "仅查看经过验证的资产"
 }

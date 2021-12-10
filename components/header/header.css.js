@@ -1,7 +1,8 @@
-import styled from 'styled-components'
-import { ReactSVG } from 'react-svg'
-import { fontSize, color } from 'styled-system'
+import { color, fontSize } from 'styled-system'
+
 import ReactCountryFlag from 'react-country-flag'
+import { ReactSVG } from 'react-svg'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[800]};

@@ -1,27 +1,27 @@
+import {
+  Container,
+  Flag,
+  IconLogo,
+  InlineLogo,
+  LanguageDropDown,
+  LanguageItem,
+  LanguagesContainer,
+  MobileNavContainer,
+  MobileNavigation,
+  NavTextLg,
+  NavTextSm,
+  Navigation
+} from './header.css'
+
+import ActiveLink from 'components/active-link'
+// import AssetSearch from "../asset-search";
 /* eslint-disable */
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
-import { useState } from 'react'
-import ActiveLink from 'components/active-link'
-import useTranslation from 'next-translate/useTranslation'
-import { useRouter } from 'next/router'
 import i18n from '../../i18n.json'
-
-import {
-  Container,
-  IconLogo,
-  InlineLogo,
-  Navigation,
-  NavTextLg,
-  NavTextSm,
-  Flag,
-  MobileNavigation,
-  MobileNavContainer,
-  LanguagesContainer,
-  LanguageItem,
-  LanguageDropDown
-} from './header.css'
-import AssetSearch from "../asset-search";
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
 // Map locale code to the flag used in 'react-country-flag'
 const localeToFlags = {

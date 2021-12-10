@@ -1,9 +1,8 @@
 {
-    "connect-wallet-button": "TÁRCA CSATLAKOZTATÁSA",
-    "connect-another-wallet-button": "Másik tárca csatlakoztatása",
-    "wallet": "Tárca",
-    "balance": "EGYENLEG",
-    "start-by": "A kezdéshez csatlakoztasd Algorand tárcádat",
-    "once-connected": "Megkezdheted a kereskedést, amint a MyAlgo használatával csatlakoztattad Algorand tárcádat"
-  }
-  
+  "connect-wallet-button": "TÁRCA CSATLAKOZTATÁSA",
+  "connect-another-wallet-button": "Másik tárca csatlakoztatása",
+  "wallet": "Tárca",
+  "balance": "EGYENLEG",
+  "start-by": "A kezdéshez csatlakoztasd Algorand tárcádat",
+  "once-connected": "Megkezdheted a kereskedést, amint a MyAlgo használatával csatlakoztattad Algorand tárcádat"
+}

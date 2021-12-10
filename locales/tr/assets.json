@@ -1,13 +1,14 @@
 {
-    "search": "Ara",
-    "pair": "ÇİFT",
-    "price": "FİYAT",
-    "change": "Değişim",
-    "24-hr-change": "24s Değişim",
-    "liquidity": "Likidite",
-    "loading": "YÜKLENİYOR...",
-    "back-to-chart": "Grafiğe geri dön",
-    "description": "Açıklama",
-    "circulating-supply": "Dolaşımdaki arz",
-    "total-supply": "Toplam arz"
+  "search": "Ara",
+  "pair": "ÇİFT",
+  "price": "FİYAT",
+  "change": "Değişim",
+  "24-hr-change": "24s Değişim",
+  "liquidity": "Likidite",
+  "loading": "YÜKLENİYOR...",
+  "back-to-chart": "Grafiğe geri dön",
+  "description": "Açıklama",
+  "circulating-supply": "Dolaşımdaki arz",
+  "total-supply": "Toplam arz",
+  "view-verified-asset": "Yalnızca Doğrulanmış Varlıkları Görüntüle"
 }
