@@ -8,14 +8,14 @@ import {
   PairSlash,
   SortIcon,
   TableContainer,
+  TableData,
   TableHeader,
-  TableWrapper,
-  TableData
+  TableWrapper
 } from './asset-search.css'
 import { BodyCopySm, BodyCopyTiny } from '../type'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useEffect, useMemo } from 'react'
-import { useRowSelect, useSortBy, useTable, useFlexLayout } from 'react-table'
+import { useFlexLayout, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import AlgoIcon from 'components/icon'
 import Icon from '@mdi/react'
