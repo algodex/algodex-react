@@ -59,13 +59,15 @@ export default function Header() {
   const renderLanguageMobile = () => {
     const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
     return locales.map(localeCd => {
-      return <Link href={asPath} locale={localeCd}>
-        <a href="#">
-          <NavTextSm style={{marginBottom: '0.4rem'}}>
-            {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-          </NavTextSm>
-        </a>
-      </Link>
+      return <li>
+        <Link href={asPath} locale={localeCd}>
+          <a href="#">
+            <NavTextSm style={{marginBottom: '0.4rem'}}>
+              {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+            </NavTextSm>
+          </a>
+        </Link>
+      </li>
     })
   }
 
@@ -159,20 +161,14 @@ export default function Header() {
             background: theme.colors.gray['700'],
             padding: '0.3rem 0.6rem',
             borderRadius: '3px',
-            // display: 'flex',
-            // flexDirection: 'column',
-            // alignItems: 'flex-start',
-            // height: '35vh',
-            // overflowX: 'scroll'
           }}
           onClick={() => setIsLanguageOpen(!isLanguageOpen)}
         >
           <NavTextSm>
-            {/* EN<Flag countryCode="US" svg /> */}
             {locale} <Flag countryCode={localeToFlags[locale]} svg />
           </NavTextSm>
         </div> &nbsp;&nbsp;&nbsp;
-        {isLanguageOpen && <div
+        {isLanguageOpen && <ul
           style={{
             position: 'absolute',
             top: '45px',
@@ -189,7 +185,7 @@ export default function Header() {
           }}
         >
           {renderLanguageMobile()}
-        </div>}
+        </ul>}
         
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
