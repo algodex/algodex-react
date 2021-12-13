@@ -106,8 +106,9 @@ function AssetSearch({ gridRef, algoPrice }) {
    * @type {(function(*): Promise<void>)|*}
    */
   const handleAssetClick = useCallback(() => {
-    setIsActive(false)
-  }, [setIsActive])
+    handleExternalClick()
+  }, [handleExternalClick])
+
   const handleAssetFocus = useCallback(
     (asset) => {
       setAssetInfo(asset)
