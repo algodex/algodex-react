@@ -57,12 +57,8 @@ export default function Header() {
   const { t } = useTranslation('common')
 
   const renderLanguageMobile = () => {
-    console.log('show language selection')
-    const res = i18n.locales.filter((localeCd) => localeCd !== locale)
-    return res.map(localeCd => {
-      // return <div style={{marginBottom: '0.4rem'}}>
-      //   {localeCd.toUpperCase()} <Flag countryCode={localeToFlags[localeCd]} svg />
-      // </div>
+    const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
+    return locales.map(localeCd => {
       return <Link href={asPath} locale={localeCd}>
         <a href="#">
           <NavTextSm style={{marginBottom: '0.4rem'}}>

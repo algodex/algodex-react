@@ -132,7 +132,7 @@ const AssetSearchTable = ({
       // If there is data, use it
       return assets.map(mapToSearchResults)
     }
-  }, [assets, isListingVerifiedAssets, isFilteringByFavorites])
+  }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 
   /**
    * React-Table Columns
