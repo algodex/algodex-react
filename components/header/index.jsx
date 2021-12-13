@@ -12,7 +12,6 @@ import {
   NavTextSm,
   Navigation
 } from './header.css'
-import theme from '../../theme'
 
 import ActiveLink from 'components/active-link'
 // import AssetSearch from "../asset-search";
@@ -20,6 +19,7 @@ import ActiveLink from 'components/active-link'
 import Hamburger from 'components/hamburger'
 import Link from 'next/link'
 import i18n from '../../i18n.json'
+import theme from '../../theme'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -52,8 +52,26 @@ const localeToFlags = {
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { asPath, locale } = useRouter()
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false)
 
   const { t } = useTranslation('common')
+
+  const renderLanguageMobile = () => {
+    console.log('show language selection')
+    const res = i18n.locales.filter((localeCd) => localeCd !== locale)
+    return res.map(localeCd => {
+      // return <div style={{marginBottom: '0.4rem'}}>
+      //   {localeCd.toUpperCase()} <Flag countryCode={localeToFlags[localeCd]} svg />
+      // </div>
+      return <Link href={asPath} locale={localeCd}>
+        <a href="#">
+          <NavTextSm style={{marginBottom: '0.4rem'}}>
+            {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+          </NavTextSm>
+        </a>
+      </Link>
+    })
+  }
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -140,15 +158,31 @@ export default function Header() {
               ))}
           </LanguageDropDown>
         </LanguagesContainer>
-        <div style={{
-          background: theme.colors.gray['700'],
-          padding: '0.3rem 0.5rem',
-          borderRadius: '3px',
-        }}>
+        <div 
+          style={{
+            background: theme.colors.gray['700'],
+            padding: '0.3rem 0.5rem',
+            borderRadius: '3px',
+          }}
+          onClick={() => setIsLanguageOpen(!isLanguageOpen)}
+        >
           <NavTextSm>
             EN<Flag countryCode="US" svg />
           </NavTextSm>
         </div> &nbsp;&nbsp;&nbsp;
+        {isLanguageOpen && <div
+          style={{
+            position: 'absolute',
+            top: '50px',
+            right: '54px',
+            zIndex: '40',
+            background: theme.colors.gray['700'],
+            padding: '0.3rem 0.5rem',
+            borderRadius: '3px',
+          }}
+        >
+          {renderLanguageMobile()}
+        </div>}
         
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
