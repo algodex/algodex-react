@@ -161,24 +161,35 @@ export default function Header() {
         <div 
           style={{
             background: theme.colors.gray['700'],
-            padding: '0.3rem 0.5rem',
+            padding: '0.3rem 0.6rem',
             borderRadius: '3px',
+            // display: 'flex',
+            // flexDirection: 'column',
+            // alignItems: 'flex-start',
+            // height: '35vh',
+            // overflowX: 'scroll'
           }}
           onClick={() => setIsLanguageOpen(!isLanguageOpen)}
         >
           <NavTextSm>
-            EN<Flag countryCode="US" svg />
+            {/* EN<Flag countryCode="US" svg /> */}
+            {locale} <Flag countryCode={localeToFlags[locale]} svg />
           </NavTextSm>
         </div> &nbsp;&nbsp;&nbsp;
         {isLanguageOpen && <div
           style={{
             position: 'absolute',
-            top: '50px',
+            top: '45px',
             right: '54px',
             zIndex: '40',
             background: theme.colors.gray['700'],
             padding: '0.3rem 0.5rem',
             borderRadius: '3px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            height: '35vh',
+            overflowX: 'scroll'
           }}
         >
           {renderLanguageMobile()}
