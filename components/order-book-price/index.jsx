@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { ArrowUp, ArrowDown } from 'react-feather'
-import { floatToFixed } from 'services/display'
+import { ArrowDown, ArrowUp } from 'react-feather'
+
 import { BodyCopySm } from 'components/type'
+import PropTypes from 'prop-types'
 import { convertFromBaseUnits } from 'services/convert'
+import { floatToFixed } from 'services/display'
+import styled from 'styled-components'
 
 const Price = styled.p`
   display: flex;

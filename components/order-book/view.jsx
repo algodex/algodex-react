@@ -1,24 +1,24 @@
-import PropTypes from 'prop-types'
-import Big from 'big.js'
-import OrderBookPrice from 'components/order-book-price'
-import { BodyCopyTiny } from 'components/type'
-import PriceHeader from 'components/price-header'
-import { floatToFixed } from 'services/display'
-import { useStore } from 'store/use-store'
-
 import {
-  Container,
-  Header,
   BookRow,
-  OrdersWrapper,
-  SellOrders,
   BuyOrders,
-  CurrentPrice
+  Container,
+  CurrentPrice,
+  Header,
+  OrdersWrapper,
+  SellOrders
 } from './order-book.css'
-import useTranslation from 'next-translate/useTranslation'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
+
+import Big from 'big.js'
+import { BodyCopyTiny } from 'components/type'
+import OrderBookPrice from 'components/order-book-price'
+import PriceHeader from 'components/price-header'
+import PropTypes from 'prop-types'
 import Spinner from '../spinner'
+import { floatToFixed } from 'services/display'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { useEventDispatch } from '../../hooks/useEvents'
+import { useStore } from 'store/use-store'
+import useTranslation from 'next-translate/useTranslation'
 
 function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
