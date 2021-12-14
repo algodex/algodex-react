@@ -55,7 +55,10 @@ const LanguageSelection = ({ isMobile }) => {
       return (
         <Link key={idx} href={asPath} locale={localeCd}>
           <a href="#top">
-            <NavTextSm style={{ marginBottom: '0.4rem' }}>
+            <NavTextSm
+              onClick={() => setIsLanguageOpen(!isLanguageOpen)}
+              style={{ marginBottom: '0.4rem' }}
+            >
               {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
             </NavTextSm>
           </a>
