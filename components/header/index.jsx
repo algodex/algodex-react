@@ -1,11 +1,7 @@
 import {
   Container,
-  Flag,
   IconLogo,
   InlineLogo,
-  LanguageDropDown,
-  LanguageItem,
-  LanguagesContainer,
   MobileNavContainer,
   MobileNavigation,
   NavTextLg,
@@ -17,8 +13,10 @@ import ActiveLink from 'components/active-link'
 // import AssetSearch from "../asset-search";
 /* eslint-disable */
 import Hamburger from 'components/hamburger'
+import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
 import i18n from '../../i18n.json'
+import theme from '../../theme'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -51,11 +49,12 @@ const localeToFlags = {
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { asPath, locale } = useRouter()
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false)
 
   const { t } = useTranslation('common')
 
   return (
-    <Container data-testid="header-container">
+    <Container className="flex" data-testid="header-container">
       <Link href="/">
         <a>
           <InlineLogo src="/logo-inline-dark.svg" />
@@ -104,41 +103,8 @@ export default function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
-
-        <LanguagesContainer>
-          <Link href={asPath} locale={locale}>
-            <a href="#">
-              <NavTextLg>
-                {locale} <Flag countryCode={localeToFlags[locale]} svg />
-              </NavTextLg>
-            </a>
-          </Link>
-
-          <LanguageDropDown>
-            <LanguageItem key={locale}>
-              <Link href={asPath} locale={locale}>
-                <a href="#">
-                  <NavTextLg>
-                    {locale} <Flag countryCode={localeToFlags[locale]} svg />
-                  </NavTextLg>
-                </a>
-              </Link>
-            </LanguageItem>
-            {i18n.locales
-              .filter((localeCd) => localeCd !== locale)
-              .map((localeCd) => (
-                <LanguageItem key={localeCd}>
-                  <Link href={asPath} locale={localeCd}>
-                    <a href="#">
-                      <NavTextLg>
-                        {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                      </NavTextLg>
-                    </a>
-                  </Link>
-                </LanguageItem>
-              ))}
-          </LanguageDropDown>
-        </LanguagesContainer>
+        <LanguageSelection isMobile={false} />
+        <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
@@ -164,9 +130,6 @@ export default function Header() {
             <NavTextSm>Support</NavTextSm>
           </ActiveLink>
           */}
-          <NavTextSm>
-            EN <Flag countryCode="US" svg />
-          </NavTextSm>
         </MobileNavContainer>
       </MobileNavigation>
     </Container>

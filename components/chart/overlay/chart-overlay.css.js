@@ -5,7 +5,7 @@ export const Container = styled.div`
   top: 0;
   left: 0;
   right: 6rem;
-  z-index: 99;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
