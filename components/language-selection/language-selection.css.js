@@ -102,9 +102,11 @@ export const Flag = styled(ReactCountryFlag)`
 `
 
 export const LanguageButton = styled.div`
-  background: ${(theme) => theme.colors.gray['700']};
-  padding: 0.3rem 0.6rem;
-  border-radius: 3px;
+  @media (max-width: 1024px) {
+    background: ${({ theme }) => theme.colors.gray['700']};
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+  }
 `
 
 export const LanguageDropdownContainerMob = styled.div`
@@ -112,12 +114,41 @@ export const LanguageDropdownContainerMob = styled.div`
   top: 45px;
   right: 54px;
   z-index: 40;
-  background: ${(theme) => theme.colors.gray['700']};
+  background: ${({ theme }) => theme.colors.gray['700']};
   padding: 0.3rem 0.5rem;
   border-radius: 3px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   height: 35vh;
   overflow-x: scroll;
+`
+
+export const LanguagesContainer = styled.ul`
+  width: 100px;
+  &:hover,
+  &:focus-within {
+    ul {
+      position: absolute;
+      display: block;
+      top: 20px;
+      width: 100px;
+    }
+  }
+`
+
+export const LanguageDropDown = styled.ul`
+  background-color: ${({ theme }) => theme.colors.gray[900]};
+  display: none;
+  max-height: 500px;
+  overflow: scroll;
+`
+
+export const LanguageItem = styled.li`
+  display: block;
+  height: 50px;
+
+  span {
+    line-height: 50px;
+  }
 `

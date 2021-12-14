@@ -17,6 +17,7 @@ import ActiveLink from 'components/active-link'
 // import AssetSearch from "../asset-search";
 /* eslint-disable */
 import Hamburger from 'components/hamburger'
+import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
 import i18n from '../../i18n.json'
 import theme from '../../theme'
@@ -58,12 +59,12 @@ export default function Header() {
 
   const renderLanguageMobile = () => {
     const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
-    return locales.map(localeCd => {
-      return <li>
+    return locales.map((localeCd, idx) => {
+      return <li key={idx}>
         <Link href={asPath} locale={localeCd}>
           <a href="#">
-            <NavTextSm style={{marginBottom: '0.4rem'}}>
-              {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+            <NavTextSm className="mb-3">
+              <span>{localeCd}</span> <Flag countryCode={localeToFlags[localeCd]} svg />
             </NavTextSm>
           </a>
         </Link>
@@ -121,8 +122,8 @@ export default function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
-
-        <LanguagesContainer>
+        <LanguageSelection isMobile={false} />
+        {/* <LanguagesContainer>
           <Link href={asPath} locale={locale}>
             <a href="#">
               <NavTextLg>
@@ -155,8 +156,8 @@ export default function Header() {
                 </LanguageItem>
               ))}
           </LanguageDropDown>
-        </LanguagesContainer>
-        <div 
+        </LanguagesContainer> */}
+        {/* <div 
           style={{
             background: theme.colors.gray['700'],
             padding: '0.3rem 0.6rem',
@@ -179,14 +180,22 @@ export default function Header() {
             borderRadius: '3px',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
+            alignItems: 'flex-end',
             height: '35vh',
             overflowX: 'scroll'
           }}
         >
           {renderLanguageMobile()}
-        </ul>}
+        </ul>} */}
         
+        <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
+          
+        {/* { window.matchMedia('(min-width: 950px)').matches && 
+          <>
+            <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
+          </>
+        } */}
+        {/* <LanguageSelection isMobile={true} /> */}
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
@@ -212,9 +221,9 @@ export default function Header() {
             <NavTextSm>Support</NavTextSm>
           </ActiveLink>
           */}
-          <NavTextSm>
+          {/* <NavTextSm>
             EN <Flag countryCode="US" svg />
-          </NavTextSm>
+          </NavTextSm> */}
         </MobileNavContainer>
       </MobileNavigation>
     </Container>

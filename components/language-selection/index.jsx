@@ -1,7 +1,11 @@
 import {
   Flag,
   LanguageButton,
+  LanguageDropDown,
   LanguageDropdownContainerMob,
+  LanguageItem,
+  LanguagesContainer,
+  NavTextLg,
   NavTextSm
 } from './language-selection.css'
 
@@ -51,7 +55,7 @@ const LanguageSelection = ({ isMobile }) => {
     return locales.map((localeCd, idx) => {
       return (
         <Link key={idx} href={asPath} locale={localeCd}>
-          <a href="#">
+          <a href="#top">
             <NavTextSm style={{ marginBottom: '0.4rem' }}>
               {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
             </NavTextSm>
@@ -63,32 +67,59 @@ const LanguageSelection = ({ isMobile }) => {
 
   const renderForMobile = () => {
     return (
-      <div>
-        <div>
-          <LanguageButton
-            role="button"
-            style={{
-              background: theme.colors.gray['700'],
-              padding: '0.3rem 0.6rem',
-              borderRadius: '3px'
-            }}
-            onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-          >
-            <NavTextSm>
-              {locale} <Flag countryCode={localeToFlags[locale]} svg />
-            </NavTextSm>
-          </LanguageButton>
-          {isLanguageOpen && (
-            <LanguageDropdownContainerMob>{renderLanguageMobile()}</LanguageDropdownContainerMob>
-          )}
-        </div>
-      </div>
+      <>
+        <LanguageButton role="button" onClick={() => setIsLanguageOpen(!isLanguageOpen)}>
+          <NavTextSm>
+            {locale} <Flag countryCode={localeToFlags[locale]} svg />
+          </NavTextSm>
+        </LanguageButton>
+        {isLanguageOpen && (
+          <LanguageDropdownContainerMob>{renderLanguageMobile()}</LanguageDropdownContainerMob>
+        )}
+      </>
     )
   }
 
-  const renderForWeb = () => <div></div>
+  const renderForWeb = () => {
+    return (
+      <LanguagesContainer>
+        <Link href={asPath} locale={locale}>
+          <a href="#top">
+            <NavTextLg>
+              {locale} <Flag countryCode={localeToFlags[locale]} svg />
+            </NavTextLg>
+          </a>
+        </Link>
 
-  return <div>{isMobile ? renderForMobile() : renderForWeb()}</div>
+        <LanguageDropDown>
+          <LanguageItem key={locale}>
+            <Link href={asPath} locale={locale}>
+              <a href="#top">
+                <NavTextLg>
+                  {locale} <Flag countryCode={localeToFlags[locale]} svg />
+                </NavTextLg>
+              </a>
+            </Link>
+          </LanguageItem>
+          {i18n.locales
+            .filter((localeCd) => localeCd !== locale)
+            .map((localeCd) => (
+              <LanguageItem key={localeCd}>
+                <Link href={asPath} locale={localeCd}>
+                  <a href="#top">
+                    <NavTextLg>
+                      {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+                    </NavTextLg>
+                  </a>
+                </Link>
+              </LanguageItem>
+            ))}
+        </LanguageDropDown>
+      </LanguagesContainer>
+    )
+  }
+
+  return <>{isMobile ? renderForMobile() : renderForWeb()}</>
 }
 
 LanguageSelection.propTypes = {
@@ -97,7 +128,6 @@ LanguageSelection.propTypes = {
 }
 
 LanguageSelection.defaultProps = {
-  isMobile: true
   // isLanguageOpen: true
 }
 
