@@ -57,21 +57,6 @@ export default function Header() {
 
   const { t } = useTranslation('common')
 
-  const renderLanguageMobile = () => {
-    const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
-    return locales.map((localeCd, idx) => {
-      return <li key={idx}>
-        <Link href={asPath} locale={localeCd}>
-          <a href="#">
-            <NavTextSm className="mb-3">
-              <span>{localeCd}</span> <Flag countryCode={localeToFlags[localeCd]} svg />
-            </NavTextSm>
-          </a>
-        </Link>
-      </li>
-    })
-  }
-
   return (
     <Container className="flex" data-testid="header-container">
       <Link href="/">
@@ -123,79 +108,7 @@ export default function Header() {
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
         <LanguageSelection isMobile={false} />
-        {/* <LanguagesContainer>
-          <Link href={asPath} locale={locale}>
-            <a href="#">
-              <NavTextLg>
-                {locale} <Flag countryCode={localeToFlags[locale]} svg />
-              </NavTextLg>
-            </a>
-          </Link>
-
-          <LanguageDropDown>
-            <LanguageItem key={locale}>
-              <Link href={asPath} locale={locale}>
-                <a href="#">
-                  <NavTextLg>
-                    {locale} <Flag countryCode={localeToFlags[locale]} svg />
-                  </NavTextLg>
-                </a>
-              </Link>
-            </LanguageItem>
-            {i18n.locales
-              .filter((localeCd) => localeCd !== locale)
-              .map((localeCd) => (
-                <LanguageItem key={localeCd}>
-                  <Link href={asPath} locale={localeCd}>
-                    <a href="#">
-                      <NavTextLg>
-                        {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                      </NavTextLg>
-                    </a>
-                  </Link>
-                </LanguageItem>
-              ))}
-          </LanguageDropDown>
-        </LanguagesContainer> */}
-        {/* <div 
-          style={{
-            background: theme.colors.gray['700'],
-            padding: '0.3rem 0.6rem',
-            borderRadius: '3px',
-          }}
-          onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-        >
-          <NavTextSm>
-            {locale} <Flag countryCode={localeToFlags[locale]} svg />
-          </NavTextSm>
-        </div> &nbsp;&nbsp;&nbsp;
-        {isLanguageOpen && <ul
-          style={{
-            position: 'absolute',
-            top: '45px',
-            right: '54px',
-            zIndex: '40',
-            background: theme.colors.gray['700'],
-            padding: '0.3rem 0.5rem',
-            borderRadius: '3px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            height: '35vh',
-            overflowX: 'scroll'
-          }}
-        >
-          {renderLanguageMobile()}
-        </ul>} */}
-        
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
-          
-        {/* { window.matchMedia('(min-width: 950px)').matches && 
-          <>
-            <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
-          </>
-        } */}
-        {/* <LanguageSelection isMobile={true} /> */}
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
@@ -221,9 +134,6 @@ export default function Header() {
             <NavTextSm>Support</NavTextSm>
           </ActiveLink>
           */}
-          {/* <NavTextSm>
-            EN <Flag countryCode="US" svg />
-          </NavTextSm> */}
         </MobileNavContainer>
       </MobileNavigation>
     </Container>
