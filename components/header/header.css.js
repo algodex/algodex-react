@@ -9,7 +9,7 @@ export const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   padding: 1rem;
   margin: 0;
-  display: none;
+  // display: none;
   justify-content: space-between;
   align-items: center;
   position: relative;
