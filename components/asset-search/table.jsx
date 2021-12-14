@@ -161,9 +161,9 @@ const AssetSearchTable = ({
           )
         },
         accessor: 'name',
-        minWidth: 35,
-        width: 35,
-        maxWidth: 35,
+        minWidth: 45,
+        width: 45,
+        maxWidth: 45,
         Cell: AssetNameCell
       },
       {
@@ -259,9 +259,9 @@ const AssetSearchTable = ({
           key={idx}
           style={{
             boxSizing: 'border-box',
-            flex: '35 0 auto',
-            minWidth: '35px',
-            width: '35px'
+            flex: '45 0 auto',
+            minWidth: '45px',
+            width: '45px'
           }}
         >
           <Icon
@@ -271,8 +271,9 @@ const AssetSearchTable = ({
             tabIndex={0}
             className="mr-1"
             path={mdiStar}
-            title="Favourite item"
+            title="Favorite item"
             size={0.5}
+            style={{ minWidth: '0.75rem' }}
             color={handleFavoritesFn(cell?.row?.original?.id)}
           />
           {cell.render('Cell')}
