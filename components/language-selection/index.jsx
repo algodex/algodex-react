@@ -12,7 +12,6 @@ import {
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import i18n from '../../i18n.json'
-import theme from '../../theme'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 

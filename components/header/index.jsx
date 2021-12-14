@@ -1,11 +1,7 @@
 import {
   Container,
-  Flag,
   IconLogo,
   InlineLogo,
-  LanguageDropDown,
-  LanguageItem,
-  LanguagesContainer,
   MobileNavContainer,
   MobileNavigation,
   NavTextLg,

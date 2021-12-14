@@ -1,7 +1,6 @@
 import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
-import { ReactSVG } from 'react-svg'
 import styled from 'styled-components'
 
 export const NavTextLg = styled.span`
