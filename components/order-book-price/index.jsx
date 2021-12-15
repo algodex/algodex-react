@@ -2,7 +2,7 @@ import { ArrowDown, ArrowUp } from 'react-feather'
 
 import { BodyCopySm } from 'components/type'
 import PropTypes from 'prop-types'
-import { convertFromBaseUnits } from 'services/convert'
+import { convertFromAsaUnits } from 'services/convert'
 import { floatToFixed } from 'services/display'
 import styled from 'styled-components'
 
@@ -33,7 +33,7 @@ function OrderBookPrice({ price, decimals, change }) {
       return '--'
     }
 
-    return floatToFixed(decimals !== 6 ? convertFromBaseUnits(price, decimals) : price)
+    return floatToFixed(decimals !== 6 ? convertFromAsaUnits(price, decimals) : price)
   }
 
   const renderChange = () => {
