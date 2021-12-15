@@ -6,8 +6,10 @@ import {
   MobileNavigation,
   NavTextLg,
   NavTextSm,
-  Navigation
+  Navigation,
+  NetworkDropdown
 } from './header.css'
+import { useEffect, useState } from 'react'
 
 import ActiveLink from 'components/active-link'
 // import AssetSearch from "../asset-search";
@@ -15,43 +17,26 @@ import ActiveLink from 'components/active-link'
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
-import i18n from '../../i18n.json'
-import theme from '../../theme'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-
-// Map locale code to the flag used in 'react-country-flag'
-const localeToFlags = {
-  en: 'US',
-  es: 'MX',
-  nl: 'NL',
-  ch: 'CN',
-  tr: 'TR',
-  vn: 'VN',
-  id: 'ID',
-  iq: 'IQ',
-  my: 'MY',
-  ir: 'IR',
-  it: 'IT',
-  se: 'SE',
-  hu: 'HU',
-  no: 'NO',
-  ct: 'ES',
-  th: 'TH',
-  in: 'IN',
-  de: 'DE',
-  kr: 'KR',
-  fr: 'FR',
-  pl: 'PL'
-}
+import useUserStore from 'store/use-user-state'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const { asPath, locale } = useRouter()
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false)
-
+  const [activeNetwork, setActiveNetwork] = useState(1)
+  const setIsMainNet = useUserStore((state) => state.setIsMainNet)
+  const isMainNet = useUserStore((state) => state.isMainNet)
+  
+  
   const { t } = useTranslation('common')
+
+  const handleNetworkChangeFn = (value) => {
+    setActiveNetwork(value)
+  }
+
+  useEffect(() => {
+    console.log(isMainNet, activeNetwork, 'both')
+    activeNetwork == 1 ? setIsMainNet(1) : setIsMainNet(2)
+  }, [activeNetwork])
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -61,6 +46,10 @@ export default function Header() {
           <IconLogo src="/logo-icon-dark.svg" />
         </a>
       </Link>
+      <NetworkDropdown onChange={(e) => handleNetworkChangeFn(e.target.value)}>
+        <option value={1}>MAIN</option>
+        <option value={2}>TEST</option>
+      </NetworkDropdown>
       <Navigation>
         <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>

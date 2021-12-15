@@ -63,6 +63,8 @@ const Page = ({
   // Add Asset to User Storage
   const addAsset = useUserStore((state) => state.addAsset)
 
+  const isMainNet = useUserStore((state) => state.isMainNet)
+
   let options = {
     enabled: isRouted || isShallow,
     refetchInterval: 200000
@@ -97,6 +99,14 @@ const Page = ({
         {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
+      <div style={{ background: 'blue', padding: '1rem 0', textAlign: 'center' }}>
+        <p>
+          This is the
+          {console.log(isMainNet, 'sdfs')}
+          {isMainNet ? ' Mainet ' : ' Testnet '}
+          version of Algodex. Please be careful making any trades.
+        </p>
+      </div>
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
         {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}

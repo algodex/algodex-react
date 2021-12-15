@@ -11,6 +11,19 @@ const userState = (set, get) => ({
    */
   assets: {},
   /**
+   * Current network used.
+   *
+   * Network can be Testnet or Mainnet
+   */
+  isMainNet: _.includes(process.env.NEXT_PUBLIC_API, 'testnet'),
+
+  setIsMainNet: (status) => {
+    console.log(status, 'status')
+    set({
+      isMainNet: status === 1 ? true : false
+    })
+  },
+  /**
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *
    */

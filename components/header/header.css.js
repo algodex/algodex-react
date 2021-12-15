@@ -256,30 +256,9 @@ export const MenuContainer = styled.div`
   }
 `
 
-export const LanguagesContainer = styled.ul`
-  width: 100px;
-  &:hover,
-  &:focus-within {
-    ul {
-      position: absolute;
-      display: block;
-      top: 20px;
-      width: 100px;
-    }
-  }
-`
-
-export const LanguageItem = styled.li`
-  display: block;
-  height: 50px;
-
-  span {
-    line-height: 50px;
-  }
-`
-export const LanguageDropDown = styled.ul`
-  background-color: ${({ theme }) => theme.colors.gray[900]};
-  display: none;
-  max-height: 500px;
-  overflow: scroll;
+export const NetworkDropdown = styled.select`
+  background: unset;
+  border: solid 1px;
+  border-radius: 3px;
+  padding: 0.3rem 1rem;
 `
