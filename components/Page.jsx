@@ -26,6 +26,12 @@ export const Container = styled.div`
   }
 `
 
+export const Ribbon = styled.div`
+  background: ;
+  padding: 1rem 0;
+  text-align: center;
+`
+
 /**
  * Page Component
  *
@@ -99,10 +105,9 @@ const Page = ({
         {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
-      <div style={{ background: 'blue', padding: '1rem 0', textAlign: 'center' }}>
+      <div>
         <p>
           This is the
-          {console.log(isMainNet, 'sdfs')}
           {isMainNet ? ' Mainet ' : ' Testnet '}
           version of Algodex. Please be careful making any trades.
         </p>
