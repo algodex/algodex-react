@@ -197,7 +197,7 @@ export const MobileMenuButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  max-width: ${({ characterLength }) => (characterLength > 7 ? '6rem' : '5rem')};
+  max-width: ${({ characterLength }) => (characterLength > 8 ? '5.5rem' : '5rem')};
   overflow-wrap: anywhere;
 `
 
