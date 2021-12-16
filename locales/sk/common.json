@@ -1,0 +1,16 @@
+{
+  "header-about": "O projekte",
+  "header-trade": "Obchodovať",
+  "header-docs": "Dokumentácia",
+  "header-support": "Podpora",
+  "price": "Cena",
+  "amount": "Množstvo",
+  "total": "Celkovo",
+  "time": "Čas",
+  "no-trades-completed": " Nebol uzavretý žiadny obchod ",
+  "mobilefooter-CHART":"Graf",
+  "mobilefooter-BOOK":" Kniha pokynov",
+  "mobilefooter-TRADE":"Obchod",
+  "mobilefooter-ORDERS":"Pokyny",
+  "mobilefooter-WALLET":"Peňaženka"
+}
