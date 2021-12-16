@@ -1,0 +1,16 @@
+{
+  "header-about": "О платформе.",
+  "header-trade": "Торги",
+  "header-docs": "Описание",
+  "header-support": "Поддержка",
+  "price": "Цена",
+  "amount": "Количество",
+  "total": "Всего",
+  "time": "Время",
+  "no-trades-completed": " Операция не совершена ",
+  "mobilefooter-CHART":"График",
+  "mobilefooter-BOOK":" Стакан",
+  "mobilefooter-TRADE":"Торговля",
+  "mobilefooter-ORDERS":"Ордера",
+  "mobilefooter-WALLET":"Кошелёк"
+}
