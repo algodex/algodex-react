@@ -38,6 +38,7 @@ import toast from 'react-hot-toast'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import useUserStore from '../../store/use-user-state'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -51,11 +52,13 @@ function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, orderBook } = props
   const { t } = useTranslation('place-order')
 
+  const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
+  const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
+
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
-  const [orderFilter, setOrderFilter] = useState(0)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -133,11 +136,11 @@ function PlaceOrderView(props) {
     // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
     let filteredOrderBook = {
       buyOrders: orderBook.buyOrders.filter((order) =>
-        new Big(order.algoAmount).gte(new Big(orderFilter).times(1000000))
+        new Big(order.algoAmount).gte(new Big(newOrderSizeFilter).times(1000000))
       ),
       sellOrders: orderBook.sellOrders.filter((order) => {
         const equivAlgoAmount = new Big(order.formattedASAAmount).times(order.formattedPrice)
-        return equivAlgoAmount.gte(new Big(orderFilter))
+        return equivAlgoAmount.gte(new Big(newOrderSizeFilter))
       })
     }
     return OrderService.placeOrder(orderData, filteredOrderBook)
@@ -346,8 +349,8 @@ function PlaceOrderView(props) {
             order={order}
             onChange={handleOptionsChange}
             allowTaker={typeof asset !== 'undefined'}
-            orderFilter={orderFilter}
-            setOrderFilter={setOrderFilter}
+            orderFilter={newOrderSizeFilter}
+            setOrderFilter={setNewOrderSizeFilter}
           />
         </LimitOrder>
         {renderSubmit()}

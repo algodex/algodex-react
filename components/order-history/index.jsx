@@ -19,6 +19,7 @@ import {
   TableWrapper,
   OrderHistoryContainer
 } from './order-history.css'
+import useUserStore from '../../store/use-user-state'
 
 const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 
@@ -46,6 +47,12 @@ function OrderHistory() {
   const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
+
+  const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
+  const setWalletOrderHistoryTableState = useUserStore(
+    (state) => state.setWalletOrderHistoryTableState
+  )
+
   const { data, isLoading, isError } = useWalletTradeHistory({
     wallet: { address: activeWalletAddress },
     options: {
@@ -103,7 +110,12 @@ function OrderHistory() {
   return (
     <OrderHistoryContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={tradeHistoryData || []} />
+        <OrdersTable
+          initialState={walletOrderHistoryTableState}
+          onStateChange={(state) => setWalletOrderHistoryTableState(state)}
+          columns={columns}
+          data={tradeHistoryData || []}
+        />
       </TableWrapper>
 
       {renderStatus()}
