@@ -46,10 +46,13 @@ export default function Header() {
           <IconLogo src="/logo-icon-dark.svg" />
         </a>
       </Link>
-      <NetworkDropdown onChange={(e) => handleNetworkChangeFn(e.target.value)}>
+      &nbsp;
+      <NetworkDropdown className="font-medium" isMainNet={isMainNet} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
         <option value={1}>MAIN</option>
         <option value={2}>TEST</option>
       </NetworkDropdown>
+        
+      
       <Navigation>
         <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>

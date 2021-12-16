@@ -15,7 +15,7 @@ const userState = (set, get) => ({
    *
    * Network can be Testnet or Mainnet
    */
-  isMainNet: _.includes(process.env.NEXT_PUBLIC_API, 'testnet'),
+  isMainNet: _.includes(process.env.NEXT_PUBLIC_API, 'testnet') ? 1 : 2,
 
   setIsMainNet: (status) => {
     console.log(status, 'status')

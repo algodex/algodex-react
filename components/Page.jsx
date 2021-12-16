@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 
 import Head from 'next/head'
 import Header from 'components/header'
+import Icon from '@mdi/react'
 import MainLayout from 'components/main-layout'
 import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
+import { mdiWindowClose } from '@mdi/js'
 import styled from 'styled-components'
+import theme from '../theme'
 import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
@@ -105,12 +108,35 @@ const Page = ({
         {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
-      <div>
-        <p>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '0.8rem 0',
+          background: `${isMainNet == 1 ? theme.colors.blue['500'] : theme.colors.green['500']}`
+        }}
+      >
+        <p
+          style={{
+            width: '90%',
+            display: 'flex',
+            justifyContent: 'center',
+            color: '#FFFFFF'
+          }}
+          className="font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
+        >
           This is the
           {isMainNet ? ' Mainet ' : ' Testnet '}
           version of Algodex. Please be careful making any trades.
         </p>
+        <Icon
+          path={mdiWindowClose}
+          title="Close ribbon"
+          size={1}
+          className="xs:mr-2 lg:mr-8 cursor-pointer"
+          color="#FFFFFF"
+        />
       </div>
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
