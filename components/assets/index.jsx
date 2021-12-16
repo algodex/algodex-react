@@ -20,6 +20,7 @@ import {
   TableWrapper
 } from './assets.css'
 import { useEventDispatch } from '../../hooks/useEvents'
+import useUserStore from '../../store/use-user-state'
 
 const AssetCoinCell = (props) => {
   const dispatcher = useEventDispatch()
@@ -66,6 +67,10 @@ function Assets() {
 
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
+
+  const walletAssetsTableState = useUserStore((state) => state.walletAssetsTableState)
+  const setWalletAssetsTableState = useUserStore((state) => state.setWalletAssetsTableState)
+
   const { data, isLoading, isError } = useWalletAssetsQuery({
     wallet: { address: activeWalletAddress },
     options: {
@@ -127,7 +132,12 @@ function Assets() {
   return (
     <Container style={{ height: '6rem' }}>
       <TableWrapper>
-        <OrdersTable columns={columns} data={assetsData || []} />
+        <OrdersTable
+          initialState={walletAssetsTableState}
+          onStateChange={(state) => setWalletAssetsTableState(state)}
+          columns={columns}
+          data={assetsData || []}
+        />
       </TableWrapper>
 
       {renderStatus()}
