@@ -25,12 +25,17 @@ import {
 } from './open-orders.css'
 import { useWalletOrdersQuery } from '../../hooks/useAlgodex'
 import { useEventDispatch } from '../../hooks/useEvents'
+import useUserStore from '../../store/use-user-state'
 
 function OpenOrders() {
   const { t, lang } = useTranslation('orders')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const [openOrdersData, setOpenOrdersData] = useState(null)
   const isSignedIn = useStore((state) => state.isSignedIn)
+
+  const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
+  const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
+
   const { data, isLoading, isError } = useWalletOrdersQuery({
     wallet: { address: activeWalletAddress },
     options: {
@@ -184,7 +189,15 @@ function OpenOrders() {
   return (
     <OpenOrdersContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={openOrdersDataMemoized || []} />
+        <OrdersTable
+          initialState={walletOpenOrdersTableState}
+          onStateChange={(state) => {
+            console.log('State changing', state)
+            setWalletOpenOrdersTableState(state)
+          }}
+          columns={columns}
+          data={openOrdersDataMemoized || []}
+        />
       </TableWrapper>
 
       {renderStatus()}
