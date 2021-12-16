@@ -1,0 +1,13 @@
+{
+  "search": "検索",
+  "pair": "ペア（取引ペア）",
+  "price": "価格",
+  "change": "変動",
+  "24-hr-change": "24時間変動",
+  "liquidity": "流動性",
+  "loading": "読み込み中・・・",
+  "back-to-chart": "チャートに戻る",
+  "description": "概要",
+  "circulating-supply": "現在の供給量",
+  "total-supply": "総供給量"
+}
