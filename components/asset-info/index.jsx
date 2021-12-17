@@ -35,6 +35,7 @@ const AssetInfo = ({ asset, price }) => {
   const { data: dexAsset } = useAssetPriceQuery({
     asset,
     options: {
+      refetchInterval: 5000,
       enabled: price?.isTraded || false,
       initialData: price
     }
