@@ -58,7 +58,7 @@ export default function Header() {
 
   return (
     <Container className="flex" data-testid="header-container">
-      <Link href="/">
+      <Link href="/trade">
         <a>
           <InlineLogo src="/logo-inline-dark.svg" />
           <IconLogo src="/logo-icon-dark.svg" />
