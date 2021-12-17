@@ -1,0 +1,16 @@
+{
+  "header-about": "AlgoDexについて",
+  "header-trade": "トレード",
+  "header-docs": "説明書",
+  "header-support": "サポート",
+  "price": "価格",
+  "amount": "量",
+  "total": "合計",
+  "time": "時間",
+  "no-trades-completed": "取引不成立  ",
+  "mobilefooter-CHART":"チャート",
+  "mobilefooter-BOOK":"板取引（オーダーブック） ",
+  "mobilefooter-TRADE":"トレード",
+  "mobilefooter-ORDERS":"注文",
+  "mobilefooter-WALLET":"ウォレット"
+}
