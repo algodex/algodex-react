@@ -57,8 +57,7 @@ export const useAssetChartQuery = ({
   asset: { id },
   options = {
     refetchInterval,
-    // enabled: typeof id !== 'undefined'
-    enabled: false
+    enabled: typeof id !== 'undefined'
   }
 }) => useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
 
@@ -87,8 +86,8 @@ export const useAssetOrdersQuery = ({
 export const useAssetTradeHistoryQuery = ({
   asset: { id },
   options = {
-    // enabled: typeof id !== 'undefined',
-    enabled: false,
+    enabled: typeof id !== 'undefined',
+    // enabled: false,
     refetchInterval: 5000,
     staleTime: 3000
   }
