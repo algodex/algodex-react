@@ -10,17 +10,21 @@ const userState = (set, get) => ({
    * This list is composed of a Algodex Assets Query and
    */
   assets: {},
-  /**
-   * Current network used.
-   *
-   * Network can be Testnet or Mainnet
-   */
-  isMainNet: _.includes(process.env.NEXT_PUBLIC_API, 'testnet') ? 1 : 2,
 
-  setIsMainNet: (status) => {
-    console.log(status, 'status')
+  /**
+   * Assets should be a reduced list keyed by Asset ID
+   *
+   * This list is composed of a Algodex Assets Query and
+   */
+  dataForSwitchingNetwork: {
+    dexNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'testnet') ? 1 : 2,
+    ribbonNotification: true,
+    modalNotification: true
+  },
+  setDataForSwitchingNetwork: (data) => {
+    const result = { ...get().dataForSwitchingNetwork, ...data }
     set({
-      isMainNet: status === 1 ? true : false
+      dataForSwitchingNetwork: result
     })
   },
   /**

@@ -23,8 +23,8 @@ import useUserStore from 'store/use-user-state'
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [activeNetwork, setActiveNetwork] = useState(1)
-  const setIsMainNet = useUserStore((state) => state.setIsMainNet)
-  const isMainNet = useUserStore((state) => state.isMainNet)
+  const setDataForSwitchingNetwork = useUserStore((state) => state.setDataForSwitchingNetwork)
+  const { dexNetwork } = useUserStore((state) => state.dataForSwitchingNetwork)
   
   
   const { t } = useTranslation('common')
@@ -34,8 +34,15 @@ export default function Header() {
   }
 
   useEffect(() => {
-    console.log(isMainNet, activeNetwork, 'both')
-    activeNetwork == 1 ? setIsMainNet(1) : setIsMainNet(2)
+    activeNetwork == 1 ? setDataForSwitchingNetwork({ 
+      dexNetwork: 1, 
+      ribbonNotification: true,
+      modalNotification: true
+    }) : setDataForSwitchingNetwork({ 
+      dexNetwork: 2,
+      ribbonNotification: true,
+      modalNotification: true
+    })
   }, [activeNetwork])
 
   return (
@@ -47,7 +54,7 @@ export default function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown className="font-medium" isMainNet={isMainNet} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
+      <NetworkDropdown className="font-medium" dexNetwork={dexNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
         <option value={1}>MAIN</option>
         <option value={2}>TEST</option>
       </NetworkDropdown>
