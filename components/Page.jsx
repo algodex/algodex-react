@@ -156,7 +156,7 @@ const Page = ({
           </div>
         )}
       </div>
-      {activeNetwork == 'mainnet' ? (
+      {activeNetwork == 'testnet' ? (
         <MainnetModalComp
           modalNotification={modalNotification}
           setDataForSwitchingNetwork={setDataForSwitchingNetwork}
