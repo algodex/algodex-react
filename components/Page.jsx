@@ -12,6 +12,7 @@ import theme from '../theme'
 import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
+import useTranslation from 'next-translate/useTranslation'
 
 const DEBUG = process.env.NEXT_DEBUG
 
@@ -63,6 +64,7 @@ const Page = ({
 }) => {
   const { query, isFallback } = useRouter()
   const [explorerAsset, setExplorerAsset] = useState(staticExplorerAsset)
+  const { t } = useTranslation(['testnet', 'mainnet'])
 
   const id = parseInt(query.id)
   const isRouted = typeof query.id !== 'undefined'
@@ -109,6 +111,17 @@ const Page = ({
       setExplorerAsset(data)
     }
   }, [explorerAsset, addAsset, data])
+
+  const modalContent = {
+    title: '',
+    subTitle: '',
+    paragraphone: '',
+    paragraphTwo: '',
+    externalLinkOne: '',
+    externalLinkTwo: '',
+    socialLinks: [''],
+    button: ''
+  }
 
   return (
     <Container>

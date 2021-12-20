@@ -32,7 +32,7 @@ export const ModalContentFooter = styled.div``
 
 export const IconWrapper = styled.div``
 
-const TestnetModal = ({ modalNotification, setDataForSwitchingNetwork }) => {
+const TestnetModal = ({ modalNotification, setDataForSwitchingNetwork, content }) => {
   return (
     <Modal visibility={modalNotification}>
       <ModalContainer className="flex flex-col justify-between text-white h-3/5 w-2/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg p-8">
@@ -115,7 +115,8 @@ const TestnetModal = ({ modalNotification, setDataForSwitchingNetwork }) => {
 
 TestnetModal.propTypes = {
   modalNotification: PropTypes.bool,
-  setDataForSwitchingNetwork: PropTypes.func
+  setDataForSwitchingNetwork: PropTypes.func,
+  content: PropTypes.object
 }
 export const TestnetModalComp = TestnetModal
 
