@@ -18,6 +18,7 @@ const userState = (set, get) => ({
    */
   dataForSwitchingNetwork: {
     dexNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'testnet') ? 1 : 2,
+    activeNetwork: 'mainnet',
     ribbonNotification: true,
     modalNotification: true
   },

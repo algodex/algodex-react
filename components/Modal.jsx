@@ -4,10 +4,15 @@ import styled from 'styled-components'
 export const ModalWrapper = styled.div`
   z-index: 200;
   background: rgba(0, 0, 0, 0.7);
+  visibility: ${({ visibility }) => (visibility ? 'visible' : 'hidden')};
 `
 const Modal = (props) => {
   return (
-    <ModalWrapper className="absolute w-full h-full flex justify-center items-center" {...props}>
+    <ModalWrapper
+      visibility={props.visibility}
+      className="absolute w-full h-full flex justify-center items-center"
+      {...props}
+    >
       {props.children}
     </ModalWrapper>
     // <div
@@ -20,6 +25,7 @@ const Modal = (props) => {
 }
 
 Modal.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.element,
+  visibility: PropTypes.bool
 }
 export default Modal
