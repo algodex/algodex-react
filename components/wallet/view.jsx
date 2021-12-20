@@ -95,8 +95,13 @@ function WalletView(props) {
   }
 
   const getButtonIntegrationState = () => {
-    console.log("eric Hit")
+    debugger;
+    // onConnectClickIntegration()
+    // if (!walletConnectAddresses) return
+    // walletConnectAddresses.connector._handleSessionDisconnect()
     onConnectClickIntegration()
+    console.log("eric Hit")
+    
     console.log(walletConnectAddresses)
     // console.log(walletConnectAddresses.connector["_accounts"][0])
   }

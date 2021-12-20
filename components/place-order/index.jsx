@@ -3,7 +3,7 @@ import PlaceOrderView from './view'
 import useStore, { useStorePersisted } from 'store/use-store'
 
 function PlaceOrder(props) {
-  const { refetchWallets } = props
+  const { refetchWallets, walletConnector } = props
 
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
@@ -19,6 +19,7 @@ function PlaceOrder(props) {
       isSignedIn={isSignedIn}
       orderBook={orderBook}
       refetchWallets={refetchWallets}
+      walletConnector={walletConnector}
     />
   )
 }

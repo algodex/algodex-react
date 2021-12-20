@@ -4,10 +4,12 @@ import { convertToBaseUnits, convertToAsaUnits } from './convert'
 const AlgodClient = new algodex.initAlgodClient('public_test')
 
 const OrderService = {
-  placeOrder: (order, orderBook) => {
+  placeOrder: (order, orderBook, walletConnector) => {
     console.log('OrderService.placeOrder', { order })
+
     const assetId = order.asset.id
-    const address = order.address
+    // const address = order.address
+    const address = walletConnector.connector['_accounts'][0]
     const minimumAmount = 0
 
     const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
@@ -15,6 +17,7 @@ const OrderService = {
 
     const price = convertToAsaUnits(order.price, order.asset.decimals)
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
+   
 
     if (order.execution === 'maker') {
       if (order.type === 'buy') {
@@ -24,6 +27,7 @@ const OrderService = {
           assetId,
           algoAmount
         })
+       
         return algodex.placeAlgosToBuyASAOrderIntoOrderbook(
           AlgodClient,
           address,
@@ -31,9 +35,11 @@ const OrderService = {
           denominator,
           minimumAmount,
           assetId,
-          algoAmount
+          algoAmount,
+          walletConnector
         )
       } else if (order.type === 'sell') {
+        
         console.log('Maker sell order', {
           address,
           price,
@@ -47,7 +53,8 @@ const OrderService = {
           denominator,
           minimumAmount,
           assetId,
-          asaAmount
+          asaAmount,
+          walletConnector
         )
       }
     }
@@ -56,7 +63,7 @@ const OrderService = {
     const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
 
     const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-    
+
     if (order.execution === 'taker') {
       console.log(`Taker ${order.type} order`, {
         isSellOrder,
@@ -74,7 +81,8 @@ const OrderService = {
         limitPrice,
         asaAmount,
         algoAmount,
-        allOrderBookOrders
+        allOrderBookOrders,
+        walletConnector
       )
     }
 
@@ -86,7 +94,8 @@ const OrderService = {
       address,
       limitPrice,
       asaAmount,
-      algoAmount
+      algoAmount,
+      walletConnector
     })
 
     return algodex.executeOrderAsMakerAndTaker(
@@ -97,7 +106,8 @@ const OrderService = {
       limitPrice,
       asaAmount,
       algoAmount,
-      allOrderBookOrders
+      allOrderBookOrders,
+      walletConnector
     )
   },
 

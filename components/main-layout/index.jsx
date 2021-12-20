@@ -89,7 +89,7 @@ function MainLayout(props) {
         </WalletSection>
     
         <TradeSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder refetchWallets={refetchWallets} />
+          <PlaceOrder refetchWallets={refetchWallets} walletConnector={walletConnectAddresses} />
         </TradeSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>

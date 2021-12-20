@@ -27,7 +27,7 @@ export default function useWalletConnect() {
        
     
         // await this.setState({ connector });
-        setWalletConnection({...walletConnection, connector})
+        setWalletConnection({ connector})
       
     
         // check if already connected

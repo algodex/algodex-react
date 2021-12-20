@@ -74,7 +74,7 @@ export default function Home() {
   })
 
   
-  console.log({walletAddresses})
+  
 
   useEffect(() => {
     if (walletsQuery.data?.wallets) {

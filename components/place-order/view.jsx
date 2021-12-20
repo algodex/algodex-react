@@ -46,7 +46,7 @@ const DEFAULT_ORDER = {
 }
 
 function PlaceOrderView(props) {
-  const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets } = props
+  const { asset, wallets, activeWalletAddress, isSignedIn, orderBook, refetchWallets, walletConnector } = props
   const { t } = useTranslation('place-order')
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
@@ -113,7 +113,7 @@ function PlaceOrderView(props) {
     })
   }
 
-  const placeOrder = (orderData) => {
+  const placeOrder = (orderData, walletConnector) => {
     // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
     let filteredOrderBook = {
       buyOrders: orderBook.buyOrders.filter((order) =>
@@ -124,7 +124,7 @@ function PlaceOrderView(props) {
         return equivAlgoAmount.gte(new Big(orderFilter))
       })
     }
-    return OrderService.placeOrder(orderData, filteredOrderBook)
+    return OrderService.placeOrder(orderData, filteredOrderBook, walletConnector)
   }
 
   const checkPopupBlocker = () => {
@@ -167,7 +167,7 @@ function PlaceOrderView(props) {
       level: Sentry.Severity.Info
     })
 
-    const orderPromise = placeOrder(orderData)
+    const orderPromise = placeOrder(orderData, walletConnector)
 
     toast.promise(orderPromise, {
       loading: t('awaiting-confirmation'),
