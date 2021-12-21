@@ -1,6 +1,6 @@
 {
-  "modal-title": "Welcome to Algodex Mainnet!",
-  
+  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
+  "modal-title-testnet": "Welcome to Algodex Testnet!",
   "modal-subtitle-mainnet": "Be aware of potential risks -",
   "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
   "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
@@ -16,5 +16,6 @@
   "modal-faucet": "Faucet",
   "modal-documentation": "Documentation",
   "modal-cta": "ACCEPT",
-  "ribbon-message": "This is the Mainnet version of Algodex. Please be careful making any trades."
+  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
+  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
 }

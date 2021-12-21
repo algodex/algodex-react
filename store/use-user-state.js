@@ -17,13 +17,13 @@ const userState = (set, get) => ({
    * This list is composed of a Algodex Assets Query and
    */
   dataForSwitchingNetwork: {
-    dexNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'testnet') ? 1 : 2,
-    activeNetwork: 'mainnet',
+    activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
     ribbonNotification: true,
     modalNotification: true
   },
   setDataForSwitchingNetwork: (data) => {
     const result = { ...get().dataForSwitchingNetwork, ...data }
+    console.log(result, 'result')
     set({
       dataForSwitchingNetwork: result
     })

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
 import Head from 'next/head'
 import Header from 'components/header'
 import Icon from '@mdi/react'
 import MainLayout from 'components/main-layout'
-import { MainnetModalComp, TestnetModalComp } from 'components/helper-modals'
+import NetworkNotificationModal from 'components/helper-modals'
 import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import { mdiWindowClose } from '@mdi/js'
@@ -11,8 +12,8 @@ import styled from 'styled-components'
 import theme from '../theme'
 import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
-import useUserStore from 'store/use-user-state'
 import useTranslation from 'next-translate/useTranslation'
+import useUserStore from 'store/use-user-state'
 
 const DEBUG = process.env.NEXT_DEBUG
 
@@ -64,7 +65,7 @@ const Page = ({
 }) => {
   const { query, isFallback } = useRouter()
   const [explorerAsset, setExplorerAsset] = useState(staticExplorerAsset)
-  const { t } = useTranslation(['testnet', 'mainnet'])
+  const { t } = useTranslation('network-notification')
 
   const id = parseInt(query.id)
   const isRouted = typeof query.id !== 'undefined'
@@ -82,9 +83,10 @@ const Page = ({
   // Add Asset to User Storage
   const addAsset = useUserStore((state) => state.addAsset)
 
-  const { ribbonNotification, dexNetwork, modalNotification, activeNetwork } = useUserStore(
+  const { ribbonNotification, modalNotification, activeNetwork } = useUserStore(
     (state) => state.dataForSwitchingNetwork
   )
+
   const setDataForSwitchingNetwork = useUserStore((state) => state.setDataForSwitchingNetwork)
 
   let options = {
@@ -102,6 +104,40 @@ const Page = ({
   })
 
   useEffect(() => {
+    console.log(modalNotification, 'hello')
+    if (modalNotification) {
+      console.log(true, 'yeah')
+    } else {
+      console.log(false, 'yeah')
+    }
+  }, [modalNotification])
+
+  const modalMessages = useMemo(() => {
+    if (activeNetwork == 'mainnet') {
+      return {
+        title: t('modal-title-mainnet'),
+        subTitle: t('modal-subtitle-mainnet'),
+        paragraphone: t('modal-first-paragraph-mainnet'),
+        paragraphTwo: t('modal-second-paragraph-mainnet'),
+        externalLinkOne: t('modal-disclaimer'),
+        externalLinkTwo: t('modal-documentation'),
+        button: t('modal-cta')
+      }
+    }
+    if (activeNetwork == 'testnet') {
+      return {
+        title: t('modal-title-testnet'),
+        subTitle: t('modal-subtitle-testnet'),
+        paragraphone: t('modal-first-paragraph-testnet'),
+        paragraphTwo: t('modal-second-paragraph-testnet'),
+        externalLinkOne: t('modal-faucet'),
+        externalLinkTwo: t('modal-documentation'),
+        button: t('modal-cta')
+      }
+    }
+  }, [t, activeNetwork])
+
+  useEffect(() => {
     if (
       typeof data !== 'undefined' &&
       typeof data.id !== 'undefined' &&
@@ -111,17 +147,6 @@ const Page = ({
       setExplorerAsset(data)
     }
   }, [explorerAsset, addAsset, data])
-
-  const modalContent = {
-    title: '',
-    subTitle: '',
-    paragraphone: '',
-    paragraphTwo: '',
-    externalLinkOne: '',
-    externalLinkTwo: '',
-    socialLinks: [''],
-    button: ''
-  }
 
   return (
     <Container>
@@ -141,7 +166,7 @@ const Page = ({
               alignItems: 'center',
               padding: '0.8rem 0',
               background: `${
-                dexNetwork == 1 ? theme.colors.blue['500'] : theme.colors.green['500']
+                activeNetwork == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']
               }`
             }}
           >
@@ -154,9 +179,9 @@ const Page = ({
               }}
               className="font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
             >
-              This is the
-              {dexNetwork ? ' Mainet ' : ' Testnet '}
-              version of Algodex. Please be careful making any trades.
+              {activeNetwork == 'mainnet'
+                ? t('ribbon-message-mainnet')
+                : t('ribbon-message-testnet')}
             </p>
             <Icon
               onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
@@ -169,21 +194,11 @@ const Page = ({
           </div>
         )}
       </div>
-      {activeNetwork == 'testnet' ? (
-        <MainnetModalComp
-          modalNotification={modalNotification}
-          setDataForSwitchingNetwork={setDataForSwitchingNetwork}
-        />
-      ) : (
-        <TestnetModalComp
-          modalNotification={modalNotification}
-          setDataForSwitchingNetwork={setDataForSwitchingNetwork}
-        />
-      )}
-      {/* <MainnetModalComp
+      <NetworkNotificationModal
         modalNotification={modalNotification}
         setDataForSwitchingNetwork={setDataForSwitchingNetwork}
-      /> */}
+        content={modalMessages}
+      />
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
         {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}

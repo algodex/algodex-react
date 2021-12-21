@@ -17,33 +17,34 @@ import ActiveLink from 'components/active-link'
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
+import _ from 'lodash'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const [activeNetwork, setActiveNetwork] = useState(1)
+  const [networkUpdate, setNetworkUpdate] = useState(null)
   const setDataForSwitchingNetwork = useUserStore((state) => state.setDataForSwitchingNetwork)
-  const { dexNetwork } = useUserStore((state) => state.dataForSwitchingNetwork)
+  const { activeNetwork } = useUserStore((state) => state.dataForSwitchingNetwork)
   
   
   const { t } = useTranslation('common')
 
   const handleNetworkChangeFn = (value) => {
-    setActiveNetwork(value)
+    setNetworkUpdate(value)
   }
 
   useEffect(() => {
-    activeNetwork == 1 ? setDataForSwitchingNetwork({ 
-      dexNetwork: 1, 
+    networkUpdate == "mainnet" ? setDataForSwitchingNetwork({ 
+      activeNetwork: 'mainnet',
       ribbonNotification: true,
       modalNotification: true
     }) : setDataForSwitchingNetwork({ 
-      dexNetwork: 2,
+      activeNetwork: 'testnet',
       ribbonNotification: true,
       modalNotification: true
     })
-  }, [activeNetwork])
+  }, [networkUpdate])
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -54,9 +55,9 @@ export default function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown className="font-medium" dexNetwork={dexNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
-        <option value={1}>MAIN</option>
-        <option value={2}>TEST</option>
+      <NetworkDropdown className="font-medium" activeNetwork={activeNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
+        <option value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
+        <option value="testnet" selected={activeNetwork === "testnet"}>TESTNET</option>
       </NetworkDropdown>
         
       

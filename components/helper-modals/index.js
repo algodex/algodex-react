@@ -1,6 +1,7 @@
-import Modal from 'components/Modal'
-import { mdiTwitter, mdiReddit, mdiDiscord, mdiSend } from '@mdi/js'
+import { mdiDiscord, mdiReddit, mdiSend, mdiTwitter } from '@mdi/js'
+
 import Icon from '@mdi/react'
+import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -32,34 +33,33 @@ export const ModalContentFooter = styled.div``
 
 export const IconWrapper = styled.div``
 
-const TestnetModal = ({ modalNotification, setDataForSwitchingNetwork, content }) => {
+const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwork, content }) => {
+  console.log(modalNotification, 'modal')
   return (
-    <Modal visibility={modalNotification}>
-      <ModalContainer className="flex flex-col justify-between text-white h-3/5 w-2/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg p-8">
+    <Modal isVisible={modalNotification}>
+      <ModalContainer className="flex flex-col justify-between text-white xs:h-5/6 xs:w-5/6 md:h-3/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg xs:p-4 md:p-8">
         <ModalBody className="flex flex-col justify-between">
-          <ModalTitle className="mb-6 text-2xl font-bold">Welcome to Algodex Testnet!</ModalTitle>
-          <ModalSubtitle className="mb-6 italic font-medium text-lg">
-            Test new features risk free!
+          <ModalTitle className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
+            {content.title}
+          </ModalTitle>
+          <ModalSubtitle className="xs:mb-4 md:mb-6 italic font-medium text-lg">
+            {content.subTitle}
           </ModalSubtitle>
-          <ModalMain className="mb-6 text-sm">
-            You are trading on the Testnet version of Algodex used to test our new features and find
-            bugs. All trades on Testnet use testnet algos and assets with no real value. You are
-            able to get Algos to test with from the Faucet link below.
-          </ModalMain>
-          <ModalClosingMessage className="mb-6 text-sm">
-            Please send feedback about any bugs or feature requests!
+          <ModalMain className="xs:mb-4 md:mb-6 text-sm">{content.paragraphone}</ModalMain>
+          <ModalClosingMessage className="xs:mb-4 md:mb-6 text-sm">
+            {content.paragraphTwo}
           </ModalClosingMessage>
-          <ModalContentFooter className="w-1/2">
+          <ModalContentFooter className="md:w-1/2">
             <hr />
-            <ModalExternalLink className="text-2xl my-3 italic font-medium">
-              Faucet
+            <ModalExternalLink className="xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+              {content.externalLinkOne}
             </ModalExternalLink>
             <hr />
-            <ModalExternalLink className="text-2xl my-3 italic font-medium">
-              Documentation
+            <ModalExternalLink className="xs:text-lg text-2xl my-3 italic font-medium">
+              {content.externalLinkTwo}
             </ModalExternalLink>
             <hr />
-            <div className="flex my-2 mx-2 w-1/4">
+            <div className="flex my-2 mx-2">
               <IconWrapper className="flex items-center">
                 <Icon
                   onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
@@ -98,14 +98,12 @@ const TestnetModal = ({ modalNotification, setDataForSwitchingNetwork, content }
             </div>
           </ModalContentFooter>
         </ModalBody>
-        <ModalFooter className="flex justify-center w-full">
+        <ModalFooter
+          onClick={() => setDataForSwitchingNetwork({ modalNotification: false })}
+          className="flex justify-center w-full"
+        >
           <div style={{ width: '10rem' }}>
-            <Button
-              onClick={() => setDataForSwitchingNetwork({ modalNotification: false })}
-              className="font-bold"
-            >
-              ACCEPT
-            </Button>
+            <Button className="font-bold">{content.button}</Button>
           </div>
         </ModalFooter>
       </ModalContainer>
@@ -113,91 +111,9 @@ const TestnetModal = ({ modalNotification, setDataForSwitchingNetwork, content }
   )
 }
 
-TestnetModal.propTypes = {
+NetworkNotificationModal.propTypes = {
   modalNotification: PropTypes.bool,
   setDataForSwitchingNetwork: PropTypes.func,
   content: PropTypes.object
 }
-export const TestnetModalComp = TestnetModal
-
-const MainnetModal = ({ modalNotification, setDataForSwitchingNetwork }) => {
-  return (
-    <Modal visibility={modalNotification}>
-      <div className="flex flex-col justify-between text-white h-3/5 w-2/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg p-8">
-        <div className="flex flex-col justify-between">
-          <p className="mb-6 text-2xl font-bold">Welcome to Algodex Mainnet!</p>
-          <p className="mb-6 italic font-medium text-lg">Be aware of potential risks -</p>
-          <p className="mb-6 text-sm">
-            You are trading on the Mainnet version of Algodex. Please be careful with your funds
-            while making any orders as these transactions are with mainnet assets with real value
-            and trades are permanent.
-          </p>
-          <p className="mb-6 text-sm">
-            Algodex has gone through a security audit, however losses may occur due to unforeseen
-            circumstances. Please review our Disclaimer and Documentation before continuing.
-          </p>
-          <div className="w-1/2">
-            <hr />
-            <p className="text-2xl my-3 italic font-medium">Disclaimer</p>
-            <hr />
-            <p className="text-2xl my-3 italic font-medium">Documentation</p>
-            <hr />
-            <div className="flex my-2 mx-2 w-1/4">
-              <div className="flex items-center">
-                <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
-                  path={mdiSend}
-                  title="Telegram link"
-                  rotate={330}
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-                <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
-                  path={mdiTwitter}
-                  title="Twitter link"
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-                <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
-                  path={mdiReddit}
-                  title="Reddit link"
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-                <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
-                  path={mdiDiscord}
-                  title="Discord link"
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center w-full">
-          <di style={{ width: '10rem' }}>
-            <Button
-              onClick={() => setDataForSwitchingNetwork({ modalNotification: false })}
-              className="font-bold"
-            >
-              ACCEPT
-            </Button>
-          </di>
-        </div>
-      </div>
-    </Modal>
-  )
-}
-
-MainnetModal.propTypes = {
-  modalNotification: PropTypes.bool,
-  setDataForSwitchingNetwork: PropTypes.func
-}
-export const MainnetModalComp = MainnetModal
+export default NetworkNotificationModal
