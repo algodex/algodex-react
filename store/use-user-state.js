@@ -130,6 +130,70 @@ const userState = (set, get) => ({
       }
     }),
   /**
+   * Wallet OrderHistory State
+   */
+  walletOrderHistoryTableState: {
+    sortBy: []
+  },
+  /**
+   * Set Wallet OrderHistory Table State
+   * @param walletOrderHistoryTableState
+   */
+  setWalletOrderHistoryTableState: (walletOrderHistoryTableState) =>
+    set({
+      walletOrderHistoryTableState: {
+        ...get().walletOrderHistoryTableState,
+        ...walletOrderHistoryTableState
+      }
+    }),
+  /**
+   * Wallet OpenOrders Table State
+   */
+  walletOpenOrdersTableState: {
+    sortBy: []
+  },
+  /**
+   * Set Wallet OpenOrders Table State
+   * @param walletOpenOrdersTableState
+   */
+  setWalletOpenOrdersTableState: (walletOpenOrdersTableState) =>
+    set({
+      walletOpenOrdersTableState: {
+        ...get().walletOpenOrdersTableState,
+        ...walletOpenOrdersTableState
+      }
+    }),
+  /**
+   * Wallet Assets Table State
+   */
+  walletAssetsTableState: {
+    sortBy: []
+  },
+  /**
+   * Set Wallet Assets Table State
+   * @param walletAssetsTableState
+   */
+  setWalletAssetsTableState: (walletAssetsTableState) =>
+    set({
+      walletAssetsTableState: {
+        ...get().walletAssetsTableState,
+        ...walletAssetsTableState
+      }
+    }),
+
+  /**
+   * New Orders Size Filter
+   */
+  newOrderSizeFilter: 0,
+  /**
+   * Set Order Size Filter
+   * @param newOrderSizeFilter
+   */
+  setNewOrderSizeFilter: (newOrderSizeFilter) =>
+    set({
+      newOrderSizeFilter
+    }),
+  /**
    * Wallet Accounts[Work in Progress]
    */
   accounts: {},

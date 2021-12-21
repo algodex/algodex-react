@@ -87,6 +87,7 @@ export const useAssetTradeHistoryQuery = ({
   asset: { id },
   options = {
     enabled: typeof id !== 'undefined',
+    // enabled: false,
     refetchInterval: 5000,
     staleTime: 3000
   }
