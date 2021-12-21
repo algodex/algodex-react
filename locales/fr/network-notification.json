@@ -1,21 +1,22 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "_comment": "Translation for French",
+  "modal-title-mainnet": "Bienvenue sur le réseau principal d'Algodex !",
+  "modal-title-testnet": "Bienvenue sur Algodex Testnet !",
+  "modal-subtitle-mainnet": "Soyez conscient des risques potentiels -",
+  "modal-first-paragraph-mainnet": "Vous négociez sur la version Mainnet d'Algodex. Soyez prudent avec vos fonds lorsque vous passez des commandes, car ces transactions sont effectuées avec des actifs du réseau principal avec une valeur réelle et les transactions sont permanentes.",
+  "modal-second-paragraph-mainnet": "Algodex a subi un audit de sécurité, mais des pertes peuvent survenir en raison de circonstances imprévues. Veuillez consulter notre avis de non-responsabilité et notre documentation avant de continuer.",
   
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
+  "modal-subtitle-testnet": "Testez les nouvelles fonctionnalités sans risque !",
+  "modal-first-paragraph-testnet": "Vous négociez sur la version Testnet d'Algodex utilisée pour tester nos nouvelles fonctionnalités et trouver des bugs. Toutes les transactions sur Testnet utilisent des algorithmes et des actifs de testnet sans valeur réelle. Vous pouvez faire tester Algos à partir du lien Faucet ci-dessous.",
+  "modal-second-paragraph-testnet": "Veuillez envoyer des commentaires sur tout bug ou demande de fonctionnalité !",
   
-  "network-name-mainnet": "MAINNET",
+  "network-name-mainnet": "RESEAU PRINCIPAL",
   "network-name-testnet": "TESTNET",
 
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
+  "modal-disclaimer": "Avertissement",
+  "modal-faucet": "Robinet",
   "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-cta": "J'ACCEPTE",
+  "ribbon-message-mainnet": "Ceci est la version Mainnet d'Algodex. S'il vous plaît soyez prudent en faisant des transactions.",
+  "ribbon-message-testnet": "Ceci est la version Testnet d'Algodex. S'il vous plaît soyez prudent en faisant des transactions."
 }

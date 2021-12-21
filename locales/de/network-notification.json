@@ -1,21 +1,22 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "_comment": "Translation for German",
+  "modal-title-mainnet": "Willkommen im Algodex Mainnet!",
+  "modal-title-testnet": "Willkommen beim Algodex Testnet!",
+  "modal-subtitle-mainnet": "Seien Sie sich der potenziellen Risiken bewusst -",
+  "modal-first-paragraph-mainnet": "Sie handeln mit der Mainnet-Version von Algodex. Bitte seien Sie vorsichtig mit Ihrem Geld, wenn Sie Bestellungen aufgeben, da diese Transaktionen mit Mainnet-Vermögenswerten mit echtem Wert erfolgen und der Handel dauerhaft ist.",
+  "modal-second-paragraph-mainnet": "Algodex hat ein Sicherheitsaudit durchlaufen, jedoch können aufgrund unvorhergesehener Umstände Verluste auftreten. Bitte lesen Sie unseren Haftungsausschluss und die Dokumentation, bevor Sie fortfahren.",
   
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
+  "modal-subtitle-testnet": "Prova les noves funcions sense risc!",
+  "modal-first-paragraph-testnet": "Esteu negociant amb la versió Testnet d'Algodex que s'utilitza per provar les nostres noves funcions i trobar errors. Totes les operacions a Testnet utilitzen algos i actius de testnet sense valor real. Podeu fer proves amb Algos des de l'enllaç de l'aixeta següent.",
+  "modal-second-paragraph-testnet": "Envieu comentaris sobre qualsevol error o sol·licitud de funció!",
   
-  "network-name-mainnet": "MAINNET",
+  "network-name-mainnet": "HAUPTNETZ",
   "network-name-testnet": "TESTNET",
 
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-disclaimer": "Haftungsausschluss",
+  "modal-faucet": "Wasserhahn",
+  "modal-documentation": "Dokumentation",
+  "modal-cta": "AKZEPTIEREN",
+  "ribbon-message-mainnet": "Dies ist die Mainnet-Version von Algodex. Bitte seien Sie vorsichtig, wenn Sie Trades tätigen.",
+  "ribbon-message-testnet": "Dies ist die Testnet-Version von Algodex. Bitte seien Sie vorsichtig, wenn Sie Trades tätigen."
 }

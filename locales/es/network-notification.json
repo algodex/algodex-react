@@ -1,21 +1,19 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
-  
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
-  
-  "network-name-mainnet": "MAINNET",
+  "_comment": "Translation for Spanish",
+  "modal-title-mainnet": "¡Bienvenido a Algodex Mainnet!",
+  "modal-title-testnet": "¡Bienvenido a Algodex Testnet!",
+  "modal-subtitle-mainnet": "Sea consciente de los riesgos potenciales:",
+  "modal-first-paragraph-mainnet": "YEstá operando en la versión Mainnet de Algodex. Tenga cuidado con sus fondos al realizar cualquier pedido, ya que estas transacciones son con activos de mainnet con valor real y las operaciones son permanentes.",
+  "modal-second-paragraph-mainnet": "Algodex ha pasado por una auditoría de seguridad, sin embargo, pueden ocurrir pérdidas debido a circunstancias imprevistas. Revise nuestra Exención de responsabilidad y documentación antes de continuar.",
+  "modal-subtitle-testnet": "¡Pruebe nuevas funciones sin riesgos!",
+  "modal-first-paragraph-testnet": "Está operando en la versión Testnet de Algodex que se utiliza para probar nuestras nuevas funciones y encontrar errores. Todas las operaciones en Testnet utilizan algoritmos y activos de Testnet sin valor real. Puede obtener Algos para probar desde el enlace de Faucet a continuación.",
+  "modal-second-paragraph-testnet": "Envíe sus comentarios sobre cualquier error o solicitud de funciones.",
+  "network-name-mainnet": "RED PRINCIPAL",
   "network-name-testnet": "TESTNET",
-
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-disclaimer": "Descargo de responsabilidad",
+  "modal-faucet": "Grifo",
+  "modal-documentation": "Documentación",
+  "modal-cta": "ACEPTAR",
+  "ribbon-message-mainnet": "Esta es la versión Mainnet de Algodex. Tenga cuidado al realizar cualquier intercambio.",
+  "ribbon-message-testnet": "Esta es la versión Testnet de Algodex. Tenga cuidado al realizar cualquier intercambio."
 }

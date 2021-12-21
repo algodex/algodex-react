@@ -1,21 +1,19 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
-  
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
-  
-  "network-name-mainnet": "MAINNET",
-  "network-name-testnet": "TESTNET",
-
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "_comment": "Translation Simplified chinese",
+  "modal-title-mainnet": "欢迎来到 Algodex 主网！",
+  "modal-title-testnet": "欢迎来到 Algodex 测试网！",
+  "modal-subtitle-mainnet": "注意潜在风险——",
+  "modal-first-paragraph-mainnet": "您正在使用 Algodex 的主网版本进行交易。下订单时请注意您的资金，因为这些交易是与具有真实价值的主网资产进行的，并且交易是永久性的。",
+  "modal-second-paragraph-mainnet": "Algodex 已通过安全审核，但可能会因不可预见的情况发生损失。在继续之前，请查看我们的免责声明和文档。",
+  "modal-subtitle-testnet": "无风险测试新功能！",
+  "modal-first-paragraph-testnet": "您正在使用 Algodex 的测试网版本进行交易，该版本用于测试我们的新功能并查找错误。测试网上的所有交易都使用没有实际价值的测试网算法和资产。您可以从下面的 Faucet 链接获取 Algos 进行测试。",
+  "modal-second-paragraph-testnet": "请发送有关任何错误或功能请求的反馈！",
+  "network-name-mainnet": "主网",
+  "network-name-testnet": "测试网",
+  "modal-disclaimer": "免责声明",
+  "modal-faucet": "龙头",
+  "modal-documentation": "文档",
+  "modal-cta": "接受",
+  "ribbon-message-mainnet": "这是 Algodex 的主网版本。请谨慎进行任何交易。",
+  "ribbon-message-testnet": "这是 Algodex 的测试网版本。请谨慎进行任何交易。"
 }
