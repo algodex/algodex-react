@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":"LIBRO",
     "mobilefooter-TRADE":"SCAMBIO",
     "mobilefooter-ORDERS":"ORDINI",
-    "mobilefooter-WALLET":"PORTAFOGLIO"
+    "mobilefooter-WALLET":"PORTAFOGLIO", 
+    "trade-history":"Storia del commercio",
+    "order-book":"portafoglio ordini"
 }
