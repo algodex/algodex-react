@@ -12,5 +12,7 @@
   "mobilefooter-BOOK": " AJÁNLATI KÖNYV",
   "mobilefooter-TRADE": "KERESKEDÉS",
   "mobilefooter-ORDERS": "AJÁNLATOK",
-  "mobilefooter-WALLET": "TÁRCA"
+  "mobilefooter-WALLET": "TÁRCA",
+  "trade-history":"Kereskedelem-Történet",
+  "order-book":"Rendelési-Könyvk"
 }
