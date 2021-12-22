@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":"BOK (bestillingsbok) ",
     "mobilefooter-TRADE":"HANDEL",
     "mobilefooter-ORDERS":"ORDRENE",
-    "mobilefooter-WALLET":"LOMMEBOK"
+    "mobilefooter-WALLET":"LOMMEBOK",
+    "trade-history":"Handelshistorie",
+    "order-book":"bestillingsliste"
 }
