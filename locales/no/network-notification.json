@@ -1,21 +1,22 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "_comment": "Translation for Norwegian",
+  "modal-title-mainnet": "Velkommen til Algodex Mainnet!",
+  "modal-title-testnet": "Velkommen til Algodex Testnet!",
+  "modal-subtitle-mainnet": "Vær oppmerksom på potensielle risikoer -",
+  "modal-first-paragraph-mainnet": "Du handler på Mainnet-versjonen av Algodex. Vær forsiktig med pengene dine når du foretar bestillinger ettersom disse transaksjonene er med mainnet-eiendeler med reell verdi og handler er permanente.",
+  "modal-second-paragraph-mainnet": "Algodex har gått gjennom en sikkerhetsrevisjon, men tap kan oppstå på grunn av uforutsette omstendigheter. Les vår ansvarsfraskrivelse og dokumentasjon før du fortsetter.",
   
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
+  "modal-subtitle-testnet": "Test nye funksjoner uten risiko!",
+  "modal-first-paragraph-testnet": "Du handler på Testnet-versjonen av Algodex som brukes til å teste våre nye funksjoner og finne feil. Alle handler på Testnet bruker testnet algoer og eiendeler uten reell verdi. Du kan få Algos til å teste med fra kranen nedenfor.",
+  "modal-second-paragraph-testnet": "Send tilbakemelding om eventuelle feil eller funksjonsforespørsler!",
   
-  "network-name-mainnet": "MAINNET",
+  "network-name-mainnet": "HOVEDNETT",
   "network-name-testnet": "TESTNET",
 
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-disclaimer": "Ansvarsfraskrivelse",
+  "modal-faucet": "Kran",
+  "modal-documentation": "Dokumentasjon",
+  "modal-cta": "AKSEPTERER",
+  "ribbon-message-mainnet": "Dette er Mainnet-versjonen av Algodex. Vær forsiktig når du handler.",
+  "ribbon-message-testnet": "Dette er Testnet-versjonen av Algodex. Vær forsiktig når du handler."
 }

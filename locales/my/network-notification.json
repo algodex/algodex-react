@@ -1,21 +1,22 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "_comment": "Translation for Malay",
+  "modal-title-mainnet": "Selamat datang ke Algodex Mainnet!",
+  "modal-title-testnet": "Selamat datang ke Algodex Testnet!",
+  "modal-subtitle-mainnet": "Berhati-hati dengan potensi risiko -",
+  "modal-first-paragraph-mainnet": "Anda berdagang pada versi Mainnet Algodex. Sila berhati-hati dengan dana anda semasa membuat sebarang pesanan kerana urus niaga ini adalah dengan aset utama dengan nilai sebenar dan dagangan adalah kekal.",
+  "modal-second-paragraph-mainnet": "Algodex telah melalui audit keselamatan, namun kerugian mungkin berlaku disebabkan oleh keadaan yang tidak dijangka. Sila semak Penafian dan Dokumentasi kami sebelum meneruskan.",
   
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
+  "modal-subtitle-testnet": "Uji ciri baharu tanpa risiko!",
+  "modal-first-paragraph-testnet": "Anda berdagang pada versi Testnet Algodex yang digunakan untuk menguji ciri baharu kami dan mencari pepijat. Semua dagangan di Testnet menggunakan algo dan aset testnet tanpa nilai sebenar. Anda boleh mendapatkan Algos untuk diuji daripada pautan Faucet di bawah.",
+  "modal-second-paragraph-testnet": "Sila hantar maklum balas tentang sebarang pepijat atau permintaan ciri!",
   
   "network-name-mainnet": "MAINNET",
   "network-name-testnet": "TESTNET",
 
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-disclaimer": "Penafian",
+  "modal-faucet": "Keran",
+  "modal-documentation": "Dokumentasi",
+  "modal-cta": "TERIMA",
+  "ribbon-message-mainnet": "Ini ialah versi Mainnet Algodex. Sila berhati-hati membuat sebarang perdagangan.",
+  "ribbon-message-testnet": "Ini ialah versi Testnet Algodex. Sila berhati-hati membuat sebarang perdagangan."
 }

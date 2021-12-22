@@ -1,21 +1,22 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "_comment": "Translation for Thai",
+  "modal-title-mainnet": "ยินดีต้อนรับสู่ Algodex Mainnet!!",
+  "modal-title-testnet": "ยินดีต้อนรับสู่ Algodex Testnet!",
+  "modal-subtitle-mainnet": "ระวังความเสี่ยงที่อาจเกิดขึ้น -",
+  "modal-first-paragraph-mainnet": "คุณกำลังซื้อขายใน Algodex เวอร์ชัน Mainnet โปรดใช้ความระมัดระวังกับเงินของคุณในขณะที่ทำการสั่งซื้อใดๆ เนื่องจากธุรกรรมเหล่านี้เกิดขึ้นกับสินทรัพย์ของ mainnet ที่มีมูลค่าจริงและการซื้อขายจะเป็นแบบถาวร",
+  "modal-second-paragraph-mainnet": "Algodex ได้ผ่านการตรวจสอบความปลอดภัยแล้ว อย่างไรก็ตาม ความสูญเสียอาจเกิดขึ้นเนื่องจากสถานการณ์ที่ไม่คาดฝัน โปรดตรวจสอบข้อจำกัดความรับผิดชอบและเอกสารประกอบของเราก่อนดำเนินการต่อ",
   
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
+  "modal-subtitle-testnet": "ทดสอบคุณสมบัติใหม่โดยไม่มีความเสี่ยง!",
+  "modal-first-paragraph-testnet": "คุณกำลังซื้อขายในเวอร์ชัน Testnet ของ Algodex ที่ใช้ในการทดสอบคุณสมบัติใหม่ของเราและค้นหาจุดบกพร่อง การซื้อขายทั้งหมดบน Testnet ใช้ algos ของ testnet และสินทรัพย์ที่ไม่มีมูลค่าจริง คุณสามารถให้ Algos ทดสอบได้จากลิงค์ Faucet ด้านล่าง",
+  "modal-second-paragraph-testnet": "โปรดส่งข้อเสนอแนะเกี่ยวกับข้อบกพร่องหรือคำขอคุณสมบัติ!",
   
-  "network-name-mainnet": "MAINNET",
+  "network-name-mainnet": "เมนเน็ต",
   "network-name-testnet": "TESTNET",
 
-  "modal-disclaimer": "Disclaimer",
+  "modal-disclaimer": "ข้อจำกัดความรับผิดชอบ",
   "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-documentation": "เอกสาร",
+  "modal-cta": "ยอมรับ",
+  "ribbon-message-mainnet": "นี่คือ Algodex เวอร์ชัน Mainnet โปรดใช้ความระมัดระวังในการซื้อขาย",
+  "ribbon-message-testnet": "นี่เป็นเวอร์ชัน Testnet ของ Algodex โปรดใช้ความระมัดระวังในการซื้อขาย"
 }
