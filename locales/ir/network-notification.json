@@ -1,21 +1,22 @@
 {
-  "modal-title-mainnet": "Welcome to Algodex Mainnet!",
-  "modal-title-testnet": "Welcome to Algodex Testnet!",
-  "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "_comment": "Translation for Persian",
+  "modal-title-mainnet": "به Algodex Mainnet خوش آمدید!",
+  "modal-title-testnet": "به Algodex Testnet خوش آمدید!",
+  "modal-subtitle-mainnet": "از خطرات احتمالی آگاه باشید -",
+  "modal-first-paragraph-mainnet": "شما در حال معامله در نسخه Mainnet Algodex هستید. لطفاً هنگام انجام هرگونه سفارش مراقب وجوه خود باشید زیرا این معاملات با دارایی های شبکه اصلی با ارزش واقعی است و معاملات دائمی هستند.",
+  "modal-second-paragraph-mainnet": "Algodex یک ممیزی امنیتی را پشت سر گذاشته است، با این حال ممکن است به دلیل شرایط پیش بینی نشده ضرر و زیان رخ دهد. لطفاً قبل از ادامه، سلب مسئولیت و اسناد ما را بررسی کنید.",
   
-  "modal-subtitle-testnet": "Test new features risk free!",
-  "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",
-  "modal-second-paragraph-testnet": "Please send feedback about any bugs or feature requests!",
+  "modal-subtitle-testnet": "تست ویژگی های جدید بدون خطر!",
+  "modal-first-paragraph-testnet": "شما در حال معامله بر روی نسخه Testnet Algodex هستید که برای آزمایش ویژگی های جدید ما و یافتن اشکالات استفاده می شود. همه معاملات در Testnet از الگوها و دارایی های شبکه تست بدون ارزش واقعی استفاده می کنند. شما می توانید Algos را برای آزمایش از لینک شیر آب زیر دریافت کنید.",
+  "modal-second-paragraph-testnet": "لطفاً در مورد هر گونه اشکال یا درخواست ویژگی بازخورد ارسال کنید!",
   
-  "network-name-mainnet": "MAINNET",
+  "network-name-mainnet": "شبکه اصلی",
   "network-name-testnet": "TESTNET",
 
-  "modal-disclaimer": "Disclaimer",
-  "modal-faucet": "Faucet",
-  "modal-documentation": "Documentation",
-  "modal-cta": "ACCEPT",
-  "ribbon-message-mainnet": "This is the Mainnet version of Algodex. Please be careful making any trades.",
-  "ribbon-message-testnet": "This is the Testnet version of Algodex. Please be careful making any trades."
+  "modal-disclaimer": "سلب مسئولیت",
+  "modal-faucet": "شير آب",
+  "modal-documentation": "مستندات",
+  "modal-cta": "تایید کنید",
+  "ribbon-message-mainnet": "این نسخه Mainnet Algodex است. لطفا در انجام هر گونه معامله دقت کنید.",
+  "ribbon-message-testnet": "این نسخه تست نت Algodex است. لطفا در انجام هر گونه معامله دقت کنید."
 }
