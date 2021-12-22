@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":" BUKU",
     "mobilefooter-TRADE":"PERDAGANGAN",
     "mobilefooter-ORDERS":"PESANAN",
-    "mobilefooter-WALLET":"DOMPET"
+    "mobilefooter-WALLET":"DOMPET",
+    "trade-history":"perdagangan sejarah",
+    "order-book":"memesan buku"
 }
