@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":"หนังสือ (หนังสือสั่งซื้อ) ",
     "mobilefooter-TRADE":"ซื้อขาย",
     "mobilefooter-ORDERS":"คำสั่งซื้อ",
-    "mobilefooter-WALLET":"กระเป๋าสตางค์"
+    "mobilefooter-WALLET":"กระเป๋าสตางค์",
+    "trade-history":"ประวัติการค้า",
+    "order-book":"สั่งหนังสือ"
 }
