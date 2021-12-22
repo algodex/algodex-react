@@ -12,5 +12,7 @@
   "mobilefooter-BOOK": "defter",
   "mobilefooter-TRADE": "ALIM-SATIM",
   "mobilefooter-ORDERS": "Emirler",
-  "mobilefooter-WALLET": "CÜZDAN"
+  "mobilefooter-WALLET": "CÜZDAN",
+  "trade-history":"Ticaret Tarihi",
+  "order-book":"Sipariş defteri"
 }
