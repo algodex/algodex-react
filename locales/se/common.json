@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":"Bok",
     "mobilefooter-TRADE":"Trade",
     "mobilefooter-ORDERS":"Ordrar",
-    "mobilefooter-WALLET":"Plånbok"
+    "mobilefooter-WALLET":"Plånbok",
+    "trade-history":"Handelshistoria",
+    "order-book":"Beställa bok"
 }
