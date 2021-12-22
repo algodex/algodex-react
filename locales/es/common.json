@@ -12,5 +12,7 @@
   "mobilefooter-BOOK": "LIBRO DE ÓRDENES",
   "mobilefooter-TRADE": "INTERCAMBIAR",
   "mobilefooter-ORDERS": "ÓRDENES",
-  "mobilefooter-WALLET": "BILLETERA"
+  "mobilefooter-WALLET": "BILLETERA",
+  "trade-history":"Historial Comercial",
+  "order-book":"Libro De Pedidos"
 }
