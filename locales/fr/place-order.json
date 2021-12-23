@@ -21,5 +21,8 @@
     "disable-popup": "Veuillez désactiver votre bloqueur de fenêtres contextuelles (probablement en haut à droite de la fenêtre de votre navigateur)",
     "disable-popup-mobile": "Veuillez désactiver votre bloqueur de fenêtres contextuelles.",
     "order-cancelled": "Ordre annulé",
-    "max-spend-explanation": "Solde total incluant {{montant}} Algos qui doit être conservé dans le portefeuille pour permettre les transactions "
+    "max-spend-explanation": "Solde total incluant {{montant}} Algos qui doit être conservé dans le portefeuille pour permettre les transactions ",
+    "order-size-filtering": "Filtrage de la taille de la commande",
+    "less-lag": "Moins de décalage",
+    "better-execution": "Meilleure exécution"
 }
