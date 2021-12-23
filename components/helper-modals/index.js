@@ -1,6 +1,7 @@
 import { mdiDiscord, mdiReddit, mdiSend, mdiTwitter } from '@mdi/js'
 
 import Icon from '@mdi/react'
+import Link from 'next/link'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -34,6 +35,45 @@ export const ModalContentFooter = styled.div``
 export const IconWrapper = styled.div``
 
 const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
+  const socialData = [
+    {
+      title: 'Telegram link',
+      url: 'https://t.me/algodex',
+      path: mdiSend
+    },
+    {
+      title: 'Twitter link',
+      url: 'https://twitter.com/AlgodexOfficial',
+      path: mdiTwitter
+    },
+    {
+      title: 'Reddit link',
+      url: 'https://www.reddit.com/r/Algodex/',
+      path: mdiReddit
+    },
+    {
+      title: 'Discord link',
+      url: 'https://discord.com/invite/ngNzV8bBhy',
+      path: mdiDiscord
+    }
+  ]
+  const renderSocialIcons = () => {
+    return socialData.map((data, idx) => {
+      return (
+        <Link key={idx} href={data.url}>
+          <a>
+            <Icon
+              path={data.path}
+              title={data.title}
+              size={0.8}
+              className="mr-2 cursor-pointer"
+              color="#FFFFFF"
+            />
+          </a>
+        </Link>
+      )
+    })
+  }
   return (
     <Modal isVisible={isModalActive}>
       <ModalContainer className="flex flex-col justify-between text-white xs:h-5/6 xs:w-5/6 md:h-3/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg xs:p-4 md:p-8">
@@ -50,50 +90,24 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
           </ModalClosingMessage>
           <ModalContentFooter className="md:w-1/2">
             <hr />
-            <ModalExternalLink className="xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
-              {content.externalLinkOne}
-            </ModalExternalLink>
+            <Link href={content.linkAddressOne}>
+              <a>
+                <ModalExternalLink className="xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+                  {content.linkTextOne}
+                </ModalExternalLink>
+              </a>
+            </Link>
             <hr />
-            <ModalExternalLink className="xs:text-lg text-2xl my-3 italic font-medium">
-              {content.externalLinkTwo}
-            </ModalExternalLink>
+            <Link href={content.linkAddressTwo}>
+              <a>
+                <ModalExternalLink className="xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+                  {content.linkTextTwo}
+                </ModalExternalLink>
+              </a>
+            </Link>
             <hr />
             <div className="flex my-2 mx-2">
-              <IconWrapper className="flex items-center">
-                <Icon
-                  onClick={() => console.log({ ribbonNotification: false })}
-                  path={mdiSend}
-                  title="Telegram link"
-                  rotate={330}
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-                <Icon
-                  onClick={() => console.log({ ribbonNotification: false })}
-                  path={mdiTwitter}
-                  title="Twitter link"
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-                <Icon
-                  onClick={() => console.log({ ribbonNotification: false })}
-                  path={mdiReddit}
-                  title="Reddit link"
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-                <Icon
-                  onClick={() => console.log({ ribbonNotification: false })}
-                  path={mdiDiscord}
-                  title="Discord link"
-                  size={0.8}
-                  className="mr-2 cursor-pointer"
-                  color="#FFFFFF"
-                />
-              </IconWrapper>
+              <IconWrapper className="flex items-center">{renderSocialIcons()}</IconWrapper>
             </div>
           </ModalContentFooter>
         </ModalBody>

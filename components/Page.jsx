@@ -116,8 +116,10 @@ const Page = ({
         subTitle: t('modal-subtitle-mainnet'),
         paragraphone: t('modal-first-paragraph-mainnet'),
         paragraphTwo: t('modal-second-paragraph-mainnet'),
-        externalLinkOne: t('modal-disclaimer'),
-        externalLinkTwo: t('modal-documentation'),
+        linkTextOne: t('modal-disclaimer'),
+        linkTextTwo: t('modal-documentation'),
+        linkAddressOne: 'https://about.algodex.com/disclaimers/',
+        linkAddressTwo: 'https://about.algodex.com/docs/',
         button: t('modal-cta')
       }
     }
@@ -127,8 +129,10 @@ const Page = ({
         subTitle: t('modal-subtitle-testnet'),
         paragraphone: t('modal-first-paragraph-testnet'),
         paragraphTwo: t('modal-second-paragraph-testnet'),
-        externalLinkOne: t('modal-faucet'),
-        externalLinkTwo: t('modal-documentation'),
+        linkTextOne: t('modal-faucet'),
+        linkTextTwo: t('modal-documentation'),
+        linkAddressOne: 'https://about.algodex.com/docs/',
+        linkAddressTwo: 'https://about.algodex.com/docs/',
         button: t('modal-cta')
       }
     }
