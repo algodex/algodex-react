@@ -21,5 +21,8 @@
     "disable-popup": "Bitte deaktivieren Sie Ihren Popup-Blocker (vermutilch in Ihrem Browserfenster oben rechts)",
     "disable-popup-mobile": "Bitte deaktivieren Sie Ihren Popup-Blocker",
     "order-cancelled": "Order gestoppt",
-    "max-spend-explanation": "Gesamtbalance einschließlich {{amount}} Algos, welche in der Wallet enthalten sein müssen um Trades zu erlauben."
+    "max-spend-explanation": "Gesamtbalance einschließlich {{amount}} Algos, welche in der Wallet enthalten sein müssen um Trades zu erlauben.",
+    "order-size-filtering": "Filtern der Bestellgröße",
+    "less-lag": "Weniger Verzögerung",
+    "better-execution": "Bessere Ausführung"
 }
