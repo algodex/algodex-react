@@ -83,11 +83,17 @@ const Page = ({
   // Add Asset to User Storage
   const addAsset = useUserStore((state) => state.addAsset)
 
-  const { ribbonNotification, modalNotification, activeNetwork } = useUserStore(
-    (state) => state.dataForSwitchingNetwork
-  )
-
-  const setDataForSwitchingNetwork = useUserStore((state) => state.setDataForSwitchingNetwork)
+  const {
+    hasMainnetRibbon,
+    hasTestnetRibbon,
+    activeNetwork,
+    hasMainnetNotificationModal,
+    hasTestnetNotificationModal,
+    setHasMainnetRibbon,
+    setHasTestnetRibbon,
+    setHasMainnetNotificationModal,
+    setHasTestnetNotificationModal
+  } = useUserStore((state) => state)
 
   let options = {
     enabled: isRouted || isShallow,
@@ -102,15 +108,6 @@ const Page = ({
     id: query.id || explorerAsset?.id,
     options
   })
-
-  useEffect(() => {
-    console.log(modalNotification, 'hello')
-    if (modalNotification) {
-      console.log(true, 'yeah')
-    } else {
-      console.log(false, 'yeah')
-    }
-  }, [modalNotification])
 
   const modalMessages = useMemo(() => {
     if (activeNetwork == 'mainnet') {
@@ -148,6 +145,16 @@ const Page = ({
     }
   }, [explorerAsset, addAsset, data])
 
+  const closeRibbonFn = (bool) => {
+    activeNetwork === 'testnet' && setHasTestnetRibbon(bool)
+    activeNetwork === 'mainnet' && setHasMainnetRibbon(bool)
+  }
+
+  const closeModalFn = (bool) => {
+    activeNetwork === 'testnet' && setHasTestnetNotificationModal(bool)
+    activeNetwork === 'mainnet' && setHasMainnetNotificationModal(bool)
+  }
+
   return (
     <Container>
       <Head>
@@ -158,33 +165,30 @@ const Page = ({
       </Head>
       <Header />
       <div>
-        {ribbonNotification && (
+        {((hasMainnetRibbon && activeNetwork === 'mainnet') ||
+          (hasTestnetRibbon && activeNetwork === 'testnet')) && (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
               padding: '0.8rem 0',
               background: `${
                 activeNetwork == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']
               }`
             }}
+            className="flex items-center justify-between"
           >
             <p
               style={{
                 width: '90%',
-                display: 'flex',
-                justifyContent: 'center',
                 color: '#FFFFFF'
               }}
-              className="font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
+              className="flex justify-center font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
             >
               {activeNetwork == 'mainnet'
                 ? t('ribbon-message-mainnet')
                 : t('ribbon-message-testnet')}
             </p>
             <Icon
-              onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
+              onClick={() => closeRibbonFn(false)}
               path={mdiWindowClose}
               title="Close ribbon"
               size={1}
@@ -195,8 +199,11 @@ const Page = ({
         )}
       </div>
       <NetworkNotificationModal
-        modalNotification={modalNotification}
-        setDataForSwitchingNetwork={setDataForSwitchingNetwork}
+        isModalActive={
+          (activeNetwork === 'mainnet' && hasMainnetNotificationModal) ||
+          (activeNetwork === 'testnet' && hasTestnetNotificationModal)
+        }
+        closeModal={() => closeModalFn(false)}
         content={modalMessages}
       />
       <MainLayout asset={explorerAsset}>

@@ -25,7 +25,9 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [networkUpdate, setNetworkUpdate] = useState(null)
   const setDataForSwitchingNetwork = useUserStore((state) => state.setDataForSwitchingNetwork)
-  const { activeNetwork } = useUserStore((state) => state.dataForSwitchingNetwork)
+  const setActiveNetwork = useUserStore((state) => state.setActiveNetwork)
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  console.log(activeNetwork, 'acrtive network')
   
   
   const { t } = useTranslation('common')
@@ -35,15 +37,7 @@ export default function Header() {
   }
 
   useEffect(() => {
-    networkUpdate == "mainnet" ? setDataForSwitchingNetwork({ 
-      activeNetwork: 'mainnet',
-      ribbonNotification: true,
-      modalNotification: true
-    }) : setDataForSwitchingNetwork({ 
-      activeNetwork: 'testnet',
-      ribbonNotification: true,
-      modalNotification: true
-    })
+    networkUpdate == "mainnet" ? setActiveNetwork("mainnet") : setActiveNetwork("testnet")
   }, [networkUpdate])
 
   return (

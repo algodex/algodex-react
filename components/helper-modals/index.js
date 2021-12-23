@@ -33,10 +33,9 @@ export const ModalContentFooter = styled.div``
 
 export const IconWrapper = styled.div``
 
-const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwork, content }) => {
-  console.log(modalNotification, 'modal')
+const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
   return (
-    <Modal isVisible={modalNotification}>
+    <Modal isVisible={isModalActive}>
       <ModalContainer className="flex flex-col justify-between text-white xs:h-5/6 xs:w-5/6 md:h-3/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg xs:p-4 md:p-8">
         <ModalBody className="flex flex-col justify-between">
           <ModalTitle className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
@@ -62,7 +61,7 @@ const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwor
             <div className="flex my-2 mx-2">
               <IconWrapper className="flex items-center">
                 <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
+                  onClick={() => console.log({ ribbonNotification: false })}
                   path={mdiSend}
                   title="Telegram link"
                   rotate={330}
@@ -71,7 +70,7 @@ const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwor
                   color="#FFFFFF"
                 />
                 <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
+                  onClick={() => console.log({ ribbonNotification: false })}
                   path={mdiTwitter}
                   title="Twitter link"
                   size={0.8}
@@ -79,7 +78,7 @@ const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwor
                   color="#FFFFFF"
                 />
                 <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
+                  onClick={() => console.log({ ribbonNotification: false })}
                   path={mdiReddit}
                   title="Reddit link"
                   size={0.8}
@@ -87,7 +86,7 @@ const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwor
                   color="#FFFFFF"
                 />
                 <Icon
-                  onClick={() => setDataForSwitchingNetwork({ ribbonNotification: false })}
+                  onClick={() => console.log({ ribbonNotification: false })}
                   path={mdiDiscord}
                   title="Discord link"
                   size={0.8}
@@ -98,11 +97,8 @@ const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwor
             </div>
           </ModalContentFooter>
         </ModalBody>
-        <ModalFooter
-          onClick={() => setDataForSwitchingNetwork({ modalNotification: false })}
-          className="flex justify-center w-full"
-        >
-          <div style={{ width: '10rem' }}>
+        <ModalFooter onClick={closeModal} className="flex justify-center w-full">
+          <div className="w-40">
             <Button className="font-bold">{content.button}</Button>
           </div>
         </ModalFooter>
@@ -112,8 +108,8 @@ const NetworkNotificationModal = ({ modalNotification, setDataForSwitchingNetwor
 }
 
 NetworkNotificationModal.propTypes = {
-  modalNotification: PropTypes.bool,
-  setDataForSwitchingNetwork: PropTypes.func,
+  isModalActive: PropTypes.bool,
+  closeModal: PropTypes.func,
   content: PropTypes.object
 }
 export default NetworkNotificationModal

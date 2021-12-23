@@ -12,22 +12,49 @@ const userState = (set, get) => ({
   assets: {},
 
   /**
-   * Assets should be a reduced list keyed by Asset ID
+   * Ribbon notification for Mainnet
    *
-   * This list is composed of a Algodex Assets Query and
+   * @true when Mainnet notification ribbon is visible
+   * @false when Mainnet notification ribbon is hidden
    */
-  dataForSwitchingNetwork: {
-    activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
-    ribbonNotification: true,
-    modalNotification: true
-  },
-  setDataForSwitchingNetwork: (data) => {
-    const result = { ...get().dataForSwitchingNetwork, ...data }
-    console.log(result, 'result')
-    set({
-      dataForSwitchingNetwork: result
-    })
-  },
+  hasMainnetRibbon: true,
+  setHasMainnetRibbon: (bool) => set({ hasMainnetRibbon: bool }),
+
+  /**
+   * Ribbon notification for Testnet
+   *
+   * @true when Testnet notification ribbon is visible
+   * @false when Testnet notification ribbon is hidden
+   */
+  hasTestnetRibbon: true,
+  setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
+
+  /**
+   * Current network user is trading on.
+   *
+   * Options are Mainnet and Testnet
+   */
+  activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
+  setActiveNetwork: (network) => set({ activeNetwork: network }),
+
+  /**
+   * Modal notification for Mainnet.
+   *
+   * @true when Mainnet notification modal is visible
+   * @false when Mainnet notification modal is hidden
+   */
+  hasMainnetNotificationModal: true,
+  setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
+
+  /**
+   * Modal notification for Testnet.
+   *
+   * @true when Testnet notification modal is visible
+   * @false when Testnet notification modal is hidden
+   */
+  hasTestnetNotificationModal: true,
+  setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
+
   /**
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *
