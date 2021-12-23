@@ -37,22 +37,22 @@ export const IconWrapper = styled.div``
 const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
   const socialData = [
     {
-      title: 'Telegram link',
+      title: 'Telegram',
       url: 'https://t.me/algodex',
       path: mdiSend
     },
     {
-      title: 'Twitter link',
+      title: 'Twitter',
       url: 'https://twitter.com/AlgodexOfficial',
       path: mdiTwitter
     },
     {
-      title: 'Reddit link',
+      title: 'Reddit',
       url: 'https://www.reddit.com/r/Algodex/',
       path: mdiReddit
     },
     {
-      title: 'Discord link',
+      title: 'Discord',
       url: 'https://discord.com/invite/ngNzV8bBhy',
       path: mdiDiscord
     }
@@ -63,6 +63,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
         <Link key={idx} href={data.url}>
           <a>
             <Icon
+              rotate={data.title === 'Telegram' ? 330 : 0}
               path={data.path}
               title={data.title}
               size={0.8}
