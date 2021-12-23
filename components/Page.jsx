@@ -4,7 +4,8 @@ import Head from 'next/head'
 import Header from 'components/header'
 import Icon from '@mdi/react'
 import MainLayout from 'components/main-layout'
-import NetworkNotificationModal from 'components/helper-modals'
+// import NetworkNotificationModal from 'components/network-notification/NotificationModal'
+import NetworkHandler from 'components/network-notification'
 import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import { mdiWindowClose } from '@mdi/js'
@@ -184,7 +185,8 @@ const Page = ({
         {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
-      <div>
+      <NetworkHandler />
+      {/* <div>
         {((hasMainnetRibbon && activeNetwork === 'mainnet') ||
           (hasTestnetRibbon && activeNetwork === 'testnet')) && (
           <div
@@ -217,15 +219,15 @@ const Page = ({
             />
           </div>
         )}
-      </div>
-      <NetworkNotificationModal
+      </div> */}
+      {/* <NetworkNotificationModal
         isModalActive={
           (activeNetwork === 'mainnet' && hasMainnetNotificationModal) ||
           (activeNetwork === 'testnet' && hasTestnetNotificationModal)
         }
         closeModal={() => closeModalFn(false)}
         content={modalMessages}
-      />
+      /> */}
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
         {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}
