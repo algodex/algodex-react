@@ -139,6 +139,22 @@ const Page = ({
   }, [t, activeNetwork])
 
   useEffect(() => {
+    hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
+    hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
+    hasTestnetRibbon === null && setHasTestnetRibbon(true)
+    hasMainnetRibbon === null && setHasMainnetRibbon(true)
+  }, [
+    hasTestnetRibbon,
+    hasMainnetRibbon,
+    hasMainnetNotificationModal,
+    hasTestnetNotificationModal,
+    setHasTestnetNotificationModal,
+    setHasMainnetNotificationModal,
+    setHasTestnetRibbon,
+    setHasMainnetRibbon
+  ])
+
+  useEffect(() => {
     if (
       typeof data !== 'undefined' &&
       typeof data.id !== 'undefined' &&

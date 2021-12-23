@@ -112,8 +112,14 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
             </div>
           </ModalContentFooter>
         </ModalBody>
-        <ModalFooter onClick={closeModal} className="flex justify-center w-full">
-          <div className="w-40">
+        <ModalFooter className="flex justify-center w-full">
+          <div
+            role="button"
+            tabIndex={0}
+            className="w-40"
+            onClick={closeModal}
+            onKeyDown={closeModal}
+          >
             <Button className="font-bold">{content.button}</Button>
           </div>
         </ModalFooter>

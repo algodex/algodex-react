@@ -43,7 +43,7 @@ const userState = (set, get) => ({
    * @true when Mainnet notification modal is visible
    * @false when Mainnet notification modal is hidden
    */
-  hasMainnetNotificationModal: true,
+  hasMainnetNotificationModal: null,
   setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
 
   /**
@@ -52,7 +52,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification modal is visible
    * @false when Testnet notification modal is hidden
    */
-  hasTestnetNotificationModal: true,
+  hasTestnetNotificationModal: null,
   setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
 
   /**
