@@ -60,8 +60,6 @@ export const AboutHowItWorks = () => {
         </div>
       </Container>
       <hr className="my-8" />
-   
-  
     </HowItWorksWrapper>
   )
 }

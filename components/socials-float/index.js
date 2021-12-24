@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react'
 import React from 'react'
 import styled from 'styled-components'
-import theme from '../../theme'
 
 export const SocialsFloat = () => {
   const Float = styled.div`
@@ -19,6 +18,9 @@ export const SocialsFloat = () => {
       a {
         color: ${({ theme }) => theme.colors.gray['800']};
         font-size: 1.5rem;
+        &:hover {
+          animation: mymove 5s infinite;
+        }
       }
     }
   `
@@ -27,17 +29,17 @@ export const SocialsFloat = () => {
     <Float className="drop-shadow-lg">
       <ul>
         <li className="my-3">
-          <a href="https://twitter.com/AlgodexOfficial" target="_blank">
+          <a href="https://twitter.com/AlgodexOfficial" target="_blank" rel="noreferrer">
             <Icon icon="brandico:twitter-bird" />
           </a>
         </li>
         <li className="my-3">
-          <a href="https://t.me/algodex" target="_blank">
+          <a href="https://t.me/algodex" target="_blank" rel="noreferrer">
             <Icon icon="file-icons:telegram" />
           </a>
         </li>
         <li className="my-3">
-          <a href="https://www.reddit.com/r/Algodex/" target="_blank">
+          <a href="https://www.reddit.com/r/Algodex/" target="_blank" rel="noreferrer">
             <Icon icon="fontisto:reddit" />
           </a>
         </li>

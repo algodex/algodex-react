@@ -16,7 +16,12 @@ export const AboutBanner = () => {
       <div>
         <p className="text-green-500 text-2xl italic my-9">
           NEW: You can now try out the platform on Testnet by going to{' '}
-          <a href="https://testnet.algodex.com" target="_blank" className="underline">
+          <a
+            href="https://testnet.algodex.com"
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
             <strong>testnet.algodex.com</strong>
           </a>
         </p>
