@@ -32,6 +32,9 @@ export default function Header() {
 
   const handleNetworkChangeFn = (value) => {
     setNetworkUpdate(value)
+    // if(activeNetwork !== value){
+    //   router.push(window.location.href.replace(activeNetwork, value))
+    // }
   }
 
   useEffect(() => {
@@ -52,8 +55,7 @@ export default function Header() {
       </Link>
       &nbsp;
       <NetworkDropdown className="font-medium" activeNetwork={activeNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
-        {console.log(activeNetwork, 'active network')}
-        <option value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
+        <option disabled value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
         <option value="testnet" selected={activeNetwork === "testnet"}>TESTNET</option>
       </NetworkDropdown>
         
