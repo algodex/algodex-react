@@ -59,7 +59,6 @@ export const AboutHowItWorks = () => {
           </div>
         </div>
       </Container>
-      <hr className="my-8" />
     </HowItWorksWrapper>
   )
 }

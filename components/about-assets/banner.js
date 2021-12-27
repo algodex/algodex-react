@@ -1,5 +1,6 @@
 import React from 'react'
 import { BannerWrapper } from './styles.css'
+import Link from 'next/link'
 
 export const AboutBanner = () => {
   return (
@@ -16,14 +17,14 @@ export const AboutBanner = () => {
       <div>
         <p className="text-green-500 text-2xl italic my-9">
           NEW: You can now try out the platform on Testnet by going to{' '}
-          <a
-            href="https://testnet.algodex.com"
+          <Link
+            href="https://testnet.algodex.com/trade"
             target="_blank"
             rel="noreferrer"
             className="underline"
           >
             <strong>testnet.algodex.com</strong>
-          </a>
+          </Link>
         </p>
         <hr className="mt-14" />
         <img

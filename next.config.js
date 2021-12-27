@@ -12,27 +12,37 @@ const getDefaultAsset = () => {
 const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
 const nextPWA = require('next-pwa')
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: []
+  }
+})
 const moduleExports = nextPWA(
-  nextTranslate({
-    pwa: {
-      dest: 'public',
-      disable: process.env.NODE_ENV === 'development'
-    },
-    async redirects() {
-      return [
-        {
-          source: '/',
-          destination: '/trade/' + defaultAsset,
-          permanent: true
-        },
-        {
-          source: '/trade',
-          destination: '/trade/' + defaultAsset,
-          permanent: true
-        }
-      ]
-    }
-  })
+  nextTranslate(
+    withMDX({
+      pwa: {
+        dest: 'public',
+        disable: process.env.NODE_ENV === 'development',
+        pageExtensions: ['js', 'jsx', 'md', 'mdx']
+      },
+      async redirects() {
+        return [
+          {
+            source: '/',
+            destination: '/trade/' + defaultAsset,
+            permanent: true
+          },
+          {
+            source: '/trade',
+            destination: '/trade/' + defaultAsset,
+            permanent: true
+          }
+        ]
+      }
+    })
+  )
 )
 
 const SentryWebpackPluginOptions = {

@@ -63,7 +63,7 @@ export const BannerWrapper = styled.section`
 export const HowItWorksWrapper = styled.section`
   font-size: 0.8rem;
   font-weight: 500;
-  padding: 0.6rem;
+  padding: 0.1rem;
   min-width: 6.2rem;
   color: ${({ theme }) => theme.colors.gray['800']};
   background-color: ${({ theme }) => theme.colors.gray['000']};
@@ -102,6 +102,31 @@ export const AboutBlogWrapper = styled.section`
     margin: 1.8rem 0 1.8rem -1.8rem;
     @media (max-width: 992px) {
       margin: 0;
+    }
+  }
+`
+export const Accordion = styled.section`
+  .accordion-header {
+    span {
+      color: ${({ theme }) => theme.colors.red['500']};
+      transition: all 0.3s ease;
+      margin-right: 0.7rem;
+      &.angle-down {
+        transform: rotate(-90deg);
+      }
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+  }
+  .accordion-content {
+    margin: 0.7rem 1rem;
+    transition: all 0.3s ease;
+    p {
+      font-size: 1rem;
+      color: ${({ theme }) => theme.colors.gray[('800', 0.6)]};
     }
   }
 `
