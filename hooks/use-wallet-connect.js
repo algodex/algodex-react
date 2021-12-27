@@ -9,59 +9,47 @@ const ERROR = {
 
 export default function useWalletConnect() {
   const [walletConnectAddresses, setAddresses] = useState()
-  const [walletConnection, setWalletConnection] = useState()
+  const [walletConnection, setWalletConnection] = useState(null)
 
 
- 
+
 
   const walletConnect = async () => {
     try {
-     
+
+      const bridge = "https://bridge.walletconnect.org";
 
 
-        const bridge = "https://bridge.walletconnect.org";
-       
+      // create new connector
+      const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+      // await this.setState({ connector });
+      setWalletConnection({ connector })
+      // check if already connected
 
-        // create new connector
-        const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-       
-    
-        // await this.setState({ connector });
-        setWalletConnection({ connector})
-      
-    
-        // check if already connected
-        if (!connector.connected) {
-          // create new session
-          await connector.createSession();
-        }
-    
-        // subscribe to events
-        await subscribeToEvents();
+      if (!connector.connected) {
+        // create new session
+        await connector.createSession();
 
+      }
+
+      // subscribe to events
+      await subscribeToEvents();
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
     }
   }
   const subscribeToEvents = () => {
-    // const { connector } = this.state;
-    const { connector } = walletConnection
 
-   
+    const { connector } = walletConnection
     if (!connector) {
       return;
     }
-
     connector.on("session_update", async (error, payload) => {
       console.log(`connector.on("session_update")`);
-
       if (error) {
         throw error;
       }
-
       const { accounts } = payload.params[0];
-    
-  
       onSessionUpdate(accounts)
     });
 
@@ -71,74 +59,78 @@ export default function useWalletConnect() {
       if (error) {
         throw error;
       }
-     
       onConnect(payload)
-      
     });
 
     connector.on("disconnect", (error, payload) => {
       console.log(`connector.on("disconnect")`);
-
       if (error) {
         throw error;
       }
-     
       onDisconnect()
-    
     });
 
     if (connector.connected) {
+
       const { accounts } = connector;
       const address = accounts[0];
-      setWalletConnection({...walletConnection,
+      setWalletConnection({
+        ...walletConnection,
         connected: true,
         accounts,
         address
-
       })
+
       setAddresses(address)
 
       onSessionUpdate(accounts)
     }
-
-  
     setWalletConnection({ ...walletConnection, connector })
+
+   
   };
 
-const onConnect = async (payload) => {
-  const { accounts } = payload.params[0];
+  const killSession = async () => {
+    const { connector } = walletConnection;
+    if (connector) {
+      connector.killSession();
+    }
+    resetApp();
+  };
 
-  const address = accounts[0];
- 
-  await setWalletConnection({ ...walletConnection,
-    connected: true,
-    accounts,
-    address,
-  });
+  const onConnect = async (payload) => {
+    const { accounts } = payload.params[0];
 
-  setAddresses(accounts[0])
-  // getAccountAssets();
-};
+    const address = accounts[0];
 
-const onDisconnect = async () => {
-  resetApp();
-};
-const resetApp = async () => {
-  await setWalletConnection(null);
-};
+    await setWalletConnection({
+      ...walletConnection,
+      connected: true,
+      accounts,
+      address,
+    });
 
-const onSessionUpdate = async (accounts) => {
-  
-  const address = accounts[0];
-  await setWalletConnection({...walletConnection, accounts, address})
-  setAddresses(accounts[0])
-  // await this.setState({ accounts, address });
-  // await this.getAccountAssets();
-};
+    setAddresses(accounts[0])
+    // getAccountAssets();
+  };
+
+  const onDisconnect = async () => {
+
+    resetApp();
+  };
+  const resetApp = async () => {
+  setWalletConnection(null);
+  };
+
+  const onSessionUpdate = async (accounts) => {
+
+    const address = accounts[0];
+    await setWalletConnection({ ...walletConnection, accounts, address })
+    setAddresses(accounts[0])
+  };
 
   return {
     walletConnect,
-    walletConnectAddresses,
     walletConnection
   }
 }

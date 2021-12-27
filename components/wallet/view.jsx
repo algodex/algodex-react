@@ -18,9 +18,10 @@ import {
   Balance,
   WalletRow
 } from './wallet.css'
+import WalletConnect from '@walletconnect/client'
 
 function WalletView(props) {
-  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onConnectClickIntegration, onSetActiveWallet, walletConnectAddresses } = props
+  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onConnectClickIntegration, onSetActiveWallet, walletConnection } = props
 
   const { t } = useTranslation("wallet");
 
@@ -95,15 +96,12 @@ function WalletView(props) {
   }
 
   const getButtonIntegrationState = () => {
-    debugger;
-    // onConnectClickIntegration()
-    // if (!walletConnectAddresses) return
-    // walletConnectAddresses.connector._handleSessionDisconnect()
+
+
     onConnectClickIntegration()
-    console.log("eric Hit")
+    console.log(walletConnection)
     
-    console.log(walletConnectAddresses)
-    // console.log(walletConnectAddresses.connector["_accounts"][0])
+    
   }
 
   const WalletButtonText = wallets.length > 0 ? t("connect-another-wallet-button") : t("connect-wallet-button");

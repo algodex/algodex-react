@@ -31,14 +31,7 @@ export default function Home() {
     }
   }, [id, isValidId, router])
 
-
-
-  
-  const { walletConnect, walletConnectAddresses, walletConnection } = useWalletConnect()
-
-  // walletConnect()
- 
-
+  const { walletConnect, walletConnection } = useWalletConnect()
 
   const { connect, addresses } = useMyAlgo()
 
@@ -73,8 +66,8 @@ export default function Home() {
 
   })
 
-  
-  
+
+
 
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
@@ -182,7 +175,7 @@ export default function Home() {
       )
     }
 
-    return <MainLayout onWalletConnect={connect} onWalletConnectIntegration={walletConnect} walletConnectAddresses={walletConnection} refetchWallets={walletsQuery.refetch} />
+    return <MainLayout onWalletConnect={connect} onWalletConnectIntegration={walletConnect} walletConnection={walletConnection} refetchWallets={walletsQuery.refetch} />
   }
 
   return (

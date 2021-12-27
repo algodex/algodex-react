@@ -96,6 +96,13 @@ function PlaceOrderView(props) {
     })
   }, [asset.id, activeWalletAddress, setOrder])
 
+  useEffect(() => {
+    if (walletConnector === null)
+    console.log("reset")
+    
+  }, [walletConnector])
+
+
 
   const handleChange = (e, field) => {
     setOrder({
@@ -124,6 +131,7 @@ function PlaceOrderView(props) {
         return equivAlgoAmount.gte(new Big(orderFilter))
       })
     }
+ 
     return OrderService.placeOrder(orderData, filteredOrderBook, walletConnector)
   }
 

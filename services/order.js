@@ -9,7 +9,11 @@ const OrderService = {
 
     const assetId = order.asset.id
     // const address = order.address
-    const address = walletConnector.connector['_accounts'][0]
+
+
+
+    const address = (!!walletConnector && walletConnector.connector.connected )? walletConnector.connector['_accounts'][0] : order.address
+
     const minimumAmount = 0
 
     const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
@@ -17,7 +21,7 @@ const OrderService = {
 
     const price = convertToAsaUnits(order.price, order.asset.decimals)
     const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
-   
+
 
     if (order.execution === 'maker') {
       if (order.type === 'buy') {
@@ -27,7 +31,7 @@ const OrderService = {
           assetId,
           algoAmount
         })
-       
+
         return algodex.placeAlgosToBuyASAOrderIntoOrderbook(
           AlgodClient,
           address,
@@ -39,7 +43,7 @@ const OrderService = {
           walletConnector
         )
       } else if (order.type === 'sell') {
-        
+
         console.log('Maker sell order', {
           address,
           price,

@@ -3,7 +3,7 @@ import useStore, { useStorePersisted } from 'store/use-store'
 import WalletView from './view'
 
 function Wallet(props) {
-  const { onWalletConnect, onWalletConnectIntegration, walletConnectAddresses } = props
+  const { onWalletConnect, onWalletConnectIntegration, walletConnection } = props
 
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
@@ -17,7 +17,7 @@ function Wallet(props) {
       isSignedIn={isSignedIn}
       onConnectClick={onWalletConnect}
       onConnectClickIntegration={onWalletConnectIntegration}
-      walletConnectAddresses={walletConnectAddresses}
+      walletConnection={walletConnection}
 
       onSetActiveWallet={setActiveWalletAddress}
     />
