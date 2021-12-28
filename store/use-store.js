@@ -1,7 +1,8 @@
-import create from 'zustand'
-import { persist, devtools } from 'zustand/middleware'
-import produce from 'immer'
+import { devtools, persist } from 'zustand/middleware'
+
 import Big from 'big.js'
+import create from 'zustand'
+import produce from 'immer'
 
 export const roundValue = (value, decimalLimit) => {
   if (value === '' || value.slice(-1) === '0') {

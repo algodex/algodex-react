@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { createStore } from './use-store'
+
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
@@ -17,7 +18,7 @@ const userState = (set, get) => ({
    * @true when Mainnet notification ribbon is visible
    * @false when Mainnet notification ribbon is hidden
    */
-  hasMainnetRibbon: true,
+  hasMainnetRibbon: null,
   setHasMainnetRibbon: (bool) => set({ hasMainnetRibbon: bool }),
 
   /**
@@ -26,7 +27,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification ribbon is visible
    * @false when Testnet notification ribbon is hidden
    */
-  hasTestnetRibbon: true,
+  hasTestnetRibbon: null,
   setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
 
   /**
@@ -34,8 +35,13 @@ const userState = (set, get) => ({
    *
    * Options are Mainnet and Testnet
    */
-  activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
-  setActiveNetwork: (network) => set({ activeNetwork: network }),
+  // activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
+  // activeNetwork: window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet',
+  // activeNetwork: () => (window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')(),
+  activeNetwork: 'mainnet',
+  setActiveNetwork: (network) => {
+    set({ activeNetwork: network })
+  },
 
   /**
    * Modal notification for Mainnet.

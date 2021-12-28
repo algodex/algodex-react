@@ -37,8 +37,10 @@ export default function Header() {
     // }
   }
 
+
   useEffect(() => {
-    setNetworkUpdate(activeNetwork)
+    // setNetworkUpdate(activeNetwork)
+    setNetworkUpdate(window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')
   }, [])
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function Header() {
       </Link>
       &nbsp;
       <NetworkDropdown className="font-medium" activeNetwork={activeNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
-        <option disabled value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
+        <option value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
         <option value="testnet" selected={activeNetwork === "testnet"}>TESTNET</option>
       </NetworkDropdown>
         
