@@ -33,14 +33,14 @@ export default function useWalletConnect() {
       }
 
       // subscribe to events
-      await subscribeToEvents();
+      await subscribeToEvents({ connector });
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
     }
   }
-  const subscribeToEvents = () => {
+  const subscribeToEvents = ({connector}) => {
 
-    const { connector } = walletConnection
+    // const { connector } = walletConnection
     if (!connector) {
       return;
     }
@@ -50,7 +50,7 @@ export default function useWalletConnect() {
         throw error;
       }
       const { accounts } = payload.params[0];
-      onSessionUpdate(accounts)
+      onSessionUpdate(accounts, connector)
     });
 
     connector.on("connect", (error, payload) => {
@@ -59,7 +59,7 @@ export default function useWalletConnect() {
       if (error) {
         throw error;
       }
-      onConnect(payload)
+      onConnect(payload, connector)
     });
 
     connector.on("disconnect", (error, payload) => {
@@ -74,14 +74,8 @@ export default function useWalletConnect() {
 
       const { accounts } = connector;
       const address = accounts[0];
-      setWalletConnection({
-        ...walletConnection,
-        connected: true,
-        accounts,
-        address
+      setWalletConnection({...walletConnection, connector
       })
-
-      setAddresses(address)
 
       onSessionUpdate(accounts)
     }
@@ -98,17 +92,12 @@ export default function useWalletConnect() {
     resetApp();
   };
 
-  const onConnect = async (payload) => {
+  const onConnect = async (payload, connector) => {
     const { accounts } = payload.params[0];
 
     const address = accounts[0];
-
-    await setWalletConnection({
-      ...walletConnection,
-      connected: true,
-      accounts,
-      address,
-    });
+  
+   setWalletConnection({...walletConnection, connector});
 
     setAddresses(accounts[0])
     // getAccountAssets();
@@ -122,11 +111,11 @@ export default function useWalletConnect() {
   setWalletConnection(null);
   };
 
-  const onSessionUpdate = async (accounts) => {
+  const onSessionUpdate = async (accounts, connector) => {
 
     const address = accounts[0];
-    await setWalletConnection({ ...walletConnection, accounts, address })
-    setAddresses(accounts[0])
+    await setWalletConnection({...walletConnection, address })
+   
   };
 
   return {

@@ -33,6 +33,7 @@ export default function Home() {
 
   const { walletConnect, walletConnection } = useWalletConnect()
 
+
   const { connect, addresses } = useMyAlgo()
 
 

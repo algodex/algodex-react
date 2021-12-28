@@ -5,6 +5,7 @@ import Button from 'components/button'
 import Icon from 'components/icon'
 import SvgImage from 'components/svg-image'
 import useTranslation from "next-translate/useTranslation";
+import { useEffect } from 'react'
 
 import React from 'react'
 import {
@@ -22,6 +23,7 @@ import WalletConnect from '@walletconnect/client'
 
 function WalletView(props) {
   const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onConnectClickIntegration, onSetActiveWallet, walletConnection } = props
+  
 
   const { t } = useTranslation("wallet");
 
@@ -96,13 +98,15 @@ function WalletView(props) {
   }
 
   const getButtonIntegrationState = () => {
-
-
-    onConnectClickIntegration()
-    console.log(walletConnection)
-    
-    
+   
+    onConnectClickIntegration()    
   }
+
+  useEffect(()=> {
+    console.log('hello')
+    console.log(walletConnection)
+
+  }, [walletConnection])
 
   const WalletButtonText = wallets.length > 0 ? t("connect-another-wallet-button") : t("connect-wallet-button");
 
