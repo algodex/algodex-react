@@ -266,3 +266,10 @@ export const NetworkDropdown = styled.select`
   border-radius: 3px;
   padding: 0.3rem 0.5rem;
 `
+
+export const ConnectWalletBtn = styled(NavTextLg)`
+  border: solid 1px;
+  padding: 0.5rem 0.5rem;
+  border-radius: 4px;
+  color: white;
+`

@@ -1,4 +1,5 @@
 import {
+  ConnectWalletBtn,
   Container,
   IconLogo,
   InlineLogo,
@@ -104,6 +105,9 @@ export default function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
+        <a target="_blank" href="//about.algodex.com" rel="noreferrer">
+          <ConnectWalletBtn>CONNECT A WALLET</ConnectWalletBtn>
+        </a>
         <LanguageSelection isMobile={false} />
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
