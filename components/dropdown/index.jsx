@@ -12,8 +12,22 @@ const Container = styled.div`
   overflow-x: hidden;
 `
 
+const DropdownHeader = styled.div``
+
+const DropdownBody = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray[500]};
+`
+
+const DropdownFooter = styled.div``
+
 const DropdownWrapper = ({ children }) => {
-  return <Container>{children}</Container>
+  return (
+    <Container>
+      <DropdownHeader />
+      <DropdownBody>{children}</DropdownBody>
+      <DropdownFooter />
+    </Container>
+  )
 }
 
 DropdownWrapper.propTypes = {

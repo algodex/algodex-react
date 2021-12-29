@@ -10,7 +10,7 @@ import {
   Navigation,
   NetworkDropdown
 } from './header.css'
-import { mdiClose, mdiContentCopy } from '@mdi/js'
+import { mdiClose, mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 import { useEffect, useState } from 'react'
 
 import ActiveLink from 'components/active-link'
@@ -82,18 +82,30 @@ export default function Header() {
       <div>
         <div>
           <div>
-            <p>AH8TJX78TG2P....Q235FRTK90LP</p>
+            <div>
+              <p>AH8TJX78TG2P....Q235FRTK90LP</p>
+              <Icon
+                path={mdiContentCopy}
+                title="Copy Address"
+                size={0.8}
+                className="cursor-pointer"
+                color="#FFFFFF"
+              />
+            </div>
+            <div>DISCONNECT</div>
+          </div>
+          <div>
+            <p>View on AlgoExplorer</p>
             <Icon
-              path={mdiContentCopy}
-              title="Copy Address"
+              path={mdiOpenInNew}
+              title="Algo explorer link"
               size={0.8}
               className="cursor-pointer"
               color="#FFFFFF"
             />
           </div>
-          <div>DISCONNECT</div>
         </div>
-
+        <div>CONNECT ANOTHER WALLET</div>
       </div>
     </div>
   }
