@@ -11,7 +11,6 @@ const DropdownBody = () => {
         style={{
           padding: '0.5rem',
           fontSize: '12px',
-          // backgroundColor: theme.colors.gray['500'],
           backgroundColor: 'rgba(113, 128, 150, 0.1)',
           borderRadius: '4px',
           boxShadow: '0 0 23px -15px #000000'
