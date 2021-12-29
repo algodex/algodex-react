@@ -7,6 +7,51 @@ import theme from '../../theme'
 const DropdownBody = () => {
   const renderWalletOptionList = () => {
     return (
+      <div
+        style={{
+          fontSize: '12px',
+          color: 'white',
+          backgroundColor: theme.colors.gray['500'],
+          borderRadius: '4px'
+        }}
+      >
+        <p
+          style={{
+            fontWeight: 'bold',
+            marginBottom: '0.5rem'
+          }}
+        >
+          CONNECT A WALLET
+        </p>
+        <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
+          <div>
+            <p
+              style={{
+                marginBottom: '0.5rem',
+                fontWeight: '500',
+                textDecoration: 'underline'
+              }}
+            >
+              Algorand Mobile Wallet
+            </p>
+          </div>
+          <div>
+            <p
+              style={{
+                marginBottom: '0.5rem',
+                fontWeight: '500',
+                textDecoration: 'underline'
+              }}
+            >
+              My Algo Wallet
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  const renderActiveWalletList = () => {
+    return (
       <div>
         <p
           style={{
@@ -242,10 +287,6 @@ const DropdownBody = () => {
     )
   }
 
-  const renderActiveWalletList = () => {
-    return <div></div>
-  }
-
   return (
     <div
       style={{
@@ -254,24 +295,26 @@ const DropdownBody = () => {
       }}
     >
       {renderWalletOptionList()}
-      {renderSwitchWalletAddress()}
-      <div
-        style={{
-          backgroundColor: theme.colors.gray['700'],
-          height: '2rem',
-          display: 'flex',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '4px',
-          marginTop: '0.5rem',
-          color: 'white'
-        }}
-      >
-        CONNECT ANOTHER WALLET
-      </div>
-      {renderActiveWalletList()}
+      {false && renderActiveWalletList()}
+      {false && renderSwitchWalletAddress()}
+      {false && (
+        <div
+          style={{
+            backgroundColor: theme.colors.gray['700'],
+            height: '2rem',
+            display: 'flex',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px',
+            marginTop: '0.5rem',
+            color: 'white'
+          }}
+        >
+          CONNECT ANOTHER WALLET
+        </div>
+      )}
     </div>
   )
 }
