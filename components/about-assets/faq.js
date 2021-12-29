@@ -3,7 +3,6 @@ import { HowItWorksWrapper, Container, Accordion } from './styles.css'
 import Icon from '@mdi/react'
 import { mdiChevronRight } from '@mdi/js'
 import Link from 'next/link'
-import Modal from 'components/Modal'
 
 export const AboutFAQ = () => {
   const [showContent, setShowContent] = useState(0)
@@ -20,6 +19,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(1)}
+            onKeyDown={() => toggleContent(1)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 1 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
@@ -44,6 +47,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(2)}
+            onKeyDown={() => toggleContent(2)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 2 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
@@ -68,6 +75,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(3)}
+            onKeyDown={() => toggleContent(3)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 3 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
@@ -93,6 +104,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(4)}
+            onKeyDown={() => toggleContent(4)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 4 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
@@ -114,7 +129,7 @@ export const AboutFAQ = () => {
                   My Algo
                 </Link>
               </span>
-              . Once you have your wallet set up, you'll be able to interact with Algodex.
+              . Once you have your wallet set up, you&#39;ll be able to interact with Algodex.
             </p>
           </div>
 
@@ -122,6 +137,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(5)}
+            onKeyDown={() => toggleContent(5)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 5 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
@@ -148,6 +167,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(6)}
+            onKeyDown={() => toggleContent(6)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 6 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
@@ -173,6 +196,10 @@ export const AboutFAQ = () => {
           <div
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(7)}
+            onKeyDown={() => toggleContent(7)}
+            tabIndex="0"
+            role="button"
+            aria-pressed="false"
           >
             <span className={showContent == 7 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
