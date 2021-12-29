@@ -13,7 +13,7 @@ const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
 const nextPWA = require('next-pwa')
 const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
+  extension: /\.(md|mdx)$/,
   options: {
     remarkPlugins: [],
     rehypePlugins: []
@@ -22,10 +22,10 @@ const withMDX = require('@next/mdx')({
 const moduleExports = nextPWA(
   nextTranslate(
     withMDX({
+      pageExtensions: ['js', 'jsx', 'md', 'mdx'],
       pwa: {
         dest: 'public',
-        disable: process.env.NODE_ENV === 'development',
-        pageExtensions: ['js', 'jsx', 'md', 'mdx']
+        disable: process.env.NODE_ENV === 'development'
       },
       async redirects() {
         return [

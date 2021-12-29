@@ -21,7 +21,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(1)}
           >
-            <span className={showContent == 1 && 'angle-down'}>
+            <span className={showContent == 1 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 1 ? 'text-gray-800' : 'text-gray-400'}>
@@ -45,7 +45,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(2)}
           >
-            <span className={showContent == 2 && 'angle-down'}>
+            <span className={showContent == 2 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 2 ? 'text-gray-800' : 'text-gray-400'}>
@@ -69,7 +69,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(3)}
           >
-            <span className={showContent == 3 && 'angle-down'}>
+            <span className={showContent == 3 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 3 ? 'text-gray-800' : 'text-gray-400'}>
@@ -94,7 +94,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(4)}
           >
-            <span className={showContent == 4 && 'angle-down'}>
+            <span className={showContent == 4 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 4 ? 'text-gray-800' : 'text-gray-400'}>
@@ -123,7 +123,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(5)}
           >
-            <span className={showContent == 5 && 'angle-down'}>
+            <span className={showContent == 5 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 5 ? 'text-gray-800' : 'text-gray-400'}>
@@ -149,7 +149,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(6)}
           >
-            <span className={showContent == 6 && 'angle-down'}>
+            <span className={showContent == 6 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 6 ? 'text-gray-800' : 'text-gray-400'}>
@@ -174,7 +174,7 @@ export const AboutFAQ = () => {
             className="accordion-header cursor-pointer transition flex items-center"
             onClick={() => toggleContent(7)}
           >
-            <span className={showContent == 7 && 'angle-down'}>
+            <span className={showContent == 7 ? 'angle-down' : ''}>
               <Icon path={mdiChevronRight} title="angle" size={1} />
             </span>
             <h3 className={showContent == 7 ? 'text-gray-800' : 'text-gray-400'}>

@@ -13,6 +13,21 @@ export const Container = styled.div`
   }
 `
 export const BannerWrapper = styled.section`
+  position: relative;
+  overflow: hidden;
+  &:before {
+    background-image: url('/bg-blob-gradient.svg');
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: contain;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.1;
+  }
   input {
     background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.25)};
     color: ${({ theme }) => theme.colors.gray['800']};
@@ -88,7 +103,7 @@ export const HowItWorksWrapper = styled.section`
   }
 `
 
-export const AboutBlogWrapper = styled.section`
+export const BlogWrapper = styled.section`
   padding-top: 4rem;
   padding-bottom: 4rem;
   .btn-gray {

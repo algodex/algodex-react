@@ -15,13 +15,9 @@ export const Footer = () => {
             Blog
           </Link>
           <span className="mx-2">|</span>
-          <Link href="/docs" target="_blank" rel="noreferrer">
-            Docs
-          </Link>
+          <Link href="/docs">Docs</Link>
           <span className="mx-2">|</span>
-          <Link href="/support" target="_blank" rel="noreferrer">
-            Support
-          </Link>
+          <Link href="/support">Support</Link>
         </div>
         <div className="mb-3 text-center">
           © 2021 Algodex, Inc |{' '}

@@ -5,6 +5,7 @@
     "*": ["common", "wallet", "place-order", "assets", "orders", "chart"],
     "/": ["common", "wallet", "place-order", "assets", "orders", "chart"],
     "/trade/[slug]": ["common", "wallet", "place-order", "assets", "orders", "chart"],
-    "/asset/[slug]": ["common", "wallet", "place-order", "assets", "orders", "chart"]
+    "/asset/[slug]": ["common", "wallet", "place-order", "assets", "orders", "chart"],
+    "/about": ["common", "wallet", "place-order", "assets", "orders", "chart"]
   }
 }
