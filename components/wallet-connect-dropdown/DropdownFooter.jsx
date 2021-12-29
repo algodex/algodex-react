@@ -26,4 +26,8 @@ const DropdownFooter = () => {
   )
 }
 
+DropdownFooter.propTypes = {
+  externalLink: PropTypes.string
+}
+
 export default DropdownFooter

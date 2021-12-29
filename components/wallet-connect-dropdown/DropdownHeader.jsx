@@ -2,7 +2,7 @@ import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import { mdiClose } from '@mdi/js'
 
-const DropdownHeader = () => {
+const DropdownHeader = ({ closeFn }) => {
   return (
     <div className="flex justify-between items-center p-4">
       <p
@@ -15,6 +15,7 @@ const DropdownHeader = () => {
         Your Wallets
       </p>
       <Icon
+        onClick={closeFn}
         path={mdiClose}
         title="Close Dropdown"
         size={0.8}
@@ -23,6 +24,10 @@ const DropdownHeader = () => {
       />
     </div>
   )
+}
+
+DropdownHeader.propTypes = {
+  closeFn: PropTypes.func
 }
 
 export default DropdownHeader

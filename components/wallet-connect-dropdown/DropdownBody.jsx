@@ -1,7 +1,7 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 
 import Icon from '@mdi/react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import theme from '../../theme'
 
 const DropdownBody = () => {
