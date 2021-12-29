@@ -12,7 +12,8 @@ const DropdownBody = () => {
           fontSize: '12px',
           color: 'white',
           backgroundColor: theme.colors.gray['500'],
-          borderRadius: '4px'
+          borderRadius: '4px',
+          padding: '0.5rem'
         }}
       >
         <p
