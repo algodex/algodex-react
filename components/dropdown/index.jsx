@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   position: absolute;
-  height: 12rem;
+  height: 16rem;
   background-color: ${({ theme }) => theme.colors.gray[700]};
   max-width: 23rem;
   width: 100%;
