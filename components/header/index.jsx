@@ -10,21 +10,34 @@ import {
   Navigation,
   NetworkDropdown
 } from './header.css'
+import { mdiClose, mdiContentCopy } from '@mdi/js'
 import { useEffect, useState } from 'react'
 
 import ActiveLink from 'components/active-link'
+import DropdownWrapper from 'components/dropdown'
 // import AssetSearch from "../asset-search";
 /* eslint-disable */
 import Hamburger from 'components/hamburger'
+import Icon from '@mdi/react'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
+// import OfficialAlgorand from '../../assets/Official-Algo-Wallet-icon.svg'
+import { ReactSVG } from 'react-svg'
 import _ from 'lodash'
+import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
+
+export const MyAlgo = styled(ReactSVG)`
+  height: auto;
+  width: 10rem;
+  display: block;
+`
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [networkUpdate, setNetworkUpdate] = useState(null)
+  const [isWalletConnectDropDownVisible, setIsWalletConnectDropDownVisible] = useState(false)
   const setActiveNetwork = useUserStore((state) => state.setActiveNetwork)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   
@@ -43,6 +56,67 @@ export default function Header() {
     // setNetworkUpdate(activeNetwork)
     setNetworkUpdate(window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')
   }, [])
+
+  const WalletOptions = () => {
+    return <div>
+      <p>CONNECT A WALLET</p>
+      <div>
+        <div>
+          <ReactSVG style={{
+            height: 'auto',
+            width: '10rem'
+          }} src="../assets/Official-Algo-Wallet-icon.svg" />
+          <p>Algorand Mobile Wallet</p>
+        </div>
+        <div>
+          <MyAlgo src="/My-Algo-Wallet-icon.svg" />
+          <p>My Algo Wallet</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  const renderActiveWallet = () => {
+    return <div>
+      <p>ACTIVE WALLET</p>
+      <div>
+        <div>
+          <div>
+            <p>AH8TJX78TG2P....Q235FRTK90LP</p>
+            <Icon
+              path={mdiContentCopy}
+              title="Copy Address"
+              size={0.8}
+              className="cursor-pointer"
+              color="#FFFFFF"
+            />
+          </div>
+          <div>DISCONNECT</div>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  const renderWalletConnectDropdown = () => {
+    return <DropdownWrapper>
+      <div className="flex justify-between p-3">
+        <p>Your Wallets</p>
+        <Icon
+          path={mdiClose}
+          title="Close Dropdown"
+          size={0.8}
+          className="cursor-pointer"
+          color="#FFFFFF"
+        />
+      </div>
+      {WalletOptions()}
+      <div>
+        <p>New to Algorand?</p>
+        <p>Learn More About Algorand Wallets</p>
+      </div>
+    </DropdownWrapper>
+  }
 
   useEffect(() => {
     networkUpdate == "mainnet" ? setActiveNetwork("mainnet") : setActiveNetwork("testnet")
@@ -105,9 +179,11 @@ export default function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
-        <a target="_blank" href="//about.algodex.com" rel="noreferrer">
-          <ConnectWalletBtn>CONNECT A WALLET</ConnectWalletBtn>
-        </a>
+        <div>
+          <ConnectWalletBtn onClick={() => setIsWalletConnectDropDownVisible(!isWalletConnectDropDownVisible)}>CONNECT A WALLET</ConnectWalletBtn>
+          {isWalletConnectDropDownVisible && renderWalletConnectDropdown()}
+        </div>
+        
         <LanguageSelection isMobile={false} />
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
