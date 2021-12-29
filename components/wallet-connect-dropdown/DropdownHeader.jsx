@@ -4,8 +4,16 @@ import { mdiClose } from '@mdi/js'
 
 const DropdownHeader = () => {
   return (
-    <div className="flex justify-between p-3">
-      <p>Your Wallets</p>
+    <div className="flex justify-between items-center p-4">
+      <p
+        style={{
+          fontSize: '16px',
+          color: 'white',
+          fontWeight: 'bold'
+        }}
+      >
+        Your Wallets
+      </p>
       <Icon
         path={mdiClose}
         title="Close Dropdown"

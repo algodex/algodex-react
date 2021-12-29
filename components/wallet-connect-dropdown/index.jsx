@@ -6,7 +6,7 @@ import DropdownHeader from './DropdownHeader'
 
 const WalletConnectDropdown = () => {
   return (
-    <div>
+    <div className="flex flex-col justify-between">
       <DropdownHeader />
       <DropdownBody />
       <DropdownFooter />
