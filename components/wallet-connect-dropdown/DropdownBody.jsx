@@ -185,7 +185,7 @@ const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWalle
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {renderWalletOptionList()}
+      {true && renderWalletOptionList()}
       {false && renderActiveWalletList()}
       {false && renderSwitchWalletAddress()}
       {true && (
