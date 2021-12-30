@@ -8,63 +8,25 @@ const DropdownBody = () => {
   const renderWalletOptionList = () => {
     return (
       <div
+        className="text-xs text-white rounded p-2"
         style={{
-          fontSize: '12px',
-          color: 'white',
-          backgroundColor: theme.colors.gray['500'],
-          borderRadius: '4px',
-          padding: '0.5rem'
+          backgroundColor: theme.colors.gray['500']
         }}
       >
-        <p
-          style={{
-            fontWeight: 'bold',
-            marginBottom: '0.5rem'
-          }}
-        >
-          CONNECT A WALLET
-        </p>
-        <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '0.5rem'
-            }}
-          >
+        <p className="font-semibold mb-2">CONNECT A WALLET</p>
+        <div className="mt-4 ml-4">
+          <div className="flex items-center mb-2">
             <Image
               src="/Official-Algo-Wallet-icon.svg"
               alt="Algorand Wallet"
               width={25}
               height={25}
             />
-            <p
-              style={{
-                marginLeft: '0.5rem',
-                fontWeight: '500',
-                textDecoration: 'underline'
-              }}
-            >
-              Algorand Mobile Wallet
-            </p>
+            <p className="ml-2 font-medium underline">Algorand Mobile Wallet</p>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '0.5rem'
-            }}
-          >
+          <div className="flex items-center mb-2">
             <Image src="/My-Algo-Wallet-icon.svg" alt="Algorand Wallet" width={25} height={25} />
-            <p
-              style={{
-                marginLeft: '0.5rem',
-                fontWeight: '500',
-                textDecoration: 'underline'
-              }}
-            >
-              My Algo Wallet
-            </p>
+            <p className="ml-2 font-medium underline">My Algo Wallet</p>
           </div>
         </div>
       </div>
@@ -73,44 +35,16 @@ const DropdownBody = () => {
   const renderActiveWalletList = () => {
     return (
       <div>
-        <p
-          style={{
-            color: 'white',
-            fontWeight: '500',
-            marginBottom: '0.5rem',
-            fontSize: '14px'
-          }}
-        >
-          ACTIVE WALLET
-        </p>
-        <div style={{ color: 'white' }}>
+        <p className="text-white font-medium mb-2 text-xs">ACTIVE WALLET</p>
+        <div className="text-white">
           <div
+            className="p-2 text-xs rounded shadow"
             style={{
-              padding: '0.5rem',
-              fontSize: '12px',
-              backgroundColor: 'rgba(113, 128, 150, 0.1)',
-              borderRadius: '4px',
-              boxShadow: '0 0 23px -15px #000000'
+              backgroundColor: 'rgba(113, 128, 150, 0.1)'
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  border: 'solid 1px',
-                  padding: '0.3rem',
-                  borderRadius: '4px',
-                  width: '80%',
-                  justifyContent: 'space-between'
-                }}
-              >
+            <div className="flex justify-between items-center">
+              <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
                 <p>AH8TJX78TG2P....Q235FRTK90LP</p>
                 <Icon
                   path={mdiContentCopy}
@@ -121,27 +55,15 @@ const DropdownBody = () => {
                 />
               </div>
               <div
+                className="rounded ml-2 p-2 font-semibold"
                 style={{
-                  borderRadius: '4px',
-                  marginLeft: '0.5rem',
-                  background: theme.colors.gray['700'],
-                  padding: '0.5rem',
-                  fontWeight: 'bold'
+                  background: theme.colors.gray['700']
                 }}
               >
                 DISCONNECT
               </div>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                color: 'white',
-                marginRight: '10%',
-                marginTop: '2%'
-              }}
-            >
+            <div className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
               <p>View on AlgoExplorer</p>
               <Icon
                 path={mdiOpenInNew}
@@ -314,9 +236,9 @@ const DropdownBody = () => {
         padding: '0.5rem'
       }}
     >
-      {renderWalletOptionList()}
+      {false && renderWalletOptionList()}
       {false && renderActiveWalletList()}
-      {false && renderSwitchWalletAddress()}
+      {renderSwitchWalletAddress()}
       {false && (
         <div
           style={{
