@@ -1,5 +1,5 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-
+import Image from 'next/image'
 import Icon from '@mdi/react'
 // import PropTypes from 'prop-types'
 import theme from '../../theme'
@@ -25,10 +25,22 @@ const DropdownBody = () => {
           CONNECT A WALLET
         </p>
         <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-          <div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '0.5rem'
+            }}
+          >
+            <Image
+              src="/Official-Algo-Wallet-icon.svg"
+              alt="Algorand Wallet"
+              width={25}
+              height={25}
+            />
             <p
               style={{
-                marginBottom: '0.5rem',
+                marginLeft: '0.5rem',
                 fontWeight: '500',
                 textDecoration: 'underline'
               }}
@@ -36,10 +48,17 @@ const DropdownBody = () => {
               Algorand Mobile Wallet
             </p>
           </div>
-          <div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '0.5rem'
+            }}
+          >
+            <Image src="/My-Algo-Wallet-icon.svg" alt="Algorand Wallet" width={25} height={25} />
             <p
               style={{
-                marginBottom: '0.5rem',
+                marginLeft: '0.5rem',
                 fontWeight: '500',
                 textDecoration: 'underline'
               }}

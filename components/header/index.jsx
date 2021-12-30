@@ -19,18 +19,11 @@ import DropdownWrapper from 'components/dropdown'
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
-import { ReactSVG } from 'react-svg'
 import WalletConnectDropdown from 'components/wallet-connect-dropdown'
 import _ from 'lodash'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
-
-export const MyAlgo = styled(ReactSVG)`
-  height: auto;
-  width: 10rem;
-  display: block;
-`
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
