@@ -21,7 +21,6 @@ import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
 import WalletConnectDropdown from 'components/wallet-connect-dropdown'
 import _ from 'lodash'
-import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 

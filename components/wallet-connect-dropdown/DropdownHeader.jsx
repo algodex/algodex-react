@@ -5,15 +5,7 @@ import { mdiClose } from '@mdi/js'
 const DropdownHeader = ({ closeFn }) => {
   return (
     <div className="flex justify-between items-center p-4">
-      <p
-        style={{
-          fontSize: '16px',
-          color: 'white',
-          fontWeight: 'bold'
-        }}
-      >
-        Your Wallets
-      </p>
+      <p className="text-sm text-white font-bold">Your Wallets</p>
       <Icon
         onClick={closeFn}
         path={mdiClose}
