@@ -49,7 +49,7 @@ export default function Header() {
 
   const renderWalletConnectDropdown = () => {
     return <DropdownWrapper>
-      <WalletConnectDropdown/>
+      <WalletConnectDropdown closeFn={() => setIsWalletConnectDropDownVisible(false)}/>
     </DropdownWrapper>
   }
 

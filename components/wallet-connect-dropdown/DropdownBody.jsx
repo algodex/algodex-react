@@ -1,10 +1,15 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 import Image from 'next/image'
 import Icon from '@mdi/react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import theme from '../../theme'
 
-const DropdownBody = () => {
+const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWallet }) => {
+  const handleWalletConnect = (type) => {
+    closeFn()
+    type === 'algomobilewallet' && connectAlgorandMobileWallet()
+    type === 'myalgowallet' && connectMyAlgoWallet()
+  }
   const renderWalletOptionList = () => {
     return (
       <div
@@ -15,17 +20,29 @@ const DropdownBody = () => {
       >
         <p className="font-semibold mb-2">CONNECT A WALLET</p>
         <div className="mt-4 ml-4">
-          <div className="flex items-center mb-2">
+          <div
+            role="button"
+            tabIndex="0"
+            className="flex items-center mb-2"
+            onClick={() => handleWalletConnect('algomobilewallet')}
+            onKeyPress={() => console.log('key pressed')}
+          >
             <Image
               src="/Official-Algo-Wallet-icon.svg"
-              alt="Algorand Wallet"
+              alt="Algorand Mobile Wallet"
               width={25}
               height={25}
             />
             <p className="ml-2 font-medium underline">Algorand Mobile Wallet</p>
           </div>
-          <div className="flex items-center mb-2">
-            <Image src="/My-Algo-Wallet-icon.svg" alt="Algorand Wallet" width={25} height={25} />
+          <div
+            className="flex items-center mb-2"
+            role="button"
+            tabIndex="0"
+            onClick={() => handleWalletConnect('myalgowallet')}
+            onKeyPress={() => console.log('key pressed')}
+          >
+            <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
             <p className="ml-2 font-medium underline">My Algo Wallet</p>
           </div>
         </div>
@@ -163,14 +180,14 @@ const DropdownBody = () => {
 
   return (
     <div
+      className="p-2"
       style={{
-        backgroundColor: theme.colors.gray['600'],
-        padding: '0.5rem'
+        backgroundColor: theme.colors.gray['600']
       }}
     >
-      {false && renderWalletOptionList()}
-      {renderActiveWalletList()}
-      {renderSwitchWalletAddress()}
+      {renderWalletOptionList()}
+      {false && renderActiveWalletList()}
+      {false && renderSwitchWalletAddress()}
       {true && (
         <div
           className="flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
@@ -183,6 +200,12 @@ const DropdownBody = () => {
       )}
     </div>
   )
+}
+
+DropdownBody.propTypes = {
+  connectMyAlgoWallet: PropTypes.func,
+  connectAlgorandMobileWallet: PropTypes.func,
+  closeFn: PropTypes.func
 }
 
 export default DropdownBody
