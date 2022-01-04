@@ -21,5 +21,8 @@
   "disable-popup": "ポップアップ・ブロックを解除してください（ブラウザの右上に表示されます）",
   "disable-popup-mobile": "ポップアップ・ブロックを解除してください",
   "order-cancelled": "注文がキャンセルされました",
-  "max-spend-explanation": "合計残高には取引のためにウォレットに入れておかなければならない {{amount}} ALGOが含まれています"
+  "max-spend-explanation": "合計残高には取引のためにウォレットに入れておかなければならない {{amount}} ALGOが含まれています",
+  "order-size-filtering": "注文サイズのフィルタリング",
+  "less-lag": "ラグが少ない",
+  "better-execution": "より良い実行"
 }

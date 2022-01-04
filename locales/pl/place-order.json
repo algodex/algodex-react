@@ -21,5 +21,8 @@
     "disable-popup": "Prosze, wyłączyc popup blocker w prawym górnym rogu okna.",
     "disable-popup-mobile": "Proszę wyłączyć popup blocker.",
     "order-cancelled": "Zlec anulowane.",
-    "max-spend-explanation": "Całkowite saldo obejmuje {{amount}} algorytmy, które muszą być przechowywane w portfelu, aby umożliwić transakcje"
+    "max-spend-explanation": "Całkowite saldo obejmuje {{amount}} algorytmy, które muszą być przechowywane w portfelu, aby umożliwić transakcje",
+    "order-size-filtering": "Filtrowanie według rozmiaru zamówienia",
+    "less-lag": "Mniej opóźnień",
+    "better-execution": "Lepsze wykonanie"
 }
