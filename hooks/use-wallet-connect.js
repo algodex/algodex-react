@@ -25,7 +25,6 @@ export default function useWalletConnect() {
         // create new session
         await connector.createSession()
       }
-
       // subscribe to events
       await subscribeToEvents({ connector })
     } catch (e) {
@@ -63,6 +62,7 @@ export default function useWalletConnect() {
     })
 
     if (connector.connected) {
+      console.log('came here ooo', connector)
       const { accounts } = connector
       // const address = accounts[0]
       // console.log(address, 'address')
@@ -102,7 +102,7 @@ export default function useWalletConnect() {
 
   const onSessionUpdate = async (accounts, connector) => {
     const address = accounts[0]
-    console.log(connector, walletConnectAddresses, 'connector')
+    // console.log(connector, walletConnectAddresses, 'connector')
     await setWalletConnection({ ...walletConnection, address })
   }
 

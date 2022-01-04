@@ -1,6 +1,7 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-import Image from 'next/image'
+
 import Icon from '@mdi/react'
+import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
 
