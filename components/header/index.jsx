@@ -9,43 +9,35 @@ import {
   Navigation,
   NetworkDropdown
 } from './header.css'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import ActiveLink from 'components/active-link'
-// import AssetSearch from "../asset-search";
-/* eslint-disable */
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
-import _ from 'lodash'
+import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
+import { withRouter } from 'next/router'
 
-export default function Header() {
+export function Header({ router }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [networkUpdate, setNetworkUpdate] = useState(null)
-  const setActiveNetwork = useUserStore((state) => state.setActiveNetwork)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  
-  
   const { t } = useTranslation('common')
 
-  const handleNetworkChangeFn = (value) => {
-    setNetworkUpdate(value)
-    // if(activeNetwork !== value){
-    //   router.push(window.location.href.replace(activeNetwork, value))
-    // }
-  }
-
-
-  useEffect(() => {
-    // setNetworkUpdate(activeNetwork)
-    setNetworkUpdate(window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')
-  }, [])
-
-  useEffect(() => {
-    networkUpdate == "mainnet" ? setActiveNetwork("mainnet") : setActiveNetwork("testnet")
-  }, [networkUpdate])
+  /**
+   * Route to other network
+   * @type {(function(*): void)|*}
+   */
+  const handleNetworkChangeFn = useCallback(
+    (value) => {
+      if (activeNetwork !== value) {
+        // This can also be window.location =
+        router.push(window.location.href.replace(activeNetwork, value))
+      }
+    },
+    [router, activeNetwork]
+  )
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -56,12 +48,18 @@ export default function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown className="font-medium" activeNetwork={activeNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
-        <option value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
-        <option value="testnet" selected={activeNetwork === "testnet"}>TESTNET</option>
+      <NetworkDropdown
+        className="font-medium"
+        activeNetwork={activeNetwork}
+        onChange={(e) => handleNetworkChangeFn(e.target.value)}
+      >
+        <option disabled value="mainnet" selected={activeNetwork === 'mainnet'}>
+          MAINNET
+        </option>
+        <option value="testnet" selected={activeNetwork === 'testnet'}>
+          TESTNET
+        </option>
       </NetworkDropdown>
-        
-      
       <Navigation>
         <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
@@ -136,3 +134,9 @@ export default function Header() {
     </Container>
   )
 }
+
+Header.propTypes = {
+  router: PropTypes.object
+}
+
+export default withRouter(Header)

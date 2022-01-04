@@ -1,11 +1,11 @@
 import algodex from '@algodex/algodex-sdk'
 import { convertFromBaseUnits } from './convert'
-import { truncateAddress } from './display'
 import { getAlgodexEnvironment } from './environment'
+import { truncateAddress } from './display'
 
 const WalletService = {
   getMinWalletBalance: async (accountInfo) => {
-     return await algodex.getMinWalletBalance(accountInfo)
+    return await algodex.getMinWalletBalance(accountInfo)
   },
 
   fetchWallets: async (addresses) => {
