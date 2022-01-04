@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":" LLIBRE (Llibreta de comandes)",
     "mobilefooter-TRADE":"COMERÇ",
     "mobilefooter-ORDERS":"ORDERS",
-    "mobilefooter-WALLET":"CARTERA"
+    "mobilefooter-WALLET":"CARTERA",
+    "trade-history":"Comerç-Història",
+    "order-book":"Llibre De Comandes"
 }

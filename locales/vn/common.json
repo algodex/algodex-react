@@ -12,5 +12,7 @@
   "mobilefooter-BOOK": "SỔ",
   "mobilefooter-TRADE": "GIAO DỊCH",
   "mobilefooter-ORDERS": "LỆNH",
-  "mobilefooter-WALLET": "VÍ"
+  "mobilefooter-WALLET": "VÍ",
+  "trade-history":"Lịch sử thương mại",
+  "order-book":"Quyển sổ đặc Mua hàng"
 }
