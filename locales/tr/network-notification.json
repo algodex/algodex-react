@@ -1,0 +1,19 @@
+{
+  "_comment": "Translation for Turkish",
+  "modal-title-mainnet": "Algodex Mainnet'e hoş geldiniz!",
+  "modal-title-testnet": "Algodex Testnet'e hoş geldiniz!",
+  "modal-subtitle-mainnet": "Potansiyel risklerin farkında olun -",
+  "modal-first-paragraph-mainnet": "Algodex'in Mainnet versiyonunda işlem yapıyorsunuz. Bu işlemler gerçek değere sahip ana ağ varlıkları ile olduğundan ve işlemler kalıcı olduğundan, emir verirken lütfen paranıza dikkat edin.",
+  "modal-second-paragraph-mainnet": "Algodex bir güvenlik denetiminden geçmiştir, ancak öngörülemeyen durumlardan dolayı kayıplar meydana gelebilir. Devam etmeden önce lütfen Sorumluluk Reddi ve Belgelerimizi inceleyin.",
+  "modal-subtitle-testnet": "Yeni özellikleri risksiz test edin!",
+  "modal-first-paragraph-testnet": "Yeni özelliklerimizi test etmek ve hataları bulmak için kullanılan Algodex'in Testnet sürümünde işlem yapıyorsunuz. Testnet'teki tüm işlemler, gerçek değeri olmayan testnet algoritmalarını ve varlıklarını kullanır. Aşağıdaki Musluk bağlantısından Algos'u test ettirebilirsiniz.",
+  "modal-second-paragraph-testnet": "Lütfen herhangi bir hata veya özellik isteği hakkında geri bildirim gönderin!",
+  "network-name-mainnet": "ANA AĞ",
+  "network-name-testnet": "TESTNET",
+  "modal-disclaimer": "sorumluluk reddi",
+  "modal-faucet": "Musluk",
+  "modal-documentation": "belgeler",
+  "modal-cta": "KABUL",
+  "ribbon-message-mainnet": "TBu, Algodex'in Mainnet sürümüdür. Lütfen herhangi bir işlem yaparken dikkatli olun.",
+  "ribbon-message-testnet": "Bu, Algodex'in Testnet sürümüdür. Lütfen herhangi bir işlem yaparken dikkatli olun."
+}

@@ -1,0 +1,22 @@
+{
+  "_comment": "Translation for Indonesian",
+  "modal-title-mainnet": "Selamat datang di Algodex Mainnet!",
+  "modal-title-testnet": "Selamat datang di Algodex Testnet!",
+  "modal-subtitle-mainnet": "Waspadai potensi risiko -",
+  "modal-first-paragraph-mainnet": "Anda berdagang di Algodex versi Mainnet. Harap berhati-hati dengan dana Anda saat membuat pesanan apa pun karena transaksi ini dengan aset mainnet dengan nilai nyata dan perdagangan bersifat permanen.",
+  "modal-second-paragraph-mainnet": "Algodex telah melalui audit keamanan, namun kerugian dapat terjadi karena keadaan yang tidak terduga. Harap tinjau Penafian dan Dokumentasi kami sebelum melanjutkan.",
+  
+  "modal-subtitle-testnet": "Uji fitur baru tanpa risiko!",
+  "modal-first-paragraph-testnet": "Anda berdagang di Algodex versi Testnet yang digunakan untuk menguji fitur baru kami dan menemukan bug. Semua perdagangan di Testnet menggunakan algo dan aset testnet tanpa nilai nyata. Anda bisa mendapatkan Algos untuk diuji dari tautan Faucet di bawah ini.",
+  "modal-second-paragraph-testnet": "Silakan kirim umpan balik tentang bug atau permintaan fitur apa pun!",
+  
+  "network-name-mainnet": "MAINNET",
+  "network-name-testnet": "TESTNET",
+
+  "modal-disclaimer": "Penafian",
+  "modal-faucet": "Keran",
+  "modal-documentation": "Dokumentasi",
+  "modal-cta": "MENERIMA",
+  "ribbon-message-mainnet": "Ini adalah versi Mainnet dari Algodex. Harap berhati-hati dalam melakukan perdagangan apa pun.",
+  "ribbon-message-testnet": "Ini adalah versi Testnet dari Algodex. Harap berhati-hati dalam melakukan perdagangan apa pun."
+}

@@ -1,0 +1,22 @@
+{
+  "_comment": "Translation for Norwegian",
+  "modal-title-mainnet": "Velkommen til Algodex Mainnet!",
+  "modal-title-testnet": "Velkommen til Algodex Testnet!",
+  "modal-subtitle-mainnet": "Vær oppmerksom på potensielle risikoer -",
+  "modal-first-paragraph-mainnet": "Du handler på Mainnet-versjonen av Algodex. Vær forsiktig med pengene dine når du foretar bestillinger ettersom disse transaksjonene er med mainnet-eiendeler med reell verdi og handler er permanente.",
+  "modal-second-paragraph-mainnet": "Algodex har gått gjennom en sikkerhetsrevisjon, men tap kan oppstå på grunn av uforutsette omstendigheter. Les vår ansvarsfraskrivelse og dokumentasjon før du fortsetter.",
+  
+  "modal-subtitle-testnet": "Test nye funksjoner uten risiko!",
+  "modal-first-paragraph-testnet": "Du handler på Testnet-versjonen av Algodex som brukes til å teste våre nye funksjoner og finne feil. Alle handler på Testnet bruker testnet algoer og eiendeler uten reell verdi. Du kan få Algos til å teste med fra kranen nedenfor.",
+  "modal-second-paragraph-testnet": "Send tilbakemelding om eventuelle feil eller funksjonsforespørsler!",
+  
+  "network-name-mainnet": "HOVEDNETT",
+  "network-name-testnet": "TESTNET",
+
+  "modal-disclaimer": "Ansvarsfraskrivelse",
+  "modal-faucet": "Kran",
+  "modal-documentation": "Dokumentasjon",
+  "modal-cta": "AKSEPTERER",
+  "ribbon-message-mainnet": "Dette er Mainnet-versjonen av Algodex. Vær forsiktig når du handler.",
+  "ribbon-message-testnet": "Dette er Testnet-versjonen av Algodex. Vær forsiktig når du handler."
+}

@@ -1,0 +1,22 @@
+{
+  "_comment": "Translation for Thai",
+  "modal-title-mainnet": "ยินดีต้อนรับสู่ Algodex Mainnet!!",
+  "modal-title-testnet": "ยินดีต้อนรับสู่ Algodex Testnet!",
+  "modal-subtitle-mainnet": "ระวังความเสี่ยงที่อาจเกิดขึ้น -",
+  "modal-first-paragraph-mainnet": "คุณกำลังซื้อขายใน Algodex เวอร์ชัน Mainnet โปรดใช้ความระมัดระวังกับเงินของคุณในขณะที่ทำการสั่งซื้อใดๆ เนื่องจากธุรกรรมเหล่านี้เกิดขึ้นกับสินทรัพย์ของ mainnet ที่มีมูลค่าจริงและการซื้อขายจะเป็นแบบถาวร",
+  "modal-second-paragraph-mainnet": "Algodex ได้ผ่านการตรวจสอบความปลอดภัยแล้ว อย่างไรก็ตาม ความสูญเสียอาจเกิดขึ้นเนื่องจากสถานการณ์ที่ไม่คาดฝัน โปรดตรวจสอบข้อจำกัดความรับผิดชอบและเอกสารประกอบของเราก่อนดำเนินการต่อ",
+  
+  "modal-subtitle-testnet": "ทดสอบคุณสมบัติใหม่โดยไม่มีความเสี่ยง!",
+  "modal-first-paragraph-testnet": "คุณกำลังซื้อขายในเวอร์ชัน Testnet ของ Algodex ที่ใช้ในการทดสอบคุณสมบัติใหม่ของเราและค้นหาจุดบกพร่อง การซื้อขายทั้งหมดบน Testnet ใช้ algos ของ testnet และสินทรัพย์ที่ไม่มีมูลค่าจริง คุณสามารถให้ Algos ทดสอบได้จากลิงค์ Faucet ด้านล่าง",
+  "modal-second-paragraph-testnet": "โปรดส่งข้อเสนอแนะเกี่ยวกับข้อบกพร่องหรือคำขอคุณสมบัติ!",
+  
+  "network-name-mainnet": "เมนเน็ต",
+  "network-name-testnet": "TESTNET",
+
+  "modal-disclaimer": "ข้อจำกัดความรับผิดชอบ",
+  "modal-faucet": "Faucet",
+  "modal-documentation": "เอกสาร",
+  "modal-cta": "ยอมรับ",
+  "ribbon-message-mainnet": "นี่คือ Algodex เวอร์ชัน Mainnet โปรดใช้ความระมัดระวังในการซื้อขาย",
+  "ribbon-message-testnet": "นี่เป็นเวอร์ชัน Testnet ของ Algodex โปรดใช้ความระมัดระวังในการซื้อขาย"
+}

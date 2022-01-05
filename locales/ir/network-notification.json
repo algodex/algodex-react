@@ -1,0 +1,22 @@
+{
+  "_comment": "Translation for Persian",
+  "modal-title-mainnet": "به Algodex Mainnet خوش آمدید!",
+  "modal-title-testnet": "به Algodex Testnet خوش آمدید!",
+  "modal-subtitle-mainnet": "از خطرات احتمالی آگاه باشید -",
+  "modal-first-paragraph-mainnet": "شما در حال معامله در نسخه Mainnet Algodex هستید. لطفاً هنگام انجام هرگونه سفارش مراقب وجوه خود باشید زیرا این معاملات با دارایی های شبکه اصلی با ارزش واقعی است و معاملات دائمی هستند.",
+  "modal-second-paragraph-mainnet": "Algodex یک ممیزی امنیتی را پشت سر گذاشته است، با این حال ممکن است به دلیل شرایط پیش بینی نشده ضرر و زیان رخ دهد. لطفاً قبل از ادامه، سلب مسئولیت و اسناد ما را بررسی کنید.",
+  
+  "modal-subtitle-testnet": "تست ویژگی های جدید بدون خطر!",
+  "modal-first-paragraph-testnet": "شما در حال معامله بر روی نسخه Testnet Algodex هستید که برای آزمایش ویژگی های جدید ما و یافتن اشکالات استفاده می شود. همه معاملات در Testnet از الگوها و دارایی های شبکه تست بدون ارزش واقعی استفاده می کنند. شما می توانید Algos را برای آزمایش از لینک شیر آب زیر دریافت کنید.",
+  "modal-second-paragraph-testnet": "لطفاً در مورد هر گونه اشکال یا درخواست ویژگی بازخورد ارسال کنید!",
+  
+  "network-name-mainnet": "شبکه اصلی",
+  "network-name-testnet": "TESTNET",
+
+  "modal-disclaimer": "سلب مسئولیت",
+  "modal-faucet": "شير آب",
+  "modal-documentation": "مستندات",
+  "modal-cta": "تایید کنید",
+  "ribbon-message-mainnet": "این نسخه Mainnet Algodex است. لطفا در انجام هر گونه معامله دقت کنید.",
+  "ribbon-message-testnet": "این نسخه تست نت Algodex است. لطفا در انجام هر گونه معامله دقت کنید."
+}
