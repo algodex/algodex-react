@@ -9,7 +9,7 @@ import {
 } from './order-book.css'
 
 import Big from 'big.js'
-import { BodyCopyTiny } from 'components/type'
+import { BodyCopyTiny, HeaderCaps } from 'components/type'
 import OrderBookPrice from 'components/order-book-price'
 import PriceHeader from 'components/price-header'
 import PropTypes from 'prop-types'
@@ -85,6 +85,10 @@ function OrderBookView({ asset, sellData, buyData }) {
   }
   return (
     <Container>
+      <HeaderCaps color="gray.500" mb={1}>
+        {t('order-book')}
+      </HeaderCaps>
+      <br></br>
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>

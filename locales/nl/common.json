@@ -12,5 +12,7 @@
   "mobilefooter-BOOK": "Boek",
   "mobilefooter-TRADE": "Handelen",
   "mobilefooter-ORDERS": "Orders",
-  "mobilefooter-WALLET": "Portemonee"
+  "mobilefooter-WALLET": "Portemonee",
+  "trade-history":"handelshistorie",
+  "order-book":"bestelboek"
 }

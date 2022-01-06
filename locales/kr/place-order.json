@@ -21,5 +21,8 @@
     "disable-popup": "팝업차단을 해제해주세요. (브라우저창의 우측 상단에 위치해 있을 확률이 높습니다.)",
     "disable-popup-mobile": "팝업차단을 해제해주세요.  ",
     "order-cancelled": "주문 취소되었습니다.",
-    "max-spend-explanation": "거래를 허용하기 위해 지갑에 보관해야 하는 총 잔액 ({{양}} 알고 포함)"
+    "max-spend-explanation": "거래를 허용하기 위해 지갑에 보관해야 하는 총 잔액 ({{양}} 알고 포함)",
+    "order-size-filtering": "주문 크기 필터링",
+    "less-lag": "지연 감소",
+    "better-execution": "더 나은 실행"
 }

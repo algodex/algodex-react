@@ -21,5 +21,8 @@
   "disable-popup": "Uistite sa, že ste v prehliadači povolili vyskakovacie okná (pravdepodobne v pravom hornom rohu prehliadača)",
   "disable-popup-mobile": "Uistite sa, že ste v prehliadači povolili vyskakovacie okná",
   "order-cancelled": "Pokyn bol úspešne zrušený",
-  "max-spend-explanation": "Aby ste mohli obchodovať, musíte mať minimálny zostatok {{amount}} Algo na svojom účte"
+  "max-spend-explanation": "Aby ste mohli obchodovať, musíte mať minimálny zostatok {{amount}} Algo na svojom účte",
+  "order-size-filtering": "Filtrovanie veľkosti objednávky",
+  "less-lag": "Menej oneskorenia",
+  "better-execution": "Lepšie prevedenie"
 }

@@ -1,0 +1,19 @@
+{
+  "_comment": "Translation for Dutch",
+  "modal-title-mainnet": "Welkom bij Algodex Mainnet!",
+  "modal-title-testnet": "Welkom bij Algodex Testnet!",
+  "modal-subtitle-mainnet": "Wees je bewust van mogelijke risico's -",
+  "modal-first-paragraph-mainnet": "U handelt op de Mainnet-versie van Algodex. Wees voorzichtig met uw geld bij het plaatsen van bestellingen, aangezien deze transacties plaatsvinden met vaste activa met echte waarde en transacties permanent zijn.",
+  "modal-second-paragraph-mainnet": "Algodex heeft een beveiligingsaudit ondergaan, maar er kunnen verliezen optreden als gevolg van onvoorziene omstandigheden. Lees onze disclaimer en documentatie voordat u verdergaat.",
+  "modal-subtitle-testnet": "Test nieuwe functies zonder risico!",
+  "modal-first-paragraph-testnet": "U handelt op de Testnet-versie van Algodex die wordt gebruikt om onze nieuwe functies te testen en bugs te vinden. Alle transacties op Testnet gebruiken testnet-algo's en activa zonder echte waarde. U kunt Algos laten testen via de kraan-link hieronder.",
+  "modal-second-paragraph-testnet": "Stuur alstublieft feedback over eventuele bugs of functieverzoeken!",
+  "network-name-mainnet": "MAINNET",
+  "network-name-testnet": "TESTNET",
+  "modal-disclaimer": "Vrijwaring",
+  "modal-faucet": "Kraan",
+  "modal-documentation": "Documentatie",
+  "modal-cta": "AANVAARDEN",
+  "ribbon-message-mainnet": "Dit is de Mainnet-versie van Algodex. Wees voorzichtig met het doen van transacties.",
+  "ribbon-message-testnet": "Dit is de Testnet-versie van Algodex. Wees voorzichtig met het doen van transacties."
+}

@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":"오더북 ",
     "mobilefooter-TRADE":"거래",
     "mobilefooter-ORDERS":"주문",
-    "mobilefooter-WALLET":"지갑"
+    "mobilefooter-WALLET":"지갑",
+    "trade-history":"무역 이력",
+    "order-book":"주문서"
 }

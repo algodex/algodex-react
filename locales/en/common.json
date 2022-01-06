@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":"BOOK",
     "mobilefooter-TRADE":"TRADE",
     "mobilefooter-ORDERS":"ORDERS",
-    "mobilefooter-WALLET":"WALLET"
+    "mobilefooter-WALLET":"WALLET",
+    "trade-history":"Trade History",
+    "order-book":"Order Book"
 }

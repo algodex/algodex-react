@@ -1,8 +1,9 @@
+import { Container, Header, Tab } from './orders.css'
+
+import Assets from 'components/assets'
 import OpenOrders from 'components/open-orders'
 import OrderHistory from 'components/order-history'
 import PropTypes from 'prop-types'
-import Assets from 'components/assets'
-import { Tab, Header, Container } from './orders.css'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 

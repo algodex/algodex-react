@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { createStore } from './use-store'
+
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
@@ -10,6 +11,56 @@ const userState = (set, get) => ({
    * This list is composed of a Algodex Assets Query and
    */
   assets: {},
+
+  /**
+   * Ribbon notification for Mainnet
+   *
+   * @true when Mainnet notification ribbon is visible
+   * @false when Mainnet notification ribbon is hidden
+   */
+  hasMainnetRibbon: null,
+  setHasMainnetRibbon: (bool) => set({ hasMainnetRibbon: bool }),
+
+  /**
+   * Ribbon notification for Testnet
+   *
+   * @true when Testnet notification ribbon is visible
+   * @false when Testnet notification ribbon is hidden
+   */
+  hasTestnetRibbon: null,
+  setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
+
+  /**
+   * Current network user is trading on.
+   *
+   * Options are Mainnet and Testnet
+   */
+  // activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
+  // activeNetwork: window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet',
+  // activeNetwork: () => (window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')(),
+  activeNetwork: 'mainnet',
+  setActiveNetwork: (network) => {
+    set({ activeNetwork: network })
+  },
+
+  /**
+   * Modal notification for Mainnet.
+   *
+   * @true when Mainnet notification modal is visible
+   * @false when Mainnet notification modal is hidden
+   */
+  hasMainnetNotificationModal: null,
+  setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
+
+  /**
+   * Modal notification for Testnet.
+   *
+   * @true when Testnet notification modal is visible
+   * @false when Testnet notification modal is hidden
+   */
+  hasTestnetNotificationModal: null,
+  setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
+
   /**
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *

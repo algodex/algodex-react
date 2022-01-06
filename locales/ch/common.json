@@ -12,5 +12,7 @@
   "mobilefooter-BOOK": "订单本",
   "mobilefooter-TRADE": "交易",
   "mobilefooter-ORDERS": "订单",
-  "mobilefooter-WALLET": "钱包"
+  "mobilefooter-WALLET": "钱包",
+  "trade-history":"贸易历史",
+  "order-book":"订单簿"
 }

@@ -21,5 +21,8 @@
     "disable-popup": "Vennligst deaktiver popup-blokkering (sannsynligvis øverst til høyre i nettleservinduet)",
     "disable-popup-mobile": "Vennligst deaktiver popup-blokkering",
     "order-cancelled": "Bestillingen kansellert",
-    "max-spend-explanation": "Total saldo inkluderer {{amount}} algoer som må oppbevares i lommeboken for å tillate handler"
+    "max-spend-explanation": "Total saldo inkluderer {{amount}} algoer som må oppbevares i lommeboken for å tillate handler",
+    "order-size-filtering": "Filtrering av ordrestørrelse",
+    "less-lag": "Mindre etterslep",
+    "better-execution": "Bedre utførelse"
 }

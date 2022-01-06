@@ -12,5 +12,7 @@
     "mobilefooter-BOOK":" Arkusz Zleceń",
     "mobilefooter-TRADE":"Operacja handlowa",
     "mobilefooter-ORDERS":"Zlecen",
-    "mobilefooter-WALLET":"Portfel"
+    "mobilefooter-WALLET":"Portfel",
+    "trade-history":"Historia handlu",
+    "order-book":"Zamów książkę"
 }

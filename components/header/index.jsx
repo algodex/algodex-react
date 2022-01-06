@@ -6,55 +6,38 @@ import {
   MobileNavigation,
   NavTextLg,
   NavTextSm,
-  Navigation
+  Navigation,
+  NetworkDropdown
 } from './header.css'
+import { useCallback, useState } from 'react'
 
 import ActiveLink from 'components/active-link'
-// import AssetSearch from "../asset-search";
-/* eslint-disable */
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
-import i18n from '../../i18n.json'
-import theme from '../../theme'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
+import useUserStore from 'store/use-user-state'
+import { withRouter } from 'next/router'
 
-// Map locale code to the flag used in 'react-country-flag'
-const localeToFlags = {
-  en: 'US',
-  es: 'MX',
-  nl: 'NL',
-  ch: 'CN',
-  tr: 'TR',
-  vn: 'VN',
-  id: 'ID',
-  iq: 'IQ',
-  my: 'MY',
-  ir: 'IR',
-  it: 'IT',
-  jp: 'JP',
-  ru: 'RU',
-  se: 'SE',
-  sk: 'SK',
-  hu: 'HU',
-  no: 'NO',
-  ct: 'ES',
-  th: 'TH',
-  in: 'IN',
-  de: 'DE',
-  kr: 'KR',
-  fr: 'FR',
-  pl: 'PL'
-}
-
-export default function Header() {
+export function Header({ router }) {
   const [isOpen, setIsOpen] = useState(false)
-  const { asPath, locale } = useRouter()
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false)
-
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
+
+  /**
+   * Route to other network
+   * @type {(function(*): void)|*}
+   */
+  const handleNetworkChangeFn = useCallback(
+    (value) => {
+      if (activeNetwork !== value) {
+        // This can also be window.location =
+        router.push(window.location.href.replace(activeNetwork, value))
+      }
+    },
+    [router, activeNetwork]
+  )
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -64,6 +47,19 @@ export default function Header() {
           <IconLogo src="/logo-icon-dark.svg" />
         </a>
       </Link>
+      &nbsp;
+      <NetworkDropdown
+        className="font-medium"
+        activeNetwork={activeNetwork}
+        onChange={(e) => handleNetworkChangeFn(e.target.value)}
+      >
+        <option disabled value="mainnet" selected={activeNetwork === 'mainnet'}>
+          MAINNET
+        </option>
+        <option value="testnet" selected={activeNetwork === 'testnet'}>
+          TESTNET
+        </option>
+      </NetworkDropdown>
       <Navigation>
         <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
@@ -138,3 +134,9 @@ export default function Header() {
     </Container>
   )
 }
+
+Header.propTypes = {
+  router: PropTypes.object
+}
+
+export default withRouter(Header)

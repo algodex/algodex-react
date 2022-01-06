@@ -12,5 +12,8 @@
     "mobilefooter-BOOK":"CARNET (carnet d'ordres) ",
     "mobilefooter-TRADE":"ÉCHANGER",
     "mobilefooter-ORDERS":"ORDRES",
-    "mobilefooter-WALLET":"PORTEFEUILLE"
+    "mobilefooter-WALLET":"PORTEFEUILLE",
+    "trade-history":"Histoire Du Commerce",
+    "order-book":"carnet de commande"
+    
 }
