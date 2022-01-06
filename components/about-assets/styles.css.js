@@ -89,7 +89,7 @@ export const HowItWorksWrapper = styled.section`
     word-break: break-all;
     color: ${({ theme }) => theme.colors.gray['800']};
   }
-  img {
+  .mockup-img {
     padding: 1rem 9rem 0px 0px;
   }
   .btn-outline {
@@ -100,6 +100,14 @@ export const HowItWorksWrapper = styled.section`
     font-size: 0.875rem;
     padding: 0.6rem 2rem;
     font-weight: bold;
+  }
+  .modal-wrapper {
+    position: relative;
+    .close-button {
+      position: absolute;
+      top: -17px;
+      right: -15px;
+    }
   }
 `
 

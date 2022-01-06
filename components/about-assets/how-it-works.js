@@ -13,7 +13,7 @@ export const AboutHowItWorks = () => {
             <img
               src="/Exchange-Mockup.png"
               alt="Exchange Mockup"
-              className="w-full object-contain"
+              className="w-full object-contain mockup-img"
             />
             <p className="my-6 text-base text-gray-800/80">
               Algodex is a highly decentralized marketplace with the orderbook completely on the

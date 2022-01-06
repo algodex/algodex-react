@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
 import { HowItWorksWrapper, Container, Accordion } from './styles.css'
-import Icon from '@mdi/react'
-import { mdiChevronRight } from '@mdi/js'
 import Link from 'next/link'
+import Modal from 'components/Modal'
+import { Icon } from '@iconify/react'
 
 export const AboutFAQ = () => {
+  const [isModalActive, setIsModalActive] = useState(false)
   const [showContent, setShowContent] = useState(0)
   const toggleContent = (number) => {
     showContent == number ? setShowContent(0) : setShowContent(number)
   }
+  const togleModal = () => {
+    setIsModalActive(!isModalActive)
+  }
+
   return (
     <HowItWorksWrapper>
       <hr className="mt-8" />
@@ -25,7 +30,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 1 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 1 ? 'text-gray-800' : 'text-gray-400'}>
               When will Algodex be available to the public?
@@ -53,7 +58,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 2 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 2 ? 'text-gray-800' : 'text-gray-400'}>
               Are there any opportunities to be part of the testing process?
@@ -81,7 +86,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 3 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 3 ? 'text-gray-800' : 'text-gray-400'}>
               Is Algodex planning to have a token?
@@ -110,7 +115,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 4 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 4 ? 'text-gray-800' : 'text-gray-400'}>
               When will Algodex be available to the public?
@@ -143,7 +148,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 5 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 5 ? 'text-gray-800' : 'text-gray-400'}>
               Do I need to generate new wallet keys to use My Algo?
@@ -173,7 +178,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 6 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 6 ? 'text-gray-800' : 'text-gray-400'}>
               How can I ensure my funds are safe?
@@ -202,7 +207,7 @@ export const AboutFAQ = () => {
             aria-pressed="false"
           >
             <span className={showContent == 7 ? 'angle-down' : ''}>
-              <Icon path={mdiChevronRight} title="angle" size={1} />
+              <Icon icon="whh:chevronright" />
             </span>
             <h3 className={showContent == 7 ? 'text-gray-800' : 'text-gray-400'}>
               What if I have an issue or suggestion?
@@ -238,14 +243,40 @@ export const AboutFAQ = () => {
             </p>
           </div>
           <div className="my-auto lg:w-1/2 md:w-2/5 text-center mb-7">
-            <button className="btn-outline">View ALGO Address / QR</button>
+            <button className="btn-outline" onClick={togleModal}>
+              View ALGO Address / QR
+            </button>
           </div>
         </div>
       </Container>
-      {/* <Modal>
-        <p>UNRAB5TNRMQJYII2QMFDN3Z2KF4ZZN5RZQW7TMGG2GYI5SIBG7BBPLD2CE</p>
-        <img src="/algodex-donate-qr.png" alt="" className="w-100" />
-      </Modal> */}
+      <Modal
+        isVisible={isModalActive}
+        className="fixed top-0  w-full h-full justify-center items-center"
+      >
+        <div className="modal-wrapper xs:h-5/6 xs:w-5/6 md:h-3/5 md:w-2/5 max-w-screen-lg">
+          <div
+            role="button"
+            tabIndex={0}
+            className="flex justify-end text-gray-000 text-lg close-button"
+            onClick={togleModal}
+            onKeyDown={togleModal}
+          >
+            <Icon icon="ep:close-bold" />
+          </div>
+          <div className="flex flex-col justify-between text-white w-full bg-gray-000 rounded-lg xs:p-4 md:p-8">
+            <div className="flex flex-col justify-center">
+              <p className="text-gray-500 break-words text-center">
+                UNRAB5TNRMQJYII2QMFDN3Z2KF4ZZN5RZQW7TMGG2GYI5SIBG7BBPLD2CE
+              </p>
+              <img
+                src="/algodex-donate-qr.png"
+                alt=""
+                className="w-full h-full object-contain p-0"
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </HowItWorksWrapper>
   )
 }

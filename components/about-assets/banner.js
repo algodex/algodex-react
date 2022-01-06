@@ -20,8 +20,8 @@ export const AboutBanner = () => {
           <div>
             <p className="text-green-500 text-2xl italic my-9">
               NEW: You can now try out the platform on Testnet by going to{' '}
-              <Link href="/trade" target="_blank" rel="noreferrer" className="underline">
-                <strong className="cursor-pointer">testnet.algodex.com</strong>
+              <Link href="/trade" target="_blank" rel="noreferrer">
+                <strong className="cursor-pointer underline">testnet.algodex.com</strong>
               </Link>
             </p>
             <hr className="mt-14" />
