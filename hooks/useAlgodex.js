@@ -1,15 +1,16 @@
-import { useQuery } from 'react-query'
 import {
-  searchAssets,
-  fetchAssetPrice,
   fetchAssetChart,
   fetchAssetOrders,
+  fetchAssetPrice,
   fetchAssetTradeHistory,
   fetchWalletAssets,
   fetchWalletOrders,
-  fetchWalletTradeHistory
+  fetchWalletTradeHistory,
+  searchAssets
 } from 'services/algodex'
+
 import WalletService from 'services/wallet'
+import { useQuery } from 'react-query'
 
 const refetchInterval = 3000
 

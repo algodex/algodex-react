@@ -1,9 +1,11 @@
+import { Container, SortIcon } from './orders-table.css'
 /* eslint-disable react/jsx-key  */
 import React, { useEffect } from 'react'
+import { useSortBy, useTable } from 'react-table'
+
 import PropTypes from 'prop-types'
-import { useTable, useSortBy } from 'react-table'
-import { Container, SortIcon } from './orders-table.css'
 import _ from 'lodash'
+
 /**
  * WARNING! This is also an Assets Table!
  * @param initialState
@@ -33,7 +35,7 @@ function OrdersTable({ initialState, onStateChange, columns, data }) {
     if (!_.isEqual(tableState, initialState)) {
       onStateChange(tableState)
     }
-  }, [tableState])
+  }, [onStateChange, initialState, tableState])
   return (
     <Container>
       <table {...getTableProps()}>
