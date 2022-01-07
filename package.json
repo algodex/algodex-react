@@ -99,6 +99,7 @@
     "jest": "^27.0.1",
     "jest-coverage-badges": "^1.1.2",
     "lint-staged": "^11.0.0",
+    "next-router-mock": "^0.6.5",
     "postcss": "^8.3.9",
     "prettier": "2.3.0",
     "react-test-renderer": "^17.0.2",
