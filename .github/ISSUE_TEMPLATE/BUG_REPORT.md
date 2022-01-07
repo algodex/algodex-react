@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: 🐛 Bug Report
 about: Submit a Bug(🐛) to be fixed
 title: '🐛 Fix: '
 labels: 'bug'

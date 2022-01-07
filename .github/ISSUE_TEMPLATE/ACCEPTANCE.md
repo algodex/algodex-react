@@ -1,6 +1,6 @@
 ---
-name: Acceptance and Standardization
-about: Adding Tests and Code Refactors
+name: ✅ Acceptance and ♻ Standardization
+about: Adding Tests(✅) and Code Refactors(♻)
 title: '✅ Acceptance: '
 labels: 'standardization'
 assignees: ''
