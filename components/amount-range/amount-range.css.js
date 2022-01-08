@@ -61,40 +61,6 @@ export const Input = styled.input.attrs({ type: 'range' })`
     -webkit-appearance: none;
   }
 
-  &:focus {
-    outline: none;
-  }
-
-  &:focus::-webkit-slider-thumb {
-    outline: 0;
-    ${focus}
-  }
-
-  &:focus::-moz-range-thumb {
-    outline: 0;
-    ${focus}
-  }
-
-  &:focus::-ms-thumb {
-    outline: 0;
-    ${focus}
-  }
-
-  &:disabled::-webkit-slider-thumb {
-    outline: 0;
-    ${disabled}
-  }
-
-  &:disabled::-moz-range-thumb {
-    outline: 0;
-    ${disabled}
-  }
-
-  &:disabled::-ms-thumb {
-    outline: 0;
-    ${disabled}
-  }
-
   --range: ${({ max, min }) => `calc(${max} - ${min})`};
   --ratio: ${({ value, min }) => `calc((${value} - ${min}) / var(--range))`};
   --sx: calc(0.5 * ${thumbDiameter} + var(--ratio) * (100% - ${thumbDiameter}));
@@ -146,6 +112,41 @@ export const Input = styled.input.attrs({ type: 'range' })`
   &::-moz-focus-outer {
     border: 0;
   }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus::-webkit-slider-thumb {
+    outline: 0;
+    ${focus}
+  }
+
+  &:focus::-moz-range-thumb {
+    outline: 0;
+    ${focus}
+  }
+
+  &:focus::-ms-thumb {
+    outline: 0;
+    ${focus}
+  }
+
+  &:disabled::-webkit-slider-thumb {
+    outline: 0;
+    ${disabled}
+  }
+
+  &:disabled::-moz-range-thumb {
+    outline: 0;
+    ${disabled}
+  }
+
+  &:disabled::-ms-thumb {
+    outline: 0;
+    ${disabled}
+  }
+  
 `
 
 export const Container = styled.div`
