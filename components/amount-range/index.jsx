@@ -91,6 +91,7 @@ function AmountRange(props) {
           min={0}
           max={100}
           step={5}
+          disabled={price == 0 ? true : false}
           value={value || 0}
           onChange={handleChange}
           orderType={order.type}

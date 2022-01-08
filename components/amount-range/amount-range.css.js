@@ -51,6 +51,10 @@ const focus = css`
       : `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #4b9064`};
 `
 
+const disabled = css`
+  background: gray;
+`
+
 export const Input = styled.input.attrs({ type: 'range' })`
   &,
   &::-webkit-slider-thumb {
@@ -74,6 +78,21 @@ export const Input = styled.input.attrs({ type: 'range' })`
   &:focus::-ms-thumb {
     outline: 0;
     ${focus}
+  }
+
+  &:disabled::-webkit-slider-thumb {
+    outline: 0;
+    ${disabled}
+  }
+
+  &:disabled::-moz-range-thumb {
+    outline: 0;
+    ${disabled}
+  }
+
+  &:disabled::-ms-thumb {
+    outline: 0;
+    ${disabled}
   }
 
   --range: ${({ max, min }) => `calc(${max} - ${min})`};
