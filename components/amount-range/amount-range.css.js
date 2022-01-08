@@ -182,7 +182,12 @@ export const Tick = styled.div`
     font-size: 0.625rem;
     font-weight: 600;
   }
-
+  &.disabled {
+    ${disabled}
+    &::after {
+      color: gray;
+    }
+  }
   &:first-child {
     transform: translateX(1px);
     &::after {
