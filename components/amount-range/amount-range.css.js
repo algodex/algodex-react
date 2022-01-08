@@ -52,7 +52,7 @@ const focus = css`
 `
 
 const disabled = css`
-  background: gray;
+  background: grey;
 `
 
 export const Input = styled.input.attrs({ type: 'range' })`
@@ -150,6 +150,9 @@ export const Input = styled.input.attrs({ type: 'range' })`
   &:disabled::-ms-thumb {
     outline: 0;
     ${disabled}
+  }
+  &:disabled {
+    opacity: 1;
   }
 `
 
