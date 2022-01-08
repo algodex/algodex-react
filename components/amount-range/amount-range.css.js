@@ -51,29 +51,14 @@ const focus = css`
       : `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #4b9064`};
 `
 
+const disabled = css`
+  background: gray;
+`
+
 export const Input = styled.input.attrs({ type: 'range' })`
   &,
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus::-webkit-slider-thumb {
-    outline: 0;
-    ${focus}
-  }
-
-  &:focus::-moz-range-thumb {
-    outline: 0;
-    ${focus}
-  }
-
-  &:focus::-ms-thumb {
-    outline: 0;
-    ${focus}
   }
 
   --range: ${({ max, min }) => `calc(${max} - ${min})`};
@@ -127,6 +112,45 @@ export const Input = styled.input.attrs({ type: 'range' })`
   &::-moz-focus-outer {
     border: 0;
   }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus::-webkit-slider-thumb {
+    outline: 0;
+    ${focus}
+  }
+
+  &:focus::-moz-range-thumb {
+    outline: 0;
+    ${focus}
+  }
+
+  &:focus::-ms-thumb {
+    outline: 0;
+    ${focus}
+  }
+
+  &:disabled::-moz-range-track,
+  &:disabled::-ms-track {
+    ${disabled};
+  }
+
+  &:disabled::-webkit-slider-thumb {
+    outline: 0;
+    ${disabled}
+  }
+
+  &:disabled::-moz-range-thumb {
+    outline: 0;
+    ${disabled}
+  }
+
+  &:disabled::-ms-thumb {
+    outline: 0;
+    ${disabled}
+  }
 `
 
 export const Container = styled.div`
@@ -163,7 +187,12 @@ export const Tick = styled.div`
     font-size: 0.625rem;
     font-weight: 600;
   }
-
+  &.disabled {
+    ${disabled}
+    &::after {
+      color: gray;
+    }
+  }
   &:first-child {
     transform: translateX(1px);
     &::after {
