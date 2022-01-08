@@ -151,8 +151,8 @@ export const Input = styled.input.attrs({ type: 'range' })`
     outline: 0;
     ${disabled}
   }
-  &:disabled{
-    opacity:1;
+  &:disabled {
+    opacity: 1;
   }
 `
 
