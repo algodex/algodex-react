@@ -132,6 +132,10 @@ export const Input = styled.input.attrs({ type: 'range' })`
     ${focus}
   }
 
+  &:disabled::-moz-range-track, &:disabled::-ms-track {
+    ${disabled};
+  }
+
   &:disabled::-webkit-slider-thumb {
     outline: 0;
     ${disabled}
