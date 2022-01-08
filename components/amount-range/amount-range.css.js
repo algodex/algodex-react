@@ -146,7 +146,6 @@ export const Input = styled.input.attrs({ type: 'range' })`
     outline: 0;
     ${disabled}
   }
-  
 `
 
 export const Container = styled.div`
