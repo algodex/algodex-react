@@ -4,20 +4,20 @@ import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
-import useMyAlgo from 'hooks/useMyAlgo'
-import useWalletConnect from 'hooks/use-wallet-connect'
+import useWalletController from 'hooks/useWalletController'
 
-const WalletConnectDropdown = ({ closeFn }) => {
-  const { connect: onWalletConnect } = useMyAlgo()
-  const { walletConnect } = useWalletConnect()
+const WalletConnectDropdown = ({ closeFn, activeWalletAddress }) => {
+  const { addConnection: connectMyAlgoFn } = useWalletController('MyAlgo')
+  const { addConnection: connectAlgorandWalletFn } = useWalletController('AlgorandOfficial')
 
   return (
     <div className="flex flex-col justify-between">
       <DropdownHeader closeFn={closeFn} />
       <DropdownBody
-        connectMyAlgoWallet={() => onWalletConnect()}
-        connectAlgorandMobileWallet={() => walletConnect()}
+        connectMyAlgoWallet={() => connectMyAlgoFn()}
+        connectAlgorandMobileWallet={() => connectAlgorandWalletFn()}
         closeFn={closeFn}
+        activeWalletAddress={activeWalletAddress}
       />
       <DropdownFooter />
     </div>
@@ -25,7 +25,8 @@ const WalletConnectDropdown = ({ closeFn }) => {
 }
 
 WalletConnectDropdown.propTypes = {
-  closeFn: PropTypes.func
+  closeFn: PropTypes.func,
+  activeWalletAddress: PropTypes.string
 }
 
 export default WalletConnectDropdown

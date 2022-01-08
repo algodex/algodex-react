@@ -21,5 +21,8 @@
     "disable-popup": "Harap nonaktifkan pemblokir popup Anda (kemungkinan di kanan atas jendela browser Anda)",
     "disable-popup-mobile": "Harap nonaktifkan pemblokir popup Anda",
     "order-cancelled": "PESANAN DIBATALKAN",
-    "max-spend-explanation": "Total saldo termasuk {{amount}} Algos yang harus disimpan di dompet untuk memungkinkan perdagangan"
+    "max-spend-explanation": "Total saldo termasuk {{amount}} Algos yang harus disimpan di dompet untuk memungkinkan perdagangan",
+    "order-size-filtering": "Pemfilteran Ukuran Pesanan",
+    "less-lag": "Lebih Sedikit Keterlambatan",
+    "better-execution": "Eksekusi yang Lebih Baik"
 }

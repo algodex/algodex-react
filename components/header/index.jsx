@@ -10,52 +10,52 @@ import {
   Navigation,
   NetworkDropdown
 } from './header.css'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import ActiveLink from 'components/active-link'
 import DropdownWrapper from 'components/dropdown'
-// import AssetSearch from "../asset-search";
-/* eslint-disable */
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
+import PropTypes from 'prop-types'
 import WalletConnectDropdown from 'components/wallet-connect-dropdown'
-import _ from 'lodash'
+import { useStorePersisted } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
+import { withRouter } from 'next/router'
 
-export default function Header() {
+export function Header({ router }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [networkUpdate, setNetworkUpdate] = useState(null)
   const [isWalletConnectDropDownVisible, setIsWalletConnectDropDownVisible] = useState(false)
-  const setActiveNetwork = useUserStore((state) => state.setActiveNetwork)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  
-  
   const { t } = useTranslation('common')
-
-  const handleNetworkChangeFn = (value) => {
-    setNetworkUpdate(value)
-    // if(activeNetwork !== value){
-    //   router.push(window.location.href.replace(activeNetwork, value))
-    // }
-  }
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
 
-  useEffect(() => {
-    // setNetworkUpdate(activeNetwork)
-    setNetworkUpdate(window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')
-  }, [])
+  /**
+   * Route to other network
+   * @type {(function(*): void)|*}
+   */
+  const handleNetworkChangeFn = useCallback(
+    (value) => {
+      if (activeNetwork !== value) {
+        // This can also be window.location =
+        router.push(window.location.href.replace(activeNetwork, value))
+      }
+    },
+    [router, activeNetwork]
+  )
 
   const renderWalletConnectDropdown = () => {
-    return <DropdownWrapper>
-      <WalletConnectDropdown closeFn={() => setIsWalletConnectDropDownVisible(false)}/>
-    </DropdownWrapper>
+    return (
+      <DropdownWrapper>
+        <WalletConnectDropdown
+          activeWalletAddress={activeWalletAddress}
+          closeFn={() => setIsWalletConnectDropDownVisible(false)}
+        />
+      </DropdownWrapper>
+    )
   }
-
-  useEffect(() => {
-    networkUpdate == "mainnet" ? setActiveNetwork("mainnet") : setActiveNetwork("testnet")
-  }, [networkUpdate])
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -66,12 +66,16 @@ export default function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown className="font-medium" activeNetwork={activeNetwork} onChange={(e) => handleNetworkChangeFn(e.target.value)}>
-        <option value="mainnet" selected={activeNetwork === "mainnet"}>MAINNET</option>
-        <option value="testnet" selected={activeNetwork === "testnet"}>TESTNET</option>
+      <NetworkDropdown
+        className="font-medium"
+        value={activeNetwork}
+        onChange={(e) => handleNetworkChangeFn(e.target.value)}
+      >
+        <option value="testnet">TESTNET</option>
+        <option disabled value="mainnet">
+          MAINNET
+        </option>
       </NetworkDropdown>
-        
-      
       <Navigation>
         <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
@@ -115,10 +119,11 @@ export default function Header() {
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
         <div>
-          <ConnectWalletBtn onClick={() => setIsWalletConnectDropDownVisible(!isWalletConnectDropDownVisible)}>CONNECT A WALLET</ConnectWalletBtn>
+          <ConnectWalletBtn onClick={() => setIsWalletConnectDropDownVisible(!isWalletConnectDropDownVisible)}>
+            { activeWalletAddress ? `${activeWalletAddress.substring(0, 4)}....${activeWalletAddress.substring(activeWalletAddress.length - 4, activeWalletAddress.length)}` : 'CONNECT A WALLET' }
+          </ConnectWalletBtn>
           {isWalletConnectDropDownVisible && renderWalletConnectDropdown()}
         </div>
-        
         <LanguageSelection isMobile={false} />
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
@@ -151,3 +156,9 @@ export default function Header() {
     </Container>
   )
 }
+
+Header.propTypes = {
+  router: PropTypes.object
+}
+
+export default withRouter(Header)

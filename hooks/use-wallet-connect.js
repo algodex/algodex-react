@@ -83,11 +83,10 @@ export default function useWalletConnect() {
 
   const onConnect = async (payload, connector) => {
     const { accounts } = payload.params[0]
-    console
     // const address = accounts[0]
     setWalletConnection({ ...walletConnection, connector })
 
-    setAddresses(accounts[0])
+    setAddresses(accounts)
     // getAccountAssets();
   }
 
@@ -108,6 +107,7 @@ export default function useWalletConnect() {
 
   return {
     walletConnect,
-    walletConnection
+    walletConnection,
+    walletConnectAddresses
   }
 }

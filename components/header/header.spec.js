@@ -1,18 +1,13 @@
 import React from 'react'
+import singletonRouter from 'next/router'
 import { render } from '../../test/test-utils'
-import Header from './index'
+import { Header } from './index'
 
-jest.mock('next/router', () => ({
-  useRouter() {
-    return {
-      asPath: '/trade/15322902'
-    }
-  }
-}))
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 describe('Header', () => {
   it('should render the container', () => {
-    const { queryByTestId } = render(<Header />)
+    const { queryByTestId } = render(<Header router={singletonRouter} />)
     expect(queryByTestId('header-container')).not.toBeNull()
   })
 })

@@ -27,6 +27,13 @@ const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
+  const explorerURL =
+    activeNetwork === 'testnet'
+      ? `https://testnet.algoexplorer.io/asset/`
+      : `https://algoexplorer.io/asset/`
+
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
@@ -157,7 +164,7 @@ const AssetInfo = ({ asset, price }) => {
         </InfoList>
         <AlgoExplorerLink>
           {/*TODO: Accredit Explorer for Information Provided*/}
-          <a href={asset.explorerUrl} target="_blank" rel="noreferrer">
+          <a href={`${explorerURL}${asset.id}`} target="_blank" rel="noreferrer">
             <Image
               src="/algo-explorer.png"
               alt="View asset on Algo Explorer"

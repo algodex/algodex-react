@@ -21,7 +21,6 @@ import useTranslation from 'next-translate/useTranslation'
 
 function WalletView(props) {
   const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
-
   const { t } = useTranslation('wallet')
 
   const getButtonVariant = () => {
@@ -98,7 +97,7 @@ function WalletView(props) {
 
   return (
     <Container>
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <Button
           variant={getButtonVariant()}
           onClick={getButtonState}
@@ -106,7 +105,7 @@ function WalletView(props) {
         >
           {WalletButtonText}
         </Button>
-      </ButtonContainer>
+      </ButtonContainer> */}
       {isSignedIn ? (
         <>
           <Header>
@@ -121,7 +120,7 @@ function WalletView(props) {
         </>
       ) : (
         <EmptyState>
-          <Arrow>
+          {/* <Arrow>
             <SvgImage use="walletArrow" h={4} color="gray.600" />
           </Arrow>
           <HeaderSm color="gray.100" m={0} mb={16}>
@@ -129,7 +128,7 @@ function WalletView(props) {
           </HeaderSm>
           <BodyCopySm color="gray.500" m={0}>
             {t('once-connected')}
-          </BodyCopySm>
+          </BodyCopySm> */}
         </EmptyState>
       )}
     </Container>

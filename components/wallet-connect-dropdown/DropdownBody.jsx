@@ -5,11 +5,16 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
 
-const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWallet }) => {
-  const handleWalletConnect = (type) => {
-    closeFn()
-    type === 'algomobilewallet' && connectAlgorandMobileWallet()
-    type === 'myalgowallet' && connectMyAlgoWallet()
+const DropdownBody = ({
+  closeFn,
+  connectMyAlgoWallet,
+  activeWalletAddress,
+  connectAlgorandMobileWallet
+}) => {
+  const handleWalletConnect = async (type) => {
+    type === 'algomobilewallet' && (await connectAlgorandMobileWallet())
+    type === 'myalgowallet' && (await connectMyAlgoWallet())
+    // closeFn()
   }
   const renderWalletOptionList = () => {
     return (
@@ -63,7 +68,9 @@ const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWalle
           >
             <div className="flex justify-between items-center">
               <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
-                <p>AH8TJX78TG2P....Q235FRTK90LP</p>
+                <p>
+                  { `${activeWalletAddress.substring(0, 11)}....${activeWalletAddress.substring(activeWalletAddress.length - 11, activeWalletAddress.length)}`}
+                </p>
                 <Icon
                   path={mdiContentCopy}
                   title="Copy Address"
@@ -73,7 +80,7 @@ const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWalle
                 />
               </div>
               <div
-                className="rounded ml-2 p-2 font-semibold"
+                className="rounded ml-2 p-2 font-semibold cursor-pointer"
                 style={{
                   background: theme.colors.gray['700']
                 }}
@@ -186,8 +193,8 @@ const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWalle
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {true && renderWalletOptionList()}
-      {false && renderActiveWalletList()}
+      {false && renderWalletOptionList()}
+      {true && renderActiveWalletList()}
       {false && renderSwitchWalletAddress()}
       {true && (
         <div
@@ -206,7 +213,8 @@ const DropdownBody = ({ closeFn, connectMyAlgoWallet, connectAlgorandMobileWalle
 DropdownBody.propTypes = {
   connectMyAlgoWallet: PropTypes.func,
   connectAlgorandMobileWallet: PropTypes.func,
-  closeFn: PropTypes.func
+  closeFn: PropTypes.func,
+  activeWalletAddress: PropTypes.string
 }
 
 export default DropdownBody
