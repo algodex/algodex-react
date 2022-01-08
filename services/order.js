@@ -1,5 +1,6 @@
+import { convertToAsaUnits, convertToBaseUnits } from './convert'
+
 import algodex from '@algodex/algodex-sdk'
-import { convertToBaseUnits, convertToAsaUnits } from './convert'
 import { getAlgodexEnvironment } from './environment'
 
 const algodex_environment = getAlgodexEnvironment()
@@ -58,7 +59,7 @@ const OrderService = {
     const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
 
     const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-    
+
     if (order.execution === 'taker') {
       console.log(`Taker ${order.type} order`, {
         isSellOrder,

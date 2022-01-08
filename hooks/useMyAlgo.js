@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
@@ -16,7 +16,6 @@ export default function useMyAlgo() {
         console.error(ERROR.FAILED_TO_INIT)
         return
       }
-
       const accounts = await myAlgoWallet.current.connect()
       const _addresses = accounts.map((acct) => acct.address)
       setAddresses(_addresses)

@@ -1,23 +1,23 @@
-import toast from 'react-hot-toast'
-import PropTypes from 'prop-types'
-import { HeaderSm, BodyCopySm, BodyCopyTiny, LabelMd } from 'components/type'
-import Button from 'components/button'
-import Icon from 'components/icon'
-import SvgImage from 'components/svg-image'
-import useTranslation from 'next-translate/useTranslation'
-
-import React from 'react'
 import {
-  Container,
-  ButtonContainer,
   Arrow,
+  Balance,
+  ButtonContainer,
+  Container,
   EmptyState,
   Header,
+  WalletRow,
   Wallets,
-  WalletsWrapper,
-  Balance,
-  WalletRow
+  WalletsWrapper
 } from './wallet.css'
+import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/type'
+
+import Button from 'components/button'
+import Icon from 'components/icon'
+import PropTypes from 'prop-types'
+import React from 'react'
+import SvgImage from 'components/svg-image'
+import toast from 'react-hot-toast'
+import useTranslation from 'next-translate/useTranslation'
 
 function WalletView(props) {
   const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
