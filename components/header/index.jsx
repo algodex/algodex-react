@@ -50,14 +50,12 @@ export function Header({ router }) {
       &nbsp;
       <NetworkDropdown
         className="font-medium"
-        activeNetwork={activeNetwork}
+        value={activeNetwork}
         onChange={(e) => handleNetworkChangeFn(e.target.value)}
       >
-        <option disabled value="mainnet" selected={activeNetwork === 'mainnet'}>
+        <option value="testnet">TESTNET</option>
+        <option disabled value="mainnet">
           MAINNET
-        </option>
-        <option value="testnet" selected={activeNetwork === 'testnet'}>
-          TESTNET
         </option>
       </NetworkDropdown>
       <Navigation>
