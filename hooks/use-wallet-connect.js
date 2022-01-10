@@ -1,6 +1,7 @@
+import { useEffect, useMemo, useState } from 'react'
+
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
 import WalletConnect from '@walletconnect/client'
-import { useState } from 'react'
 
 const ERROR = {
   FAILED_TO_INIT: 'Algorand Mobile Wallet failed to initialize.',
@@ -9,7 +10,7 @@ const ERROR = {
 
 export default function useWalletConnect() {
   const [walletConnectAddresses, setAddresses] = useState()
-  const [walletConnection, setWalletConnection] = useState(null)
+  const [walletConnection, setWalletConnection] = useState()
 
   const walletConnect = async () => {
     try {
@@ -17,9 +18,9 @@ export default function useWalletConnect() {
 
       // create new connector
       const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
+      console.log(connector, 'connector')
       // Set Wallet connector
       setWalletConnection({ connector })
-
       // check if already connected
       if (!connector.connected) {
         // create new session
@@ -67,8 +68,8 @@ export default function useWalletConnect() {
       // const address = accounts[0]
       // console.log(address, 'address')
       setWalletConnection({ ...walletConnection, connector })
-
-      onSessionUpdate(accounts)
+      setAddresses(accounts)
+      onSessionUpdate(accounts, connector)
     }
     setWalletConnection({ ...walletConnection, connector })
   }
@@ -91,8 +92,8 @@ export default function useWalletConnect() {
   }
 
   const onDisconnect = async () => {
-    resetApp()
     killSession()
+    resetApp()
   }
 
   const resetApp = async () => {
@@ -101,12 +102,13 @@ export default function useWalletConnect() {
 
   const onSessionUpdate = async (accounts, connector) => {
     const address = accounts[0]
-    // console.log(connector, walletConnectAddresses, 'connector')
+    console.log(connector, accounts, 'connector')
     await setWalletConnection({ ...walletConnection, address })
   }
 
   return {
     walletConnect,
+    onDisconnect,
     walletConnection,
     walletConnectAddresses
   }

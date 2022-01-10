@@ -28,6 +28,7 @@ export function Header({ router }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isWalletConnectDropDownVisible, setIsWalletConnectDropDownVisible] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const allAddresses = useStorePersisted((state) => state.allAddresses)
   const { t } = useTranslation('common')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
 
@@ -52,6 +53,7 @@ export function Header({ router }) {
         <WalletConnectDropdown
           activeWalletAddress={activeWalletAddress}
           closeFn={() => setIsWalletConnectDropDownVisible(false)}
+          allAddresses={allAddresses}
         />
       </DropdownWrapper>
     )

@@ -2,15 +2,20 @@ import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 
 import Icon from '@mdi/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
+import { useState } from 'react'
 
 const DropdownBody = ({
   closeFn,
   connectMyAlgoWallet,
   activeWalletAddress,
-  connectAlgorandMobileWallet
+  connectAlgorandMobileWallet,
+  allAddresses,
+  disconnectAlgorandWallet
 }) => {
+  const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   const handleWalletConnect = async (type) => {
     type === 'algomobilewallet' && (await connectAlgorandMobileWallet())
     type === 'myalgowallet' && (await connectMyAlgoWallet())
@@ -88,20 +93,80 @@ const DropdownBody = ({
                 DISCONNECT
               </div>
             </div>
-            <div className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-              <p>View on AlgoExplorer</p>
-              <Icon
-                path={mdiOpenInNew}
-                title="Algo explorer link"
-                size={0.8}
-                className="cursor-pointer"
-                color="#FFFFFF"
-              />
+            <div>
+              <Link href={`https://algoexplorer.io/address/${activeWalletAddress}`}>
+                <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
+                  <p>View on AlgoExplorer</p>
+                  <Icon
+                    path={mdiOpenInNew}
+                    title="Algo explorer link"
+                    size={0.8}
+                    className="cursor-pointer"
+                    color="#FFFFFF"
+                  />
+                </a>
+              </Link>
             </div>
           </div>
         </div>
       </div>
     )
+  }
+
+  const renderAddressesList = () => {
+    return allAddresses.map((address, idx) => {
+      return (
+        <div className="mt-4" key={idx}>
+          <div className="flex justify-between items-center">
+            <div className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5">
+              <p>
+              { `${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}
+              </p>
+              <Icon
+                path={mdiContentCopy}
+                title="Copy Address"
+                size={0.8}
+                className="cursor-pointer"
+                color="#FFFFFF"
+              />
+            </div>
+            <div
+              onClick={() => disconnectAlgorandWallet()}
+              className="rounded ml-2 p-2 font-bold"
+              style={{
+                background: theme.colors.gray['800']
+              }}
+            >
+              DISCONNECT
+            </div>
+          </div>
+          {/* <div className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
+            <p>View on AlgoExplorer</p>
+            <Icon
+              path={mdiOpenInNew}
+              title="Algo explorer link"
+              size={0.8}
+              className="cursor-pointer"
+              color="#FFFFFF"
+            />
+          </div> */}
+          <div>
+            <Link href={`https://algoexplorer.io/address/${address}`}>
+              <a target="_blank" className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
+                <p>View on AlgoExplorer</p>
+                <Icon
+                  path={mdiOpenInNew}
+                  title="Algo explorer link"
+                  size={0.8}
+                  className="cursor-pointer"
+                  color="#FFFFFF"
+                />
+              </a>
+            </Link>
+          </div>
+        </div>
+      )
+    })
   }
 
   const renderSwitchWalletAddress = () => {
@@ -116,72 +181,7 @@ const DropdownBody = ({
           <p className="font-bold text-xs mb-1.5">SWITCH WALLETS</p>
           <p>Click on address to switch active wallets</p>
         </div>
-        <div>
-          <div className="mt-4">
-            <div className="flex justify-between items-center">
-              <div className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5">
-                <p>BH6Y7U89JO52....C6U9AA171T92</p>
-                <Icon
-                  path={mdiContentCopy}
-                  title="Copy Address"
-                  size={0.8}
-                  className="cursor-pointer"
-                  color="#FFFFFF"
-                />
-              </div>
-              <div
-                className="rounded ml-2 p-2 font-bold"
-                style={{
-                  background: theme.colors.gray['800']
-                }}
-              >
-                DISCONNECT
-              </div>
-            </div>
-            <div className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-              <p>View on AlgoExplorer</p>
-              <Icon
-                path={mdiOpenInNew}
-                title="Algo explorer link"
-                size={0.8}
-                className="cursor-pointer"
-                color="#FFFFFF"
-              />
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex justify-between items-center">
-              <div className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5">
-                <p>CH9PL5RRJO7K....V2R87J12W3T1</p>
-                <Icon
-                  path={mdiContentCopy}
-                  title="Copy Address"
-                  size={0.8}
-                  className="cursor-pointer"
-                  color="#FFFFFF"
-                />
-              </div>
-              <div
-                className="rounded ml-2 p-2 font-bold"
-                style={{
-                  background: theme.colors.gray['800']
-                }}
-              >
-                DISCONNECT
-              </div>
-            </div>
-            <div className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-              <p>View on AlgoExplorer</p>
-              <Icon
-                path={mdiOpenInNew}
-                title="Algo explorer link"
-                size={0.8}
-                className="cursor-pointer"
-                color="#FFFFFF"
-              />
-            </div>
-          </div>
-        </div>
+        <div>{renderAddressesList()}</div>
       </div>
     )
   }
@@ -193,15 +193,16 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {false && renderWalletOptionList()}
-      {true && renderActiveWalletList()}
-      {false && renderSwitchWalletAddress()}
-      {true && (
+      {(!activeWalletAddress || isConnectingAddress) && renderWalletOptionList()}
+      {(activeWalletAddress && !isConnectingAddress) && renderActiveWalletList()}
+      {(activeWalletAddress && !isConnectingAddress) && renderSwitchWalletAddress()}
+      {(activeWalletAddress && !isConnectingAddress) && (
         <div
-          className="flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+          className="cursor-pointer flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
           style={{
             backgroundColor: theme.colors.gray['700']
           }}
+          onClick={() => setIsConnectingAddress(!isConnectingAddress)}
         >
           CONNECT ANOTHER WALLET
         </div>
@@ -214,7 +215,9 @@ DropdownBody.propTypes = {
   connectMyAlgoWallet: PropTypes.func,
   connectAlgorandMobileWallet: PropTypes.func,
   closeFn: PropTypes.func,
-  activeWalletAddress: PropTypes.string
+  activeWalletAddress: PropTypes.string,
+  allAddresses: PropTypes.allAddresses,
+  disconnectAlgorandWallet: PropTypes.func
 }
 
 export default DropdownBody

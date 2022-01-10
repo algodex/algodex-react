@@ -24,7 +24,7 @@ const WalletService = {
       })
 
       const wallets = await Promise.all(promises)
-
+      // console.log(wallets, 'wallets oooo')
       return {
         wallets
       }

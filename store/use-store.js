@@ -41,6 +41,9 @@ export const useStorePersisted = create(
         wallets: [],
         setWallets: (wallets) => set({ wallets }),
 
+        allAddresses: [],
+        setAllAddresses: (allAddresses) => set({ allAddresses }),
+
         activeWalletAddress: '',
         setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
       })),
