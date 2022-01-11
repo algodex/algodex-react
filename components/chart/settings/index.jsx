@@ -29,8 +29,8 @@ function ChartSettings(props) {
           checked={i === chartTime}
           onChange={handleTimeClick}
         />
-        <ToggleBtn as="label" size="small" htmlFor={`time-${i}`}>
-          {i}
+        <ToggleBtn size="small">
+          <label htmlFor={`time-${i}`}>{i}</label>
         </ToggleBtn>
       </React.Fragment>
     ))
@@ -46,8 +46,8 @@ function ChartSettings(props) {
           checked={chartMode === 'candle'}
           onChange={handleModeClick}
         />
-        <ToggleBtn as="label" size="small" htmlFor="mode-candle">
-          {t('candle')}
+        <ToggleBtn size="small">
+          <label htmlFor="mode-candle">{t('candle')}</label>
         </ToggleBtn>
         <ToggleInput
           type="radio"
@@ -56,8 +56,8 @@ function ChartSettings(props) {
           checked={chartMode === 'area'}
           onChange={handleModeClick}
         />
-        <ToggleBtn as="label" size="small" htmlFor="mode-area">
-          {t('area')}
+        <ToggleBtn size="small">
+          <label htmlFor="mode-area">{t('area')}</label>
         </ToggleBtn>
       </ToggleWrapper>
       <ToggleWrapper>{renderTimeIntervals()}</ToggleWrapper>
