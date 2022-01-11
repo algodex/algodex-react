@@ -46,7 +46,10 @@ const ToggleBtn = styled(Button)`
   &:hover {
     background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
   }
-
+  label {
+    cursor: pointer;
+    width: 100%;
+  }
   && {
     ${ToggleInput}:focus + & {
       z-index: 1;
