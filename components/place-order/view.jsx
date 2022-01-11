@@ -370,7 +370,7 @@ function PlaceOrderView(props) {
             onChange={(e) => handleChange(e, 'type')}
           />
           <BuyButton>
-            <label htmlFor="type-buy">{t('buy')}</label> 
+            <label htmlFor="type-buy">{t('buy')}</label>
           </BuyButton>
           <ToggleInput
             type="radio"
