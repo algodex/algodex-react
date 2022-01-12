@@ -453,10 +453,16 @@ function PlaceOrderView(props) {
           </BalanceRow>
         </AvailableBalance>
 
-        <Tabs orderType={order.type}>
-          <Tab isActive>{t('limit')}</Tab>
-        </Tabs>
+        <section>
+          <Tabs orderType={order.type}>
+            <Tab isActive>{t('limit')}</Tab>
+          </Tabs>
 
+          <Tabs orderType={order.type}>
+            {/* <Tab isActive>{t('market')}</Tab> */}
+            <Tab isActive>Market</Tab>
+          </Tabs>
+        </section>
         {renderLimitOrder()}
       </Form>
     )
