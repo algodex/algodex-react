@@ -64,6 +64,7 @@ export const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  height: 100%;
 
   @media (min-width: 1024px) and (orientation: landscape) {
     border-right: none;
@@ -170,8 +171,8 @@ export const Main = styled.main`
 
 export const MobileMenu = styled.nav`
   height: 50px;
-  width: 100%;
-
+  width: 100vw;
+  z-index: 99;
   & > ul {
     display: flex;
     height: 100%;
@@ -183,8 +184,6 @@ export const MobileMenu = styled.nav`
     flex: 1 0 auto;
     height: 100%;
   }
-
-  z-index: 99;
 
   @media (min-width: 996px) {
     display: none;
@@ -201,6 +200,9 @@ export const MobileMenuButton = styled(Button)`
   min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
+  @media (max-width: 996px) {
+    font-size: 0.7rem;
+  }
 `
 
 export const MobilePriceSection = styled.section`
@@ -230,5 +232,30 @@ export const MobilePriceSection = styled.section`
     @media (min-width: 1024px) {
       font-size: 1.25rem;
     }
+  }
+`
+export const WebOnly = styled.section`
+  @media (max-width: 996px) {
+    display: none;
+  }
+`
+
+export const MobileBookMenu = styled.div`
+  display: flex;
+  padding: 0 1.125rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  & > * {
+    margin: 0 1rem;
+  }
+  justify-content: space-between;
+  @media (min-width: 996px) {
+    display: none;
+  }
+`
+
+export const MobileBookTab = styled.section`
+  display: ${({ active }) => (active ? 'block' : 'none')};
+  @media (min-width: 996px) {
+    display: none;
   }
 `

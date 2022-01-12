@@ -9,6 +9,7 @@ import { Container, Header, Trades, TradesWrapper, TradesRow } from './trade-his
 
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import useTranslation from 'next-translate/useTranslation'
+import { WebOnly } from 'components/main-layout/main-layout.css'
 dayjs.extend(localizedFormat)
 
 function TradeHistoryView(props) {
@@ -65,7 +66,7 @@ function TradeHistoryView(props) {
   return (
     <Container>
       <HeaderCaps color="gray.500" mb={1}>
-        {t('trade-history')}
+        <WebOnly>{t('trade-history')}</WebOnly>
       </HeaderCaps>
       <br></br>
       <Header>

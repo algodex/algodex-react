@@ -10,7 +10,10 @@ import {
   PlaceOrderSection,
   SearchAndChartSection,
   WalletOrdersSection,
-  WalletSection
+  WalletSection,
+  MobileBookTab,
+  WebOnly,
+  MobileBookMenu
 } from './main-layout.css'
 import { useRef, useState } from 'react'
 
@@ -24,6 +27,7 @@ import TradeHistory from 'components/trade-history'
 import Wallet from 'components/wallet'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import { Tab } from 'components/orders/orders.css'
 
 /**
  * @param asset
@@ -44,6 +48,12 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
+  const BOOKTABS = {
+    ORDER_BOOK: 'ORDER_BOOK',
+    TRADE_HISTORY: 'TRADE_HISTORY'
+  }
+
+  const [activeBookMobile, setActiveBookMobile] = useState(BOOKTABS.ORDER_BOOK)
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
   /**
    * Use Clicked Events
@@ -79,12 +89,47 @@ function MainLayout({ asset, children }) {
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
-        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          <OrderBook asset={asset} />
+        {/* <AssetOrderBookSection>
+          <WebOnly>
+            <OrderBook asset={asset} />
+          </WebOnly>
         </AssetOrderBookSection>
-        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-          <TradeHistory asset={asset} />
-        </AssetTradeHistorySection>
+        <AssetTradeHistorySection>
+          <WebOnly>
+            <TradeHistory asset={asset} />
+          </WebOnly>
+        </AssetTradeHistorySection> */}
+
+            <section>
+        <MobileBookTab active={activeMobile === TABS.BOOK}>
+          <MobileBookMenu>
+            <Tab
+              isActive={activeBookMobile === BOOKTABS.ORDER_BOOK}
+              onClick={() => setActiveBookMobile(BOOKTABS.ORDER_BOOK)}
+            >
+              {t('order-book')}
+            </Tab>
+            <Tab
+              isActive={activeBookMobile === BOOKTABS.TRADE_HISTORY}
+              onClick={() => setActiveBookMobile(BOOKTABS.TRADE_HISTORY)}
+            >
+              {t('trade-history')}
+            </Tab>
+          </MobileBookMenu>
+        </MobileBookTab>
+
+          <AssetOrderBookSection
+            active={activeMobile === TABS.BOOK && activeBookMobile === BOOKTABS.ORDER_BOOK}
+          >
+            <OrderBook asset={asset} />
+          </AssetOrderBookSection>
+          <AssetTradeHistorySection
+            active={activeMobile === TABS.BOOK && activeBookMobile === BOOKTABS.TRADE_HISTORY}
+          >
+            <TradeHistory asset={asset} />
+          </AssetTradeHistorySection>
+        </section>
+
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
           <Orders />
         </WalletOrdersSection>
@@ -126,14 +171,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
-            {/*
-            <li>
-              // Trade history. Disable for now until it is refactored into the Orders tab
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                History
-              </MobileMenuButton>
-            </li>
-            */}
+
             <li>
               <MobileMenuButton
                 type="button"

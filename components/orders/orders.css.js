@@ -29,6 +29,9 @@ export const Tab = styled.div`
   @media (min-width: 1024px) {
     color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
   }
+  @media (max-width: 992px) {
+    font-size: 0.7rem;
+  }
 `
 
 export const Header = styled.div`

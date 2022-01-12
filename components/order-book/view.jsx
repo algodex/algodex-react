@@ -19,6 +19,7 @@ import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { useEventDispatch } from '../../hooks/useEvents'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
+import { WebOnly } from 'components/main-layout/main-layout.css'
 
 function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
@@ -86,7 +87,7 @@ function OrderBookView({ asset, sellData, buyData }) {
   return (
     <Container>
       <HeaderCaps color="gray.500" mb={1}>
-        {t('order-book')}
+        <WebOnly> {t('order-book')}</WebOnly>
       </HeaderCaps>
       <br></br>
       <Header>
