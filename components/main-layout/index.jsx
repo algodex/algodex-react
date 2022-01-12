@@ -100,23 +100,23 @@ function MainLayout({ asset, children }) {
           </WebOnly>
         </AssetTradeHistorySection> */}
 
-            <section>
-        <MobileBookTab active={activeMobile === TABS.BOOK}>
-          <MobileBookMenu>
-            <Tab
-              isActive={activeBookMobile === BOOKTABS.ORDER_BOOK}
-              onClick={() => setActiveBookMobile(BOOKTABS.ORDER_BOOK)}
-            >
-              {t('order-book')}
-            </Tab>
-            <Tab
-              isActive={activeBookMobile === BOOKTABS.TRADE_HISTORY}
-              onClick={() => setActiveBookMobile(BOOKTABS.TRADE_HISTORY)}
-            >
-              {t('trade-history')}
-            </Tab>
-          </MobileBookMenu>
-        </MobileBookTab>
+        <section>
+          <MobileBookTab active={activeMobile === TABS.BOOK}>
+            <MobileBookMenu>
+              <Tab
+                isActive={activeBookMobile === BOOKTABS.ORDER_BOOK}
+                onClick={() => setActiveBookMobile(BOOKTABS.ORDER_BOOK)}
+              >
+                {t('order-book')}
+              </Tab>
+              <Tab
+                isActive={activeBookMobile === BOOKTABS.TRADE_HISTORY}
+                onClick={() => setActiveBookMobile(BOOKTABS.TRADE_HISTORY)}
+              >
+                {t('trade-history')}
+              </Tab>
+            </MobileBookMenu>
+          </MobileBookTab>
 
           <AssetOrderBookSection
             active={activeMobile === TABS.BOOK && activeBookMobile === BOOKTABS.ORDER_BOOK}
