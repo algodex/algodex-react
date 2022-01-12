@@ -59,7 +59,7 @@ export default function useWalletConnect() {
       if (error) {
         throw error
       }
-      onDisconnect()
+      // onDisconnect()
     })
 
     if (connector.connected) {
@@ -74,7 +74,7 @@ export default function useWalletConnect() {
     setWalletConnection({ ...walletConnection, connector })
   }
 
-  const killSession = async () => {
+  const killSession = async (walletConnection) => {
     const { connector } = walletConnection
     if (connector) {
       connector.killSession()
@@ -91,9 +91,9 @@ export default function useWalletConnect() {
     // getAccountAssets();
   }
 
-  const onDisconnect = async () => {
-    killSession()
-    resetApp()
+  const onDisconnect = async (connector) => {
+    killSession(connector)
+    // resetApp()
   }
 
   const resetApp = async () => {
@@ -101,7 +101,7 @@ export default function useWalletConnect() {
   }
 
   const onSessionUpdate = async (accounts, connector) => {
-    const address = accounts[0]
+    const address = accounts
     console.log(connector, accounts, 'connector')
     await setWalletConnection({ ...walletConnection, address })
   }

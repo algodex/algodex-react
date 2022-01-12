@@ -14,7 +14,7 @@ const Container = styled.div`
 `
 
 const DropdownWrapper = ({ children }) => {
-  return <Container>{children}</Container>
+  return <Container className="overflow-y-auto">{children}</Container>
 }
 
 DropdownWrapper.propTypes = {

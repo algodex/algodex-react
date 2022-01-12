@@ -7,7 +7,13 @@ import PropTypes from 'prop-types'
 import useWalletConnect from 'hooks/use-wallet-connect'
 import useWalletController from 'hooks/useWalletController'
 
-const WalletConnectDropdown = ({ closeFn, activeWalletAddress, allAddresses }) => {
+const WalletConnectDropdown = ({
+  closeFn,
+  activeWalletAddress,
+  allAddresses,
+  setActiveWalletAddress,
+  activeNetwork
+}) => {
   const { addConnection: connectMyAlgoFn } = useWalletController('MyAlgo')
   const { addConnection: connectAlgorandWalletFn } = useWalletController('AlgorandOfficial')
   const { onDisconnect: disconnectAlgorandWallet } = useWalletConnect()
@@ -22,6 +28,8 @@ const WalletConnectDropdown = ({ closeFn, activeWalletAddress, allAddresses }) =
         activeWalletAddress={activeWalletAddress}
         allAddresses={allAddresses}
         disconnectAlgorandWallet={disconnectAlgorandWallet}
+        setActiveWalletAddress={setActiveWalletAddress}
+        activeNetwork={activeNetwork}
       />
       <DropdownFooter />
     </div>
@@ -31,7 +39,9 @@ const WalletConnectDropdown = ({ closeFn, activeWalletAddress, allAddresses }) =
 WalletConnectDropdown.propTypes = {
   closeFn: PropTypes.func,
   activeWalletAddress: PropTypes.string,
-  allAddresses: PropTypes.array
+  allAddresses: PropTypes.array,
+  setActiveWalletAddress: PropTypes.func,
+  activeNetwork: PropTypes.string
 }
 
 export default WalletConnectDropdown

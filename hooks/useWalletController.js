@@ -8,14 +8,23 @@ import { useWalletsQuery } from 'hooks/useAlgodex'
 
 export default function useWalletController(walletTag) {
   const { connect, addresses } = useMyAlgo()
-  const { walletConnect, walletConnectAddresses, onDisconnect } = useWalletConnect()
+  const { walletConnect, walletConnectAddresses, walletConnection } = useWalletConnect()
   const wallets = useStorePersisted((state) => state.wallets)
   const setWallets = useStorePersisted((state) => state.setWallets)
   const setAllAddresses = useStorePersisted((state) => state.setAllAddresses)
+  const setAlgorandWalletConnection = useStorePersisted(
+    (state) => state.setAlgorandWalletConnection
+  )
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
+
+  useEffect(() => {
+    if (walletConnection) {
+      setAlgorandWalletConnection(walletConnection)
+    }
+  }, [walletConnection, setAlgorandWalletConnection])
 
   const walletAddresses = useMemo(() => {
     if (addresses) {
@@ -31,21 +40,6 @@ export default function useWalletController(walletTag) {
     return wallets ? wallets.map((w) => w.address) : []
   }, [walletConnectAddresses, wallets])
 
-  // const allWalletAddresses = useMemo(() => {
-  //   let allAddresses = []
-  //   if (walletAddresses) {
-  //     allAddresses = [...walletAddresses]
-  //   }
-  //   if (algorandWalletAddresses) {
-  //     allAddresses = [...allAddresses, ...walletAddresses]
-  //   }
-
-  //   if (allAddresses.length) {
-  //     return uniq(allAddresses)
-  //   }
-
-  //   return undefined
-  // }, [algorandWalletAddresses, walletAddresses])
   const allWalletAddresses = useMemo(() => {
     let hasMyAlgo = false
     let hasAlgorandWallet = false

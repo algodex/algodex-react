@@ -5,7 +5,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
+import toast from 'react-hot-toast'
 import { useState } from 'react'
+import { useStorePersisted } from 'store/use-store'
 
 const DropdownBody = ({
   closeFn,
@@ -13,14 +15,39 @@ const DropdownBody = ({
   activeWalletAddress,
   connectAlgorandMobileWallet,
   allAddresses,
-  disconnectAlgorandWallet
+  disconnectAlgorandWallet,
+  setActiveWalletAddress,
+  activeNetwork
 }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+  const algorandWalletConnection = useStorePersisted((state) => state.algorandWalletConnection)
+  const setAlgorandWalletConnection = useStorePersisted((state) => state.setAlgorandWalletConnection)
+
   const handleWalletConnect = async (type) => {
     type === 'algomobilewallet' && (await connectAlgorandMobileWallet())
     type === 'myalgowallet' && (await connectMyAlgoWallet())
     // closeFn()
   }
+
+  const copyAddress = (address) => {
+    navigator.clipboard.writeText(address).then(
+      () => {
+        toast.success('Copied wallet address to clipboard!')
+      },
+      () => {
+        toast.error('Failed to copy wallet address to clipboard')
+      }
+    )
+  }
+
+  const isWalletActive = (addr) => {
+    return activeWalletAddress === addr
+  }
+
+  const handleWalletClick = (addr) => {
+    !isWalletActive(addr) && setActiveWalletAddress(addr)
+  }
+
   const renderWalletOptionList = () => {
     return (
       <div
@@ -29,7 +56,10 @@ const DropdownBody = ({
           backgroundColor: theme.colors.gray['500']
         }}
       >
-        <p className="font-semibold mb-2">CONNECT A WALLET</p>
+        <div className="flex justify-between">
+          <p className="font-semibold mb-2">CONNECT A WALLET</p>
+          {isConnectingAddress && <button onClick={() => setIsConnectingAddress(!isConnectingAddress)}>Go back</button>}
+        </div>
         <div className="mt-4 ml-4">
           <div
             role="button"
@@ -60,6 +90,16 @@ const DropdownBody = ({
       </div>
     )
   }
+
+  const setExplorerLink = (addr) => {
+    return activeNetwork === 'testnet' ? `https://testnet.algoexplorer.io/address/${addr}` : `https://algoexplorer.io/address/${addr}`
+  }
+
+  const handleDisconnectFn = async () => {
+    await disconnectAlgorandWallet(algorandWalletConnection)
+    setAlgorandWalletConnection(null)
+  }
+
   const renderActiveWalletList = () => {
     return (
       <div>
@@ -77,6 +117,7 @@ const DropdownBody = ({
                   { `${activeWalletAddress.substring(0, 11)}....${activeWalletAddress.substring(activeWalletAddress.length - 11, activeWalletAddress.length)}`}
                 </p>
                 <Icon
+                  onClick={() => copyAddress(activeWalletAddress)}
                   path={mdiContentCopy}
                   title="Copy Address"
                   size={0.8}
@@ -94,7 +135,7 @@ const DropdownBody = ({
               </div>
             </div>
             <div>
-              <Link href={`https://algoexplorer.io/address/${activeWalletAddress}`}>
+              <Link href={setExplorerLink(activeWalletAddress)}>
                 <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
                   <p>View on AlgoExplorer</p>
                   <Icon
@@ -116,13 +157,18 @@ const DropdownBody = ({
   const renderAddressesList = () => {
     return allAddresses.map((address, idx) => {
       return (
-        <div className="mt-4" key={idx}>
+        <div
+          className="mt-4"
+          key={idx}
+          onClick={() => handleWalletClick(address)}
+        >
           <div className="flex justify-between items-center">
             <div className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5">
               <p>
-              { `${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}
+                {`${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}
               </p>
               <Icon
+                onClick={() => copyAddress(address)}
                 path={mdiContentCopy}
                 title="Copy Address"
                 size={0.8}
@@ -131,7 +177,7 @@ const DropdownBody = ({
               />
             </div>
             <div
-              onClick={() => disconnectAlgorandWallet()}
+              onClick={() => handleDisconnectFn()}
               className="rounded ml-2 p-2 font-bold"
               style={{
                 background: theme.colors.gray['800']
@@ -140,18 +186,8 @@ const DropdownBody = ({
               DISCONNECT
             </div>
           </div>
-          {/* <div className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-            <p>View on AlgoExplorer</p>
-            <Icon
-              path={mdiOpenInNew}
-              title="Algo explorer link"
-              size={0.8}
-              className="cursor-pointer"
-              color="#FFFFFF"
-            />
-          </div> */}
           <div>
-            <Link href={`https://algoexplorer.io/address/${address}`}>
+            <Link href={setExplorerLink(address)}>
               <a target="_blank" className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
                 <p>View on AlgoExplorer</p>
                 <Icon
@@ -217,7 +253,8 @@ DropdownBody.propTypes = {
   closeFn: PropTypes.func,
   activeWalletAddress: PropTypes.string,
   allAddresses: PropTypes.allAddresses,
-  disconnectAlgorandWallet: PropTypes.func
+  disconnectAlgorandWallet: PropTypes.func,
+  setActiveWalletAddress: PropTypes.func
 }
 
 export default DropdownBody
