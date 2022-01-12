@@ -64,7 +64,7 @@ export const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  height: 100%;
+  height: calc(100% - 50px);
 
   @media (min-width: 1024px) and (orientation: landscape) {
     border-right: none;
@@ -76,6 +76,10 @@ export const AssetOrderBookSection = styled.section`
   @media (min-width: 996px) {
     grid-area: book;
     display: flex;
+    height: 100%;
+  }
+  @media (max-width: 996px) {
+    display: ${({ webView, active }) => (webView ? 'none' : active ? 'flex' : 'none')};
   }
 `
 export const AssetTradeHistorySection = styled.section`
@@ -89,7 +93,10 @@ export const AssetTradeHistorySection = styled.section`
   @media (min-width: 996px) {
     grid-area: history;
     display: flex;
-    height: inherit;
+    height: 100%;
+  }
+  @media (max-width: 996px) {
+    display: ${({ webView, active }) => (webView ? 'none' : active ? 'flex' : 'none')};
   }
 `
 

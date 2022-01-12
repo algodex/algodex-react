@@ -88,8 +88,8 @@ function MainLayout({ asset, children }) {
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
-        <section>
-          <MobileBookTab active={activeMobile === TABS.BOOK}>
+        <MobileBookTab active={activeMobile === TABS.BOOK}>
+          <header active={activeMobile === TABS.BOOK}>
             <MobileBookMenu>
               <Tab
                 isActive={activeBookMobile === BOOKTABS.ORDER_BOOK}
@@ -104,7 +104,7 @@ function MainLayout({ asset, children }) {
                 {t('trade-history')}
               </Tab>
             </MobileBookMenu>
-          </MobileBookTab>
+          </header>
 
           <AssetOrderBookSection
             active={activeMobile === TABS.BOOK && activeBookMobile === BOOKTABS.ORDER_BOOK}
@@ -116,7 +116,14 @@ function MainLayout({ asset, children }) {
           >
             <TradeHistory asset={asset} />
           </AssetTradeHistorySection>
-        </section>
+        </MobileBookTab>
+
+        <AssetOrderBookSection webView={true}>
+          <OrderBook asset={asset} />
+        </AssetOrderBookSection>
+        <AssetTradeHistorySection webView={true}>
+          <TradeHistory asset={asset} />
+        </AssetTradeHistorySection>
 
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
           <Orders />
