@@ -12,7 +12,6 @@ import {
   WalletOrdersSection,
   WalletSection,
   MobileBookTab,
-  WebOnly,
   MobileBookMenu
 } from './main-layout.css'
 import { useRef, useState } from 'react'
@@ -88,17 +87,6 @@ function MainLayout({ asset, children }) {
           </AssetsSection>
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
-
-        {/* <AssetOrderBookSection>
-          <WebOnly>
-            <OrderBook asset={asset} />
-          </WebOnly>
-        </AssetOrderBookSection>
-        <AssetTradeHistorySection>
-          <WebOnly>
-            <TradeHistory asset={asset} />
-          </WebOnly>
-        </AssetTradeHistorySection> */}
 
         <section>
           <MobileBookTab active={activeMobile === TABS.BOOK}>
