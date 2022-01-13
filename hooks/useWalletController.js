@@ -1,4 +1,4 @@
-import { uniq, uniqBy, filter } from 'lodash'
+import { uniq, uniqBy, filter, find } from 'lodash'
 import { useEffect, useMemo } from 'react'
 import useStore, { useStorePersisted } from 'store/use-store'
 
@@ -64,17 +64,17 @@ export default function useWalletController() {
   //     hasAlgorandWallet = true
   //   }
 
+  //   if (hasMyAlgo) {
+  //     allAddresses = [...algorandWalletAddresses, ...walletAddresses]
+  //     walletAddressesAndType.push(
+  //       ...allAddresses.map((address) => ({ address, type: 'my-algo-connect' }))
+  //     )
+  //   }
   //   if (hasAlgorandWallet) {
   //     allAddresses = [...algorandWalletAddresses]
   //     // Set Wallet Type
   //     walletAddressesAndType.push(
   //       ...allAddresses.map((address) => ({ address, type: 'algorand-wallet' }))
-  //     )
-  //   }
-  //   if (hasMyAlgo) {
-  //     allAddresses = [...algorandWalletAddresses, ...walletAddresses]
-  //     walletAddressesAndType.push(
-  //       ...allAddresses.map((address) => ({ address, type: 'my-algo-connect' }))
   //     )
   //   }
 
@@ -87,47 +87,66 @@ export default function useWalletController() {
   //   }
   //   return undefined
   // }, [algorandWalletAddresses, walletAddresses, setAllAddresses, wallets])
+
   const combineWalletAddresses = useMemo(() => {
-    let hasMyAlgo = false
-    let hasAlgorandWallet = false
-    let allAddresses = []
+    // let allAddresses = []
     let walletAddressesAndType = []
 
-    if (walletConnectAddresses && walletConnectAddresses.length) {
-      hasAlgorandWallet = true
-    }
-    if (addresses && addresses.length) {
-      hasMyAlgo = true
-    }
+    console.log(walletConnectAddresses, addresses, wallets, allAddresses, 'addresses')
 
-    if (hasAlgorandWallet) {
-      allAddresses = [...walletConnectAddresses]
-      // Set Wallet Type
-      walletAddressesAndType.push(
-        ...allAddresses.map((address) => ({ address, type: 'algorand-wallet' }))
-      )
-    }
-    if (hasMyAlgo) {
-      allAddresses = [...addresses, ...walletConnectAddresses]
-      walletAddressesAndType.push(
-        ...allAddresses.map((address) => ({ address, type: 'my-algo-connect' }))
-      )
-    }
+    // if (walletConnectAddresses && walletConnectAddresses.length) {
+    //   hasAlgorandWallet = true
+    // }
+    // if (addresses && addresses.length) {
+    //   hasMyAlgo = true
+    // }
 
-    allAddresses = [...allAddresses, ...(wallets ? wallets.map((w) => w.address) : [])]
-    walletAddressesAndType.push(
-      ...allAddresses.map((address) => ({ address, type: 'my-algo-connect' }))
-    )
+    // if (hasAlgorandWallet) {
+    //   allAddresses = [...walletConnectAddresses, ...(wallets ? wallets.map((w) => w.address) : [])]
+    //   // Set Wallet Type
+    //   walletAddressesAndType.push(
+    //     ...allAddresses.map((address) => ({ address, type: 'algorand-wallet' }))
+    //   )
+    // }
+    // if (hasMyAlgo) {
+    //   allAddresses = [...allAddresses, ...addresses]
+    //   walletAddressesAndType.push(
+    //     ...allAddresses.map((address) => ({ address, type: 'my-algo-connect' }))
+    //   )
+    // }
 
-    if (allAddresses.length) {
-      const uniqueWalletAddresses = uniq(allAddresses)
-      const uniqWalletAddressesWithType = uniqBy(walletAddressesAndType, 'address')
-      setAllAddresses(uniqWalletAddressesWithType)
-      console.log(uniqueWalletAddresses, 'unique wallet addresses')
-      return uniqueWalletAddresses
-    }
+    // if (allAddresses.length) {
+    //   const uniqueWalletAddresses = uniq(allAddresses)
+    //   const uniqWalletAddressesWithType = uniqBy(walletAddressesAndType, 'address')
+    //   setAllAddresses(uniqWalletAddressesWithType)
+    //   console.log(uniqueWalletAddresses, 'unique wallet addresses')
+    //   return uniqueWalletAddresses
+    // }
     return undefined
-  }, [walletConnectAddresses, addresses, setAllAddresses, wallets])
+  }, [
+    walletConnectAddresses,
+    addresses,
+    setAllAddresses,
+    allAddresses,
+    wallets
+  ])
+
+  const dtActiveWalletAddr = (wallets) => {
+    const newActiveWalletAddr = find(wallets, ({ address }) => address !== activeWalletAddress)
+    setActiveWalletAddress(newActiveWalletAddr.address)
+    return
+  }
+
+  const dtAllAddresses = (wallets) => {
+    const newAllAddrList = wallets.forEach((wallet) => {
+      const item = find(allAddresses, ({ address }) => address === wallet.address)
+      if (item) {
+        return item
+      }
+    })
+    setAllAddresses(newAllAddrList)
+    return
+  }
 
   /**
    * Disconnects a Wallet Address
@@ -140,33 +159,35 @@ export default function useWalletController() {
    */
   const handleDisconnectFn = async (addr, type) => {
     // Saves the updated list after filtering
-    let updatedAddrList = []
+    let updatedWalletsList = []
 
     // Handles disconnect for Algorand wallet addresses
     if (type === 'algorand-wallet') {
-      updatedAddrList = filter(allAddresses, ({ type }) => type !== 'algorand-wallet')
-      updatedAddrList = updatedAddrList ? updatedAddrList : []
-      if (!updatedAddrList.length) {
-        await setWallets(updatedAddrList)
-        await setAllAddresses([])
-        await setActiveWalletAddress('')
+      updatedWalletsList = filter(wallets, ({ type }) => type !== 'algorand-wallet')
+      updatedWalletsList = updatedWalletsList ? updatedWalletsList : []
+      if (!updatedWalletsList.length) {
+        await onDisconnect()
+        // await setWallets(updatedWalletsList)
+        // await setAllAddresses([])
+        // await setActiveWalletAddress('')
       }
-      await onDisconnect()
+      dtActiveWalletAddr(dtActiveWalletAddr())
     }
 
     // Handles disconnect for My Algo wallet addresses
     if (type === 'my-algo-connect') {
-      updatedAddrList = filter(allAddresses, ({ type }) => type !== 'my-algo-connect')
-      if (!updatedAddrList.length) {
-        await setWallets(updatedAddrList)
+      updatedWalletsList = filter(allAddresses, ({ type }) => type !== 'my-algo-connect')
+      if (!updatedWalletsList.length) {
         await setAllAddresses([])
         await setActiveWalletAddress('')
       }
+      await setWallets(updatedWalletsList)
     }
   }
 
   // fetch wallet balances from blockchain
   const walletsQuery = useWalletsQuery({ wallets: combineWalletAddresses })
+  // console.log(walletsQuery, 'wallets query')
 
   useEffect(() => {
     if (walletsQuery?.data?.wallets && walletConnection) {

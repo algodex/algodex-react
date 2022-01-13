@@ -163,9 +163,12 @@ const DropdownBody = ({
   const renderAddressesList = () => {
     return allAddresses.map(({ address, type }, idx) => {
       return (
-        <div className="mt-4" key={idx} onClick={() => handleWalletClick(address)}>
+        <div className="mt-4" key={idx}>
           <div className="flex justify-between items-center">
-            <div className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5">
+            <div
+              onClick={() => handleWalletClick(address)}
+              className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
+            >
               <p>{`${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}</p>
               <Icon
                 onClick={() => copyAddress(address)}
@@ -177,7 +180,7 @@ const DropdownBody = ({
               />
             </div>
             <div
-              onClick={() => handleDisconnectFn(address, type)}
+              onClick={() => console.log(address, type)}
               className="rounded ml-2 p-2 font-bold cursor-pointer"
               style={{
                 background: theme.colors.gray['800']

@@ -39,10 +39,7 @@ export const useStorePersisted = create(
     persist(
       immer((set) => ({
         wallets: [],
-        setWallets: (wallets) => {
-          console.log(wallets, 'wallets here')
-          set({ wallets })
-        },
+        setWallets: (wallets) => set({ wallets }),
 
         allAddresses: [],
         setAllAddresses: (allAddresses) => set({ allAddresses }),
