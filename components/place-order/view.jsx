@@ -64,6 +64,10 @@ function PlaceOrderView(props) {
     submitted: false,
     submitting: false
   })
+  const [orderView, setOrderView] = useState('limit')
+
+  const LIMIT_PANEL = 'limit'
+  const MARKET_PANEL = 'market'
 
   // @todo: calculate transaction fees in total
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
@@ -358,6 +362,83 @@ function PlaceOrderView(props) {
     )
   }
 
+  const renderMarketOrder = () => {
+    if (!enableOrder[order.type]) {
+      // @todo: make this better, this is a placeholder
+      return (
+        <BodyCopy color="gray.500" textAlign="center" m={32}>
+          {t('insufficient-balance')}
+        </BodyCopy>
+      )
+    }
+
+    return (
+      <>
+        <LimitOrder>
+          <OrderInput
+            type="number"
+            pattern="\d*"
+            id="price"
+            name="af2Km9q"
+            label={t('price')}
+            asset="ALGO"
+            decimals={6}
+            disabled
+            orderType={order.type}
+            value={order.price}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+            step="0.000001"
+            inputMode="decimal"
+          />
+          <OrderInput
+            type="number"
+            pattern="\d*"
+            id="amount"
+            name="af2Km9q"
+            label={t('amount')}
+            asset={asset.name}
+            decimals={asset.decimals}
+            orderType={order.type}
+            value={order.amount}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+            step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
+          />
+          <AmountRange
+            order={order}
+            algoBalance={maxSpendableAlgo}
+            asaBalance={asaBalance}
+            asset={asset}
+            // txnFee={txnFee}
+            onChange={handleRangeChange}
+          />
+          <OrderInput
+            type="number"
+            id="total"
+            label={t('total')}
+            asset="ALGO"
+            decimals={6}
+            orderType={order.type}
+            value={order.total}
+            readOnly
+            disabled
+          />
+          {/* <TxnFeeContainer>
+            <BodyCopyTiny color="gray.500" textTransform="none">
+              Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
+              {txnFee.toFixed(3)}
+            </BodyCopyTiny>
+          </TxnFeeContainer> */}
+        </LimitOrder>
+        {renderSubmit()}
+      </>
+    )
+  }
+
   const renderForm = () => {
     return (
       <Form onSubmit={handleSubmit} autocomplete="off">
@@ -453,17 +534,27 @@ function PlaceOrderView(props) {
           </BalanceRow>
         </AvailableBalance>
 
-        <section>
-          <Tabs orderType={order.type}>
-            <Tab isActive>{t('limit')}</Tab>
-          </Tabs>
-
-          <Tabs orderType={order.type}>
-            {/* <Tab isActive>{t('market')}</Tab> */}
-            <Tab isActive>Market</Tab>
-          </Tabs>
-        </section>
-        {renderLimitOrder()}
+        <Tabs>
+          <Tab
+            orderType={order.type}
+            isActive={orderView == LIMIT_PANEL}
+            onClick={() => {
+              setOrderView(LIMIT_PANEL)
+            }}
+          >
+            {t('limit')}
+          </Tab>
+          <Tab
+            orderType={order.type}
+            isActive={orderView == MARKET_PANEL}
+            onClick={() => {
+              setOrderView(MARKET_PANEL)
+            }}
+          >
+            Market
+          </Tab>
+        </Tabs>
+        {orderView == LIMIT_PANEL ? renderLimitOrder() : renderMarketOrder()}
       </Form>
     )
   }

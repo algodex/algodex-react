@@ -120,16 +120,17 @@ export const Tab = styled(_Tab)`
   padding: 0.625rem 0;
   letter-spacing: 0.12rem;
   border-bottom-width: 4px;
+  margin-right: 1rem;
+
+  border-bottom-color: ${({ orderType, isActive, theme }) =>
+    isActive && (orderType === 'sell' ? theme.colors.red['500'] : theme.colors.green['500'])};
+}
 `
 
 export const Tabs = styled(_Tabs)`
   padding: 0;
   margin-bottom: 1rem;
-
-  ${Tab} {
-    border-bottom-color: ${({ orderType, theme }) =>
-      orderType === 'sell' ? theme.colors.red['500'] : theme.colors.green['500']};
-  }
+  justify-content: flex-start;
 `
 
 export const LimitOrder = styled.div`
