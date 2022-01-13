@@ -39,6 +39,7 @@ import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import useUserStore from '../../store/use-user-state'
+import { useFetchAlgorandPriceQuery } from 'hooks/useAlgoExplorer'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -118,6 +119,19 @@ function PlaceOrderView(props) {
     setOrder(
       {
         [field || e.target.id]: e.target.value
+      },
+      asset
+    )
+  }
+  const {
+    data: { algoPrice: algoPrice }
+  } = useFetchAlgorandPriceQuery()
+
+  const handleMarketOrderChange = (e, field) => {
+    setOrder(
+      {
+        [field || e.target.id]: e.target.value,
+        price: algoPrice
       },
       asset
     )
@@ -402,7 +416,9 @@ function PlaceOrderView(props) {
             decimals={asset.decimals}
             orderType={order.type}
             value={order.amount}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleMarketOrderChange(e)
+            }}
             autocomplete="false"
             min="0"
             step={new Big(10).pow(-1 * asset.decimals).toString()}
