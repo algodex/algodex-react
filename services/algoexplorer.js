@@ -95,13 +95,13 @@ export async function fetchExplorerSearchv1(search) {
  * @returns {Promise<{circulating, total, decimals, name, verified, txid, fullName, id, url, timestamp, txns}>}
  */
 export async function fetchExplorerAssetInfo(id) {
-  console.debug(`Fetching ${id || 'Nothing'}`)
+  //console.debug(`Fetching ${id || 'Nothing'}`)
   if (typeof id === 'undefined') {
     throw new Error('Must have ID')
   }
-  console.debug(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
+  //console.debug(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
   const { data } = await axios.get(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
-  console.debug(`Fetched ${id} with ${data.txCount} transactions`)
+  //console.debug(`Fetched ${id} with ${data.txCount} transactions`)
   return toExplorerAsset(data)
 }
 
