@@ -9,7 +9,7 @@ DEBUG && console.debug('process.env.NEXT_ALGORAND_API: ' + process.env.NEXT_ALGO
 DEBUG && console.info('ALGORAND_HOST: ' + ALGORAND_API)
 
 /**
- * @see https://testnet.algoexplorerapi.io/v2/assets/185
+ * @see https://testnet.algoexplorerapi.io/idx2/v2/assets/185
  * @typedef {Object} IndexAsset
  * @property {number} index Unique asset identifier.
  * @property {number} created-at-round Round during which this asset was created.
@@ -19,7 +19,7 @@ DEBUG && console.info('ALGORAND_HOST: ' + ALGORAND_API)
  */
 
 /**
- * @see https://testnet.algoexplorerapi.io/v2/assets/185
+ * @see https://testnet.algoexplorerapi.io/idx2/v2/assets/185
  * @typedef {Object} IndexAssetParams
  * @property {string} clawback Address of account used to clawback holdings of this asset.  If empty, clawback is not permitted.
  * @property {string} creator The address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.
