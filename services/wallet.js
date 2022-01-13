@@ -15,11 +15,10 @@ const WalletService = {
 
     try {
       const algodex_environment = getAlgodexEnvironment()
-      const AlgodClient = new algodex.initAlgodClient(algodex_environment)
-
+      algodex.initIndexer(algodex_environment)
+      
       const promises = addresses.map(async (address) => {
-        const accountInfo = await AlgodClient.accountInformation(address).do()
-
+        const accountInfo = await algodex.getAccountInfo(address)
         return WalletService.setWalletData(accountInfo)
       })
 
