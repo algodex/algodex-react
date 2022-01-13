@@ -61,8 +61,6 @@ function PlaceOrderView(props) {
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
 
-  // const algoPrice = useFetchAlgorandPriceQuery().data.algoPrice
-
   const {
     data: { algoPrice: algoPrice }
   } = useFetchAlgorandPriceQuery()
