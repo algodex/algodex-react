@@ -14,22 +14,22 @@ const WalletConnectDropdown = ({
   setActiveWalletAddress,
   activeNetwork
 }) => {
-  const { addConnection: connectMyAlgoFn } = useWalletController('MyAlgo')
-  const { addConnection: connectAlgorandWalletFn } = useWalletController('AlgorandOfficial')
+  const { addConnection, handleDisconnectFn } = useWalletController()
   const { onDisconnect: disconnectAlgorandWallet } = useWalletConnect()
 
   return (
     <div className="flex flex-col justify-between">
       <DropdownHeader closeFn={closeFn} />
       <DropdownBody
-        connectMyAlgoWallet={() => connectMyAlgoFn()}
-        connectAlgorandMobileWallet={() => connectAlgorandWalletFn()}
+        connectMyAlgoWallet={() => addConnection('MyAlgo')}
+        connectAlgorandMobileWallet={() => addConnection('AlgorandOfficial')}
+        disconnectAlgorandWallet={disconnectAlgorandWallet}
         closeFn={closeFn}
         activeWalletAddress={activeWalletAddress}
         allAddresses={allAddresses}
-        disconnectAlgorandWallet={disconnectAlgorandWallet}
         setActiveWalletAddress={setActiveWalletAddress}
         activeNetwork={activeNetwork}
+        handleDisconnectFn={handleDisconnectFn}
       />
       <DropdownFooter />
     </div>

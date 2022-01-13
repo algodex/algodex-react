@@ -90,7 +90,7 @@ function PlaceOrderView(props) {
   })
 
   useEffect(() => {
-    if (!isLoading && !isError) {
+    if (!isLoading && !isError && minBalance) {
       const total = new Big(algoBalance)
       const min = new Big(minBalance).div(1000000)
       const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()

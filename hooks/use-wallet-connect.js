@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
-
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
 import WalletConnect from '@walletconnect/client'
+import { useState } from 'react'
 
 const ERROR = {
   FAILED_TO_INIT: 'Algorand Mobile Wallet failed to initialize.',
@@ -60,12 +59,12 @@ export default function useWalletConnect() {
         throw error
       }
       // onDisconnect()
+      resetApp()
     })
 
     if (connector.connected) {
       console.log('came here ooo', connector)
       const { accounts } = connector
-      // const address = accounts[0]
       // console.log(address, 'address')
       setWalletConnection({ ...walletConnection, connector })
       setAddresses(accounts)
@@ -74,30 +73,29 @@ export default function useWalletConnect() {
     setWalletConnection({ ...walletConnection, connector })
   }
 
-  const killSession = async (walletConnection) => {
-    const { connector } = walletConnection
-    if (connector) {
-      connector.killSession()
+  const killSession = async () => {
+    if (walletConnection) {
+      const { connector } = walletConnection
+      if (connector) {
+        connector.killSession()
+      }
     }
-    resetApp()
   }
 
   const onConnect = async (payload, connector) => {
     const { accounts } = payload.params[0]
-    // const address = accounts[0]
     setWalletConnection({ ...walletConnection, connector })
-
     setAddresses(accounts)
     // getAccountAssets();
   }
 
-  const onDisconnect = async (connector) => {
-    killSession(connector)
-    // resetApp()
+  const onDisconnect = async () => {
+    killSession()
   }
 
   const resetApp = async () => {
-    setWalletConnection(null)
+    setWalletConnection()
+    setAddresses()
   }
 
   const onSessionUpdate = async (accounts, connector) => {

@@ -39,13 +39,13 @@ export const useStorePersisted = create(
     persist(
       immer((set) => ({
         wallets: [],
-        setWallets: (wallets) => set({ wallets }),
+        setWallets: (wallets) => {
+          console.log(wallets, 'wallets here')
+          set({ wallets })
+        },
 
         allAddresses: [],
         setAllAddresses: (allAddresses) => set({ allAddresses }),
-
-        algorandWalletConnection: null,
-        setAlgorandWalletConnection: (algorandWalletConnection) => set({ algorandWalletConnection }),
 
         activeWalletAddress: '',
         setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })

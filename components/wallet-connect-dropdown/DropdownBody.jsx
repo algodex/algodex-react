@@ -4,24 +4,26 @@ import Icon from '@mdi/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { find } from 'lodash'
 import theme from '../../theme'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { useStorePersisted } from 'store/use-store'
 
 const DropdownBody = ({
-  closeFn,
+  // closeFn,
   connectMyAlgoWallet,
   activeWalletAddress,
   connectAlgorandMobileWallet,
   allAddresses,
   disconnectAlgorandWallet,
   setActiveWalletAddress,
-  activeNetwork
+  activeNetwork,
+  handleDisconnectFn
 }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const algorandWalletConnection = useStorePersisted((state) => state.algorandWalletConnection)
-  const setAlgorandWalletConnection = useStorePersisted((state) => state.setAlgorandWalletConnection)
+  // const setAllAddresses = useStorePersisted((state) => state.setAllAddresses)
+  const setWallets = useStorePersisted((state) => state.setWallets)
 
   const handleWalletConnect = async (type) => {
     type === 'algomobilewallet' && (await connectAlgorandMobileWallet())
@@ -48,6 +50,12 @@ const DropdownBody = ({
     !isWalletActive(addr) && setActiveWalletAddress(addr)
   }
 
+  const setExplorerLink = (addr) => {
+    return activeNetwork === 'testnet'
+      ? `https://testnet.algoexplorer.io/address/${addr}`
+      : `https://algoexplorer.io/address/${addr}`
+  }
+
   const renderWalletOptionList = () => {
     return (
       <div
@@ -58,7 +66,9 @@ const DropdownBody = ({
       >
         <div className="flex justify-between">
           <p className="font-semibold mb-2">CONNECT A WALLET</p>
-          {isConnectingAddress && <button onClick={() => setIsConnectingAddress(!isConnectingAddress)}>Go back</button>}
+          {isConnectingAddress && (
+            <button onClick={() => setIsConnectingAddress(!isConnectingAddress)}>Go back</button>
+          )}
         </div>
         <div className="mt-4 ml-4">
           <div
@@ -91,82 +101,72 @@ const DropdownBody = ({
     )
   }
 
-  const setExplorerLink = (addr) => {
-    return activeNetwork === 'testnet' ? `https://testnet.algoexplorer.io/address/${addr}` : `https://algoexplorer.io/address/${addr}`
-  }
-
-  const handleDisconnectFn = async () => {
-    await disconnectAlgorandWallet(algorandWalletConnection)
-    setAlgorandWalletConnection(null)
-  }
-
   const renderActiveWalletList = () => {
-    return (
-      <div>
-        <p className="text-white font-medium mb-2 text-xs">ACTIVE WALLET</p>
-        <div className="text-white">
-          <div
-            className="p-2 text-xs rounded shadow"
-            style={{
-              backgroundColor: 'rgba(113, 128, 150, 0.1)'
-            }}
-          >
-            <div className="flex justify-between items-center">
-              <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
-                <p>
-                  { `${activeWalletAddress.substring(0, 11)}....${activeWalletAddress.substring(activeWalletAddress.length - 11, activeWalletAddress.length)}`}
-                </p>
-                <Icon
-                  onClick={() => copyAddress(activeWalletAddress)}
-                  path={mdiContentCopy}
-                  title="Copy Address"
-                  size={0.8}
-                  className="cursor-pointer"
-                  color="#FFFFFF"
-                />
-              </div>
-              <div
-                className="rounded ml-2 p-2 font-semibold cursor-pointer"
-                style={{
-                  background: theme.colors.gray['700']
-                }}
-              >
-                DISCONNECT
-              </div>
-            </div>
-            <div>
-              <Link href={setExplorerLink(activeWalletAddress)}>
-                <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-                  <p>View on AlgoExplorer</p>
+    const wallet = find(allAddresses, ({ address }) => address === activeWalletAddress)
+    if (wallet) {
+      const { address, type } = wallet
+      return (
+        <div>
+          <p className="text-white font-medium mb-2 text-xs">ACTIVE WALLET</p>
+          <div className="text-white">
+            <div
+              className="p-2 text-xs rounded shadow"
+              style={{
+                backgroundColor: 'rgba(113, 128, 150, 0.1)'
+              }}
+            >
+              <div className="flex justify-between items-center">
+                <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
+                  <p>
+                    { `${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}
+                  </p>
                   <Icon
-                    path={mdiOpenInNew}
-                    title="Algo explorer link"
+                    onClick={() => copyAddress(address)}
+                    path={mdiContentCopy}
+                    title="Copy Address"
                     size={0.8}
                     className="cursor-pointer"
                     color="#FFFFFF"
                   />
-                </a>
-              </Link>
+                </div>
+                <div
+                  onClick={() => handleDisconnectFn(address, type)}
+                  className="rounded ml-2 p-2 font-semibold cursor-pointer"
+                  style={{
+                    background: theme.colors.gray['700']
+                  }}
+                >
+                  DISCONNECT
+                </div>
+              </div>
+              <div>
+                <Link href={setExplorerLink(address)}>
+                  <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
+                    <p>View on AlgoExplorer</p>
+                    <Icon
+                      path={mdiOpenInNew}
+                      title="Algo explorer link"
+                      size={0.8}
+                      className="cursor-pointer"
+                      color="#FFFFFF"
+                    />
+                  </a>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 
   const renderAddressesList = () => {
-    return allAddresses.map((address, idx) => {
+    return allAddresses.map(({ address, type }, idx) => {
       return (
-        <div
-          className="mt-4"
-          key={idx}
-          onClick={() => handleWalletClick(address)}
-        >
+        <div className="mt-4" key={idx} onClick={() => handleWalletClick(address)}>
           <div className="flex justify-between items-center">
             <div className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5">
-              <p>
-                {`${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}
-              </p>
+              <p>{`${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}</p>
               <Icon
                 onClick={() => copyAddress(address)}
                 path={mdiContentCopy}
@@ -177,8 +177,8 @@ const DropdownBody = ({
               />
             </div>
             <div
-              onClick={() => handleDisconnectFn()}
-              className="rounded ml-2 p-2 font-bold"
+              onClick={() => handleDisconnectFn(address, type)}
+              className="rounded ml-2 p-2 font-bold cursor-pointer"
               style={{
                 background: theme.colors.gray['800']
               }}
@@ -252,9 +252,11 @@ DropdownBody.propTypes = {
   connectAlgorandMobileWallet: PropTypes.func,
   closeFn: PropTypes.func,
   activeWalletAddress: PropTypes.string,
-  allAddresses: PropTypes.allAddresses,
+  allAddresses: PropTypes.any,
   disconnectAlgorandWallet: PropTypes.func,
-  setActiveWalletAddress: PropTypes.func
+  setActiveWalletAddress: PropTypes.func,
+  activeNetwork: PropTypes.string,
+  handleDisconnectFn: PropTypes.func
 }
 
 export default DropdownBody

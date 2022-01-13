@@ -33,7 +33,6 @@ export function Header({ router }) {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
 
-
   /**
    * Route to other network
    * @type {(function(*): void)|*}
@@ -53,9 +52,9 @@ export function Header({ router }) {
       <DropdownWrapper>
         <WalletConnectDropdown
           activeWalletAddress={activeWalletAddress}
+          setActiveWalletAddress={setActiveWalletAddress}
           closeFn={() => setIsWalletConnectDropDownVisible(false)}
           allAddresses={allAddresses}
-          setActiveWalletAddress={setActiveWalletAddress}
           activeNetwork={activeNetwork}
         />
       </DropdownWrapper>
@@ -124,8 +123,11 @@ export function Header({ router }) {
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
         <div>
-          <ConnectWalletBtn onClick={() => setIsWalletConnectDropDownVisible(!isWalletConnectDropDownVisible)}>
-            { activeWalletAddress ? `${activeWalletAddress.substring(0, 4)}....${activeWalletAddress.substring(activeWalletAddress.length - 4, activeWalletAddress.length)}` : 'CONNECT A WALLET' }
+          <ConnectWalletBtn
+            onClick={() => setIsWalletConnectDropDownVisible(!isWalletConnectDropDownVisible)}
+          >
+            {activeWalletAddress
+              ? `${activeWalletAddress.substring(0, 4)}....${activeWalletAddress.substring(activeWalletAddress.length - 4, activeWalletAddress.length)}` : 'CONNECT A WALLET' }
           </ConnectWalletBtn>
           {isWalletConnectDropDownVisible && renderWalletConnectDropdown()}
         </div>
