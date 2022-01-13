@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { indexerAssetMap } from './algorand'
-export const EXPLORER_API = process.env.NEXT_EXPLORER_API || 'https://testnet.algoexplorerapi.io'
+export const EXPLORER_API = process.env.NEXT_EXPLORER_API || 'https://node.testnet.algoexplorerapi.io'
 export const EXPLORER_INDEXER_API =
-  process.env.NEXT_EXPLORER_INDEXER_API || 'https://indexer.testnet.algoexplorerapi.io'
+  process.env.NEXT_EXPLORER_INDEXER_API || 'https://algoindexer.testnet.algoexplorerapi.io'
+export const ALGO_EXPLORER_V1_API = 
+  process.env.NEXT_ALGO_EXPLORER_V1_API || 'https://testnet.algoexplorerapi.io'
 export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/algo-usd'
 
 console.debug('NEXT_EXPLORER_API: ' + process.env.NEXT_EXPLORER_API)
@@ -12,7 +14,7 @@ console.debug('EXPLORER_INDEXER_API: ' + EXPLORER_INDEXER_API)
 console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
 
 /**
- * @see https://testnet.algoexplorerapi.io/idx2/v2/assets/185
+ * @see https://algoindexer.testnet.algoexplorerapi.io/v2/assets/185
  * @typedef {Object} ExplorerIndexAsset
  * @property {number} assetId Unique asset identifier.
  * @property {boolean} destroyed Whether or not this asset is currently deleted.
@@ -21,7 +23,7 @@ console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
  */
 
 /**
- * @see https://testnet.algoexplorerapi.io/idx2/v2/assets/185
+ * @see https://algoindexer.testnet.algoexplorerapi.io/v2/assets/185
  * @typedef {Object} ExplorerIndexVerifedInfo
  * @property {string} clawback Address of account used to clawback holdings of this asset.  If empty, clawback is not permitted.
  * @property {string} creator The address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.
@@ -80,7 +82,7 @@ const toExplorerAsset = ({
 }
 
 export async function fetchExplorerSearchv1(search) {
-  const { data } = await axios.get(`${EXPLORER_API}/v1/search/${search}`)
+  const { data } = await axios.get(`${ALGO_EXPLORER_V1_API}/v1/search/${search}`)
   return data
 }
 
@@ -97,7 +99,8 @@ export async function fetchExplorerAssetInfo(id) {
   if (typeof id === 'undefined') {
     throw new Error('Must have ID')
   }
-  const { data } = await axios.get(`${EXPLORER_API}/v1/asset/${id}/info`)
+  console.debug(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
+  const { data } = await axios.get(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
   console.debug(`Fetched ${id} with ${data.txCount} transactions`)
   return toExplorerAsset(data)
 }
