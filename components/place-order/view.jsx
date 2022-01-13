@@ -61,6 +61,10 @@ function PlaceOrderView(props) {
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
 
+  const {
+    data: { algoPrice: algoPrice }
+  } = useFetchAlgorandPriceQuery()
+
   const [status, setStatus] = useState({
     submitted: false,
     submitting: false
@@ -123,9 +127,6 @@ function PlaceOrderView(props) {
       asset
     )
   }
-  const {
-    data: { algoPrice: algoPrice }
-  } = useFetchAlgorandPriceQuery()
 
   const handleMarketOrderChange = (e, field) => {
     setOrder(
