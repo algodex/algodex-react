@@ -5,11 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { find } from 'lodash'
-import { subStringFn } from './helper'
+import { subStringFn, setExplorerLink } from './helper'
 import theme from '../../theme'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
-import { useStorePersisted } from 'store/use-store'
 
 const DropdownBody = ({
   // closeFn,
@@ -17,14 +16,11 @@ const DropdownBody = ({
   activeWalletAddress,
   connectAlgorandMobileWallet,
   allAddresses,
-  disconnectAlgorandWallet,
   setActiveWalletAddress,
   activeNetwork,
   handleDisconnectFn
 }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  // const setAllAddresses = useStorePersisted((state) => state.setAllAddresses)
-  const setWallets = useStorePersisted((state) => state.setWallets)
 
   const handleWalletConnect = async (type) => {
     type === 'algomobilewallet' && (await connectAlgorandMobileWallet())
@@ -51,11 +47,7 @@ const DropdownBody = ({
     !isWalletActive(addr) && setActiveWalletAddress(addr)
   }
 
-  const setExplorerLink = (addr) => {
-    return activeNetwork === 'testnet'
-      ? `https://testnet.algoexplorer.io/address/${addr}`
-      : `https://algoexplorer.io/address/${addr}`
-  }
+  
 
   const renderWalletOptionList = () => {
     return (
@@ -135,6 +127,9 @@ const DropdownBody = ({
                   />
                 </div>
                 <div
+                  role="button"
+                  tabIndex="0"
+                  onKeyDown={(e) => console.log(e)}
                   onClick={() => handleDisconnectFn(address, type)}
                   className="rounded ml-2 p-2 font-semibold cursor-pointer"
                   style={{
@@ -145,7 +140,7 @@ const DropdownBody = ({
                 </div>
               </div>
               <div>
-                <Link href={setExplorerLink(address)}>
+                <Link href={setExplorerLink(address, activeNetwork)}>
                   <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
                     <p>View on AlgoExplorer</p>
                     <Icon
@@ -171,6 +166,9 @@ const DropdownBody = ({
         <div className="mt-4" key={idx}>
           <div className="flex justify-between items-center">
             <div
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => console.log(e)}
               onClick={() => handleWalletClick(address)}
               className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
             >
@@ -191,6 +189,9 @@ const DropdownBody = ({
               />
             </div>
             <div
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => console.log(e)}
               onClick={() => handleDisconnectFn(address, type)}
               className="rounded ml-2 p-2 font-bold cursor-pointer"
               style={{
@@ -201,7 +202,7 @@ const DropdownBody = ({
             </div>
           </div>
           <div>
-            <Link href={setExplorerLink(address)}>
+            <Link href={setExplorerLink(address, activeNetwork)}>
               <a
                 target="_blank"
                 className="flex justify-end items-center text-white mr-10 mt-3 font-medium"
@@ -251,6 +252,9 @@ const DropdownBody = ({
       {(activeWalletAddress && !isConnectingAddress) && renderSwitchWalletAddress()}
       {(activeWalletAddress && !isConnectingAddress) && (
         <div
+          role="button"
+          tabIndex="0"
+          onKeyDown={(e) => console.log(e)}
           className="cursor-pointer flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
           style={{
             backgroundColor: theme.colors.gray['700']
