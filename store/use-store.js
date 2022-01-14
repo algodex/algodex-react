@@ -69,7 +69,7 @@ export const useStore = create(
       //   verified: false,
       //   info: {
       //     fullName: 'Lamps',
-      //     algoExplorerUrl: 'https://testnet.algoexplorer.io/asset/15322902',
+      //     algoExplorerUrl: 'https://algoindexer.testnet.algoexplorerapi.io/asset/15322902',
       //     supply: {
       //       circulating: '99989.339745',
       //       total: '100000.000000'

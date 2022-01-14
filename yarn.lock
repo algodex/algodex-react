@@ -26,11 +26,12 @@
   dependencies:
     tunnel "0.0.6"
 
-"@algodex/algodex-sdk@^1.0.80":
-  version "1.0.80"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.0.80/d2f2739b86ac6164ca1a409b56ebbebc687acce18c7c4ba25c37d79b4d19e868#b3caba43611441455ad9b53d2f21e8ca2f0a3c76"
-  integrity sha512-GcqSdR7nLOoWYw9W47iXR1XmZ30AbKHoPewfB2q/8dSpZRM7pzcbPXuuroD0GvLlW8+/YOjJoo6OUXeStBjTNA==
+"@algodex/algodex-sdk@^1.1.3":
+  version "1.1.3"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.1.3/030162ccd1b038085522ac426d95af8ed9d6fc464b0757c4bee0202e7aadd7f7#9b613604109f7dd2f61ddd35e9429c33fd7a7511"
+  integrity sha512-hjcJ2+d5oFdNS4MB/ySctFmcReSEHYHFvCh3tLv0Shm5UTJWCj84oUAxVAXpmg9fsx6q8tzjW5V/0VDY8q+CZQ==
   dependencies:
+    "@json-rpc-tools/utils" "^1.7.6"
     "@randlabs/myalgo-connect" "^1.0.1"
     algosdk "^1.10.0"
     axios "^0.21.1"
@@ -38,6 +39,7 @@
     minimist "^1.2.5"
     mocha "^9.0.2"
     text-encoding "^0.7.0"
+    tslib "^2.3.1"
     util "^0.12.4"
 
 "@apideck/better-ajv-errors@^0.3.1":
@@ -1658,6 +1660,21 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@json-rpc-tools/types@^1.7.6":
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/@json-rpc-tools/types/-/types-1.7.6.tgz#5abd5fde01364a130c46093b501715bcce5bdc0e"
+  integrity sha512-nDSqmyRNEqEK9TZHtM15uNnDljczhCUdBmRhpNZ95bIPKEDQ+nTDmGMFd2lLin3upc5h2VVVd9tkTDdbXUhDIQ==
+  dependencies:
+    keyvaluestorage-interface "^1.0.0"
+
+"@json-rpc-tools/utils@^1.7.6":
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/@json-rpc-tools/utils/-/utils-1.7.6.tgz#67f04987dbaa2e7adb6adff1575367b75a9a9ba1"
+  integrity sha512-HjA8x/U/Q78HRRe19yh8HVKoZ+Iaoo3YZjakJYxR+rw52NHo6jM+VE9b8+7ygkCFXl/EHID5wh/MkXaE/jGyYw==
+  dependencies:
+    "@json-rpc-tools/types" "^1.7.6"
+    "@pedrouid/environment" "^1.0.1"
+
 "@mdi/js@^6.5.95":
   version "6.5.95"
   resolved "https://registry.yarnpkg.com/@mdi/js/-/js-6.5.95.tgz#2d895b013408f213252b77c30e0fdaaba6dc8b4b"
@@ -1911,6 +1928,11 @@
   integrity sha512-s1zLBjWhdEI2zwaoSgyOFoKSl109CUcVBCc7biPJ3aAf6LGLU6szDvi31JPU7bxfla2lqfhjbbg/5DdFNxOwHw==
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
+
+"@pedrouid/environment@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@pedrouid/environment/-/environment-1.0.1.tgz#858f0f8a057340e0b250398b75ead77d6f4342ec"
+  integrity sha512-HaW78NszGzRZd9SeoI3JD11JqY+lubnaOx7Pewj5pfjqWXOEATpeKIFb9Z4t2WBUK2iryiXX3lzWwmYWgUL0Ug==
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.1":
   version "0.5.3"

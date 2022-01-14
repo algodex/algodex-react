@@ -82,11 +82,9 @@ function MainLayout({ asset, children }) {
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
           <OrderBook asset={asset} />
         </AssetOrderBookSection>
-
         <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
           <TradeHistory asset={asset} />
         </AssetTradeHistorySection>
-
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
           <Orders />
         </WalletOrdersSection>
@@ -128,11 +126,14 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
+            {/*
             <li>
+              // Trade history. Disable for now until it is refactored into the Orders tab
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
                 History
               </MobileMenuButton>
             </li>
+            */}
             <li>
               <MobileMenuButton
                 type="button"

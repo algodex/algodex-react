@@ -369,8 +369,8 @@ function PlaceOrderView(props) {
             checked={order.type === 'buy'}
             onChange={(e) => handleChange(e, 'type')}
           />
-          <BuyButton as="label" htmlFor="type-buy">
-            {t('buy')}
+          <BuyButton>
+            <label htmlFor="type-buy">{t('buy')}</label>
           </BuyButton>
           <ToggleInput
             type="radio"
@@ -379,8 +379,8 @@ function PlaceOrderView(props) {
             checked={order.type === 'sell'}
             onChange={(e) => handleChange(e, 'type')}
           />
-          <SellButton as="label" htmlFor="type-sell">
-            {t('sell')}
+          <SellButton>
+            <label htmlFor="type-sell">{t('sell')}</label>
           </SellButton>
         </ToggleWrapper>
 

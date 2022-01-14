@@ -42,7 +42,10 @@ export const ToggleBtn = styled(Button)`
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
   background-color: ${({ theme }) => theme.colors.gray['900']};
-
+  label {
+    cursor: pointer;
+    width: 100%;
+  }
   &:hover {
     background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['900'])};
   }
