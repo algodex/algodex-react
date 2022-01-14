@@ -18,7 +18,7 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import AmountRange from 'components/amount-range'
 import Big from 'big.js'
@@ -128,15 +128,19 @@ function PlaceOrderView(props) {
     )
   }
 
-  const handleMarketOrderChange = (e, field) => {
-    setOrder(
-      {
-        [field || e.target.id]: e.target.value,
-        price: algoPrice
-      },
-      asset
-    )
-  }
+  const handleMarketOrderChange = useCallback(
+    (e, field) => {
+      setOrder(
+        {
+          [field || e.target.id]: e.target.value,
+          // WARNING: There is no price for a Market Order
+          price: algoPrice
+        },
+        asset
+      )
+    },
+    [algoPrice]
+  )
 
   const handleRangeChange = (update) => {
     setOrder(update, asset)
