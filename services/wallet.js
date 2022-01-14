@@ -17,12 +17,23 @@ const WalletService = {
     algodex.initIndexer(algodex_environment)
     const getEmptyAccountInfo = (address) => {
       return {
-                "address":address,
-                "amount":0,"amount-without-pending-rewards":0,"apps-local-state":[],
-                "apps-total-schema":{"num-byte-slice":0,"num-uint":0},"assets":[],
-                "created-apps":[],"created-assets":[],"pending-rewards":0,
-                "reward-base":0,"rewards":0,"round":-1,"status":"Offline"
-            }
+        address: address,
+        amount: 0,
+        'amount-without-pending-rewards': 0,
+        'apps-local-state': [],
+        'apps-total-schema': {
+          'num-byte-slice': 0,
+          'num-uint': 0
+        },
+        assets: [],
+        'created-apps': [],
+        'created-assets': [],
+        'pending-rewards': 0,
+        'reward-base': 0,
+        rewards: 0,
+        round: -1,
+        status: 'Offline'
+      }
     }
 
     const promises = addresses.map(async (address) => {
@@ -45,7 +56,6 @@ const WalletService = {
     return {
       wallets
     }
-
   },
 
   setWalletData: (accountInfo) => {
