@@ -41,7 +41,8 @@ export default function useWalletController() {
     dtWallets,
     setActiveWalletAddress,
     setWallets,
-    setAllAddresses
+    setAllAddresses,
+    dtActiveWalletAddr
   ])
 
   /**
@@ -118,10 +119,10 @@ export default function useWalletController() {
     walletsQuery.data
   ])
 
-  const dtActiveWalletAddr = (addresses) => {
+  const dtActiveWalletAddr = useCallback((addresses) => {
     const activeAddress = addresses[0] ? addresses[0].address : ''
     return activeAddress
-  }
+  }, [])
 
   const dtWallets = useCallback(
     (addresses) => {
