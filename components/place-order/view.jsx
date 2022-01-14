@@ -130,14 +130,16 @@ function PlaceOrderView(props) {
 
   const handleMarketOrderChange = useCallback(
     (e, field) => {
-      setOrder(
-        {
-          [field || e.target.id]: e.target.value,
-          // WARNING: There is no price for a Market Order
-          price: algoPrice
-        },
-        asset
-      )
+      if (typeof algoPrice !== 'undefined') {
+        setOrder(
+          {
+            [field || e.target.id]: e.target.value,
+            // WARNING: There is no price for a Market Order
+            price: algoPrice
+          },
+          asset
+        )
+      }
     },
     [algoPrice]
   )
