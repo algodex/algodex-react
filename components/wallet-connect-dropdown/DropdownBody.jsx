@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { find } from 'lodash'
+import { subStringFn } from './helper'
 import theme from '../../theme'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
@@ -118,7 +119,11 @@ const DropdownBody = ({
               <div className="flex justify-between items-center">
                 <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
                   <p>
-                    { `${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}
+                    {`${subStringFn(0, 11, address)}....${subStringFn(
+                      address.length - 11,
+                      address.length,
+                      address
+                    )}`}
                   </p>
                   <Icon
                     onClick={() => copyAddress(address)}
@@ -169,7 +174,13 @@ const DropdownBody = ({
               onClick={() => handleWalletClick(address)}
               className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
             >
-              <p>{`${address.substring(0, 11)}....${address.substring(address.length - 11, address.length)}`}</p>
+              <p>
+                {`${subStringFn(0, 11, address)}....${subStringFn(
+                  address.length - 11,
+                  address.length,
+                  address
+                )}`}
+              </p>
               <Icon
                 onClick={() => copyAddress(address)}
                 path={mdiContentCopy}
@@ -180,7 +191,7 @@ const DropdownBody = ({
               />
             </div>
             <div
-              onClick={() => console.log(address, type)}
+              onClick={() => handleDisconnectFn(address, type)}
               className="rounded ml-2 p-2 font-bold cursor-pointer"
               style={{
                 background: theme.colors.gray['800']
@@ -191,7 +202,10 @@ const DropdownBody = ({
           </div>
           <div>
             <Link href={setExplorerLink(address)}>
-              <a target="_blank" className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
+              <a
+                target="_blank"
+                className="flex justify-end items-center text-white mr-10 mt-3 font-medium"
+              >
                 <p>View on AlgoExplorer</p>
                 <Icon
                   path={mdiOpenInNew}

@@ -56,6 +56,7 @@ export default function useWalletConnect() {
     connector.on('disconnect', (error, payload) => {
       console.log(payload, 'disconnect')
       if (error) {
+        console.log(error, 'an error occured', error.response)
         throw error
       }
       // onDisconnect()

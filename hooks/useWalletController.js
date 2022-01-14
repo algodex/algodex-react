@@ -10,19 +10,33 @@ export default function useWalletController() {
   const { connect, addresses } = useMyAlgo()
   const { walletConnect, walletConnectAddresses, walletConnection, onDisconnect } =
     useWalletConnect()
+
+  const [updatedData, setUpdatedData] = useState(null)
   const [addressesList, setAddressesList] = useState([])
+
   const wallets = useStorePersisted((state) => state.wallets)
   const setWallets = useStorePersisted((state) => state.setWallets)
   const setAllAddresses = useStorePersisted((state) => state.setAllAddresses)
   const allAddresses = useStorePersisted((state) => state.allAddresses)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
+
   const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
 
   useEffect(() => {
     setAddressesList(allAddresses)
   }, [])
+
+  useEffect(() => {
+    console.log(walletConnection, updatedData, 'both statuses here')
+    if (walletConnection === undefined && updatedData !== null) {
+      setAddressesList(updatedData)
+      setWallets(dtWallets(updatedData))
+      setActiveWalletAddress(dtActiveWalletAddr(updatedData))
+      setAllAddresses(updatedData)
+    }
+  }, [walletConnection, updatedData])
 
   /**
    * Memoized Wallet Address List
@@ -48,7 +62,6 @@ export default function useWalletController() {
     if (uniqAddr.length) {
       setAllAddresses(uniqAddr)
     }
-
     return uniqAddr
   }, [addresses, walletConnectAddresses, setAllAddresses, addressesList])
 
@@ -99,21 +112,19 @@ export default function useWalletController() {
     walletsQuery.data
   ])
 
-  const dtActiveWalletAddr = (wallets) => {
-    const newActiveWalletAddr = find(wallets, ({ address }) => address !== activeWalletAddress)
-    setActiveWalletAddress(newActiveWalletAddr.address)
-    return
+  const dtActiveWalletAddr = (addresses) => {
+    const activeAddress = addresses[0] ? addresses[0].address : ''
+    return activeAddress
   }
 
-  const dtAllAddresses = (wallets) => {
-    const newAllAddrList = wallets.forEach((wallet) => {
-      const item = find(allAddresses, ({ address }) => address === wallet.address)
+  const dtWallets = (addresses) => {
+    const newAllAddrList = addresses.map((addr) => {
+      const item = find(wallets, ({ address }) => address === addr.address)
       if (item) {
         return item
       }
     })
-    setAllAddresses(newAllAddrList)
-    return
+    return newAllAddrList
   }
 
   /**
@@ -131,23 +142,19 @@ export default function useWalletController() {
 
     // Handles disconnect for Algorand wallet addresses
     if (type === 'algorand-wallet') {
-      updatedWalletsList = filter(wallets, ({ type }) => type !== 'algorand-wallet')
+      updatedWalletsList = filter(allAddresses, ({ type }) => type !== 'algorand-wallet')
       updatedWalletsList = updatedWalletsList ? updatedWalletsList : []
-      console.log(updatedWalletsList, 'wallets list')
-      // await onDisconnect()
-      // setWallets(updatedWalletsList)
-      // dtAllAddresses(updatedWalletsList)
-      // dtActiveWalletAddr(updatedWalletsList)
+      setUpdatedData(updatedWalletsList)
+      await onDisconnect()
     }
 
     // Handles disconnect for My Algo wallet addresses
     if (type === 'my-algo-connect') {
       updatedWalletsList = filter(allAddresses, ({ type }) => type !== 'my-algo-connect')
-      if (!updatedWalletsList.length) {
-        await setAllAddresses([])
-        await setActiveWalletAddress('')
-      }
-      await setWallets(updatedWalletsList)
+      updatedWalletsList = updatedWalletsList ? updatedWalletsList : []
+      setAllAddresses(updatedWalletsList)
+      dtWallets(updatedWalletsList)
+      dtActiveWalletAddr(updatedWalletsList)
     }
   }
 
