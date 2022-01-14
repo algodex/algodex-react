@@ -1,5 +1,5 @@
 import { uniqBy, filter, find } from 'lodash'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import useStore, { useStorePersisted } from 'store/use-store'
 
 import useMyAlgo from 'hooks/useMyAlgo'
@@ -123,15 +123,18 @@ export default function useWalletController() {
     return activeAddress
   }
 
-  const dtWallets = (addresses) => {
-    const newAllAddrList = addresses.map((addr) => {
-      const item = find(wallets, ({ address }) => address === addr.address)
-      if (item) {
-        return item
-      }
-    })
-    return newAllAddrList
-  }
+  const dtWallets = useCallback(
+    (addresses) => {
+      const newAllAddrList = addresses.map((addr) => {
+        const item = find(wallets, ({ address }) => address === addr.address)
+        if (item) {
+          return item
+        }
+      })
+      return newAllAddrList
+    },
+    [wallets]
+  )
 
   /**
    * Disconnects a Wallet Address
