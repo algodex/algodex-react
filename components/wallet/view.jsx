@@ -1,7 +1,7 @@
 import {
-  Arrow,
+  // Arrow,
   Balance,
-  ButtonContainer,
+  // ButtonContainer,
   Container,
   EmptyState,
   Header,
@@ -9,23 +9,25 @@ import {
   Wallets,
   WalletsWrapper
 } from './wallet.css'
-import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/type'
+// import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/type'
+import { BodyCopyTiny, LabelMd } from 'components/type'
 
-import Button from 'components/button'
+// import Button from 'components/button'
 import Icon from 'components/icon'
 import PropTypes from 'prop-types'
 import React from 'react'
-import SvgImage from 'components/svg-image'
+// import SvgImage from 'components/svg-image'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 
 function WalletView(props) {
-  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
+  // const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
+  const { wallets, activeWalletAddress, isSignedIn, onSetActiveWallet } = props
   const { t } = useTranslation('wallet')
 
-  const getButtonVariant = () => {
-    return isSignedIn ? 'secondary' : 'primary'
-  }
+  // const getButtonVariant = () => {
+  //   return isSignedIn ? 'secondary' : 'primary'
+  // }
 
   const isWalletActive = (addr) => {
     return activeWalletAddress === addr
@@ -88,12 +90,12 @@ function WalletView(props) {
     ))
   }
 
-  const getButtonState = () => {
-    onConnectClick()
-  }
+  // const getButtonState = () => {
+  //   onConnectClick()
+  // }
 
-  const WalletButtonText =
-    wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
+  // const WalletButtonText =
+  //   wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
 
   return (
     <Container>

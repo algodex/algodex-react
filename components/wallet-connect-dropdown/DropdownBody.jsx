@@ -246,21 +246,23 @@ const DropdownBody = ({
       }}
     >
       {(!activeWalletAddress || isConnectingAddress) && renderWalletOptionList()}
-      {(activeWalletAddress && !isConnectingAddress) && renderActiveWalletList()}
-      {(activeWalletAddress && !isConnectingAddress) && renderSwitchWalletAddress()}
-      {(activeWalletAddress && !isConnectingAddress) && (
-        <div
-          role="button"
-          tabIndex="0"
-          onKeyDown={(e) => console.log(e)}
-          className="cursor-pointer flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-          style={{
-            backgroundColor: theme.colors.gray['700']
-          }}
-          onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-        >
-          CONNECT ANOTHER WALLET
-        </div>
+      {activeWalletAddress && !isConnectingAddress && (
+        <>
+          {renderActiveWalletList()}
+          {renderSwitchWalletAddress()}
+          <div
+            role="button"
+            tabIndex="0"
+            onKeyDown={(e) => console.log(e)}
+            className="cursor-pointer flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+            style={{
+              backgroundColor: theme.colors.gray['700']
+            }}
+            onClick={() => setIsConnectingAddress(!isConnectingAddress)}
+          >
+            CONNECT ANOTHER WALLET
+          </div>
+        </>
       )}
     </div>
   )

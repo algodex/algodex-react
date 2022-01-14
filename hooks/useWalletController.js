@@ -1,4 +1,4 @@
-import { uniq, uniqBy, filter, find } from 'lodash'
+import { uniqBy, filter, find } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
 import useStore, { useStorePersisted } from 'store/use-store'
 
@@ -29,14 +29,20 @@ export default function useWalletController() {
   }, [])
 
   useEffect(() => {
-    console.log(walletConnection, updatedData, 'both statuses here')
     if (walletConnection === undefined && updatedData !== null) {
       setAddressesList(updatedData)
       setWallets(dtWallets(updatedData))
       setActiveWalletAddress(dtActiveWalletAddr(updatedData))
       setAllAddresses(updatedData)
     }
-  }, [walletConnection, updatedData])
+  }, [
+    walletConnection,
+    updatedData,
+    dtWallets,
+    setActiveWalletAddress,
+    setWallets,
+    setAllAddresses
+  ])
 
   /**
    * Memoized Wallet Address List
