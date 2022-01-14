@@ -34,7 +34,7 @@ const WalletService = {
 
   setWalletData: (accountInfo) => {
     if (accountInfo.assets === undefined) {
-      accountInfo.assets = [];
+      accountInfo.assets = []
     }
     return {
       address: accountInfo.address,
