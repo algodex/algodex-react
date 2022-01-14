@@ -47,8 +47,6 @@ const DropdownBody = ({
     !isWalletActive(addr) && setActiveWalletAddress(addr)
   }
 
-  
-
   const renderWalletOptionList = () => {
     return (
       <div

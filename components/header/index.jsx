@@ -11,6 +11,7 @@ import {
   NetworkDropdown
 } from './header.css'
 import { useCallback, useState } from 'react'
+import { subStringFn } from 'components/wallet-connect-dropdown/helper'
 
 import ActiveLink from 'components/active-link'
 import DropdownWrapper from 'components/dropdown'
@@ -127,7 +128,12 @@ export function Header({ router }) {
             onClick={() => setIsWalletConnectDropDownVisible(!isWalletConnectDropDownVisible)}
           >
             {activeWalletAddress
-              ? `${activeWalletAddress.substring(0, 4)}....${activeWalletAddress.substring(activeWalletAddress.length - 4, activeWalletAddress.length)}` : 'CONNECT A WALLET' }
+              ? `${subStringFn(0, 4, activeWalletAddress)}....${subStringFn(
+                  activeWalletAddress.length - 4,
+                  activeWalletAddress.length,
+                  activeWalletAddress
+                )}`
+              : 'CONNECT A WALLET'}
           </ConnectWalletBtn>
           {isWalletConnectDropDownVisible && renderWalletConnectDropdown()}
         </div>
