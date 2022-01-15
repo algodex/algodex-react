@@ -6,6 +6,7 @@ import { LimitOrder } from './place-order.css'
 import Big from 'big.js'
 import OrderOptions from 'components/order-options'
 import { BodyCopy } from 'components/type'
+import PropTypes from 'prop-types'
 
 export const OrderForm = ({
   order,
@@ -106,4 +107,18 @@ export const OrderForm = ({
       </LimitOrder>
     </>
   )
+}
+
+OrderForm.propTypes = {
+  orderType: PropTypes.string.isRequired,
+  order: PropTypes.object.isRequired,
+  asset: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  maxSpendableAlgo: PropTypes.number.isRequired,
+  asaBalance: PropTypes.number.isRequired,
+  handleRangeChange: PropTypes.func,
+  handleOptionsChange: PropTypes.func,
+  enableOrder: PropTypes.object,
+  newOrderSizeFilter: PropTypes.number,
+  setNewOrderSizeFilter: PropTypes.func
 }

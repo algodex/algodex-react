@@ -1,5 +1,6 @@
 import React from 'react'
 import { OrderForm } from './order-form'
+import PropTypes from 'prop-types'
 
 export const LimitOrder = ({
   order,
@@ -28,4 +29,17 @@ export const LimitOrder = ({
       orderType="limit"
     />
   )
+}
+
+LimitOrder.propTypes = {
+  order: PropTypes.object.isRequired,
+  asset: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  maxSpendableAlgo: PropTypes.number.isRequired,
+  asaBalance: PropTypes.number.isRequired,
+  handleRangeChange: PropTypes.func.isRequired,
+  handleOptionsChange: PropTypes.func.isRequired,
+  enableOrder: PropTypes.object,
+  newOrderSizeFilter: PropTypes.number.isRequired,
+  setNewOrderSizeFilter: PropTypes.func.isRequired
 }
