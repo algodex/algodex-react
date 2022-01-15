@@ -5,6 +5,7 @@ import React from 'react'
 import { LimitOrder } from './place-order.css'
 import Big from 'big.js'
 import OrderOptions from 'components/order-options'
+import { BodyCopy } from 'components/type'
 
 export const OrderForm = ({
   order,
