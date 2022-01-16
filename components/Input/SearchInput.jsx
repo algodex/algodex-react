@@ -1,14 +1,14 @@
-// import { X as CancelIcon, Search as _Search } from 'react-feather'
-import { X as CancelIcon } from 'react-feather'
-import Checkbox from 'components/checkbox'
-import Icon from '@mdi/react'
+import { createRef, forwardRef, useEffect, useState } from 'react'
+import theme from 'theme'
+import TextInput from './Text'
+import Checkbox from './Checkbox'
 import PropTypes from 'prop-types'
-import TextInput from 'components/text-input'
-import { forwardRef } from 'react'
-import { mdiMagnify } from '@mdi/js'
-import styled from 'styled-components'
-import theme from '../../theme'
+import useDebounce from 'hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
+import styled from 'styled-components'
+import Icon from '@mdi/react'
+import { mdiMagnify } from '@mdi/js'
+import { X as CancelIcon } from 'react-feather'
 
 const Container = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 `
 
-const CancelButton = styled.button.attrs({
+export const CancelButton = styled.button.attrs({
   type: 'button'
 })`
   position: absolute;
@@ -63,7 +63,7 @@ const Input = styled(TextInput)`
   // padding-right: 3rem;
 `
 
-const Search = forwardRef(
+export const Search = forwardRef(
   (
     { isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, isActive, ...props },
     ref
@@ -127,4 +127,85 @@ Search.defaultProps = {
 
 Search.displayName = 'Search'
 
-export default Search
+export function SearchInput(props) {
+  const {
+    initialText,
+    onChange,
+    onSearchFocus,
+    onExternalClick,
+    containerRef,
+    isActive,
+    isListingVerifiedAssets,
+    setIsListingVerifiedAssets
+  } = props
+  const { t } = useTranslation('assets')
+  const [searchText, setSearchText] = useState(initialText)
+  const debouncedSearchText = useDebounce(searchText, 500)
+
+  useEffect(() => {
+    const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
+    onChange(filteredSearchText)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchText])
+
+  /**
+   * This ref is forwarded to the search input
+   */
+  const inputRef = createRef()
+
+  /**
+   * Blur search bar (if focused) when flyout is hidden
+   */
+  useEffect(() => {
+    !isActive && inputRef?.current?.blur()
+  }, [inputRef, isActive])
+
+  /**
+   * If the user clicks outside the expanded flyout, it should close, and click
+   * listener can be removed
+   */
+  const handleClick = (e) => {
+    if (!containerRef?.current?.contains(e.target)) {
+      onExternalClick()
+      window.removeEventListener('click', handleClick)
+    }
+  }
+
+  /**
+   * Focusing on the search input triggers the flyout to appear. A listener is
+   * added to detect clicks outside the expanded flyout.
+   */
+  const handleFocus = () => {
+    onSearchFocus()
+    window.addEventListener('click', handleClick)
+  }
+
+  return (
+    <Search
+      ref={inputRef}
+      value={searchText}
+      isActive={isActive}
+      onChange={(e) => setSearchText(e.target.value)}
+      onCancel={() => setSearchText('')}
+      onFocus={handleFocus}
+      placeholder={`${t('search')}`}
+      isListingVerifiedAssets={isListingVerifiedAssets}
+      setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+    />
+  )
+}
+
+SearchInput.propTypes = {
+  initialText: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  onCancel: PropTypes.func,
+  onSearchFocus: PropTypes.func,
+  onExternalClick: PropTypes.func,
+  containerRef: PropTypes.object,
+  isActive: PropTypes.bool,
+  isListingVerifiedAssets: PropTypes.bool,
+  setIsListingVerifiedAssets: PropTypes.func
+}
+
+export default SearchInput

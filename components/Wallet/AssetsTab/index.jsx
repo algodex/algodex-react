@@ -1,12 +1,11 @@
-/* eslint-disable react/prop-types  */
 import { useCallback, useMemo } from 'react'
 import { useWalletAssetsQuery } from 'hooks/useAlgodex'
-import { BodyCopyTiny, BodyCopySm } from 'components/type'
-import OrdersTable from 'components/orders-table'
+import { BodyCopyTiny, BodyCopySm } from 'components/Typography'
+import Table from 'components/Table'
 import useStore, { useStorePersisted } from 'store/use-store'
 import { mapAssetsData } from './helpers'
 import useTranslation from 'next-translate/useTranslation'
-import { AssetId, AssetNameBlock } from 'components/asset-search/asset-search.css.js'
+import { AssetId, AssetNameBlock } from 'components/Asset'
 import Link from 'next/link'
 import {
   AssetAlgoValue,
@@ -19,8 +18,8 @@ import {
   StatusContainer,
   TableWrapper
 } from './assets.css'
-import { useEventDispatch } from '../../hooks/useEvents'
-import useUserStore from '../../store/use-user-state'
+import { useEventDispatch } from 'hooks/useEvents'
+import useUserStore from 'store/use-user-state'
 
 const AssetCoinCell = (props) => {
   const dispatcher = useEventDispatch()
@@ -62,7 +61,7 @@ const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
 
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 
-function Assets() {
+function AssetsTab() {
   const { t, lang } = useTranslation('orders')
 
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
@@ -132,7 +131,7 @@ function Assets() {
   return (
     <Container style={{ height: '6rem' }}>
       <TableWrapper>
-        <OrdersTable
+        <Table
           initialState={walletAssetsTableState}
           onStateChange={(state) => setWalletAssetsTableState(state)}
           columns={columns}
@@ -145,4 +144,4 @@ function Assets() {
   )
 }
 
-export default Assets
+export default AssetsTab

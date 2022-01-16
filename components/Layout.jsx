@@ -13,7 +13,7 @@ export const FlexContainer = styled.div`
 
 import { useRef, useState } from 'react'
 
-import AssetSearch from 'components/asset-search'
+import AssetSearch from 'components/Nav/Search'
 import OrderBook from 'components/order-book'
 import Orders from 'components/orders'
 import PlaceOrder from 'components/place-order'

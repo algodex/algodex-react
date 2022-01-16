@@ -188,7 +188,7 @@ export const Tick = styled.div`
  * @deprecated
  * @constructor
  */
-function AmountRange({
+function AmountRangeInput({
   order,
   algoBalance: _algoBalance,
   asaBalance: _asaBalance,

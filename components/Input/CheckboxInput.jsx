@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
  * @returns {JSX.Element}
  * @constructor
  */
-const Checkbox = ({ isChecked, onChange, classProps }) => {
+const CheckboxInput = ({ isChecked, onChange, classProps }) => {
   return (
     <input
       type="checkbox"
@@ -21,16 +21,16 @@ const Checkbox = ({ isChecked, onChange, classProps }) => {
   )
 }
 
-Checkbox.propTypes = {
+CheckboxInput.propTypes = {
   isChecked: PropTypes.bool,
   onChange: PropTypes.func,
   classProps: PropTypes.string
 }
 
-Checkbox.defaultProps = {
+CheckboxInput.defaultProps = {
   isChecked: false
 }
 
-Checkbox.displayName = 'Checkbox'
+CheckboxInput.displayName = 'Checkbox'
 
-export default Checkbox
+export default CheckboxInput
