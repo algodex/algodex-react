@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Spinner from '.'
+import Spinner from './Spinner'
 
 const Container = styled.div`
   width: 320px;

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, StyledComponent } from 'styled-components'
 import { parseThemeColor } from 'theme'
 
 const rotate = keyframes`
@@ -23,6 +23,10 @@ const dash = keyframes`
   }
 `
 
+/**
+ * @todo Move to components/Layout.jsx
+ * @type {StyledComponent}
+ */
 const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -30,6 +34,10 @@ const FlexContainer = styled.div`
   justify-content: center;
 `
 
+/**
+ * Spinner SVG
+ * @type {StyledComponent}
+ */
 const Svg = styled.svg.attrs({
   viewBox: '0 0 50 50'
 })`
@@ -49,9 +57,21 @@ const Svg = styled.svg.attrs({
   }
 `
 
-function Spinner(props) {
-  const { size, color, flex, ...rest } = props
-
+/**
+ * Loading Spinner
+ *
+ * Used to show a loading screen for asynchronous operations
+ *
+ * @param {object} props Component Properties
+ * @param {number} props.size SVG Size
+ * @param {string} props.color SVG Color
+ * @param {boolean} props.flex Enable Flex
+ * @returns {JSX.Element}
+ *
+ * @todo Refactor to Tailwinds class="spinner"
+ * @constructor
+ */
+function Spinner({ size, color, flex, ...rest }) {
   return flex ? (
     <FlexContainer>
       <Svg size={size} color={color} {...rest}>
