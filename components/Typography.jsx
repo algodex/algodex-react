@@ -1,6 +1,17 @@
-/* eslint-disable react/prop-types */
-import BaseComponent from './base'
+import styled from 'styled-components'
 import theme from '../../theme'
+
+import {
+  space,
+  fontFamily,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  letterSpacing,
+  textAlign,
+  color,
+  system
+} from 'styled-system'
 
 const {
   title,
@@ -19,6 +30,20 @@ const {
   navLabel
 } = theme.textStyles
 
+export const BaseComponent = styled.div`
+  ${space}
+  ${fontFamily}
+  ${fontSize}
+  ${fontWeight}
+  ${lineHeight}
+  ${letterSpacing}
+  ${textAlign}
+  ${color}
+  ${system({
+    textTransform: true,
+    cursor: true
+  })}
+`
 export const Title = (props) => (
   <BaseComponent {...title} {...props}>
     {props.children}
