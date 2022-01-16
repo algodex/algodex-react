@@ -1,4 +1,10 @@
 import styled from 'styled-components'
+
+/**
+ * IconButton
+ * @type {StyledComponent}
+ * @todo refactor to TailwindsCSS
+ */
 export const IconButton = styled.button`
   cursor: pointer;
   pointer-events: all;
@@ -14,3 +20,5 @@ export const IconButton = styled.button`
     color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
+
+export default IconButton
