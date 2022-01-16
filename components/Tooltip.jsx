@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
  *
  * @todo Refactor Styled Component to Tailwinds
  * @type {StyledComponent}
-
  */
 const TooltipContainer = styled.div`
   &.tooltip-container {

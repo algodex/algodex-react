@@ -1,0 +1,160 @@
+import React, { useEffect } from 'react'
+import { useSortBy, useTable } from 'react-table'
+
+import PropTypes from 'prop-types'
+import _ from 'lodash'
+import styled from 'styled-components'
+import { rgba } from 'polished'
+import Icon from 'components/icon'
+
+export const SortIcon = styled(Icon)`
+  position: relative;
+  top: -1px;
+  margin-left: 0.25rem;
+`
+
+export const Container = styled.div`
+  table {
+    position: relative;
+    border-spacing: 0;
+    border: none;
+    width: 100%;
+    min-width: 600px;
+    overflow: scroll;
+
+    @media only (min-width: 996px) {
+      min-width: unset;
+    }
+
+    tr {
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:nth-child(odd) {
+        td {
+          background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
+        }
+      }
+
+      &:nth-child(odd),
+      &:nth-child(even) {
+        &:hover {
+          td {
+            background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
+          }
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem 0;
+      color: ${({ theme }) => theme.colors.gray['600']};
+      font-size: 0.75rem;
+      line-height: 1.25;
+
+      &:first-child {
+        padding-left: 1.125rem;
+      }
+      padding-right: 0.5rem;
+    }
+
+    thead {
+      tr {
+        th {
+          position: sticky;
+          top: 0;
+          padding: 0.75rem 0;
+          background-color: ${({ theme }) => theme.colors.gray['800']};
+          color: ${({ theme }) => theme.colors.gray['500']};
+          text-align: left;
+          text-transform: uppercase;
+          font-weight: 500;
+          user-select: none;
+          white-space: nowrap;
+          padding-right: 0.5rem;
+        }
+      }
+    }
+  }
+`
+
+/**
+ * WARNING! This is also an Assets Table!
+ * @param initialState
+ * @param onStateChange
+ * @param columns
+ * @param data
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function Table({ initialState, onStateChange, columns, data }) {
+  const {
+    state: tableState,
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState
+    },
+    useSortBy
+  )
+  useEffect(() => {
+    if (!_.isEqual(tableState, initialState)) {
+      onStateChange(tableState)
+    }
+  }, [onStateChange, initialState, tableState])
+  return (
+    <Container>
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  {!column.disableSortBy && (
+                    <SortIcon
+                      use={
+                        !column.isSorted ? 'sortNone' : column.isSortedDesc ? 'sortDesc' : 'sortAsc'
+                      }
+                      size={0.625}
+                    />
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </Container>
+  )
+}
+
+Table.propTypes = {
+  initialState: PropTypes.any.isRequired,
+  onStateChange: PropTypes.func.isRequired,
+  columns: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired
+}
+
+export default Table
