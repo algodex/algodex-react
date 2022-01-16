@@ -1,22 +1,8 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { AlertTriangle } from 'react-feather'
 import { parseThemeColor } from 'theme'
-
-const FlexContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
-
-const AlertIcon = styled(AlertTriangle)`
-  stroke: ${({ color }) => parseThemeColor(color)};
-  width: ${({ size }) => `${size}rem`};
-  height: ${({ size }) => `${size}rem`};
-  margin: ${({ flex }) => (flex ? '0' : '0 0.5rem 0 0')};
-`
+import { FlexContainer } from 'components/Layout'
+import { AlertIcon } from 'components/Icon'
 
 const Message = styled.p`
   display: flex;
@@ -35,17 +21,31 @@ const Message = styled.p`
   }};
 `
 
-function Error(props) {
-  const { size, color, flex, message } = props
+/**
+ * Error Message
+ *
+ * @param {object} props Component Properties
+ * @param {number} props.size <AlertIcon> Size
+ * @param {string} props.color Component Color
+ * @param {boolean} props.flex Enable Flex
+ * @param {string} props.message Display Message
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function Error({ size, color, flex, message }) {
   const showMsg = message?.length > 0
 
   return flex ? (
     <FlexContainer>
       <AlertIcon size={size} color={color} />
-      {showMsg && <Message {...props}>{message}</Message>}
+      {showMsg && (
+        <Message color={color} flex={flex}>
+          {message}
+        </Message>
+      )}
     </FlexContainer>
   ) : (
-    <Message {...props}>
+    <Message color={color} flex={flex}>
       <AlertIcon size={1.5} color={color} />
       {message}
     </Message>

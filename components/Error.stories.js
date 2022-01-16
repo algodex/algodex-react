@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Error from '.'
+import Error from './Error'
 
 const Container = styled.div`
   width: 320px;
