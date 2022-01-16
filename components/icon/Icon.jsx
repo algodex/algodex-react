@@ -1,6 +1,8 @@
-import theme from '../../theme'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import theme, { parseThemeColor } from '../../theme'
 
-export default {
+const ICONS = {
   wallet: {
     format: 'data',
     viewBox: '0 0 24 24',
@@ -42,3 +44,66 @@ export default {
     path: 'M23.98,23.99h-3.75l-2.44-9.07l-5.25,9.07H8.34l8.1-14.04l-1.3-4.88L4.22,24H0.02L13.88,0h3.67l1.61,5.96 h3.79l-2.59,4.5L23.98,23.99z'
   }
 }
+
+const Svg = styled.svg`
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+
+  ${({ color, use }) =>
+    ICONS[use].format === 'data' &&
+    `
+		path {
+			fill: ${color ? parseThemeColor(color) : 'currentColor'};
+		}
+	`};
+`
+
+/**
+ * Component for custom icons that aren't included in the Feather Icons set.
+ *
+ * Icon definitions live in 'ICONS' and have two possible `format` values:
+ * 'data' and 'markup'. For an icon to be styled with the `color` prop or
+ * inherit the color of its parent (by leaving `color` undefined), it must be
+ * in 'data' format and consist of a single <path/>, its `d` attribute set as
+ * a string.
+ *
+ * @param {Object} props
+ * @param {String} props.use Key of icon to use
+ * @param {Number} props.size Icon size in rem units
+ * @param {String} props.color A theme color in dot notation, e.g. 'gray.000'
+ *
+ * @example <Icon use="wallet" size={0.75} color="gray.000" />
+ */
+function Icon(props) {
+  if (!ICONS[props.use]) {
+    return null
+  }
+
+  const useIcon = ICONS[props.use]
+
+  const content = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
+
+  return (
+    <Svg
+      width={`${props.size}rem`}
+      height={`${props.size}rem`}
+      viewBox={useIcon.viewBox}
+      {...props}
+    >
+      {content}
+    </Svg>
+  )
+}
+
+Icon.propTypes = {
+  use: PropTypes.string.isRequired,
+  size: PropTypes.number,
+  color: PropTypes.string
+}
+
+Icon.defaultProps = {
+  size: 1
+}
+
+export default Icon
