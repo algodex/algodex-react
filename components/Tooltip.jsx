@@ -1,7 +1,15 @@
 import { usePopperTooltip } from 'react-popper-tooltip'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-export const TooltipContainer = styled.div`
+
+/**
+ * Tooltip Styled Container
+ *
+ * @todo Refactor Styled Component to Tailwinds
+ * @type {StyledComponent}
+
+ */
+const TooltipContainer = styled.div`
   &.tooltip-container {
     --tooltipBackground: ${({ theme }) => theme.colors.gray[600]};
     --tooltipBorder: ${({ theme }) => theme.colors.gray[600]};
@@ -120,11 +128,23 @@ export const TooltipContainer = styled.div`
 
   width: 260px;
 `
+/**
+ * Tooltip for hover over
+ * @param {object} props Component Properties
+ * @param {function} props.renderButton Button Render Function
+ * @param {number} props.delayShow Delay for displaying the <Tooltip>
+ * @param {number} props.delayHide Delay for hiding the <Tooltip>
+ * @param {*} props.children React Children
+ * @returns {JSX.Element}
+ * @constructor
+ */
 
-export const Tooltip = (props) => {
-  const { renderButton } = props
+export const Tooltip = ({ renderButton, children, delayShow = 200, delayHide = 200 }) => {
   const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
-    usePopperTooltip({ delayShow: 200, delayHide: 200 })
+    usePopperTooltip({
+      delayShow,
+      delayHide
+    })
 
   return (
     <>
@@ -135,7 +155,7 @@ export const Tooltip = (props) => {
           {...getTooltipProps({ className: 'tooltip-container' })}
         >
           <div {...getArrowProps({ className: 'tooltip-arrow' })} />
-          {props.children}
+          {children}
         </TooltipContainer>
       )}
     </>
@@ -143,6 +163,8 @@ export const Tooltip = (props) => {
 }
 Tooltip.propTypes = {
   renderButton: PropTypes.any.isRequired,
-  children: PropTypes.any
+  children: PropTypes.any,
+  delayShow: PropTypes.number,
+  delayHide: PropTypes.number
 }
 export default Tooltip
