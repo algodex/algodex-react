@@ -1,11 +1,19 @@
 import PropTypes from 'prop-types'
 
-const Checkbox = ({ isChecked, onCheckFn, classProps }) => {
+/**
+ * @param {object} props Component Properties
+ * @param {boolean} props.isChecked Checked State
+ * @param {function} props.onChange Triggered on State change
+ * @param {string } props.classProps Class property
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const Checkbox = ({ isChecked, onChange, classProps }) => {
   return (
     <input
       type="checkbox"
       checked={isChecked}
-      onChange={onCheckFn}
+      onChange={onChange}
       className={`${classProps} ${
         !isChecked ? 'appearance-none' : ''
       } border border-gray-700 w-3.5 h-3.5 checked:bg-blue-600 checked:border-transparent`}
@@ -15,7 +23,7 @@ const Checkbox = ({ isChecked, onCheckFn, classProps }) => {
 
 Checkbox.propTypes = {
   isChecked: PropTypes.bool,
-  onCheckFn: PropTypes.func,
+  onChange: PropTypes.func,
   classProps: PropTypes.string
 }
 
