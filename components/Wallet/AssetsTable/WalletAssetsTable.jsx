@@ -10,6 +10,7 @@ import useUserStore from 'store/use-user-state'
 import { AssetId, AssetNameBlock } from 'components/Asset'
 import { BodyCopyTiny, BodyCopySm } from 'components/Typography'
 import Table from 'components/Table'
+import PropTypes from 'prop-types'
 
 /**
  * @deprecated
@@ -108,7 +109,7 @@ const AssetCoinCell = (props) => {
     </Link>
   )
 }
-
+AssetCoinCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 const AssetNameCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
   const onClick = useCallback(() => {
@@ -122,15 +123,15 @@ const AssetNameCell = ({ value, row }) => {
     </Link>
   )
 }
-
+AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 const AssetTotalCell = ({ value }) => <AssetTotal>{value}</AssetTotal>
-
+AssetTotalCell.propTypes = { value: PropTypes.any }
 const AssetAvailableCell = ({ value }) => <AssetAvailable>{value}</AssetAvailable>
-
+AssetAvailableCell.propTypes = { value: PropTypes.any }
 const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
-
+AssetInOrderCell.propTypes = { value: PropTypes.any }
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
-
+AssetAlgoValueCell.propTypes = { value: PropTypes.any }
 function AssetsTab() {
   const { t, lang } = useTranslation('orders')
 

@@ -12,6 +12,7 @@ import { useWalletOrdersQuery } from 'hooks/useAlgodex'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
+import PropTypes from 'prop-types'
 
 export const mapOpenOrdersData = (data) => {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
@@ -160,9 +161,9 @@ function OpenOrders() {
   // const openOrdersDataMemoized = openOrdersData
 
   const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
-
+  OrderDateCell.propTypes = { value: PropTypes.any }
   const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
-
+  OrderPriceCell.propTypes = { value: PropTypes.any }
   const OrderPairCell = ({ value, row }) => {
     const dispatcher = useEventDispatch()
     const assetId = row?.original?.metadata?.assetId
@@ -177,12 +178,13 @@ function OpenOrders() {
       </Link>
     )
   }
-
+  OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
   const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
-
+  OrderTypeCell.propTypes = { value: PropTypes.any }
   const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-
+  OrderAmountCell.propTypes = { value: PropTypes.any }
   const OrderStatusCell = ({ value }) => <OrderStatus>{value}</OrderStatus>
+  OrderStatusCell.propTypes = { value: PropTypes.any }
 
   const OrderCancelCell = useCallback(
     ({ data, cell }) => {

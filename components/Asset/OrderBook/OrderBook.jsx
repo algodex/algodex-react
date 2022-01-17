@@ -420,7 +420,7 @@ OrderBookView.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function OrderBook({ asset, onClicked, onChange }) {
+export default function OrderBook({ asset /* onClicked, onChange */ }) {
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
   const isSignedIn = useStore((state) => state.isSignedIn)

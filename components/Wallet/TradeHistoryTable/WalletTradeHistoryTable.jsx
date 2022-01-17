@@ -11,6 +11,7 @@ import useUserStore from 'store/use-user-state'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
+import PropTypes from 'prop-types'
 
 export const mapTradeHistoryData = (data) => {
   const buyText = 'BUY'
@@ -85,7 +86,7 @@ export const OrderAmount = styled.span`
 `
 
 const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
-
+OrderDateCell.propTypes = { value: PropTypes.any }
 const OrderPairCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
   const assetId = row?.original?.id
@@ -100,14 +101,15 @@ const OrderPairCell = ({ value, row }) => {
     </Link>
   )
 }
-
+OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
-
+OrderPriceCell.propTypes = { value: PropTypes.any }
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-
+OrderAmountCell.propTypes = { value: PropTypes.any }
 function OrderHistory() {
   const { t, lang } = useTranslation('orders')
   const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+  OrderSideCell.propTypes = { value: PropTypes.any }
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
 

@@ -491,7 +491,7 @@ PlaceOrderView.propTypes = {
   orderBook: PropTypes.object.isRequired
 }
 
-function PlaceOrder({ asset, wallet }) {
+function PlaceOrder({ asset /*, wallet*/ }) {
   const { t } = useTranslation('place-order')
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)

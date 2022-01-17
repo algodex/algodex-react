@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import styled, { keyframes, StyledComponent } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { parseThemeColor } from 'theme'
 
 const rotate = keyframes`

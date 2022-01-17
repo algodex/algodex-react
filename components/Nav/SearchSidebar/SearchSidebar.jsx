@@ -176,7 +176,8 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
 }
 
 NavSearchSidebar.propTypes = {
-  gridRef: PropTypes.object.isRequired
+  gridRef: PropTypes.object.isRequired,
+  algoPrice: PropTypes.any
 }
 
 export default withfetchAlgorandPriceQuery(NavSearchSidebar)
