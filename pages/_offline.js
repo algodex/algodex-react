@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styled from 'styled-components'
-import Header from '../components/header'
+import Header from 'components/Nav/Header'
 
 const Container = styled.div`
   display: flex;

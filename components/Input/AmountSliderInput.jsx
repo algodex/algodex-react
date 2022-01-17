@@ -93,17 +93,17 @@ export const Input = styled.input.attrs({ type: 'range' })`
 
   &:focus::-webkit-slider-thumb {
     outline: 0;
-    ${focus}
+    ${FocusCSS}
   }
 
   &:focus::-moz-range-thumb {
     outline: 0;
-    ${focus}
+    ${FocusCSS}
   }
 
   &:focus::-ms-thumb {
     outline: 0;
-    ${focus}
+    ${FocusCSS}
   }
 
   &:disabled::-moz-range-track,
@@ -194,7 +194,7 @@ export const Tick = styled.div`
  * @deprecated
  * @constructor
  */
-function AmountRangeInput({
+function AmountSliderInput({
   order,
   algoBalance: _algoBalance,
   asaBalance: _asaBalance,
@@ -332,7 +332,7 @@ function AmountRangeInput({
   )
 }
 
-AmountRange.propTypes = {
+AmountSliderInput.propTypes = {
   order: PropTypes.object.isRequired,
   algoBalance: PropTypes.number.isRequired,
   asaBalance: PropTypes.number.isRequired,
@@ -340,4 +340,4 @@ AmountRange.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default AmountRange
+export default AmountSliderInput

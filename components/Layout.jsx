@@ -6,10 +6,12 @@ import { HeaderLg, HeaderSm } from 'components/Typography'
 import { useRef, useState } from 'react'
 
 import NavSearchSidebar from 'components/Nav/SearchSidebar'
+import WalletConnect from 'components/Wallet/Connect/WalletConnect'
 import WalletTabs from 'components/Wallet/WalletTabs'
 import PlaceOrder from 'components/Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
+import AssetOrderBook from './Asset/OrderBook'
 import TradeHistory from 'components/Asset/TradeHistory'
 
 import { useEvent } from 'hooks/useEvents'
@@ -307,22 +309,18 @@ export function Layout({ asset, children }) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <WalletTabsSection active={activeMobile === TABS.WALLET} />
+        <WalletConnect active={activeMobile === TABS.WALLET} />
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
+
         <NavSidebarAndContentSection active={activeMobile === TABS.CHART}>
           <NavSearchSidebar style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
           <ContentSection>{children}</ContentSection>
         </NavSidebarAndContentSection>
 
-        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          <OrderBook asset={asset} />
-        </AssetOrderBookSection>
-        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-          <TradeHistory asset={asset} active={activeMobile === TABS.ORDERS} />
-        </AssetTradeHistorySection>
-
+        <AssetOrderBook asset={asset} active={activeMobile === TABS.BOOK} />
+        <TradeHistory asset={asset} active={activeMobile === TABS.ORDERS} />
         <WalletTabs active={activeMobile === TABS.ORDERS} />
 
         <MobileMenu>

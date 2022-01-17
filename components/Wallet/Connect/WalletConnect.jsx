@@ -5,10 +5,10 @@ import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import toast from 'react-hot-toast'
-import Icon from '../../Icon'
-import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from '../../Typography'
-import Button from '../../Button'
-import SvgImage from '../../SvgImage'
+import Icon from 'components/Icon'
+import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
+import Button from 'components/Button'
+import SvgImage from 'components/SvgImage'
 import PropTypes from 'prop-types'
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -287,7 +287,7 @@ WalletView.defaultProps = {
   isSignedIn: false
 }
 
-function Wallet() {
+function WalletConnect() {
   const { connect: onWalletConnect, addresses } = useMyAlgo()
 
   const wallets = useStorePersisted((state) => state.wallets)
@@ -338,4 +338,4 @@ function Wallet() {
   )
 }
 
-export default Wallet
+export default WalletConnect

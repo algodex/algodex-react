@@ -1,4 +1,7 @@
 import useTranslation from 'next-translate/useTranslation'
+import WalletOpenOrdersTable from './OpenOrdersTable/WalletOpenOrdersTable'
+import WalletTradeHistoryTable from './TradeHistoryTable/WalletTradeHistoryTable'
+import WalletAssetsTable from './AssetsTable/WalletAssetsTable'
 import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
@@ -26,11 +29,11 @@ function WalletTabs({ initialPanel }) {
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <OpenOrders />
+        return <WalletOpenOrdersTable />
       case ORDER_HISTORY_PANEL:
-        return <OrderHistory />
+        return <WalletTradeHistoryTable />
       case ASSETS_PANEL:
-        return <Assets />
+        return <WalletAssetsTable />
       default:
         return null
     }

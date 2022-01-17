@@ -33,7 +33,7 @@ const Message = styled.p`
  * @returns {JSX.Element}
  * @constructor
  */
-function Error({ size, color, flex, message, Icon }) {
+export function Error({ size, color, flex, message, Icon }) {
   const showMsg = message?.length > 0
 
   return flex ? (
