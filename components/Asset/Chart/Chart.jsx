@@ -167,7 +167,7 @@ function autoScaleProvider(original, chart, priceData) {
   return res
 }
 
-function ChartView(props) {
+export function ChartView(props) {
   const { asset, volumeData, priceData } = props
   const [currentPrices, setCurrentPrices] = useState(props)
   const [currentLogical, setCurrentLogical] = useState(priceData.length - 1)
