@@ -1,29 +1,13 @@
-import {
-  Ask,
-  Bid,
-  BidAskSpreadContainer,
-  Container,
-  Header,
-  IconButton,
-  OhlcItem,
-  OhlcList,
-  Spread,
-  TradingPair,
-  Volume,
-  VolumeContainer
-} from './chart-overlay.css'
-
 import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
 import { floatToFixed } from 'services/display'
 import { mdiCheckDecagram } from '@mdi/js'
-import theme from '../../../theme'
+import theme from 'theme'
 import { useCallback } from 'react'
-import { useUserStore } from '../../../store'
-import styled from "styled-components";
-
+import { useUserStore } from 'store'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   position: absolute;
@@ -110,7 +94,7 @@ export const OhlcItem = styled.div`
 
   dd {
     color: ${({ theme, value }) =>
-    parseFloat(value) < 0 ? theme.colors.red[500] : theme.colors.green[500]};
+      parseFloat(value) < 0 ? theme.colors.red[500] : theme.colors.green[500]};
   }
 
   @media (min-width: 1024px) {
@@ -184,7 +168,6 @@ export const Volume = styled.div`
     font-size: 0.75rem;
   }
 `
-
 
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props

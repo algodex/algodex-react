@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  DEMO_ALGO_VOLUME,
-  DEMO_ASSET,
-  DEMO_OHLC,
-  DEMO_BID,
-  DEMO_ASK,
-  DEMO_SPREAD,
-  DEMO_PRICE_DATA,
-  DEMO_VOLUME_DATA
-} from './demo'
-import Chart from './view'
+import Chart from '.'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -23,7 +13,7 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Chart',
+  title: 'Asset/Chart',
   component: Chart,
   decorators: [
     (Story) => (
@@ -38,7 +28,7 @@ const Template = (args) => <Chart {...args} />
 
 export const NoData = Template.bind({})
 NoData.args = {
-  asset: DEMO_ASSET,
+  asset: {},
   asaVolume: '0',
   ohlc: { open: 0, high: 0, low: 0, close: 0 },
   bid: '0',
@@ -50,12 +40,12 @@ NoData.args = {
 
 export const Candlestick = Template.bind({})
 Candlestick.args = {
-  asset: DEMO_ASSET,
-  asaVolume: DEMO_ALGO_VOLUME,
-  ohlc: DEMO_OHLC,
-  bid: DEMO_BID,
-  ask: DEMO_ASK,
-  spread: DEMO_SPREAD,
-  priceData: DEMO_PRICE_DATA,
-  volumeData: DEMO_VOLUME_DATA
+  asset: {},
+  asaVolume: {},
+  ohlc: {},
+  bid: {},
+  ask: {},
+  spread: {},
+  priceData: {},
+  volumeData: {}
 }

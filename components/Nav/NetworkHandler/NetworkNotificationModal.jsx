@@ -1,4 +1,4 @@
-import NotificationModal from 'components/network-notification/NotificationModal'
+import NotificationModal from 'components/Nav/NetworkHandler/NotificationModal'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'

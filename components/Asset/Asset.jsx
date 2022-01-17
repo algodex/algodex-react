@@ -134,7 +134,7 @@ export const AlgoExplorerLink = styled.div`
     }
   }
 `
-const AssetInfo = ({ asset, price }) => {
+export const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'

@@ -12,8 +12,8 @@ import {
 import { useCallback, useState } from 'react'
 
 import NavActiveLink from 'components/Nav/ActiveLink'
-import Hamburger from 'components/hamburger'
-import LanguageSelection from 'components/language-selection'
+import Hamburger from 'components/Button/Hamburger'
+import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'

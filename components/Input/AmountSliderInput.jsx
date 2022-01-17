@@ -2,8 +2,14 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import Big from 'big.js'
 import styled, { css } from 'styled-components'
-import { TrackFillCSS, TrackCSS, FillCSS, TickWrapper, FocusCSS } from '../Input/Range/Slider'
-import { InputWrapper } from '../Input'
+import {
+  TrackFillCSS,
+  TrackCSS,
+  FillCSS,
+  TickWrapper,
+  FocusCSS
+} from 'components/Input/Range/Slider'
+import { InputWrapper } from 'components/Input'
 
 const trackHeight = '0.125rem'
 const thumbDiameter = '0.75rem'

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { AlertTriangle } from 'react-feather'
-import { parseThemeColor } from '../../theme'
+import { parseThemeColor } from 'theme'
 
 export const AlertIcon = styled(AlertTriangle)`
   stroke: ${({ color }) => parseThemeColor(color)};

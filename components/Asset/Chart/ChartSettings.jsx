@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import useStore, { getChartTimeInterval } from 'store/use-store'
-import { Container, ToggleWrapper, ToggleInput, ToggleBtn } from './chart-settings.css'
 import useTranslation from 'next-translate/useTranslation'
-import styled from "styled-components";
-import Button from "../../../Button";
-import {lighten} from "polished";
+import styled from 'styled-components'
+import Button from 'components/Button'
+import { lighten } from 'polished'
 
 export const Container = styled.div`
   display: flex;

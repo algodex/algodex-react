@@ -5,5 +5,5 @@ export const InputWrapper = styled.div`
   inset: 0;
   border: 1px solid transparent;
 `
-export { default as Checkbox } from './Checkbox'
+export { default as Checkbox } from './CheckboxInput'
 export { default as TextInput } from './TextInput'

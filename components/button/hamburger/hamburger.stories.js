@@ -12,7 +12,7 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Hamburger',
+  title: '@algodex/components/Button/Hamburger',
   component: Hamburger,
   decorators: [
     (Story) => (

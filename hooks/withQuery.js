@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
-import Spinner from 'components/spinner'
-import { default as DefaultError } from 'components/error'
+import Spinner from 'components/Spinner'
+import { default as DefaultError } from 'components/Error'
 
 /**
  * Base withQuery Abstraction

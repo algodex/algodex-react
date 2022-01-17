@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '../../test/test-utils'
+import { render } from 'test/test-utils'
 import {
   DEMO_CHART_DATA,
   DEMO_VOLUME_DATA,
@@ -8,7 +8,7 @@ import {
   DEMO_VOLUME_AMOUNT,
   DEMO_DAILY_CHANGE_PERCENT,
   DEMO_OHLC
-} from './demo'
+} from 'spec/Chat'
 import Chart from '.'
 
 const DEMO_SPREAD_AMOUNT = parseFloat(

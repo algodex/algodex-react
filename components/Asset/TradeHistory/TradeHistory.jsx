@@ -1,5 +1,5 @@
 import Spinner from 'components/Spinner'
-import Error from 'components/error'
+import Error from 'components/Error'
 import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
 import { useAssetTradeHistoryQuery } from 'hooks/useAlgodex'

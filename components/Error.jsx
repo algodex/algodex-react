@@ -29,15 +29,16 @@ const Message = styled.p`
  * @param {string} props.color Component Color
  * @param {boolean} props.flex Enable Flex
  * @param {string} props.message Display Message
+ * @param {JSXElement} props.Icon Icon Component to Render
  * @returns {JSX.Element}
  * @constructor
  */
-function Error({ size, color, flex, message }) {
+function Error({ size, color, flex, message, Icon }) {
   const showMsg = message?.length > 0
 
   return flex ? (
     <FlexContainer>
-      <AlertIcon size={size} color={color} />
+      <Icon size={size} color={color} />
       {showMsg && (
         <Message color={color} flex={flex}>
           {message}
@@ -46,7 +47,7 @@ function Error({ size, color, flex, message }) {
     </FlexContainer>
   ) : (
     <Message color={color} flex={flex}>
-      <AlertIcon size={1.5} color={color} />
+      <Icon size={size} color={color} />
       {message}
     </Message>
   )
@@ -56,13 +57,16 @@ Error.propTypes = {
   size: PropTypes.number,
   color: PropTypes.string,
   message: PropTypes.string,
-  flex: PropTypes.bool
+  flex: PropTypes.bool,
+  Icon: PropTypes.element
 }
 
 Error.defaultProps = {
-  size: 4,
+  size: 1.5,
   color: 'gray.600',
-  flex: false
+  flex: false,
+  message: 'Something went wrong!',
+  Icon: AlertIcon
 }
 
 export default Error

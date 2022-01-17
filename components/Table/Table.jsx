@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import styled from 'styled-components'
 import { rgba } from 'polished'
-import Icon from 'components/icon'
+import Icon from 'components/Icon'
 
 export const SortIcon = styled(Icon)`
   position: relative;
@@ -82,11 +82,17 @@ export const Container = styled.div`
 `
 
 /**
- * WARNING! This is also an Assets Table!
- * @param initialState
- * @param onStateChange
- * @param columns
- * @param data
+ * Table Component
+ *
+ * Uses react-table and provides an easy way to create a tables
+ *
+ * @see https://react-table.tanstack.com/
+ *
+ * @param {object} props Component Properties
+ * @param {object} props.initialState Initial <Table> State
+ * @param {function} props.onStateChange Triggered when the tableState is mutated
+ * @param {Array<Column>} props.columns Array of columns for the <Table>
+ * @param {Array<any>>} props.data Data to display in the <Table>
  * @returns {JSX.Element}
  * @constructor
  */
@@ -115,10 +121,10 @@ function Table({ initialState, onStateChange, columns, data }) {
     <Container>
       <table {...getTableProps()}>
         <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+          {headerGroups.map((headerGroup, rowKey) => (
+            <tr key={rowKey} {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column, headerKey) => (
+                <th key={headerKey} {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
                   {!column.disableSortBy && (
                     <SortIcon
@@ -134,12 +140,16 @@ function Table({ initialState, onStateChange, columns, data }) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {rows.map((row, rowKey) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              <tr key={rowKey} {...row.getRowProps()}>
+                {row.cells.map((cell, cellKey) => {
+                  return (
+                    <td key={cellKey} {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </td>
+                  )
                 })}
               </tr>
             )

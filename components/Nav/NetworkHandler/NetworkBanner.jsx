@@ -1,7 +1,7 @@
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import { mdiWindowClose } from '@mdi/js'
-import theme from '../../theme'
+import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 
 const NetworkBanner = ({

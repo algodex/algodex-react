@@ -1,1 +1,3 @@
-export { withSearchResults, useSearchResults } from 'hooks/Algodex'
+export * from './useAlgodex'
+export * from './useAlgoExplorer'
+export * from './useEvents'

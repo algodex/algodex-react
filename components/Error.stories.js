@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Error',
+  title: '@algodex/components/Error',
   component: Error,
   argTypes: {
     color: {
@@ -51,9 +51,9 @@ export default {
 const Template = (args) => <Error {...args} />
 
 export const Default = Template.bind({})
-Default.args = {
-  color: 'gray.600',
-  flex: false,
-  size: 4,
-  message: 'Error loading data'
+Default.args = {}
+export const Flex = Template.bind({})
+Flex.args = {
+  flex: true,
+  size: 8
 }

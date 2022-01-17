@@ -1,16 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
 import Spinner from './Spinner'
-
-const Container = styled.div`
-  width: 320px;
-  height: 320px;
-  background: ${({ theme }) => theme.colors.gray['800']};
-  display: flex;
-`
+import { FlexColumn } from './Layout'
 
 export default {
-  title: 'Spinner',
+  title: '@algodex/components/Spinner',
   component: Spinner,
   argTypes: {
     color: {
@@ -38,9 +31,9 @@ export default {
   },
   decorators: [
     (Story) => (
-      <Container>
+      <FlexColumn>
         <Story />
-      </Container>
+      </FlexColumn>
     )
   ]
 }
