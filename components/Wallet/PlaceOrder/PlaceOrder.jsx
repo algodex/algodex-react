@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser'
-
+import styled from 'styled-components'
 import useStore, { useStorePersisted } from 'store/use-store'
 import PropTypes from 'prop-types'
 import { useAssetOrdersQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
@@ -40,6 +40,16 @@ import { Info } from 'react-feather'
 import Icon from 'components/Icon'
 import Tooltip from 'components/Tooltip'
 
+export const PlaceOrderSection = styled.section`
+  grid-area: 1 / 1 / 3 / 3;
+  border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  display: ${({ active }) => (active ? 'block' : 'none')};
+  overflow: hidden scroll;
+  @media (min-width: 996px) {
+    grid-area: trade;
+    display: flex;
+  }
+`
 const DEFAULT_ORDER = {
   type: 'buy',
   price: '',
@@ -485,7 +495,8 @@ function PlaceOrder({ asset, wallet }) {
   const { t } = useTranslation('place-order')
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const isSignedIn = typeof wallet !== 'undefined' && wallet.isSignedIn
+  // const isSignedIn = typeof wallet !== 'undefined' && wallet.isSignedIn
+  const isSignedIn = useStore((state) => state.isSignedIn)
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
 
   const orderBook = useMemo(
@@ -497,16 +508,18 @@ function PlaceOrder({ asset, wallet }) {
   )
   if (!isSignedIn) {
     return (
-      <Container data-testid="place-order">
-        <Header>
-          <HeaderCaps color="gray.500" mb={1}>
-            {t('place-order')}
-          </HeaderCaps>
-        </Header>
-        <BodyCopy color="gray.500" textAlign="center" m={16}>
-          {t('not-signed-in')}
-        </BodyCopy>
-      </Container>
+      <PlaceOrderSection>
+        <Container data-testid="place-order">
+          <Header>
+            <HeaderCaps color="gray.500" mb={1}>
+              {t('place-order')}
+            </HeaderCaps>
+          </Header>
+          <BodyCopy color="gray.500" textAlign="center" m={16}>
+            {t('not-signed-in')}
+          </BodyCopy>
+        </Container>
+      </PlaceOrderSection>
     )
   }
   if (isLoading) {
@@ -517,13 +530,14 @@ function PlaceOrder({ asset, wallet }) {
   }
 
   return (
-    <div>Ooooff</div>
-    // <PlaceOrderView
-    //   asset={asset}
-    //   wallets={wallets}
-    //   activeWalletAddress={activeWalletAddress}
-    //   orderBook={orderBook}
-    // />
+    <PlaceOrderSection>
+      <PlaceOrderView
+        asset={asset}
+        wallets={wallets}
+        activeWalletAddress={activeWalletAddress}
+        orderBook={orderBook}
+      />
+    </PlaceOrderSection>
   )
 }
 

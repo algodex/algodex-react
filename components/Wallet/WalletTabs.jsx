@@ -6,15 +6,15 @@ import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-export const WalletSection = styled.section`
-  grid-area: 1 / 1 / 3 / 3;
-  border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
+export const WalletOrdersSection = styled.section`
+  border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  @media (min-width: 1024px) and (orientation: landscape) {
+    border-top: none;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
   display: ${({ active }) => (active ? 'flex' : 'none')};
-
   @media (min-width: 996px) {
-    grid-area: wallet;
+    grid-area: orders;
     display: flex;
   }
 `
@@ -40,7 +40,7 @@ function WalletTabs({ initialPanel }) {
   }
 
   return (
-    <WalletSection>
+    <WalletOrdersSection>
       <Container>
         <Header>
           <Tab
@@ -64,7 +64,7 @@ function WalletTabs({ initialPanel }) {
         </Header>
         {renderPanel(selectedPanel)}
       </Container>
-    </WalletSection>
+    </WalletOrdersSection>
   )
 }
 

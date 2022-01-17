@@ -16,7 +16,20 @@ import TablePriceHeader from 'components/Table/PriceHeader'
 import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
-
+export const AssetOrderBookSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  @media (min-width: 1024px) and (orientation: landscape) {
+    border-right: none;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
+  display: ${({ active }) => (active ? 'flex' : 'none')};
+  @media (min-width: 996px) {
+    grid-area: book;
+    display: flex;
+  }
+`
 export const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -354,36 +367,38 @@ function OrderBookView({ asset, sellData, buyData }) {
     })
   }
   return (
-    <Container>
-      <HeaderCaps color="gray.500" mb={1}>
-        {t('order-book')}
-      </HeaderCaps>
-      <br></br>
-      <Header>
-        <TablePriceHeader />
-        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t('amount')}
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t('total')}
-        </BodyCopyTiny>
-      </Header>
+    <AssetOrderBookSection>
+      <Container>
+        <HeaderCaps color="gray.500" mb={1}>
+          {t('order-book')}
+        </HeaderCaps>
+        <br></br>
+        <Header>
+          <TablePriceHeader />
+          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            {t('amount')}
+          </BodyCopyTiny>
+          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            {t('total')}
+          </BodyCopyTiny>
+        </Header>
 
-      <SellOrders>
-        <OrdersWrapper>{renderOrders(sellData, 'sell')}</OrdersWrapper>
-      </SellOrders>
+        <SellOrders>
+          <OrdersWrapper>{renderOrders(sellData, 'sell')}</OrdersWrapper>
+        </SellOrders>
 
-      <CurrentPrice>
-        {isLoading && <Spinner flex />}
-        {!isLoading && (
-          <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
-        )}
-      </CurrentPrice>
+        <CurrentPrice>
+          {isLoading && <Spinner flex />}
+          {!isLoading && (
+            <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
+          )}
+        </CurrentPrice>
 
-      <BuyOrders>
-        <OrdersWrapper>{renderOrders(buyData, 'buy')}</OrdersWrapper>
-      </BuyOrders>
-    </Container>
+        <BuyOrders>
+          <OrdersWrapper>{renderOrders(buyData, 'buy')}</OrdersWrapper>
+        </BuyOrders>
+      </Container>
+    </AssetOrderBookSection>
   )
 }
 

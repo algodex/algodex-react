@@ -10,7 +10,17 @@ import useTranslation from 'next-translate/useTranslation'
 import Icon from 'components/Icon'
 import Big from 'big.js'
 import dayjs from 'dayjs'
-
+const AssetTradeHistorySection = styled.section`
+  display: flex;
+  flex-direction: column;
+  display: ${({ active }) => (active ? 'flex' : 'none')};
+  height: calc(100% - 50px);
+  @media (min-width: 996px) {
+    grid-area: history;
+    display: flex;
+    height: inherit;
+  }
+`
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -147,32 +157,34 @@ function TradeHistoryView(props) {
   }
 
   return (
-    <Container>
-      <HeaderCaps color="gray.500" mb={1}>
-        {t('trade-history')}
-      </HeaderCaps>
-      <br></br>
-      <Header>
-        <PriceHeader />
-        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t('amount')}
-        </BodyCopyTiny>
-        <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-          {t('time')}
-        </BodyCopyTiny>
-      </Header>
-      <Trades>
-        <TradesWrapper>
-          {hasTradeHistory ? (
-            renderHistory()
-          ) : (
-            <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
-              {t('no-trades-completed')}
-            </BodyCopyTiny>
-          )}
-        </TradesWrapper>
-      </Trades>
-    </Container>
+    <AssetTradeHistorySection>
+      <Container>
+        <HeaderCaps color="gray.500" mb={1}>
+          {t('trade-history')}
+        </HeaderCaps>
+        <br></br>
+        <Header>
+          <PriceHeader />
+          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            {t('amount')}
+          </BodyCopyTiny>
+          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            {t('time')}
+          </BodyCopyTiny>
+        </Header>
+        <Trades>
+          <TradesWrapper>
+            {hasTradeHistory ? (
+              renderHistory()
+            ) : (
+              <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
+                {t('no-trades-completed')}
+              </BodyCopyTiny>
+            )}
+          </TradesWrapper>
+        </Trades>
+      </Container>
+    </AssetTradeHistorySection>
   )
 }
 
