@@ -46,7 +46,7 @@ async function getEtagResponse(url) {
   if (urlToEtag[url]) {
     headers = { headers: { 'if-none-match': urlToEtag[url] } }
   }
-
+  DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, headers)
     .then((res) => {
