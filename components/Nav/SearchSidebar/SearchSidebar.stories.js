@@ -12,6 +12,6 @@ const Template = (args) => <Component {...args} />
 export const Default = Template.bind({})
 
 Default.args = {
-  assetPrice: 100
-  // components: { NavTable: NavSearchTable }
+  assetPrice: 100,
+  components: { NavTable: NavSearchTable }
 }
