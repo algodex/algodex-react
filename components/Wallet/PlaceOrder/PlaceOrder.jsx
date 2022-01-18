@@ -39,7 +39,7 @@ import OrderOptions from './order-options'
 import { Info } from 'react-feather'
 import Icon from 'components/Icon'
 import Tooltip from 'components/Tooltip'
-
+import { Section } from 'components/Section'
 export const PlaceOrderSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -491,7 +491,8 @@ PlaceOrderView.propTypes = {
   orderBook: PropTypes.object.isRequired
 }
 
-function PlaceOrder({ asset /*, wallet*/ }) {
+function PlaceOrder(props) {
+  const { asset /*, wallet*/ } = props
   const { t } = useTranslation('place-order')
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
@@ -508,7 +509,7 @@ function PlaceOrder({ asset /*, wallet*/ }) {
   )
   if (!isSignedIn) {
     return (
-      <PlaceOrderSection>
+      <Section {...props}>
         <Container data-testid="place-order">
           <Header>
             <HeaderCaps color="gray.500" mb={1}>
@@ -519,7 +520,7 @@ function PlaceOrder({ asset /*, wallet*/ }) {
             {t('not-signed-in')}
           </BodyCopy>
         </Container>
-      </PlaceOrderSection>
+      </Section>
     )
   }
   if (isLoading) {
@@ -530,14 +531,14 @@ function PlaceOrder({ asset /*, wallet*/ }) {
   }
 
   return (
-    <PlaceOrderSection>
+    <Section {...props}>
       <PlaceOrderView
         asset={asset}
         wallets={wallets}
         activeWalletAddress={activeWalletAddress}
         orderBook={orderBook}
       />
-    </PlaceOrderSection>
+    </Section>
   )
 }
 

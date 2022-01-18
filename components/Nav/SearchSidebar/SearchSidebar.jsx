@@ -8,11 +8,8 @@ import styled from 'styled-components'
 import useUserStore from 'store/use-user-state'
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
-export const Section = styled.section`
-  @media (min-width: 1536px) {
-    display: flex;
-  }
-`
+import { Section } from 'components/Section'
+
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -45,7 +42,8 @@ export const AssetsContainer = styled.div`
     box-shadow: none;
   }
 `
-export function NavSearchSidebar({ gridRef, algoPrice }) {
+export function NavSearchSidebar(props) {
+  const { gridRef, algoPrice } = props
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
@@ -134,7 +132,7 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize])
   return (
-    <Section>
+    <Section {...props}>
       <Container style={{ minHeight: '4rem' }} isActive={isActive}>
         <AssetsContainer
           style={{ width: '100%' }}

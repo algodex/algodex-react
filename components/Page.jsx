@@ -13,32 +13,13 @@ import useUserStore from 'store/use-user-state'
 
 const DEBUG = process.env.NEXT_DEBUG
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
 
   overflow: hidden;
   max-height: 100%;
   height: 100%;
-
-  @media (min-width: 996px) {
-    overflow: scroll;
-    max-height: none;
-  }
-`
-
-export const Ribbon = styled.div`
-  background: ;
-  padding: 1rem 0;
-  text-align: center;
-`
-
-export const Button = styled.button`
-  width: 100%;
-  background: white;
-  color: black;
-  padding: 9% 3%;
-  border-radius: 3px;
 `
 
 /**

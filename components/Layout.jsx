@@ -1,21 +1,22 @@
+import { useState, Fragment } from 'react'
 import styled from 'styled-components'
 import Button from 'components/Button'
 import SvgImage from 'components/SvgImage'
 import { HeaderLg, HeaderSm } from 'components/Typography'
 
-import { useRef, useState } from 'react'
-
+import { Controls as DefaultControls } from './Controls'
 import NavSearchSidebar from 'components/Nav/SearchSidebar'
-import WalletConnect from 'components/Wallet/Connect/WalletConnect'
 import WalletTabs from 'components/Wallet/WalletTabs'
-import PlaceOrder from 'components/Wallet/PlaceOrder'
+import AssetTradeHistory from 'components/Asset/TradeHistory'
+import AssetOrderBook from 'components/Asset/OrderBook'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
-import AssetOrderBook from './Asset/OrderBook'
-import TradeHistory from 'components/Asset/TradeHistory'
 
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import PlaceOrder from './Wallet/PlaceOrder'
+import WalletConnect from './Wallet/Connect/WalletConnect'
+
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -28,141 +29,56 @@ export const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
 `
-export const PlaceOrderSection = styled.section`
-  grid-area: 1 / 1 / 3 / 3;
 
-  border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'block' : 'none')};
-  overflow: hidden scroll;
-
-  @media (min-width: 996px) {
-    grid-area: trade;
-    display: flex;
-  }
-`
-
-export const ContentSection = styled.section`
+const DefaultContent = styled.section`
+  grid-area: content;
   position: relative;
+  border: dashed;
+  border-color: green;
   height: auto;
 `
 
-export const NavSidebarAndContentSection = styled.section`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+const Grid = styled.main`
   position: relative;
-
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-
-  display: ${({ active }) => (active ? 'grid' : 'none')};
-  grid-template-rows: 50px 1fr;
-
-  @media (min-width: 996px) {
-    display: grid;
-    grid-area: chart;
-  }
-
-  @media (min-width: 1536px) {
-    grid-template-columns: 365px 1fr;
-    grid-template-rows: 1fr;
-  }
-`
-
-export const AssetOrderBookSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: book;
-    display: flex;
-  }
-`
-
-export const WalletOrdersSection = styled.section`
-  border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-top: none;
-    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: orders;
-    display: flex;
-  }
-`
-
-export const MainWrapper = styled.div`
-  position: relative;
-  height: 100%;
-  min-height: 500px;
-
-  @media (min-width: 996px) {
-    min-height: 100%;
-    height: auto;
-  }
-`
-
-export const Main = styled.main`
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  overflow: hidden scroll;
+  grid-template-columns: none;
+  grid-auto-columns: auto;
+
+  overflow: hidden;
+
   height: 100%;
+  width: 100%;
 
-
-  @media (min-width: 996px) {
-    height: 100%;
-    min-height: 900px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 240px 200px 300px 300px;
+  @media (max-width: 1024px) {
+    grid-template-columns: auto;
+    grid-template-rows: 1000px 50px;
     grid-template-areas:
-      'chart chart wallet'
-      'chart chart trade'
-      'book history trade'
-      'orders orders trade';
-
-    & > section {
-      // for demo
-      &.demo {
-        border: 1px dotted rgba(255, 255, 255, 0.125);
-      }
-    }
+      'content content content'
+      'content content content'
+      'content content content'
+      'footer footer footer';
   }
 
   @media (min-width: 1024px) {
     grid-template-columns: 2fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
-      'chart book wallet'
-      'chart book trade'
-      'orders history trade';
+      'content controls controls'
+      'content controls controls'
+      'footer controls controls';
   }
 
   @media (min-width: 1536px) {
     grid-template-columns: 1fr 3fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
-      'chart chart book wallet'
-      'chart chart book trade'
-      'orders orders history trade';
+      'sidebar content controls controls'
+      'sidebar content controls controls'
+      'footer footer controls controls';
   }
-
-}
-
 `
 
-export const MobileMenu = styled.nav`
+const MobileMenu = styled.nav`
   height: 50px;
   width: 100%;
 
@@ -185,7 +101,7 @@ export const MobileMenu = styled.nav`
   }
 `
 
-export const MobileMenuButton = styled(Button)`
+const MobileMenuButton = styled(Button)`
   height: 100%;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.gray['800']};
@@ -195,36 +111,6 @@ export const MobileMenuButton = styled(Button)`
   min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
-`
-
-export const MobilePriceSection = styled.section`
-  grid-area: 1 / 1 / 2 / 2;
-  height: 50px;
-
-  display: ${({ active }) => (active ? 'grid' : 'none')};
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  justify-content: space-around;
-  align-content: center;
-  padding: 1.125rem;
-  h3 {
-    font-family: ${({ theme }) => theme.fontFamilies.body};
-    font-size: 1rem;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.gray[500]};
-    white-space: nowrap;
-
-    span {
-      color: ${({ theme }) => theme.colors.gray[100]};
-    }
-
-    display: flex;
-    align-items: center;
-
-    @media (min-width: 1024px) {
-      font-size: 1.25rem;
-    }
-  }
 `
 
 const Container = styled.div`
@@ -271,14 +157,22 @@ export function MobileInterface() {
 /**
  * @param asset
  * @param children
+ * @param components
  * @returns {JSX.Element}
  * @constructor
  */
-export function Layout({ asset, children }) {
+export function Layout({ asset, children, components }) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const {
+    Sidebar = NavSearchSidebar,
+    Footer = WalletTabs,
+    Controls = DefaultControls,
+    Content = DefaultContent
+  } = components
 
   const { t } = useTranslation('common')
-  const gridRef = useRef()
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 720
   const TABS = {
     CHART: 'CHART',
     BOOK: 'BOOK',
@@ -296,7 +190,7 @@ export function Layout({ asset, children }) {
    */
   useEvent('clicked', (data) => {
     if (data === 'asset') {
-      console.log('CLicked', data)
+      console.log('CLicked', data, activeMobile)
       setActiveMobile(TABS.CHART)
     }
     if (data === 'order') {
@@ -306,62 +200,71 @@ export function Layout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
+  const renderPanels = () => (
+    <Fragment>
+      <AssetTradeHistory area={!isMobile ? 'bottomLeft' : 'content'} asset={asset} />
+      <PlaceOrder asset={asset} area={!isMobile ? 'bottomRight' : 'content'} />
+      <AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />
+      <WalletConnect area={!isMobile ? 'topRight' : 'content'} />
+    </Fragment>
+  )
   return (
-    <MainWrapper>
-      <Main ref={gridRef}>
-        <WalletConnect active={activeMobile === TABS.WALLET} />
-        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder asset={asset} />
-        </PlaceOrderSection>
+    <Grid>
+      <Sidebar area="sidebar" border="dashed" borderColor="blue" lgOnly={true} />
 
-        <NavSidebarAndContentSection active={activeMobile === TABS.CHART}>
-          <NavSearchSidebar style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
-          <ContentSection>{children}</ContentSection>
-        </NavSidebarAndContentSection>
+      <Footer area="footer" border="dashed" borderColor="purple" />
+      {!isMobile && (
+        <Content area="content" border="dashed" borderColor="green">
+          {children}
+        </Content>
+      )}
+      {isMobile ? (
+        renderPanels()
+      ) : (
+        <Controls area="controls" mdAndUp={true} border="dashed" borderColor="purple">
+          {renderPanels()}
+        </Controls>
+      )}
 
-        <AssetOrderBook asset={asset} active={activeMobile === TABS.BOOK} />
-        <TradeHistory asset={asset} active={activeMobile === TABS.ORDERS} />
-        <WalletTabs active={activeMobile === TABS.ORDERS} />
-
-        <MobileMenu>
-          <ul>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-CHART').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.CHART)}
-              >
-                {t('mobilefooter-CHART')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-BOOK').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.BOOK)}
-              >
-                {t('mobilefooter-BOOK')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-TRADE').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.TRADE)}
-              >
-                {t('mobilefooter-TRADE')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-ORDERS').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.ORDERS)}
-              >
-                {t('mobilefooter-ORDERS')}
-              </MobileMenuButton>
-            </li>
-            {/*
+      <MobileMenu>
+        <ul>
+          <li>
+            <MobileMenuButton
+              characterLength={t('mobilefooter-CHART').length}
+              type="button"
+              onClick={() => setActiveMobile(TABS.CHART)}
+            >
+              {t('mobilefooter-CHART')}
+            </MobileMenuButton>
+          </li>
+          <li>
+            <MobileMenuButton
+              characterLength={t('mobilefooter-BOOK').length}
+              type="button"
+              onClick={() => setActiveMobile(TABS.BOOK)}
+            >
+              {t('mobilefooter-BOOK')}
+            </MobileMenuButton>
+          </li>
+          <li>
+            <MobileMenuButton
+              characterLength={t('mobilefooter-TRADE').length}
+              type="button"
+              onClick={() => setActiveMobile(TABS.TRADE)}
+            >
+              {t('mobilefooter-TRADE')}
+            </MobileMenuButton>
+          </li>
+          <li>
+            <MobileMenuButton
+              characterLength={t('mobilefooter-ORDERS').length}
+              type="button"
+              onClick={() => setActiveMobile(TABS.ORDERS)}
+            >
+              {t('mobilefooter-ORDERS')}
+            </MobileMenuButton>
+          </li>
+          {/*
             <li>
               // Trade history. Disable for now until it is refactored into the Orders tab
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
@@ -369,23 +272,33 @@ export function Layout({ asset, children }) {
               </MobileMenuButton>
             </li>
             */}
-            <li>
-              <MobileMenuButton
-                type="button"
-                characterLength={t('mobilefooter-WALLET').length}
-                onClick={() => setActiveMobile(TABS.WALLET)}
-              >
-                {t('mobilefooter-WALLET')}
-              </MobileMenuButton>
-            </li>
-          </ul>
-        </MobileMenu>
-      </Main>
-    </MainWrapper>
+          <li>
+            <MobileMenuButton
+              type="button"
+              characterLength={t('mobilefooter-WALLET').length}
+              onClick={() => setActiveMobile(TABS.WALLET)}
+            >
+              {t('mobilefooter-WALLET')}
+            </MobileMenuButton>
+          </li>
+        </ul>
+      </MobileMenu>
+    </Grid>
   )
 }
 Layout.propTypes = {
   asset: PropTypes.object,
-  children: PropTypes.any
+  children: PropTypes.any,
+  components: PropTypes.shape({
+    Controls: PropTypes.elementType,
+    Sidebar: PropTypes.elementType,
+    Footer: PropTypes.elementType,
+    Content: PropTypes.elementType
+  })
+}
+Layout.defaultProps = {
+  components: {
+    Controls: DefaultControls
+  }
 }
 export default Layout

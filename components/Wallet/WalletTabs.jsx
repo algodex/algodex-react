@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Section } from '../Section'
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -18,7 +19,8 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
-function WalletTabs({ initialPanel }) {
+function WalletTabs(props) {
+  const { initialPanel } = props
   const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -40,7 +42,7 @@ function WalletTabs({ initialPanel }) {
   }
 
   return (
-    <WalletOrdersSection>
+    <Section {...props}>
       <Container>
         <Header>
           <Tab
@@ -64,7 +66,7 @@ function WalletTabs({ initialPanel }) {
         </Header>
         {renderPanel(selectedPanel)}
       </Container>
-    </WalletOrdersSection>
+    </Section>
   )
 }
 

@@ -16,21 +16,9 @@ import TablePriceHeader from 'components/Table/PriceHeader'
 import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
-export const AssetOrderBookSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-  @media (min-width: 996px) {
-    grid-area: book;
-    display: flex;
-  }
-`
-export const FirstOrderContainer = styled.div`
+import { Section } from '../../Section'
+
+const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
@@ -39,7 +27,7 @@ export const FirstOrderContainer = styled.div`
   padding: 0.875rem 0 1rem;
 `
 
-export const EmptyState = styled.div`
+const EmptyState = styled.div`
   position: relative;
   flex: 1 1 0%;
   display: flex;
@@ -50,7 +38,7 @@ export const EmptyState = styled.div`
   text-align: center;
 `
 
-export const Arrow = styled.div`
+const Arrow = styled.div`
   display: none;
   position: absolute;
   top: 50%;
@@ -74,7 +62,7 @@ export const Arrow = styled.div`
   }
 `
 
-export const PairSlash = styled.span`
+const PairSlash = styled.span`
   letter-spacing: 0.125rem;
 `
 function FirstOrderMsg(props) {
@@ -303,7 +291,8 @@ OrderBookPrice.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-function OrderBookView({ asset, sellData, buyData }) {
+function OrderBookView(props) {
+  const { asset, sellData, buyData } = props
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
@@ -367,7 +356,7 @@ function OrderBookView({ asset, sellData, buyData }) {
     })
   }
   return (
-    <AssetOrderBookSection>
+    <Section {...props}>
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('order-book')}
@@ -398,7 +387,7 @@ function OrderBookView({ asset, sellData, buyData }) {
           <OrdersWrapper>{renderOrders(buyData, 'buy')}</OrdersWrapper>
         </BuyOrders>
       </Container>
-    </AssetOrderBookSection>
+    </Section>
   )
 }
 
@@ -420,7 +409,8 @@ OrderBookView.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function OrderBook({ asset /* onClicked, onChange */ }) {
+export default function OrderBook(props) {
+  const { asset /* onClicked, onChange */ } = props
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
   const isSignedIn = useStore((state) => state.isSignedIn)
@@ -459,7 +449,7 @@ export default function OrderBook({ asset /* onClicked, onChange */ }) {
   }
 
   // Return OrderBook
-  return <OrderBookView asset={asset} buyData={buyOrders} sellData={sellOrders} />
+  return <OrderBookView buyData={buyOrders} sellData={sellOrders} {...props} />
 }
 OrderBook.propTypes = {
   asset: PropTypes.object.isRequired,
