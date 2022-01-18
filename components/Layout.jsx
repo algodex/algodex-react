@@ -78,6 +78,28 @@ export const Grid = styled.main`
     // Without footer we use a three column layout and return
     if (withoutFooter) {
       return css`
+        @media (max-width: 996px) {
+          grid-template-columns: 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas:
+            'content'
+            'footer';
+        }
+        @media (min-width: 996px) {
+          grid-template-columns: 1fr 1fr 280px;
+          grid-template-rows: 240px 200px 300px 300px;
+          grid-template-areas:
+            'content content controls'
+            'content content controls'
+            'footer footer controls'
+            'footer footer controls';
+        }
+
+        @media (min-width: 1024px) {
+          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas: 'content controls controls';
+        }
         @media (min-width: 1536px) {
           grid-template-columns: 1fr 3fr 1fr 1fr;
           grid-template-rows: 100%;
@@ -87,6 +109,30 @@ export const Grid = styled.main`
     }
     if (withFooterOnly) {
       return css`
+        @media (max-width: 996px) {
+          grid-template-columns: 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas:
+            'content'
+            'footer';
+        }
+        @media (min-width: 996px) {
+          grid-template-columns: 1fr 1fr 280px;
+          grid-template-rows: 240px 200px 300px 300px;
+          grid-template-areas:
+            'content content controls'
+            'content content controls'
+            'footer footer controls'
+            'footer footer controls';
+        }
+        @media (min-width: 1024px) {
+          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-template-areas:
+            'content controls controls'
+            'content controls controls'
+            'footer footer footer';
+        }
         @media (min-width: 1536px) {
           grid-template-columns: 1fr 3fr 1fr 1fr;
           grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -96,10 +142,34 @@ export const Grid = styled.main`
         }
       `
     }
+
     if (withoutSidebar) {
       // Expanded Controls
       if (withExpandedControls) {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer controls controls';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -110,6 +180,30 @@ export const Grid = styled.main`
         `
       } else {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer footer footer';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -122,6 +216,30 @@ export const Grid = styled.main`
     }
     if (withSidebarOnly) {
       return css`
+        @media (max-width: 996px) {
+          grid-template-columns: 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas:
+            'content'
+            'footer';
+        }
+        @media (min-width: 996px) {
+          grid-template-columns: 1fr 1fr 280px;
+          grid-template-rows: 240px 200px 300px 300px;
+          grid-template-areas:
+            'content content controls'
+            'content content controls'
+            'footer footer controls'
+            'footer footer controls';
+        }
+        @media (min-width: 1024px) {
+          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-template-areas:
+            'content controls controls'
+            'content controls controls'
+            'footer footer footer';
+        }
         @media (min-width: 1536px) {
           grid-template-columns: 1fr 3fr 1fr 1fr;
           grid-template-rows: 100%;
@@ -133,6 +251,30 @@ export const Grid = styled.main`
     if (withoutControls) {
       if (withExpandedSidebar) {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer footer footer';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -143,6 +285,30 @@ export const Grid = styled.main`
         `
       } else {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer footer footer';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -156,6 +322,30 @@ export const Grid = styled.main`
 
     if (withControlsOnly) {
       return css`
+        @media (max-width: 996px) {
+          grid-template-columns: 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas:
+            'content'
+            'footer';
+        }
+        @media (min-width: 996px) {
+          grid-template-columns: 1fr 1fr 280px;
+          grid-template-rows: 240px 200px 300px 300px;
+          grid-template-areas:
+            'content content controls'
+            'content content controls'
+            'footer footer controls'
+            'footer footer controls';
+        }
+        @media (min-width: 1024px) {
+          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-template-areas:
+            'content controls controls'
+            'content controls controls'
+            'footer footer footer';
+        }
         @media (min-width: 1536px) {
           grid-template-columns: 1fr 3fr 1fr 1fr;
           grid-template-rows: 100%;
@@ -166,6 +356,30 @@ export const Grid = styled.main`
     if (withEverything) {
       if (withExpandedSidebar && withExpandedControls) {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer footer footer';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -177,6 +391,30 @@ export const Grid = styled.main`
       }
       if (withExpandedSidebar && !withExpandedControls) {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer footer footer';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -188,6 +426,30 @@ export const Grid = styled.main`
       }
       if (!withExpandedSidebar && withExpandedControls) {
         return css`
+          @media (max-width: 996px) {
+            grid-template-columns: 1fr;
+            grid-template-rows: 100%;
+            grid-template-areas:
+              'content'
+              'footer';
+          }
+          @media (min-width: 996px) {
+            grid-template-columns: 1fr 1fr 280px;
+            grid-template-rows: 240px 200px 300px 300px;
+            grid-template-areas:
+              'content content controls'
+              'content content controls'
+              'footer footer controls'
+              'footer footer controls';
+          }
+          @media (min-width: 1024px) {
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+              'content controls controls'
+              'content controls controls'
+              'footer controls controls';
+          }
           @media (min-width: 1536px) {
             grid-template-columns: 1fr 3fr 1fr 1fr;
             grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -200,6 +462,30 @@ export const Grid = styled.main`
 
       // Return unexpanded
       return css`
+        @media (max-width: 996px) {
+          grid-template-columns: 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas:
+            'content'
+            'footer';
+        }
+        @media (min-width: 996px) {
+          grid-template-columns: 1fr 1fr 280px;
+          grid-template-rows: 240px 200px 300px 300px;
+          grid-template-areas:
+            'content content controls'
+            'content content controls'
+            'footer footer controls'
+            'footer footer controls';
+        }
+        @media (min-width: 1024px) {
+          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-template-areas:
+            'content controls controls'
+            'content controls controls'
+            'footer footer footer';
+        }
         @media (min-width: 1536px) {
           grid-template-columns: 1fr 3fr 1fr 1fr;
           grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
@@ -212,6 +498,30 @@ export const Grid = styled.main`
 
     if (withoutEverything) {
       return css`
+        @media (max-width: 996px) {
+          grid-template-columns: 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas:
+            'content'
+            'footer';
+        }
+        @media (min-width: 996px) {
+          grid-template-columns: 1fr 1fr 280px;
+          grid-template-rows: 240px 200px 300px 300px;
+          grid-template-areas:
+            'content content controls'
+            'content content controls'
+            'footer footer controls'
+            'footer footer controls';
+        }
+        @media (min-width: 1024px) {
+          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+          grid-template-areas:
+            'content controls controls'
+            'content controls controls'
+            'footer footer footer';
+        }
         @media (min-width: 1536px) {
           grid-template-columns: 1fr 3fr 1fr 1fr;
           grid-template-rows: 100%;
@@ -328,7 +638,10 @@ export function Layout({
 
   const { t } = useTranslation('common')
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 720
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 996
+  const isMedium = typeof window !== 'undefined' && window.innerWidth >= 996
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 996
+
   const TABS = {
     CHART: 'CHART',
     BOOK: 'BOOK',
