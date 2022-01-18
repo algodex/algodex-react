@@ -1,20 +1,19 @@
+import { AssetId, AssetName, AssetNameBlock, NameVerifiedWrapper } from 'components/Asset'
 import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
-import { useEffect, useMemo } from 'react'
-import { useFlexLayout, useRowSelect, useSortBy, useTable } from 'react-table'
-import { AssetNameBlock, AssetId, AssetName, NameVerifiedWrapper } from 'components/Asset'
+import { useMemo, useCallback } from 'react'
+import Table from 'components/Table'
 import AlgoIcon from 'components/Icon'
 import Icon from '@mdi/react'
-import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { flatten } from 'lodash'
+import { floatToFixed } from 'services/display'
+import { rgba } from 'polished'
+import styled from 'styled-components'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
-import styled from 'styled-components'
-import { rgba } from 'polished'
-import { floatToFixed } from 'services/display'
 
 /**
  * Map a Query Result to a Search Result
@@ -279,47 +278,7 @@ const Error = ({ message }) => <BodyCopySm color="gray.400">Error: {message}</Bo
 Error.propTypes = {
   message: PropTypes.string
 }
-const AssetNameCell = ({ value, row }) => {
-  return (
-    <div className="flex items-start">
-      <div className="flex flex-col">
-        <div>
-          <AssetNameBlock>
-            <AssetName>{value}</AssetName>
-            <PairSlash>{`/`}</PairSlash>
-            <NameVerifiedWrapper>
-              ALGO
-              {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
-            </NameVerifiedWrapper>
-          </AssetNameBlock>
-        </div>
-        <br />
-        <div className="flex item-center -mt-3">
-          <div className="mr-1">
-            <AssetId>{row.original.id}</AssetId>
-          </div>
-          {row.original.verified && (
-            <Icon
-              path={mdiCheckDecagram}
-              title="Verified asset"
-              size={0.5}
-              color={theme.colors.gray['500']}
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
 
-AssetNameCell.propTypes = {
-  value: PropTypes.any,
-  row: PropTypes.object
-}
-const AssetPriceCell = ({ value }) => <AssetPrice>{value}</AssetPrice>
-AssetPriceCell.propTypes = {
-  value: PropTypes.any
-}
 const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
     if (value === null) {
@@ -337,7 +296,6 @@ AssetChangeCell.propTypes = {
 }
 
 const NavSearchTable = ({
-  searchHeight,
   isActive,
   onAssetFocus,
   onAssetLeave,
@@ -352,7 +310,7 @@ const NavSearchTable = ({
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
-  const { t, lang } = useTranslation('assets')
+  const { t } = useTranslation('assets')
 
   /**
    * Handle Search Data
@@ -376,6 +334,79 @@ const NavSearchTable = ({
       return assets.map(mapToSearchResults)
     }
   }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
+
+  const AssetPriceCell = useCallback(
+    ({ value }) => {
+      return (
+        <AssetPrice>
+          {value}
+          <br />
+          {value != '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
+        </AssetPrice>
+      )
+    },
+    [algoPrice]
+  )
+  AssetPriceCell.propTypes = {
+    value: PropTypes.any
+  }
+
+  // const AssetNameCell = ({ value, row }) => {
+
+  // }
+
+  const AssetNameCell = useCallback(
+    ({ value, row }) => {
+      return (
+        <div className="flex items-center">
+          <div className="flex flex-col">
+            <div className="flex items-center">
+              <Icon
+                role="button"
+                onClick={() => toggleFavoritesFn(row.original?.id)}
+                onKeyDown={() => toggleFavoritesFn(row.original?.id)}
+                tabIndex={0}
+                className="mr-1"
+                path={mdiStar}
+                title="Favorite item"
+                size={0.5}
+                style={{ minWidth: '0.75rem' }}
+                color={handleFavoritesFn(row?.original?.id)}
+              />
+              <AssetNameBlock>
+                <AssetName>{value}</AssetName>
+                <PairSlash>{`/`}</PairSlash>
+                <NameVerifiedWrapper>
+                  ALGO
+                  {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
+                </NameVerifiedWrapper>
+              </AssetNameBlock>
+            </div>
+            <br />
+            <div className="flex item-center -mt-3">
+              <div className="ml-3">
+                <AssetId>{row.original.id}</AssetId>
+              </div>
+              {row.original.verified && (
+                <Icon
+                  path={mdiCheckDecagram}
+                  title="Verified asset"
+                  size={0.5}
+                  color={theme.colors.gray['500']}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )
+    },
+    [handleFavoritesFn, toggleFavoritesFn]
+  )
+
+  AssetNameCell.propTypes = {
+    value: PropTypes.any,
+    row: PropTypes.object
+  }
 
   /**
    * React-Table Columns
@@ -434,13 +465,16 @@ const NavSearchTable = ({
         Cell: AssetChangeCell
       }
     ],
-    [lang, isFilteringByFavorites]
+    [isFilteringByFavorites, AssetNameCell, AssetPriceCell, filterByFavoritesFn, t]
   )
 
-  const filterByFavoritesFn = (e) => {
-    e.stopPropagation()
-    setIsFilteringByFavorites(!isFilteringByFavorites)
-  }
+  const filterByFavoritesFn = useCallback(
+    (e) => {
+      e.stopPropagation()
+      setIsFilteringByFavorites(!isFilteringByFavorites)
+    },
+    [setIsFilteringByFavorites, isFilteringByFavorites]
+  )
 
   /**
    *
@@ -457,135 +491,38 @@ const NavSearchTable = ({
       }
     },
     onMouseEnter: () => {
-      onAssetFocus(row.original)
+      onAssetFocus(row.original) // eslint-disable-line
     },
     onMouseLeave: onAssetLeave
   })
 
-  const {
-    state: tableState,
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow
-  } = useTable(
-    {
-      columns,
-      // data: Object.keys(assets).map((key) => assets[key]),
-      data: searchResultData,
-      autoResetSortBy: false,
-      initialState: searchState
+  const toggleFavoritesFn = useCallback(
+    (assetId) => {
+      toggleFavourite(assetId)
     },
-    useSortBy,
-    useRowSelect,
-    useFlexLayout
+    [toggleFavourite]
   )
-  useEffect(() => {
-    setSearchState(tableState)
-  }, [tableState, setSearchState])
 
-  const toggleFavoritesFn = (assetId) => {
-    toggleFavourite(assetId)
-  }
-
-  const handleFavoritesFn = (id) => {
-    return favoritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
-  }
-
-  const renderTableData = (cell, idx) => {
-    if (idx === 0) {
-      return (
-        <TableData
-          className="flex item-center"
-          key={idx}
-          style={{
-            boxSizing: 'border-box',
-            flex: '45 0 auto',
-            minWidth: '45px',
-            width: '45px'
-          }}
-        >
-          <Icon
-            role="button"
-            onClick={() => toggleFavoritesFn(cell?.row.original?.id)}
-            onKeyDown={() => toggleFavoritesFn(cell?.row.original?.id)}
-            tabIndex={0}
-            className="mr-1"
-            path={mdiStar}
-            title="Favorite item"
-            size={0.5}
-            style={{ minWidth: '0.75rem' }}
-            color={handleFavoritesFn(cell?.row?.original?.id)}
-          />
-          {cell.render('Cell')}
-        </TableData>
-      )
-    } else if (idx === 1) {
-      return (
-        <TableData key={idx} {...cell.getCellProps()}>
-          <span>{cell.render('Cell')}</span>
-          <br />
-          {cell?.value != '--' ? <span>{(algoPrice * cell.value).toLocaleString()} USD</span> : ''}
-        </TableData>
-      )
-    } else {
-      return (
-        <TableData key={idx} {...cell.getCellProps()}>
-          {cell.render('Cell')}
-        </TableData>
-      )
-    }
-  }
+  const handleFavoritesFn = useCallback(
+    (id) => {
+      return favoritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
+    },
+    [favoritesState]
+  )
 
   return (
     <TableWrapper className="mt-12">
-      <TableContainer>
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup, h) => (
-              <tr key={h} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, c) => (
-                  <TableHeader
-                    key={c}
-                    searchHeight={searchHeight}
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                  >
-                    {column.render('Header')}
-
-                    {!column.isSorted ? (
-                      <SortIcon use="sortNone" size={0.625} />
-                    ) : column.isSortedDesc ? (
-                      <SortIcon use="sortDesc" size={0.625} />
-                    ) : (
-                      <SortIcon use="sortAsc" size={0.625} />
-                    )}
-                  </TableHeader>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row, r) => {
-              prepareRow(row)
-              return (
-                <Link key={r} href={`/trade/${row.original.id}`}>
-                  <tr key={r} {...row.getRowProps(getRowProps(row))}>
-                    {row.cells.map((cell, rc) => {
-                      return renderTableData(cell, rc)
-                    })}
-                  </tr>
-                </Link>
-              )
-            })}
-          </tbody>
-        </table>
-      </TableContainer>
+      <Table
+        initialState={searchState}
+        onStateChange={(tableState) => setSearchState(tableState)}
+        getRowProps={getRowProps}
+        columns={columns}
+        data={searchResultData || []}
+      />
     </TableWrapper>
   )
 }
 NavSearchTable.propTypes = {
-  searchHeight: PropTypes.number,
   query: PropTypes.string.isRequired,
   assets: PropTypes.array.isRequired,
   isActive: PropTypes.bool,
