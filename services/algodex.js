@@ -41,11 +41,13 @@ async function getEtagResponse(url) {
     urlToLastResp = {}
   }
 
-  let headers = {}
-
+  const authToken = process.env.GEO_PASSWORD
+  const authHeader = `Bearer ${authToken}`
+  let headers = { headers: {Authorization: authHeader} }
   if (urlToEtag[url]) {
-    headers = { headers: { 'if-none-match': urlToEtag[url] } }
+    headers = { headers: { Authorization: authHeader, 'if-none-match': urlToEtag[url] } }
   }
+  DEBUG && console.debug({headers})
   DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, headers)
