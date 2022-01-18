@@ -17,7 +17,7 @@ const Container = styled.div`
 export default {
   title: '@algodex/components',
   component: Component,
-  argTypes:{
+  argTypes: {
     rowHeight: {
       control: { type: 'range', min: 0, max: 100 }
     }
@@ -34,7 +34,19 @@ export default {
 const Template = (args) => <Component {...args} />
 
 export const Layout = Template.bind({})
-Layout.parameters = { layout: 'fullscreen', controls: {include: ['rowHeight', 'sidebarCollapsed', 'sidebarExpanded', 'controlsCollapsed', 'controlsExpanded', 'footerCollapsed']} }
+Layout.parameters = {
+  layout: 'fullscreen',
+  controls: {
+    include: [
+      'rowHeight',
+      'sidebarCollapsed',
+      'sidebarExpanded',
+      'controlsCollapsed',
+      'controlsExpanded',
+      'footerCollapsed'
+    ]
+  }
+}
 Layout.args = {
   asset: {
     id: 15322902,

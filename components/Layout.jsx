@@ -38,25 +38,6 @@ const DefaultContent = styled.section`
   height: auto;
 `
 
-const medium = css`
-  @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-areas:
-      'content controls controls'
-      'content controls controls'
-      'footer controls controls';
-  }
-`
-const mobile = css`
-  grid-template-columns: auto;
-  grid-template-rows: 1000px 50px;
-  grid-template-areas:
-    'content content content'
-    'content content content'
-    'content content content'
-    'footer footer footer';
-`
 export const Grid = styled.main`
   position: relative;
   display: grid;
@@ -238,50 +219,7 @@ export const Grid = styled.main`
         }
       `
     }
-    // if (withExpandedControls && !withExpandedSidebar) {
-    //   return css`
-    //     @media (min-width: 1536px) {
-    //       grid-template-columns: 1fr 3fr 1fr 1fr;
-    //       grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
-    //       grid-template-areas:
-    //         'sidebar content controls controls'
-    //         'footer footer controls controls';
-    //     }
-    //   `
-    // }
 
-    // if (!withExpandedControls && !withExpandedSidebar) {
-    //   return css`
-    //     @media (min-width: 1536px) {
-    //       grid-template-columns: 1fr 3fr 1fr 1fr;
-    //       grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
-    //       grid-template-areas:
-    //         'sidebar content controls controls'
-    //         'footer footer footer footer';
-    //     }
-    //   `
-    // }
-    // if (withExpandedControls && !withExpandedSidebar && footer) {
-    //   return css`
-    //     @media (min-width: 1536px) {
-    //       grid-template-columns: 1fr 3fr 1fr 1fr;
-    //       grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
-    //       grid-template-areas:
-    //         'sidebar content controls controls'
-    //         'footer footer controls controls';
-    //     }
-    //   `
-    // }
-    //
-    // return css`
-    //   @media (min-width: 1536px) {
-    //     grid-template-columns: 1fr 3fr 1fr 1fr;
-    //     grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
-    //     grid-template-areas:
-    //       'sidebar content controls controls'
-    //       'footer footer controls controls';
-    //   }
-    // `
     throw new Error('No valid layout state!!!')
   }}
 `
@@ -389,20 +327,6 @@ export function Layout({
   } = components
 
   const { t } = useTranslation('common')
-  // const [rowHeight, setRowHeight] = useState(_rowHeight)
-  // const [sidebarCollapsed, setSidebarCollapsed] = useState(_sidebarCollapsed)
-  // const [controlsCollapsed, setControlsCollapsed] = useState(_controlsCollapsed)
-  // const [footerCollapsed, setFooterCollapsed] = useState(_footerCollapsed)
-  // Fake User Input for layouts
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     const temp = Math.floor(Math.random() * 100)
-  //     setRowHeight(temp < 35 ? temp + 35 : temp)
-  //     setSidebarCollapsed(!sidebarCollapsed)
-  //     setControlsCollapsed(!controlsCollapsed)
-  //   }, 5000)
-  //   return () => clearInterval(interval)
-  // }, [setRowHeight, setSidebarCollapsed, sidebarCollapsed, controlsCollapsed, setControlsCollapsed])
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 720
   const TABS = {
@@ -465,7 +389,7 @@ export function Layout({
         lgOnly={true}
       />
 
-      <Footer active={!footerCollapsed} area="footer" border="dashed" borderColor="purple" />
+      <Footer active={!footerCollapsed} area="footer" border="dashed" borderColor="white" />
       {!isMobile && (
         <Content area="content" border="dashed" borderColor="green">
           {children}
@@ -549,7 +473,9 @@ Layout.propTypes = {
   asset: PropTypes.object,
   rowHeight: PropTypes.number,
   sidebarCollapsed: PropTypes.bool,
+  onSidebarToggle: PropTypes.func,
   sidebarExpanded: PropTypes.bool,
+  onSidebarExpand: PropTypes.func,
   controlsCollapsed: PropTypes.bool,
   controlsExpanded: PropTypes.bool,
   footerCollapsed: PropTypes.bool,
@@ -562,8 +488,15 @@ Layout.propTypes = {
   })
 }
 Layout.defaultProps = {
+  rowHeight: 70,
+  sidebarCollapsed: false,
+  sidebarExpanded: false,
+  controlsCollapsed: false,
+  controlsExpanded: true,
+  footerCollapsed: false,
   components: {
-    Controls: DefaultControls
+    Controls: DefaultControls,
+    Footer: WalletTabs
   }
 }
 export default Layout
