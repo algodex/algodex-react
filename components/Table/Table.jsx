@@ -19,7 +19,7 @@ export const Container = styled.div`
     border-spacing: 0;
     border: none;
     width: 100%;
-    min-width: 600px;
+    // min-width: 600px;
     overflow: scroll;
 
     @media only (min-width: 996px) {
@@ -96,7 +96,7 @@ export const Container = styled.div`
  * @returns {JSX.Element}
  * @constructor
  */
-function Table({ initialState, onStateChange, columns, data }) {
+function Table({ initialState, onStateChange, columns, data, getRowProps }) {
   const {
     state: tableState,
     getTableProps,
@@ -143,7 +143,7 @@ function Table({ initialState, onStateChange, columns, data }) {
           {rows.map((row, rowKey) => {
             prepareRow(row)
             return (
-              <tr key={rowKey} {...row.getRowProps()}>
+              <tr key={rowKey} {...row.getRowProps(getRowProps(row))}>
                 {row.cells.map((cell, cellKey) => {
                   return (
                     <td key={cellKey} {...cell.getCellProps()}>
@@ -164,7 +164,14 @@ Table.propTypes = {
   initialState: PropTypes.any.isRequired,
   onStateChange: PropTypes.func.isRequired,
   columns: PropTypes.array.isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  getRowProps: PropTypes.func
+}
+
+Table.defaultProps = {
+  getRowProps: () => {
+    return {}
+  }
 }
 
 export default Table

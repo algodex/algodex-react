@@ -133,7 +133,7 @@ AssetInOrderCell.propTypes = { value: PropTypes.any }
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 AssetAlgoValueCell.propTypes = { value: PropTypes.any }
 function AssetsTab() {
-  const { t, lang } = useTranslation('orders')
+  const { t } = useTranslation('orders')
 
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const isSignedIn = useStore((state) => state.isSignedIn)
@@ -184,7 +184,7 @@ function AssetsTab() {
         Cell: AssetAlgoValueCell
       }
     ],
-    [lang]
+    [t]
   )
 
   const renderStatus = () => {

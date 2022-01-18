@@ -31,7 +31,6 @@ export const AssetId = styled.span`
 
 export const AssetNameBlock = styled.p`
   color: ${({ theme }) => theme.colors.gray['500']};
-
   ${NameVerifiedWrapper} {
     svg {
       position: relative;

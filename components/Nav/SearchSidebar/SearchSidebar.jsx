@@ -5,7 +5,9 @@ import PropTypes from 'prop-types'
 import SearchInput from 'components/Input/SearchInput'
 import { rgba } from 'polished'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
+
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
 export const Section = styled.section`
@@ -31,7 +33,7 @@ export const AssetsContainer = styled.div`
   width: 100%;
   height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
-  box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
+  // box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
   z-index: 30;
 
   @media (min-width: 1536px) {
@@ -51,6 +53,7 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
+  const { push } = useRouter()
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
@@ -108,9 +111,13 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
    *
    * @type {(function(*): Promise<void>)|*}
    */
-  const handleAssetClick = useCallback(() => {
-    handleExternalClick()
-  }, [handleExternalClick])
+  const handleAssetClick = useCallback(
+    (row) => {
+      handleExternalClick()
+      push(`/trade/${row.original.id}`)
+    },
+    [push, handleExternalClick]
+  )
 
   const handleAssetFocus = useCallback(
     (asset) => {
