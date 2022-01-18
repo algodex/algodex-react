@@ -17,6 +17,11 @@ const Container = styled.div`
 export default {
   title: '@algodex/components',
   component: Component,
+  argTypes:{
+    rowHeight: {
+      control: { type: 'range', min: 0, max: 100 }
+    }
+  },
   decorators: [
     (Story) => (
       <Container>
@@ -29,7 +34,7 @@ export default {
 const Template = (args) => <Component {...args} />
 
 export const Layout = Template.bind({})
-Layout.parameters = { layout: 'fullscreen' }
+Layout.parameters = { layout: 'fullscreen', controls: {include: ['rowHeight', 'sidebarCollapsed', 'sidebarExpanded', 'controlsCollapsed', 'controlsExpanded', 'footerCollapsed']} }
 Layout.args = {
   asset: {
     id: 15322902,
@@ -45,14 +50,17 @@ Layout.args = {
     url: null,
     total: 100000000000
   },
+  rowHeight: 70,
+  sidebarCollapsed: false,
+  sidebarExpanded: false,
+  controlsCollapsed: false,
+  controlsExpanded: true,
+  footerCollapsed: false,
+
   components: {
     Sidebar: (props) => <Section {...props}>Sidebar</Section>,
     Footer: (props) => <Section {...props}>Footer</Section>,
-    Content: (props) => <Section {...props}>Content</Section>
-    // Controls: () => (
-    //   <Demo mdAndUp={true} area="controls" borderColor="purple">
-    //     Controls
-    //   </Demo>
-    // )
+    Content: (props) => <Section {...props}>Content</Section>,
+    Controls: (props) => <Section {...props}>Controls</Section>
   }
 }

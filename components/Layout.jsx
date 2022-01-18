@@ -1,5 +1,5 @@
 import { useState, Fragment } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Button from 'components/Button'
 import SvgImage from 'components/SvgImage'
 import { HeaderLg, HeaderSm } from 'components/Typography'
@@ -38,7 +38,26 @@ const DefaultContent = styled.section`
   height: auto;
 `
 
-const Grid = styled.main`
+const medium = css`
+  @media (min-width: 1024px) {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas:
+      'content controls controls'
+      'content controls controls'
+      'footer controls controls';
+  }
+`
+const mobile = css`
+  grid-template-columns: auto;
+  grid-template-rows: 1000px 50px;
+  grid-template-areas:
+    'content content content'
+    'content content content'
+    'content content content'
+    'footer footer footer';
+`
+export const Grid = styled.main`
   position: relative;
   display: grid;
   grid-template-columns: none;
@@ -49,33 +68,222 @@ const Grid = styled.main`
   height: 100%;
   width: 100%;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: auto;
-    grid-template-rows: 1000px 50px;
-    grid-template-areas:
-      'content content content'
-      'content content content'
-      'content content content'
-      'footer footer footer';
-  }
+  ${({
+    sidebarExpanded,
+    sidebarCollapsed,
+    controlsCollapsed,
+    controlsExpanded,
+    footerCollapsed,
+    rowHeight
+  }) => {
+    const footer = footerCollapsed === false
+    const controls = controlsCollapsed === false
+    const sidebar = sidebarCollapsed === false
 
-  @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-areas:
-      'content controls controls'
-      'content controls controls'
-      'footer controls controls';
-  }
+    const withoutFooter = !footer && sidebar && controls
+    const withoutSidebar = footer && !sidebar && controls
+    const withoutControls = footer && sidebar && !controls
 
-  @media (min-width: 1536px) {
-    grid-template-columns: 1fr 3fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-areas:
-      'sidebar content controls controls'
-      'sidebar content controls controls'
-      'footer footer controls controls';
-  }
+    const withFooterOnly = footer && !sidebar && !controls
+    const withSidebarOnly = !footer && sidebar && !controls
+    const withControlsOnly = !footer && !sidebar && controls
+
+    const withEverything = footer && sidebar && controls
+    const withoutEverything = !footer && !sidebar && !controls
+
+    const withExpandedControls = controls && controlsExpanded
+    const withExpandedSidebar = sidebar && sidebarExpanded
+
+    // Without footer we use a three column layout and return
+    if (withoutFooter) {
+      return css`
+        @media (min-width: 1536px) {
+          grid-template-columns: 1fr 3fr 1fr 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas: 'sidebar content controls controls';
+        }
+      `
+    }
+    if (withFooterOnly) {
+      return css`
+        @media (min-width: 1536px) {
+          grid-template-columns: 1fr 3fr 1fr 1fr;
+          grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+          grid-template-areas:
+            'content content content content'
+            'footer footer footer footer';
+        }
+      `
+    }
+    if (withoutSidebar) {
+      // Expanded Controls
+      if (withExpandedControls) {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'content content controls controls'
+              'footer footer controls controls';
+          }
+        `
+      } else {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'content content controls controls'
+              'footer footer footer footer';
+          }
+        `
+      }
+    }
+    if (withSidebarOnly) {
+      return css`
+        @media (min-width: 1536px) {
+          grid-template-columns: 1fr 3fr 1fr 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas: 'sidebar content content content';
+        }
+      `
+    }
+
+    if (withoutControls) {
+      if (withExpandedSidebar) {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'sidebar content content content'
+              'sidebar footer footer footer';
+          }
+        `
+      } else {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'sidebar content content content'
+              'footer footer footer footer';
+          }
+        `
+      }
+    }
+
+    if (withControlsOnly) {
+      return css`
+        @media (min-width: 1536px) {
+          grid-template-columns: 1fr 3fr 1fr 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas: 'content content controls controls';
+        }
+      `
+    }
+    if (withEverything) {
+      if (withExpandedSidebar && withExpandedControls) {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'sidebar content controls controls'
+              'sidebar footer controls controls';
+          }
+        `
+      }
+      if (withExpandedSidebar && !withExpandedControls) {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'sidebar content controls controls'
+              'sidebar footer footer footer';
+          }
+        `
+      }
+      if (!withExpandedSidebar && withExpandedControls) {
+        return css`
+          @media (min-width: 1536px) {
+            grid-template-columns: 1fr 3fr 1fr 1fr;
+            grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+            grid-template-areas:
+              'sidebar content controls controls'
+              'footer footer controls controls';
+          }
+        `
+      }
+
+      // Return unexpanded
+      return css`
+        @media (min-width: 1536px) {
+          grid-template-columns: 1fr 3fr 1fr 1fr;
+          grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+          grid-template-areas:
+            'sidebar content controls controls'
+            'footer footer footer footer';
+        }
+      `
+    }
+
+    if (withoutEverything) {
+      return css`
+        @media (min-width: 1536px) {
+          grid-template-columns: 1fr 3fr 1fr 1fr;
+          grid-template-rows: 100%;
+          grid-template-areas: 'content content content content';
+        }
+      `
+    }
+    // if (withExpandedControls && !withExpandedSidebar) {
+    //   return css`
+    //     @media (min-width: 1536px) {
+    //       grid-template-columns: 1fr 3fr 1fr 1fr;
+    //       grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+    //       grid-template-areas:
+    //         'sidebar content controls controls'
+    //         'footer footer controls controls';
+    //     }
+    //   `
+    // }
+
+    // if (!withExpandedControls && !withExpandedSidebar) {
+    //   return css`
+    //     @media (min-width: 1536px) {
+    //       grid-template-columns: 1fr 3fr 1fr 1fr;
+    //       grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+    //       grid-template-areas:
+    //         'sidebar content controls controls'
+    //         'footer footer footer footer';
+    //     }
+    //   `
+    // }
+    // if (withExpandedControls && !withExpandedSidebar && footer) {
+    //   return css`
+    //     @media (min-width: 1536px) {
+    //       grid-template-columns: 1fr 3fr 1fr 1fr;
+    //       grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+    //       grid-template-areas:
+    //         'sidebar content controls controls'
+    //         'footer footer controls controls';
+    //     }
+    //   `
+    // }
+    //
+    // return css`
+    //   @media (min-width: 1536px) {
+    //     grid-template-columns: 1fr 3fr 1fr 1fr;
+    //     grid-template-rows: ${`${rowHeight}% ${100 - rowHeight}%`};
+    //     grid-template-areas:
+    //       'sidebar content controls controls'
+    //       'footer footer controls controls';
+    //   }
+    // `
+    throw new Error('No valid layout state!!!')
+  }}
 `
 
 const MobileMenu = styled.nav`
@@ -161,7 +369,17 @@ export function MobileInterface() {
  * @returns {JSX.Element}
  * @constructor
  */
-export function Layout({ asset, children, components }) {
+export function Layout({
+  asset,
+  children,
+  components,
+  rowHeight,
+  sidebarCollapsed,
+  sidebarExpanded,
+  controlsCollapsed,
+  controlsExpanded,
+  footerCollapsed
+}) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const {
     Sidebar = NavSearchSidebar,
@@ -171,6 +389,20 @@ export function Layout({ asset, children, components }) {
   } = components
 
   const { t } = useTranslation('common')
+  // const [rowHeight, setRowHeight] = useState(_rowHeight)
+  // const [sidebarCollapsed, setSidebarCollapsed] = useState(_sidebarCollapsed)
+  // const [controlsCollapsed, setControlsCollapsed] = useState(_controlsCollapsed)
+  // const [footerCollapsed, setFooterCollapsed] = useState(_footerCollapsed)
+  // Fake User Input for layouts
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const temp = Math.floor(Math.random() * 100)
+  //     setRowHeight(temp < 35 ? temp + 35 : temp)
+  //     setSidebarCollapsed(!sidebarCollapsed)
+  //     setControlsCollapsed(!controlsCollapsed)
+  //   }, 5000)
+  //   return () => clearInterval(interval)
+  // }, [setRowHeight, setSidebarCollapsed, sidebarCollapsed, controlsCollapsed, setControlsCollapsed])
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 720
   const TABS = {
@@ -202,17 +434,38 @@ export function Layout({ asset, children, components }) {
   }
   const renderPanels = () => (
     <Fragment>
-      <AssetTradeHistory area={!isMobile ? 'bottomLeft' : 'content'} asset={asset} />
-      <PlaceOrder asset={asset} area={!isMobile ? 'bottomRight' : 'content'} />
+      <AssetTradeHistory
+        active={!controlsCollapsed}
+        area={!isMobile ? 'bottomLeft' : 'content'}
+        asset={asset}
+      />
+      <PlaceOrder
+        active={!controlsCollapsed}
+        asset={asset}
+        area={!isMobile ? 'bottomRight' : 'content'}
+      />
       <AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />
       <WalletConnect area={!isMobile ? 'topRight' : 'content'} />
     </Fragment>
   )
   return (
-    <Grid>
-      <Sidebar area="sidebar" border="dashed" borderColor="blue" lgOnly={true} />
+    <Grid
+      controlsCollapsed={controlsCollapsed}
+      controlsExpanded={controlsExpanded}
+      sidebarCollapsed={sidebarCollapsed}
+      sidebarExpanded={sidebarExpanded}
+      footerCollapsed={footerCollapsed}
+      rowHeight={rowHeight}
+    >
+      <Sidebar
+        active={!sidebarCollapsed}
+        area="sidebar"
+        border="dashed"
+        borderColor="blue"
+        lgOnly={true}
+      />
 
-      <Footer area="footer" border="dashed" borderColor="purple" />
+      <Footer active={!footerCollapsed} area="footer" border="dashed" borderColor="purple" />
       {!isMobile && (
         <Content area="content" border="dashed" borderColor="green">
           {children}
@@ -221,7 +474,13 @@ export function Layout({ asset, children, components }) {
       {isMobile ? (
         renderPanels()
       ) : (
-        <Controls area="controls" mdAndUp={true} border="dashed" borderColor="purple">
+        <Controls
+          active={!controlsCollapsed}
+          area="controls"
+          mdAndUp={true}
+          border="dashed"
+          borderColor="purple"
+        >
           {renderPanels()}
         </Controls>
       )}
@@ -288,6 +547,12 @@ export function Layout({ asset, children, components }) {
 }
 Layout.propTypes = {
   asset: PropTypes.object,
+  rowHeight: PropTypes.number,
+  sidebarCollapsed: PropTypes.bool,
+  sidebarExpanded: PropTypes.bool,
+  controlsCollapsed: PropTypes.bool,
+  controlsExpanded: PropTypes.bool,
+  footerCollapsed: PropTypes.bool,
   children: PropTypes.any,
   components: PropTypes.shape({
     Controls: PropTypes.elementType,
