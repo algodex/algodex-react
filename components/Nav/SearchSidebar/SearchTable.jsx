@@ -295,7 +295,7 @@ AssetChangeCell.propTypes = {
   value: PropTypes.any
 }
 
-const NavSearchTable = ({
+export const NavSearchTable = ({
   isActive,
   onAssetFocus,
   onAssetLeave,
@@ -311,7 +311,27 @@ const NavSearchTable = ({
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const { t } = useTranslation('assets')
+  const filterByFavoritesFn = useCallback(
+    (e) => {
+      e.stopPropagation()
+      setIsFilteringByFavorites(!isFilteringByFavorites)
+    },
+    [setIsFilteringByFavorites, isFilteringByFavorites]
+  )
 
+  const toggleFavoritesFn = useCallback(
+    (assetId) => {
+      toggleFavourite(assetId)
+    },
+    [toggleFavourite]
+  )
+
+  const handleFavoritesFn = useCallback(
+    (id) => {
+      return favoritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
+    },
+    [favoritesState]
+  )
   /**
    * Handle Search Data
    * @type {Array}
@@ -326,7 +346,7 @@ const NavSearchTable = ({
     } else if (isFilteringByFavorites) {
       // Filter assets by favorites
       const result = Object.keys(favoritesState).map((assetId) => {
-        return assets.filter((asset) => asset.assetId == parseInt(assetId, 10))
+        return assets.filter((asset) => asset.assetId === parseInt(assetId, 10))
       })
       return flatten(result).map(mapToSearchResults)
     } else {
@@ -341,7 +361,7 @@ const NavSearchTable = ({
         <AssetPrice>
           {value}
           <br />
-          {value != '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
+          {value !== '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
         </AssetPrice>
       )
     },
@@ -468,14 +488,6 @@ const NavSearchTable = ({
     [isFilteringByFavorites, AssetNameCell, AssetPriceCell, filterByFavoritesFn, t]
   )
 
-  const filterByFavoritesFn = useCallback(
-    (e) => {
-      e.stopPropagation()
-      setIsFilteringByFavorites(!isFilteringByFavorites)
-    },
-    [setIsFilteringByFavorites, isFilteringByFavorites]
-  )
-
   /**
    *
    * @param row
@@ -495,20 +507,6 @@ const NavSearchTable = ({
     },
     onMouseLeave: onAssetLeave
   })
-
-  const toggleFavoritesFn = useCallback(
-    (assetId) => {
-      toggleFavourite(assetId)
-    },
-    [toggleFavourite]
-  )
-
-  const handleFavoritesFn = useCallback(
-    (id) => {
-      return favoritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
-    },
-    [favoritesState]
-  )
 
   return (
     <TableWrapper className="mt-12">

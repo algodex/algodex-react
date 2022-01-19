@@ -11,6 +11,9 @@ import useUserStore from 'store/use-user-state'
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
 export const Section = styled.section`
+  height: 100%;
+  margin: 0;
+  padding: 0;
   @media (min-width: 1536px) {
     display: flex;
   }
@@ -21,7 +24,7 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.background.dark};
   position: relative;
   overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
-  height: 51px;
+  height: 100%;
 
   @media (min-width: 1536px) {
     flex-direction: column;
@@ -31,7 +34,8 @@ export const Container = styled.div`
 export const AssetsContainer = styled.div`
   position: absolute;
   width: 100%;
-  height: ${({ gridHeight }) => `${gridHeight}px`};
+  height: 100%;
+  // height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
   // box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
   z-index: 30;
@@ -47,7 +51,8 @@ export const AssetsContainer = styled.div`
     box-shadow: none;
   }
 `
-export function NavSearchSidebar({ gridRef, algoPrice }) {
+export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps }) {
+  const { NavTable } = components
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
@@ -162,7 +167,7 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
             />
           </div>
           <div className="mt-1.5" style={{ borderTop: 'solid 1px #2D3748' }}>
-            <NavSearchTable
+            <NavTable
               query={query}
               options={{ refetchInterval: 5000 }}
               onAssetClick={handleAssetClick}
@@ -173,6 +178,7 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
+              {...tableProps}
             />
           </div>
         </AssetsContainer>
@@ -184,7 +190,18 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
 
 NavSearchSidebar.propTypes = {
   gridRef: PropTypes.object.isRequired,
-  algoPrice: PropTypes.any
+  algoPrice: PropTypes.any,
+  components: PropTypes.shape({
+    NavTable: PropTypes.node
+  }),
+  tableProps: PropTypes.object
+}
+
+NavSearchSidebar.defaultProps = {
+  components: {
+    NavTable: NavSearchTable
+  },
+  tableProps: {}
 }
 
 export default withfetchAlgorandPriceQuery(NavSearchSidebar)
