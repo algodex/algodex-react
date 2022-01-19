@@ -16,6 +16,9 @@ export default {
   parameters: {
     layout: 'fullscreen'
   },
+  argTypes: {
+    algoPrice: { control: { type: 'range', min: 1, max: 10 } }
+  },
   decorators: [
     (Story) => (
       <Container>
