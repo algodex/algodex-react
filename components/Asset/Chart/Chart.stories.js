@@ -7,9 +7,9 @@ import {
   DEMO_PRICE_DATA,
   DEMO_SPREAD,
   DEMO_VOLUME_DATA
-} from 'spec/Chat'
+} from 'spec/Chart'
 
-import { ChartView as Component } from './Chart'
+import { ChartView as Component, default as ComponentWithData } from './Chart'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -56,6 +56,7 @@ export default {
 }
 
 const Template = (args) => <Component {...args} />
+const TemplateWithData = (args) => <ComponentWithData {...args} />
 
 export const Chart = Template.bind({})
 Chart.parameters = { layout: 'fullscreen', controls: { include: ['asset'] } }
@@ -68,4 +69,9 @@ Chart.args = {
   spread: DEMO_SPREAD,
   priceData: DEMO_PRICE_DATA,
   volumeData: DEMO_VOLUME_DATA
+}
+export const ChartPreview = TemplateWithData.bind({})
+ChartPreview.parameters = { layout: 'fullscreen', controls: { include: ['asset'] } }
+ChartPreview.args = {
+  asset: DEMO_ASSET
 }
