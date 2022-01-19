@@ -33,7 +33,7 @@ const AssetInfo = ({ asset, price }) => {
 
   const explorerURL =
     activeNetwork === 'testnet'
-      ? `https://algoindexer.testnet.algoexplorerapi.io/asset/`
+      ? `https://testnet.algoexplorer.io/asset/`
       : `https://algoexplorer.io/asset/`
 
   const onClick = useCallback(() => {
