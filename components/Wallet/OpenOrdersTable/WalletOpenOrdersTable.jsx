@@ -1,6 +1,6 @@
 import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import useStore, { useStorePersisted } from 'store/use-store'
 import Table from 'components/Table'
 import Link from 'next/link'
 import OrderService from 'services/order'
@@ -181,7 +181,13 @@ export function OpenOrders({ wallet }) {
     )
   }
   OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-  const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
+  // const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
+  const OrderTypeCell = useCallback(
+    ({ value }) => {
+      return <OrderType value={value}>{t(value.toLowerCase())}</OrderType> // eslint-disable-line
+    },
+    [t]
+  )
   OrderTypeCell.propTypes = { value: PropTypes.any }
   const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
   OrderAmountCell.propTypes = { value: PropTypes.any }

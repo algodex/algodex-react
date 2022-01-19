@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import { useWalletAssetsQuery, useEventDispatch } from 'hooks'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import useStore, { useStorePersisted } from 'store/use-store'
 import useUserStore from 'store/use-user-state'
 
 import { AssetId, AssetNameBlock } from 'components/Asset/Typography'
