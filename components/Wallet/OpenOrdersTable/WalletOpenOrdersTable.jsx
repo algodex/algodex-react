@@ -133,12 +133,14 @@ export const OrderCancelButton = styled.button`
   }
 `
 
-function OpenOrders() {
+export function OpenOrders({ wallet }) {
   // const { t, lang } = useTranslation('orders')
   const { t } = useTranslation('orders')
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const activeWalletAddress = wallet.address
   const [openOrdersData, setOpenOrdersData] = useState([])
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  // const isSignedIn = useStore((state) => state.isSignedIn)
+  const isSignedIn = typeof wallet !== 'undefined'
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
@@ -312,6 +314,12 @@ function OpenOrders() {
       {renderStatus()}
     </OpenOrdersContainer>
   )
+}
+
+OpenOrders.propTypes = {
+  wallet: PropTypes.shape({
+    address: PropTypes.string.isRequired
+  })
 }
 
 export default OpenOrders

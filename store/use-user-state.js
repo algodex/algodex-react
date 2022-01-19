@@ -35,7 +35,8 @@ const userState = (set, get) => ({
    *
    * Options are Mainnet and Testnet
    */
-  activeNetwork: _.includes(process.env.NEXT_PUBLIC_API, 'mainnet') ? 'mainnet' : 'testnet',
+  activeNetwork: process.env.NEXT_PUBLIC_ALGORAND_NETWORK 
+              && (process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet') ? 'mainnet' : 'testnet',
   // activeNetwork: window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet',
   // activeNetwork: () => (window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')(),
   // activeNetwork: 'mainnet',
