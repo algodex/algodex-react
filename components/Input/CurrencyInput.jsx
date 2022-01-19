@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-export const Input = styled.input`
+const Input = styled.input`
   flex: 1 1 auto;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.gray['900']};
@@ -34,17 +35,11 @@ export const Input = styled.input`
   }
 `
 
-export const Container = styled.div`
+const Container = styled.div`
   flex: 1 1 auto;
   display: flex;
   position: relative;
-  margin-bottom: 1rem;
-
-  ${Input} {
-    &:focus {
-      box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
-    }
-  }
+  // margin-bottom: 1rem;
 `
 
 const InputLabel = styled.span`
@@ -57,12 +52,39 @@ const InputLabel = styled.span`
   line-height: 1;
 `
 
-export const Label = styled(InputLabel)`
+const Label = styled(InputLabel)`
   left: 0.875rem;
 `
 
-export const Asset = styled(InputLabel)`
+const Asset = styled(InputLabel)`
   right: 1.25rem;
   width: 2.75rem;
   font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
 `
+
+/**
+ *
+ * @param {object} props Component Properties
+ * @param {string} props.label Input Label
+ * @param {string} props.currency Display Currency
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export function CurrencyInput({ label, currency, ...props }) {
+  const condenseAssetName = currency?.length > 5
+
+  return (
+    <Container>
+      <Input placeholder="0.00" {...props} />
+      <Label>{label}</Label>
+      <Asset isCondensed={condenseAssetName}>{currency}</Asset>
+    </Container>
+  )
+}
+
+CurrencyInput.propTypes = {
+  label: PropTypes.string,
+  currency: PropTypes.string
+}
+
+export default CurrencyInput

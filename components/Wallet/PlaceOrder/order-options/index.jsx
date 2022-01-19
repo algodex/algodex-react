@@ -20,7 +20,7 @@ import {
   OptionsButton
 } from './order-options.css'
 // import InfoButton from 'components/info-button'
-import OrderSizeFilter from '../order-size-filter'
+import OrderSizeFilter from 'components/Input/'
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker, orderFilter, setOrderFilter } = props

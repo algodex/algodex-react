@@ -1,9 +1,9 @@
 import React from 'react'
-import PlaceOrder from '.'
+import {PlaceOrderView as Component, default as ComponentWithData} from './PlaceOrder'
 
 export default {
   title: 'Wallet/Place Order',
-  component: PlaceOrder,
+  component: Component,
   decorators: [
     (Story) => (
       <div
@@ -20,7 +20,7 @@ export default {
   ]
 }
 
-const Template = (args) => <PlaceOrder {...args} />
+const Template = (args) => <Component {...args} />
 
 const asset = {
   id: 15322902,
