@@ -314,8 +314,11 @@ export function Layout({ asset, children }) {
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
 
-        <NavSidebarAndContentSection active={activeMobile === TABS.CHART}>
-          <NavSearchSidebar style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
+        <NavSidebarAndContentSection
+          style={{ height: '67vh' }}
+          active={activeMobile === TABS.CHART}
+        >
+          <NavSearchSidebar className="h-24" gridRef={gridRef} />
           <ContentSection>{children}</ContentSection>
         </NavSidebarAndContentSection>
 

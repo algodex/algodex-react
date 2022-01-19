@@ -11,7 +11,8 @@ import useUserStore from 'store/use-user-state'
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
 export const Section = styled.section`
-  height: 100%;
+  height: inherit;
+  width: 100%;
   margin: 0;
   padding: 0;
   @media (min-width: 1536px) {
@@ -24,11 +25,11 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.background.dark};
   position: relative;
   overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
-  height: 100%;
 
   @media (min-width: 1536px) {
     flex-direction: column;
-    height: auto;
+    // height: auto;
+    height: 99%;
   }
 `
 export const AssetsContainer = styled.div`
@@ -49,6 +50,8 @@ export const AssetsContainer = styled.div`
     height: auto;
     background-color: transparent;
     box-shadow: none;
+    max-height: inherit;
+    height: inherit;
   }
 `
 export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps }) {
@@ -147,7 +150,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
   }, [gridRef, setGridSize])
   return (
     <Section>
-      <Container style={{ minHeight: '4rem' }} isActive={isActive}>
+      <Container isActive={isActive}>
         <AssetsContainer
           style={{ width: '100%' }}
           className="flex"
@@ -166,7 +169,10 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
             />
           </div>
-          <div className="mt-1.5" style={{ borderTop: 'solid 1px #2D3748' }}>
+          <div
+            className="mt-1.5"
+            style={{ borderTop: 'solid 1px #2D3748', height: '91%', overflowY: 'scroll' }}
+          >
             <NavTable
               query={query}
               options={{ refetchInterval: 5000 }}
