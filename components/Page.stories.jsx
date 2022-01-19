@@ -1,9 +1,9 @@
 import Page from './Page'
 import React from 'react'
-import Chart from './chart'
-import AssetInfo from './asset-info'
+import Chart from 'components/Asset/Chart'
+import { AssetInfo } from 'components/Asset/Asset'
 export default {
-  title: 'Page',
+  title: '@algodex/components/Page',
   component: Page,
   decorators: [(Story) => <Story />]
 }

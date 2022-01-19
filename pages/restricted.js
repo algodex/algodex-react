@@ -1,4 +1,4 @@
-import Header from 'components/header'
+import Header from 'components/Nav/Header'
 import Image from 'next/image'
 import Modal from 'components/Modal'
 import { useRouter } from 'next/router'

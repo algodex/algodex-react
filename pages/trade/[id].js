@@ -1,12 +1,12 @@
 import { fetchAssetPrice, fetchAssets } from 'services/algodex'
 
-import AssetInfo from 'components/asset-info'
-import Chart from 'components/chart'
+import { AssetInfo } from 'components/Asset/Asset'
+import Chart from 'components/Asset/Chart'
 import Page from 'components/Page'
 import PropTypes from 'prop-types'
 import { fetchExplorerAssetInfo } from 'services/algoexplorer'
 import styled from 'styled-components'
-import { useUserStore } from '../../store'
+import { useUserStore } from 'store'
 
 export const Container = styled.div`
   display: flex;
