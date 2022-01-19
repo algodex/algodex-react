@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { rgba } from 'polished'
 import { ArrowLeft, ExternalLink } from 'react-feather'
 import useTranslation from 'next-translate/useTranslation'
 import { useUserStore } from 'store'
@@ -13,43 +12,17 @@ import PropTypes from 'prop-types'
 import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/Typography'
 import SvgImage from 'components/SvgImage'
 
-export const NameVerifiedWrapper = styled.span`
-  white-space: nowrap;
-`
-export const AssetName = styled.strong`
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.gray['000']};
-  margin-right: 0.125rem;
-  letter-spacing: 0.025rem;
-`
-
-export const AssetId = styled.span`
-  color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.3)};
-  font-family: 'Roboto Mono', monospace;
-  font-size: 0.625rem;
-`
-
-export const AssetNameBlock = styled.p`
-  color: ${({ theme }) => theme.colors.gray['500']};
-  ${NameVerifiedWrapper} {
-    svg {
-      position: relative;
-      top: -0.125rem;
-      margin-left: 0.375rem;
-    }
-  }
-`
-export const Container = styled.div`
+const Container = styled.div`
   flex: 1 1 0%;
   background-color: ${({ theme }) => theme.colors.gray[900]};
 `
 
-export const InfoContainer = styled.div`
+const InfoContainer = styled.div`
   padding: 4rem;
   max-width: 40rem;
 `
 
-export const ButtonText = styled.button`
+const ButtonText = styled.button`
   background-color: transparent;
   padding: 0;
   border: none;
@@ -65,7 +38,7 @@ export const ButtonText = styled.button`
   }
 `
 
-export const HeaderContainer = styled.div`
+const HeaderContainer = styled.div`
   padding-bottom: 2rem;
 
   h2 {
@@ -80,7 +53,7 @@ export const HeaderContainer = styled.div`
   }
 `
 
-export const AssetUrl = styled.p`
+const AssetUrl = styled.p`
   a {
     color: ${({ theme }) => theme.colors.gray[400]};
     text-decoration: none;
@@ -92,23 +65,23 @@ export const AssetUrl = styled.p`
   }
 `
 
-export const InfoList = styled.dl`
+const InfoList = styled.dl`
   display: flex;
   flex-wrap: wrap;
 `
 
-export const InfoItem = styled.div`
+const InfoItem = styled.div`
   flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
   margin-bottom: 2rem;
 `
 
-export const ExternalLinkIcon = styled(ExternalLink)`
+const ExternalLinkIcon = styled(ExternalLink)`
   stroke: ${({ theme }) => theme.colors.gray[500]};
   width: 1rem;
   height: 1rem;
 `
 
-export const AlgoExplorerLink = styled.div`
+const AlgoExplorerLink = styled.div`
   margin-top: 1.25rem;
 
   a {
@@ -146,7 +119,7 @@ export const AssetInfo = ({ asset, price }) => {
 
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
-  }, [asset])
+  }, [setShowAssetInfo])
   const { data: dexAsset } = useAssetPriceQuery({
     asset,
     options: {
@@ -292,3 +265,5 @@ AssetInfo.propTypes = {
   asset: PropTypes.object.isRequired,
   price: PropTypes.object
 }
+
+export default AssetInfo
