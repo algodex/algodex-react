@@ -5,10 +5,16 @@ import PropTypes from 'prop-types'
 import SearchInput from 'components/Input/SearchInput'
 import { rgba } from 'polished'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
+
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
 export const Section = styled.section`
+  height: inherit;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   @media (min-width: 1536px) {
     display: flex;
   }
@@ -19,19 +25,20 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.background.dark};
   position: relative;
   overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
-  height: 51px;
 
   @media (min-width: 1536px) {
     flex-direction: column;
-    height: auto;
+    // height: auto;
+    height: 99%;
   }
 `
 export const AssetsContainer = styled.div`
   position: absolute;
   width: 100%;
-  height: ${({ gridHeight }) => `${gridHeight}px`};
+  height: 100%;
+  // height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
-  box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
+  // box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
   z-index: 30;
 
   @media (min-width: 1536px) {
@@ -43,33 +50,37 @@ export const AssetsContainer = styled.div`
     height: auto;
     background-color: transparent;
     box-shadow: none;
+    max-height: inherit;
+    height: inherit;
   }
 `
-export function NavSearchSidebar({ gridRef, algoPrice }) {
+export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps }) {
+  const { NavTable } = components
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
+  const { push } = useRouter()
 
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(true)
-  const [searchHeight, setSearchHeight] = useState(0)
+  // const [searchHeight, setSearchHeight] = useState(0)
   const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
   const searchRef = useRef()
-  /**
-   * Get the client height
-   */
-  useEffect(() => {
-    if (searchRef.current) {
-      const height = Math.floor(searchRef.current.getBoundingClientRect().height)
-      setSearchHeight(height)
-    }
-  }, [searchRef])
+  // /**
+  //  * Get the client height
+  //  */
+  // useEffect(() => {
+  //   if (searchRef.current) {
+  //     const height = Math.floor(searchRef.current.getBoundingClientRect().height)
+  //     setSearchHeight(height)
+  //   }
+  // }, [searchRef])
 
   /**
    * The `gridSize` prop changes on window resize, so this is equivalent to a
@@ -108,9 +119,13 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
    *
    * @type {(function(*): Promise<void>)|*}
    */
-  const handleAssetClick = useCallback(() => {
-    handleExternalClick()
-  }, [handleExternalClick])
+  const handleAssetClick = useCallback(
+    (row) => {
+      handleExternalClick()
+      push(`/trade/${row.original.id}`)
+    },
+    [push, handleExternalClick]
+  )
 
   const handleAssetFocus = useCallback(
     (asset) => {
@@ -135,7 +150,7 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
   }, [gridRef, setGridSize])
   return (
     <Section>
-      <Container style={{ minHeight: '4rem' }} isActive={isActive}>
+      <Container isActive={isActive}>
         <AssetsContainer
           style={{ width: '100%' }}
           className="flex"
@@ -154,8 +169,11 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
             />
           </div>
-          <div className="mt-1.5" style={{ borderTop: 'solid 1px #2D3748' }}>
-            <NavSearchTable
+          <div
+            className="mt-1.5"
+            style={{ borderTop: 'solid 1px #2D3748', height: '91%', overflowY: 'scroll' }}
+          >
+            <NavTable
               query={query}
               options={{ refetchInterval: 5000 }}
               onAssetClick={handleAssetClick}
@@ -166,10 +184,11 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
+              {...tableProps}
             />
           </div>
         </AssetsContainer>
-        <InfoFlyover assetInfo={assetInfo} searchHeight={searchHeight} />
+        <InfoFlyover assetInfo={assetInfo} />
       </Container>
     </Section>
   )
@@ -177,7 +196,18 @@ export function NavSearchSidebar({ gridRef, algoPrice }) {
 
 NavSearchSidebar.propTypes = {
   gridRef: PropTypes.object.isRequired,
-  algoPrice: PropTypes.any
+  algoPrice: PropTypes.any,
+  components: PropTypes.shape({
+    NavTable: PropTypes.node
+  }),
+  tableProps: PropTypes.object
+}
+
+NavSearchSidebar.defaultProps = {
+  components: {
+    NavTable: NavSearchTable
+  },
+  tableProps: {}
 }
 
 export default withfetchAlgorandPriceQuery(NavSearchSidebar)

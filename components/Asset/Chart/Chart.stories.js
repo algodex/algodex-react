@@ -1,17 +1,17 @@
-import React from 'react'
-import { ChartView as Component } from './Chart'
-import styled from 'styled-components'
-
 import {
   DEMO_ALGO_VOLUME,
-  DEMO_ASSET,
-  DEMO_OHLC,
-  DEMO_BID,
   DEMO_ASK,
-  DEMO_SPREAD,
+  DEMO_ASSET,
+  DEMO_BID,
+  DEMO_OHLC,
   DEMO_PRICE_DATA,
+  DEMO_SPREAD,
   DEMO_VOLUME_DATA
 } from 'spec/Chat'
+
+import { ChartView as Component } from './Chart'
+import React from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[900]};
