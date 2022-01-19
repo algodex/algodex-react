@@ -68,19 +68,19 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(true)
-  const [searchHeight, setSearchHeight] = useState(0)
+  // const [searchHeight, setSearchHeight] = useState(0)
   const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
   const searchRef = useRef()
-  /**
-   * Get the client height
-   */
-  useEffect(() => {
-    if (searchRef.current) {
-      const height = Math.floor(searchRef.current.getBoundingClientRect().height)
-      setSearchHeight(height)
-    }
-  }, [searchRef])
+  // /**
+  //  * Get the client height
+  //  */
+  // useEffect(() => {
+  //   if (searchRef.current) {
+  //     const height = Math.floor(searchRef.current.getBoundingClientRect().height)
+  //     setSearchHeight(height)
+  //   }
+  // }, [searchRef])
 
   /**
    * The `gridSize` prop changes on window resize, so this is equivalent to a
@@ -188,7 +188,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
             />
           </div>
         </AssetsContainer>
-        <InfoFlyover assetInfo={assetInfo} searchHeight={searchHeight} />
+        <InfoFlyover assetInfo={assetInfo} />
       </Container>
     </Section>
   )
