@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { useWalletTradeHistory } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/Typography'
 import Table from 'components/Table'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import useStore, { useStorePersisted } from 'store/use-store'
 import { useEventDispatch } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
@@ -108,8 +108,14 @@ const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 OrderAmountCell.propTypes = { value: PropTypes.any }
 
 export function OrderHistory({ wallet }) {
-  const { t, lang } = useTranslation('orders')
-  const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+  const { t } = useTranslation('orders')
+  // const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+  const OrderSideCell = useCallback(
+    ({ value }) => {
+      return <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+    },
+    [t]
+  )
   OrderSideCell.propTypes = { value: PropTypes.any }
   const activeWalletAddress = wallet.address
   const isSignedIn = typeof wallet !== 'undefined'
@@ -129,7 +135,7 @@ export function OrderHistory({ wallet }) {
     }
   })
 
-  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data, lang])
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
 
   const columns = useMemo(
     () => [
@@ -160,7 +166,7 @@ export function OrderHistory({ wallet }) {
         Cell: OrderAmountCell
       }
     ],
-    [lang]
+    [t, OrderSideCell]
   )
 
   const renderStatus = () => {
