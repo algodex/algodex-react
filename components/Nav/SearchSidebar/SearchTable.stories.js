@@ -36,8 +36,6 @@ const TemplateWithData = (args) => <ComponentWithData {...args} />
  */
 export const Table = Template.bind({})
 Table.args = {
-  searchHeight: '51px',
-  isActive: true,
   onAssetFocus: false,
   onAssetLeave: false,
   onAssetClick: () => console.log('Hello'),
@@ -63,8 +61,6 @@ Table.args = {
 export const LiveTable = TemplateWithData.bind({})
 LiveTable.args = {
   query: '',
-  searchHeight: '51px',
-  isActive: true,
   onAssetFocus: false,
   onAssetLeave: false,
   onAssetClick: () => console.log('Hello'),

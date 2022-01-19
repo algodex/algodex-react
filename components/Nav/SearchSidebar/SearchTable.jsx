@@ -117,7 +117,6 @@ AssetChangeCell.propTypes = {
 }
 
 export const NavSearchTable = ({
-  isActive,
   onAssetFocus,
   onAssetLeave,
   onAssetClick,
@@ -316,7 +315,6 @@ export const NavSearchTable = ({
    */
   const getRowProps = (row) => ({
     role: 'button',
-    tabIndex: isActive ? '0' : '-1', // tab-navigable only when rows are visible
     onClick: () => onAssetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
@@ -344,7 +342,6 @@ export const NavSearchTable = ({
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
   assets: PropTypes.array.isRequired,
-  isActive: PropTypes.bool,
   onAssetFocus: PropTypes.func,
   onAssetLeave: PropTypes.func,
   onAssetClick: PropTypes.func,
