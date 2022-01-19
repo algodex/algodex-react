@@ -16,15 +16,18 @@ import TablePriceHeader from 'components/Table/PriceHeader'
 import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
+
 export const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
     border-right: none;
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
-  display: ${({ active }) => (active ? 'flex' : 'none')};
+  // display: ${({ active }) => (active ? 'flex' : 'none')};
   @media (min-width: 996px) {
     grid-area: book;
     display: flex;
@@ -303,7 +306,7 @@ OrderBookPrice.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-function OrderBookView({ asset, sellData, buyData }) {
+export function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
@@ -311,6 +314,7 @@ function OrderBookView({ asset, sellData, buyData }) {
   const { data, isLoading } = useAssetPriceQuery({
     asset
   })
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
 
@@ -427,7 +431,7 @@ export default function OrderBook({ asset /* onClicked, onChange */ }) {
 
   // Orderbook Query
   const { data, isLoading, isError } = useAssetOrdersQuery({ asset })
-
+  console.log('DAAAATA', data)
   // Massage Orders
   useEffect(() => {
     if (
