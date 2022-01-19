@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 import Head from 'next/head'
-import Header from 'components/header'
-import MainLayout from 'components/main-layout'
-import NetworkHandler from 'components/network-notification'
+import Header from 'components/Nav/Header'
+import Layout from 'components/Layout'
+import NetworkHandler from 'components/Nav/NetworkHandler'
 import PropTypes from 'prop-types'
-import Spinner from 'components/spinner'
+import Spinner from 'components/Spinner'
 import styled from 'styled-components'
 import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
@@ -48,7 +48,7 @@ export const Button = styled.button`
  * @param {string} description
  * @param {Object} staticExplorerAsset
  * @param {boolean} noFollow
- * @param {JSX.Element|JSX.Element[]} children
+ * @param {JSX.Element|JSX.Element[]|function} children
  * @returns {JSX.Element}
  * @constructor
  */
@@ -113,10 +113,10 @@ const Page = ({
       </Head>
       <Header />
       <NetworkHandler />
-      <MainLayout asset={explorerAsset}>
+      <Layout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
         {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}
-      </MainLayout>
+      </Layout>
     </Container>
   )
 }
@@ -125,6 +125,6 @@ Page.propTypes = {
   description: PropTypes.string,
   staticExplorerAsset: PropTypes.object,
   noFollow: PropTypes.bool,
-  children: PropTypes.func
+  children: PropTypes.node
 }
 export default Page
