@@ -106,12 +106,15 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 OrderPriceCell.propTypes = { value: PropTypes.any }
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 OrderAmountCell.propTypes = { value: PropTypes.any }
-function OrderHistory() {
+
+export function OrderHistory({ wallet }) {
   const { t, lang } = useTranslation('orders')
   const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
   OrderSideCell.propTypes = { value: PropTypes.any }
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  const activeWalletAddress = wallet.address
+  const isSignedIn = typeof wallet !== 'undefined'
+  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  // const isSignedIn = useStore((state) => state.isSignedIn)
 
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
@@ -186,6 +189,12 @@ function OrderHistory() {
       {renderStatus()}
     </OrderHistoryContainer>
   )
+}
+
+OrderHistory.propTypes = {
+  wallet: PropTypes.shape({
+    address: PropTypes.string.isRequired
+  })
 }
 
 export default OrderHistory
