@@ -10,7 +10,7 @@
 
 import axios from 'axios'
 // TODO: Implement getLogger() from '@algodex/common'
-const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
 export const PUBLIC_API = process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com'
 
