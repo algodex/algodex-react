@@ -14,7 +14,7 @@ import { floatToFixed } from 'services/display'
 import Big from 'big.js'
 import styled from 'styled-components'
 
-export const Container = styled.div`
+const Container = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.colors.gray[900]};
   height: 100%;
@@ -24,16 +24,7 @@ export const Container = styled.div`
   }
 `
 
-export const LoadingContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
-`
-
-export const AreaSeriesChart = styled.div`
+const AreaSeriesChart = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -47,7 +38,7 @@ export const AreaSeriesChart = styled.div`
   }
 `
 
-export const CandleStickChart = styled.div`
+const CandleStickChart = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -61,7 +52,7 @@ export const CandleStickChart = styled.div`
   }
 `
 
-export const SettingsContainer = styled.div`
+const SettingsContainer = styled.div`
   position: absolute;
   left: 0;
   right: 0;
@@ -72,7 +63,7 @@ export const SettingsContainer = styled.div`
     height: 2.75rem;
   }
 `
-export const mapPriceData = (data) => {
+const mapPriceData = (data) => {
   const prices =
     data?.chart_data.map(
       ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
@@ -89,10 +80,10 @@ export const mapPriceData = (data) => {
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
-export const getOhlc = (data) => {
+const getOhlc = (data) => {
   const lastPriceData = data?.chart_data[0]
 
-  const ohlc = lastPriceData
+  return lastPriceData
     ? {
         open: floatToFixed(lastPriceData.formatted_open),
         high: floatToFixed(lastPriceData.formatted_high),
@@ -100,10 +91,9 @@ export const getOhlc = (data) => {
         close: floatToFixed(lastPriceData.formatted_close)
       }
     : {}
-  return ohlc
 }
 
-export const mapVolumeData = (data, volUpColor, volDownColor) => {
+const mapVolumeData = (data, volUpColor, volDownColor) => {
   const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
     const time = parseInt(unixTime)
     return {
@@ -114,11 +104,10 @@ export const mapVolumeData = (data, volUpColor, volDownColor) => {
   const volumeColors = data?.chart_data.map(({ open, close }) =>
     open > close ? volDownColor : volUpColor
   )
-  const volumeData = mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
-  return volumeData
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
 }
 
-export const getBidAskSpread = (orderBook) => {
+const getBidAskSpread = (orderBook) => {
   const { buyOrders, sellOrders } = orderBook
 
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
@@ -147,7 +136,7 @@ function autoScaleProvider(original, chart, priceData) {
     max = Math.max(priceItem.close, max)
     max = Math.max(priceItem.open, max)
     max = Math.max(priceItem.high, max)
-    if (min == -1) {
+    if (min === -1) {
       min = priceItem.open
     }
     min = Math.min(priceItem.close, min)
@@ -159,7 +148,7 @@ function autoScaleProvider(original, chart, priceData) {
   }
 
   const res = original()
-  if (res !== null && min != -1) {
+  if (res !== null && min !== -1) {
     res.priceRange.maxValue = max
     res.priceRange.minValue = min
   }
@@ -175,7 +164,7 @@ export function ChartView(props) {
   useMemo(() => {
     setCurrentPrices(props)
     setCurrentLogical(priceData.length - 1)
-  }, [asset])
+  }, [asset, priceData, props])
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
@@ -236,7 +225,7 @@ export function ChartView(props) {
       return
     }
 
-    if (logical != currentLogical) {
+    if (logical !== currentLogical) {
       setCurrentLogical(logical)
       updateHoverPrices(logical)
     }
@@ -275,11 +264,11 @@ export function ChartView(props) {
 ChartView.propTypes = {
   candleChartRef: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
+    PropTypes.shape({ current: PropTypes.any })
   ]),
   areaChartRef: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.any) })
+    PropTypes.shape({ current: PropTypes.any })
   ]),
   asset: PropTypes.object,
   asaVolume: PropTypes.string,
@@ -300,11 +289,11 @@ function Chart({ asset, ...rest }) {
   const { data: assetOrders } = useAssetOrdersQuery({ asset })
 
   const orderBook = useMemo(
-    () => ({
-      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
-      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
-    }),
-    [assetOrders]
+      () => ({
+        buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+        sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+      }),
+      [assetOrders]
   )
 
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
@@ -330,18 +319,18 @@ function Chart({ asset, ...rest }) {
   }
 
   return (
-    <ChartView
-      bid={bid}
-      ask={ask}
-      baseAsset={baseAsset}
-      spread={spread}
-      asaVolume={asaVolume}
-      asset={asset}
-      ohlc={ohlc}
-      priceData={priceData}
-      volumeData={volumeData}
-      {...rest}
-    />
+      <ChartView
+          bid={bid}
+          ask={ask}
+          baseAsset={baseAsset}
+          spread={spread}
+          asaVolume={asaVolume}
+          asset={asset}
+          ohlc={ohlc}
+          priceData={priceData}
+          volumeData={volumeData}
+          {...rest}
+      />
   )
 }
 
