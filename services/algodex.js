@@ -43,10 +43,16 @@ async function getEtagResponse(url) {
 
   const authToken = process.env.GEO_PASSWORD
   const authHeader = `Bearer ${authToken}`
+
   let headers = { headers: {Authorization: authHeader} }
   if (urlToEtag[url]) {
     headers = { headers: { Authorization: authHeader, 'if-none-match': urlToEtag[url] } }
   }
+
+  if (!authToken) {
+    delete headers.headers.Authorization
+  }
+
   DEBUG && console.debug({headers})
   DEBUG && console.debug('url: ' + url)
   return await axios
