@@ -5,10 +5,10 @@ import { HeaderLg, HeaderSm } from 'components/Typography'
 
 import { useRef, useState } from 'react'
 
-import NavSearchSidebar from 'components/Nav/SearchSidebar'
+import { default as NavSearchSidebar } from 'components/Nav/SearchSidebar/SearchSidebar'
 import WalletConnect from 'components/Wallet/Connect/WalletConnect'
 import WalletTabs from 'components/Wallet/WalletTabs'
-import PlaceOrder from 'components/Wallet/PlaceOrder'
+import { default as PlaceOrder } from 'components/Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
 import AssetOrderBook from './Asset/OrderBook'
@@ -162,7 +162,7 @@ export const Main = styled.main`
 
 `
 
-export const MobileMenu = styled.nav`
+const MobileMenu = styled.nav`
   height: 50px;
   width: 100%;
 
@@ -318,7 +318,7 @@ export function Layout({ asset, children }) {
           style={{ height: '67vh' }}
           active={activeMobile === TABS.CHART}
         >
-          <NavSearchSidebar className="h-24" gridRef={gridRef} />
+          <NavSearchSidebar className="h-24" />
           <ContentSection>{children}</ContentSection>
         </NavSidebarAndContentSection>
 

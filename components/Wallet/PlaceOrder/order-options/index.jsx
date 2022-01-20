@@ -22,7 +22,7 @@ import {
 // import InfoButton from 'components/info-button'
 import OrderSizeFilter from 'components/Input/'
 
-function OrderOptions(props) {
+export function OrderOptions(props) {
   const { order, onChange, allowTaker, orderFilter, setOrderFilter } = props
   const { t } = useTranslation('place-order')
 
@@ -164,7 +164,7 @@ OrderOptions.propTypes = {
   order: PropTypes.object.isRequired,
   orderFilter: PropTypes.any,
   setOrderFilter: PropTypes.any,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   allowTaker: PropTypes.bool
 }
 

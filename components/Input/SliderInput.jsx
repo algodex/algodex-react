@@ -177,4 +177,4 @@ SliderInput.propTypes = {
   value: PropTypes.any
 }
 
-export default AmountSliderInput
+export default SliderInput

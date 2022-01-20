@@ -1,11 +1,12 @@
 import useTranslation from 'next-translate/useTranslation'
-import WalletOpenOrdersTable from './OpenOrdersTable/WalletOpenOrdersTable'
-import WalletTradeHistoryTable from './TradeHistoryTable/WalletTradeHistoryTable'
-import WalletAssetsTable from './AssetsTable/WalletAssetsTable'
+import { default as WalletOpenOrdersTable } from './OpenOrdersTable/WalletOpenOrdersTable'
+import { default as WalletTradeHistoryTable } from './TradeHistoryTable/WalletTradeHistoryTable'
+import { default as WalletAssetsTable } from './AssetsTable/WalletAssetsTable'
 import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useStorePersisted } from '../../store/use-store'
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -25,15 +26,19 @@ function WalletTabs({ initialPanel }) {
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
   const ASSETS_PANEL = 'assets'
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const wallet = {
+    address: activeWalletAddress
+  }
 
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <WalletOpenOrdersTable />
+        return <WalletOpenOrdersTable wallet={wallet} />
       case ORDER_HISTORY_PANEL:
-        return <WalletTradeHistoryTable />
+        return <WalletTradeHistoryTable wallet={wallet} />
       case ASSETS_PANEL:
-        return <WalletAssetsTable />
+        return <WalletAssetsTable wallet={wallet} />
       default:
         return null
     }
