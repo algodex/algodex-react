@@ -4,6 +4,7 @@ import InfoFlyover from './InfoFlyover'
 import NavSearchTable from './SearchTable'
 import PropTypes from 'prop-types'
 import SearchInput from 'components/Input/SearchInput'
+import Tooltip from 'components/Tooltip'
 import { rgba } from 'polished'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -57,6 +58,7 @@ export const AssetsContainer = styled.div`
 export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
+  const [controlledVisible, setControlledVisible] = useState(false)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
@@ -130,11 +132,13 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
   const handleAssetFocus = useCallback(
     (asset) => {
       setAssetInfo(asset)
+      setControlledVisible(true)
     },
     [setAssetInfo]
   )
   const handleAssetLeave = useCallback(() => {
     setAssetInfo(null)
+    setControlledVisible(false)
   }, [setAssetInfo])
   useEffect(() => {
     const handleResize = () => {
@@ -188,7 +192,22 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
             />
           </div>
         </AssetsContainer>
-        <InfoFlyover assetInfo={assetInfo} />
+        {/* {visible && (
+          <div ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container' })}>
+            <InfoFlyover assetInfo={assetInfo} />
+            <div {...getArrowProps({ className: 'tooltip-arrow' })} />
+          </div>
+        )} */}
+        <Tooltip
+          hasRenderButton={false}
+          otherProps={{
+            trigger: 'click',
+            visible: controlledVisible,
+            onVisibleChange: setControlledVisible
+          }}
+        >
+          <InfoFlyover assetInfo={assetInfo} />
+        </Tooltip>
       </Container>
     </Section>
   )
