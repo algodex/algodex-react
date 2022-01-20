@@ -2,12 +2,11 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
-
 import { useWalletAssetsQuery, useEventDispatch } from 'hooks'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import useStore, { useStorePersisted } from 'store/use-store'
 import useUserStore from 'store/use-user-state'
 
-import { AssetId, AssetNameBlock } from 'components/Asset'
+import { AssetId, AssetNameBlock } from 'components/Asset/Typography'
 import { BodyCopyTiny, BodyCopySm } from 'components/Typography'
 import Table from 'components/Table'
 import PropTypes from 'prop-types'
@@ -132,11 +131,14 @@ const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
 AssetInOrderCell.propTypes = { value: PropTypes.any }
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 AssetAlgoValueCell.propTypes = { value: PropTypes.any }
-function AssetsTab() {
+
+export function AssetsTab({ wallet }) {
+  const isSignedIn = typeof wallet !== 'undefined'
   const { t } = useTranslation('orders')
 
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const activeWalletAddress = wallet.address
+  // const isSignedIn = useStore((state) => state.isSignedIn)
 
   const walletAssetsTableState = useUserStore((state) => state.walletAssetsTableState)
   const setWalletAssetsTableState = useUserStore((state) => state.setWalletAssetsTableState)
@@ -213,6 +215,12 @@ function AssetsTab() {
       {renderStatus()}
     </Container>
   )
+}
+
+AssetsTab.propTypes = {
+  wallet: PropTypes.shape({
+    address: PropTypes.string.isRequired
+  })
 }
 
 export default AssetsTab

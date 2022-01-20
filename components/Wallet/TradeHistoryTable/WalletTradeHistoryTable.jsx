@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { useWalletTradeHistory } from 'hooks/useAlgodex'
 import { BodyCopyTiny, BodyCopySm } from 'components/Typography'
 import Table from 'components/Table'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import useStore, { useStorePersisted } from 'store/use-store'
 import { useEventDispatch } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
@@ -106,12 +106,21 @@ const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
 OrderPriceCell.propTypes = { value: PropTypes.any }
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 OrderAmountCell.propTypes = { value: PropTypes.any }
-function OrderHistory() {
-  const { t, lang } = useTranslation('orders')
-  const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+
+export function OrderHistory({ wallet }) {
+  const { t } = useTranslation('orders')
+  // const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+  const OrderSideCell = useCallback(
+    ({ value }) => {
+      return <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
+    },
+    [t]
+  )
   OrderSideCell.propTypes = { value: PropTypes.any }
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  const activeWalletAddress = wallet.address
+  const isSignedIn = typeof wallet !== 'undefined'
+  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  // const isSignedIn = useStore((state) => state.isSignedIn)
 
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
@@ -126,7 +135,7 @@ function OrderHistory() {
     }
   })
 
-  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data, lang])
+  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
 
   const columns = useMemo(
     () => [
@@ -157,7 +166,7 @@ function OrderHistory() {
         Cell: OrderAmountCell
       }
     ],
-    [lang]
+    [t, OrderSideCell]
   )
 
   const renderStatus = () => {
@@ -186,6 +195,12 @@ function OrderHistory() {
       {renderStatus()}
     </OrderHistoryContainer>
   )
+}
+
+OrderHistory.propTypes = {
+  wallet: PropTypes.shape({
+    address: PropTypes.string.isRequired
+  })
 }
 
 export default OrderHistory
