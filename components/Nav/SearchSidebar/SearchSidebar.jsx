@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import NavSearchTable from './SearchTable'
+
 import InfoFlyover from './InfoFlyover'
+import NavSearchTable from './SearchTable'
 import PropTypes from 'prop-types'
 import SearchInput from 'components/Input/SearchInput'
 import { rgba } from 'polished'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
 export const Section = styled.section`
