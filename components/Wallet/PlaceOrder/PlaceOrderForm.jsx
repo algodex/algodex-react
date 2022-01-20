@@ -11,8 +11,8 @@ import { BodyCopyTiny, LabelMd, LabelSm } from 'components/Typography'
 import { useState } from 'react'
 import CurrencyInput from '../../Input/CurrencyInput'
 import { default as AmountRange } from 'components/Input/SliderInput'
-import useUserStore from "../../../store/use-user-state";
-import OrderOptions from "./order-options";
+import useUserStore from 'store/use-user-state'
+import OrderOptions from './order-options'
 const IconTextContainer = styled.div`
   display: flex;
   align-items: center;
@@ -23,22 +23,6 @@ const AvailableBalance = styled.div`
   margin-bottom: 1.25rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-`
-const Container = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.dark};
-  overflow: hidden scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`
-
-const Header = styled.header`
-  padding: 1.125rem;
 `
 
 const Form = styled.form`
@@ -177,6 +161,7 @@ const DEFAULT_ORDER = {
 }
 
 export function PlaceOrderForm({ asset, onSubmit, wallet }) {
+  console.log(wallet)
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
