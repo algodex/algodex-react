@@ -22,6 +22,13 @@ function InfoFlyover({ row, components, children, isActive }) {
   )
 }
 
+function DefaultRoot({ children }) {
+  return <div>{children}</div>
+}
+DefaultRoot.propTypes = {
+  children: PropTypes.elementType
+}
+
 InfoFlyover.propTypes = {
   row: PropTypes.object,
   components: PropTypes.shape({
@@ -34,7 +41,7 @@ InfoFlyover.defaultProps = {
   isActive: false,
   row: {},
   components: {
-    Root: ({ children }) => <div>{children}</div>
+    Root: DefaultRoot
   }
 }
 export default InfoFlyover

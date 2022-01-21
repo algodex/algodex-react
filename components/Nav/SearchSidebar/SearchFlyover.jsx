@@ -1,5 +1,5 @@
 import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/Typography'
-import { lighten, rgba } from 'polished'
+// import { lighten, rgba } from 'polished'
 
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
@@ -7,28 +7,7 @@ import SvgImage from 'components/SvgImage'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 
-// export const InfoPopup = styled.aside`
-//   position: fixed;
-//   top: 100px;
-//   left: calc(320px + 1.125rem);
-//   width: ${({ isLarge }) => (isLarge ? '480px' : '360px')};
-//   background-color: ${({ theme }) => lighten(0.02, theme.colors.gray['800'])};
-//   z-index: 999;
-//   opacity: ${({ isActive }) => (isActive ? 1 : 0)};
-//   pointer-events: ${({ isActive }) => (isActive ? 'auto' : 'none')};
-//   transform: translateY(${({ isActive }) => (isActive ? '0' : '5%')});
-//   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
-//   padding: 1rem 1.5rem;
-//   padding-bottom: ${({ isLarge }) => (isLarge ? '0.25rem' : '1.25rem')};
-//   box-shadow: 3px 3px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
-//
-//   @media (min-width: 1536px) {
-//     // top: ${({ searchHeight }) => `${searchHeight + 36}px`};
-//     left: calc(100% + 1.125rem);
-//   }
-// `
-
-export const HeaderContainer = styled.div`
+const HeaderContainer = styled.div`
   h3 {
     > span {
       white-space: nowrap;
@@ -42,12 +21,12 @@ export const HeaderContainer = styled.div`
   }
 `
 
-export const InfoList = styled.dl`
+const InfoList = styled.dl`
   display: flex;
   flex-wrap: wrap;
 `
 
-export const InfoItem = styled.div`
+const InfoItem = styled.div`
   flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
 
   &:not(:last-child) {
@@ -55,24 +34,13 @@ export const InfoItem = styled.div`
   }
 `
 
-export const Algos = styled(Icon)`
+const Algos = styled(Icon)`
   position: relative;
   top: -0.125rem;
   margin-left: 0.125rem;
 `
 
-// this is imported by components/main-layout
-export const ChartOverlay = styled.div`
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.25);
-  opacity: ${({ isActive }) => (isActive ? 1 : 0)};
-  pointer-events: ${({ isActive }) => (isActive ? 'auto' : 'none')};
-  transition: opacity 150ms ease-in-out;
-  z-index: 998;
-`
-
-function SearchFlyover(props) {
+export function SearchFlyover(props) {
   const { row } = props
   const { t } = useTranslation('assets')
 

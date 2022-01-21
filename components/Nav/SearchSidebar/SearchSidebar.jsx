@@ -55,7 +55,7 @@ export const AssetsContainer = styled.div`
 export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'sidebar' }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
-  const [controlledVisible, setControlledVisible] = useState(false)
+  // const [controlledVisible, setControlledVisible] = useState(false)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
@@ -68,7 +68,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
    */
   const [isActive, setIsActive] = useState(true)
   // const [searchHeight, setSearchHeight] = useState(0)
-  const [assetInfo, setAssetInfo] = useState(null)
+  // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
   const searchRef = useRef()
   // /**
