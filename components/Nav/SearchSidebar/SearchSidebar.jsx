@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import NavSearchTable from './SearchTable'
-import InfoFlyover from './InfoFlyover'
+import { default as NavSearchTable } from './SearchTable'
+import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
-import SearchInput from 'components/Input/SearchInput'
-import { rgba } from 'polished'
+import { default as SearchInput } from 'components/Input/SearchInput'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
@@ -36,9 +35,7 @@ export const AssetsContainer = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  // height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
-  // box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
   z-index: 30;
 
   @media (min-width: 1536px) {
@@ -54,11 +51,11 @@ export const AssetsContainer = styled.div`
     height: inherit;
   }
 `
-export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps }) {
+export function NavSearchSidebar({ algoPrice, components, tableProps }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
-  const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
+  const [gridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
@@ -136,27 +133,22 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
   const handleAssetLeave = useCallback(() => {
     setAssetInfo(null)
   }, [setAssetInfo])
-  useEffect(() => {
-    const handleResize = () => {
-      if (gridRef?.current) {
-        const { width, height } = gridRef.current.getBoundingClientRect()
-        setGridSize({ width, height })
-      }
-    }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => removeEventListener('resize', handleResize)
-  }, [gridRef, setGridSize])
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (gridRef?.current) {
+  //       const { width, height } = gridRef.current.getBoundingClientRect()
+  //       setGridSize({ width, height })
+  //     }
+  //   }
+  //   window.addEventListener('resize', handleResize)
+  //   handleResize()
+  //
+  //   return () => removeEventListener('resize', handleResize)
+  // }, [gridRef, setGridSize])
   return (
     <Section>
       <Container isActive={isActive}>
-        <AssetsContainer
-          style={{ width: '100%' }}
-          className="flex"
-          ref={containerRef}
-          gridHeight={gridSize.height}
-        >
+        <AssetsContainer style={{ width: '100%' }} className="flex">
           <div style={{ width: '100%' }} ref={searchRef}>
             <SearchInput
               initialText={query}
@@ -195,7 +187,6 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps })
 }
 
 NavSearchSidebar.propTypes = {
-  gridRef: PropTypes.object.isRequired,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
     NavTable: PropTypes.node

@@ -132,7 +132,7 @@ AssetInOrderCell.propTypes = { value: PropTypes.any }
 const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
 AssetAlgoValueCell.propTypes = { value: PropTypes.any }
 
-export function AssetsTab({ wallet }) {
+export function AssetsTable({ wallet }) {
   const isSignedIn = typeof wallet !== 'undefined'
   const { t } = useTranslation('orders')
 
@@ -217,10 +217,10 @@ export function AssetsTab({ wallet }) {
   )
 }
 
-AssetsTab.propTypes = {
+AssetsTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
   })
 }
 
-export default AssetsTab
+export default AssetsTable

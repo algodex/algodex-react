@@ -107,7 +107,7 @@ OrderPriceCell.propTypes = { value: PropTypes.any }
 const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
 OrderAmountCell.propTypes = { value: PropTypes.any }
 
-export function OrderHistory({ wallet }) {
+export function TradeHistoryTable({ wallet }) {
   const { t } = useTranslation('orders')
   // const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
   const OrderSideCell = useCallback(
@@ -197,10 +197,10 @@ export function OrderHistory({ wallet }) {
   )
 }
 
-OrderHistory.propTypes = {
+TradeHistoryTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
   })
 }
 
-export default OrderHistory
+export default TradeHistoryTable

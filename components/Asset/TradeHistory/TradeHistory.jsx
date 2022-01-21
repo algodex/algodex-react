@@ -50,6 +50,27 @@ const Trades = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow: hidden scroll;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 12px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+  }
 `
 
 const TradesWrapper = styled.div`

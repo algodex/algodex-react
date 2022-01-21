@@ -29,7 +29,7 @@ const thumb = css`
     `calc(${thumbDiameter} * (-0.5 + ${(value - min) / (max - min)}))`};
 `
 
-export const Input = styled.input.attrs({ type: 'range' })`
+const Input = styled.input.attrs({ type: 'range' })`
   &,
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -107,13 +107,13 @@ export const Input = styled.input.attrs({ type: 'range' })`
   }
 `
 
-export const Container = styled.div`
+const Container = styled.div`
   position: relative;
   margin: 1rem 4px;
   height: 1.25rem;
 `
 
-export const Tick = styled.div`
+const Tick = styled.div`
   position: relative;
   top: -0.125rem;
   width: ${tickWidth};
@@ -143,7 +143,7 @@ export const Tick = styled.div`
  * @returns {JSX.Element}
  * @constructor
  */
-function OrderSizeFilter({ onChange, value }) {
+export function SliderInput({ onChange, value }) {
   const [isMouseDown, setIsMouseDown] = useState(false)
 
   return (
@@ -163,7 +163,6 @@ function OrderSizeFilter({ onChange, value }) {
           step={5}
           value={value || 0}
           onChange={(e) => onChange(e.target.value)}
-          //   orderType={order.type}
           onMouseDown={() => setIsMouseDown(true)}
           onMouseUp={() => setIsMouseDown(false)}
           isMouseDown={isMouseDown}
@@ -173,9 +172,9 @@ function OrderSizeFilter({ onChange, value }) {
   )
 }
 
-OrderSizeFilter.propTypes = {
+SliderInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.any
 }
 
-export default OrderSizeFilter
+export default SliderInput

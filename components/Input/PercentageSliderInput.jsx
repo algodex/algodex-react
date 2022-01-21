@@ -194,7 +194,7 @@ export const Tick = styled.div`
  * @deprecated
  * @constructor
  */
-function AmountSliderInput({
+export function PercentageSliderInput({
   order,
   algoBalance: _algoBalance,
   asaBalance: _asaBalance,
@@ -332,7 +332,7 @@ function AmountSliderInput({
   )
 }
 
-AmountSliderInput.propTypes = {
+PercentageSliderInput.propTypes = {
   order: PropTypes.object.isRequired,
   algoBalance: PropTypes.number.isRequired,
   asaBalance: PropTypes.number.isRequired,
@@ -340,4 +340,4 @@ AmountSliderInput.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default AmountSliderInput
+export default PercentageSliderInput
