@@ -16,7 +16,7 @@ import TablePriceHeader from 'components/Table/PriceHeader'
 import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
-
+import { Section } from '../../Section'
 export const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@ export const FirstOrderContainer = styled.div`
   padding: 0.875rem 0 1rem;
 `
 
-export const EmptyState = styled.div`
+const EmptyState = styled.div`
   position: relative;
   flex: 1 1 0%;
   display: flex;
@@ -53,7 +53,7 @@ export const EmptyState = styled.div`
   text-align: center;
 `
 
-export const Arrow = styled.div`
+const Arrow = styled.div`
   display: none;
   position: absolute;
   top: 50%;
@@ -77,7 +77,7 @@ export const Arrow = styled.div`
   }
 `
 
-export const PairSlash = styled.span`
+const PairSlash = styled.span`
   letter-spacing: 0.125rem;
 `
 function FirstOrderMsg(props) {
@@ -422,7 +422,7 @@ export function OrderBookView({ asset, sellData, buyData }) {
     })
   }
   return (
-    <AssetOrderBookSection>
+    <Section area="topLeft">
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('order-book')}
@@ -453,7 +453,7 @@ export function OrderBookView({ asset, sellData, buyData }) {
           <OrdersWrapper>{renderOrders(buyData, 'buy')}</OrdersWrapper>
         </BuyOrders>
       </Container>
-    </AssetOrderBookSection>
+    </Section>
   )
 }
 
@@ -494,7 +494,7 @@ export default function OrderBook({ asset /* onClicked, onChange */ }) {
 
   // Orderbook Query
   const { data, isLoading, isError } = useAssetOrdersQuery({ asset })
-  console.log('DAAAATA', data)
+
   // Massage Orders
   useEffect(() => {
     if (

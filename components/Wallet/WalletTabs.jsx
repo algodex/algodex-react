@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Section } from '../Section'
 import { useStorePersisted } from '../../store/use-store'
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -19,7 +20,7 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
-function WalletTabs({ initialPanel }) {
+function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -45,7 +46,7 @@ function WalletTabs({ initialPanel }) {
   }
 
   return (
-    <WalletOrdersSection>
+    <Section area={area} borderColor="blue" border="dashed">
       <Container>
         <Header>
           <Tab
@@ -69,7 +70,7 @@ function WalletTabs({ initialPanel }) {
         </Header>
         {renderPanel(selectedPanel)}
       </Container>
-    </WalletOrdersSection>
+    </Section>
   )
 }
 
@@ -79,7 +80,8 @@ WalletTabs.propTypes = {
   initialPanel: PropTypes.string,
   openOrderData: PropTypes.array.isRequired,
   orderHistoryData: PropTypes.array.isRequired,
-  assetsData: PropTypes.array.isRequired
+  assetsData: PropTypes.array.isRequired,
+  area: PropTypes.string
 }
 
 WalletTabs.defaultProps = {

@@ -2,7 +2,7 @@
 import styled from 'styled-components'
 import { NavSearchTable as Component, default as ComponentWithData } from './SearchTable'
 const Container = styled.div`
-  width: 100vw;
+  width: 50vw;
   height: 100vh;
   background: ${({ theme }) => theme.colors.gray['800']};
   display: flex;
