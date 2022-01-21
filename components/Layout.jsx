@@ -1,22 +1,21 @@
-import { useState, Fragment } from 'react'
-import styled, { css } from 'styled-components'
-import Button from 'components/Button'
-import SvgImage from 'components/SvgImage'
+import { Fragment, useState } from 'react'
 import { HeaderLg, HeaderSm } from 'components/Typography'
+import styled, { css } from 'styled-components'
+import { useStore, useStorePersisted } from '../store/use-store'
 
+import AssetOrderBook from 'components/Asset/OrderBook'
+import AssetTradeHistory from 'components/Asset/TradeHistory'
+import Button from 'components/Button'
 import { Controls as DefaultControls } from './Controls'
 import NavSearchSidebar from 'components/Nav/SearchSidebar'
-import WalletTabs from 'components/Wallet/WalletTabs'
-import AssetTradeHistory from 'components/Asset/TradeHistory'
-import AssetOrderBook from 'components/Asset/OrderBook'
+import PlaceOrder from './Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
-
+import SvgImage from 'components/SvgImage'
+import WalletConnect from './Wallet/Connect/WalletConnect'
+import WalletTabs from 'components/Wallet/WalletTabs'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import PlaceOrder from './Wallet/PlaceOrder'
-import WalletConnect from './Wallet/Connect/WalletConnect'
-import { useStore, useStorePersisted } from '../store/use-store'
 
 export const FlexContainer = styled.div`
   flex: 1 1 0%;

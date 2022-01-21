@@ -1,6 +1,6 @@
-import { usePopperTooltip } from 'react-popper-tooltip'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { usePopperTooltip } from 'react-popper-tooltip'
 
 /**
  * Tooltip Styled Container
@@ -138,16 +138,24 @@ const TooltipContainer = styled.div`
  * @constructor
  */
 
-export const Tooltip = ({ renderButton, children, delayShow = 200, delayHide = 200 }) => {
+export const Tooltip = ({
+  otherProps = {},
+  hasRenderButton = true,
+  renderButton,
+  children,
+  delayShow = 200,
+  delayHide = 200
+}) => {
   const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
     usePopperTooltip({
       delayShow,
-      delayHide
+      delayHide,
+      ...otherProps
     })
 
   return (
     <>
-      {renderButton(setTriggerRef)}
+      {hasRenderButton && renderButton(setTriggerRef)}
       {visible && (
         <TooltipContainer
           ref={setTooltipRef}
@@ -161,7 +169,9 @@ export const Tooltip = ({ renderButton, children, delayShow = 200, delayHide = 2
   )
 }
 Tooltip.propTypes = {
-  renderButton: PropTypes.any.isRequired,
+  renderButton: PropTypes.any,
+  hasRenderButton: PropTypes.bool,
+  otherProps: PropTypes.object,
   children: PropTypes.any,
   delayShow: PropTypes.number,
   delayHide: PropTypes.number
