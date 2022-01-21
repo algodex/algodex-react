@@ -4,7 +4,7 @@ import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/Typography'
 import Icon from 'components/Icon'
 
 export const InfoPopup = styled.aside`
-  position: absolute;
+  position: fixed;
   top: 100px;
   left: calc(320px + 1.125rem);
   width: ${({ isLarge }) => (isLarge ? '480px' : '360px')};
@@ -19,7 +19,7 @@ export const InfoPopup = styled.aside`
   box-shadow: 3px 3px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
 
   @media (min-width: 1536px) {
-    top: ${({ searchHeight }) => `${searchHeight + 36}px`};
+    // top: ${({ searchHeight }) => `${searchHeight + 36}px`};
     left: calc(100% + 1.125rem);
   }
 `
@@ -73,7 +73,7 @@ import SvgImage from 'components/SvgImage'
 import useTranslation from 'next-translate/useTranslation'
 
 function InfoFlyover(props) {
-  const { assetInfo, searchHeight } = props
+  const { assetInfo } = props
   const { t } = useTranslation('assets')
 
   const renderName = () => {
@@ -109,11 +109,7 @@ function InfoFlyover(props) {
   }
 
   return (
-    <InfoPopup
-      isActive={!!assetInfo}
-      searchHeight={searchHeight}
-      isLarge={assetInfo?.hasBeenOrdered}
-    >
+    <InfoPopup isActive={!!assetInfo} isLarge={assetInfo?.hasBeenOrdered}>
       {assetInfo && (
         <>
           <HeaderContainer>
@@ -173,8 +169,7 @@ function InfoFlyover(props) {
 }
 
 InfoFlyover.propTypes = {
-  assetInfo: PropTypes.object,
-  searchHeight: PropTypes.number
+  assetInfo: PropTypes.object
 }
 
 export default InfoFlyover

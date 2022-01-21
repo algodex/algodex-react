@@ -1,12 +1,13 @@
 import useTranslation from 'next-translate/useTranslation'
-import WalletOpenOrdersTable from './OpenOrdersTable/WalletOpenOrdersTable'
-import WalletTradeHistoryTable from './TradeHistoryTable/WalletTradeHistoryTable'
-import WalletAssetsTable from './AssetsTable/WalletAssetsTable'
+import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
+import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
+import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Section } from '../Section'
+import { useStorePersisted } from '../../store/use-store'
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -19,30 +20,33 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
-function WalletTabs(props) {
-  const { initialPanel } = props
+function WalletTabs({ initialPanel }) {
   const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
   const ASSETS_PANEL = 'assets'
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const wallet = {
+    address: activeWalletAddress
+  }
 
   const renderPanel = (panelName) => {
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
-        return <WalletOpenOrdersTable />
+        return <WalletOpenOrdersTable wallet={wallet} />
       case ORDER_HISTORY_PANEL:
-        return <WalletTradeHistoryTable />
+        return <WalletTradeHistoryTable wallet={wallet} />
       case ASSETS_PANEL:
-        return <WalletAssetsTable />
+        return <WalletAssetsTable wallet={wallet} />
       default:
         return null
     }
   }
 
   return (
-    <Section {...props}>
+    <WalletOrdersSection>
       <Container>
         <Header>
           <Tab
@@ -66,7 +70,7 @@ function WalletTabs(props) {
         </Header>
         {renderPanel(selectedPanel)}
       </Container>
-    </Section>
+    </WalletOrdersSection>
   )
 }
 

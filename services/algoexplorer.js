@@ -1,15 +1,15 @@
 import axios from 'axios'
 import { indexerAssetMap } from './algorand'
-export const EXPLORER_API = process.env.NEXT_EXPLORER_API || 'https://node.testnet.algoexplorerapi.io'
+export const EXPLORER_API = process.env.NEXT_PUBLIC_EXPLORER_API || 'https://node.testnet.algoexplorerapi.io'
 export const EXPLORER_INDEXER_API =
-  process.env.NEXT_EXPLORER_INDEXER_API || 'https://algoindexer.testnet.algoexplorerapi.io'
+  process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API || 'https://algoindexer.testnet.algoexplorerapi.io'
 export const ALGO_EXPLORER_V1_API = 
-  process.env.NEXT_ALGO_EXPLORER_V1_API || 'https://testnet.algoexplorerapi.io'
+  process.env.NEXT_PUBLIC_ALGO_EXPLORER_V1_API || 'https://testnet.algoexplorerapi.io'
 export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/algo-usd'
 
-console.debug('NEXT_EXPLORER_API: ' + process.env.NEXT_EXPLORER_API)
+console.debug('NEXT_PUBLIC_EXPLORER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_API)
 console.debug('EXPLORER_API: ' + EXPLORER_API)
-console.debug('NEXT_EXPLORER_INDEXER_API: ' + process.env.NEXT_EXPLORER_INDEXER_API)
+console.debug('NEXT_PUBLIC_EXPLORER_INDEXER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API)
 console.debug('EXPLORER_INDEXER_API: ' + EXPLORER_INDEXER_API)
 console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
 

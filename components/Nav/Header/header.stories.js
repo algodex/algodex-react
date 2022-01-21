@@ -1,16 +1,16 @@
-import Header from '.'
+import { default as Component } from '.'
 import React from 'react'
 
 export default {
-  title: 'Nav/Header',
-  component: Header
+  title: 'Nav',
+  component: Component
 }
 
-const Template = (args) => <Header {...args} />
+const Template = (args) => <Component {...args} />
 
-export const Default = Template.bind({})
+export const Header = Template.bind({})
 
-Default.args = {
+Header.args = {
   variant: 'large',
   fontSize: 2
 }

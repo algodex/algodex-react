@@ -17,8 +17,23 @@ import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
 import { Section } from '../../Section'
-
-const FirstOrderContainer = styled.div`
+export const AssetOrderBookSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%
+  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  @media (min-width: 1024px) and (orientation: landscape) {
+    border-right: none;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  }
+  // display: ${({ active }) => (active ? 'flex' : 'none')};
+  @media (min-width: 996px) {
+    grid-area: book;
+    display: flex;
+  }
+`
+export const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
@@ -212,6 +227,27 @@ export const SellOrders = styled.div`
   overflow: hidden scroll;
   display: flex;
   flex-direction: column-reverse;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 12px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+  }
 `
 
 export const BuyOrders = styled.div`
@@ -221,6 +257,27 @@ export const BuyOrders = styled.div`
 
   ${OrdersWrapper} {
     right: 0;
+  }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 12px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
   }
 `
 
@@ -245,6 +302,13 @@ const Price = styled.p`
   }
 `
 
+/**
+ * @param price
+ * @param decimals
+ * @param change
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function OrderBookPrice({ price, decimals, change }) {
   const isDecrease = change < 0
   const color = isDecrease ? 'red' : 'green'
@@ -284,6 +348,8 @@ OrderBookPrice.defaultProps = {
 }
 
 /**
+ * # Recipe: Orderbook Component
+ *
  * @todo Refactor to Orderbook withAssetOrdersQuery
  * @param asset
  * @param sellData
@@ -291,8 +357,7 @@ OrderBookPrice.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-function OrderBookView(props) {
-  const { asset, sellData, buyData } = props
+export function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
@@ -300,6 +365,7 @@ function OrderBookView(props) {
   const { data, isLoading } = useAssetPriceQuery({
     asset
   })
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
 
@@ -393,8 +459,20 @@ function OrderBookView(props) {
 
 OrderBookView.propTypes = {
   asset: PropTypes.object.isRequired,
-  sellData: PropTypes.array,
-  buyData: PropTypes.array
+  sellData: PropTypes.arrayOf(
+    PropTypes.shape({
+      amount: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired
+    })
+  ),
+  buyData: PropTypes.arrayOf(
+    PropTypes.shape({
+      amount: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired
+    })
+  )
 }
 
 OrderBookView.defaultProps = {
@@ -409,8 +487,7 @@ OrderBookView.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function OrderBook(props) {
-  const { asset /* onClicked, onChange */ } = props
+export default function OrderBook({ asset /* onClicked, onChange */ }) {
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
   const isSignedIn = useStore((state) => state.isSignedIn)
@@ -449,7 +526,7 @@ export default function OrderBook(props) {
   }
 
   // Return OrderBook
-  return <OrderBookView buyData={buyOrders} sellData={sellOrders} {...props} />
+  return <OrderBookView asset={asset} buyData={buyOrders} sellData={sellOrders} />
 }
 OrderBook.propTypes = {
   asset: PropTypes.object.isRequired,

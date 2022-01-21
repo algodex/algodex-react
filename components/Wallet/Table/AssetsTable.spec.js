@@ -1,5 +1,5 @@
 import React from 'react'
-import Assets from '.'
+import Assets from './AssetsTable'
 import { render } from 'test/test-utils'
 
 const ASSETS_ROW = 'assets-row'

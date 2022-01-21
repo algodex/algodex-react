@@ -11,7 +11,7 @@ import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 
-const DEBUG = process.env.NEXT_DEBUG
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG
 
 const Container = styled.div`
   display: flex;

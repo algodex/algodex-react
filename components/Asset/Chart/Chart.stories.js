@@ -7,11 +7,12 @@ import {
   DEMO_PRICE_DATA,
   DEMO_SPREAD,
   DEMO_VOLUME_DATA
-} from 'spec/Chat'
+} from 'spec/Chart'
 
-import { ChartView as Component } from './Chart'
+import { ChartView as Component, default as ComponentWithData } from './Chart'
 import React from 'react'
 import styled from 'styled-components'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[900]};
@@ -23,26 +24,31 @@ const Container = styled.div`
   margin: 0;
 `
 const assets = {
-  YLDY: { ...DEMO_ASSET },
-  OTHER: {
-    name: 'OTHER',
-    ...DEMO_ASSET
-  }
+  VOTE: { id: 48806985, decimals: 6, name: 'VOTE' },
+  LAMP: { id: 15322902, decimals: 6, name: 'LAMP' }
 }
+
 export default {
-  title: '@algodex/components/Asset',
+  title: '@algodex/Asset/Chart',
   component: Component,
-  argsTypes: {
+  parameters: { layout: 'fullscreen', controls: { include: ['asset', 'isLive'] } },
+  args: {
+    asset: DEMO_ASSET,
+    isLive: false,
+    asaVolume: DEMO_ALGO_VOLUME,
+    ohlc: DEMO_OHLC,
+    bid: DEMO_BID,
+    ask: DEMO_ASK,
+    spread: DEMO_SPREAD,
+    priceData: DEMO_PRICE_DATA,
+    volumeData: DEMO_VOLUME_DATA
+  },
+  argTypes: {
     asset: {
-      options: Object.keys(assets), // An array of serializable values
-      mapping: assets, // Maps serializable option values to complex arg values
+      options: Object.keys(assets),
+      mapping: assets,
       control: {
-        type: 'select', // Type 'select' is automatically inferred when 'options' is defined
-        labels: {
-          // 'labels' maps option values to string labels
-          YDLY: 'YDLY',
-          OTHER: 'OTHER'
-        }
+        type: 'select'
       }
     }
   },
@@ -55,17 +61,30 @@ export default {
   ]
 }
 
-const Template = (args) => <Component {...args} />
-
-export const Chart = Template.bind({})
-Chart.parameters = { layout: 'fullscreen', controls: { include: ['asset'] } }
-Chart.args = {
-  asset: DEMO_ASSET,
-  asaVolume: DEMO_ALGO_VOLUME,
-  ohlc: DEMO_OHLC,
-  bid: DEMO_BID,
-  ask: DEMO_ASK,
-  spread: DEMO_SPREAD,
-  priceData: DEMO_PRICE_DATA,
-  volumeData: DEMO_VOLUME_DATA
-}
+// const Template = (args) => <Component {...args} />
+// const TemplateWithData = (args) => <ComponentWithData {...args} />
+//eslint-disable-next-line
+export const Chart = ({ isLive, asset, ...props }) => (
+  <>
+    {!isLive && <Component asset={asset} {...props} />}
+    {isLive && <ComponentWithData asset={asset} />}
+    {isLive && <ReactQueryDevtools initialIsOpen={false} />}
+  </>
+)
+// export const Chart = Template.bind({})
+// Chart.parameters =
+// Chart.args = {
+//   asset: DEMO_ASSET,
+//   asaVolume: DEMO_ALGO_VOLUME,
+//   ohlc: DEMO_OHLC,
+//   bid: DEMO_BID,
+//   ask: DEMO_ASK,
+//   spread: DEMO_SPREAD,
+//   priceData: DEMO_PRICE_DATA,
+//   volumeData: DEMO_VOLUME_DATA
+// }
+// export const ChartPreview = TemplateWithData.bind({})
+// ChartPreview.parameters = { layout: 'fullscreen', controls: { include: ['asset'] } }
+// ChartPreview.args = {
+//   asset: DEMO_ASSET
+// }

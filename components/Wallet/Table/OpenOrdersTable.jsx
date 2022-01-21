@@ -1,6 +1,6 @@
 import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import useStore, { useStorePersisted } from 'store/use-store'
 import Table from 'components/Table'
 import Link from 'next/link'
 import OrderService from 'services/order'
@@ -133,12 +133,14 @@ export const OrderCancelButton = styled.button`
   }
 `
 
-function OpenOrders() {
+export function OpenOrdersTable({ wallet }) {
   // const { t, lang } = useTranslation('orders')
   const { t } = useTranslation('orders')
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const activeWalletAddress = wallet.address
   const [openOrdersData, setOpenOrdersData] = useState([])
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  // const isSignedIn = useStore((state) => state.isSignedIn)
+  const isSignedIn = typeof wallet !== 'undefined'
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
@@ -179,7 +181,13 @@ function OpenOrders() {
     )
   }
   OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-  const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
+  // const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
+  const OrderTypeCell = useCallback(
+    ({ value }) => {
+      return <OrderType value={value}>{t(value.toLowerCase())}</OrderType> // eslint-disable-line
+    },
+    [t]
+  )
   OrderTypeCell.propTypes = { value: PropTypes.any }
   const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
   OrderAmountCell.propTypes = { value: PropTypes.any }
@@ -314,4 +322,10 @@ function OpenOrders() {
   )
 }
 
-export default OpenOrders
+OpenOrdersTable.propTypes = {
+  wallet: PropTypes.shape({
+    address: PropTypes.string.isRequired
+  })
+}
+
+export default OpenOrdersTable

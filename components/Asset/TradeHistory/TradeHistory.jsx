@@ -10,9 +10,21 @@ import useTranslation from 'next-translate/useTranslation'
 import Icon from 'components/Icon'
 import Big from 'big.js'
 import dayjs from 'dayjs'
-
 import { Section } from 'components/Section'
+const AssetTradeHistorySection = styled.section`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 
+  // display: ${({ active }) => (active ? 'flex' : 'none')};
+  // height: calc(100% - 50px);
+  // @media (min-width: 996px) {
+  //   grid-area: history;
+  //   display: flex;
+  //   height: inherit;
+  // }
+`
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -38,6 +50,27 @@ const Trades = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow: hidden scroll;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 12px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+  }
 `
 
 const TradesWrapper = styled.div`
@@ -149,12 +182,12 @@ export function TradeHistoryView(props) {
   }
 
   return (
-    <Section {...props}>
+    <AssetTradeHistorySection>
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('trade-history')}
         </HeaderCaps>
-        <br></br>
+        <br />
         <Header>
           <PriceHeader />
           <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
@@ -176,7 +209,7 @@ export function TradeHistoryView(props) {
           </TradesWrapper>
         </Trades>
       </Container>
-    </Section>
+    </AssetTradeHistorySection>
   )
 }
 
@@ -192,7 +225,7 @@ TradeHistoryView.propTypes = {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function TradeHistory({ asset, ...rest }) {
+export default function TradeHistory({ asset }) {
   const { status, data } = useAssetTradeHistoryQuery({ asset })
 
   if (status === 'loading') {
@@ -214,7 +247,7 @@ export default function TradeHistory({ asset, ...rest }) {
   if (!asset?.id) {
     return <Spinner flex />
   }
-  return <TradeHistoryView asset={asset} tradesData={tradesData} {...rest} />
+  return <TradeHistoryView asset={asset} tradesData={tradesData} />
 }
 TradeHistory.propTypes = {
   asset: PropTypes.object.isRequired

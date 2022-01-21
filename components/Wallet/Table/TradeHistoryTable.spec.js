@@ -1,5 +1,5 @@
 import React from 'react'
-import OrderHistory from '.'
+import OrderHistory from './TradeHistoryTable'
 import { render } from 'test/test-utils'
 
 const ORDER_HISTORY_ROW = 'order-history-row'
