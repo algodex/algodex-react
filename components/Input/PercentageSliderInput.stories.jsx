@@ -30,8 +30,8 @@ const Template = (args) => <Component {...args} />
 
 export const PercentageSliderInput = Template.bind({})
 PercentageSliderInput.args = {
-    order: {},
-    algoBalance: 10000,
-    asaBalance: 10000,
-    asset
+  order: {},
+  algoBalance: 10000,
+  asaBalance: 10000,
+  asset
 }

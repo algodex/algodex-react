@@ -133,7 +133,7 @@ export const OrderCancelButton = styled.button`
   }
 `
 
-export function OpenOrders({ wallet }) {
+export function OpenOrdersTable({ wallet }) {
   // const { t, lang } = useTranslation('orders')
   const { t } = useTranslation('orders')
   // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
@@ -322,10 +322,10 @@ export function OpenOrders({ wallet }) {
   )
 }
 
-OpenOrders.propTypes = {
+OpenOrdersTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
   })
 }
 
-export default OpenOrders
+export default OpenOrdersTable

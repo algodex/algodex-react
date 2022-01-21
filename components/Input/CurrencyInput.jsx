@@ -84,7 +84,8 @@ export function CurrencyInput({ label, currency, ...props }) {
 
 CurrencyInput.propTypes = {
   label: PropTypes.string,
-  currency: PropTypes.string
+  currency: PropTypes.string,
+  isCondensed: PropTypes.bool
 }
 
 export default CurrencyInput

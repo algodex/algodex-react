@@ -29,5 +29,5 @@ const Template = (args) => <Component {...args} />
 
 export const SliderInput = Template.bind({})
 SliderInput.args = {
-    value: 50
+  value: 50
 }

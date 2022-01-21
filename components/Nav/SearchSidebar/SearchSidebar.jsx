@@ -3,7 +3,6 @@ import { default as NavSearchTable } from './SearchTable'
 import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
 import { default as SearchInput } from 'components/Input/SearchInput'
-import { rgba } from 'polished'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
@@ -56,7 +55,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
-  const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
+  const [gridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
@@ -166,19 +165,19 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
             className="mt-1.5"
             style={{ borderTop: 'solid 1px #2D3748', height: '91%', overflowY: 'scroll' }}
           >
-            {/*<NavTable*/}
-            {/*  query={query}*/}
-            {/*  options={{ refetchInterval: 5000 }}*/}
-            {/*  onAssetClick={handleAssetClick}*/}
-            {/*  onAssetFocus={handleAssetFocus}*/}
-            {/*  onAssetLeave={handleAssetLeave}*/}
-            {/*  algoPrice={algoPrice}*/}
-            {/*  isListingVerifiedAssets={isListingVerifiedAssets}*/}
-            {/*  setIsListingVerifiedAssets={setIsListingVerifiedAssets}*/}
-            {/*  isFilteringByFavorites={isFilteringByFavorites}*/}
-            {/*  setIsFilteringByFavorites={setIsFilteringByFavorites}*/}
-            {/*  {...tableProps}*/}
-            {/*/>*/}
+            <NavTable
+              query={query}
+              options={{ refetchInterval: 5000 }}
+              onAssetClick={handleAssetClick}
+              onAssetFocus={handleAssetFocus}
+              onAssetLeave={handleAssetLeave}
+              algoPrice={algoPrice}
+              isListingVerifiedAssets={isListingVerifiedAssets}
+              setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+              isFilteringByFavorites={isFilteringByFavorites}
+              setIsFilteringByFavorites={setIsFilteringByFavorites}
+              {...tableProps}
+            />
           </div>
         </AssetsContainer>
         <InfoFlyover assetInfo={assetInfo} />

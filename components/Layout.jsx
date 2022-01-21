@@ -8,7 +8,6 @@ import { useRef, useState } from 'react'
 import { default as NavSearchSidebar } from 'components/Nav/SearchSidebar/SearchSidebar'
 import WalletConnect from 'components/Wallet/Connect/WalletConnect'
 import WalletTabs from 'components/Wallet/WalletTabs'
-import { default as PlaceOrder } from 'components/Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
 import AssetOrderBook from './Asset/OrderBook'
@@ -16,6 +15,7 @@ import TradeHistory from 'components/Asset/TradeHistory'
 
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import PlaceOrderForm from './Wallet/PlaceOrder/Form'
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -311,7 +311,7 @@ export function Layout({ asset, children }) {
       <Main ref={gridRef}>
         <WalletConnect active={activeMobile === TABS.WALLET} />
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder asset={asset} />
+          <PlaceOrderForm asset={asset} wallet={{ balance: 0, assets: {} }} />
         </PlaceOrderSection>
 
         <NavSidebarAndContentSection
