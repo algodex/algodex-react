@@ -14,14 +14,14 @@ export const SortIcon = styled(Icon)`
 `
 
 export const Container = styled.div`
+  // min-width: 600px;
+  // overflow: hidden;
+
   table {
     position: relative;
     border-spacing: 0;
     border: none;
     width: 100%;
-    // min-width: 600px;
-    overflow: scroll;
-
     @media only (min-width: 996px) {
       min-width: unset;
     }
@@ -62,6 +62,7 @@ export const Container = styled.div`
     }
 
     thead {
+      position: sticky;
       tr {
         th {
           position: sticky;

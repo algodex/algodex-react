@@ -227,6 +227,27 @@ export const SellOrders = styled.div`
   overflow: hidden scroll;
   display: flex;
   flex-direction: column-reverse;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 12px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+  }
 `
 
 export const BuyOrders = styled.div`
@@ -236,6 +257,27 @@ export const BuyOrders = styled.div`
 
   ${OrdersWrapper} {
     right: 0;
+  }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 12px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
   }
 `
 
@@ -260,6 +302,13 @@ const Price = styled.p`
   }
 `
 
+/**
+ * @param price
+ * @param decimals
+ * @param change
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function OrderBookPrice({ price, decimals, change }) {
   const isDecrease = change < 0
   const color = isDecrease ? 'red' : 'green'
@@ -299,6 +348,8 @@ OrderBookPrice.defaultProps = {
 }
 
 /**
+ * # Recipe: Orderbook Component
+ *
  * @todo Refactor to Orderbook withAssetOrdersQuery
  * @param asset
  * @param sellData
@@ -408,8 +459,20 @@ export function OrderBookView({ asset, sellData, buyData }) {
 
 OrderBookView.propTypes = {
   asset: PropTypes.object.isRequired,
-  sellData: PropTypes.array,
-  buyData: PropTypes.array
+  sellData: PropTypes.arrayOf(
+    PropTypes.shape({
+      amount: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired
+    })
+  ),
+  buyData: PropTypes.arrayOf(
+    PropTypes.shape({
+      amount: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired
+    })
+  )
 }
 
 OrderBookView.defaultProps = {

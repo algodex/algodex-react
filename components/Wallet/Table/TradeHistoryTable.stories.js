@@ -1,6 +1,7 @@
 import React from 'react'
-import { OpenOrders as Component, default as ComponentWithData } from './WalletOpenOrdersTable'
+import { TradeHistoryTable as Component, default as ComponentWithData } from './TradeHistoryTable'
 import styled from 'styled-components'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 const Container = styled.div`
   width: 100vw;
@@ -13,13 +14,14 @@ const Container = styled.div`
   margin: 0;
 `
 export default {
-  title: 'Wallet/Wallet Open Orders',
+  title: 'Wallet/Table',
   component: Component,
   parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
       <Container>
         <Story />
+        <ReactQueryDevtools initialIsOpen={false} />
       </Container>
     )
   ]
@@ -28,15 +30,15 @@ export default {
 const Template = (args) => <Component {...args} />
 const TemplateWithData = (args) => <ComponentWithData {...args} />
 
-export const OpenOrders = Template.bind({})
-OpenOrders.args = {
+export const TradeHistoryTable = Template.bind({})
+TradeHistoryTable.args = {
   wallet: {
     address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
   }
 }
 
-export const OpenOrdersPreview = TemplateWithData.bind({})
-OpenOrdersPreview.args = {
+export const TradeHistoryTablePreview = TemplateWithData.bind({})
+TradeHistoryTablePreview.args = {
   wallet: {
     address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
   }

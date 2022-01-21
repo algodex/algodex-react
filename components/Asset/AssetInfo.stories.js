@@ -2,7 +2,7 @@ import React from 'react'
 import { AssetInfo as Component, default as ComponentWithData } from './Asset'
 
 export default {
-  title: 'Asset/Asset Information',
+  title: '@algodex/Asset/AssetInfo',
   component: Component,
   parameters: { layout: 'fullscreen' },
   decorators: [

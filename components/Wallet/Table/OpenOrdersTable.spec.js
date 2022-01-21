@@ -1,5 +1,5 @@
 import React from 'react'
-import OpenOrders from '.'
+import OpenOrders from './OpenOrdersTable'
 import { render } from 'test/test-utils'
 
 const OPEN_ORDER_ROW = 'open-order-row'

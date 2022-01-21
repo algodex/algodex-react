@@ -71,12 +71,7 @@ export const mapToSearchResults = ({
 const TableWrapper = styled.div`
   // position: absolute;
   // inset: 0;
-  overflow-y: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  // overflow-y: auto;
 `
 
 const PairSlash = styled.span`

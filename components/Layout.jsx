@@ -3,15 +3,17 @@ import { useRef, useState } from 'react'
 
 import AssetOrderBook from './Asset/OrderBook'
 import Button from 'components/Button'
-import NavSearchSidebar from 'components/Nav/SearchSidebar'
-import { default as NavSearchTable } from 'components/Nav/SearchSidebar/SearchTable'
-import PlaceOrder from 'components/Wallet/PlaceOrder'
+// import NavSearchSidebar from 'components/Nav/SearchSidebar'
+// import { default as NavSearchTable } from 'components/Nav/SearchSidebar/SearchTable'
+// import PlaceOrder from 'components/Wallet/PlaceOrder'
+import { default as NavSearchSidebar } from 'components/Nav/SearchSidebar/SearchSidebar'
+import PlaceOrderForm from './Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
 import SvgImage from 'components/SvgImage'
 import TradeHistory from 'components/Asset/TradeHistory'
 import WalletConnect from 'components/Wallet/Connect/WalletConnect'
-import WalletTabs from 'components/Wallet/WalletTabs'
+// import WalletTabs from 'components/Wallet/WalletTabs'
 import styled from 'styled-components'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
@@ -162,7 +164,7 @@ export const Main = styled.main`
 
 `
 
-export const MobileMenu = styled.nav`
+const MobileMenu = styled.nav`
   height: 50px;
   width: 100%;
 
@@ -311,18 +313,14 @@ export function Layout({ asset, children }) {
       <Main ref={gridRef}>
         <WalletConnect active={activeMobile === TABS.WALLET} />
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder asset={asset} />
+          <PlaceOrderForm asset={asset} wallet={{ balance: 0, assets: {} }} />
         </PlaceOrderSection>
 
         <NavSidebarAndContentSection
           style={{ height: '67vh' }}
           active={activeMobile === TABS.CHART}
         >
-          <NavSearchSidebar
-            className="h-24"
-            components={{ NavTable: NavSearchTable }}
-            gridRef={gridRef}
-          />
+          <NavSearchSidebar className="h-24" />
           <ContentSection>{children}</ContentSection>
         </NavSidebarAndContentSection>
 
