@@ -1,4 +1,9 @@
-import { AssetId, AssetName, AssetNameBlock, NameVerifiedWrapper } from 'components/Asset'
+import {
+  AssetId,
+  AssetName,
+  AssetNameBlock,
+  NameVerifiedWrapper
+} from 'components/Asset/Typography'
 import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'

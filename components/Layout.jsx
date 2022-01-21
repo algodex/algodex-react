@@ -1,21 +1,21 @@
-import styled from 'styled-components'
-import Button from 'components/Button'
-import SvgImage from 'components/SvgImage'
 import { HeaderLg, HeaderSm } from 'components/Typography'
-
 import { useRef, useState } from 'react'
 
+import AssetOrderBook from './Asset/OrderBook'
+import Button from 'components/Button'
 import NavSearchSidebar from 'components/Nav/SearchSidebar'
-import WalletConnect from 'components/Wallet/Connect/WalletConnect'
-import WalletTabs from 'components/Wallet/WalletTabs'
+import { default as NavSearchTable } from 'components/Nav/SearchSidebar/SearchTable'
 import PlaceOrder from 'components/Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
-import AssetOrderBook from './Asset/OrderBook'
+import SvgImage from 'components/SvgImage'
 import TradeHistory from 'components/Asset/TradeHistory'
-
+import WalletConnect from 'components/Wallet/Connect/WalletConnect'
+import WalletTabs from 'components/Wallet/WalletTabs'
+import styled from 'styled-components'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -318,13 +318,17 @@ export function Layout({ asset, children }) {
           style={{ height: '67vh' }}
           active={activeMobile === TABS.CHART}
         >
-          <NavSearchSidebar className="h-24" gridRef={gridRef} />
+          <NavSearchSidebar
+            className="h-24"
+            components={{ NavTable: NavSearchTable }}
+            gridRef={gridRef}
+          />
           <ContentSection>{children}</ContentSection>
         </NavSidebarAndContentSection>
 
         <AssetOrderBook asset={asset} active={activeMobile === TABS.BOOK} />
         <TradeHistory asset={asset} active={activeMobile === TABS.ORDERS} />
-        <WalletTabs active={activeMobile === TABS.ORDERS} />
+        {/* <WalletTabs active={activeMobile === TABS.ORDERS} /> */}
 
         <MobileMenu>
           <ul>

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export const ModalWrapper = styled.div`
   z-index: 200;
-  background: rgba(0, 0, 0, 0.7);
+  background: ${({ hideBackdrop }) => (hideBackdrop ? 'rgba(0, 0, 0, 0.7)' : 'none')};
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
 `
@@ -13,6 +13,7 @@ const Modal = (props) => {
       isVisible={props.isVisible}
       className="absolute w-full h-full justify-center items-center"
       {...props}
+      hideBackdrop={props.hideBackdrop}
     >
       {props.children}
     </ModalWrapper>
@@ -21,6 +22,11 @@ const Modal = (props) => {
 
 Modal.propTypes = {
   children: PropTypes.element,
-  isVisible: PropTypes.bool
+  isVisible: PropTypes.bool,
+  hideBackdrop: PropTypes.bool
+}
+
+Modal.defaultProps = {
+  hideBackdrop: false
 }
 export default Modal

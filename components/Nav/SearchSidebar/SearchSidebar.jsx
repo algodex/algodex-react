@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import InfoFlyover from './InfoFlyover'
-import NavSearchTable from './SearchTable'
+// import NavSearchTable from './SearchTable'
+import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
-import SearchInput from 'components/Input/SearchInput'
+import SearchInput from '@/components/Input/SearchInput'
 import Tooltip from 'components/Tooltip'
 import { rgba } from 'polished'
 import styled from 'styled-components'
@@ -55,7 +56,9 @@ export const AssetsContainer = styled.div`
     height: inherit;
   }
 `
-export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps }) {
+export function NavSearchSidebar(
+  { algoPrice, components, tableProps, gridRef } = { components: { NavTable: NavSearchTable } }
+) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
   const [controlledVisible, setControlledVisible] = useState(false)
