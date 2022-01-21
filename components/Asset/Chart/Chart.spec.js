@@ -8,7 +8,7 @@ import {
   DEMO_VOLUME_AMOUNT,
   DEMO_DAILY_CHANGE_PERCENT,
   DEMO_OHLC
-} from 'spec/Chat'
+} from 'spec/Chart'
 import Chart from '.'
 
 const DEMO_SPREAD_AMOUNT = parseFloat(

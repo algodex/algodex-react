@@ -422,7 +422,7 @@ export function OrderBookView({ asset, sellData, buyData }) {
     })
   }
   return (
-    <Section {...props}>
+    <Section>
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('order-book')}

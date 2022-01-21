@@ -1,19 +1,21 @@
 import React from 'react'
-import Assets from './AssetsTable'
+import { AssetsTable } from './AssetsTable'
 import { render } from 'test/test-utils'
 
 const ASSETS_ROW = 'assets-row'
 const EMPTY_STATE = 'empty-state'
-
+const wallet = {
+  address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+}
 describe('Assets', () => {
   it('should not show any rows if no data is provided', () => {
-    const { queryByTestId } = render(<Assets />)
+    const { queryByTestId } = render(<AssetsTable wallet={wallet} />)
 
     expect(queryByTestId(ASSETS_ROW)).toBeNull()
   })
 
   it.skip('should display empty state if no data is provided', () => {
-    const { queryByTestId } = render(<Assets />)
+    const { queryByTestId } = render(<AssetsTable wallet={wallet} />)
 
     expect(queryByTestId(EMPTY_STATE)).not.toBeNull()
   })
@@ -29,8 +31,10 @@ describe('Assets', () => {
         algoValue: 12000
       }
     ]
-
-    const { queryByTestId } = render(<Assets assets={assets} />)
+    const wallet = {
+      address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+    }
+    const { queryByTestId } = render(<AssetsTable assets={assets} wallet={wallet} />)
 
     expect(queryByTestId(ASSETS_ROW)).not.toBeNull()
     expect(queryByTestId(EMPTY_STATE)).toBeNull()

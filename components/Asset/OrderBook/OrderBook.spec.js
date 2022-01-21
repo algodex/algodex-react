@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'test/test-utils'
-import OrderBookView from '.'
+import { OrderBookView } from './OrderBook'
 
 const SELL_ROW = 'order-book-sell-row'
 const BUY_ROW = 'order-book-buy-row'
