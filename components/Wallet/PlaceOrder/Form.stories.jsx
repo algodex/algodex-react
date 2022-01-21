@@ -14,7 +14,7 @@ const Container = styled.div`
   margin: 0;
 `
 export default {
-  title: 'Wallet',
+  title: '@algodex/recipes/Wallet/Place Order Form',
   component: Component,
   parameters: { layout: 'fullscreen' },
   decorators: [

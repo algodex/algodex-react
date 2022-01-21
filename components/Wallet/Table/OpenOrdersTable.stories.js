@@ -1,5 +1,5 @@
 import React from 'react'
-import { OpenOrdersTable as Component, default as ComponentWithData } from './OpenOrdersTable'
+import { OpenOrdersTable as Component /*, default as ComponentWithData*/ } from './OpenOrdersTable'
 import styled from 'styled-components'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
@@ -14,7 +14,7 @@ const Container = styled.div`
   margin: 0;
 `
 export default {
-  title: 'Wallet/Table',
+  title: '@algodex/recipes/Wallet/Table/Open Orders Table',
   component: Component,
   parameters: { layout: 'fullscreen' },
   decorators: [
@@ -28,7 +28,7 @@ export default {
 }
 
 const Template = (args) => <Component {...args} />
-const TemplateWithData = (args) => <ComponentWithData {...args} />
+// const TemplateWithData = (args) => <ComponentWithData {...args} />
 
 export const OpenOrdersTable = Template.bind({})
 OpenOrdersTable.args = {
@@ -37,9 +37,9 @@ OpenOrdersTable.args = {
   }
 }
 
-export const OpenOrdersTablePreview = TemplateWithData.bind({})
-OpenOrdersTablePreview.args = {
-  wallet: {
-    address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-  }
-}
+// export const OpenOrdersTablePreview = TemplateWithData.bind({})
+// OpenOrdersTablePreview.args = {
+//   wallet: {
+//     address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+//   }
+// }

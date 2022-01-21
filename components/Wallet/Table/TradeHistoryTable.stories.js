@@ -1,5 +1,7 @@
 import React from 'react'
-import { TradeHistoryTable as Component, default as ComponentWithData } from './TradeHistoryTable'
+import {
+  TradeHistoryTable as Component /*, default as ComponentWithData*/
+} from './TradeHistoryTable'
 import styled from 'styled-components'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
@@ -14,7 +16,7 @@ const Container = styled.div`
   margin: 0;
 `
 export default {
-  title: 'Wallet/Table',
+  title: '@algodex/recipes/Wallet/Table/Trade History Table',
   component: Component,
   parameters: { layout: 'fullscreen' },
   decorators: [
@@ -28,7 +30,7 @@ export default {
 }
 
 const Template = (args) => <Component {...args} />
-const TemplateWithData = (args) => <ComponentWithData {...args} />
+// const TemplateWithData = (args) => <ComponentWithData {...args} />
 
 export const TradeHistoryTable = Template.bind({})
 TradeHistoryTable.args = {
@@ -37,9 +39,9 @@ TradeHistoryTable.args = {
   }
 }
 
-export const TradeHistoryTablePreview = TemplateWithData.bind({})
-TradeHistoryTablePreview.args = {
-  wallet: {
-    address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-  }
-}
+// export const TradeHistoryTablePreview = TemplateWithData.bind({})
+// TradeHistoryTablePreview.args = {
+//   wallet: {
+//     address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+//   }
+// }

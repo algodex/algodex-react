@@ -21,7 +21,7 @@ const assets = {
 }
 
 export default {
-  title: '@algodex/Asset',
+  title: '@algodex/recipes/Asset/Trade History',
   component: Component,
   parameters: {
     layout: 'fullscreen',

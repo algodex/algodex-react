@@ -1,19 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
-import Hamburger from '.'
+import { default as Component } from '.'
 
 const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray[900]};
   display: flex;
-  flex: 1 1 0%;
-  width: 20px;
-  height: 20px;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 0;
   margin: 0;
 `
 
 export default {
   title: '@algodex/components/Button/Hamburger',
-  component: Hamburger,
+  component: Component,
+  parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
       <Container>
@@ -23,9 +27,9 @@ export default {
   ]
 }
 
-const Template = (args) => <Hamburger {...args} />
+const Template = (args) => <Component {...args} />
 
-export const Default = Template.bind({})
-Default.args = {
+export const Hamburger = Template.bind({})
+Hamburger.args = {
   isOpen: false
 }

@@ -29,7 +29,7 @@ const assets = {
 }
 
 export default {
-  title: '@algodex/Asset/Chart',
+  title: '@algodex/recipes/Asset/Chart',
   component: Component,
   parameters: { layout: 'fullscreen', controls: { include: ['asset', 'isLive'] } },
   args: {

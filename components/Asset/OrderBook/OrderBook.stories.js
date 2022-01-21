@@ -1,14 +1,17 @@
 import React from 'react'
 import { OrderBookView as Component, default as ComponentWithData } from './OrderBook'
 import { ReactQueryDevtools } from 'react-query/devtools'
-
+/**
+ * @todo: Add Full Selection for Assets
+ * @todo: Add withData hooks and isLive flag
+ */
 const assets = {
   VOTE: { id: 48806985, decimals: 6 },
   LAMP: { id: 15322902, decimals: 6 }
 }
 
 export default {
-  title: '@algodex/Asset/Orderbook',
+  title: '@algodex/recipes/Asset/Orderbook',
   component: Component,
   argTypes: {
     asset: {

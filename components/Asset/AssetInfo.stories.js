@@ -1,29 +1,23 @@
 import React from 'react'
 import { AssetInfo as Component, default as ComponentWithData } from './Asset'
-
-export default {
-  title: '@algodex/Asset/AssetInfo',
-  component: Component,
-  parameters: { layout: 'fullscreen' },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <Story />
-      </div>
-    )
-  ]
-}
-
-const Template = (args) => <Component {...args} />
-const TemplateWithData = (args) => <ComponentWithData {...args} />
-
+import { ReactQueryDevtools } from 'react-query/devtools'
+import styled from 'styled-components'
+const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray[200]};
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+`
+/**
+ * @todo: Add Selection for Assets
+ * @todo: Add withData hooks and isLive flag
+ */
 const asset = {
   circulating: 99989322377,
   decimals: 6,
@@ -47,15 +41,28 @@ const price = {
   priceBefore: 2305,
   unix_time: 1642616539
 }
-
-export const AssetInfo = Template.bind({})
-AssetInfo.args = {
-  asset,
-  price
+export default {
+  title: '@algodex/recipes/Asset/Asset Info',
+  component: Component,
+  parameters: { layout: 'fullscreen' },
+  args: {
+    asset,
+    price
+  },
+  decorators: [
+    (Story) => (
+      <Container>
+        <Story />
+      </Container>
+    )
+  ]
 }
 
-export const AssetInfoPreview = TemplateWithData.bind({})
-AssetInfoPreview.args = {
-  asset,
-  price
-}
+//eslint-disable-next-line
+export const AssetInfo = ({ asset, isLive, ...props }) => (
+  <>
+    {!isLive && <Component asset={asset} {...props} />}
+    {isLive && <ComponentWithData asset={asset} />}
+    {isLive && <ReactQueryDevtools initialIsOpen={false} />}
+  </>
+)
