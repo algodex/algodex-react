@@ -6,11 +6,13 @@ import {
 } from 'components/Asset/Typography'
 import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
-import { useMemo, useCallback } from 'react'
-import Table from 'components/Table'
+import { useCallback, useMemo } from 'react'
+
 import AlgoIcon from 'components/Icon'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
+import SearchFlyover from './SearchFlyover'
+import Table from 'components/Table'
 import { flatten } from 'lodash'
 import { floatToFixed } from 'services/display'
 import styled from 'styled-components'
@@ -117,8 +119,6 @@ AssetChangeCell.propTypes = {
 }
 
 export const NavSearchTable = ({
-  onAssetFocus,
-  onAssetLeave,
   onAssetClick,
   assets,
   isListingVerifiedAssets,
@@ -320,16 +320,20 @@ export const NavSearchTable = ({
       if (e.key === ' ' || e.key === 'Enter') {
         onAssetClick(row)
       }
-    },
-    onMouseEnter: () => {
-      onAssetFocus(row.original) // eslint-disable-line
-    },
-    onMouseLeave: onAssetLeave
+    }
+    // onMouseEnter: () => {
+    //   onAssetFocus(row.original) // eslint-disable-line
+    // },
+    // onMouseLeave: onAssetLeave
   })
 
   return (
     <TableWrapper>
       <Table
+        flyover={true}
+        components={{
+          Flyover: SearchFlyover
+        }}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}

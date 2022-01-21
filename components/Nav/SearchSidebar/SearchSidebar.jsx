@@ -1,23 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { default as NavSearchTable } from './SearchTable'
-import { default as InfoFlyover } from './InfoFlyover'
+// import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
 import { default as SearchInput } from 'components/Input/SearchInput'
+import { Section } from 'components/Section'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
 
-export const Section = styled.section`
-  height: inherit;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  @media (min-width: 1536px) {
-    display: flex;
-  }
-`
+// export const Section = styled.section`
+//   height: inherit;
+//   width: 100%;
+//   margin: 0;
+//   padding: 0;
+//   @media (min-width: 1536px) {
+//     display: flex;
+//   }
+// `
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -51,9 +52,10 @@ export const AssetsContainer = styled.div`
     height: inherit;
   }
 `
-export function NavSearchSidebar({ algoPrice, components, tableProps }) {
+export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'sidebar' }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
+  const [controlledVisible, setControlledVisible] = useState(false)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
@@ -124,15 +126,15 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
     [push, handleExternalClick]
   )
 
-  const handleAssetFocus = useCallback(
-    (asset) => {
-      setAssetInfo(asset)
-    },
-    [setAssetInfo]
-  )
-  const handleAssetLeave = useCallback(() => {
-    setAssetInfo(null)
-  }, [setAssetInfo])
+  // const handleAssetFocus = useCallback(
+  //   (asset) => {
+  //     setAssetInfo(asset)
+  //   },
+  //   [setAssetInfo]
+  // )
+  // const handleAssetLeave = useCallback(() => {
+  //   setAssetInfo(null)
+  // }, [setAssetInfo])
   // useEffect(() => {
   //   const handleResize = () => {
   //     if (gridRef?.current) {
@@ -146,7 +148,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
   //   return () => removeEventListener('resize', handleResize)
   // }, [gridRef, setGridSize])
   return (
-    <Section>
+    <Section area={area} borderColor="red" border="dashed">
       <Container isActive={isActive}>
         <AssetsContainer style={{ width: '100%' }} className="flex">
           <div style={{ width: '100%' }} ref={searchRef}>
@@ -169,8 +171,6 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
               query={query}
               options={{ refetchInterval: 5000 }}
               onAssetClick={handleAssetClick}
-              onAssetFocus={handleAssetFocus}
-              onAssetLeave={handleAssetLeave}
               algoPrice={algoPrice}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
@@ -180,7 +180,6 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
             />
           </div>
         </AssetsContainer>
-        <InfoFlyover assetInfo={assetInfo} />
       </Container>
     </Section>
   )
@@ -191,7 +190,8 @@ NavSearchSidebar.propTypes = {
   components: PropTypes.shape({
     NavTable: PropTypes.node
   }),
-  tableProps: PropTypes.object
+  tableProps: PropTypes.object,
+  area: PropTypes.string
 }
 
 NavSearchSidebar.defaultProps = {

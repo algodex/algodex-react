@@ -10,7 +10,8 @@ import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typograp
 import Button from 'components/Button'
 import SvgImage from 'components/SvgImage'
 import PropTypes from 'prop-types'
-export const Container = styled.div`
+import { Section } from '../../Section'
+const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
@@ -19,7 +20,7 @@ export const Container = styled.div`
   padding: 0.875rem 0 1rem;
 `
 
-export const ButtonContainer = styled.div`
+const ButtonContainer = styled.div`
   flex-shrink: 0%;
   display: flex;
   width: 100%;
@@ -30,7 +31,7 @@ export const ButtonContainer = styled.div`
   }
 `
 
-export const EmptyState = styled.div`
+const EmptyState = styled.div`
   position: relative;
   flex: 1 1 0%;
   display: flex;
@@ -46,13 +47,13 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
-export const Arrow = styled.div`
+const Arrow = styled.div`
   position: absolute;
   top: 0.5rem;
   left: 0.375rem;
 `
 
-export const Header = styled.header`
+const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
   ${gridStyles}
@@ -60,7 +61,7 @@ export const Header = styled.header`
   margin-top: 1.5rem;
 `
 
-export const Wallets = styled.div`
+const Wallets = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow-y: auto;
@@ -83,7 +84,7 @@ export const Wallets = styled.div`
   }
 `
 
-export const WalletsWrapper = styled.div`
+const WalletsWrapper = styled.div`
   flex: 1 1 0%;
   position: absolute;
   top: 0;
@@ -91,7 +92,7 @@ export const WalletsWrapper = styled.div`
   right: 0;
 `
 
-export const Balance = styled.p`
+const Balance = styled.p`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -113,7 +114,7 @@ export const Balance = styled.p`
   }
 `
 
-export const WalletRow = styled.div`
+const WalletRow = styled.div`
   display: grid;
   ${gridStyles}
   margin: 0.375rem 0.75rem;
@@ -236,42 +237,44 @@ export function WalletView(props) {
     wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
 
   return (
-    <Container>
-      <ButtonContainer>
-        <Button
-          variant={getButtonVariant()}
-          onClick={getButtonState}
-          data-testid="connect-wallet-btn"
-        >
-          {WalletButtonText}
-        </Button>
-      </ButtonContainer>
-      {isSignedIn ? (
-        <>
-          <Header>
-            <BodyCopyTiny color="gray.500">{t('wallet')}</BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right">
-              {t('balance')}
-            </BodyCopyTiny>
-          </Header>
-          <Wallets>
-            <WalletsWrapper>{renderWallets()}</WalletsWrapper>
-          </Wallets>
-        </>
-      ) : (
-        <EmptyState>
-          <Arrow>
-            <SvgImage use="walletArrow" h={4} color="gray.600" />
-          </Arrow>
-          <HeaderSm color="gray.100" m={0} mb={16}>
-            {t('start-by')}
-          </HeaderSm>
-          <BodyCopySm color="gray.500" m={0}>
-            {t('once-connected')}
-          </BodyCopySm>
-        </EmptyState>
-      )}
-    </Container>
+    <Section area="topRight">
+      <Container>
+        <ButtonContainer>
+          <Button
+            variant={getButtonVariant()}
+            onClick={getButtonState}
+            data-testid="connect-wallet-btn"
+          >
+            {WalletButtonText}
+          </Button>
+        </ButtonContainer>
+        {isSignedIn ? (
+          <>
+            <Header>
+              <BodyCopyTiny color="gray.500">{t('wallet')}</BodyCopyTiny>
+              <BodyCopyTiny color="gray.500" textAlign="right">
+                {t('balance')}
+              </BodyCopyTiny>
+            </Header>
+            <Wallets>
+              <WalletsWrapper>{renderWallets()}</WalletsWrapper>
+            </Wallets>
+          </>
+        ) : (
+          <EmptyState>
+            <Arrow>
+              <SvgImage use="walletArrow" h={4} color="gray.600" />
+            </Arrow>
+            <HeaderSm color="gray.100" m={0} mb={16}>
+              {t('start-by')}
+            </HeaderSm>
+            <BodyCopySm color="gray.500" m={0}>
+              {t('once-connected')}
+            </BodyCopySm>
+          </EmptyState>
+        )}
+      </Container>
+    </Section>
   )
 }
 
@@ -280,14 +283,15 @@ WalletView.propTypes = {
   activeWalletAddress: PropTypes.string.isRequired,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
-  onSetActiveWallet: PropTypes.func.isRequired
+  onSetActiveWallet: PropTypes.func.isRequired,
+  area: PropTypes.string
 }
 
 WalletView.defaultProps = {
   isSignedIn: false
 }
 
-function WalletConnect() {
+function WalletConnect(props) {
   const { connect: onWalletConnect, addresses } = useMyAlgo()
 
   const wallets = useStorePersisted((state) => state.wallets)
@@ -334,6 +338,7 @@ function WalletConnect() {
       isSignedIn={isSignedIn}
       onConnectClick={onWalletConnect}
       onSetActiveWallet={setActiveWalletAddress}
+      {...props}
     />
   )
 }

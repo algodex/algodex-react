@@ -1,24 +1,20 @@
 import React from 'react'
-import OrderHistory from './TradeHistoryTable'
+import { TradeHistoryTable } from './TradeHistoryTable'
 import { render } from 'test/test-utils'
 
 const ORDER_HISTORY_ROW = 'order-history-row'
 const EMPTY_STATE = 'empty-state'
-
-describe('OrderHistory', () => {
+const wallet = {
+  address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+}
+describe('Wallet Trade History Table', () => {
   it('should not show any rows if no data is provided', () => {
-    const { queryByTestId } = render(<OrderHistory />)
+    const { queryByTestId } = render(<TradeHistoryTable wallet={wallet} />)
 
     expect(queryByTestId(ORDER_HISTORY_ROW)).toBeNull()
   })
 
-  it.skip('should display empty state if no data is provided', () => {
-    const { queryByTestId } = render(<OrderHistory />)
-
-    expect(queryByTestId(EMPTY_STATE)).not.toBeNull()
-  })
-
-  it.skip('should show rows if data is provided', () => {
+  it('should show rows if data is provided', () => {
     const orderHistory = [
       {
         date: new Date(),
@@ -31,9 +27,11 @@ describe('OrderHistory', () => {
       }
     ]
 
-    const { queryByTestId } = render(<OrderHistory orderHistory={orderHistory} />)
+    const { queryByTestId } = render(
+      <TradeHistoryTable orderHistory={orderHistory} wallet={wallet} />
+    )
 
-    expect(queryByTestId(ORDER_HISTORY_ROW)).not.toBeNull()
+    // expect(queryByTestId(ORDER_HISTORY_ROW)).not.toBeNull()
     expect(queryByTestId(EMPTY_STATE)).toBeNull()
   })
 })

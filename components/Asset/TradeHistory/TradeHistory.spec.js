@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'test/test-utils'
-import TradeHistoryView from '.'
+import { TradeHistoryView } from './TradeHistory'
 
 const HISTORY_ROW = 'trade-history-row'
 

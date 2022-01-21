@@ -14,6 +14,7 @@ import { default as AmountRange } from 'components/Input/SliderInput'
 import AdvancedOptions from './Form/AdvancedOptions'
 import PropTypes from 'prop-types'
 import { has } from 'lodash'
+import { Section } from '../../Section'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -222,182 +223,184 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
   }
 
   return (
-    <Container data-testid="place-order">
-      {showTitle && (
-        <Header>
-          <HeaderCaps color="gray.500" mb={1}>
-            {t('place-order')}
-          </HeaderCaps>
-        </Header>
-      )}
-      <Form onSubmit={onSubmit} autocomplete="off">
-        <ToggleWrapper>
-          <ToggleInput
-            type="radio"
-            name="type"
-            id="type-buy"
-            value="buy"
-            checked={order.type === 'buy'}
-            onChange={(e) => handleChange(e, 'type')}
-          />
-          <BuyButton>
-            <label htmlFor="type-buy">{t('buy')}</label>
-          </BuyButton>
-          <ToggleInput
-            type="radio"
-            name="type"
-            id="type-sell"
-            value="sell"
-            checked={order.type === 'sell'}
-            onChange={(e) => handleChange(e, 'type')}
-          />
-          <SellButton>
-            <label htmlFor="type-sell">{t('sell')}</label>
-          </SellButton>
-        </ToggleWrapper>
-        <AvailableBalance>
-          <IconTextContainer style={{ marginBottom: '10px' }}>
-            <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
-            <Tooltip
-              renderButton={(setTriggerRef) => (
-                <IconButton ref={setTriggerRef} type="button">
-                  <Info />
-                </IconButton>
-              )}
-            >
-              <BalanceRow>
-                <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                  {t('orders:available')}:
-                </LabelMd>
-                <IconTextContainer>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {wallet.balance}
-                  </LabelMd>
-                  <Icon use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
-                <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                  {t('total')}:
-                </LabelMd>
-                <IconTextContainer>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {wallet.balance}
-                  </LabelMd>
-                  <Icon use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
-                <LabelSm
-                  color="gray.300"
-                  fontWeight="400"
-                  textTransform="initial"
-                  lineHeight="0.9rem"
-                  letterSpacing="0.1em"
-                >
-                  &nbsp;*
-                  {t('max-spend-explanation', {
-                    // amount: new Big(wallet.balance).minus(new Big(wallet.balance)).round(6).toString()
-                  })}
-                </LabelSm>
-              </BalanceRow>
-            </Tooltip>
-          </IconTextContainer>
-          <BalanceRow>
-            <LabelMd color="gray.400" fontWeight="500">
-              ALGO
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {wallet.balance}
-            </LabelMd>
-          </BalanceRow>
-          <BalanceRow>
-            <LabelMd color="gray.400" fontWeight="500">
-              <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
-              {asset.name || asset.id}
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {hasBalance && wallet.assets[asset.id].balance}
-            </LabelMd>
-          </BalanceRow>
-        </AvailableBalance>
-
-        <Tabs orderType={order.type}>
-          <Tab isActive>{t('limit')}</Tab>
-        </Tabs>
-        {!hasBalance && (
-          <BodyCopy color="gray.500" textAlign="center" m={32}>
-            {t('insufficient-balance')}
-          </BodyCopy>
+    <Section area="bottomRight">
+      <Container data-testid="place-order">
+        {showTitle && (
+          <Header>
+            <HeaderCaps color="gray.500" mb={1}>
+              {t('place-order')}
+            </HeaderCaps>
+          </Header>
         )}
-        {hasBalance && (
-          <LimitOrder>
-            <CurrencyInput
-              name="price"
-              type="number"
-              pattern="\d*"
-              label={t('price')}
-              currency="ALGO"
-              value={order.price}
-              onChange={handleChange}
-              autocomplete="false"
-              min="0"
-              step="0.000001"
-              inputMode="decimal"
+        <Form onSubmit={onSubmit} autocomplete="off">
+          <ToggleWrapper>
+            <ToggleInput
+              type="radio"
+              name="type"
+              id="type-buy"
+              value="buy"
+              checked={order.type === 'buy'}
+              onChange={(e) => handleChange(e, 'type')}
             />
-            <CurrencyInput
-              type="number"
-              pattern="\d*"
-              name="amount"
-              label={t('amount')}
-              currency={asset.name}
-              value={order.amount}
-              onChange={handleChange}
-              autocomplete="false"
-              min="0"
-              step={new Big(10).pow(-1 * asset.decimals).toString()}
-              inputMode="decimal"
+            <BuyButton>
+              <label htmlFor="type-buy">{t('buy')}</label>
+            </BuyButton>
+            <ToggleInput
+              type="radio"
+              name="type"
+              id="type-sell"
+              value="sell"
+              checked={order.type === 'sell'}
+              onChange={(e) => handleChange(e, 'type')}
             />
-            <AmountRange
-              // txnFee={txnFee}
-              onChange={console.log}
-              value={order.amount}
-            />
-            <CurrencyInput
-              name="total"
-              type="number"
-              label={t('total')}
-              asset="ALGO"
-              decimals={6}
-              value={order.amount * order.price}
-              readOnly
-              disabled
-            />
-            {/* <TxnFeeContainer>
+            <SellButton>
+              <label htmlFor="type-sell">{t('sell')}</label>
+            </SellButton>
+          </ToggleWrapper>
+          <AvailableBalance>
+            <IconTextContainer style={{ marginBottom: '10px' }}>
+              <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
+              <Tooltip
+                renderButton={(setTriggerRef) => (
+                  <IconButton ref={setTriggerRef} type="button">
+                    <Info />
+                  </IconButton>
+                )}
+              >
+                <BalanceRow>
+                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                    {t('orders:available')}:
+                  </LabelMd>
+                  <IconTextContainer>
+                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                      {wallet.balance}
+                    </LabelMd>
+                    <Icon use="algoLogo" size={0.625} />
+                  </IconTextContainer>
+                </BalanceRow>
+                <BalanceRow>
+                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                    {t('total')}:
+                  </LabelMd>
+                  <IconTextContainer>
+                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                      {wallet.balance}
+                    </LabelMd>
+                    <Icon use="algoLogo" size={0.625} />
+                  </IconTextContainer>
+                </BalanceRow>
+                <BalanceRow>
+                  <LabelSm
+                    color="gray.300"
+                    fontWeight="400"
+                    textTransform="initial"
+                    lineHeight="0.9rem"
+                    letterSpacing="0.1em"
+                  >
+                    &nbsp;*
+                    {t('max-spend-explanation', {
+                      // amount: new Big(wallet.balance).minus(new Big(wallet.balance)).round(6).toString()
+                    })}
+                  </LabelSm>
+                </BalanceRow>
+              </Tooltip>
+            </IconTextContainer>
+            <BalanceRow>
+              <LabelMd color="gray.400" fontWeight="500">
+                ALGO
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {wallet.balance}
+              </LabelMd>
+            </BalanceRow>
+            <BalanceRow>
+              <LabelMd color="gray.400" fontWeight="500">
+                <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
+                {asset.name || asset.id}
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {hasBalance && wallet.assets[asset.id].balance}
+              </LabelMd>
+            </BalanceRow>
+          </AvailableBalance>
+
+          <Tabs orderType={order.type}>
+            <Tab isActive>{t('limit')}</Tab>
+          </Tabs>
+          {!hasBalance && (
+            <BodyCopy color="gray.500" textAlign="center" m={32}>
+              {t('insufficient-balance')}
+            </BodyCopy>
+          )}
+          {hasBalance && (
+            <LimitOrder>
+              <CurrencyInput
+                name="price"
+                type="number"
+                pattern="\d*"
+                label={t('price')}
+                currency="ALGO"
+                value={order.price}
+                onChange={handleChange}
+                autocomplete="false"
+                min="0"
+                step="0.000001"
+                inputMode="decimal"
+              />
+              <CurrencyInput
+                type="number"
+                pattern="\d*"
+                name="amount"
+                label={t('amount')}
+                currency={asset.name}
+                value={order.amount}
+                onChange={handleChange}
+                autocomplete="false"
+                min="0"
+                step={new Big(10).pow(-1 * asset.decimals).toString()}
+                inputMode="decimal"
+              />
+              <AmountRange
+                // txnFee={txnFee}
+                onChange={console.log}
+                value={order.amount}
+              />
+              <CurrencyInput
+                name="total"
+                type="number"
+                label={t('total')}
+                asset="ALGO"
+                decimals={6}
+                value={order.amount * order.price}
+                readOnly
+                disabled
+              />
+              {/* <TxnFeeContainer>
                 <BodyCopyTiny color="gray.500" textTransform="none">
                   Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
                   {txnFee.toFixed(3)}
                 </BodyCopyTiny>
               </TxnFeeContainer> */}
-            <AdvancedOptions
-              order={order}
-              // onChange={handleOptionsChange}
-              allowTaker={typeof asset !== 'undefined'}
-            />
-          </LimitOrder>
-        )}
-        <SubmitButton
-          type="submit"
-          variant={buttonProps[order.type].variant}
-          size="large"
-          block
-          orderType={order.type}
-          disabled={order.valid}
-        >
-          {buttonProps[order.type].text}
-        </SubmitButton>
-      </Form>
-    </Container>
+              <AdvancedOptions
+                order={order}
+                // onChange={handleOptionsChange}
+                allowTaker={typeof asset !== 'undefined'}
+              />
+            </LimitOrder>
+          )}
+          <SubmitButton
+            type="submit"
+            variant={buttonProps[order.type].variant}
+            size="large"
+            block
+            orderType={order.type}
+            disabled={order.valid}
+          >
+            {buttonProps[order.type].text}
+          </SubmitButton>
+        </Form>
+      </Container>
+    </Section>
   )
 }
 

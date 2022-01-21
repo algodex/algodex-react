@@ -9,7 +9,7 @@ const StyledMotionSvg = styled(motion.svg)`
   }
 `
 
-function Hamburger({ isOpen, ...props }) {
+export function Hamburger({ isOpen, ...props }) {
   const width = 24
   const height = 15
   const strokeWidth = 2

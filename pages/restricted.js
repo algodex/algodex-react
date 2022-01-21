@@ -22,7 +22,7 @@ const Restricted = () => {
       <Header />
 
       <main className="flex flex-col flex-1 md:h-100 w-full items-center justify-center bg-cover bg-no-repeat bg-unauthorized-mobile md:bg-unauthorized">
-        <Modal>
+        <Modal isVisible={true}>
           <div className="h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5">
             <div className="flex flex-col md:flex-row text-center md:text-left h-full bg-gray-700 ">
               <div className="mt-4 md:mt-0 mx-8 md:mx-12 flex justify-center items-center ">
