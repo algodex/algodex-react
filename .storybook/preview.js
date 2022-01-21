@@ -14,7 +14,7 @@ import walletEN from '../locales/en/wallet.json'
 import chartEN from '../locales/en/chart.json'
 const queryClient = new QueryClient()
 import * as NextImage from "next/image";
-
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 const OriginalNextImage = NextImage.default;
 
 Object.defineProperty(NextImage, "default", {
@@ -89,6 +89,11 @@ const GlobalStyle = createGlobalStyle`
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+    viewport:{
+        viewports: INITIAL_VIEWPORTS,
+        defaultViewport: 'iphonex'
+    },
+
   controls: {
     matchers: {
       color: /(background|color)$/i,
