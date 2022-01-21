@@ -676,12 +676,12 @@ export function Layout({
         area={!isMobile ? 'bottomLeft' : 'content'}
         asset={asset}
       />
-      <PlaceOrder
-        active={!controlsCollapsed}
-        asset={asset}
-        area={!isMobile ? 'bottomRight' : 'content'}
-      />
-      <AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />
+      {/*<PlaceOrder*/}
+      {/*  active={!controlsCollapsed}*/}
+      {/*  asset={asset}*/}
+      {/*  area={!isMobile ? 'bottomRight' : 'content'}*/}
+      {/*/>*/}
+      {/*<AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />*/}
       <WalletConnect area={!isMobile ? 'topRight' : 'content'} />
     </Fragment>
   )
