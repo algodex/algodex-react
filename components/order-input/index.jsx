@@ -27,7 +27,8 @@ OrderInput.propTypes = {
   label: PropTypes.string,
   asset: PropTypes.string,
   decimals: PropTypes.number,
-  orderType: PropTypes.oneOf(['buy', 'sell'])
+  orderType: PropTypes.oneOf(['buy', 'sell']),
+  usdEquivalent: PropTypes.string
 }
 
 export default OrderInput
