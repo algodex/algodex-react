@@ -333,6 +333,7 @@ function PlaceOrderView(props) {
             id="total"
             label={t('total')}
             asset="ALGO"
+            usdEquivalent="12,000"
             decimals={6}
             orderType={order.type}
             value={order.total}
@@ -435,20 +436,27 @@ function PlaceOrderView(props) {
               </BalanceRow>
             </Tooltip>
           </IconTextContainer>
-          <BalanceRow>
+          <BalanceRow className="text-right">
             <LabelMd color="gray.400" fontWeight="500">
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
               {maxSpendableAlgo}
+              <br />
+              <LabelSm color="gray.500" fontWeight="500">
+                $12,300
+              </LabelSm>
             </LabelMd>
           </BalanceRow>
-          <BalanceRow>
+          <BalanceRow className="text-right">
             <LabelMd color="gray.400" fontWeight="500">
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance}
+              {asaBalance} <br />
+              <LabelSm color="gray.500" fontWeight="500">
+                $12,300
+              </LabelSm>
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>

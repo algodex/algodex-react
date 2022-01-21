@@ -6,8 +6,8 @@ export const Input = styled.input`
   background-color: ${({ theme }) => theme.colors.gray['900']};
   border: 2px solid ${({ theme }) => theme.colors.gray['700']};
   border-radius: 3px;
-  padding: 0.5rem 0.75rem;
-  padding-right: 4.5rem;
+  padding: ${({ isTotal }) =>
+    isTotal ? '0.2rem 4.5rem 1.3rem 0.75rem' : '0.5rem 4.5rem 0.5rem 0.75rem'};
   color: ${({ theme }) => theme.colors.gray['000']};
   text-align: right;
   font-size: 1rem;
@@ -39,7 +39,7 @@ export const Container = styled.div`
   display: flex;
   position: relative;
   margin-bottom: 1rem;
-
+  height: ${({ isTotal }) => (isTotal ? '3.3rem' : 'auto')};
   ${Input} {
     &:focus {
       box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
@@ -64,5 +64,11 @@ export const Label = styled(InputLabel)`
 export const Asset = styled(InputLabel)`
   right: 1.25rem;
   width: 2.75rem;
+  font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
+`
+export const AssetUSD = styled(InputLabel)`
+  right: 4.5rem;
+  bottom: 2rem;
+  font-size: 0.8rem;
   font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
 `
