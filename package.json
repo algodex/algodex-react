@@ -44,6 +44,7 @@
     "browserify-css": "0.12.0",
     "cookies": "^0.8.0",
     "csstype": "^2.6.2",
+    "cypress-react-selector": "^2.3.14",
     "dayjs": "^1.10.5",
     "framer-motion": "^4.1.17",
     "immer": "^9.0.3",
