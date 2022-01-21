@@ -8,16 +8,16 @@ import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 
 import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
-import { Section as Temp } from 'components/Section'
-export const Section = styled.section`
-  height: inherit;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  @media (min-width: 1536px) {
-    display: flex;
-  }
-`
+import { Section } from 'components/Section'
+// export const Section = styled.section`
+//   height: inherit;
+//   width: 100%;
+//   margin: 0;
+//   padding: 0;
+//   @media (min-width: 1536px) {
+//     display: flex;
+//   }
+// `
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -51,7 +51,7 @@ export const AssetsContainer = styled.div`
     height: inherit;
   }
 `
-export function NavSearchSidebar({ algoPrice, components, tableProps }) {
+export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'sidebar' }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
   const setQuery = useUserStore((state) => state.setQuery)
@@ -146,7 +146,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps }) {
   //   return () => removeEventListener('resize', handleResize)
   // }, [gridRef, setGridSize])
   return (
-    <Section>
+    <Section area={area} borderColor="red" border="dashed">
       <Container isActive={isActive}>
         <AssetsContainer style={{ width: '100%' }} className="flex">
           <div style={{ width: '100%' }} ref={searchRef}>
@@ -191,7 +191,8 @@ NavSearchSidebar.propTypes = {
   components: PropTypes.shape({
     NavTable: PropTypes.node
   }),
-  tableProps: PropTypes.object
+  tableProps: PropTypes.object,
+  area: PropTypes.string
 }
 
 NavSearchSidebar.defaultProps = {

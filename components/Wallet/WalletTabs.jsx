@@ -20,7 +20,7 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
-function WalletTabs({ initialPanel }) {
+function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
@@ -46,7 +46,7 @@ function WalletTabs({ initialPanel }) {
   }
 
   return (
-    <WalletOrdersSection>
+    <Section area={area} borderColor="blue" border="dashed">
       <Container>
         <Header>
           <Tab
@@ -70,7 +70,7 @@ function WalletTabs({ initialPanel }) {
         </Header>
         {renderPanel(selectedPanel)}
       </Container>
-    </WalletOrdersSection>
+    </Section>
   )
 }
 
@@ -80,7 +80,8 @@ WalletTabs.propTypes = {
   initialPanel: PropTypes.string,
   openOrderData: PropTypes.array.isRequired,
   orderHistoryData: PropTypes.array.isRequired,
-  assetsData: PropTypes.array.isRequired
+  assetsData: PropTypes.array.isRequired,
+  area: PropTypes.string
 }
 
 WalletTabs.defaultProps = {

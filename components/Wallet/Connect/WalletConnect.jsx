@@ -237,7 +237,7 @@ export function WalletView(props) {
     wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
 
   return (
-    <Section {...props}>
+    <Section area="topRight">
       <Container>
         <ButtonContainer>
           <Button
@@ -283,7 +283,8 @@ WalletView.propTypes = {
   activeWalletAddress: PropTypes.string.isRequired,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
-  onSetActiveWallet: PropTypes.func.isRequired
+  onSetActiveWallet: PropTypes.func.isRequired,
+  area: PropTypes.string
 }
 
 WalletView.defaultProps = {

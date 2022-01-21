@@ -16,6 +16,7 @@ import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import PlaceOrder from './Wallet/PlaceOrder'
 import WalletConnect from './Wallet/Connect/WalletConnect'
+import { useStore, useStorePersisted } from '../store/use-store'
 
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
@@ -637,10 +638,13 @@ export function Layout({
   } = components
 
   const { t } = useTranslation('common')
-
+  const isSignedIn = useStore((state) => state.isSignedIn)
+  const wallets = useStorePersisted((state) => state.wallets)
+  const address = useStorePersisted((state) => state.activeWalletAddress)
+  const wallet = wallets.find((wallet) => wallet.address === address)
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 996
-  const isMedium = typeof window !== 'undefined' && window.innerWidth >= 996
-  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 996
+  // const isMedium = typeof window !== 'undefined' && window.innerWidth >= 996
+  // const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 996
 
   const TABS = {
     CHART: 'CHART',
@@ -676,12 +680,15 @@ export function Layout({
         area={!isMobile ? 'bottomLeft' : 'content'}
         asset={asset}
       />
-      {/*<PlaceOrder*/}
-      {/*  active={!controlsCollapsed}*/}
-      {/*  asset={asset}*/}
-      {/*  area={!isMobile ? 'bottomRight' : 'content'}*/}
-      {/*/>*/}
-      {/*<AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />*/}
+      {isSignedIn && (
+        <PlaceOrder
+          active={!controlsCollapsed}
+          asset={asset}
+          wallet={wallet}
+          area={!isMobile ? 'bottomRight' : 'content'}
+        />
+      )}
+      <AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />
       <WalletConnect area={!isMobile ? 'topRight' : 'content'} />
     </Fragment>
   )

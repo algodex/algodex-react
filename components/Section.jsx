@@ -4,7 +4,7 @@ export const Section = styled.section`
   height: 100%;
   width: 100%;
   grid-area: ${({ area }) => area};
-  border-color: ${({ borderColor }) => borderColor} !important;
+  border-color: ${({ borderColor }) => borderColor};
   border: ${({ border }) => border};
   display: ${({ active }) => (active ? 'flex' : 'none')};
   ${({ mdAndUp }) =>

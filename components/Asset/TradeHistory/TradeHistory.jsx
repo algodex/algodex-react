@@ -11,20 +11,20 @@ import Icon from 'components/Icon'
 import Big from 'big.js'
 import dayjs from 'dayjs'
 import { Section } from 'components/Section'
-const AssetTradeHistorySection = styled.section`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-
-  // display: ${({ active }) => (active ? 'flex' : 'none')};
-  // height: calc(100% - 50px);
-  // @media (min-width: 996px) {
-  //   grid-area: history;
-  //   display: flex;
-  //   height: inherit;
-  // }
-`
+// const AssetTradeHistorySection = styled.section`
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+//   width: 100%;
+//
+//   // display: ${({ active }) => (active ? 'flex' : 'none')};
+//   // height: calc(100% - 50px);
+//   // @media (min-width: 996px) {
+//   //   grid-area: history;
+//   //   display: flex;
+//   //   height: inherit;
+//   // }
+// `
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -182,7 +182,7 @@ export function TradeHistoryView(props) {
   }
 
   return (
-    <AssetTradeHistorySection>
+    <Section area="bottomLeft">
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('trade-history')}
@@ -209,7 +209,7 @@ export function TradeHistoryView(props) {
           </TradesWrapper>
         </Trades>
       </Container>
-    </AssetTradeHistorySection>
+    </Section>
   )
 }
 
