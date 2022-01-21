@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { default as NavSearchTable } from './SearchTable'
-import { default as InfoFlyover } from './InfoFlyover'
+// import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
 import { default as SearchInput } from 'components/Input/SearchInput'
 import styled from 'styled-components'
@@ -124,15 +124,15 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
     [push, handleExternalClick]
   )
 
-  const handleAssetFocus = useCallback(
-    (asset) => {
-      setAssetInfo(asset)
-    },
-    [setAssetInfo]
-  )
-  const handleAssetLeave = useCallback(() => {
-    setAssetInfo(null)
-  }, [setAssetInfo])
+  // const handleAssetFocus = useCallback(
+  //   (asset) => {
+  //     setAssetInfo(asset)
+  //   },
+  //   [setAssetInfo]
+  // )
+  // const handleAssetLeave = useCallback(() => {
+  //   setAssetInfo(null)
+  // }, [setAssetInfo])
   // useEffect(() => {
   //   const handleResize = () => {
   //     if (gridRef?.current) {
@@ -169,8 +169,6 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
               query={query}
               options={{ refetchInterval: 5000 }}
               onAssetClick={handleAssetClick}
-              onAssetFocus={handleAssetFocus}
-              onAssetLeave={handleAssetLeave}
               algoPrice={algoPrice}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
@@ -180,7 +178,6 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
             />
           </div>
         </AssetsContainer>
-        <InfoFlyover assetInfo={assetInfo} />
       </Container>
     </Section>
   )

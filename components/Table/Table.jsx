@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
 import PropTypes from 'prop-types'
@@ -6,6 +6,8 @@ import _ from 'lodash'
 import styled from 'styled-components'
 import { rgba } from 'polished'
 import Icon from 'components/Icon'
+import InfoFlyover from './InfoFlyover'
+import { usePopperTooltip } from 'react-popper-tooltip'
 
 export const SortIcon = styled(Icon)`
   position: relative;
@@ -81,6 +83,9 @@ export const Container = styled.div`
     }
   }
 `
+// const AbsoluteTemp = styled.div`
+//   position: absolute;
+// `
 
 /**
  * Table Component
@@ -97,7 +102,35 @@ export const Container = styled.div`
  * @returns {JSX.Element}
  * @constructor
  */
-function Table({ initialState, onStateChange, columns, data, getRowProps }) {
+function Table({
+  components,
+  componentsProps,
+  flyover,
+  flyoverPlacement,
+  initialState,
+  onStateChange,
+  columns,
+  data,
+  getRowProps
+}) {
+  const { Flyover = InfoFlyover } = components
+
+  const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
+    usePopperTooltip({ placement: flyoverPlacement, visible: true })
+
+  const [itemInfo, setItemInfo] = useState({})
+
+  const handleRowFocus = useCallback(
+    (item) => {
+      setItemInfo(item.original)
+    },
+    [setItemInfo]
+  )
+
+  const handleRowLeave = useCallback(() => {
+    setItemInfo({})
+  }, [setItemInfo])
+
   const {
     state: tableState,
     getTableProps,
@@ -119,7 +152,7 @@ function Table({ initialState, onStateChange, columns, data, getRowProps }) {
     }
   }, [onStateChange, initialState, tableState])
   return (
-    <Container>
+    <Container ref={setTriggerRef}>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
@@ -143,8 +176,13 @@ function Table({ initialState, onStateChange, columns, data, getRowProps }) {
         <tbody {...getTableBodyProps()}>
           {rows.map((row, rowKey) => {
             prepareRow(row)
+            const customProps = getRowProps(row)
+            if (flyover) {
+              customProps.onMouseLeave = () => handleRowLeave(row)
+              customProps.onMouseEnter = () => handleRowFocus(row)
+            }
             return (
-              <tr key={rowKey} {...row.getRowProps(getRowProps(row))}>
+              <tr key={rowKey} {...row.getRowProps(customProps)}>
                 {row.cells.map((cell, cellKey) => {
                   return (
                     <td key={cellKey} {...cell.getCellProps()}>
@@ -157,19 +195,36 @@ function Table({ initialState, onStateChange, columns, data, getRowProps }) {
           })}
         </tbody>
       </table>
+      {/*<AbsoluteTemp>*/}
+      {visible && (
+        <div ref={setTooltipRef} {...getTooltipProps({ className: 'tooltip-container' })}>
+          {console.log(itemInfo)}
+          <Flyover row={itemInfo} {...componentsProps.Flyover} />
+          <div {...getArrowProps({ className: 'tooltip-arrow' })} />
+        </div>
+      )}
+      {/*</AbsoluteTemp>*/}
     </Container>
   )
 }
 
 Table.propTypes = {
+  components: PropTypes.object,
+  componentsProps: PropTypes.object,
   initialState: PropTypes.any.isRequired,
   onStateChange: PropTypes.func.isRequired,
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
-  getRowProps: PropTypes.func
+  getRowProps: PropTypes.func,
+  flyover: PropTypes.bool,
+  flyoverPlacement: PropTypes.string
 }
 
 Table.defaultProps = {
+  components: { Flyover: InfoFlyover },
+  componentsProps: {},
+  flyover: false,
+  flyoverPlacement: 'right',
   getRowProps: () => {
     return {}
   }

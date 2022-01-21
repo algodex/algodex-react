@@ -18,6 +18,7 @@ import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
+import SearchFlyover from "./SearchFlyover";
 
 /**
  * Map a Query Result to a Search Result
@@ -117,8 +118,6 @@ AssetChangeCell.propTypes = {
 }
 
 export const NavSearchTable = ({
-  onAssetFocus,
-  onAssetLeave,
   onAssetClick,
   assets,
   isListingVerifiedAssets,
@@ -320,16 +319,20 @@ export const NavSearchTable = ({
       if (e.key === ' ' || e.key === 'Enter') {
         onAssetClick(row)
       }
-    },
-    onMouseEnter: () => {
-      onAssetFocus(row.original) // eslint-disable-line
-    },
-    onMouseLeave: onAssetLeave
+    }
+    // onMouseEnter: () => {
+    //   onAssetFocus(row.original) // eslint-disable-line
+    // },
+    // onMouseLeave: onAssetLeave
   })
 
   return (
     <TableWrapper>
       <Table
+        flyover={true}
+        components={{
+          Flyover: SearchFlyover
+        }}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}
