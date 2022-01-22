@@ -11,6 +11,8 @@ import {
 
 import WalletService from 'services/wallet'
 import { useQuery } from 'react-query'
+import { useRouter } from 'next/router'
+import { routeQueryError } from 'hooks/withQuery'
 
 const refetchInterval = 3000
 
@@ -26,7 +28,13 @@ export const useSearchResultsQuery = ({
   options = {
     refetchInterval: query === '' ? refetchInterval : 20000
   }
-} = {}) => useQuery(['searchResults', { query }], () => searchAssets(query), options)
+} = {}) => {
+  const router = useRouter()
+  const { data, isError, error, ...rest } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
+  routeQueryError( {isError, error, router} )
+
+  return { data, isError, error, ...rest }
+}
 
 /**
  * Use Asset Price Query
