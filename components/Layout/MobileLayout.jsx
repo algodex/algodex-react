@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import AssetOrderBook from 'components/Asset/OrderBook'
-import AssetTradeHistory from 'components/Asset/TradeHistory'
+// import AssetTradeHistory from 'components/Asset/TradeHistory'
 import Button from 'components/Button'
 import NavSearchSidebar from 'components/Nav/SearchSidebar'
 // import PlaceOrder from '@/components/Wallet/PlaceOrder'
@@ -13,6 +13,10 @@ import WalletConnect from '@/components/Wallet/Connect/WalletConnect'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { Section } from '@/components/Layout/Section'
+// import PlaceOrder from '@/components/Wallet/PlaceOrder'
+import PlaceOrderForm from '@/components/Wallet/PlaceOrder'
+import useStore, { useStorePersisted } from '../../store/use-store'
+import WalletTabs from '@/components/Wallet/WalletTabs'
 
 const DefaultContent = styled.section`
   grid-area: content;
@@ -76,7 +80,8 @@ const TABS = {
   BOOK: 'BOOK',
   TRADE: 'TRADE',
   ORDERS: 'ORDERS',
-  HISTORY: 'HISTORY'
+  HISTORY: 'HISTORY',
+  WALLET: 'WALLET'
 }
 const MobileButtonsSection = ({ onClick, ...rest }) => {
   const { t } = useTranslation('common')
@@ -164,7 +169,6 @@ export function Layout({
   controlsExpanded,
   footerCollapsed
 }) {
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const {
     Sidebar = NavSearchSidebar,
     Footer = styled.div`
@@ -172,8 +176,12 @@ export function Layout({
     `,
     Content = DefaultContent
   } = components
-
+  const isSignedIn = useStore((state) => state.isSignedIn)
+  const wallets = useStorePersisted((state) => state.wallets)
+  const address = useStorePersisted((state) => state.activeWalletAddress)
+  const wallet = wallets.find((wallet) => wallet.address === address)
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
+  console.debug(`Mobile Layout Render Asset: ${asset?.id || 'Missing'} ${activeMobile}`)
   /**
    * Use Clicked Events
    *
@@ -206,12 +214,16 @@ export function Layout({
 
       <Content area="content" border="dashed" borderColor="green">
         {activeMobile === TABS.CHART && children}
-        {activeMobile === TABS.HISTORY && <AssetTradeHistory area="content" asset={asset} />}
+        {activeMobile === TABS.TRADE && isSignedIn && (
+          <PlaceOrderForm area="content" asset={asset} wallet={wallet} />
+        )}
+        {activeMobile === TABS.TRADE && !isSignedIn && <div>Sign In!</div>}
+        {activeMobile === TABS.ORDERS && isSignedIn && <WalletTabs wallet={wallet} />}
         {/*{isSignedIn && (*/}
         {/*  <PlaceOrder asset={asset} wallet={wallet} area={!isMobile ? 'bottomRight' : 'content'} />*/}
         {/*)}*/}
         {activeMobile === TABS.BOOK && <AssetOrderBook asset={asset} area="content" />}
-        {activeMobile === TABS.HISTORY && <WalletConnect area="content" />}
+        {activeMobile === TABS.WALLET && <WalletConnect area="content" />}
       </Content>
 
       <Footer

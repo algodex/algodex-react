@@ -69,7 +69,7 @@ export const Grid = styled.main`
             'footer footer controls';
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 100%;
           grid-template-areas: 'content controls controls';
@@ -92,7 +92,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -122,7 +122,7 @@ export const Grid = styled.main`
               'content content controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -149,7 +149,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -178,7 +178,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -206,7 +206,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -233,7 +233,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -263,7 +263,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -290,7 +290,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -318,7 +318,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -346,7 +346,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -375,7 +375,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -404,7 +404,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:

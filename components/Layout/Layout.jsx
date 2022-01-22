@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import detectMobileDisplay from '../../utils/detectMobileDisplay'
 import DesktopLayout from '@/components/Layout/DesktopLayout'
 import MobileLayout from '@/components/Layout/MobileLayout'
-
+import useDebounce from 'hooks/useDebounce'
 /**
  * Detect Mobile
  * @returns {unknown}
  */
 function useMobileDetect() {
   const [isMobile, setIsMobile] = useState(undefined)
-
+  const debounceIsMobile = useDebounce(isMobile, 500)
   useEffect(() => {
     function handleResize() {
       setIsMobile(detectMobileDisplay())
@@ -21,9 +21,9 @@ function useMobileDetect() {
     handleResize()
 
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [debounceIsMobile])
 
-  return isMobile
+  return debounceIsMobile
 }
 
 /**
