@@ -10,7 +10,7 @@
 
 import axios from 'axios'
 // TODO: Implement getLogger() from '@algodex/common'
-const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
 export const PUBLIC_API = process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com'
 
@@ -41,12 +41,20 @@ async function getEtagResponse(url) {
     urlToLastResp = {}
   }
 
-  let headers = {}
+  const authToken = process.env.GEO_PASSWORD
+  const authHeader = `Bearer ${authToken}`
 
+  let headers = { headers: {Authorization: authHeader} }
   if (urlToEtag[url]) {
-    headers = { headers: { 'if-none-match': urlToEtag[url] } }
+    headers = { headers: { Authorization: authHeader, 'if-none-match': urlToEtag[url] } }
   }
 
+  if (!authToken) {
+    delete headers.headers.Authorization
+  }
+
+  DEBUG && console.debug({headers})
+  DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, headers)
     .then((res) => {
