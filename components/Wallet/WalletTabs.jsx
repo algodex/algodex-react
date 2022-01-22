@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Section } from '../Section'
+import { Section } from '@/components/Layout/Section'
 import { useStorePersisted } from '../../store/use-store'
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};

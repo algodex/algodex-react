@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
-import { Section } from './Section'
 import styled from 'styled-components'
+import { Section } from '@/components/Layout/Section'
 
 const Grid = styled.main`
   position: relative;

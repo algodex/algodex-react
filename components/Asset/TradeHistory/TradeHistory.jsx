@@ -10,7 +10,7 @@ import useTranslation from 'next-translate/useTranslation'
 import Icon from 'components/Icon'
 import Big from 'big.js'
 import dayjs from 'dayjs'
-import { Section } from 'components/Section'
+import { Section } from '@/components/Layout/Section'
 // const AssetTradeHistorySection = styled.section`
 //   display: flex;
 //   flex-direction: column;

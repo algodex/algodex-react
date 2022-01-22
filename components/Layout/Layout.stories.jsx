@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Component from './Layout'
-import { Section } from 'components/Section'
+import { Section } from '@/components/Layout/Section'
 
 const asset = {
   id: 15322902,
