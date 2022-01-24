@@ -76,6 +76,10 @@ Layout.parameters = {
 }
 Layout.args = {
   asset,
+  mobile: false,
+  loading: true,
+  error: false,
+  offline: false,
   rowHeight: 70,
   sidebarCollapsed: false,
   sidebarExpanded: false,

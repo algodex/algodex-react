@@ -1,9 +1,22 @@
 import { Fragment, useEffect, useState } from 'react'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import detectMobileDisplay from '../../utils/detectMobileDisplay'
 import DesktopLayout from '@/components/Layout/DesktopLayout'
 import MobileLayout from '@/components/Layout/MobileLayout'
 import useDebounce from 'hooks/useDebounce'
+import { isUndefined } from 'lodash/lang'
+import Spinner from '@/components/Spinner'
+import Error from '@/components/Error'
+import {Wifi} from "react-feather";
+
+export const FlexContainer = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
 /**
  * Detect Mobile
  * @returns {unknown}
@@ -23,7 +36,7 @@ function useMobileDetect() {
     return () => window.removeEventListener('resize', handleResize)
   }, [debounceIsMobile])
 
-  return debounceIsMobile
+  return isMobile
 }
 
 /**
@@ -31,16 +44,24 @@ function useMobileDetect() {
  * @returns {JSX.Element}
  * @constructor
  */
-export function Layout(props) {
-  const isMobile = useMobileDetect()
-  return (
-    <Fragment>
-      {isMobile && <MobileLayout {...props} />}
-      {!isMobile && <DesktopLayout {...props} />}
-    </Fragment>
-  )
+export function Layout({ loading, error, offline, mobile, ...props }) {
+  const isMobile = !isUndefined(mobile) || useMobileDetect()
+  const isSizeDetected = !isUndefined(isMobile)
+  const isLoading = (!isUndefined(loading) && loading) || !isSizeDetected
+  const isError = !isUndefined(error) && error
+  const isOffline = !isUndefined(offline) && offline
+
+  if (isLoading) return <Spinner flex={true} />
+  if (isError) return <Error flex={true} size={10} message={'Something is up'} />
+  if (isOffline) return <Error Icon={Wifi} flex={true} size={10} message={'You are offline!'} />
+  if (isSizeDetected && isMobile) return <MobileLayout {...props} />
+  if (isSizeDetected && !isMobile) return <DesktopLayout {...props} />
 }
 Layout.propTypes = {
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
+  offline: PropTypes.bool,
+  mobile: PropTypes.bool,
   asset: PropTypes.object,
   rowHeight: PropTypes.number,
   sidebarCollapsed: PropTypes.bool,
