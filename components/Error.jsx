@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { parseThemeColor } from 'theme'
-import { FlexContainer } from 'components/Layout'
+import { FlexContainer } from 'components/Layout/Layout'
 import { AlertIcon } from 'components/Icon'
 
 const Message = styled.p`

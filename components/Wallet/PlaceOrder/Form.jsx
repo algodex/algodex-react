@@ -14,7 +14,7 @@ import { default as AmountRange } from 'components/Input/SliderInput'
 import AdvancedOptions from './Form/AdvancedOptions'
 import PropTypes from 'prop-types'
 import { has } from 'lodash'
-import { Section } from '../../Section'
+import { Section } from '@/components/Layout/Section'
 
 const Container = styled.div`
   flex: 1 1 0%;

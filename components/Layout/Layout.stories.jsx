@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Component from './Layout'
-import { Section } from 'components/Section'
+import { Section } from '@/components/Layout/Section'
 
 const asset = {
   id: 15322902,
@@ -76,6 +76,10 @@ Layout.parameters = {
 }
 Layout.args = {
   asset,
+  mobile: false,
+  loading: true,
+  error: false,
+  offline: false,
   rowHeight: 70,
   sidebarCollapsed: false,
   sidebarExpanded: false,

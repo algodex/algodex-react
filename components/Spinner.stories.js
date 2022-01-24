@@ -1,10 +1,20 @@
 import React from 'react'
-import Spinner from './Spinner'
-import { FlexColumn } from './Layout'
-
+import { default as Component } from './Spinner'
+import styled from 'styled-components'
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: ${({ theme }) => theme.colors.gray['700']};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+`
 export default {
   title: '@algodex/components/Spinner',
-  component: Spinner,
+  component: Component,
+  parameters: { layout: 'fullscreen' },
   argTypes: {
     color: {
       options: [
@@ -31,18 +41,18 @@ export default {
   },
   decorators: [
     (Story) => (
-      <FlexColumn>
+      <Container>
         <Story />
-      </FlexColumn>
+      </Container>
     )
   ]
 }
 
-const Template = (args) => <Spinner {...args} />
+const Template = (args) => <Component {...args} />
 
-export const Default = Template.bind({})
+export const Spinner = Template.bind({})
 Spinner.args = {
   color: 'gray.600',
-  flex: false,
+  flex: true,
   size: 5
 }

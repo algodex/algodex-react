@@ -51,8 +51,8 @@ export default {
 
 const Template = (args) => <Component {...args} />
 
-export const IconButton = Template.bind({})
-IconButton.args = {
+export const Button = Template.bind({})
+Button.args = {
   icon: 'Info',
   size: 500,
   onClick: () => console.log('Clicked')

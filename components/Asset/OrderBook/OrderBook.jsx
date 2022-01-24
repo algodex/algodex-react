@@ -16,7 +16,7 @@ import TablePriceHeader from 'components/Table/PriceHeader'
 import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
-import { Section } from '../../Section'
+import { Section } from '@/components/Layout/Section'
 export const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -443,7 +443,7 @@ export function OrderBookView({ asset, sellData, buyData }) {
         </SellOrders>
 
         <CurrentPrice>
-          {isLoading && <Spinner flex />}
+          {isLoading && <OrderBookPrice price={false} decimals={6} change={0} />}
           {!isLoading && (
             <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
           )}

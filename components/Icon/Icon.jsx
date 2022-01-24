@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import theme, { parseThemeColor } from 'theme'
+import * as Icons from 'react-feather'
+import { has } from 'lodash/object'
+import {isNumber} from "lodash";
 
-const ICONS = {
+export const ICONS = {
   wallet: {
     format: 'data',
     viewBox: '0 0 24 24',
@@ -45,18 +48,25 @@ const ICONS = {
   }
 }
 
+function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
+  return theme.colors[color][fillGradient]
+}
+function getSize({ size }) {
+  return isNumber(size) ? `${size}px` : size
+}
+function getColor({ theme, color = 'gray', gradient = 900 }){
+  return theme.colors[color][gradient]
+}
+
 const Svg = styled.svg`
-  display: inline-block;
+  display: ${(flex) => (flex ? 'flex' : 'inline-block')};
   vertical-align: middle;
   cursor: pointer;
-
-  ${({ color, use }) =>
-    ICONS[use].format === 'data' &&
-    `
-		path {
-			fill: ${color ? parseThemeColor(color) : 'currentColor'};
-		}
-	`};
+  path {
+    height: ${getSize}
+    fill: ${getFillColor};
+    color: ${getColor};      
+  }
 `
 
 /**
@@ -75,34 +85,39 @@ const Svg = styled.svg`
  *
  * @example <Icon use="wallet" size={0.75} color="gray.000" />
  */
-function Icon(props) {
-  if (!ICONS[props.use]) {
+export function Icon(props) {
+  const isCustomIcon = has(ICONS, props.use)
+  const isFeatherIcon = has(Icons, props.use)
+  if (!isCustomIcon && !isFeatherIcon) {
     return null
   }
 
-  const useIcon = ICONS[props.use]
+  const SvgIcon = isFeatherIcon ? Icons[props.use] : Svg
 
-  const content = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
+  const svgProps = {
+    width: `${props.size}rem`,
+    height: `${props.size}rem`
+  }
 
-  return (
-    <Svg
-      width={`${props.size}rem`}
-      height={`${props.size}rem`}
-      viewBox={useIcon.viewBox}
-      {...props}
-    >
-      {content}
-    </Svg>
-  )
+  if (isCustomIcon) {
+    const useIcon = ICONS[props.use]
+    svgProps.children = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
+    svgProps.viewBox = useIcon.viewBox
+  }
+
+  return <SvgIcon custom={isCustomIcon} {...svgProps} {...props} />
 }
 
 Icon.propTypes = {
+  flex: PropTypes.bool,
   use: PropTypes.string.isRequired,
   size: PropTypes.number,
   color: PropTypes.string
 }
 
 Icon.defaultProps = {
+  color: 'red',
+  use: 'algoLogo',
   size: 1
 }
 

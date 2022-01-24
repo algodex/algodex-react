@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Error from './Error'
+import { default as Component } from './Error'
 
 const Container = styled.div`
   width: 320px;
@@ -14,7 +14,7 @@ const Container = styled.div`
 
 export default {
   title: '@algodex/components/Error',
-  component: Error,
+  component: Component,
   argTypes: {
     color: {
       options: [
@@ -48,12 +48,10 @@ export default {
   ]
 }
 
-const Template = (args) => <Error {...args} />
+const Template = (args) => <Component {...args} />
 
-export const Default = Template.bind({})
-Default.args = {}
-export const Flex = Template.bind({})
-Flex.args = {
+export const Error = Template.bind({})
+Error.args = {
   flex: true,
   size: 8
 }

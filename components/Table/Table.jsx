@@ -202,7 +202,6 @@ function Table({
             ref={setTooltipRef}
             {...getTooltipProps({ style: { height: 'inherit' }, className: 'tooltip-container' })}
           >
-            {console.log(itemInfo)}
             <Flyover row={itemInfo} {...componentsProps.Flyover} />
             <div {...getArrowProps({ className: 'tooltip-arrow' })} />
           </div>

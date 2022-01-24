@@ -1,34 +1,15 @@
-import { Fragment, useState } from 'react'
-import { HeaderLg, HeaderSm } from 'components/Typography'
 import styled, { css } from 'styled-components'
-import { useStore, useStorePersisted } from '../store/use-store'
+import { useStore, useStorePersisted } from 'store/use-store'
 
 import AssetOrderBook from 'components/Asset/OrderBook'
 import AssetTradeHistory from 'components/Asset/TradeHistory'
-import Button from 'components/Button'
 import { Controls as DefaultControls } from './Controls'
 import NavSearchSidebar from 'components/Nav/SearchSidebar'
-import PlaceOrder from './Wallet/PlaceOrder'
+import PlaceOrder from 'components/Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
 import Spinner from 'components/Spinner'
-import SvgImage from 'components/SvgImage'
-import WalletConnect from './Wallet/Connect/WalletConnect'
+import WalletConnect from 'components/Wallet/Connect/WalletConnect'
 import WalletTabs from 'components/Wallet/WalletTabs'
-import { useEvent } from 'hooks/useEvents'
-import useTranslation from 'next-translate/useTranslation'
-
-export const FlexContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
-export const FlexColumn = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-`
 
 const DefaultContent = styled.section`
   grid-area: content;
@@ -78,13 +59,6 @@ export const Grid = styled.main`
     // Without footer we use a three column layout and return
     if (withoutFooter) {
       return css`
-        @media (max-width: 996px) {
-          grid-template-columns: 1fr;
-          grid-template-rows: 100%;
-          grid-template-areas:
-            'content'
-            'footer';
-        }
         @media (min-width: 996px) {
           grid-template-columns: 1fr 1fr 280px;
           grid-template-rows: 240px 200px 300px 300px;
@@ -95,7 +69,7 @@ export const Grid = styled.main`
             'footer footer controls';
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 100%;
           grid-template-areas: 'content controls controls';
@@ -109,13 +83,6 @@ export const Grid = styled.main`
     }
     if (withFooterOnly) {
       return css`
-        @media (max-width: 996px) {
-          grid-template-columns: 1fr;
-          grid-template-rows: 100%;
-          grid-template-areas:
-            'content'
-            'footer';
-        }
         @media (min-width: 996px) {
           grid-template-columns: 1fr 1fr 280px;
           grid-template-rows: 240px 200px 300px 300px;
@@ -125,7 +92,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -147,13 +114,6 @@ export const Grid = styled.main`
       // Expanded Controls
       if (withExpandedControls) {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -162,7 +122,7 @@ export const Grid = styled.main`
               'content content controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -180,13 +140,6 @@ export const Grid = styled.main`
         `
       } else {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -196,7 +149,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -216,13 +169,6 @@ export const Grid = styled.main`
     }
     if (withSidebarOnly) {
       return css`
-        @media (max-width: 996px) {
-          grid-template-columns: 1fr;
-          grid-template-rows: 100%;
-          grid-template-areas:
-            'content'
-            'footer';
-        }
         @media (min-width: 996px) {
           grid-template-columns: 1fr 1fr 280px;
           grid-template-rows: 240px 200px 300px 300px;
@@ -232,7 +178,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -251,13 +197,6 @@ export const Grid = styled.main`
     if (withoutControls) {
       if (withExpandedSidebar) {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -267,7 +206,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -285,13 +224,6 @@ export const Grid = styled.main`
         `
       } else {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -301,7 +233,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -322,13 +254,6 @@ export const Grid = styled.main`
 
     if (withControlsOnly) {
       return css`
-        @media (max-width: 996px) {
-          grid-template-columns: 1fr;
-          grid-template-rows: 100%;
-          grid-template-areas:
-            'content'
-            'footer';
-        }
         @media (min-width: 996px) {
           grid-template-columns: 1fr 1fr 280px;
           grid-template-rows: 240px 200px 300px 300px;
@@ -338,7 +263,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -356,13 +281,6 @@ export const Grid = styled.main`
     if (withEverything) {
       if (withExpandedSidebar && withExpandedControls) {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -372,7 +290,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -391,13 +309,6 @@ export const Grid = styled.main`
       }
       if (withExpandedSidebar && !withExpandedControls) {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -407,7 +318,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -426,13 +337,6 @@ export const Grid = styled.main`
       }
       if (!withExpandedSidebar && withExpandedControls) {
         return css`
-          @media (max-width: 996px) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 100%;
-            grid-template-areas:
-              'content'
-              'footer';
-          }
           @media (min-width: 996px) {
             grid-template-columns: 1fr 1fr 280px;
             grid-template-rows: 240px 200px 300px 300px;
@@ -442,7 +346,7 @@ export const Grid = styled.main`
               'footer footer controls'
               'footer footer controls';
           }
-          @media (min-width: 1024px) {
+          @media (min-width: 1023px) {
             grid-template-columns: 2fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
             grid-template-areas:
@@ -462,13 +366,6 @@ export const Grid = styled.main`
 
       // Return unexpanded
       return css`
-        @media (max-width: 996px) {
-          grid-template-columns: 1fr;
-          grid-template-rows: 100%;
-          grid-template-areas:
-            'content'
-            'footer';
-        }
         @media (min-width: 996px) {
           grid-template-columns: 1fr 1fr 280px;
           grid-template-rows: 240px 200px 300px 300px;
@@ -478,7 +375,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -498,13 +395,6 @@ export const Grid = styled.main`
 
     if (withoutEverything) {
       return css`
-        @media (max-width: 996px) {
-          grid-template-columns: 1fr;
-          grid-template-rows: 100%;
-          grid-template-areas:
-            'content'
-            'footer';
-        }
         @media (min-width: 996px) {
           grid-template-columns: 1fr 1fr 280px;
           grid-template-rows: 240px 200px 300px 300px;
@@ -514,7 +404,7 @@ export const Grid = styled.main`
             'footer footer controls'
             'footer footer controls';
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1023px) {
           grid-template-columns: 2fr 1fr 1fr;
           grid-template-rows: 1fr 1fr 1fr;
           grid-template-areas:
@@ -533,83 +423,6 @@ export const Grid = styled.main`
     throw new Error('No valid layout state!!!')
   }}
 `
-
-const MobileMenu = styled.nav`
-  height: 50px;
-  width: 100%;
-
-  & > ul {
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-
-  & > ul > li {
-    flex: 1 0 auto;
-    height: 100%;
-  }
-
-  z-index: 99;
-
-  @media (min-width: 996px) {
-    display: none;
-  }
-`
-
-const MobileMenuButton = styled(Button)`
-  height: 100%;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['800']};
-  padding: 0;
-  border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
-  min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
-  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
-  overflow-wrap: anywhere;
-`
-
-const Container = styled.div`
-  height: 100%;
-  background: url('/coming-soon-bg.jpg') no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-`
-
-const TypeContainer = styled.div`
-  padding: 15vh 2rem 0;
-  text-align: center;
-`
-
-const LogoContainer = styled.div`
-  padding: 4rem;
-`
-
-export function MobileInterface() {
-  return (
-    <Container>
-      <TypeContainer>
-        <HeaderLg fontSize="3.25rem" fontWeight="800" color="gray.000" mb={4}>
-          Coming soon
-        </HeaderLg>
-        <HeaderSm as="p" fontSize="1.25rem" fontWeight="500" letterSpacing="0" color="gray.000">
-          The Algodex mobile experience will be available in a later release.
-        </HeaderSm>
-      </TypeContainer>
-      <LogoContainer>
-        <SvgImage use="logoLg" w={7.5} />
-      </LogoContainer>
-    </Container>
-  )
-}
-
 /**
  * @param asset
  * @param children
@@ -617,7 +430,7 @@ export function MobileInterface() {
  * @returns {JSX.Element}
  * @constructor
  */
-export function Layout({
+export function DesktopLayout({
   asset,
   children,
   components,
@@ -628,7 +441,7 @@ export function Layout({
   controlsExpanded,
   footerCollapsed
 }) {
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  console.debug(`Desktop Render Asset: ${asset?.id || 'Missing'}`)
   const {
     Sidebar = NavSearchSidebar,
     Footer = WalletTabs,
@@ -636,61 +449,15 @@ export function Layout({
     Content = DefaultContent
   } = components
 
-  const { t } = useTranslation('common')
   const isSignedIn = useStore((state) => state.isSignedIn)
   const wallets = useStorePersisted((state) => state.wallets)
   const address = useStorePersisted((state) => state.activeWalletAddress)
   const wallet = wallets.find((wallet) => wallet.address === address)
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 996
-  // const isMedium = typeof window !== 'undefined' && window.innerWidth >= 996
-  // const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 996
 
-  const TABS = {
-    CHART: 'CHART',
-    BOOK: 'BOOK',
-    TRADE: 'TRADE',
-    ORDERS: 'ORDERS',
-    HISTORY: 'HISTORY'
-  }
-
-  const [activeMobile, setActiveMobile] = useState(TABS.CHART)
-  /**
-   * Use Clicked Events
-   *
-   * This is only used to switch to MobileMenu Chart view
-   * when the Next/Router navigates to a shallow route
-   */
-  useEvent('clicked', (data) => {
-    if (data === 'asset') {
-      console.log('CLicked', data, activeMobile)
-      setActiveMobile(TABS.CHART)
-    }
-    if (data === 'order') {
-      setActiveMobile(TABS.TRADE)
-    }
-  })
   if (!asset) {
     return <Spinner flex={true} />
   }
-  const renderPanels = () => (
-    <Fragment>
-      <AssetTradeHistory
-        active={!controlsCollapsed}
-        area={!isMobile ? 'bottomLeft' : 'content'}
-        asset={asset}
-      />
-      {isSignedIn && (
-        <PlaceOrder
-          active={!controlsCollapsed}
-          asset={asset}
-          wallet={wallet}
-          area={!isMobile ? 'bottomRight' : 'content'}
-        />
-      )}
-      <AssetOrderBook asset={asset} area={!isMobile ? 'topLeft' : 'content'} />
-      <WalletConnect area={!isMobile ? 'topRight' : 'content'} />
-    </Fragment>
-  )
+
   return (
     <Grid
       controlsCollapsed={controlsCollapsed}
@@ -709,86 +476,34 @@ export function Layout({
       />
 
       <Footer active={!footerCollapsed} area="footer" border="dashed" borderColor="white" />
-      {!isMobile && (
-        <Content area="content" border="dashed" borderColor="green">
-          {children}
-        </Content>
-      )}
-      {isMobile ? (
-        renderPanels()
-      ) : (
-        <Controls
-          active={!controlsCollapsed}
-          area="controls"
-          mdAndUp={true}
-          border="dashed"
-          borderColor="purple"
-        >
-          {renderPanels()}
-        </Controls>
-      )}
 
-      <MobileMenu>
-        <ul>
-          <li>
-            <MobileMenuButton
-              characterLength={t('mobilefooter-CHART').length}
-              type="button"
-              onClick={() => setActiveMobile(TABS.CHART)}
-            >
-              {t('mobilefooter-CHART')}
-            </MobileMenuButton>
-          </li>
-          <li>
-            <MobileMenuButton
-              characterLength={t('mobilefooter-BOOK').length}
-              type="button"
-              onClick={() => setActiveMobile(TABS.BOOK)}
-            >
-              {t('mobilefooter-BOOK')}
-            </MobileMenuButton>
-          </li>
-          <li>
-            <MobileMenuButton
-              characterLength={t('mobilefooter-TRADE').length}
-              type="button"
-              onClick={() => setActiveMobile(TABS.TRADE)}
-            >
-              {t('mobilefooter-TRADE')}
-            </MobileMenuButton>
-          </li>
-          <li>
-            <MobileMenuButton
-              characterLength={t('mobilefooter-ORDERS').length}
-              type="button"
-              onClick={() => setActiveMobile(TABS.ORDERS)}
-            >
-              {t('mobilefooter-ORDERS')}
-            </MobileMenuButton>
-          </li>
-          {/*
-            <li>
-              // Trade history. Disable for now until it is refactored into the Orders tab
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                History
-              </MobileMenuButton>
-            </li>
-            */}
-          <li>
-            <MobileMenuButton
-              type="button"
-              characterLength={t('mobilefooter-WALLET').length}
-              onClick={() => setActiveMobile(TABS.WALLET)}
-            >
-              {t('mobilefooter-WALLET')}
-            </MobileMenuButton>
-          </li>
-        </ul>
-      </MobileMenu>
+      <Content area="content" border="dashed" borderColor="green">
+        {children}
+      </Content>
+
+      <Controls
+        active={!controlsCollapsed}
+        area="controls"
+        mdAndUp={true}
+        border="dashed"
+        borderColor="purple"
+      >
+        <AssetTradeHistory active={!controlsCollapsed} area="bottomLeft" asset={asset} />
+        {isSignedIn && (
+          <PlaceOrder
+            active={!controlsCollapsed}
+            asset={asset}
+            wallet={wallet}
+            area="bottomRight"
+          />
+        )}
+        <AssetOrderBook asset={asset} area="topLeft" />
+        <WalletConnect area="topRight" />
+      </Controls>
     </Grid>
   )
 }
-Layout.propTypes = {
+DesktopLayout.propTypes = {
   asset: PropTypes.object,
   rowHeight: PropTypes.number,
   sidebarCollapsed: PropTypes.bool,
@@ -806,7 +521,7 @@ Layout.propTypes = {
     Content: PropTypes.elementType
   })
 }
-Layout.defaultProps = {
+DesktopLayout.defaultProps = {
   rowHeight: 70,
   sidebarCollapsed: false,
   sidebarExpanded: false,
@@ -818,4 +533,4 @@ Layout.defaultProps = {
     Footer: WalletTabs
   }
 }
-export default Layout
+export default DesktopLayout

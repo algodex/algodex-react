@@ -1,6 +1,6 @@
 // SearchTable.stories.js
 import styled from 'styled-components'
-import { NavSearchTable as Component, default as ComponentWithData } from './SearchTable'
+import { NavSearchTable as Component /*, default as ComponentWithData*/ } from './SearchTable'
 const Container = styled.div`
   width: 50vw;
   height: 100vh;
@@ -11,7 +11,7 @@ const Container = styled.div`
   padding: 0;
 `
 export default {
-  title: 'Nav/Search',
+  title: '@algodex/recipes/Nav/Table/Search Table',
   component: Component,
   parameters: {
     layout: 'fullscreen'
@@ -29,13 +29,13 @@ export default {
 }
 
 const Template = (args) => <Component {...args} />
-const TemplateWithData = (args) => <ComponentWithData {...args} />
+// const TemplateWithData = (args) => <ComponentWithData {...args} />
 /**
  * @todo Refactor SearchTable to render properly in a `flex` and `block` display
  * @type {any}
  */
-export const Table = Template.bind({})
-Table.args = {
+export const SearchTable = Template.bind({})
+SearchTable.args = {
   onAssetFocus: false,
   onAssetLeave: false,
   onAssetClick: () => console.log('Hello'),
@@ -58,14 +58,14 @@ Table.args = {
   setIsFilteringByFavorites: () => console.log('Hello')
 }
 
-export const LiveTable = TemplateWithData.bind({})
-LiveTable.args = {
-  query: '',
-  onAssetFocus: false,
-  onAssetLeave: false,
-  onAssetClick: () => console.log('Hello'),
-  isListingVerifiedAssets: false,
-  algoPrice: 1.44,
-  isFilteringByFavorites: false,
-  setIsFilteringByFavorites: () => console.log('Hello')
-}
+// export const LiveTable = TemplateWithData.bind({})
+// LiveTable.args = {
+//   query: '',
+//   onAssetFocus: false,
+//   onAssetLeave: false,
+//   onAssetClick: () => console.log('Hello'),
+//   isListingVerifiedAssets: false,
+//   algoPrice: 1.44,
+//   isFilteringByFavorites: false,
+//   setIsFilteringByFavorites: () => console.log('Hello')
+// }

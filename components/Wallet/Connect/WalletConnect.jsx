@@ -10,7 +10,7 @@ import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typograp
 import Button from 'components/Button'
 import SvgImage from 'components/SvgImage'
 import PropTypes from 'prop-types'
-import { Section } from '../../Section'
+import { Section } from '@/components/Layout/Section'
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
