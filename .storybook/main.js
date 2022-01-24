@@ -11,7 +11,15 @@ module.exports = {
     }
   }],
   webpackFinal: async config => {
-    config.resolve.modules = [path.resolve(__dirname, '..'), 'node_modules'];
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@/components": path.resolve(__dirname, "../components"),
+      "@/hooks": path.resolve(__dirname, "../hooks"),
+      "@/store": path.resolve(__dirname, "../store")
+    };
+    config.resolve.modules = [
+        path.resolve(__dirname, '..'), 'node_modules',
+    ];
     config.resolve.fallback={http: false, crypto: false, path: false}
     return config;
   },
