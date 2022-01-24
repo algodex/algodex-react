@@ -39,6 +39,7 @@ import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import useUserStore from '../../store/use-user-state'
+import { useFetchAlgorandPriceQuery } from 'hooks/useAlgoExplorer'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -64,6 +65,10 @@ function PlaceOrderView(props) {
     submitted: false,
     submitting: false
   })
+
+  const {
+    data: { algoPrice }
+  } = useFetchAlgorandPriceQuery()
 
   // @todo: calculate transaction fees in total
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
@@ -333,7 +338,7 @@ function PlaceOrderView(props) {
             id="total"
             label={t('total')}
             asset="ALGO"
-            usdEquivalent="12,000"
+            usdEquivalent={(order.total * algoPrice).toLocaleString()}
             decimals={6}
             orderType={order.type}
             value={order.total}
@@ -444,7 +449,7 @@ function PlaceOrderView(props) {
               {maxSpendableAlgo}
               <br />
               <LabelSm color="gray.500" fontWeight="500">
-                $12,300
+                ${(maxSpendableAlgo * algoPrice).toLocaleString()}
               </LabelSm>
             </LabelMd>
           </BalanceRow>
@@ -455,7 +460,7 @@ function PlaceOrderView(props) {
             <LabelMd color="gray.300" fontWeight="500">
               {asaBalance} <br />
               <LabelSm color="gray.500" fontWeight="500">
-                $12,300
+                ${(asaBalance * algoPrice).toLocaleString()}
               </LabelSm>
             </LabelMd>
           </BalanceRow>
