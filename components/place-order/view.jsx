@@ -33,10 +33,11 @@ import detectMobileDisplay from 'utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
-import { useAssetPriceQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import { useAssetOrdersQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import useUserStore from '../../store/use-user-state'
 import { MarketOrder } from './market-order'
 import { LimitOrder } from './limit-order'
+import { aggregateOrders } from 'components/order-book/helpers'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -57,6 +58,8 @@ function PlaceOrderView(props) {
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
+  const [marketBuyPrice, setMarketBuyPrice] = useState(0)
+  const [marketSellPrice, setMarketSellPrice] = useState(0)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -120,11 +123,30 @@ function PlaceOrderView(props) {
       asset
     )
   }
-  const { data } = useAssetPriceQuery({ asset })
+  const { data: assetOrders, isLoading: assetOrderLoading } = useAssetOrdersQuery({ asset })
+  useEffect(() => {
+    if (
+      assetOrders &&
+      !assetOrderLoading &&
+      typeof assetOrders.sellASAOrdersInEscrow !== 'undefined' &&
+      typeof assetOrders.buyASAOrdersInEscrow !== 'undefined'
+    ) {
+      let list = aggregateOrders(assetOrders.sellASAOrdersInEscrow, asset.decimals, 'sell').map(
+        (value) => parseFloat(value.price)
+      )
+      setMarketBuyPrice(Math.min(...list))
+
+      let list2 = aggregateOrders(assetOrders.buyASAOrdersInEscrow, asset.decimals, 'buy').map(
+        (value) => parseFloat(value.price)
+      )
+      setMarketSellPrice(Math.max(...list2))
+    }
+  }, [assetOrderLoading, assetOrders, setMarketBuyPrice, setMarketSellPrice, asset])
+
   const handleMarketOrderChange = () => {
     setOrder(
       {
-        price: `${data.price}` || ''
+        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
       },
       asset
     )
@@ -133,7 +155,7 @@ function PlaceOrderView(props) {
     if (orderView == MARKET_PANEL) {
       handleMarketOrderChange()
     }
-  }, [data])
+  }, [assetOrders])
 
   const handleRangeChange = (update) => {
     setOrder(update, asset)
