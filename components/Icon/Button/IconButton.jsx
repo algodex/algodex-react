@@ -3,10 +3,15 @@ import * as Icons from 'react-feather'
 import { isNumber } from 'lodash'
 import PropTypes from 'prop-types'
 
-function getFill({ theme, color = 'gray', fillGradient = 500 }) {
+function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
   return theme.colors[color][fillGradient]
 }
-
+function getSize({ size }) {
+  return isNumber(size) ? `${size}px` : size
+}
+function getColor({ theme, color = 'gray', gradient = 900 }){
+  return theme.colors[color][gradient]
+}
 const style = css`
   cursor: pointer;
   pointer-events: all;
@@ -14,13 +19,13 @@ const style = css`
   background: transparent;
   margin: 0;
   padding: 0;
-  height: ${({ size }) => (isNumber(size) ? `${size}px` : size)};
-  width: ${({ size }) => (isNumber(size) ? `${size}px` : size)};
-  color: ${({ theme, color = 'gray', gradient = 900 }) => theme.colors[color][gradient]};
+  height: ${getSize};
+  width: ${getSize};
+  color: ${getColor};
   svg {
-    height: ${({ size }) => (isNumber(size) ? `${size}px` : size)};
+    height: ${getSize};
     fill: ${getFill};
-    color: ${({ theme, color = 'gray', gradient = 900 }) => theme.colors[color][gradient]};
+    color: ${getColor};
   }
 `
 /**
