@@ -12,9 +12,10 @@ module.exports = {
   collectCoverageFrom: [
     '**/components/**/*.{js,jsx}',
     '!**/components/**/*.stories.{js,jsx}',
-    '!**/components/**/*demo.{js,jsx}'
+    '!**/components/**/*demo.{js,jsx}',
+    '!**/components/**/*spec.{js,jsx}'
   ],
-  coverageReporters: ['json-summary', 'text', 'lcov'],
+  coverageReporters: ['lcov', 'text', 'json-summary', 'text'],
   moduleNameMapper: {
     '^components(.*)$': '<rootDir>/components$1',
     '^lib(.*)$': '<rootDir>/lib$1',

@@ -1,7 +1,7 @@
 import { useAssetPriceQuery, useSearchResultsQuery } from './useAlgodex'
 
 import { useFetchAlgorandPriceQuery } from './useAlgoExplorer'
-import withQuery from 'hooks/withQuery'
+import { withQuery } from './withQuery'
 
 /**
  * With Search Results Query
