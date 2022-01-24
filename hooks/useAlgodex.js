@@ -23,15 +23,19 @@ const refetchInterval = 3000
  * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<{assets: *}, unknown>}
  */
-export const useSearchResultsQuery = ({
+export function useSearchResultsQuery({
   query = '',
   options = {
     refetchInterval: query === '' ? refetchInterval : 20000
   }
-} = {}) => {
+} = {}) {
   const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
-  routeQueryError( {isError, error, router} )
+  const { data, isError, error, ...rest } = useQuery(
+    ['searchResults', { query }],
+    () => searchAssets(query),
+    options
+  )
+  routeQueryError({ isError, error, router })
 
   return { data, isError, error, ...rest }
 }

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import Spinner from 'components/Spinner'
-import { Error as DefaultError } from 'components/Error'
+import DefaultError from 'components/Error'
 
 /**
  * Base withQuery Abstraction
@@ -14,15 +14,15 @@ import { Error as DefaultError } from 'components/Error'
  * @param {JSX.Element | Function} options.error Error Component
  * @returns {JSX.Element} Return a composed component
  */
-export const withQuery = (
+export function withQuery(
   Component,
-  { hook = useQuery, loading: Loading = Spinner, error: Error = DefaultError }
-) => {
+  { hook = useQuery, loading: Loading = Spinner /*, error: Error = DefaultError */ }
+) {
   function withQueryWrapper(props) {
     const { isSuccess, isLoading, isError, data, error } = hook(props)
     if (isSuccess) return <Component {...data} {...props} />
     if (isLoading) return <Loading flex />
-    if (isError) return <Error message={error.message} />
+    if (isError) return <DefaultError message={error.message} />
   }
   withQueryWrapper.getInitialProps = Component.getInitialProps
 
@@ -42,7 +42,7 @@ export const routeQueryError = ({ isError, error, router }) => {
     // Do nothing. The component will handle this.
   } else if (isError) {
     // router.push('/500')
-    console.error({error})
+    console.error({ error })
     router.push('/restricted')
   }
 }
