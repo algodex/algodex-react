@@ -38,11 +38,12 @@ export const withQuery = (
 export const routeQueryError = ({ isError, error, router }) => {
   if (isError && error.message.match(404)) {
     router.push('/404')
-  } else if (isError && error.message.match(403)) {
-    router.push('/unauthorized')
+  } else if (isError && error.message.match(500)) {
+    // Do nothing. The component will handle this.
   } else if (isError) {
     // router.push('/500')
-    console.error(error)
+    console.error({error})
+    router.push('/restricted')
   }
 }
 export default withQuery

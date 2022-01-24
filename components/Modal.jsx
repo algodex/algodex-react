@@ -12,6 +12,7 @@ const Modal = (props) => {
     <ModalWrapper
       isVisible={props.isVisible}
       className="absolute w-full h-full justify-center items-center"
+      hideBackdrop={props.hideBackdrop}
       {...props}
       hideBackdrop={props.hideBackdrop}
     >
@@ -27,6 +28,6 @@ Modal.propTypes = {
 }
 
 Modal.defaultProps = {
-  hideBackdrop: false
+  hideBackdrop: true
 }
 export default Modal
