@@ -1,5 +1,5 @@
-import React from 'react'
 import { SliderInput as Component } from './SliderInput'
+import React from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -29,5 +29,9 @@ const Template = (args) => <Component {...args} />
 
 export const SliderInput = Template.bind({})
 SliderInput.args = {
-  value: 50
+  value: 50,
+  marks: true,
+  step: 10,
+  min: 10,
+  max: 100
 }

@@ -1,20 +1,21 @@
-import useTranslation from 'next-translate/useTranslation'
-import { Info } from 'react-feather'
-import Icon from 'components/Icon'
-import Tooltip from 'components/Tooltip'
-import styled from 'styled-components'
-import Button from '../../Button'
-import Big from 'big.js'
-import { lighten } from 'polished'
-import { Header as _Tabs, Tab as _Tab } from '../../Tabs/orders.css'
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
-import { useState, useMemo } from 'react'
-import CurrencyInput from '../../Input/CurrencyInput'
-import { default as AmountRange } from 'components/Input/SliderInput'
+import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
+import { useMemo, useState } from 'react'
+
 import AdvancedOptions from './Form/AdvancedOptions'
+import { default as AmountRange } from 'components/Input/SliderInput'
+import Big from 'big.js'
+import Button from '../../Button'
+import CurrencyInput from '../../Input/CurrencyInput'
+import Icon from 'components/Icon'
+import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
-import { has } from 'lodash'
 import { Section } from '@/components/Layout/Section'
+import Tooltip from 'components/Tooltip'
+import { has } from 'lodash'
+import { lighten } from 'polished'
+import styled from 'styled-components'
+import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -363,7 +364,12 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               <AmountRange
                 // txnFee={txnFee}
                 onChange={console.log}
+                // onChange={(e) => handleChange(e, 'type')}
                 value={order.amount}
+                marks={true}
+                step={10}
+                min={0}
+                max={100}
               />
               <CurrencyInput
                 name="total"
