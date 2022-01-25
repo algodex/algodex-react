@@ -26,7 +26,9 @@ const ENABLE_NETWORK_SELECTION =
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
-if (1 === 1) {
+let a = 1
+let b = 1
+if (a === b) {
   throw 'this is a test by alex'
 }
 export function Header({ router }) {
