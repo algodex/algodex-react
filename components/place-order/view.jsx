@@ -155,7 +155,7 @@ function PlaceOrderView(props) {
     if (orderView == MARKET_PANEL) {
       handleMarketOrderChange()
     }
-  }, [assetOrders])
+  }, [assetOrders, order.type])
 
   const handleRangeChange = (update) => {
     setOrder(update, asset)
