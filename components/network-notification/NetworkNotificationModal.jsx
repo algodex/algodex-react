@@ -24,9 +24,9 @@ const NetworkNotificationModal = ({
         subTitle: t('modal-subtitle-mainnet'),
         paragraphone: t('modal-first-paragraph-mainnet'),
         paragraphTwo: t('modal-second-paragraph-mainnet'),
-        linkTextOne: t('modal-disclaimer'),
+        linkTextOne: t('modal-terms'),
         linkTextTwo: t('modal-documentation'),
-        linkAddressOne: 'https://about.algodex.com/disclaimers/',
+        linkAddressOne: '/algodex_tos.pdf',
         linkAddressTwo: 'https://about.algodex.com/docs/',
         button: t('modal-cta')
       }
