@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
+import { useRouter } from 'next/router'
+
 import {
   fetchAssetChart,
   fetchAssetOrders,
@@ -7,16 +11,30 @@ import {
   fetchWalletOrders,
   fetchWalletTradeHistory,
   searchAssets
-} from 'services/algodex'
+} from '@/services/algodex'
 
-import WalletService from 'services/wallet'
-import { useQuery } from 'react-query'
-import { useRouter } from 'next/router'
-import { routeQueryError } from 'hooks/withQuery'
-import { useEffect, useState } from 'react'
-import { floatToFixed } from '../services/display'
-import { calculateAsaBuyAmount } from '../services/convert'
+import { floatToFixed } from '@/services/display'
+import { calculateAsaBuyAmount } from '@/services/convert'
+import WalletService from '@/services/wallet'
 
+/**
+ * Route based on Error
+ * @param isError
+ * @param error
+ * @param router
+ * @returns {function(): boolean}
+ */
+export function routeQueryError({ isError, error, router }) {
+  if (isError && error.message.match(404)) {
+    router.push('/404')
+  } else if (isError && error.message.match(500)) {
+    // Do nothing. The component will handle this.
+  } else if (isError) {
+    // router.push('/500')
+    console.error({ error })
+    router.push('/restricted')
+  }
+}
 const refetchInterval = 3000
 
 /**
@@ -24,7 +42,7 @@ const refetchInterval = 3000
  * @param {Object} props The props of the parent
  * @param {string} props.query Search Query
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<{assets: *}, unknown>}
+ * @returns {object}
  */
 export function useSearchResultsQuery({
   query = '',
@@ -50,23 +68,30 @@ export function useSearchResultsQuery({
  * @param {Object} props.asset An instance of an Asset
  * @param {Object} [props.options] useQuery Options
  * @todo: Consolidate with Search
- * @returns {UseQueryResult<*, unknown>}
+ * @returns {object} Massaged Query
  */
-export const useAssetPriceQuery = ({
-  asset: { id },
+export function useAssetPriceQuery({
+  asset,
   options = {
-    refetchInterval,
-    enabled: typeof id !== 'undefined'
+    refetchInterval
   }
-} = {}) => useQuery(['assetPrice', { id }], () => fetchAssetPrice(id), options)
+} = {}) {
+  const { id } = asset
+  const { data: dexAsset, ...rest } = useQuery(
+    ['assetPrice', { id }],
+    () => fetchAssetPrice(id),
+    options
+  )
 
+  return { data: { price: dexAsset }, ...rest }
+}
 /**
  * Use Asset Chart Query
  * @param {Object} props The props of the parent
  * @param {Object} props.asset An instance of an Asset
  * @param {string} props.chartInterval Interval to aggregate chart by
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {object}
  */
 export function useAssetChartQuery({
   chartInterval,
@@ -209,75 +234,84 @@ export function useAssetTradeHistoryQuery({
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
  * @todo: Fetch Wallet Assets from on-chain
- * @returns {UseQueryResult<T, unknown>}
+ * @returns {object}
  */
-export const useWalletAssetsQuery = ({
+export function useWalletAssetsQuery({
   wallet: { address },
   options = {
     enabled: typeof address !== 'undefined',
     refetchInterval
   }
-}) => useQuery(['walletAssets', { address }], () => fetchWalletAssets(address), options)
-
+}) {
+  return useQuery(['walletAssets', { address }], () => fetchWalletAssets(address), options)
+}
 /**
  * Use Wallet Orders Query
  *
  * @param {Object} props The props of the parent
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {object}
  */
-export const useWalletOrdersQuery = ({
+export function useWalletOrdersQuery({
   wallet: { address },
   options = { enabled: typeof address !== 'undefined', refetchInterval }
-}) => useQuery(['walletOrders', { address }], () => fetchWalletOrders(address), options)
-
+}) {
+  return useQuery(['walletOrders', { address }], () => fetchWalletOrders(address), options)
+}
 /**
  * Use Wallet Trade History
  *
  * @param {Object} props The props of the parent
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {object}
  */
-export const useWalletTradeHistory = ({
+export function useWalletTradeHistory({
   wallet: { address },
   options = {
     enabled: typeof address !== 'undefined',
     refetchInterval
   }
-}) => useQuery(['walletTradeHistory', { address }], () => fetchWalletTradeHistory(address), options)
-
+}) {
+  return useQuery(
+    ['walletTradeHistory', { address }],
+    () => fetchWalletTradeHistory(address),
+    options
+  )
+}
 /**
  * Use Wallet Minimum Balance Query
  * @param {Object} props The props of the parent
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<*, unknown>}
+ * @returns {object}
  */
-export const useWalletMinBalanceQuery = ({
+export function useWalletMinBalanceQuery({
   wallet,
   options = {
     enabled: typeof wallet !== 'undefined' && typeof wallet.address !== 'undefined'
   }
-}) =>
-  useQuery(
+}) {
+  return useQuery(
     ['walletMinBalance', { address: wallet?.address }],
     async () => await WalletService.getMinWalletBalance(wallet),
     options
   )
-
+}
 /**
  * Use Wallets Query
  * @param {Object} props The props of the parent
  * @param {Object} props.wallets A list of Wallet Addresses
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<{}|{wallets: unknown[]}|undefined, unknown>}
+ * @returns {object}
  */
-export const useWalletsQuery = ({
+export function useWalletsQuery({
   wallets,
   options = {
     enabled: typeof wallets !== 'undefined',
     refetchInterval
   }
-}) => useQuery('wallets', () => WalletService.fetchWallets(wallets), options)
+}) {
+  return useQuery('wallets', () => WalletService.fetchWallets(wallets), options)
+}

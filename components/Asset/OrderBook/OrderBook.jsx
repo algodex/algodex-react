@@ -1,19 +1,22 @@
 import useStore from 'store/use-store'
+import { ArrowDown, ArrowUp } from 'react-feather'
 import PropTypes from 'prop-types'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import styled from 'styled-components'
 import { rgba } from 'polished'
 import useTranslation from 'next-translate/useTranslation'
-import { useEventDispatch } from 'hooks/useEvents'
 import Big from 'big.js'
-import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from 'components/Typography'
-import { floatToFixed } from 'services/display'
-import TablePriceHeader from 'components/Table/PriceHeader'
-import { convertFromAsaUnits } from 'services/convert'
-import { ArrowDown, ArrowUp } from 'react-feather'
-import SvgImage from 'components/SvgImage'
+
+import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
+import TablePriceHeader from '@/components/Table/PriceHeader'
+import SvgImage from '@/components/SvgImage'
 import { Section } from '@/components/Layout/Section'
+
+import { floatToFixed } from '@/services/display'
+import { convertFromAsaUnits } from '@/services/convert'
+
 import { withAssetOrdersQuery } from '@/hooks/withAlgodex'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import { useEventDispatch } from '@/hooks/useEvents'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
@@ -300,7 +303,10 @@ export function OrderBook({ asset, orders }) {
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
   const dispatcher = useEventDispatch()
-  const { data, isLoading } = useAssetPriceQuery({
+  const {
+    data: { price: dexAsset },
+    isLoading
+  } = useAssetPriceQuery({
     asset
   })
 
@@ -383,7 +389,11 @@ export function OrderBook({ asset, orders }) {
         <CurrentPrice>
           {isLoading && <OrderBookPrice price={false} decimals={6} change={0} />}
           {!isLoading && (
-            <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
+            <OrderBookPrice
+              price={dexAsset.price}
+              decimals={decimals}
+              change={dexAsset.price24Change}
+            />
           )}
         </CurrentPrice>
 
@@ -431,4 +441,4 @@ OrderBook.defaultProps = {
   orders: { sell: [], buy: [] }
 }
 
-export default withAssetOrdersQuery(OrderBook, {})
+export default withAssetOrdersQuery(OrderBook)
