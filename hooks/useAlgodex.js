@@ -16,6 +16,11 @@ import {
 import { floatToFixed } from '@/services/display'
 import { calculateAsaBuyAmount } from '@/services/convert'
 import WalletService from '@/services/wallet'
+// import useStore, { getChartTimeInterval } from '@/store/use-store'
+// import millify from 'millify'
+// import Spinner from '@/components/Spinner'
+// import Error from '@/components/Error'
+import Big from 'big.js'
 
 /**
  * Route based on Error
@@ -85,6 +90,64 @@ export function useAssetPriceQuery({
 
   return { data: { price: dexAsset }, ...rest }
 }
+
+function mapPriceData(data) {
+  const prices =
+    data?.chart_data.map(
+      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+        const time = parseInt(unixTime)
+        return {
+          time: time,
+          open: floatToFixed(formatted_open),
+          high: floatToFixed(formatted_high),
+          low: floatToFixed(formatted_low),
+          close: floatToFixed(formatted_close)
+        }
+      }
+    ) || []
+  return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
+}
+
+function getOhlc(data) {
+  const lastPriceData = data?.chart_data[0]
+
+  return lastPriceData
+    ? {
+        open: floatToFixed(lastPriceData.formatted_open),
+        high: floatToFixed(lastPriceData.formatted_high),
+        low: floatToFixed(lastPriceData.formatted_low),
+        close: floatToFixed(lastPriceData.formatted_close)
+      }
+    : {}
+}
+
+function mapVolumeData(data, volUpColor, volDownColor) {
+  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
+    const time = parseInt(unixTime)
+    return {
+      time: time,
+      value: asaVolume
+    }
+  })
+  const volumeColors = data?.chart_data.map(({ open, close }) =>
+    open > close ? volDownColor : volUpColor
+  )
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
+}
+
+function getBidAskSpread(orderBook) {
+  const { buyOrders, sellOrders } = orderBook
+
+  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
+  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
+
+  const bid = floatToFixed(bidPrice)
+  const ask = floatToFixed(askPrice)
+  const spread = floatToFixed(new Big(ask).minus(bid).abs())
+
+  return { bid, ask, spread }
+}
+
 /**
  * Use Asset Chart Query
  * @param {Object} props The props of the parent
@@ -101,6 +164,37 @@ export function useAssetChartQuery({
     enabled: typeof id !== 'undefined'
   }
 }) {
+  // const { data: assetOrders } = useAssetOrdersQuery({ asset })
+  //
+  // const orderBook = useMemo(
+  //   () => ({
+  //     buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+  //     sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+  //   }),
+  //   [assetOrders]
+  // )
+  //
+  // const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
+  // const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
+  //
+  // const { isLoading, isError, data } = useAssetChartQuery({
+  //   asset,
+  //   chartInterval: chartTimeInterval
+  // })
+  //
+  // const priceData = useMemo(() => mapPriceData(data), [data])
+  // const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
+  // const ohlc = useMemo(() => getOhlc(data), [data])
+  //
+  // const asaVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
+  //
+  // if (isLoading) {
+  //   return <Spinner flex />
+  // }
+  //
+  // if (isError) {
+  //   return <Error message="Error loading chart" flex />
+  // }
   return useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
 }
 /**
@@ -161,7 +255,7 @@ function aggregateOrders(orders, asaDecimals, type) {
  * @param {Object} [props.options] useQuery Options
  * @returns {object} React Query Results
  */
-export function useAssetOrdersQuery({
+export function useAssetOrderbookQuery({
   asset,
   options = {
     refetchInterval
@@ -193,6 +287,11 @@ export function useAssetOrdersQuery({
 
   // Return OrderBook
   return { data: { orders: { sell, buy } }, isLoading, ...rest }
+}
+
+export function useAssetOrdersQuery({ asset, options = {} }) {
+  const { id } = asset
+  return useQuery(['assetOrders', { id }], () => fetchAssetOrders(id), options)
 }
 
 /**

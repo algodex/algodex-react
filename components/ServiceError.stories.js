@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { default as Component } from './Error'
+import { default as Component } from './ServiceError'
 
 const Container = styled.div`
   width: 320px;
@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 export default {
-  title: '@algodex/components/Error',
+  title: '@algodex/components/ServiceError',
   component: Component,
   argTypes: {
     color: {

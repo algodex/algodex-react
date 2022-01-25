@@ -12,6 +12,8 @@ import { convertFromBaseUnits } from '@/services/convert'
 import { HeaderLg, BodyCopy, BodyCopyTiny } from '@/components/Typography'
 import SvgImage from '@/components/SvgImage'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
+import Spinner from '@/components/Spinner'
+import ServiceError from '@/components/ServiceError'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -260,4 +262,6 @@ AssetInfo.propTypes = {
   price: PropTypes.object
 }
 
-export default withAssetPriceQuery(AssetInfo)
+export default withAssetPriceQuery(AssetInfo, {
+  components: { Loading: Spinner, ServiceError }
+})

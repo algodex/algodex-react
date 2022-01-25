@@ -3,23 +3,23 @@ import {
   AssetName,
   AssetNameBlock,
   NameVerifiedWrapper
-} from 'components/Asset/Typography'
-import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
+} from '@/components/Asset/Typography'
+import { BodyCopySm, BodyCopyTiny } from '@/components/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 
-import AlgoIcon from 'components/Icon'
+import AlgoIcon from '@/components/Icon'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
-import Table from 'components/Table'
+import Table from '@/components/Table'
 import { flatten } from 'lodash'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@/services/display'
 import styled from 'styled-components'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
-import { withSearchResultsQuery } from 'hooks/withAlgodex'
+import useUserStore from '@/store/use-user-state'
+import { withSearchResultsQuery } from '@/hooks/withAlgodex'
 
 /**
  * Map a Query Result to a Search Result
@@ -354,4 +354,4 @@ NavSearchTable.propTypes = {
   isFilteringByFavorites: PropTypes.bool,
   setIsFilteringByFavorites: PropTypes.func
 }
-export default withSearchResultsQuery(NavSearchTable, { loading: Loading, error: Error })
+export default withSearchResultsQuery(NavSearchTable)

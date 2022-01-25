@@ -1,18 +1,19 @@
-import Error from 'components/Error'
+import Error from 'components/ServiceError'
 import Spinner from 'components/Spinner'
 import millify from 'millify'
 import PropTypes from 'prop-types'
 import { useMemo, useRef, useState } from 'react'
-import useStore, { getChartTimeInterval } from 'store/use-store'
-import { useAssetChartQuery, useAssetOrdersQuery } from 'hooks/useAlgodex'
-import useAreaChart from 'hooks/use-area-chart'
-import useCandleChart from 'hooks/use-candle-chart'
+import useStore, { getChartTimeInterval } from '@/store/use-store'
+import { useAssetChartQuery, useAssetOrdersQuery } from '@/hooks/useAlgodex'
+import { withAssetChartQuery } from '@/hooks/withAlgodex'
+import useAreaChart from '@/hooks/use-area-chart'
+import useCandleChart from '@/hooks/use-candle-chart'
 import ReactDOM from 'react-dom'
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
-import { floatToFixed } from 'services/display'
-import Big from 'big.js'
 import styled from 'styled-components'
+import {floatToFixed} from "@/services/display";
+import Big from "big.js";
 
 const Container = styled.div`
   position: relative;
@@ -63,62 +64,6 @@ const SettingsContainer = styled.div`
     height: 2.75rem;
   }
 `
-const mapPriceData = (data) => {
-  const prices =
-    data?.chart_data.map(
-      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
-        const time = parseInt(unixTime)
-        return {
-          time: time,
-          open: floatToFixed(formatted_open),
-          high: floatToFixed(formatted_high),
-          low: floatToFixed(formatted_low),
-          close: floatToFixed(formatted_close)
-        }
-      }
-    ) || []
-  return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
-}
-
-const getOhlc = (data) => {
-  const lastPriceData = data?.chart_data[0]
-
-  return lastPriceData
-    ? {
-        open: floatToFixed(lastPriceData.formatted_open),
-        high: floatToFixed(lastPriceData.formatted_high),
-        low: floatToFixed(lastPriceData.formatted_low),
-        close: floatToFixed(lastPriceData.formatted_close)
-      }
-    : {}
-}
-
-const mapVolumeData = (data, volUpColor, volDownColor) => {
-  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
-    const time = parseInt(unixTime)
-    return {
-      time: time,
-      value: asaVolume
-    }
-  })
-  const volumeColors = data?.chart_data.map(({ open, close }) =>
-    open > close ? volDownColor : volUpColor
-  )
-  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
-}
-
-const getBidAskSpread = (orderBook) => {
-  const { buyOrders, sellOrders } = orderBook
-
-  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
-  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
-
-  const bid = floatToFixed(bidPrice)
-  const ask = floatToFixed(askPrice)
-  const spread = floatToFixed(new Big(ask).minus(bid).abs())
-
-  return { bid, ask, spread }
-}
 function autoScaleProvider(original, chart, priceData) {
   let visibleRange = chart.timeScale().getVisibleRange()
   if (!visibleRange) {
@@ -155,7 +100,6 @@ function autoScaleProvider(original, chart, priceData) {
 
   return res
 }
-
 export function ChartView(props) {
   const { asset, volumeData, priceData } = props
   const [currentPrices, setCurrentPrices] = useState(props)
@@ -285,6 +229,62 @@ const VOLUME_UP_COLOR = '#2fb16c2c'
 const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
+function mapPriceData (data)  {
+  const prices =
+      data?.chart_data.map(
+          ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+            const time = parseInt(unixTime)
+            return {
+              time: time,
+              open: floatToFixed(formatted_open),
+              high: floatToFixed(formatted_high),
+              low: floatToFixed(formatted_low),
+              close: floatToFixed(formatted_close)
+            }
+          }
+      ) || []
+  return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
+}
+
+function getOhlc(data) {
+  const lastPriceData = data?.chart_data[0]
+
+  return lastPriceData
+      ? {
+        open: floatToFixed(lastPriceData.formatted_open),
+        high: floatToFixed(lastPriceData.formatted_high),
+        low: floatToFixed(lastPriceData.formatted_low),
+        close: floatToFixed(lastPriceData.formatted_close)
+      }
+      : {}
+}
+
+function mapVolumeData (data, volUpColor, volDownColor) {
+  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
+    const time = parseInt(unixTime)
+    return {
+      time: time,
+      value: asaVolume
+    }
+  })
+  const volumeColors = data?.chart_data.map(({ open, close }) =>
+      open > close ? volDownColor : volUpColor
+  )
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
+}
+
+function getBidAskSpread (orderBook)  {
+  const { buyOrders, sellOrders } = orderBook
+
+  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
+  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
+
+  const bid = floatToFixed(bidPrice)
+  const ask = floatToFixed(askPrice)
+  const spread = floatToFixed(new Big(ask).minus(bid).abs())
+
+  return { bid, ask, spread }
+}
 function Chart({ asset, ...rest }) {
   const { data: assetOrders } = useAssetOrdersQuery({ asset })
 

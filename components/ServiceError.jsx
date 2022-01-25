@@ -33,7 +33,7 @@ const Message = styled.p`
  * @returns {JSX.Element}
  * @constructor
  */
-export function Error({ size, color, flex, message, Icon }) {
+export function ServiceError({ size, color, flex, message, Icon }) {
   const showMsg = message?.length > 0
 
   return flex ? (
@@ -53,7 +53,7 @@ export function Error({ size, color, flex, message, Icon }) {
   )
 }
 
-Error.propTypes = {
+ServiceError.propTypes = {
   size: PropTypes.number,
   color: PropTypes.string,
   message: PropTypes.string,
@@ -61,7 +61,7 @@ Error.propTypes = {
   Icon: PropTypes.element
 }
 
-Error.defaultProps = {
+ServiceError.defaultProps = {
   size: 1.5,
   color: 'gray.600',
   flex: false,
@@ -69,4 +69,4 @@ Error.defaultProps = {
   Icon: AlertIcon
 }
 
-export default Error
+export default ServiceError

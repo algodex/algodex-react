@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import detectMobileDisplay from '../../utils/detectMobileDisplay'
@@ -7,8 +7,7 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import useDebounce from 'hooks/useDebounce'
 import { isUndefined } from 'lodash/lang'
 import Spinner from '@/components/Spinner'
-import Error from '@/components/Error'
-import {Wifi} from "react-feather";
+import ServiceError from '@/components/ServiceError'
 
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
@@ -44,16 +43,16 @@ function useMobileDetect() {
  * @returns {JSX.Element}
  * @constructor
  */
-export function Layout({ loading, error, offline, mobile, ...props }) {
-  const isMobile = !isUndefined(mobile) || useMobileDetect()
+export function Layout({ loading, error, offline, ...props }) {
+  const isMobile = useMobileDetect()
   const isSizeDetected = !isUndefined(isMobile)
   const isLoading = (!isUndefined(loading) && loading) || !isSizeDetected
   const isError = !isUndefined(error) && error
   const isOffline = !isUndefined(offline) && offline
 
   if (isLoading) return <Spinner flex={true} />
-  if (isError) return <Error flex={true} size={10} message={'Something is up'} />
-  if (isOffline) return <Error Icon={Wifi} flex={true} size={10} message={'You are offline!'} />
+  if (isError) return <ServiceError flex={true} size={10} message={'Something is up'} />
+  if (isOffline) return <ServiceError flex={true} size={10} message={'You are offline!'} />
   if (isSizeDetected && isMobile) return <MobileLayout {...props} />
   if (isSizeDetected && !isMobile) return <DesktopLayout {...props} />
 }

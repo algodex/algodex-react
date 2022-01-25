@@ -1,11 +1,12 @@
-import { fetchAssetPrice, fetchAssets } from 'services/algodex'
-
-import { AssetInfo } from 'components/Asset/Asset'
-import Chart from 'components/Asset/Chart'
-import Page from 'components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from 'services/algoexplorer'
-import { useUserStore } from 'store'
+
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
+import useUserStore from '@/store/use-user-state'
+
+import Page from '@/components/Page'
+import AssetInfo from '@/components/Asset/Asset'
+import Chart from '@/components/Asset/Chart'
 
 /**
  * Fetch Traded Asset Paths

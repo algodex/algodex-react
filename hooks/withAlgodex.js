@@ -1,51 +1,30 @@
 import {
   useAssetOrdersQuery,
+  useAssetOrderbookQuery,
   useAssetPriceQuery,
   useAssetTradeHistoryQuery,
   useSearchResultsQuery
 } from '@/hooks/useAlgodex'
 
 import { useFetchAlgorandPriceQuery } from '@/hooks/useAlgoExplorer'
-
-import { useQuery } from 'react-query'
+import { withQuery } from '@/hooks/withQuery'
 import Spinner from '@/components/Spinner'
-import DefaultError from '@/components/Error'
-/**
- * Base withQuery Abstraction
- *
- * Return an element based on Query State
- *
- * @param {JSX.Element | Function} Component Component to wrap
- * @param {Object} [options] Query Options
- * @param {Function} options.hook Callable Hook
- * @param {JSX.Element | Function} options.loading Loading Component
- * @param {JSX.Element | Function} options.error Error Component
- * @returns {JSX.Element} Return a composed component
- */
-export function withQuery(
-  Component,
-  { hook = useQuery /*, loading: Loading = Spinner , error: Error = DefaultError */ }
-) {
-  function withQueryWrapper(props) {
-    const { isSuccess, isLoading, isError, data, error } = hook(props)
-    if (isSuccess) return <Component {...data} {...props} />
-    if (isLoading) return <Spinner flex />
-    if (isError) return <DefaultError message={error.message} />
-    return <div>What</div>
-  }
-  withQueryWrapper.getInitialProps = Component.getInitialProps
+import ServiceError from '@/components/ServiceError'
 
-  return withQueryWrapper
+const components = {
+  Loading: Spinner,
+  ServiceError
 }
 /**
  * With Search Results Query
  * @param {JSX.Element| Function} Component Component to wrap
- * @param {object} options Options to pass to withQuery
+ * @param {object} [options] Options to pass to withQuery
  * @returns {JSX.Element}
  */
 export function withSearchResultsQuery(Component, options) {
   return withQuery(Component, {
     hook: useSearchResultsQuery,
+    components,
     ...options
   })
 }
@@ -58,6 +37,15 @@ export function withSearchResultsQuery(Component, options) {
 export function withAssetOrdersQuery(Component, options) {
   return withQuery(Component, {
     hook: useAssetOrdersQuery,
+    components,
+    ...options
+  })
+}
+
+export function withAssetOrderbookQuery(Component, options) {
+  return withQuery(Component, {
+    hook: useAssetOrderbookQuery,
+    components,
     ...options
   })
 }
@@ -70,6 +58,7 @@ export function withAssetOrdersQuery(Component, options) {
 export function withAssetTradeHistoryQuery(Component, options) {
   return withQuery(Component, {
     hook: useAssetTradeHistoryQuery,
+    components,
     ...options
   })
 }
@@ -83,6 +72,7 @@ export function withAssetTradeHistoryQuery(Component, options) {
 export function withAssetPriceQuery(Component, options) {
   return withQuery(Component, {
     hook: useAssetPriceQuery,
+    components,
     ...options
   })
 }
@@ -90,12 +80,13 @@ export function withAssetPriceQuery(Component, options) {
 /**
  * With Algorand Price Query
  * @param {JSX.Element| Function} Component Component to wrap
- * @param {object} options Options to pass to withQuery
+ * @param {object} [options] Options to pass to withQuery
  * @returns {JSX.Element}
  */
 export function withfetchAlgorandPriceQuery(Component, options) {
   return withQuery(Component, {
     hook: useFetchAlgorandPriceQuery,
+    components,
     ...options
   })
 }
