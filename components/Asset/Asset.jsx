@@ -1,16 +1,17 @@
+import Image from 'next/image'
+import PropTypes from 'prop-types'
+import { Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 import { ArrowLeft, ExternalLink } from 'react-feather'
 import useTranslation from 'next-translate/useTranslation'
-import { useUserStore } from 'store'
-import { Fragment, useCallback } from 'react'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import theme from 'theme'
-import { floatToFixed } from 'services/display'
-import { convertFromBaseUnits } from 'services/convert'
-import Image from 'next/image'
-import PropTypes from 'prop-types'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/Typography'
-import SvgImage from 'components/SvgImage'
+
+import theme from '../../theme/index'
+import useUserStore from '@/store/use-user-state'
+import { floatToFixed } from '@/services/display'
+import { convertFromBaseUnits } from '@/services/convert'
+import { HeaderLg, BodyCopy, BodyCopyTiny } from '@/components/Typography'
+import SvgImage from '@/components/SvgImage'
+import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -106,7 +107,7 @@ const AlgoExplorerLink = styled.div`
     }
   }
 `
-export const AssetInfo = ({ asset, price }) => {
+export function AssetInfo({ asset, price: dexAsset }) {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -120,14 +121,7 @@ export const AssetInfo = ({ asset, price }) => {
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset,
-    options: {
-      refetchInterval: 5000,
-      enabled: price?.isTraded || false,
-      initialData: price
-    }
-  })
+
   const renderName = () => {
     if (asset.verified) {
       return (
@@ -266,4 +260,4 @@ AssetInfo.propTypes = {
   price: PropTypes.object
 }
 
-export default AssetInfo
+export default withAssetPriceQuery(AssetInfo)

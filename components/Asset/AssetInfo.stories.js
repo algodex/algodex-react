@@ -46,6 +46,7 @@ export default {
   component: Component,
   parameters: { layout: 'fullscreen' },
   args: {
+    isLive: false,
     asset,
     price
   },
@@ -59,9 +60,9 @@ export default {
 }
 
 //eslint-disable-next-line
-export const AssetInfo = ({ asset, isLive, ...props }) => (
+export const AssetInfo = ({ asset, price, isLive, ...props }) => (
   <>
-    {!isLive && <Component asset={asset} {...props} />}
+    {!isLive && <Component asset={asset} price={price} {...props} />}
     {isLive && <ComponentWithData asset={asset} />}
     {isLive && <ReactQueryDevtools initialIsOpen={false} />}
   </>
