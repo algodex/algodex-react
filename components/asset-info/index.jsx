@@ -23,7 +23,7 @@ import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { Fragment, useCallback } from 'react'
 import { useUserStore } from '../../store'
 import { floatToFixed } from 'services/display'
-import { convertFromBaseUnits } from 'services/convert'
+import { convertFromAsaUnits, numberFormatter } from 'services/convert'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
@@ -110,7 +110,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'TODO'}
+              {numberFormatter(asset.circulating)}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -118,7 +118,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.total}
+              {numberFormatter(asset.total)}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -147,7 +147,7 @@ const AssetInfo = ({ asset, price }) => {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
+                      ? convertFromAsaUnits(dexAsset.price, asset.decimals)
                       : dexAsset.price
                   )}{' '}
                   ALGO
