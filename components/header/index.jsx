@@ -26,6 +26,9 @@ const ENABLE_NETWORK_SELECTION =
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
+if (1 === 1) {
+  throw 'this is a test by alex'
+}
 export function Header({ router }) {
   const [isOpen, setIsOpen] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
