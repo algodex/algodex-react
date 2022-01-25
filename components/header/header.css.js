@@ -266,3 +266,8 @@ export const NetworkDropdown = styled.select`
   border-radius: 3px;
   padding: 0.3rem 0.5rem;
 `
+
+export const NetworkDropdownOption = styled.option`
+  color: ${({ enableLinks }) =>
+    enableLinks ? 'black' : '#AAA'};
+`
