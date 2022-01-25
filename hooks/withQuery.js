@@ -14,13 +14,14 @@ import { isUndefined } from 'lodash/lang'
  * @param {JSX.Element | function} options.components.ServiceError Error Component
  * @returns {JSX.Element} Return a composed component
  */
-export function withQuery(
-  Component,
-  { hook = useQuery, components: { Loading, ServiceError } = {} } = {}
-) {
-  if (isUndefined(Loading) || isUndefined(ServiceError))
+export function withQuery(Component, { hook = useQuery, components }) {
+  if (
+    isUndefined(components) ||
+    isUndefined(components.Loading) ||
+    isUndefined(components.ServiceError)
+  )
     throw new Error('Must have Loading and Error components')
-
+  const { Loading, ServiceError } = components
   function withQueryWrapper(props) {
     const { isSuccess, isLoading, isError, data, error } = hook(props)
     if (isSuccess) return <Component {...data} {...props} />

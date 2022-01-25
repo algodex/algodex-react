@@ -17,8 +17,6 @@ import { convertFromAsaUnits } from '@/services/convert'
 import { withAssetOrderbookQuery } from '@/hooks/withAlgodex'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import { useEventDispatch } from '@/hooks/useEvents'
-import Spinner from '@/components/Spinner'
-import ServiceError from '@/components/ServiceError'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
@@ -443,6 +441,4 @@ OrderBook.defaultProps = {
   orders: { sell: [], buy: [] }
 }
 
-export default withAssetOrderbookQuery(OrderBook, {
-  components: { Loading: Spinner, ServiceError }
-})
+export default withAssetOrderbookQuery(OrderBook)
