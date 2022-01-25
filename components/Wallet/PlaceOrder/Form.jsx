@@ -3,7 +3,7 @@ import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
 import { useMemo, useState } from 'react'
 
 import AdvancedOptions from './Form/AdvancedOptions'
-import { default as AmountRange } from 'components/Input/SliderInput'
+import { default as AmountRange } from 'components/Input/Slider'
 import Big from 'big.js'
 import Button from '../../Button'
 import CurrencyInput from '../../Input/CurrencyInput'
@@ -364,8 +364,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               />
               <AmountRange
                 // txnFee={txnFee}
-                onChange={console.log}
-                // onChange={(e) => handleChange(e, 'type')}
+                onChange={(e) => handleChange(e, 'type')}
                 value={order.amount}
                 marks={true}
                 step={10}

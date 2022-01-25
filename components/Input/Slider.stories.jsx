@@ -1,7 +1,6 @@
+import { default as Component } from './Slider'
 import React from 'react'
-import { PercentageSliderInput as Component } from './PercentageSliderInput'
 import styled from 'styled-components'
-import asset from 'spec/Asset'
 
 const Container = styled.div`
   width: 100vw;
@@ -16,6 +15,9 @@ const Container = styled.div`
 export default {
   title: '@algodex/components/Input',
   component: Component,
+  argTypes: {
+    value: { control: { type: 'range', min: 0, max: 100, step: 10 } }
+  },
   parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
@@ -28,10 +30,12 @@ export default {
 
 const Template = (args) => <Component {...args} />
 
-export const PercentageSliderInput = Template.bind({})
-PercentageSliderInput.args = {
-  order: {},
-  algoBalance: 10000,
-  asaBalance: 10000,
-  asset
+export const SliderInput = Template.bind({})
+SliderInput.args = {
+  type: 'line-marks',
+  value: 50,
+  marks: true,
+  step: 10,
+  min: 10,
+  max: 100
 }
