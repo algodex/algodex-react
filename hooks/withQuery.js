@@ -8,7 +8,7 @@ import DefaultError from 'components/Error'
  * Return an element based on Query State
  *
  * @param {JSX.Element | Function} Component Component to wrap
- * @param {Object} options Query Options
+ * @param {Object} [options] Query Options
  * @param {Function} options.hook Callable Hook
  * @param {JSX.Element | Function} options.loading Loading Component
  * @param {JSX.Element | Function} options.error Error Component
@@ -16,13 +16,14 @@ import DefaultError from 'components/Error'
  */
 export function withQuery(
   Component,
-  { hook = useQuery, loading: Loading = Spinner /*, error: Error = DefaultError */ }
+  { hook = useQuery /*, loading: Loading = Spinner , error: Error = DefaultError */ }
 ) {
   function withQueryWrapper(props) {
     const { isSuccess, isLoading, isError, data, error } = hook(props)
     if (isSuccess) return <Component {...data} {...props} />
-    if (isLoading) return <Loading flex />
+    if (isLoading) return <Spinner flex />
     if (isError) return <DefaultError message={error.message} />
+    return <div>What</div>
   }
   withQueryWrapper.getInitialProps = Component.getInitialProps
 

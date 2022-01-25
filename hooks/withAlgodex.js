@@ -1,4 +1,4 @@
-import { useAssetPriceQuery, useSearchResultsQuery } from './useAlgodex'
+import { useAssetOrdersQuery, useAssetPriceQuery, useSearchResultsQuery } from './useAlgodex'
 
 import { useFetchAlgorandPriceQuery } from './useAlgoExplorer'
 import { withQuery } from './withQuery'
@@ -12,6 +12,18 @@ import { withQuery } from './withQuery'
 export const withSearchResultsQuery = (Component, options) =>
   withQuery(Component, {
     hook: useSearchResultsQuery,
+    ...options
+  })
+
+/**
+ *
+ * @param Component
+ * @param options
+ * @returns {JSX.Element}
+ */
+export const withAssetOrdersQuery = (Component, options) =>
+  withQuery(Component, {
+    hook: useAssetOrdersQuery,
     ...options
   })
 /**

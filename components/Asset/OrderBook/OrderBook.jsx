@@ -1,10 +1,6 @@
-import { useState } from 'react'
 import useStore from 'store/use-store'
-import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import Spinner from 'components/Spinner'
-import Error from 'components/Error'
-import { useAssetOrdersQuery, useAssetPriceQuery } from 'hooks/useAlgodex'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import styled from 'styled-components'
 import { rgba } from 'polished'
 import useTranslation from 'next-translate/useTranslation'
@@ -13,27 +9,13 @@ import Big from 'big.js'
 import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from 'components/Typography'
 import { floatToFixed } from 'services/display'
 import TablePriceHeader from 'components/Table/PriceHeader'
-import { calculateAsaBuyAmount, convertFromAsaUnits } from 'services/convert'
+import { convertFromAsaUnits } from 'services/convert'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import SvgImage from 'components/SvgImage'
 import { Section } from '@/components/Layout/Section'
-export const AssetOrderBookSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%
-  border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-  // display: ${({ active }) => (active ? 'flex' : 'none')};
-  @media (min-width: 996px) {
-    grid-area: book;
-    display: flex;
-  }
-`
-export const FirstOrderContainer = styled.div`
+import { withAssetOrdersQuery } from '@/hooks/withAlgodex'
+
+const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
@@ -122,52 +104,7 @@ FirstOrderMsg.propTypes = {
   isSignedIn: PropTypes.bool
 }
 
-export const aggregateOrders = (orders, asaDecimals, type) => {
-  const isBuyOrder = type === 'buy'
-  let total = 0
-
-  const sortOrdersToAggregate = (a, b) => {
-    if (isBuyOrder) {
-      return b.asaPrice - a.asaPrice
-    }
-    return a.asaPrice - b.asaPrice
-  }
-
-  const reduceAggregateData = (result, order) => {
-    const price = floatToFixed(order.formattedPrice)
-
-    const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
-
-    const amount = isBuyOrder
-      ? calculateAsaBuyAmount(price, orderAmount)
-      : parseFloat(order.formattedASAAmount)
-
-    total += amount
-
-    const index = result.findIndex((obj) => obj.price === price)
-
-    if (index !== -1) {
-      result[index].amount += amount
-      result[index].total += amount
-      return result
-    }
-
-    result.push({
-      price,
-      amount,
-      total
-    })
-    return result
-  }
-
-  const sortRowsByPrice = (a, b) => {
-    return b.price - a.price
-  }
-
-  return orders.sort(sortOrdersToAggregate).reduce(reduceAggregateData, []).sort(sortRowsByPrice)
-}
-
-export const Container = styled.div`
+const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
@@ -186,14 +123,14 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
-export const Header = styled.header`
+const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
   ${gridStyles}
   padding: 0 0.5rem 0.75rem;
 `
 
-export const BookRow = styled.div`
+const BookRow = styled.div`
   display: grid;
   ${gridStyles}
   padding: 0 0.5rem;
@@ -214,14 +151,14 @@ export const BookRow = styled.div`
   }
 `
 
-export const OrdersWrapper = styled.div`
+const OrdersWrapper = styled.div`
   position: absolute;
   left: 0;
   right: 0;
   overflow: visible;
 `
 
-export const SellOrders = styled.div`
+const SellOrders = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow: hidden scroll;
@@ -250,7 +187,7 @@ export const SellOrders = styled.div`
   }
 `
 
-export const BuyOrders = styled.div`
+const BuyOrders = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow: hidden scroll;
@@ -281,7 +218,7 @@ export const BuyOrders = styled.div`
   }
 `
 
-export const CurrentPrice = styled.div`
+const CurrentPrice = styled.div`
   padding: 1rem 0;
 `
 const Price = styled.p`
@@ -348,16 +285,17 @@ OrderBookPrice.defaultProps = {
 }
 
 /**
- * # Recipe: Orderbook Component
+ * Recipe: Orderbook Component
  *
- * @todo Refactor to Orderbook withAssetOrdersQuery
- * @param asset
- * @param sellData
- * @param buyData
+ * @todo: Return Orderbook Summary from API in two parts, Sell and Buy
+ *
+ * @param {object} props Component Properties
+ * @param {object} props.asset Algorand Asset Information
+ * @param {object} props.orders Algodex Asset Orders, A unmodified list of raw orders
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBookView({ asset, sellData, buyData }) {
+export function OrderBook({ asset, orders }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
@@ -439,7 +377,7 @@ export function OrderBookView({ asset, sellData, buyData }) {
         </Header>
 
         <SellOrders>
-          <OrdersWrapper>{renderOrders(sellData, 'sell')}</OrdersWrapper>
+          <OrdersWrapper>{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice>
@@ -450,86 +388,47 @@ export function OrderBookView({ asset, sellData, buyData }) {
         </CurrentPrice>
 
         <BuyOrders>
-          <OrdersWrapper>{renderOrders(buyData, 'buy')}</OrdersWrapper>
+          <OrdersWrapper>{renderOrders(orders.buy, 'buy')}</OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>
   )
 }
 
-OrderBookView.propTypes = {
-  asset: PropTypes.object.isRequired,
-  sellData: PropTypes.arrayOf(
-    PropTypes.shape({
-      amount: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      total: PropTypes.number.isRequired
-    })
-  ),
-  buyData: PropTypes.arrayOf(
-    PropTypes.shape({
-      amount: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      total: PropTypes.number.isRequired
-    })
-  )
-}
-
-OrderBookView.defaultProps = {
-  sellData: [],
-  buyData: []
-}
-
-/**
- * @todo move into OrderbookView
- * @deprecated
- * @param asset
- * @returns {JSX.Element}
- * @constructor
- */
-export default function OrderBook({ asset /* onClicked, onChange */ }) {
-  const [sellOrders, setSellOrders] = useState()
-  const [buyOrders, setBuyOrders] = useState()
-  const isSignedIn = useStore((state) => state.isSignedIn)
-
-  // Orderbook Query
-  const { data, isLoading, isError } = useAssetOrdersQuery({ asset })
-
-  // Massage Orders
-  useEffect(() => {
-    if (
-      data &&
-      !isLoading &&
-      typeof data.sellASAOrdersInEscrow !== 'undefined' &&
-      typeof data.buyASAOrdersInEscrow !== 'undefined'
-    ) {
-      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, asset.decimals, 'sell'))
-      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, asset.decimals, 'buy'))
-    }
-  }, [isLoading, data, setSellOrders, setBuyOrders, asset])
-
-  // Invalid
-  if (!asset?.id || isLoading) {
-    return <Spinner flex />
-  }
-
-  // Is in error
-  if (isError || (!asset?.id && !isLoading)) {
-    return <Error message={'Issue fetching Orderbook'} />
-  }
-
-  // Has no orders
-  if (typeof sellOrders !== 'undefined' && typeof buyOrders !== 'undefined') {
-    if (sellOrders.length === 0 && buyOrders.length === 0) {
-      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
-    }
-  }
-
-  // Return OrderBook
-  return <OrderBookView asset={asset} buyData={buyOrders} sellData={sellOrders} />
-}
 OrderBook.propTypes = {
+  /**
+   * Algorand Asset Information
+   */
   asset: PropTypes.object.isRequired,
-  onClicked: PropTypes.func,
-  onChange: PropTypes.func
+  /**
+   * Algodex Orders
+   */
+  orders: PropTypes.shape({
+    /**
+     * Sell Orders
+     */
+    sell: PropTypes.arrayOf(
+      PropTypes.shape({
+        amount: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
+        total: PropTypes.number.isRequired
+      })
+    ),
+    /**
+     * Buy Orders
+     */
+    buy: PropTypes.arrayOf(
+      PropTypes.shape({
+        amount: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
+        total: PropTypes.number.isRequired
+      })
+    )
+  })
 }
+
+OrderBook.defaultProps = {
+  orders: { sell: [], buy: [] }
+}
+
+export default withAssetOrdersQuery(OrderBook, {})
