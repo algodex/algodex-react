@@ -268,6 +268,5 @@ export const NetworkDropdown = styled.select`
 `
 
 export const NetworkDropdownOption = styled.option`
-  color: ${({ enableLinks }) =>
-    enableLinks ? 'black' : '#AAA'};
+  color: ${({ enableLinks }) => (enableLinks ? 'black' : '#AAA')};
 `
