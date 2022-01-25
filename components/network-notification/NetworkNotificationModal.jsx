@@ -39,8 +39,8 @@ const NetworkNotificationModal = ({
         paragraphTwo: t('modal-second-paragraph-testnet'),
         linkTextOne: t('modal-faucet'),
         linkTextTwo: t('modal-documentation'),
-        linkAddressOne: 'https://about.algodex.com/docs/',
-        linkAddressTwo: 'https://about.algodex.com/docs/',
+        linkAddressOne: 'https://bank.testnet.algorand.network/',
+        linkAddressTwo: 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/',
         button: t('modal-cta')
       }
     }
