@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { parseThemeColor } from 'theme'
-import { FlexContainer } from 'components/Layout/Layout'
 import { AlertIcon } from 'components/Icon'
-
+export const FlexContainer = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
 const Message = styled.p`
   display: flex;
   align-items: center;

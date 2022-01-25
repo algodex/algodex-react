@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import detectMobileDisplay from '../../utils/detectMobileDisplay'
 import DesktopLayout from '@/components/Layout/DesktopLayout'
@@ -9,13 +8,6 @@ import { isUndefined } from 'lodash/lang'
 import Spinner from '@/components/Spinner'
 import ServiceError from '@/components/ServiceError'
 
-export const FlexContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
 /**
  * Detect Mobile
  * @returns {unknown}
