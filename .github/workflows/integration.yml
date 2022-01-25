@@ -1,6 +1,10 @@
 name: Cypress Tests using Cypress Docker Image
 
-on: [push]
+on:
+  # push
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   cypress-run:
@@ -15,5 +19,5 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          # Specify Browser since container image is compile with Firefox
+          # Specify Browser since container image is compile with chrome
           browser: chrome
