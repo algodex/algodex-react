@@ -68,15 +68,16 @@ export const useAssetPriceQuery = ({
  * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<Object, unknown>}
  */
-export const useAssetChartQuery = ({
+export function useAssetChartQuery({
   chartInterval,
   asset: { id },
   options = {
     refetchInterval,
     enabled: typeof id !== 'undefined'
   }
-}) => useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
-
+}) {
+  return useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
+}
 /**
  * @todo aggregate Orders in the API
  * @param orders
@@ -84,7 +85,7 @@ export const useAssetChartQuery = ({
  * @param type
  * @returns {*}
  */
-const aggregateOrders = (orders, asaDecimals, type) => {
+function aggregateOrders(orders, asaDecimals, type) {
   const isBuyOrder = type === 'buy'
   let total = 0
 
@@ -174,18 +175,33 @@ export function useAssetOrdersQuery({
  * @param {Object} props The props of the parent
  * @param {Object} props.asset An instance of an Asset
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {object} Massaged React-Query
  */
-export const useAssetTradeHistoryQuery = ({
-  asset: { id },
+export function useAssetTradeHistoryQuery({
+  asset,
   options = {
-    enabled: typeof id !== 'undefined',
-    // enabled: false,
     refetchInterval: 5000,
     staleTime: 3000
   }
-}) => useQuery(['assetTradeHistory', { id }], () => fetchAssetTradeHistory(id), options)
+}) {
+  const { id } = asset
+  const { data, ...rest } = useQuery(
+    ['assetTradeHistory', { id }],
+    () => fetchAssetTradeHistory(id),
+    options
+  )
 
+  const tradesData =
+    data?.transactions.map((txn) => ({
+      id: txn.PK_trade_history_id,
+      type: txn.tradeType,
+      price: floatToFixed(txn.formattedPrice),
+      amount: txn.formattedASAAmount,
+      timestamp: txn.unix_time * 1000
+    })) || []
+
+  return { data: { orders: tradesData }, ...rest }
+}
 /**
  * Use Wallet Assets Query
  *

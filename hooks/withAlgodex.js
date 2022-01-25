@@ -1,4 +1,9 @@
-import { useAssetOrdersQuery, useAssetPriceQuery, useSearchResultsQuery } from './useAlgodex'
+import {
+  useAssetOrdersQuery,
+  useAssetPriceQuery,
+  useAssetTradeHistoryQuery,
+  useSearchResultsQuery
+} from './useAlgodex'
 
 import { useFetchAlgorandPriceQuery } from './useAlgoExplorer'
 import { withQuery } from './withQuery'
@@ -26,6 +31,20 @@ export const withAssetOrdersQuery = (Component, options) =>
     hook: useAssetOrdersQuery,
     ...options
   })
+
+/**
+ *
+ * @param Component React Component
+ * @param [options] Extra options for hooks
+ * @returns {JSX.Element}
+ */
+export function withAssetTradeHistoryQuery(Component, options) {
+  return withQuery(Component, {
+    hook: useAssetTradeHistoryQuery,
+    ...options
+  })
+}
+
 /**
  * With Asset Price Query
  * @param {JSX.Element| Function} Component Component to wrap
