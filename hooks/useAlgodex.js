@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
@@ -16,11 +16,8 @@ import {
 import { floatToFixed } from '@/services/display'
 import { calculateAsaBuyAmount } from '@/services/convert'
 import WalletService from '@/services/wallet'
-// import useStore, { getChartTimeInterval } from '@/store/use-store'
-// import millify from 'millify'
-// import Spinner from '@/components/Spinner'
-// import Error from '@/components/Error'
 import Big from 'big.js'
+import millify from 'millify'
 
 /**
  * Route based on Error
@@ -157,45 +154,67 @@ function getBidAskSpread(orderBook) {
  * @returns {object}
  */
 export function useAssetChartQuery({
-  chartInterval,
-  asset: { id },
+  interval,
+  asset,
   options = {
-    refetchInterval,
-    enabled: typeof id !== 'undefined'
+    refetchInterval
   }
 }) {
-  // const { data: assetOrders } = useAssetOrdersQuery({ asset })
-  //
-  // const orderBook = useMemo(
-  //   () => ({
-  //     buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
-  //     sellOrders: assetOrders?.sellASAOrdersInEscrow || []
-  //   }),
-  //   [assetOrders]
-  // )
-  //
-  // const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
-  // const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
-  //
-  // const { isLoading, isError, data } = useAssetChartQuery({
-  //   asset,
-  //   chartInterval: chartTimeInterval
-  // })
-  //
-  // const priceData = useMemo(() => mapPriceData(data), [data])
-  // const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
-  // const ohlc = useMemo(() => getOhlc(data), [data])
-  //
-  // const asaVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
-  //
-  // if (isLoading) {
-  //   return <Spinner flex />
-  // }
-  //
-  // if (isError) {
-  //   return <Error message="Error loading chart" flex />
-  // }
-  return useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
+  // console.log(`useAssetChartQuery(${JSON.stringify({ interval, asset })})`)
+  const { id } = asset
+  const {
+    data: assetOrders,
+    isLoading: isOrdersLoading,
+    isError: isOrdersError
+  } = useAssetOrdersQuery({ asset })
+
+  // console.log(`ASSETORDERS`, { isOrdersLoading, isOrdersError, ...assetQueryRest })
+
+  const VOLUME_UP_COLOR = '#2fb16c2c'
+  const VOLUME_DOWN_COLOR = '#e53e3e2c'
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+
+  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
+
+  const {
+    isLoading: isChartLoading,
+    isError: isChartError,
+    data,
+    ...rest
+  } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
+  // console.log(`ASSETCHART`, { isChartLoading, isChartError, ...rest })
+
+  const priceData = useMemo(() => mapPriceData(data), [data])
+  const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
+  const ohlcOverlay = useMemo(() => getOhlc(data), [data])
+
+  const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
+
+  const isLoading = isOrdersLoading || isChartLoading
+  const isError = isOrdersError || isChartError
+
+  return {
+    data: {
+      overlay: {
+        ohlc: ohlcOverlay,
+        orderbook: { bid, ask, spread },
+        volume
+      },
+      volume: volumeData,
+      ohlc: priceData,
+      isLoading,
+      isError
+    },
+    isLoading,
+    isError,
+    ...rest
+  }
 }
 /**
  * @todo aggregate Orders in the API
@@ -261,6 +280,7 @@ export function useAssetOrderbookQuery({
     refetchInterval
   }
 } = {}) {
+  // console.log(`useAssetOrderbookQuery(${JSON.stringify({ asset })})`)
   const { id, decimals } = asset
   const [sell, setSellOrders] = useState([])
   const [buy, setBuyOrders] = useState([])
@@ -286,10 +306,11 @@ export function useAssetOrderbookQuery({
   }, [isLoading, data, setSellOrders, setBuyOrders, decimals])
 
   // Return OrderBook
-  return { data: { orders: { sell, buy } }, isLoading, ...rest }
+  return { data: { orders: { sell, buy }, isLoading }, isLoading, ...rest }
 }
 
 export function useAssetOrdersQuery({ asset, options = {} }) {
+  // console.log(`useAssetOrdersQuery(${JSON.stringify({ asset })})`)
   const { id } = asset
   return useQuery(['assetOrders', { id }], () => fetchAssetOrders(id), options)
 }

@@ -7,6 +7,7 @@ import useUserStore from '@/store/use-user-state'
 import Page from '@/components/Page'
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
+import { useState, useCallback } from 'react'
 
 /**
  * Fetch Traded Asset Paths
@@ -77,6 +78,16 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
+
+  const [interval, setInterval] = useState('1h')
+  const onChange = useCallback(
+    (e) => {
+      if (e.target.name === 'interval' && e.target.value !== interval) {
+        setInterval(e.target.value)
+      }
+    },
+    [setInterval, interval]
+  )
   return (
     <Page
       title={`${prefix} ${title}`}
@@ -88,7 +99,7 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
         showAssetInfo || !staticAssetPrice?.isTraded ? (
           <AssetInfo asset={asset} price={staticAssetPrice} />
         ) : (
-          <Chart asset={asset} />
+          <Chart asset={asset} interval={interval} onChange={onChange} />
         )
       }
     </Page>

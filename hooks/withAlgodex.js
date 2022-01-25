@@ -3,7 +3,8 @@ import {
   useAssetOrderbookQuery,
   useAssetPriceQuery,
   useAssetTradeHistoryQuery,
-  useSearchResultsQuery
+  useSearchResultsQuery,
+  useAssetChartQuery
 } from '@/hooks/useAlgodex'
 
 import { useFetchAlgorandPriceQuery } from '@/hooks/useAlgoExplorer'
@@ -18,7 +19,7 @@ const components = {
 /**
  * With Search Results Query
  * @param {JSX.Element| Function} Component Component to wrap
- * @param {object} [options] Options to pass to withQuery
+ * @param {Object} [options] Options to pass to withQuery
  * @returns {JSX.Element}
  */
 export function withSearchResultsQuery(Component, options) {
@@ -30,8 +31,8 @@ export function withSearchResultsQuery(Component, options) {
 }
 /**
  *
- * @param Component
- * @param [options]
+ * @param {JSX.Element| Function} Component Component to wrap
+ * @param {Object} [options]
  * @returns {JSX.Element}
  */
 export function withAssetOrdersQuery(Component, options) {
@@ -45,6 +46,14 @@ export function withAssetOrdersQuery(Component, options) {
 export function withAssetOrderbookQuery(Component, options) {
   return withQuery(Component, {
     hook: useAssetOrderbookQuery,
+    components,
+    ...options
+  })
+}
+
+export function withAssetChartQuery(Component, options) {
+  return withQuery(Component, {
+    hook: useAssetChartQuery,
     components,
     ...options
   })
