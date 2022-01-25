@@ -32,7 +32,6 @@ export const useSearchResultsQuery = ({
   const router = useRouter()
   const { data, isError, error, ...rest } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
   routeQueryError( {isError, error, router} )
-
   return { data, isError, error, ...rest }
 }
 
@@ -51,7 +50,12 @@ export const useAssetPriceQuery = ({
     refetchInterval,
     enabled: typeof id !== 'undefined'
   }
-} = {}) => useQuery(['assetPrice', { id }], () => fetchAssetPrice(id), options)
+} = {}) => {
+  const router = useRouter()
+  const { data, isError, error, ...rest } = useQuery(['assetPrice', { id }], () => fetchAssetPrice(id), options)
+  routeQueryError( {isError, error, router} )
+  return { data, isError, error, ...rest }
+}
 
 /**
  * Use Asset Chart Query
@@ -68,7 +72,12 @@ export const useAssetChartQuery = ({
     refetchInterval,
     enabled: typeof id !== 'undefined'
   }
-}) => useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
+}) => {
+  const router = useRouter()
+  const { data, isError, error, ...rest } = useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
+  routeQueryError( {isError, error, router} )
+  return { data, isError, error, ...rest }
+}
 
 /**
  * Use Asset Orders Query
@@ -180,4 +189,9 @@ export const useWalletsQuery = ({
     enabled: typeof wallets !== 'undefined',
     refetchInterval
   }
-}) => useQuery('wallets', () => WalletService.fetchWallets(wallets), options)
+}) => {
+  const router = useRouter()
+  const { data, isError, error, ...rest } = useQuery('wallets', () => WalletService.fetchWallets(wallets), options)
+  routeQueryError( {isError, error, router} )
+  return { data, isError, error, ...rest }
+}
