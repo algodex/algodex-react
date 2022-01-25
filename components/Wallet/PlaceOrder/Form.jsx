@@ -3,7 +3,7 @@ import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
 import { useMemo, useState } from 'react'
 
 import AdvancedOptions from './Form/AdvancedOptions'
-import { default as AmountRange } from 'components/Input/SliderInput'
+import { default as AmountRange } from 'components/Input/Slider'
 import Big from 'big.js'
 import Button from '../../Button'
 import CurrencyInput from '../../Input/CurrencyInput'
