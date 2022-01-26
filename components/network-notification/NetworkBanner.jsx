@@ -1,17 +1,18 @@
 import Icon from '@mdi/react'
-import PropTypes from 'prop-types'
 import { mdiWindowClose } from '@mdi/js'
 import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
+import { useUserStore } from '../../store'
 
-const NetworkBanner = ({
-  hasMainnetRibbon,
-  hasTestnetRibbon,
-  activeNetwork,
-  setHasTestnetRibbon,
-  setHasMainnetRibbon
-}) => {
+const NetworkBanner = () => {
   const { t } = useTranslation('network-notification')
+
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
+  const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
+  const hasTestnetRibbon = useUserStore((state) => state.hasTestnetRibbon)
+  const setHasTestnetRibbon = useUserStore((state) => state.setHasTestnetRibbon)
+  const setHasMainnetRibbon = useUserStore((state) => state.setHasMainnetRibbon)
 
   const closeRibbonFn = (bool) => {
     activeNetwork === 'testnet' && setHasTestnetRibbon(bool)
@@ -52,14 +53,6 @@ const NetworkBanner = ({
       )}
     </div>
   )
-}
-
-NetworkBanner.propTypes = {
-  hasMainnetRibbon: PropTypes.bool,
-  hasTestnetRibbon: PropTypes.bool,
-  activeNetwork: PropTypes.string,
-  setHasTestnetRibbon: PropTypes.func,
-  setHasMainnetRibbon: PropTypes.func
 }
 
 export default NetworkBanner

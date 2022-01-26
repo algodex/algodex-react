@@ -1,55 +1,22 @@
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
-import { useEffect } from 'react'
-import useUserStore from 'store/use-user-state'
-import { getActiveNetwork } from 'services/environment'
+import { useUserStore } from '../../store'
 
 const NetworkHandler = () => {
-  const activeNetwork = getActiveNetwork()
+  const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
+  const hasTestnetRibbon = useUserStore((state) => state.hasTestnetRibbon)
+  const hasMainnetNotificationModal = useUserStore((state) => state.hasMainnetNotificationModal)
+  const hasTestnetNotificationModal = useUserStore((state) => state.hasTestnetNotificationModal)
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
 
-  const {
-    hasMainnetRibbon,
-    hasTestnetRibbon,
-    hasMainnetNotificationModal,
-    hasTestnetNotificationModal,
-    setHasMainnetRibbon,
-    setHasTestnetRibbon,
-    setHasMainnetNotificationModal,
-    setHasTestnetNotificationModal
-  } = useUserStore((state) => state)
-
-  useEffect(() => {
-    hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
-    hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
-    hasTestnetRibbon === null && setHasTestnetRibbon(true)
-    hasMainnetRibbon === null && setHasMainnetRibbon(true)
-  }, [
-    hasTestnetRibbon,
-    hasMainnetRibbon,
-    hasMainnetNotificationModal,
-    hasTestnetNotificationModal,
-    setHasTestnetNotificationModal,
-    setHasMainnetNotificationModal,
-    setHasTestnetRibbon,
-    setHasMainnetRibbon
-  ])
+  const isRibbonActive = activeNetwork === 'testnet' ? hasTestnetRibbon : hasMainnetRibbon
+  const isModalActive =
+    activeNetwork === 'testnet' ? hasTestnetNotificationModal : hasMainnetNotificationModal
 
   return (
     <div>
-      <NetworkBanner
-        activeNetwork={activeNetwork}
-        hasMainnetRibbon={hasMainnetRibbon}
-        hasTestnetRibbon={hasTestnetRibbon}
-        setHasMainnetRibbon={setHasMainnetRibbon}
-        setHasTestnetRibbon={setHasTestnetRibbon}
-      />
-      <NetworkNotificationModal
-        activeNetwork={activeNetwork}
-        hasMainnetNotificationModal={hasMainnetNotificationModal}
-        hasTestnetNotificationModal={hasTestnetNotificationModal}
-        setHasTestnetNotificationModal={setHasTestnetNotificationModal}
-        setHasMainnetNotificationModal={setHasMainnetNotificationModal}
-      />
+      {isRibbonActive && <NetworkBanner />}
+      {isModalActive && <NetworkNotificationModal />}
     </div>
   )
 }

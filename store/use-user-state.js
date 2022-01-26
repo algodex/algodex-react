@@ -12,14 +12,25 @@ const userState = (set, get) => ({
    */
   assets: {},
 
+  activeNetwork:
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet'
+      ? 'mainnet'
+      : 'testnet',
+
   /**
    * Ribbon notification for Mainnet
    *
    * @true when Mainnet notification ribbon is visible
    * @false when Mainnet notification ribbon is hidden
    */
-  hasMainnetRibbon: null,
-  setHasMainnetRibbon: (bool) => set({ hasMainnetRibbon: bool }),
+  hasMainnetRibbon: true,
+  setHasMainnetRibbon: (bool) => {
+    const check = get().hasMainnetRibbon
+    if (bool !== check) {
+      set({ hasMainnetRibbon: bool })
+    }
+  },
 
   /**
    * Ribbon notification for Testnet
@@ -27,7 +38,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification ribbon is visible
    * @false when Testnet notification ribbon is hidden
    */
-  hasTestnetRibbon: null,
+  hasTestnetRibbon: true,
   setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
 
   /**
@@ -36,7 +47,7 @@ const userState = (set, get) => ({
    * @true when Mainnet notification modal is visible
    * @false when Mainnet notification modal is hidden
    */
-  hasMainnetNotificationModal: null,
+  hasMainnetNotificationModal: true,
   setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
 
   /**
@@ -45,7 +56,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification modal is visible
    * @false when Testnet notification modal is hidden
    */
-  hasTestnetNotificationModal: null,
+  hasTestnetNotificationModal: true,
   setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
 
   /**
