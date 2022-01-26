@@ -18,8 +18,8 @@ import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
 import { withRouter } from 'next/router'
+import { getActiveNetwork } from 'services/environment'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -28,7 +28,7 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
 export function Header({ router }) {
   const [isOpen, setIsOpen] = useState(false)
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
   const { t } = useTranslation('common')
 
   /**

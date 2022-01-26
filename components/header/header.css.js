@@ -259,10 +259,10 @@ export const MenuContainer = styled.div`
 export const NetworkDropdown = styled.select`
   background: unset;
   border: solid 2px
-    ${({ theme, activeNetwork }) =>
-      activeNetwork == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
-  color: ${({ theme, activeNetwork }) =>
-    activeNetwork == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+    ${({ theme, value }) =>
+      value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+  color: ${({ theme, value }) =>
+    value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
   border-radius: 3px;
   padding: 0.3rem 0.5rem;
 `

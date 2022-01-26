@@ -35,7 +35,7 @@ let urlToLastResp
  * @returns {Promise<AxiosResponse<Object>>} Response or Cached Result
  */
 async function getEtagResponse(url) {
-  DEBUG && console.debug(`getEtagResponse(${url.replace(`${API_HOST}`, '')})`)
+  DEBUG && console.debug(`getEtagResponse(${API_HOST})`)
   if (typeof urlToEtag === 'undefined') {
     urlToEtag = {}
   }
