@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
 import { BodyCopyTiny, LabelSm } from 'components/Typography'
-import { ChevronDown } from 'react-feather'
-import { useRouter } from 'next/router'
-import useTranslation from 'next-translate/useTranslation'
 
+import Button from '../../../Button'
+import { ChevronDown } from 'react-feather'
 import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
-import OrderSizeFilter from 'components/Input/SliderInput'
-import styled from 'styled-components'
-import Button from '../../../Button'
+import OrderSizeFilter from 'components/Input/Slider'
+import PropTypes from 'prop-types'
 import { lighten } from 'polished'
+import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '../../../../store/use-user-state'
+
 export const ExpandToggle = styled.div.attrs({
   execution: 'button'
 })`
@@ -292,7 +293,11 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
             <OrderSizeFilter
               order={order}
               value={newOrderSizeFilter}
-              onChange={setNewOrderSizeFilter}
+              onChange={(e) => setNewOrderSizeFilter(e.target.value)}
+              marks={true}
+              step={10}
+              min={0}
+              max={100}
             />
             <div className="flex justify-between text-gray-500 text-sm">
               <span className="block">Better Execution</span>
