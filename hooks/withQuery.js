@@ -16,12 +16,12 @@ import { useQuery } from 'react-query'
  */
 export function withQuery(
   Component,
-  { hook = useQuery, loading: Loading = Spinner /*, error: Error = DefaultError */ }
+  { hook = useQuery /*, loading: Loading = Spinner error: Error = DefaultError */ }
 ) {
   function withQueryWrapper(props) {
     const { isSuccess, isLoading, isError, data, error } = hook(props)
     if (isSuccess) return <Component {...data} {...props} />
-    if (isLoading) return <Loading flex />
+    if (isLoading) return <div>Hello</div>
     if (isError) return <DefaultError message={error.message} />
   }
   withQueryWrapper.getInitialProps = Component.getInitialProps

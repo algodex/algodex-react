@@ -292,7 +292,8 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
             </div>
             <OrderSizeFilter
               order={order}
-              value={newOrderSizeFilter}
+              // value={newOrderSizeFilter}
+              value={50}
               onChange={(e) => setNewOrderSizeFilter(e.target.value)}
               marks={true}
               step={10}
