@@ -1,85 +1,25 @@
-import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
+import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
-import OrderService from 'services/order'
-import PropTypes from 'prop-types'
-// import useStore, { useStorePersisted } from 'store/use-store'
-import Table from 'components/Table'
-import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { useEventDispatch } from 'hooks/useEvents'
-import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
-import { useWalletOrdersQuery } from 'hooks/useAlgodex'
+import PropTypes from 'prop-types'
 
-export const mapOpenOrdersData = (data) => {
-  if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
-    return null
-  }
+import { BrightGraySpan } from '@/components/Typography'
+import Table, { DefaultCell } from '@/components/Table'
+import { useEventDispatch } from '@/hooks/useEvents'
+import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
+import useUserStore from '@/store/use-user-state'
+import OrderService from '@/services/order'
 
-  const {
-    buyASAOrdersInEscrow: buyOrdersData,
-    sellASAOrdersInEscrow: sellOrdersData,
-    allAssets: assetsData
-  } = data
-
-  const assetsInfo = assetsData.reduce((allAssetsInfo, currentAssetInfo) => {
-    allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
-    return allAssetsInfo
-  }, {})
-
-  const buyOrders = buyOrdersData.map((order) => {
-    const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
-    return {
-      /** @todo get date/time from API */
-      date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
-      // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
-      unix_time: unix_time,
-      price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
-      type: 'BUY',
-      status: 'OPEN',
-      amount: formattedASAAmount,
-      metadata: order
-    }
-  })
-
-  const sellOrders = sellOrdersData.map((order) => {
-    const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
-
-    return {
-      /** @todo get date/time from API */
-      date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
-      unix_time: unix_time,
-      price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
-      type: 'SELL',
-      status: 'OPEN',
-      amount: formattedASAAmount,
-      metadata: order
-    }
-  })
-
-  const allOrders = [...buyOrders, ...sellOrders]
-  allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
-  return allOrders
-}
-export const OpenOrdersContainer = styled.div`
+const OpenOrdersContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;
   position: relative;
 `
 
-export const StatusContainer = styled.div`
-  position: absolute;
-  inset: 6.25rem 1.125rem 2rem;
-`
-
-export const TableWrapper = styled.div`
+const TableWrapper = styled.div`
   padding: 0;
   position: absolute;
   inset: 0;
@@ -91,35 +31,11 @@ export const TableWrapper = styled.div`
   }
 `
 
-export const OrderDate = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderPrice = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderPair = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderType = styled.span`
+const OrderType = styled.span`
   color: ${({ theme, value }) =>
     value === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
 `
-export const OrderAmount = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderFilled = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderRole = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderStatus = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderCancel = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderCancelButton = styled.button`
+const OrderCancelButton = styled.button`
   cursor: pointer;
   background: none;
   border: none;
@@ -134,39 +50,17 @@ export const OrderCancelButton = styled.button`
   }
 `
 
-export function OpenOrdersTable({ wallet }) {
-  // const { t, lang } = useTranslation('orders')
+export function OpenOrdersTable({ orders: _orders }) {
+  // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const activeWalletAddress = wallet.address
-  const [openOrdersData, setOpenOrdersData] = useState([])
-  // const isSignedIn = useStore((state) => state.isSignedIn)
-  const isSignedIn = typeof wallet !== 'undefined'
+  const [openOrdersData, setOpenOrdersData] = useState(_orders)
+  useEffect(() => {
+    setOpenOrdersData(_orders)
+  }, [_orders, setOpenOrdersData])
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
 
-  const { data, isLoading, isError } = useWalletOrdersQuery({
-    wallet: { address: activeWalletAddress },
-    options: {
-      enabled: isSignedIn,
-      refetchInterval: 3000
-    }
-  })
-
-  useEffect(() => {
-    if (data) {
-      setOpenOrdersData(mapOpenOrdersData(data))
-    }
-  }, [data])
-
-  const openOrdersDataMemoized = useMemo(() => openOrdersData, [openOrdersData])
-  // const openOrdersDataMemoized = openOrdersData
-
-  const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
-  OrderDateCell.propTypes = { value: PropTypes.any }
-  const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
-  OrderPriceCell.propTypes = { value: PropTypes.any }
   const OrderPairCell = ({ value, row }) => {
     const dispatcher = useEventDispatch()
     const assetId = row?.original?.metadata?.assetId
@@ -176,24 +70,21 @@ export function OpenOrdersTable({ wallet }) {
     return (
       <Link href={`/trade/${assetId}`}>
         <button onClick={onClick}>
-          <OrderPair>{value}</OrderPair>
+          <BrightGraySpan>{value}</BrightGraySpan>
         </button>
       </Link>
     )
   }
   OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-  // const OrderTypeCell = ({ value }) => <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
+
   const OrderTypeCell = useCallback(
     ({ value }) => {
-      return <OrderType value={value}>{t(value.toLowerCase())}</OrderType> // eslint-disable-line
+      // eslint-disable-next-line react/prop-types
+      return <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
     },
     [t]
   )
-  OrderTypeCell.propTypes = { value: PropTypes.any }
-  const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-  OrderAmountCell.propTypes = { value: PropTypes.any }
-  const OrderStatusCell = ({ value }) => <OrderStatus>{value}</OrderStatus>
-  OrderStatusCell.propTypes = { value: PropTypes.any }
+  OrderTypeCell.propTypes = { value: PropTypes.string.isRequired }
 
   const OrderCancelCell = useCallback(
     ({ data, cell }) => {
@@ -242,9 +133,9 @@ export function OpenOrdersTable({ wallet }) {
       }
 
       return (
-        <OrderCancel>
+        <BrightGraySpan>
           <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
-        </OrderCancel>
+        </BrightGraySpan>
       )
     },
     [t, openOrdersData]
@@ -255,7 +146,7 @@ export function OpenOrdersTable({ wallet }) {
       {
         Header: t('date'),
         accessor: 'date',
-        Cell: OrderDateCell
+        Cell: DefaultCell
       },
       {
         Header: t('pair'),
@@ -265,7 +156,7 @@ export function OpenOrdersTable({ wallet }) {
       {
         Header: t('price') + ' (ALGO)',
         accessor: 'price',
-        Cell: OrderPriceCell
+        Cell: DefaultCell
       },
       {
         Header: t('type'),
@@ -275,12 +166,12 @@ export function OpenOrdersTable({ wallet }) {
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: OrderAmountCell
+        Cell: DefaultCell
       },
       {
         Header: t('status'),
         accessor: 'status',
-        Cell: OrderStatusCell
+        Cell: DefaultCell
       },
       {
         Header: '',
@@ -292,18 +183,6 @@ export function OpenOrdersTable({ wallet }) {
     [t, OrderTypeCell, OrderCancelCell]
   )
 
-  const renderStatus = () => {
-    if (!isLoading && !isError) {
-      return null
-    }
-    return (
-      <StatusContainer>
-        {isLoading && <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>}
-        {isError && <BodyCopySm color="gray.400">{t('error')}</BodyCopySm>}
-      </StatusContainer>
-    )
-  }
-
   return (
     <OpenOrdersContainer>
       <TableWrapper>
@@ -314,11 +193,9 @@ export function OpenOrdersTable({ wallet }) {
             setWalletOpenOrdersTableState(state)
           }}
           columns={columns}
-          data={openOrdersDataMemoized || []}
+          data={_orders || []}
         />
       </TableWrapper>
-
-      {renderStatus()}
     </OpenOrdersContainer>
   )
 }
@@ -326,7 +203,12 @@ export function OpenOrdersTable({ wallet }) {
 OpenOrdersTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
-  })
+  }),
+  orders: PropTypes.array.isRequired
 }
 
-export default OpenOrdersTable
+OpenOrdersTable.defaultProps = {
+  orders: []
+}
+
+export default withWalletOrdersQuery(OpenOrdersTable)

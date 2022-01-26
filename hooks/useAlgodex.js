@@ -18,6 +18,7 @@ import { calculateAsaBuyAmount } from '@/services/convert'
 import WalletService from '@/services/wallet'
 import Big from 'big.js'
 import millify from 'millify'
+import dayjs from 'dayjs'
 
 /**
  * Route based on Error
@@ -149,7 +150,7 @@ function getBidAskSpread(orderBook) {
  * Use Asset Chart Query
  * @param {Object} props The props of the parent
  * @param {Object} props.asset An instance of an Asset
- * @param {string} props.chartInterval Interval to aggregate chart by
+ * @param {string} props.interval Interval to aggregate chart by
  * @param {Object} [props.options] useQuery Options
  * @returns {object}
  */
@@ -406,6 +407,58 @@ export function useWalletAssetsQuery({
   console.log(assets)
   return { data: { assets }, ...rest }
 }
+
+const mapOpenOrdersData = (data) => {
+  if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
+    return null
+  }
+
+  const {
+    buyASAOrdersInEscrow: buyOrdersData,
+    sellASAOrdersInEscrow: sellOrdersData,
+    allAssets: assetsData
+  } = data
+
+  const assetsInfo = assetsData.reduce((allAssetsInfo, currentAssetInfo) => {
+    allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
+    return allAssetsInfo
+  }, {})
+
+  const buyOrders = buyOrdersData.map((order) => {
+    const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
+    return {
+      date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
+      // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
+      unix_time: unix_time,
+      price: floatToFixed(formattedPrice),
+      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      type: 'BUY',
+      status: 'OPEN',
+      amount: formattedASAAmount,
+      metadata: order
+    }
+  })
+
+  const sellOrders = sellOrdersData.map((order) => {
+    const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
+
+    return {
+      date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
+      unix_time: unix_time,
+      price: floatToFixed(formattedPrice),
+      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      type: 'SELL',
+      status: 'OPEN',
+      amount: formattedASAAmount,
+      metadata: order
+    }
+  })
+
+  const allOrders = [...buyOrders, ...sellOrders]
+  allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
+  return allOrders
+}
+
 /**
  * Use Wallet Orders Query
  *
@@ -414,11 +467,18 @@ export function useWalletAssetsQuery({
  * @param {Object} [props.options] useQuery Options
  * @returns {object}
  */
-export function useWalletOrdersQuery({
-  wallet: { address },
-  options = { enabled: typeof address !== 'undefined', refetchInterval }
-}) {
-  return useQuery(['walletOrders', { address }], () => fetchWalletOrders(address), options)
+export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) {
+  const { address } = wallet
+  console.log(`useWalletOrdersQuery`)
+  const { data, ...rest } = useQuery(
+    ['walletOrders', { address }],
+    () => fetchWalletOrders(address),
+    options
+  )
+  console.log('DATA', data, rest)
+  const orders = useMemo(() => mapOpenOrdersData(data), [data])
+  console.log(orders)
+  return { data: { orders }, ...rest }
 }
 /**
  * Use Wallet Trade History
