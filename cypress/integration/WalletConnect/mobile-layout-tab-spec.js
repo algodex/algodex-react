@@ -1,4 +1,4 @@
-const sizes = ['iphone-6', 'iphone-x', 'samsung-s10', 'samsung-note9']
+const sizes = ['iphone-x','samsung-note9']
 
 describe('Check Mobile Tabs on Different Screens', () => {
   sizes.forEach((size) => {
@@ -95,32 +95,29 @@ describe('Checks if trade section is visible on Mobile view on Different Screens
         cy.get('[data-testid=candleStickChart]').should('be.visible')
         cy.get('[data-cy=trade-button]').should('be.visible').click({ force: true })
         cy.get('.main-layoutcss__PlaceOrderSection-sc-d2kdjb-1').should('be.visible')
-        cy.get('#price').should('be.visible').type(1)
-        cy.get('#amount').should('be.visible').type(5)
-        cy.get('.place-ordercss__SubmitButton-sc-1hehax9-14').should('be.visible')
       }
     })
   })
 })
 
-describe('Checks if wallet section is visible on Mobile view on Different Screens', () => {
-  sizes.forEach((size) => {
-    it(`Should render wallet section page on a ${size} screen`, () => {
-      if (Cypress._.isArray(size)) {
-        cy.viewport(size[0], size[1])
-        cy.visit('/en/trade/15322902')
-        cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
-        cy.get('[data-testid=candleStickChart]').should('be.visible')
-        cy.get('[data-cy=wallet-button]').should('be.visible').click()
-      } else {
-        cy.viewport(size)
-        cy.visit('/en/trade/15322902')
-        cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
-        cy.get('[data-testid=candleStickChart]').should('be.visible')
-        cy.get('[data-cy=wallet-button]').should('be.visible').click({ force: true })
-        cy.get('[data-testid=connect-wallet-btn]').should('be.visible')
-        cy.get('.walletcss__Container-sc-1tb3vth-0').should('be.visible')
-      }
-    })
-  })
-})
+// describe('Checks if wallet section is visible on Mobile view on Different Screens', () => {
+//   sizes.forEach((size) => {
+//     it(`Should render wallet section page on a ${size} screen`, () => {
+//       if (Cypress._.isArray(size)) {
+//         cy.viewport(size[0], size[1])
+//         cy.visit('/en/trade/15322902')
+//         cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
+//         cy.get('[data-testid=candleStickChart]').should('be.visible')
+//         cy.get('[data-cy=wallet-button]').should('be.visible').click()
+//       } else {
+//         cy.viewport(size)
+//         cy.visit('/en/trade/15322902')
+//         cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
+//         cy.get('[data-testid=candleStickChart]').should('be.visible')
+//         cy.get('[data-cy=wallet-button]').should('be.visible').click({ force: true })
+//         cy.get('[data-testid=connect-wallet-btn]').should('be.visible')
+//         cy.get('.walletcss__Container-sc-1tb3vth-0').should('be.visible')
+//       }
+//     })
+//   })
+// })
