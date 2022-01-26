@@ -1,62 +1,23 @@
-import { useCallback, useMemo } from 'react'
-import { useWalletTradeHistory } from 'hooks/useAlgodex'
-import { BodyCopyTiny, BodyCopySm } from 'components/Typography'
-import Table from 'components/Table'
-// import useStore, { useStorePersisted } from 'store/use-store'
-import { useEventDispatch } from 'hooks/useEvents'
-import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
-
-import useUserStore from 'store/use-user-state'
 import styled from 'styled-components'
-import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
+import Link from 'next/link'
+import { useCallback, useMemo } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
-export const mapTradeHistoryData = (data) => {
-  const buyText = 'BUY'
-  const sellText = 'SELL'
-  if (!data || !data.transactions || !data.allAssets) {
-    return null
-  }
+import { BrightGraySpan } from '@/components/Typography'
+import Table, { DefaultCell } from '@/components/Table'
+import { useEventDispatch } from '@/hooks/useEvents'
+import useUserStore from '@/store/use-user-state'
+import { withWalletTradeHistoryQuery } from '@/hooks/withAlgodex'
 
-  const { transactions: tradeHistoryData, allAssets: assetsData } = data
-
-  const assetsInfo = assetsData.reduce((allAssetsInfo, currentAssetInfo) => {
-    allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
-    return allAssetsInfo
-  }, {})
-
-  const tradeHistory = tradeHistoryData.map(
-    ({ unix_time, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
-      const side = tradeType === 'buyASA' ? buyText : sellText
-
-      return {
-        id: asset_id,
-        date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-        price: floatToFixed(formattedPrice),
-        pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
-        side,
-        amount: formattedASAAmount
-      }
-    }
-  )
-
-  return tradeHistory
-}
-export const OrderHistoryContainer = styled.div`
+const OrderHistoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;
   position: relative;
 `
 
-export const StatusContainer = styled.div`
-  position: absolute;
-  inset: 6.25rem 1.125rem 2rem;
-`
-
-export const TableWrapper = styled.div`
+const TableWrapper = styled.div`
   padding: 0;
   position: absolute;
   inset: 0;
@@ -68,25 +29,11 @@ export const TableWrapper = styled.div`
   }
 `
 
-export const OrderDate = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderPrice = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderPair = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-export const OrderSide = styled.span`
+const OrderSide = styled.span`
   color: ${({ theme, value }) =>
     ('' + value).toUpperCase() === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
 `
-export const OrderAmount = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
 
-const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
-OrderDateCell.propTypes = { value: PropTypes.any }
 const OrderPairCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
   const assetId = row?.original?.id
@@ -96,20 +43,15 @@ const OrderPairCell = ({ value, row }) => {
   return (
     <Link href={`/trade/${assetId}`}>
       <button onClick={onClick}>
-        <OrderPair>{value}</OrderPair>
+        <BrightGraySpan>{value}</BrightGraySpan>
       </button>
     </Link>
   )
 }
 OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-const OrderPriceCell = ({ value }) => <OrderPrice>{value}</OrderPrice>
-OrderPriceCell.propTypes = { value: PropTypes.any }
-const OrderAmountCell = ({ value }) => <OrderAmount>{value}</OrderAmount>
-OrderAmountCell.propTypes = { value: PropTypes.any }
 
-export function TradeHistoryTable({ wallet }) {
+export function TradeHistoryTable({ orders }) {
   const { t } = useTranslation('orders')
-  // const OrderSideCell = ({ value }) => <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
   const OrderSideCell = useCallback(
     ({ value }) => {
       return <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
@@ -117,32 +59,18 @@ export function TradeHistoryTable({ wallet }) {
     [t]
   )
   OrderSideCell.propTypes = { value: PropTypes.any }
-  const activeWalletAddress = wallet.address
-  const isSignedIn = typeof wallet !== 'undefined'
-  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  // const isSignedIn = useStore((state) => state.isSignedIn)
 
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
   )
 
-  const { data, isLoading, isError } = useWalletTradeHistory({
-    wallet: { address: activeWalletAddress },
-    options: {
-      enabled: isSignedIn,
-      refetchInterval: 3000
-    }
-  })
-
-  const tradeHistoryData = useMemo(() => mapTradeHistoryData(data), [data])
-
   const columns = useMemo(
     () => [
       {
         Header: t('date'),
         accessor: 'date',
-        Cell: OrderDateCell
+        Cell: DefaultCell
       },
       {
         Header: t('pair'),
@@ -158,28 +86,16 @@ export function TradeHistoryTable({ wallet }) {
       {
         Header: t('price') + ' (ALGO)',
         accessor: 'price',
-        Cell: OrderPriceCell
+        Cell: DefaultCell
       },
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: OrderAmountCell
+        Cell: DefaultCell
       }
     ],
     [t, OrderSideCell]
   )
-
-  const renderStatus = () => {
-    if (!isLoading && !isError) {
-      return null
-    }
-    return (
-      <StatusContainer>
-        {isLoading && <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>}
-        {isError && <BodyCopySm color="gray.400">{t.error}</BodyCopySm>}
-      </StatusContainer>
-    )
-  }
 
   return (
     <OrderHistoryContainer>
@@ -188,11 +104,9 @@ export function TradeHistoryTable({ wallet }) {
           initialState={walletOrderHistoryTableState}
           onStateChange={(state) => setWalletOrderHistoryTableState(state)}
           columns={columns}
-          data={tradeHistoryData || []}
+          data={orders || []}
         />
       </TableWrapper>
-
-      {renderStatus()}
     </OrderHistoryContainer>
   )
 }
@@ -200,7 +114,12 @@ export function TradeHistoryTable({ wallet }) {
 TradeHistoryTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
-  })
+  }),
+  orders: PropTypes.array.isRequired
 }
 
-export default TradeHistoryTable
+TradeHistoryTable.defaultProps = {
+  orders: []
+}
+
+export default withWalletTradeHistoryQuery(TradeHistoryTable)

@@ -488,18 +488,50 @@ export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) 
  * @param {Object} [props.options] useQuery Options
  * @returns {object}
  */
-export function useWalletTradeHistory({
-  wallet: { address },
+export function useWalletTradeHistoryQuery({
+  wallet,
   options = {
-    enabled: typeof address !== 'undefined',
     refetchInterval
   }
 }) {
-  return useQuery(
+  const { address } = wallet
+  const mapTradeHistoryData = (data) => {
+    const buyText = 'BUY'
+    const sellText = 'SELL'
+    if (!data || !data.transactions || !data.allAssets) {
+      return null
+    }
+
+    const { transactions: tradeHistoryData, allAssets: assetsData } = data
+
+    const assetsInfo = assetsData.reduce((allAssetsInfo, currentAssetInfo) => {
+      allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
+      return allAssetsInfo
+    }, {})
+
+    return tradeHistoryData.map(
+      ({ unix_time, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
+        const side = tradeType === 'buyASA' ? buyText : sellText
+
+        return {
+          id: asset_id,
+          date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+          price: floatToFixed(formattedPrice),
+          pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
+          side,
+          amount: formattedASAAmount
+        }
+      }
+    )
+  }
+  const { data, ...rest } = useQuery(
     ['walletTradeHistory', { address }],
     () => fetchWalletTradeHistory(address),
     options
   )
+  const orders = useMemo(() => mapTradeHistoryData(data), [data])
+
+  return { data: { orders }, ...rest }
 }
 /**
  * Use Wallet Minimum Balance Query
