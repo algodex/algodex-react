@@ -1,12 +1,9 @@
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Link from 'next/link'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
-import { BrightGraySpan } from '@/components/Typography'
-import Table, { DefaultCell } from '@/components/Table'
-import { useEventDispatch } from '@/hooks/useEvents'
+import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@/hooks/withAlgodex'
 
@@ -29,36 +26,15 @@ const TableWrapper = styled.div`
   }
 `
 
-const OrderSide = styled.span`
-  color: ${({ theme, value }) =>
-    ('' + value).toUpperCase() === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
-`
-
-const OrderPairCell = ({ value, row }) => {
-  const dispatcher = useEventDispatch()
-  const assetId = row?.original?.id
-  const onClick = useCallback(() => {
-    dispatcher('clicked', 'asset')
-  }, [dispatcher])
-  return (
-    <Link href={`/trade/${assetId}`}>
-      <button onClick={onClick}>
-        <BrightGraySpan>{value}</BrightGraySpan>
-      </button>
-    </Link>
-  )
-}
-OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-
+/**
+ * Trade History Table
+ * @param orders
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function TradeHistoryTable({ orders }) {
+  //console.log(`TradeHistoryTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  const OrderSideCell = useCallback(
-    ({ value }) => {
-      return <OrderSide value={value}>{t(value.toLowerCase())}</OrderSide>
-    },
-    [t]
-  )
-  OrderSideCell.propTypes = { value: PropTypes.any }
 
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
@@ -75,12 +51,12 @@ export function TradeHistoryTable({ orders }) {
       {
         Header: t('pair'),
         accessor: 'pair',
-        Cell: OrderPairCell
+        Cell: AssetNameCell
       },
       {
         Header: t('side'),
         accessor: 'side',
-        Cell: OrderSideCell
+        Cell: OrderTypeCell
       },
 
       {
@@ -94,7 +70,7 @@ export function TradeHistoryTable({ orders }) {
         Cell: DefaultCell
       }
     ],
-    [t, OrderSideCell]
+    [t]
   )
 
   return (

@@ -169,8 +169,6 @@ export function useAssetChartQuery({
     isError: isOrdersError
   } = useAssetOrdersQuery({ asset })
 
-  // console.log(`ASSETORDERS`, { isOrdersLoading, isOrdersError, ...assetQueryRest })
-
   const VOLUME_UP_COLOR = '#2fb16c2c'
   const VOLUME_DOWN_COLOR = '#e53e3e2c'
   const orderBook = useMemo(
@@ -189,7 +187,6 @@ export function useAssetChartQuery({
     data,
     ...rest
   } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
-  // console.log(`ASSETCHART`, { isChartLoading, isChartError, ...rest })
 
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
@@ -404,7 +401,6 @@ export function useWalletAssetsQuery({
     options
   )
   const assets = useMemo(() => mapAssetsData(data), [data])
-  console.log(assets)
   return { data: { assets }, ...rest }
 }
 
@@ -427,6 +423,7 @@ const mapOpenOrdersData = (data) => {
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     return {
+      asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
@@ -443,6 +440,7 @@ const mapOpenOrdersData = (data) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
 
     return {
+      asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
@@ -469,15 +467,12 @@ const mapOpenOrdersData = (data) => {
  */
 export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) {
   const { address } = wallet
-  console.log(`useWalletOrdersQuery`)
   const { data, ...rest } = useQuery(
     ['walletOrders', { address }],
     () => fetchWalletOrders(address),
     options
   )
-  console.log('DATA', data, rest)
   const orders = useMemo(() => mapOpenOrdersData(data), [data])
-  console.log(orders)
   return { data: { orders }, ...rest }
 }
 /**
@@ -530,7 +525,6 @@ export function useWalletTradeHistoryQuery({
     options
   )
   const orders = useMemo(() => mapTradeHistoryData(data), [data])
-
   return { data: { orders }, ...rest }
 }
 /**

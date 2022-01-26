@@ -3,8 +3,9 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
+import { BrightGraySpan } from '@/components/Typography'
 import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
-import Table from '@/components/Table'
+import Table, { DefaultCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { useEventDispatch } from '@/hooks/useEvents'
 import { withWalletAssetsQuery } from '@/hooks/withAlgodex'
@@ -28,26 +29,6 @@ const TableWrapper = styled.div`
   }
 `
 
-const AssetCoin = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-const AssetName = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-const AssetTotal = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-
-const AssetAvailable = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-const AssetInOrder = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-const AssetAlgoValue = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
-`
-
 const AssetCoinCell = (props) => {
   const dispatcher = useEventDispatch()
   const onClick = useCallback(() => {
@@ -57,7 +38,7 @@ const AssetCoinCell = (props) => {
     <Link href={`/trade/${props.row.original.id}`}>
       <button onClick={onClick}>
         <AssetNameBlock>
-          <AssetName>{props.value}</AssetName>
+          <BrightGraySpan>{props.value}</BrightGraySpan>
           <br />
           <AssetId>{props.row.original.id}</AssetId>
         </AssetNameBlock>
@@ -66,28 +47,6 @@ const AssetCoinCell = (props) => {
   )
 }
 AssetCoinCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-const AssetNameCell = ({ value, row }) => {
-  const dispatcher = useEventDispatch()
-  const onClick = useCallback(() => {
-    dispatcher('clicked', 'asset')
-  }, [dispatcher])
-  return (
-    <Link href={`/trade/${row.original.id}`}>
-      <button onClick={onClick}>
-        <AssetCoin>{value}</AssetCoin>
-      </button>
-    </Link>
-  )
-}
-AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-const AssetTotalCell = ({ value }) => <AssetTotal>{value}</AssetTotal>
-AssetTotalCell.propTypes = { value: PropTypes.any }
-const AssetAvailableCell = ({ value }) => <AssetAvailable>{value}</AssetAvailable>
-AssetAvailableCell.propTypes = { value: PropTypes.any }
-const AssetInOrderCell = ({ value }) => <AssetInOrder>{value}</AssetInOrder>
-AssetInOrderCell.propTypes = { value: PropTypes.any }
-const AssetAlgoValueCell = ({ value }) => <AssetAlgoValue>{value}</AssetAlgoValue>
-AssetAlgoValueCell.propTypes = { value: PropTypes.any }
 
 export function AssetsTable({ assets }) {
   console.log(`AssetsTable(`, arguments[0], `)`)
@@ -112,22 +71,22 @@ export function AssetsTable({ assets }) {
       {
         Header: t('total'),
         accessor: 'total',
-        Cell: AssetTotalCell
+        Cell: DefaultCell
       },
       {
         Header: t('available'),
         accessor: 'available',
-        Cell: AssetAvailableCell
+        Cell: DefaultCell
       },
       {
         Header: t('in-order'),
         accessor: 'in-order',
-        Cell: AssetInOrderCell
+        Cell: DefaultCell
       },
       {
         Header: t('algo-value'),
         accessor: 'algo-value',
-        Cell: AssetAlgoValueCell
+        Cell: DefaultCell
       }
     ],
     [t]

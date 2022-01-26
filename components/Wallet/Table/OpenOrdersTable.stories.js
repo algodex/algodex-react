@@ -24,10 +24,11 @@ export default {
     },
     orders: [
       {
+        id: 21547225,
         date: '2022-01-19 15:11:46',
         unix_time: 1642626706,
         price: '1000.0000',
-        pair: 'TEST/ALGO',
+        pair: 'BTC/ALGO',
         type: 'BUY',
         status: 'OPEN',
         amount: '1000.000'
@@ -46,7 +47,6 @@ export default {
 //eslint-disable-next-line
 export const OpenOrdersTable = ({ wallet, orders, isLive, ...props }) => (
   <>
-    {/*<Component wallet={wallet} orders={orders} />*/}
     {!isLive && <Component wallet={wallet} orders={orders} {...props} />}
     {isLive && <ComponentWithData wallet={wallet} />}
     {isLive && <ReactQueryDevtools initialIsOpen={false} />}

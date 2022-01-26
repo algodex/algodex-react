@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
 import PropTypes from 'prop-types'
 
 import { BrightGraySpan } from '@/components/Typography'
-import Table, { DefaultCell } from '@/components/Table'
-import { useEventDispatch } from '@/hooks/useEvents'
+import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
 import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
 import useUserStore from '@/store/use-user-state'
 import OrderService from '@/services/order'
@@ -31,10 +29,6 @@ const TableWrapper = styled.div`
   }
 `
 
-const OrderType = styled.span`
-  color: ${({ theme, value }) =>
-    value === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
-`
 const OrderCancelButton = styled.button`
   cursor: pointer;
   background: none;
@@ -54,37 +48,13 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
+
   useEffect(() => {
     setOpenOrdersData(_orders)
   }, [_orders, setOpenOrdersData])
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
-
-  const OrderPairCell = ({ value, row }) => {
-    const dispatcher = useEventDispatch()
-    const assetId = row?.original?.metadata?.assetId
-    const onClick = useCallback(() => {
-      dispatcher('clicked', 'asset')
-    }, [dispatcher])
-    return (
-      <Link href={`/trade/${assetId}`}>
-        <button onClick={onClick}>
-          <BrightGraySpan>{value}</BrightGraySpan>
-        </button>
-      </Link>
-    )
-  }
-  OrderPairCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
-
-  const OrderTypeCell = useCallback(
-    ({ value }) => {
-      // eslint-disable-next-line react/prop-types
-      return <OrderType value={value}>{t(value.toLowerCase())}</OrderType>
-    },
-    [t]
-  )
-  OrderTypeCell.propTypes = { value: PropTypes.string.isRequired }
 
   const OrderCancelCell = useCallback(
     ({ data, cell }) => {
@@ -151,7 +121,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: t('pair'),
         accessor: 'pair',
-        Cell: OrderPairCell
+        Cell: AssetNameCell
       },
       {
         Header: t('price') + ' (ALGO)',
@@ -180,7 +150,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         disableSortBy: true
       }
     ],
-    [t, OrderTypeCell, OrderCancelCell]
+    [t, OrderCancelCell]
   )
 
   return (
@@ -188,10 +158,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       <TableWrapper>
         <Table
           initialState={walletOpenOrdersTableState}
-          onStateChange={(state) => {
-            console.log('State changing', state)
-            setWalletOpenOrdersTableState(state)
-          }}
+          onStateChange={(state) => setWalletOpenOrdersTableState(state)}
           columns={columns}
           data={_orders || []}
         />

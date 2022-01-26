@@ -21,7 +21,17 @@ export default {
     isLive: false,
     wallet: {
       address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-    }
+    },
+    orders: [
+      {
+        id: 21547225,
+        date: '2022-01-10 19:11:26',
+        price: '0.0840',
+        pair: 'BTC/ALGO',
+        side: 'SELL',
+        amount: '7.12025316'
+      }
+    ]
   },
   decorators: [
     (Story) => (
