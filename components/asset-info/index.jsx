@@ -23,13 +23,14 @@ import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { Fragment, useCallback } from 'react'
 import { useUserStore } from '../../store'
 import { floatToFixed } from 'services/display'
-import { convertFromBaseUnits } from 'services/convert'
+import { convertFromAsaUnits, numberFormatter } from 'services/convert'
+import { getActiveNetwork } from 'services/environment'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   const explorerURL =
     activeNetwork === 'testnet'
@@ -110,7 +111,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'TODO'}
+              {numberFormatter(asset.circulating)}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -118,7 +119,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.total}
+              {numberFormatter(asset.total)}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -147,7 +148,7 @@ const AssetInfo = ({ asset, price }) => {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
+                      ? convertFromAsaUnits(dexAsset.price, asset.decimals)
                       : dexAsset.price
                   )}{' '}
                   ALGO

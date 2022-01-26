@@ -2,12 +2,14 @@ import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
 import { useEffect } from 'react'
 import useUserStore from 'store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 const NetworkHandler = () => {
+  const activeNetwork = getActiveNetwork()
+
   const {
     hasMainnetRibbon,
     hasTestnetRibbon,
-    activeNetwork,
     hasMainnetNotificationModal,
     hasTestnetNotificationModal,
     setHasMainnetRibbon,
