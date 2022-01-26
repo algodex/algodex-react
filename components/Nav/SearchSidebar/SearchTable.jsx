@@ -4,7 +4,6 @@ import {
   AssetNameBlock,
   NameVerifiedWrapper
 } from '@/components/Asset/Typography'
-import { BodyCopySm, BodyCopyTiny } from '@/components/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 
@@ -91,16 +90,6 @@ const AssetChange = styled.span`
     return value < 0 ? theme.colors.red['500'] : theme.colors.green['500']
   }};
 `
-
-const Loading = () => {
-  const { t } = useTranslation('assets')
-  return <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
-}
-const Error = ({ message }) => <BodyCopySm color="gray.400">Error: {message}</BodyCopySm>
-
-Error.propTypes = {
-  message: PropTypes.string
-}
 
 const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
@@ -321,10 +310,6 @@ export const NavSearchTable = ({
         onAssetClick(row)
       }
     }
-    // onMouseEnter: () => {
-    //   onAssetFocus(row.original) // eslint-disable-line
-    // },
-    // onMouseLeave: onAssetLeave
   })
 
   return (

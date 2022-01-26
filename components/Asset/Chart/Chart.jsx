@@ -144,7 +144,7 @@ export function Chart({
         onChange(e)
       }
     },
-    [setChartMode, candleChart, areaChart]
+    [setChartMode, candleChart, areaChart, onChange]
   )
 
   const updateHoverPrices = useCallback(
@@ -175,38 +175,50 @@ export function Chart({
         setOverlay(_overlay)
         return
       }
-      // TODO: fix eslint error
-      /* eslint-disable */
-    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect()
-    const x = ev.clientX - rect.left
-    const logical = candleChart.timeScale().coordinateToLogical(x)
+      // eslint-disable-next-line react/no-find-dom-node
+      const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect()
+      const x = ev.clientX - rect.left
+      const logical = candleChart.timeScale().coordinateToLogical(x)
 
-    if (logical >= ohlc.length || logical >= volume.length) {
-      setOverlay(_overlay)
-      return
-    }
+      if (logical >= ohlc.length || logical >= volume.length) {
+        setOverlay(_overlay)
+        return
+      }
 
-    if (logical !== currentLogical) {
-      setCurrentLogical(logical)
-      updateHoverPrices(logical)
-    }
-  }, [candleChart, areaChart, setOverlay, _overlay, setCurrentLogical, updateHoverPrices, volume, ohlc])
+      if (logical !== currentLogical) {
+        setCurrentLogical(logical)
+        updateHoverPrices(logical)
+      }
+    },
+    [
+      chartMode,
+      currentLogical,
+      candleChart,
+      areaChart,
+      setOverlay,
+      _overlay,
+      setCurrentLogical,
+      updateHoverPrices,
+      volume,
+      ohlc
+    ]
+  )
 
   return (
-    <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={(ev) => mouseOut()}>
+    <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={() => mouseOut()}>
       {/*{!isFetched && isFetching && <Spinner flex={true}/> }*/}
       {/*{isFetched && <>*/}
       <>
         <CandleStickChart
-            ref={candleChartRef}
-            isVisible={chartMode === 'candle'}
-            data-testid="candleStickChart"
+          ref={candleChartRef}
+          isVisible={chartMode === 'candle'}
+          data-testid="candleStickChart"
         />
 
         <AreaSeriesChart
-            ref={areaChartRef}
-            isVisible={chartMode === 'area'}
-            data-testid="areaChart"
+          ref={areaChartRef}
+          isVisible={chartMode === 'area'}
+          data-testid="areaChart"
         />
       </>
 
@@ -251,9 +263,9 @@ Chart.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-Chart.defaultProps ={
+Chart.defaultProps = {
   mode: 'candle',
-  interval: '1h',
+  interval: '1h'
   // onChange: ()=>console.log('Chart Change')
 }
 
