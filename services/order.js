@@ -58,7 +58,7 @@ const OrderService = {
     const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
 
     const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-    
+
     if (order.execution === 'taker') {
       console.log(`Taker ${order.type} order`, {
         isSellOrder,
@@ -74,6 +74,21 @@ const OrderService = {
         assetId,
         address,
         limitPrice,
+        asaAmount,
+        algoAmount,
+        allOrderBookOrders
+      )
+    }
+
+    const marketPrice = order.price
+
+    if (order.execution === 'market') {
+      return algodex.executeMarketOrderAsTaker(
+        AlgodClient,
+        isSellOrder,
+        assetId,
+        address,
+        marketPrice,
         asaAmount,
         algoAmount,
         allOrderBookOrders

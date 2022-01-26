@@ -118,7 +118,8 @@ function PlaceOrderView(props) {
   const handleChange = (e, field) => {
     setOrder(
       {
-        [field || e.target.id]: e.target.value
+        [field || e.target.id]: e.target.value,
+        execution: orderView == MARKET_PANEL ? 'market' : 'both'
       },
       asset
     )
@@ -146,7 +147,8 @@ function PlaceOrderView(props) {
   const handleMarketOrderChange = () => {
     setOrder(
       {
-        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
+        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || '',
+        execution: orderView == MARKET_PANEL ? 'market' : 'both'
       },
       asset
     )
@@ -192,7 +194,9 @@ function PlaceOrderView(props) {
     console.log('order submitted')
 
     e.preventDefault()
+    setStatus((prev) => ({ ...prev, submitting: true }))
     if (checkPopupBlocker()) {
+      setStatus((prev) => ({ ...prev, submitting: false }))
       toast.error(
         'Please disable your popup blocker (likely in the top-right of your browser window)'
       )
@@ -201,13 +205,10 @@ function PlaceOrderView(props) {
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
     console.log({ activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
+      setStatus((prev) => ({ ...prev, submitting: false }))
       toast.error('Please fund your wallet with more ALGO before placing orders!')
       return
     }
-    console.log({ minWalletBalance })
-
-    setStatus((prev) => ({ ...prev, submitting: true }))
-
     const orderData = {
       ...order,
       address: activeWalletAddress,
