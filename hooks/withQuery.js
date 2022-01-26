@@ -1,11 +1,7 @@
 import DefaultError from 'components/Error'
 import Spinner from 'components/Spinner'
 import { useQuery } from 'react-query'
-const activeNetwork =
-  process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
-  process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet'
-    ? 'mainnet'
-    : 'testnet'
+
 /**
  * Base withQuery Abstraction
  *
@@ -44,7 +40,7 @@ export const routeQueryError = ({ isError, error, router }) => {
     router.push('/404')
   } else if (isError && error.message.match(500)) {
     // Do nothing. The component will handle this.
-  } else if (isError && activeNetwork === 'mainnet') {
+  } else if (isError) {
     // router.push('/500')
     console.error({ error })
     router.push('/restricted')
