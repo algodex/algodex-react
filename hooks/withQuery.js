@@ -1,12 +1,9 @@
 import { useQuery } from 'react-query'
 import Spinner from 'components/spinner'
 import { default as DefaultError } from 'components/error'
+import { getActiveNetwork } from 'services/environment'
 
-const activeNetwork =
-  process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
-  process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet'
-    ? 'mainnet'
-    : 'testnet'
+const activeNetwork = getActiveNetwork()
 
 /**
  * Base withQuery Abstraction
