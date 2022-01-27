@@ -23,10 +23,6 @@ jobs:
     name: Jest
     runs-on: ubuntu-latest
     needs: [lint]
-    env:
-      DEBUG: true
-      NEXT_PUBLIC_DEBUG: true
-      NEXT_PUBLIC_API: https://api-testnet-public.algodex.com
     steps:
       - uses: actions/checkout@v2
         with:
