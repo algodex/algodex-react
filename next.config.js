@@ -9,9 +9,15 @@ const getDefaultAsset = () => {
   // Default to LAMP (available on Testnet only)
   return process.env.NEXT_PUBLIC_DEFAULT_ASSET || 15322902
 }
+
+const PUBLIC_API = process.env.NEXT_PUBLIC_API
+
+if (typeof PUBLIC_API === 'undefined') throw new Error('Must have Public API!')
+
 const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
 const nextPWA = require('next-pwa')
+
 const moduleExports = nextPWA(
   nextTranslate({
     pwa: {
@@ -22,8 +28,8 @@ const moduleExports = nextPWA(
       return {
         beforeFiles: [
           {
-            source: '/backend/:path*',
-            destination: 'https://cloud.algodex.com/algodex-backend/:path*'
+            source: '/algodex-backend/:path*',
+            destination: `${PUBLIC_API}/algodex-backend/:path*`
           }
         ]
       }

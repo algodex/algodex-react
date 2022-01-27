@@ -22,10 +22,7 @@ export const PUBLIC_API =
     ? process.env.NEXT_PUBLIC_API
     : `${window.location.protocol}//${window.location.host}`
 
-export const API_HOST =
-  typeof window === 'undefined' && process.env.NEXT_PUBLIC_API
-    ? `${PUBLIC_API}/algodex-backend`
-    : `${PUBLIC_API}/backend`
+export const API_HOST = `${PUBLIC_API}/algodex-backend`
 
 DEBUG && console.debug('process.env.NEXT_PUBLIC_API: ' + process.env.NEXT_PUBLIC_API)
 console.debug('API_HOST: ' + API_HOST)
