@@ -80,15 +80,23 @@ const OrderService = {
       )
     }
 
-    const marketPrice = order.price
+    // const marketPrice = order.price
 
     if (order.execution === 'market') {
+      console.log(`Market ${order.type} order`, {
+        isSellOrder,
+        assetId,
+        address,
+        limitPrice,
+        asaAmount,
+        algoAmount
+      })
       return algodex.executeMarketOrderAsTaker(
         AlgodClient,
         isSellOrder,
         assetId,
         address,
-        marketPrice,
+        limitPrice,
         asaAmount,
         algoAmount,
         allOrderBookOrders

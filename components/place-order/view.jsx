@@ -118,8 +118,7 @@ function PlaceOrderView(props) {
   const handleChange = (e, field) => {
     setOrder(
       {
-        [field || e.target.id]: e.target.value,
-        execution: orderView == MARKET_PANEL ? 'market' : 'both'
+        [field || e.target.id]: e.target.value
       },
       asset
     )
@@ -147,12 +146,12 @@ function PlaceOrderView(props) {
   const handleMarketOrderChange = () => {
     setOrder(
       {
-        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || '',
-        execution: orderView == MARKET_PANEL ? 'market' : 'both'
+        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
       },
       asset
     )
   }
+
   useEffect(() => {
     if (orderView == MARKET_PANEL) {
       handleMarketOrderChange()
@@ -191,6 +190,9 @@ function PlaceOrderView(props) {
   }
 
   const handleSubmit = async (e) => {
+    handleOptionsChange({
+      target: { value: orderView == LIMIT_PANEL ? order.execution : 'market' }
+    })
     console.log('order submitted')
 
     e.preventDefault()
@@ -203,7 +205,7 @@ function PlaceOrderView(props) {
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
-    console.log({ activeWallet })
+    console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))
       toast.error('Please fund your wallet with more ALGO before placing orders!')
@@ -211,13 +213,14 @@ function PlaceOrderView(props) {
     }
     const orderData = {
       ...order,
+      execution: orderView == LIMIT_PANEL ? order.execution : 'market',
       address: activeWalletAddress,
       asset
     }
 
     Sentry.addBreadcrumb({
       category: 'order',
-      message: `${order.execution} ${order.type} order placed`,
+      message: `${orderData.execution} ${orderData.type} order placed`,
       data: {
         order: orderData
       },
@@ -225,6 +228,7 @@ function PlaceOrderView(props) {
     })
 
     const orderPromise = placeOrder(orderData)
+    console.log('orderPromise', orderPromise)
 
     toast.promise(orderPromise, {
       loading: t('awaiting-confirmation'),
@@ -415,6 +419,7 @@ function PlaceOrderView(props) {
             isActive={orderView == LIMIT_PANEL}
             onClick={() => {
               setOrderView(LIMIT_PANEL)
+              handleOptionsChange({ target: { value: 'both' } })
             }}
           >
             {t('limit')}
@@ -425,6 +430,7 @@ function PlaceOrderView(props) {
             onClick={() => {
               setOrderView(MARKET_PANEL)
               handleMarketOrderChange()
+              handleOptionsChange({ target: { value: 'market' } })
             }}
           >
             Market
