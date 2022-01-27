@@ -52,9 +52,6 @@ function OrderOptions(props) {
       case 'both':
         return t('maker-taker-desc')
 
-      case 'market':
-        return t('market-desc')
-
       default:
         return null
     }
