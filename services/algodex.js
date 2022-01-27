@@ -3,18 +3,24 @@
  *
  * Includes all responses from the publicly exposed routes
  *
+ * TODO: Make deterministic in @algodex/sdk or @algodex/common.
+ * Refactor the api client to accept a URL. The consumers of the api client should handle their
+ * own ENV variables. For this project it would be ./hooks/useAlgodex
+ *
  * @author Alexander Trefonas
  * @author Michael Feher
  * @copyright Algodev Inc
  */
 
 import axios from 'axios'
-import Router from 'next/router'
 
 // TODO: Implement getLogger() from '@algodex/common'
 const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
-export const PUBLIC_API = process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com'
+export const PUBLIC_API =
+  typeof window === 'undefined' && process.env.NEXT_PUBLIC_API
+    ? process.env.NEXT_PUBLIC_API
+    : `${window.location.protocol}//${window.location.host}`
 
 export const API_HOST = `${PUBLIC_API}/algodex-backend`
 
@@ -46,7 +52,7 @@ async function getEtagResponse(url) {
   const authToken = process.env.GEO_PASSWORD
   const authHeader = `Bearer ${authToken}`
 
-  let headers = { headers: {Authorization: authHeader} }
+  let headers = { headers: { Authorization: authHeader } }
   if (urlToEtag[url]) {
     headers = { headers: { Authorization: authHeader, 'if-none-match': urlToEtag[url] } }
   }
@@ -55,7 +61,7 @@ async function getEtagResponse(url) {
     delete headers.headers.Authorization
   }
 
-  DEBUG && console.debug({headers})
+  DEBUG && console.debug({ headers })
   DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, headers)
@@ -76,7 +82,7 @@ async function getEtagResponse(url) {
       } else if (error && !errorResp) {
         console.debug('preflight failing?')
       } else if (errorResp && errorResp.status === 451) {
-        console.debug('Error 451!');
+        console.debug('Error 451!')
       } else {
         throw new Error(`Invalid response: ${error.message}`)
       }
