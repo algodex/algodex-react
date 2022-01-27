@@ -228,7 +228,6 @@ function PlaceOrderView(props) {
     })
 
     const orderPromise = placeOrder(orderData)
-    console.log('orderPromise', orderPromise)
 
     toast.promise(orderPromise, {
       loading: t('awaiting-confirmation'),
