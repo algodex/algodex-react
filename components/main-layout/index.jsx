@@ -95,7 +95,6 @@ function MainLayout({ asset, children }) {
                 characterLength={t('mobilefooter-CHART').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.CHART)}
-                data-cy="chart-button"
               >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
@@ -105,7 +104,6 @@ function MainLayout({ asset, children }) {
                 characterLength={t('mobilefooter-BOOK').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.BOOK)}
-                data-cy="book-button"
               >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
@@ -115,7 +113,6 @@ function MainLayout({ asset, children }) {
                 characterLength={t('mobilefooter-TRADE').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.TRADE)}
-                data-cy="trade-button"
               >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
@@ -125,7 +122,6 @@ function MainLayout({ asset, children }) {
                 characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.ORDERS)}
-                data-cy="orders-button"
               >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
@@ -143,7 +139,6 @@ function MainLayout({ asset, children }) {
                 type="button"
                 characterLength={t('mobilefooter-WALLET').length}
                 onClick={() => setActiveMobile(TABS.WALLET)}
-                data-cy="wallet-button"
               >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
