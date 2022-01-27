@@ -25,7 +25,7 @@ export const PUBLIC_API =
 export const API_HOST =
   typeof window === 'undefined' && process.env.NEXT_PUBLIC_API
     ? `${PUBLIC_API}/algodex-backend`
-    : `${PUBLIC_API}/api`
+    : `${PUBLIC_API}/backend`
 
 DEBUG && console.debug('process.env.NEXT_PUBLIC_API: ' + process.env.NEXT_PUBLIC_API)
 console.debug('API_HOST: ' + API_HOST)

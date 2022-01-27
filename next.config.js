@@ -22,7 +22,7 @@ const moduleExports = nextPWA(
       return {
         beforeFiles: [
           {
-            source: '/api/:path*',
+            source: '/backend/:path*',
             destination: 'https://cloud.algodex.com/algodex-backend/:path*'
           }
         ]
