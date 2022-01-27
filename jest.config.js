@@ -6,7 +6,7 @@ module.exports = {
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 10
+      branches: 5
     }
   },
   collectCoverageFrom: [

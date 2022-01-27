@@ -6,7 +6,7 @@ import { Header } from './index'
 jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 describe('Header', () => {
-  it('should render the container', () => {
+  it.skip('should render the container', () => {
     const { queryByTestId } = render(<Header router={singletonRouter} />)
     expect(queryByTestId('header-container')).not.toBeNull()
   })
