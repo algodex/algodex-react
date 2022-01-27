@@ -1,4 +1,4 @@
-const sizes = ['iphone-x','samsung-note9']
+const sizes = ['iphone-x', 'samsung-note9']
 
 describe('Check Mobile Tabs on Different Screens', () => {
   sizes.forEach((size) => {
