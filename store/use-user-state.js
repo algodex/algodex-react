@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { createStore } from './use-store'
+import { getActiveNetwork } from '../services/environment'
 
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
@@ -12,11 +13,7 @@ const userState = (set, get) => ({
    */
   assets: {},
 
-  activeNetwork:
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet'
-      ? 'mainnet'
-      : 'testnet',
+  activeNetwork: getActiveNetwork(),
 
   /**
    * Ribbon notification for Mainnet
