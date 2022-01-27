@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { createStore } from './use-store'
+import { getActiveNetwork } from '../services/environment'
 
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
@@ -12,14 +13,21 @@ const userState = (set, get) => ({
    */
   assets: {},
 
+  activeNetwork: getActiveNetwork(),
+
   /**
    * Ribbon notification for Mainnet
    *
    * @true when Mainnet notification ribbon is visible
    * @false when Mainnet notification ribbon is hidden
    */
-  hasMainnetRibbon: null,
-  setHasMainnetRibbon: (bool) => set({ hasMainnetRibbon: bool }),
+  hasMainnetRibbon: true,
+  setHasMainnetRibbon: (bool) => {
+    const check = get().hasMainnetRibbon
+    if (bool !== check) {
+      set({ hasMainnetRibbon: bool })
+    }
+  },
 
   /**
    * Ribbon notification for Testnet
@@ -27,7 +35,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification ribbon is visible
    * @false when Testnet notification ribbon is hidden
    */
-  hasTestnetRibbon: null,
+  hasTestnetRibbon: true,
   setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
 
   /**
@@ -36,7 +44,7 @@ const userState = (set, get) => ({
    * @true when Mainnet notification modal is visible
    * @false when Mainnet notification modal is hidden
    */
-  hasMainnetNotificationModal: null,
+  hasMainnetNotificationModal: true,
   setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
 
   /**
@@ -45,7 +53,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification modal is visible
    * @false when Testnet notification modal is hidden
    */
-  hasTestnetNotificationModal: null,
+  hasTestnetNotificationModal: true,
   setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
 
   /**

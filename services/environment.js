@@ -3,12 +3,10 @@ export const getAlgodexEnvironment = () => {
 }
 
 export const getActiveNetwork = () => {
-  const activeNetwork =
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
+  return process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
     process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet'
-      ? 'mainnet'
-      : 'testnet'
-  return activeNetwork
+    ? 'mainnet'
+    : 'testnet'
 }
 
 export const getDefaultAsset = () => {

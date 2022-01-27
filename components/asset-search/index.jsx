@@ -8,7 +8,7 @@ import SearchInput from './search'
 import { rgba } from 'polished'
 import styled from 'styled-components'
 import useUserStore from 'store/use-user-state'
-import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
+import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -174,4 +174,4 @@ AssetSearch.propTypes = {
   gridRef: PropTypes.object.isRequired
 }
 
-export default withfetchAlgorandPriceQuery(AssetSearch)
+export default withAlgorandPriceQuery(AssetSearch)
