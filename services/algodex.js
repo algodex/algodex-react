@@ -53,20 +53,23 @@ async function getEtagResponse(url) {
 
   const authToken = process.env.GEO_PASSWORD
   const authHeader = `Bearer ${authToken}`
+  let options = { headers: {} }
+  if (
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
+    typeof authToken !== 'undefined' &&
+    NODE_ENV !== 'test'
+  ) {
+    options.headers['Authorization'] = authHeader
+  }
 
-  let headers = { headers: { Authorization: authHeader } }
   if (urlToEtag[url]) {
-    headers = { headers: { Authorization: authHeader, 'if-none-match': urlToEtag[url] } }
+    options.headers['if-none-match'] = urlToEtag[url]
   }
 
-  if (!authToken) {
-    delete headers.headers.Authorization
-  }
-
-  DEBUG && console.debug({ headers })
+  DEBUG && console.debug(options)
   DEBUG && console.debug('url: ' + url)
   return await axios
-    .get(url, headers)
+    .get(url, options)
     .then((res) => {
       if (res && res.status === 200) {
         let etag = res.headers.etag
@@ -82,7 +85,7 @@ async function getEtagResponse(url) {
       if (errorResp && errorResp.status === 304) {
         return urlToLastResp[url]
       } else if (error && !errorResp) {
-        console.debug('preflight failing?')
+        console.debug('preflight failing?', error)
       } else if (errorResp && errorResp.status === 451) {
         console.debug('Error 451!')
       } else {
