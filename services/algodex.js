@@ -20,7 +20,7 @@ const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 const NEXT_API = process.env.NEXT_PUBLIC_API
 const NODE_ENV = process.env.NODE_ENV
 export const PUBLIC_API =
-  typeof window === 'undefined' && NODE_ENV !== 'test' && NEXT_API
+  (typeof window === 'undefined' && NEXT_API) || (NODE_ENV === 'test' && NEXT_API)
     ? NEXT_API
     : `${window.location.protocol}//${window.location.host}`
 
