@@ -350,7 +350,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 step="0.000001"
                 inputMode="decimal"
               />
-              {/* <CurrencyInput
+              <CurrencyInput
                 type="number"
                 pattern="\d*"
                 name="amount"
@@ -362,8 +362,8 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 min="0"
                 step={new Big(10).pow(-1 * asset.decimals).toString()}
                 inputMode="decimal"
-              /> */}
-              {/* <AmountRange
+              />
+              <AmountRange
                 // txnFee={txnFee}
                 onChange={(e) => handleChange(e, 'type')}
                 value={order.amount}
@@ -371,31 +371,31 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 step={10}
                 min={0}
                 max={100}
-              /> */}
-              {/* <CurrencyInput
+              />
+              <CurrencyInput
                 name="total"
                 type="number"
                 label={t('total')}
-                asset="ALGO"
+                currency="ALGO"
                 decimals={6}
                 value={order.amount * order.price}
                 readOnly
                 disabled
-              /> */}
+              />
               {/* <TxnFeeContainer>
                 <BodyCopyTiny color="gray.500" textTransform="none">
                   Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
                   {txnFee.toFixed(3)}
                 </BodyCopyTiny>
               </TxnFeeContainer> */}
-              {/* <AdvancedOptions
+              <AdvancedOptions
                 order={order}
                 // onChange={handleOptionsChange}
                 allowTaker={typeof asset !== 'undefined'}
-              /> */}
+              />
             </LimitOrder>
           )}
-          {/* <SubmitButton
+          <SubmitButton
             type="submit"
             variant={buttonProps[order.type].variant}
             size="large"
@@ -404,7 +404,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
             disabled={order.valid}
           >
             {buttonProps[order.type].text}
-          </SubmitButton> */}
+          </SubmitButton>
         </FormControl>
       </Container>
     </Section>
