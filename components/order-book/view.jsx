@@ -24,6 +24,7 @@ function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
+  const currentOrder = useStore((state) => state.order)
   const dispatcher = useEventDispatch()
   const { data, isLoading } = useAssetPriceQuery({
     asset
@@ -39,7 +40,7 @@ function OrderBookView({ asset, sellData, buyData }) {
         dispatcher('clicked', 'order')
         setOrder(
           {
-            price: row.price,
+            price: currentOrder.execution == 'market' ? currentOrder.price : row.price,
             type: type === 'buy' ? 'sell' : 'buy'
           },
           asset

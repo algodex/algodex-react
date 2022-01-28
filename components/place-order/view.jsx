@@ -9,7 +9,6 @@ import {
   Header,
   IconButton,
   IconTextContainer,
-  LimitOrder,
   SellButton,
   SubmitButton,
   Tab,
@@ -17,16 +16,13 @@ import {
   ToggleInput,
   ToggleWrapper
 } from './place-order.css'
-import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
+import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
 import { useEffect, useState } from 'react'
 
-import AmountRange from 'components/amount-range'
 import Big from 'big.js'
 import Error from 'components/error'
 import Icon from 'components/icon'
 import { Info } from 'react-feather'
-import OrderInput from 'components/order-input'
-import OrderOptions from 'components/order-options'
 import OrderService from 'services/order'
 import PropTypes from 'prop-types'
 import Spinner from '../spinner'
@@ -37,9 +33,12 @@ import detectMobileDisplay from 'utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
-import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import { useAssetOrdersQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import useUserStore from '../../store/use-user-state'
 import { useFetchAlgorandPriceQuery } from 'hooks/useAlgoExplorer'
+import { MarketOrder } from './market-order'
+import { LimitOrder } from './limit-order'
+import { aggregateOrders } from 'components/order-book/helpers'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -60,11 +59,17 @@ function PlaceOrderView(props) {
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
+  const [marketBuyPrice, setMarketBuyPrice] = useState(0)
+  const [marketSellPrice, setMarketSellPrice] = useState(0)
 
   const [status, setStatus] = useState({
     submitted: false,
     submitting: false
   })
+  const [orderView, setOrderView] = useState('limit')
+
+  const LIMIT_PANEL = 'limit'
+  const MARKET_PANEL = 'market'
 
   const {
     data: { algoPrice }
@@ -123,6 +128,40 @@ function PlaceOrderView(props) {
       asset
     )
   }
+  const { data: assetOrders, isLoading: assetOrderLoading } = useAssetOrdersQuery({ asset })
+  useEffect(() => {
+    if (
+      assetOrders &&
+      !assetOrderLoading &&
+      typeof assetOrders.sellASAOrdersInEscrow !== 'undefined' &&
+      typeof assetOrders.buyASAOrdersInEscrow !== 'undefined'
+    ) {
+      let list = aggregateOrders(assetOrders.sellASAOrdersInEscrow, asset.decimals, 'sell').map(
+        (value) => parseFloat(value.price)
+      )
+      setMarketBuyPrice(Math.min(...list))
+
+      let list2 = aggregateOrders(assetOrders.buyASAOrdersInEscrow, asset.decimals, 'buy').map(
+        (value) => parseFloat(value.price)
+      )
+      setMarketSellPrice(Math.max(...list2))
+    }
+  }, [assetOrderLoading, assetOrders, setMarketBuyPrice, setMarketSellPrice, asset])
+
+  const handleMarketOrderChange = () => {
+    setOrder(
+      {
+        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
+      },
+      asset
+    )
+  }
+
+  useEffect(() => {
+    if (orderView == MARKET_PANEL) {
+      handleMarketOrderChange()
+    }
+  }, [assetOrders, order.type, marketBuyPrice, marketSellPrice])
 
   const handleRangeChange = (update) => {
     setOrder(update, asset)
@@ -156,34 +195,37 @@ function PlaceOrderView(props) {
   }
 
   const handleSubmit = async (e) => {
+    handleOptionsChange({
+      target: { value: orderView == LIMIT_PANEL ? order.execution : 'market' }
+    })
     console.log('order submitted')
 
     e.preventDefault()
+    setStatus((prev) => ({ ...prev, submitting: true }))
     if (checkPopupBlocker()) {
+      setStatus((prev) => ({ ...prev, submitting: false }))
       toast.error(
         'Please disable your popup blocker (likely in the top-right of your browser window)'
       )
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
-    console.log({ activeWallet })
+    console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
+      setStatus((prev) => ({ ...prev, submitting: false }))
       toast.error('Please fund your wallet with more ALGO before placing orders!')
       return
     }
-    console.log({ minWalletBalance })
-
-    setStatus((prev) => ({ ...prev, submitting: true }))
-
     const orderData = {
       ...order,
+      execution: orderView == LIMIT_PANEL ? order.execution : 'market',
       address: activeWalletAddress,
       asset
     }
 
     Sentry.addBreadcrumb({
       category: 'order',
-      message: `${order.execution} ${order.type} order placed`,
+      message: `${orderData.execution} ${orderData.type} order placed`,
       data: {
         order: orderData
       },
@@ -214,14 +256,16 @@ function PlaceOrderView(props) {
 
       setStatus({ submitted: true, submitting: false })
 
-      // reset order form
-      setOrder(
-        {
-          ...DEFAULT_ORDER,
-          type: order.type
-        },
-        asset
-      )
+      // reset order form if it is not a market order
+      if (order.execution != 'market') {
+        setOrder(
+          {
+            ...DEFAULT_ORDER,
+            type: order.type
+          },
+          asset
+        )
+      }
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
@@ -277,90 +321,6 @@ function PlaceOrderView(props) {
       >
         {buttonProps[order.type].text}
       </SubmitButton>
-    )
-  }
-
-  const renderLimitOrder = () => {
-    if (!enableOrder[order.type]) {
-      // @todo: make this better, this is a placeholder
-      return (
-        <BodyCopy color="gray.500" textAlign="center" m={32}>
-          {t('insufficient-balance')}
-        </BodyCopy>
-      )
-    }
-
-    return (
-      <>
-        <LimitOrder>
-          <OrderInput
-            type="number"
-            pattern="\d*"
-            id="price"
-            name="af2Km9q"
-            label={t('price')}
-            asset="ALGO"
-            decimals={6}
-            orderType={order.type}
-            value={order.price}
-            onChange={handleChange}
-            autocomplete="false"
-            min="0"
-            step="0.000001"
-            inputMode="decimal"
-          />
-          <OrderInput
-            type="number"
-            pattern="\d*"
-            id="amount"
-            name="af2Km9q"
-            label={t('amount')}
-            asset={asset.name}
-            decimals={asset.decimals}
-            orderType={order.type}
-            value={order.amount}
-            onChange={handleChange}
-            autocomplete="false"
-            min="0"
-            step={new Big(10).pow(-1 * asset.decimals).toString()}
-            inputMode="decimal"
-          />
-          <AmountRange
-            order={order}
-            algoBalance={maxSpendableAlgo}
-            asaBalance={asaBalance}
-            asset={asset}
-            // txnFee={txnFee}
-            onChange={handleRangeChange}
-          />
-          <OrderInput
-            type="number"
-            id="total"
-            label={t('total')}
-            asset="ALGO"
-            usdEquivalent={(order.total * algoPrice).toLocaleString()}
-            decimals={6}
-            orderType={order.type}
-            value={order.total}
-            readOnly
-            disabled
-          />
-          {/* <TxnFeeContainer>
-            <BodyCopyTiny color="gray.500" textTransform="none">
-              Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
-              {txnFee.toFixed(3)}
-            </BodyCopyTiny>
-          </TxnFeeContainer> */}
-          <OrderOptions
-            order={order}
-            onChange={handleOptionsChange}
-            allowTaker={typeof asset !== 'undefined'}
-            orderFilter={newOrderSizeFilter}
-            setOrderFilter={setNewOrderSizeFilter}
-          />
-        </LimitOrder>
-        {renderSubmit()}
-      </>
     )
   }
 
@@ -466,14 +426,58 @@ function PlaceOrderView(props) {
           </BalanceRow>
         </AvailableBalance>
 
-        <Tabs orderType={order.type}>
-          <Tab isActive>{t('limit')}</Tab>
+        <Tabs>
+          <Tab
+            orderType={order.type}
+            isActive={orderView == LIMIT_PANEL}
+            onClick={() => {
+              setOrderView(LIMIT_PANEL)
+              handleOptionsChange({ target: { value: 'both' } })
+            }}
+          >
+            {t('limit')}
+          </Tab>
+          <Tab
+            orderType={order.type}
+            isActive={orderView == MARKET_PANEL}
+            onClick={() => {
+              setOrderView(MARKET_PANEL)
+              handleMarketOrderChange()
+              handleOptionsChange({ target: { value: 'market' } })
+            }}
+          >
+            Market
+          </Tab>
         </Tabs>
-
-        {renderLimitOrder()}
+        {orderView == LIMIT_PANEL ? (
+          <LimitOrder
+            order={order}
+            handleChange={handleChange}
+            asset={asset}
+            maxSpendableAlgo={maxSpendableAlgo}
+            asaBalance={asaBalance}
+            handleRangeChange={handleRangeChange}
+            enableOrder={enableOrder}
+            handleOptionsChange={handleOptionsChange}
+            newOrderSizeFilter={newOrderSizeFilter}
+            setNewOrderSizeFilter={setNewOrderSizeFilter}
+          />
+        ) : (
+          <MarketOrder
+            order={order}
+            handleChange={handleChange}
+            asset={asset}
+            maxSpendableAlgo={maxSpendableAlgo}
+            asaBalance={asaBalance}
+            handleRangeChange={handleRangeChange}
+            enableOrder={enableOrder}
+          />
+        )}
+        {renderSubmit()}
       </Form>
     )
   }
+
   if (isError) return <Error />
   if (isLoading) return <Spinner flex />
   return (
