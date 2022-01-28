@@ -338,20 +338,24 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           {hasBalance && (
             <LimitOrder>
               <CurrencyInput
-                name="price"
-                type="text"
+                type="number"
                 pattern="\d*"
+                id="price"
+                name="af2Km9q"
                 label={t('price')}
-                currency="ALGO"
-                value={order.price}
-                onChange={handleChange}
+                asset="ALGO"
+                currecy="ALGO"
+                decimals={6}
+                orderType={order.type}
+                // value={order.price}
+                // onChange={handleChange}
                 autocomplete="false"
                 min="0"
                 step="0.000001"
                 inputMode="decimal"
               />
               <CurrencyInput
-                type="text"
+                type="number"
                 pattern="\d*"
                 name="amount"
                 label={t('amount')}

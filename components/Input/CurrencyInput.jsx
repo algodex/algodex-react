@@ -9,6 +9,19 @@ const MainInput = styled(OutlinedInput)(({ theme }) => ({
     color: theme.colors.gray['000'],
     marginRight: '0.5rem',
     textAlign: 'right'
+  },
+  '& input': {
+    '&[type=number]': {
+      '-moz-appearance': 'textfield'
+    },
+    '&::-webkit-outer-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0
+    },
+    '&::-webkit-inner-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0
+    }
   }
 }))
 
@@ -20,48 +33,17 @@ const MainInput = styled(OutlinedInput)(({ theme }) => ({
  * @returns {JSX.Element}
  * @constructor
  */
-export function TextInput({
-  name,
-  type,
-  pattern,
-  label,
-  currency,
-  value,
-  onChange,
-  min,
-  step,
-  autoComplete
-}) {
+export function TextInput({ currency, label, ...props }) {
   return (
     <FormControl
       component={() => (
         <section className="text-sm text-right my-1 my-2 rounded bg-gray-900 border-2 border-solid border-gray-700">
           <MainInput
-            autoComplete={autoComplete}
-            name={name}
-            // onInput={(e) =>
-            //   onChange(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))
-            // }
-            onChange={onChange}
-            // onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-            // onInput={(e) => e.target.value}
-            value={value}
             size="small"
             placeholder="0.00"
-            className="text-sm font-bold"
+            className="text-sm font-bold "
             inputProps={{
-              min,
-              step,
-              inputMode: 'decimal',
-              pattern: '[0-9]*',
-              type
-            }}
-            InputProps={{
-              min,
-              step,
-              inputMode: 'decimal',
-              pattern: '[0-9]*',
-              type
+              ...props
             }}
             fullWidth
             startAdornment={
@@ -83,16 +65,7 @@ export function TextInput({
 
 TextInput.propTypes = {
   label: PropTypes.string,
-  currency: PropTypes.string,
-  isCondensed: PropTypes.bool,
-  name: PropTypes.string,
-  type: PropTypes.string,
-  pattern: PropTypes.string,
-  value: PropTypes.any,
-  onChange: PropTypes.func,
-  min: PropTypes.any,
-  step: PropTypes.any,
-  autoComplete: PropTypes.bool
+  currency: PropTypes.string
 }
 
 export default TextInput

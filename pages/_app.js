@@ -1,15 +1,17 @@
+import 'tailwindcss/tailwind.css'
+
 /* eslint-disable react/prop-types */
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
+
 import { EventEmitter } from 'hooks/useEvents'
 // import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
 // import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental'
 import { Hydrate } from 'react-query/hydration'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import ReactGA from 'react-ga'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { Toaster } from 'react-hot-toast'
 import theme from 'theme'
-import ReactGA from 'react-ga'
-import 'tailwindcss/tailwind.css'
-import { ReactQueryDevtools } from 'react-query/devtools'
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
