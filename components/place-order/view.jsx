@@ -251,14 +251,16 @@ function PlaceOrderView(props) {
 
       setStatus({ submitted: true, submitting: false })
 
-      // reset order form
-      setOrder(
-        {
-          ...DEFAULT_ORDER,
-          type: order.type
-        },
-        asset
-      )
+      // reset order form if it is not a market order
+      if (order.execution != 'market') {
+        setOrder(
+          {
+            ...DEFAULT_ORDER,
+            type: order.type
+          },
+          asset
+        )
+      }
     } catch (err) {
       setStatus({ submitted: false, submitting: false })
       console.error(err)
