@@ -19,7 +19,6 @@ import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { useEventDispatch } from '../../hooks/useEvents'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
-import { order } from 'styled-system'
 
 function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
