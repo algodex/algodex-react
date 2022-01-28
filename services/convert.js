@@ -15,6 +15,12 @@ export const convertFromBaseUnits = (amount, decimals = 6) => {
   return baseUnits.div(divisor).toNumber()
 }
 
+export const numberFormatter = (number) => {
+  const parts = parseFloat(number).toFixed(0).split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return parts.join('.')
+}
+
 /**
  * Converts an asset amount from whole units to base units
  *

@@ -1,85 +1,13 @@
-import styled from 'styled-components'
 import { ArrowLeft, ExternalLink } from 'react-feather'
+import { Fragment, useCallback } from 'react'
+import { convertFromAsaUnits, numberFormatter } from 'services/convert'
+
+import { floatToFixed } from 'services/display'
+import styled from 'styled-components'
+import theme from 'theme'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import useTranslation from 'next-translate/useTranslation'
 import { useUserStore } from 'store'
-import { Fragment, useCallback } from 'react'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import theme from 'theme'
-import { floatToFixed } from 'services/display'
-import { convertFromBaseUnits } from 'services/convert'
-import Image from 'next/image'
-import PropTypes from 'prop-types'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/Typography'
-import SvgImage from 'components/SvgImage'
-
-const Container = styled.div`
-  flex: 1 1 0%;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
-`
-
-const InfoContainer = styled.div`
-  padding: 4rem;
-  max-width: 40rem;
-`
-
-const ButtonText = styled.button`
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  display: flex;
-  align-content: center;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.gray[400]};
-  padding: 5px 0;
-
-  div {
-    line-height: 24px;
-    margin-left: 5px;
-  }
-`
-
-const HeaderContainer = styled.div`
-  padding-bottom: 2rem;
-
-  h2 {
-    > span {
-      white-space: nowrap;
-
-      svg {
-        position: relative;
-        top: -0.125rem;
-      }
-    }
-  }
-`
-
-const AssetUrl = styled.p`
-  a {
-    color: ${({ theme }) => theme.colors.gray[400]};
-    text-decoration: none;
-    transition: color 100ms;
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
-    }
-  }
-`
-
-const InfoList = styled.dl`
-  display: flex;
-  flex-wrap: wrap;
-`
-
-const InfoItem = styled.div`
-  flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
-  margin-bottom: 2rem;
-`
-
-const ExternalLinkIcon = styled(ExternalLink)`
-  stroke: ${({ theme }) => theme.colors.gray[500]};
-  width: 1rem;
-  height: 1rem;
-`
 
 const AlgoExplorerLink = styled.div`
   margin-top: 1.25rem;
@@ -191,7 +119,7 @@ export const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'TODO'}
+              {numberFormatter(asset.circulating)}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -199,7 +127,7 @@ export const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.total}
+              {numberFormatter(asset.total)}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -228,7 +156,7 @@ export const AssetInfo = ({ asset, price }) => {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
+                      ? convertFromAsaUnits(dexAsset.price, asset.decimals)
                       : dexAsset.price
                   )}{' '}
                   ALGO
