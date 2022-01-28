@@ -17,12 +17,14 @@ describe('Landing Page In Potrait Mode', () => {
       if (Cypress._.isArray(size)) {
         cy.viewport(size[0], size[1])
         cy.visit('/en/trade/15322902')
-        cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       } else {
         cy.viewport(size)
         cy.visit('/en/trade/15322902')
-        cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       }
     })
@@ -35,12 +37,14 @@ describe('Landing Page In Landscape Mode', () => {
       if (Cypress._.isArray(size)) {
         cy.viewport(size[0], size[1], 'landscape')
         cy.visit('/en/trade/15322902')
-        cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       } else {
         cy.viewport(size, 'landscape')
         cy.visit('/en/trade/15322902')
-        cy.get('.NotificationModal__Button-sc-1yiqhp3-0').click({ force: true })
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       }
     })
