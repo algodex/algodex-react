@@ -30,9 +30,9 @@ const Tab = styled(TabUnstyled)`
   background-color: transparent;
   width: 100%;
   padding: 12px 16px;
-  margin: 6px 6px;
+  margin: 6px 0px;
   border: none;
-  border-radius: 5px;
+  border-radius: 0px;
   display: flex;
   justify-content: center;
 
@@ -42,7 +42,6 @@ const Tab = styled(TabUnstyled)`
 
   &:focus {
     color: #fff;
-    border-radius: 3px;
     outline: 2px solid ${blue[200]};
     outline-offset: 2px;
   }
@@ -67,25 +66,31 @@ const TabPanel = styled(TabPanelUnstyled)`
 const TabsList = styled(TabsListUnstyled)`
   min-width: 320px;
   background-color: ${blue[500]};
-  border-radius: 8px;
+  border-radius: 3px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   align-content: space-between;
+  & :first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  & :last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
 `
 
 export function Tabs() {
   return (
     <TabsUnstyled defaultValue={0}>
       <TabsList>
-        <Tab>One</Tab>
-        <Tab>Two</Tab>
-        <Tab>Three</Tab>
+        <Tab>Buy</Tab>
+        <Tab>Sell</Tab>
       </TabsList>
       <TabPanel value={0}>First content</TabPanel>
       <TabPanel value={1}>Second content</TabPanel>
-      <TabPanel value={2}>Third content</TabPanel>
     </TabsUnstyled>
   )
 }
