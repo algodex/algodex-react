@@ -12,7 +12,8 @@ export const LimitOrder = ({
   handleOptionsChange,
   newOrderSizeFilter,
   setNewOrderSizeFilter,
-  enableOrder
+  enableOrder,
+  usdEquivalent
 }) => {
   return (
     <OrderForm
@@ -23,6 +24,7 @@ export const LimitOrder = ({
       asaBalance={asaBalance}
       handleRangeChange={handleRangeChange}
       enableOrder={enableOrder}
+      usdEquivalent={usdEquivalent}
       handleOptionsChange={handleOptionsChange}
       newOrderSizeFilter={newOrderSizeFilter}
       setNewOrderSizeFilter={setNewOrderSizeFilter}
@@ -41,5 +43,6 @@ LimitOrder.propTypes = {
   handleOptionsChange: PropTypes.func.isRequired,
   enableOrder: PropTypes.object,
   newOrderSizeFilter: PropTypes.number.isRequired,
-  setNewOrderSizeFilter: PropTypes.func.isRequired
+  setNewOrderSizeFilter: PropTypes.func.isRequired,
+  usdEquivalent: PropTypes.string.isRequired
 }

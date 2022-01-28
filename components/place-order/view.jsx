@@ -71,9 +71,8 @@ function PlaceOrderView(props) {
   const LIMIT_PANEL = 'limit'
   const MARKET_PANEL = 'market'
 
-  const {
-    data: { algoPrice }
-  } = useFetchAlgorandPriceQuery()
+  const { data } = useFetchAlgorandPriceQuery()
+  const algoPrice = data?.algoPrice
 
   // @todo: calculate transaction fees in total
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
@@ -449,6 +448,7 @@ function PlaceOrderView(props) {
             Market
           </Tab>
         </Tabs>
+
         {orderView == LIMIT_PANEL ? (
           <LimitOrder
             order={order}
@@ -461,6 +461,7 @@ function PlaceOrderView(props) {
             handleOptionsChange={handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
+            usdEquivalent={(order.total * algoPrice).toLocaleString()}
           />
         ) : (
           <MarketOrder
@@ -471,6 +472,7 @@ function PlaceOrderView(props) {
             asaBalance={asaBalance}
             handleRangeChange={handleRangeChange}
             enableOrder={enableOrder}
+            usdEquivalent={(order.total * algoPrice).toLocaleString()}
           />
         )}
         {renderSubmit()}
