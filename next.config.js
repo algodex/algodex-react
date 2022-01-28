@@ -22,7 +22,7 @@ const moduleExports = nextPWA(
   nextTranslate({
     pwa: {
       dest: 'public',
-      disable: process.env.NODE_ENV === 'development'
+      disable: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
     },
     async rewrites() {
       return {
