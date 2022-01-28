@@ -5,9 +5,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const MainInput = styled(OutlinedInput)(({ theme }) => ({
-  '& .MuiOutlinedInput-root': {
-    backgroundColor: theme.colors.gray['000']
-  },
   '.MuiOutlinedInput-input': {
     color: theme.colors.gray['000'],
     marginRight: '0.5rem',
@@ -42,8 +39,12 @@ export function TextInput({
           <MainInput
             autoComplete={autoComplete}
             name={name}
+            // onInput={(e) =>
+            //   onChange(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))
+            // }
             onChange={onChange}
-            type={type}
+            // onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+            // onInput={(e) => e.target.value}
             value={value}
             size="small"
             placeholder="0.00"
@@ -52,7 +53,15 @@ export function TextInput({
               min,
               step,
               inputMode: 'decimal',
-              pattern
+              pattern: '[0-9]*',
+              type
+            }}
+            InputProps={{
+              min,
+              step,
+              inputMode: 'decimal',
+              pattern: '[0-9]*',
+              type
             }}
             fullWidth
             startAdornment={

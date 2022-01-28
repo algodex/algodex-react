@@ -339,7 +339,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
             <LimitOrder>
               <CurrencyInput
                 name="price"
-                type="number"
+                type="text"
                 pattern="\d*"
                 label={t('price')}
                 currency="ALGO"
@@ -351,7 +351,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 inputMode="decimal"
               />
               <CurrencyInput
-                type="number"
+                type="text"
                 pattern="\d*"
                 name="amount"
                 label={t('amount')}
@@ -374,7 +374,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               />
               <CurrencyInput
                 name="total"
-                type="number"
+                type="text"
                 label={t('total')}
                 currency="ALGO"
                 decimals={6}
