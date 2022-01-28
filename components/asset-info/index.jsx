@@ -24,13 +24,12 @@ import { Fragment, useCallback } from 'react'
 import { useUserStore } from '../../store'
 import { floatToFixed } from 'services/display'
 import { convertFromAsaUnits, numberFormatter } from 'services/convert'
-import { getActiveNetwork } from 'services/environment'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
-  const activeNetwork = getActiveNetwork()
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
 
   const explorerURL =
     activeNetwork === 'testnet'
@@ -39,7 +38,7 @@ const AssetInfo = ({ asset, price }) => {
 
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
-  }, [asset])
+  }, [setShowAssetInfo])
   const { data: dexAsset } = useAssetPriceQuery({
     asset,
     options: {

@@ -57,7 +57,7 @@
     "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "moment": "^2.29.1",
-    "next": "^11.1.2",
+    "next": "^11.0.1",
     "next-pwa": "^5.4.0",
     "next-translate": "^1.0.7",
     "polished": "^4.1.3",

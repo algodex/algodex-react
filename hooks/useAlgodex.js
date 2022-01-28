@@ -12,7 +12,7 @@ import {
 import WalletService from 'services/wallet'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
-import { routeQueryError } from 'hooks/withQuery'
+import { useRouteQueryError } from './useRouteQueryError'
 
 const refetchInterval = 3000
 
@@ -21,7 +21,7 @@ const refetchInterval = 3000
  * @param {Object} props The props of the parent
  * @param {string} props.query Search Query
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<{assets: *}, unknown>}
+ * @returns {Object} Query Response
  */
 export const useSearchResultsQuery = ({
   query = '',
@@ -30,8 +30,12 @@ export const useSearchResultsQuery = ({
   }
 } = {}) => {
   const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
-  routeQueryError( {isError, error, router} )
+  const { data, isError, error, ...rest } = useQuery(
+    ['searchResults', { query }],
+    () => searchAssets(query),
+    options
+  )
+  useRouteQueryError({ isError, error, router })
   return { data, isError, error, ...rest }
 }
 
@@ -42,7 +46,7 @@ export const useSearchResultsQuery = ({
  * @param {Object} props.asset An instance of an Asset
  * @param {Object} [props.options] useQuery Options
  * @todo: Consolidate with Search
- * @returns {UseQueryResult<*, unknown>}
+ * @returns {Object} Query Response
  */
 export const useAssetPriceQuery = ({
   asset: { id },
@@ -52,8 +56,12 @@ export const useAssetPriceQuery = ({
   }
 } = {}) => {
   const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery(['assetPrice', { id }], () => fetchAssetPrice(id), options)
-  routeQueryError( {isError, error, router} )
+  const { data, isError, error, ...rest } = useQuery(
+    ['assetPrice', { id }],
+    () => fetchAssetPrice(id),
+    options
+  )
+  useRouteQueryError({ isError, error, router })
   return { data, isError, error, ...rest }
 }
 
@@ -63,7 +71,7 @@ export const useAssetPriceQuery = ({
  * @param {Object} props.asset An instance of an Asset
  * @param {string} props.chartInterval Interval to aggregate chart by
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {Object} Query Response
  */
 export const useAssetChartQuery = ({
   chartInterval,
@@ -74,8 +82,12 @@ export const useAssetChartQuery = ({
   }
 }) => {
   const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery(['assetChart', { id }], () => fetchAssetChart(id, chartInterval), options)
-  routeQueryError( {isError, error, router} )
+  const { data, isError, error, ...rest } = useQuery(
+    ['assetChart', { id }],
+    () => fetchAssetChart(id, chartInterval),
+    options
+  )
+  useRouteQueryError({ isError, error, router })
   return { data, isError, error, ...rest }
 }
 
@@ -84,7 +96,7 @@ export const useAssetChartQuery = ({
  * @param {Object} props The props of the parent
  * @param {Object} props.asset An instance of an Asset
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {Object} Query Response
  */
 export const useAssetOrdersQuery = ({
   asset: { id },
@@ -99,7 +111,7 @@ export const useAssetOrdersQuery = ({
  * @param {Object} props The props of the parent
  * @param {Object} props.asset An instance of an Asset
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {Object} Query Response
  */
 export const useAssetTradeHistoryQuery = ({
   asset: { id },
@@ -118,7 +130,7 @@ export const useAssetTradeHistoryQuery = ({
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
  * @todo: Fetch Wallet Assets from on-chain
- * @returns {UseQueryResult<T, unknown>}
+ * @returns {Object} Query Response
  */
 export const useWalletAssetsQuery = ({
   wallet: { address },
@@ -131,10 +143,11 @@ export const useWalletAssetsQuery = ({
 /**
  * Use Wallet Orders Query
  *
+ * @todo: Use Notes to get Orders
  * @param {Object} props The props of the parent
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {Object} Query Response
  */
 export const useWalletOrdersQuery = ({
   wallet: { address },
@@ -144,10 +157,11 @@ export const useWalletOrdersQuery = ({
 /**
  * Use Wallet Trade History
  *
+ * @todo: Use Notes to get Trade History
  * @param {Object} props The props of the parent
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<Object, unknown>}
+ * @returns {Object} Query Response
  */
 export const useWalletTradeHistory = ({
   wallet: { address },
@@ -162,7 +176,7 @@ export const useWalletTradeHistory = ({
  * @param {Object} props The props of the parent
  * @param {Object} props.wallet An instance of a Wallet
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<*, unknown>}
+ * @returns {Object} Query Response
  */
 export const useWalletMinBalanceQuery = ({
   wallet,
@@ -181,7 +195,7 @@ export const useWalletMinBalanceQuery = ({
  * @param {Object} props The props of the parent
  * @param {Object} props.wallets A list of Wallet Addresses
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<{}|{wallets: unknown[]}|undefined, unknown>}
+ * @returns {Object} Query Response
  */
 export const useWalletsQuery = ({
   wallets,
@@ -191,7 +205,11 @@ export const useWalletsQuery = ({
   }
 }) => {
   const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery('wallets', () => WalletService.fetchWallets(wallets), options)
-  routeQueryError( {isError, error, router} )
+  const { data, isError, error, ...rest } = useQuery(
+    'wallets',
+    () => WalletService.fetchWallets(wallets),
+    options
+  )
+  useRouteQueryError({ isError, error, router })
   return { data, isError, error, ...rest }
 }

@@ -10,7 +10,7 @@ import {
   NetworkDropdown,
   NetworkDropdownOption
 } from './header.css'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 import ActiveLink from 'components/active-link'
 import Hamburger from 'components/hamburger'
@@ -18,36 +18,32 @@ import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
-import { withRouter } from 'next/router'
-import { getActiveNetwork } from 'services/environment'
+import useUserStore from 'store/use-user-state'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
-export function Header({ router }) {
+export function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const activeNetwork = getActiveNetwork()
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
 
   /**
    * Route to other network
    * @type {(function(*): void)|*}
    */
-  const handleNetworkChangeFn = useCallback(
-    (value) => {
-      if (!ENABLE_NETWORK_SELECTION) {
-        return
-      }
-      if (value === 'mainnet') {
-        window.location = MAINNET_LINK
-      } else {
-        window.location = TESTNET_LINK
-      }
-    },
-    [router, activeNetwork]
-  )
+  const handleNetworkChangeFn = (value) => {
+    if (!ENABLE_NETWORK_SELECTION) {
+      return
+    }
+    if (value === 'mainnet') {
+      window.location = MAINNET_LINK
+    } else {
+      window.location = TESTNET_LINK
+    }
+  }
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -149,4 +145,4 @@ Header.propTypes = {
   router: PropTypes.object
 }
 
-export default withRouter(Header)
+export default Header

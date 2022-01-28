@@ -1,9 +1,6 @@
 import { useQuery } from 'react-query'
 import Spinner from 'components/spinner'
 import { default as DefaultError } from 'components/error'
-import { getActiveNetwork } from 'services/environment'
-
-const activeNetwork = getActiveNetwork()
 
 /**
  * Base withQuery Abstraction
@@ -31,22 +28,5 @@ export const withQuery = (
 
   return withQueryWrapper
 }
-/**
- * Route based on Error
- * @param isError
- * @param error
- * @param router
- * @returns {function(): boolean}
- */
-export const routeQueryError = ({ isError, error, router }) => {
-  if (isError && error.message.match(404)) {
-    router.push('/404')
-  } else if (isError && error.message.match(500)) {
-    // Do nothing. The component will handle this.
-  } else if (isError && activeNetwork === 'mainnet') {
-    // router.push('/500')
-    console.error({error})
-    router.push('/restricted')
-  }
-}
+
 export default withQuery

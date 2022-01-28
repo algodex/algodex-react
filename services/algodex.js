@@ -3,6 +3,10 @@
  *
  * Includes all responses from the publicly exposed routes
  *
+ * TODO: Make deterministic in @algodex/sdk or @algodex/common.
+ * Refactor the api client to accept a URL. The consumers of the api client should handle their
+ * own ENV variables. For this project it would be ./hooks/useAlgodex
+ *
  * @author Alexander Trefonas
  * @author Michael Feher
  * @copyright Algodev Inc
@@ -15,7 +19,10 @@ const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
 const NEXT_API = process.env.NEXT_PUBLIC_API
 
-export const PUBLIC_API = NEXT_API || 'https://api-testnet-public.algodex.com'
+export const PUBLIC_API =
+  typeof window === 'undefined' && NEXT_API
+    ? NEXT_API
+    : `${window.location.protocol}//${window.location.host}`
 
 export const API_HOST = `${PUBLIC_API}/algodex-backend`
 
