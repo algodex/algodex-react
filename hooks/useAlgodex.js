@@ -23,19 +23,24 @@ const refetchInterval = 3000
  * @param {Object} [props.options] useQuery Options
  * @returns {Object} Query Response
  */
-export const useSearchResultsQuery = ({
+export function useSearchResultsQuery({
   query = '',
   options = {
     refetchInterval: query === '' ? refetchInterval : 20000
   }
-} = {}) => {
+} = {}) {
   const router = useRouter()
   const { data, isError, error, ...rest } = useQuery(
     ['searchResults', { query }],
     () => searchAssets(query),
     options
   )
+<<<<<<< HEAD
   useRouteQueryError({ isError, error, router })
+=======
+  routeQueryError({ isError, error, router })
+
+>>>>>>> next
   return { data, isError, error, ...rest }
 }
 

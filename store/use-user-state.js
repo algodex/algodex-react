@@ -39,6 +39,26 @@ const userState = (set, get) => ({
   setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
 
   /**
+<<<<<<< HEAD
+=======
+   * Current network user is trading on.
+   *
+   * Options are Mainnet and Testnet
+   */
+  activeNetwork:
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'mainnet'
+      ? 'mainnet'
+      : 'testnet',
+  // activeNetwork: window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet',
+  // activeNetwork: () => (window.location.hostname === 'mainnet' ? 'mainnet' : 'testnet')(),
+  // activeNetwork: 'mainnet',
+  setActiveNetwork: (network) => {
+    set({ activeNetwork: network })
+  },
+
+  /**
+>>>>>>> next
    * Modal notification for Mainnet.
    *
    * @true when Mainnet notification modal is visible

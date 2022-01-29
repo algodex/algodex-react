@@ -12,6 +12,10 @@
  * @copyright Algodev Inc
  */
 
+<<<<<<< HEAD
+=======
+import Router from 'next/router'
+>>>>>>> next
 import axios from 'axios'
 
 // TODO: Implement getLogger() from '@algodex/common'
@@ -53,6 +57,7 @@ async function getEtagResponse(url) {
 
   const authToken = process.env.GEO_PASSWORD
   const authHeader = `Bearer ${authToken}`
+<<<<<<< HEAD
   let options = { headers: {} }
   if (
     process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
@@ -67,6 +72,18 @@ async function getEtagResponse(url) {
   }
 
   DEBUG && console.debug(options)
+=======
+  let headers = { headers: {} }
+  if (urlToEtag[url]) {
+    headers.headers = { 'if-none-match': urlToEtag[url] }
+  }
+
+  if (typeof authToken !== 'undefined' && typeof window === 'undefined') {
+    headers.headers.Authorization = authHeader
+  }
+
+  DEBUG && console.debug({ headers })
+>>>>>>> next
   DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, options)

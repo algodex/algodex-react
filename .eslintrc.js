@@ -1,6 +1,5 @@
 module.exports = {
   env: {
-    'cypress/globals': true,
     browser: true,
     amd: true,
     node: true,
@@ -21,7 +20,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: ['react', 'cypress'],
+  plugins: ['react'],
   settings: {
     react: {
       version: 'detect'
@@ -33,7 +32,9 @@ module.exports = {
       {
         endOfLine: 'auto'
       },
-      { usePrettierrc: true }
+      {
+        usePrettierrc: true
+      }
     ],
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/anchor-is-valid': [

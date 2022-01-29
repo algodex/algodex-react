@@ -1,6 +1,7 @@
 import { lighten } from 'polished'
 
 const colors = {
+  white: '#FFFFFF',
   blue: {
     '000': '#7face6',
     100: '#6a9ee2',

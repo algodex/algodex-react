@@ -1,45 +1,11 @@
 import { fetchAssetPrice, fetchAssets } from 'services/algodex'
 
-import AssetInfo from 'components/asset-info'
-import Chart from 'components/chart'
+import { AssetInfo } from 'components/Asset/Asset'
+import Chart from 'components/Asset/Chart'
 import Page from 'components/Page'
 import PropTypes from 'prop-types'
 import { fetchExplorerAssetInfo } from 'services/algoexplorer'
-import styled from 'styled-components'
-import { useUserStore } from '../../store'
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  overflow: hidden;
-  max-height: calc(var(--vh, 1vh) * 100);
-  height: calc(var(--vh, 1vh) * 100);
-
-  @media (min-width: 996px) {
-    overflow: scroll;
-    max-height: none;
-  }
-
-  // for demo
-  p.demo {
-    flex: 1 1 0%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    margin: 0;
-    color: ${({ theme }) => theme.colors.gray['600']};
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-`
-
-export const StatusContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-`
+import { useUserStore } from 'store'
 
 /**
  * Fetch Traded Asset Paths
@@ -101,7 +67,7 @@ export async function getStaticProps({ params: { id } }) {
  * found
  *
  * @param {object} staticExplorerAsset The Explorer Response
- * @param {object} staticExplorerAsset The Asset Price Response
+ * @param {object} staticAssetPrice The Asset Price Response
  * @returns {JSX.Element}
  * @constructor
  */
