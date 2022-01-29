@@ -7,6 +7,7 @@ import TabsListUnstyled from '@mui/base/TabsListUnstyled'
 import TabsUnstyled from '@mui/base/TabsUnstyled'
 import { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled'
 import { styled } from '@mui/system'
+import theme from '../../theme'
 
 const blue = {
   50: '#F0F7FF',
@@ -27,7 +28,8 @@ const Tab = styled(TabUnstyled)`
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: bold;
-  background-color: transparent;
+  // background-color: transparent;
+  background-color: ${theme.colors.gray['700']};
   width: 100%;
   padding: 12px 16px;
   margin: 6px 0px;
@@ -62,10 +64,10 @@ const TabPanel = styled(TabPanelUnstyled)`
   font-family: IBM Plex Sans, sans-serif;
   font-size: 0.875rem;
 `
-
+// background-color: ${blue[500]};
 const TabsList = styled(TabsListUnstyled)`
   min-width: 320px;
-  background-color: ${blue[500]};
+
   border-radius: 3px;
   margin-bottom: 16px;
   display: flex;
