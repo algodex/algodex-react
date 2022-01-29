@@ -3,8 +3,8 @@ on:
   pull_request:
     branches: [main, development]
 jobs:
-  jest:
-    name: Jest
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,5 +17,39 @@ jobs:
           yarn
         env:
           NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
-      - name: Run tests
-        run: yarn test
+      - name: Lint Files
+        run: yarn test-lint
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GHP_AUTH_TOKEN }}" >> ~/.npmrc
+          echo "@algodex:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          yarn
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
+      - name: Run Unit Tests
+        run: yarn test-jest
+  e2e:
+    name: End<->End
+    runs-on: ubuntu-latest
+    needs: [jest]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GHP_AUTH_TOKEN }}" >> ~/.npmrc
+          echo "@algodex:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          yarn
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
+      - name: Run Cypress
+        run: yarn test-cypress

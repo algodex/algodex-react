@@ -80,7 +80,7 @@ function AmountRange(props) {
   return (
     <Container>
       <TickWrapper>
-        <Tick amt={0} isActive isHighlighted={!value} />
+        <Tick className={price == 0 && 'disabled'} amt={0} isActive isHighlighted={!value} />
         <Tick amt={25} isActive={rounded >= 25} isHighlighted={rounded === 25} />
         <Tick amt={50} isActive={rounded >= 50} isHighlighted={rounded === 50} />
         <Tick amt={75} isActive={rounded >= 75} isHighlighted={rounded === 75} />
@@ -91,6 +91,7 @@ function AmountRange(props) {
           min={0}
           max={100}
           step={5}
+          disabled={price == 0 ? true : false}
           value={value || 0}
           onChange={handleChange}
           orderType={order.type}

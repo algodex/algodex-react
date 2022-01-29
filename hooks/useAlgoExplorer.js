@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { fetchExplorerAssetInfo, fetchAlgorandPrice } from 'services/algoexplorer'
-import { routeQueryError } from 'hooks/withQuery'
-import { useEffect } from 'react'
-const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
+import { useRouteQueryError } from './useRouteQueryError'
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
 const refetchInterval = 3000
 
@@ -25,13 +24,7 @@ export const useExplorerAssetInfo = ({ id, options }) => {
     options
   )
 
-  useEffect(() => {
-    let mounted = true
-    if (mounted) {
-      routeQueryError({ isError, error, router })
-    }
-    return () => (mounted = false)
-  }, [router, data, isError, error])
+  useRouteQueryError({ isError, error, router })
 
   return { data, isError, error, ...rest }
 }
@@ -41,7 +34,7 @@ export const useExplorerAssetInfo = ({ id, options }) => {
  * @param {Object} props The props of the parent
  * @param {string} props.query Search Query
  * @param {Object} [props.options] useQuery Options
- * @returns {UseQueryResult<{assets: *}, unknown>}
+ * @returns {Object} Query Response
  */
 export const useFetchAlgorandPriceQuery = ({
   query = '',
