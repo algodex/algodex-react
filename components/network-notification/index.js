@@ -11,8 +11,12 @@ const NetworkHandler = () => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const setHasMainnetRibbon = useUserStore((state) => state.setHasMainnetRibbon)
   const setHasTestnetRibbon = useUserStore((state) => state.setHasTestnetRibbon)
-  const setHasMainnetNotificationModal = useUserStore((state) => state.setHasMainnetNotificationModal)
-  const setHasTestnetNotificationModal = useUserStore((state) => state.setHasTestnetNotificationModal)
+  const setHasMainnetNotificationModal = useUserStore(
+    (state) => state.setHasMainnetNotificationModal
+  )
+  const setHasTestnetNotificationModal = useUserStore(
+    (state) => state.setHasTestnetNotificationModal
+  )
 
   const isRibbonActive = activeNetwork === 'testnet' ? hasTestnetRibbon : hasMainnetRibbon
   const isModalActive =
@@ -23,8 +27,8 @@ const NetworkHandler = () => {
     hasTestnetRibbon === null && setHasTestnetRibbon(true)
     hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
     hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
-  }, [])
-  
+  }, []) // eslint-disable-line
+
   return (
     <div>
       {isRibbonActive && <NetworkBanner />}
