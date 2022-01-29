@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { BannerWrapper } from './styles.css'
 import Link from 'next/link'
 import { Container } from 'components/about-assets/styles.css'
-import Axios from 'axios'
 import useAxios from 'axios-hooks'
 
 export const AboutBanner = () => {
