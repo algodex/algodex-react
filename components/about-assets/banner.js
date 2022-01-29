@@ -1,9 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BannerWrapper } from './styles.css'
 import Link from 'next/link'
 import { Container } from 'components/about-assets/styles.css'
+import Axios from 'axios'
+import useAxios from 'axios-hooks'
 
 export const AboutBanner = () => {
+  const [email, setEmail] = useState('')
+  const [pageUri, setPageUri] = useState('')
+
+  const [{ data, loading, error }, refetch] = useAxios(
+    {
+      url: '/api/subscribe',
+      method: 'POST',
+      data: { email, pageUri }
+    },
+    {
+      manual: true
+    }
+  )
+
+  useEffect(() => {
+    if (data?.success === true && !loading) {
+      setEmail('')
+    }
+  }, [data?.success, loading])
+
+  useEffect(() => {
+    setPageUri(window.location.href)
+  })
   return (
     <BannerWrapper>
       <Container className="container mx-auto">
@@ -15,8 +40,15 @@ export const AboutBanner = () => {
             Learn how Algodex works and find opportunities to contribute to the project. Stay
             up-to-date by entering your email below!
           </p>
-          <input type="email" placeholder="Email" />
-          <button>Subscribe</button>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button onClick={() => refetch()} disabled={loading}>
+            Subscribe
+          </button>
           <div>
             <p className="text-green-500 text-2xl italic my-9">
               NEW: You can now try out the platform on Testnet by going to{' '}

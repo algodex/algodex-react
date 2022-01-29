@@ -43,6 +43,7 @@
     "@randlabs/myalgo-connect": "^1.0.1",
     "@sentry/nextjs": "^6.11.0",
     "axios": "^0.21.1",
+    "axios-hooks": "^3.0.0",
     "big.js": "^6.1.1",
     "browserify-css": "0.12.0",
     "cookies": "^0.8.0",
@@ -100,8 +101,6 @@
     "chromatic": "^5.8.3",
     "cypress": "^7.4.0",
     "eslint": "^7.27.0",
-    "storybook-addon-jsx": "^7.3.10",
-    "storybook-addon-next-router": "^3.0.5",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
@@ -116,6 +115,8 @@
     "postcss": "^8.3.9",
     "prettier": "2.3.0",
     "react-test-renderer": "^17.0.2",
+    "storybook-addon-jsx": "^7.3.10",
+    "storybook-addon-next-router": "^3.0.5",
     "tailwindcss": "^3.0.7",
     "webpack": "^5.65.0"
   }
