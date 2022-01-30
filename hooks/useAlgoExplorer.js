@@ -43,7 +43,7 @@ export const useExplorerAssetInfo = ({ id, options }) => {
  * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<{assets: *}, unknown>}
  */
-export const useFetchAlgorandPriceQuery = ({
+export const useAlgorandPriceQuery = ({
   query = '',
   options = {
     refetchInterval: query === '' ? refetchInterval : 20000

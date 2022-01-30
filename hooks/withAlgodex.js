@@ -10,7 +10,6 @@ import {
   useWalletTradeHistoryQuery
 } from '@/hooks/useAlgodex'
 
-import { useFetchAlgorandPriceQuery } from '@/hooks/useAlgoExplorer'
 import { withQuery } from '@/hooks/withQuery'
 import Spinner from '@/components/Spinner'
 import ServiceError from '@/components/ServiceError'
@@ -108,20 +107,6 @@ export function withWalletOrdersQuery(Component, options) {
 export function withWalletTradeHistoryQuery(Component, options) {
   return withQuery(Component, {
     hook: useWalletTradeHistoryQuery,
-    components,
-    ...options
-  })
-}
-
-/**
- * With Algorand Price Query
- * @param {JSX.Element| Function} Component Component to wrap
- * @param {object} [options] Options to pass to withQuery
- * @returns {JSX.Element}
- */
-export function withfetchAlgorandPriceQuery(Component, options) {
-  return withQuery(Component, {
-    hook: useFetchAlgorandPriceQuery,
     components,
     ...options
   })

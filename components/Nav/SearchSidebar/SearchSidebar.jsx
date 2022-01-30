@@ -8,7 +8,7 @@ import { Section } from '@/components/Layout/Section'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
+import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
 // export const Section = styled.section`
 //   height: inherit;
@@ -201,4 +201,4 @@ NavSearchSidebar.defaultProps = {
   tableProps: {}
 }
 
-export default withfetchAlgorandPriceQuery(NavSearchSidebar)
+export default withAlgorandPriceQuery(NavSearchSidebar)
