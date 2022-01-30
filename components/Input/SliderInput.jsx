@@ -1,15 +1,16 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import {
+  FillCSS,
+  FocusCSS,
+  TickWrapper,
+  TrackCSS,
+  TrackFillCSS
+} from 'components/Input/Range/Slider'
 import styled, { css } from 'styled-components'
 
 import { InputWrapper } from 'components/Input'
-import {
-  TrackCSS,
-  TrackFillCSS,
-  FillCSS,
-  TickWrapper,
-  FocusCSS
-} from 'components/Input/Range/Slider'
+import PropTypes from 'prop-types'
+import Slider from '@mui/material/Slider'
+import { useState } from 'react'
 
 const trackHeight = '0.125rem'
 const thumbDiameter = '0.75rem'
@@ -143,38 +144,40 @@ const Tick = styled.div`
  * @returns {JSX.Element}
  * @constructor
  */
-export function SliderInput({ onChange, value }) {
-  const [isMouseDown, setIsMouseDown] = useState(false)
+export function SliderInput({ onChange, value, marks, step, min, max }) {
+  // const [isMouseDown, setIsMouseDown] = useState(false)
 
   return (
     <Container>
-      <TickWrapper>
-        <Tick amt={0} isActive isHighlighted={!value} />
-        <Tick amt={20} isActive={value >= 20} isHighlighted={value === 20} />
-        <Tick amt={40} isActive={value >= 40} isHighlighted={value === 40} />
-        <Tick amt={60} isActive={value >= 60} isHighlighted={value === 60} />
-        <Tick amt={80} isActive={value >= 80} isHighlighted={value === 80} />
-        <Tick amt={100} isActive={value === 100} isHighlighted={value === 100} />
-      </TickWrapper>
-      <InputWrapper>
-        <Input
-          min={0}
-          max={100}
-          step={5}
-          value={value || 0}
-          onChange={(e) => onChange(e.target.value)}
-          onMouseDown={() => setIsMouseDown(true)}
-          onMouseUp={() => setIsMouseDown(false)}
-          isMouseDown={isMouseDown}
-        />
-      </InputWrapper>
+      <Slider
+        aria-label="Slider Input"
+        valueLabelDisplay="auto"
+        defaultValue={value}
+        value={value}
+        onChange={onChange}
+        marks={marks}
+        step={step}
+        min={min}
+        max={max}
+      />
     </Container>
   )
 }
 
 SliderInput.propTypes = {
+  defaultValue: PropTypes.number,
+  value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.any
+  marks: PropTypes.bool.isRequired,
+  step: PropTypes.number,
+  min: PropTypes.number,
+  max: PropTypes.number
+}
+
+SliderInput.defaultProps = {
+  value: 0,
+  onChange: () => console.log('No value passed'),
+  marks: false
 }
 
 export default SliderInput
