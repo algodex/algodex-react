@@ -33,6 +33,7 @@ export function withSearchResultsQuery(Component, options) {
 }
 /**
  *
+ * @todo add to PlaceOrder
  * @param {JSX.Element| Function} Component Component to wrap
  * @param {Object} [options]
  * @returns {JSX.Element}
