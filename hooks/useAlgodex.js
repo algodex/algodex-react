@@ -104,7 +104,16 @@ export const useAssetOrdersQuery = ({
     refetchInterval,
     enabled: typeof id !== 'undefined'
   }
-}) => useQuery(['assetOrders', { id }], () => fetchAssetOrders(id), options)
+}) => {
+  const router = useRouter()
+  const { data, isError, error, ...rest } = useQuery(
+    ['assetOrders', { id }],
+    () => fetchAssetOrders(id),
+    options
+  )
+  useRouteQueryError({ isError, error, router })
+  return { data, isError, error, ...rest }
+}
 
 /**
  * Use Asset Trade History Query
