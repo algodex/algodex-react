@@ -1,53 +1,38 @@
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
 import { useEffect } from 'react'
-import useUserStore from 'store/use-user-state'
+import useUserStore from '@/store/use-user-state'
 
 const NetworkHandler = () => {
-  const {
-    hasMainnetRibbon,
-    hasTestnetRibbon,
-    activeNetwork,
-    hasMainnetNotificationModal,
-    hasTestnetNotificationModal,
-    setHasMainnetRibbon,
-    setHasTestnetRibbon,
-    setHasMainnetNotificationModal,
-    setHasTestnetNotificationModal
-  } = useUserStore((state) => state)
+  const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
+  const hasTestnetRibbon = useUserStore((state) => state.hasTestnetRibbon)
+  const hasMainnetNotificationModal = useUserStore((state) => state.hasMainnetNotificationModal)
+  const hasTestnetNotificationModal = useUserStore((state) => state.hasTestnetNotificationModal)
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const setHasMainnetRibbon = useUserStore((state) => state.setHasMainnetRibbon)
+  const setHasTestnetRibbon = useUserStore((state) => state.setHasTestnetRibbon)
+  const setHasMainnetNotificationModal = useUserStore(
+    (state) => state.setHasMainnetNotificationModal
+  )
+  const setHasTestnetNotificationModal = useUserStore(
+    (state) => state.setHasTestnetNotificationModal
+  )
+
+  const isRibbonActive = activeNetwork === 'testnet' ? hasTestnetRibbon : hasMainnetRibbon
+  const isModalActive =
+    activeNetwork === 'testnet' ? hasTestnetNotificationModal : hasMainnetNotificationModal
 
   useEffect(() => {
+    hasMainnetRibbon === null && setHasMainnetRibbon(true)
+    hasTestnetRibbon === null && setHasTestnetRibbon(true)
     hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
     hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
-    hasTestnetRibbon === null && setHasTestnetRibbon(true)
-    hasMainnetRibbon === null && setHasMainnetRibbon(true)
-  }, [
-    hasTestnetRibbon,
-    hasMainnetRibbon,
-    hasMainnetNotificationModal,
-    hasTestnetNotificationModal,
-    setHasTestnetNotificationModal,
-    setHasMainnetNotificationModal,
-    setHasTestnetRibbon,
-    setHasMainnetRibbon
-  ])
+  }, []) // eslint-disable-line
 
   return (
     <div>
-      <NetworkBanner
-        activeNetwork={activeNetwork}
-        hasMainnetRibbon={hasMainnetRibbon}
-        hasTestnetRibbon={hasTestnetRibbon}
-        setHasMainnetRibbon={setHasMainnetRibbon}
-        setHasTestnetRibbon={setHasTestnetRibbon}
-      />
-      <NetworkNotificationModal
-        activeNetwork={activeNetwork}
-        hasMainnetNotificationModal={hasMainnetNotificationModal}
-        hasTestnetNotificationModal={hasTestnetNotificationModal}
-        setHasTestnetNotificationModal={setHasTestnetNotificationModal}
-        setHasMainnetNotificationModal={setHasMainnetNotificationModal}
-      />
+      {isRibbonActive && <NetworkBanner />}
+      {isModalActive && <NetworkNotificationModal />}
     </div>
   )
 }

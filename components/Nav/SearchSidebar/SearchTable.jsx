@@ -3,23 +3,22 @@ import {
   AssetName,
   AssetNameBlock,
   NameVerifiedWrapper
-} from 'components/Asset/Typography'
-import { BodyCopySm, BodyCopyTiny } from 'components/Typography'
+} from '@/components/Asset/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 
-import AlgoIcon from 'components/Icon'
+import AlgoIcon from '@/components/Icon'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
-import Table from 'components/Table'
+import Table from '@/components/Table'
 import { flatten } from 'lodash'
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@/services/display'
 import styled from 'styled-components'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
-import { withSearchResultsQuery } from 'hooks/withAlgodex'
+import useUserStore from '@/store/use-user-state'
+import { withSearchResultsQuery } from '@/hooks/withAlgodex'
 
 /**
  * Map a Query Result to a Search Result
@@ -91,16 +90,6 @@ const AssetChange = styled.span`
     return value < 0 ? theme.colors.red['500'] : theme.colors.green['500']
   }};
 `
-
-const Loading = () => {
-  const { t } = useTranslation('assets')
-  return <BodyCopyTiny color="gray.600">{t('loading')}&hellip;</BodyCopyTiny>
-}
-const Error = ({ message }) => <BodyCopySm color="gray.400">Error: {message}</BodyCopySm>
-
-Error.propTypes = {
-  message: PropTypes.string
-}
 
 const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
@@ -321,10 +310,6 @@ export const NavSearchTable = ({
         onAssetClick(row)
       }
     }
-    // onMouseEnter: () => {
-    //   onAssetFocus(row.original) // eslint-disable-line
-    // },
-    // onMouseLeave: onAssetLeave
   })
 
   return (
@@ -354,4 +339,4 @@ NavSearchTable.propTypes = {
   isFilteringByFavorites: PropTypes.bool,
   setIsFilteringByFavorites: PropTypes.func
 }
-export default withSearchResultsQuery(NavSearchTable, { loading: Loading, error: Error })
+export default withSearchResultsQuery(NavSearchTable)

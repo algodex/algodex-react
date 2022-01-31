@@ -1,5 +1,5 @@
 import React from 'react'
-import { AssetsTable as Component /*, default as ComponentWithData*/ } from './AssetsTable'
+import { AssetsTable as Component, default as ComponentWithData } from './AssetsTable'
 import styled from 'styled-components'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
@@ -17,30 +17,38 @@ const Container = styled.div`
 export default {
   title: '@algodex/recipes/Wallet/Table/Assets Table',
   component: Component,
-  parameters: { layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen', controls: { exclude: ['assets', 'wallet'] } },
+  args: {
+    wallet: {
+      address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+    },
+    assets: [
+      {
+        unit: 'TEST',
+        id: 22847687,
+        name: 'TEST',
+        total: '100',
+        available: '10',
+        'in-order': '0',
+        'algo-value': '0.888'
+      }
+    ],
+    isLive: false
+  },
   decorators: [
     (Story) => (
       <Container>
         <Story />
-        <ReactQueryDevtools initialIsOpen={false} />
       </Container>
     )
   ]
 }
 
-const Template = (args) => <Component {...args} />
-// const TemplateWithData = (args) => <ComponentWithData {...args} />
-
-export const AssetsTable = Template.bind({})
-AssetsTable.args = {
-  wallet: {
-    address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-  }
-}
-
-// export const AssetsTablePreview = TemplateWithData.bind({})
-// AssetsTablePreview.args = {
-//   wallet: {
-//     address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-//   }
-// }
+//eslint-disable-next-line
+export const AssetsTable = ({ wallet, assets, isLive, ...props }) => (
+  <>
+    {!isLive && <Component wallet={wallet} assets={assets} {...props} />}
+    {isLive && <ComponentWithData wallet={wallet} />}
+    {isLive && <ReactQueryDevtools initialIsOpen={false} />}
+  </>
+)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TradeHistoryView as Component, default as ComponentWithData } from './TradeHistory'
+import { TradeHistory as Component, default as ComponentWithData } from './TradeHistory'
 import asset from 'spec/Asset'
 import styled from 'styled-components'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -55,7 +55,7 @@ export default {
       }
     },
     isLive: false,
-    tradesData: [
+    orders: [
       {
         amount: '0.001171',
         id: 341492,

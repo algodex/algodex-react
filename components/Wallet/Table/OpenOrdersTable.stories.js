@@ -1,5 +1,5 @@
 import React from 'react'
-import { OpenOrdersTable as Component /*, default as ComponentWithData*/ } from './OpenOrdersTable'
+import { OpenOrdersTable as Component, default as ComponentWithData } from './OpenOrdersTable'
 import styled from 'styled-components'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
@@ -16,30 +16,39 @@ const Container = styled.div`
 export default {
   title: '@algodex/recipes/Wallet/Table/Open Orders Table',
   component: Component,
-  parameters: { layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen', controls: { exclude: ['wallet', 'orders'] } },
+  args: {
+    isLive: false,
+    wallet: {
+      address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
+    },
+    orders: [
+      {
+        id: 21547225,
+        date: '2022-01-19 15:11:46',
+        unix_time: 1642626706,
+        price: '1000.0000',
+        pair: 'BTC/ALGO',
+        type: 'BUY',
+        status: 'OPEN',
+        amount: '1000.000'
+      }
+    ]
+  },
   decorators: [
     (Story) => (
       <Container>
         <Story />
-        <ReactQueryDevtools initialIsOpen={false} />
       </Container>
     )
   ]
 }
 
-const Template = (args) => <Component {...args} />
-// const TemplateWithData = (args) => <ComponentWithData {...args} />
-
-export const OpenOrdersTable = Template.bind({})
-OpenOrdersTable.args = {
-  wallet: {
-    address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-  }
-}
-
-// export const OpenOrdersTablePreview = TemplateWithData.bind({})
-// OpenOrdersTablePreview.args = {
-//   wallet: {
-//     address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
-//   }
-// }
+//eslint-disable-next-line
+export const OpenOrdersTable = ({ wallet, orders, isLive, ...props }) => (
+  <>
+    {!isLive && <Component wallet={wallet} orders={orders} {...props} />}
+    {isLive && <ComponentWithData wallet={wallet} />}
+    {isLive && <ReactQueryDevtools initialIsOpen={false} />}
+  </>
+)

@@ -63,7 +63,7 @@ const TabsList = styled(TabsListUnstyled)`
   align-content: space-between;
 `
 
-const TabsMain = styled(Tabs)`
+const TabsWrapper = styled(Tabs)`
   .MuiTabs-indicator {
     height: 5px;
     background-color: white;
@@ -74,12 +74,37 @@ const TabsMain = styled(Tabs)`
     }
   }
 `
-const NativeTabItem = styled(Tab)`
+const TabItemWrapper = styled(Tab)`
   color: ${theme.colors.gray['500']};
   &.${tabUnstyledClasses.selected} {
     color: #fff;
   }
 `
+
+function NativeTabPanel(props) {
+  const { children, value, index, ...other } = props
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  )
+}
+
+NativeTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired
+}
 
 export function TabsComponent() {
   const [value, setValue] = useState(0)
@@ -118,45 +143,19 @@ export function TabsComponent() {
     )
   }
 
-  function NativeTabPanel(props) {
-    const { children, value, index, ...other } = props
-
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ p: 3 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    )
-  }
-
-  NativeTabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired
-  }
-
   const renderNativeTab = () => {
     return (
       <TabsUnstyled defaultValue={0} sx={{ width: '100%' }}>
-        <TabsMain
+        <TabsWrapper
           style={{ marginBottom: '16px', borderBottom: 'solid 1px' }}
           value={value}
           textColor="primary"
           onChange={handleChange}
           aria-label="secondary tabs example"
         >
-          <NativeTabItem value={0} label="Item One" />
-          <NativeTabItem value={1} label="Item Two" />
-        </TabsMain>
+          <TabItemWrapper value={0} label="Item One" />
+          <TabItemWrapper value={1} label="Item Two" />
+        </TabsWrapper>
 
         <NativeTabPanel value={value} index={0}>
           First content

@@ -15,7 +15,9 @@ module.exports = {
       ...config.resolve.alias,
       "@/components": path.resolve(__dirname, "../components"),
       "@/hooks": path.resolve(__dirname, "../hooks"),
-      "@/store": path.resolve(__dirname, "../store")
+      "@/store": path.resolve(__dirname, "../store"),
+      "@/services": path.resolve(__dirname, "../services"),
+      "@/utils": path.resolve(__dirname, "../utils")
     };
     config.resolve.modules = [
         path.resolve(__dirname, '..'), 'node_modules',

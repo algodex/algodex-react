@@ -1,13 +1,86 @@
 import { ArrowLeft, ExternalLink } from 'react-feather'
+import { BodyCopy, BodyCopyTiny, HeaderLg } from '@/components/Typography'
 import { Fragment, useCallback } from 'react'
-import { convertFromAsaUnits, numberFormatter } from 'services/convert'
 
-import { floatToFixed } from 'services/display'
+import Image from 'next/image'
+import PropTypes from 'prop-types'
+import SvgImage from '@/components/SvgImage'
+import { convertFromBaseUnits } from '@/services/convert'
+import { floatToFixed } from '@/services/display'
 import styled from 'styled-components'
-import theme from 'theme'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
+import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
-import { useUserStore } from 'store'
+import useUserStore from '@/store/use-user-state'
+import { withAssetPriceQuery } from '@/hooks/withAlgodex'
+
+const Container = styled.div`
+  flex: 1 1 0%;
+  background-color: ${({ theme }) => theme.colors.gray[900]};
+`
+
+const InfoContainer = styled.div`
+  padding: 4rem;
+  max-width: 40rem;
+`
+
+const ButtonText = styled.button`
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  display: flex;
+  align-content: center;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.gray[400]};
+  padding: 5px 0;
+
+  div {
+    line-height: 24px;
+    margin-left: 5px;
+  }
+`
+
+const HeaderContainer = styled.div`
+  padding-bottom: 2rem;
+
+  h2 {
+    > span {
+      white-space: nowrap;
+
+      svg {
+        position: relative;
+        top: -0.125rem;
+      }
+    }
+  }
+`
+
+const AssetUrl = styled.p`
+  a {
+    color: ${({ theme }) => theme.colors.gray[400]};
+    text-decoration: none;
+    transition: color 100ms;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.gray[100]};
+    }
+  }
+`
+
+const InfoList = styled.dl`
+  display: flex;
+  flex-wrap: wrap;
+`
+
+const InfoItem = styled.div`
+  flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
+  margin-bottom: 2rem;
+`
+
+const ExternalLinkIcon = styled(ExternalLink)`
+  stroke: ${({ theme }) => theme.colors.gray[500]};
+  width: 1rem;
+  height: 1rem;
+`
 
 const AlgoExplorerLink = styled.div`
   margin-top: 1.25rem;
@@ -34,7 +107,8 @@ const AlgoExplorerLink = styled.div`
     }
   }
 `
-export const AssetInfo = ({ asset, price }) => {
+export function AssetInfo({ asset }) {
+  console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -48,14 +122,7 @@ export const AssetInfo = ({ asset, price }) => {
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset,
-    options: {
-      refetchInterval: 5000,
-      enabled: price?.isTraded || false,
-      initialData: price
-    }
-  })
+
   const renderName = () => {
     if (asset.verified) {
       return (
@@ -91,7 +158,7 @@ export const AssetInfo = ({ asset, price }) => {
   return (
     <Container>
       <InfoContainer>
-        {dexAsset?.isTraded ? (
+        {asset?.price_info?.isTraded ? (
           <button onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
@@ -119,7 +186,7 @@ export const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {numberFormatter(asset.circulating)}
+              {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -127,7 +194,7 @@ export const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {numberFormatter(asset.total)}
+              {asset.total}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -147,7 +214,7 @@ export const AssetInfo = ({ asset, price }) => {
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
-          {dexAsset?.isTraded ? (
+          {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
                 <BodyCopyTiny as="dt" color="gray.500">
@@ -156,8 +223,8 @@ export const AssetInfo = ({ asset, price }) => {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromAsaUnits(dexAsset.price, asset.decimals)
-                      : dexAsset.price
+                      ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
+                      : asset?.price_info.price
                   )}{' '}
                   ALGO
                 </BodyCopy>
@@ -167,7 +234,7 @@ export const AssetInfo = ({ asset, price }) => {
                   Change
                 </BodyCopyTiny>
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-                  {dexAsset.price24Change}%
+                  {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>
             </Fragment>
@@ -190,8 +257,7 @@ export const AssetInfo = ({ asset, price }) => {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired,
-  price: PropTypes.object
+  asset: PropTypes.object.isRequired
 }
 
-export default AssetInfo
+export default withAssetPriceQuery(AssetInfo)

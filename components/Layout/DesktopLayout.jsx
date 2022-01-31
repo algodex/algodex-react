@@ -1,15 +1,16 @@
-import styled, { css } from 'styled-components'
-import { useStore, useStorePersisted } from 'store/use-store'
-
-import AssetOrderBook from 'components/Asset/OrderBook'
-import AssetTradeHistory from 'components/Asset/TradeHistory'
-import { Controls as DefaultControls } from './Controls'
-import NavSearchSidebar from 'components/Nav/SearchSidebar'
-import PlaceOrder from 'components/Wallet/PlaceOrder'
+import React from 'react'
 import PropTypes from 'prop-types'
-import Spinner from 'components/Spinner'
-import WalletConnect from 'components/Wallet/Connect/WalletConnect'
-import WalletTabs from 'components/Wallet/WalletTabs'
+import styled, { css } from 'styled-components'
+import { useStore /*, useStorePersisted */ } from '@/store/use-store'
+
+import AssetOrderBook from '@/components/Asset/OrderBook'
+import AssetTradeHistory from '@/components/Asset/TradeHistory'
+import { Controls as DefaultControls } from './Controls'
+import NavSearchSidebar from '@/components/Nav/SearchSidebar'
+// import PlaceOrder from '@/components/Wallet/PlaceOrder'
+import Spinner from '@/components/Spinner'
+import WalletConnect from '@/components/Wallet/Connect/WalletConnect'
+import WalletTabs from '@/components/Wallet/WalletTabs'
 
 const DefaultContent = styled.section`
   grid-area: content;
@@ -442,6 +443,7 @@ export function DesktopLayout({
   footerCollapsed
 }) {
   console.debug(`Desktop Render Asset: ${asset?.id || 'Missing'}`)
+
   const {
     Sidebar = NavSearchSidebar,
     Footer = WalletTabs,
@@ -450,9 +452,9 @@ export function DesktopLayout({
   } = components
 
   const isSignedIn = useStore((state) => state.isSignedIn)
-  const wallets = useStorePersisted((state) => state.wallets)
-  const address = useStorePersisted((state) => state.activeWalletAddress)
-  const wallet = wallets.find((wallet) => wallet.address === address)
+  // const wallets = useStorePersisted((state) => state.wallets)
+  // const address = useStorePersisted((state) => state.activeWalletAddress)
+  // const wallet = wallets.find((wallet) => wallet.address === address)
 
   if (!asset) {
     return <Spinner flex={true} />
@@ -490,12 +492,13 @@ export function DesktopLayout({
       >
         <AssetTradeHistory active={!controlsCollapsed} area="bottomLeft" asset={asset} />
         {isSignedIn && (
-          <PlaceOrder
-            active={!controlsCollapsed}
-            asset={asset}
-            wallet={wallet}
-            area="bottomRight"
-          />
+          <div>TODO Place Order</div>
+          // <PlaceOrder
+          //   active={!controlsCollapsed}
+          //   asset={asset}
+          //   wallet={wallet}
+          //   area="bottomRight"
+          // />
         )}
         <AssetOrderBook asset={asset} area="topLeft" />
         <WalletConnect area="topRight" />

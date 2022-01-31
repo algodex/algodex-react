@@ -2,15 +2,20 @@ import NotificationModal from 'components/Nav/NetworkHandler/NotificationModal'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
 
-const NetworkNotificationModal = ({
-  activeNetwork,
-  hasMainnetNotificationModal,
-  hasTestnetNotificationModal,
-  setHasTestnetNotificationModal,
-  setHasMainnetNotificationModal
-}) => {
+const NetworkNotificationModal = () => {
   const { t } = useTranslation('network-notification')
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
+  const hasMainnetNotificationModal = useUserStore((state) => state.hasMainnetNotificationModal)
+  const hasTestnetNotificationModal = useUserStore((state) => state.hasTestnetNotificationModal)
+  const setHasTestnetNotificationModal = useUserStore(
+    (state) => state.setHasTestnetNotificationModal
+  )
+  const setHasMainnetNotificationModal = useUserStore(
+    (state) => state.setHasMainnetNotificationModal
+  )
 
   const closeModalFn = (bool) => {
     activeNetwork === 'testnet' && setHasTestnetNotificationModal(bool)
