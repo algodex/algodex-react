@@ -28,9 +28,6 @@ export function withQuery(
 
   return withQueryWrapper
 }
-<<<<<<< HEAD
-
-=======
 /**
  * Route based on Error
  * @param isError
@@ -49,5 +46,4 @@ export const routeQueryError = ({ isError, error, router }) => {
     router.push('/restricted')
   }
 }
->>>>>>> next
 export default withQuery

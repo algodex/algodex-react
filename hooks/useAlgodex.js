@@ -35,12 +35,7 @@ export function useSearchResultsQuery({
     () => searchAssets(query),
     options
   )
-<<<<<<< HEAD
   useRouteQueryError({ isError, error, router })
-=======
-  routeQueryError({ isError, error, router })
-
->>>>>>> next
   return { data, isError, error, ...rest }
 }
 

@@ -1,8 +1,10 @@
 import axios from 'axios'
 
-const HUBSPOT_API_KEY = process.env.HUBSPOT_API_KEY // ALGODEX_HUBSPOT_API_KEY
-const HUBSPOT_PORTAL_ID = '' // ALGODEX_HUBSPOT_PORTAL_ID
-const HUBSPOT_FORM_GUID = '' // ALGODEX_HUBSPOT_FORM_GUID
+//Extract credentials into .env
+
+const HUBSPOT_API_KEY = '3382e6ff-1c9c-43f1-a622-52f60c30cce3'
+const HUBSPOT_FORM_GUID = 'f4023600-6995-433b-894a-2a1ab09dc2f6'
+const HUBSPOT_PORTAL_ID = '20146426'
 
 export default async (req, res) => {
   const { email, pageUri } = req.body
