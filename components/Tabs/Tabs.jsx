@@ -81,7 +81,7 @@ const TabItemWrapper = styled(Tab)`
   }
 `
 
-function NativeTabPanel(props) {
+function TabPanelWrapper(props) {
   const { children, value, index, ...other } = props
   return (
     <div
@@ -100,7 +100,7 @@ function NativeTabPanel(props) {
   )
 }
 
-NativeTabPanel.propTypes = {
+TabPanelWrapper.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired
@@ -157,12 +157,12 @@ export function TabsComponent() {
           <TabItemWrapper value={1} label="Item Two" />
         </TabsWrapper>
 
-        <NativeTabPanel value={value} index={0}>
+        <TabPanelWrapper value={value} index={0}>
           First content
-        </NativeTabPanel>
-        <NativeTabPanel value={value} index={1}>
+        </TabPanelWrapper>
+        <TabPanelWrapper value={value} index={1}>
           Second content
-        </NativeTabPanel>
+        </TabPanelWrapper>
       </TabsUnstyled>
     )
   }
