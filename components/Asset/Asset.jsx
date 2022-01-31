@@ -1,16 +1,17 @@
+import Image from 'next/image'
+import PropTypes from 'prop-types'
+import { Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 import { ArrowLeft, ExternalLink } from 'react-feather'
 import useTranslation from 'next-translate/useTranslation'
-import { useUserStore } from 'store'
-import { Fragment, useCallback } from 'react'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import theme from 'theme'
-import { floatToFixed } from 'services/display'
-import { convertFromBaseUnits } from 'services/convert'
-import Image from 'next/image'
-import PropTypes from 'prop-types'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/Typography'
-import SvgImage from 'components/SvgImage'
+
+import theme from '../../theme/index'
+import useUserStore from '@/store/use-user-state'
+import { floatToFixed } from '@/services/display'
+import { convertFromBaseUnits } from '@/services/convert'
+import { HeaderLg, BodyCopy, BodyCopyTiny } from '@/components/Typography'
+import SvgImage from '@/components/SvgImage'
+import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -106,7 +107,8 @@ const AlgoExplorerLink = styled.div`
     }
   }
 `
-export const AssetInfo = ({ asset, price }) => {
+export function AssetInfo({ asset }) {
+  console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -120,14 +122,7 @@ export const AssetInfo = ({ asset, price }) => {
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset,
-    options: {
-      refetchInterval: 5000,
-      enabled: price?.isTraded || false,
-      initialData: price
-    }
-  })
+
   const renderName = () => {
     if (asset.verified) {
       return (
@@ -163,7 +158,7 @@ export const AssetInfo = ({ asset, price }) => {
   return (
     <Container>
       <InfoContainer>
-        {dexAsset?.isTraded ? (
+        {asset?.price_info?.isTraded ? (
           <button onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
@@ -191,7 +186,7 @@ export const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'TODO'}
+              {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -219,7 +214,7 @@ export const AssetInfo = ({ asset, price }) => {
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
-          {dexAsset?.isTraded ? (
+          {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
                 <BodyCopyTiny as="dt" color="gray.500">
@@ -228,8 +223,8 @@ export const AssetInfo = ({ asset, price }) => {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
-                      : dexAsset.price
+                      ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
+                      : asset?.price_info.price
                   )}{' '}
                   ALGO
                 </BodyCopy>
@@ -239,7 +234,7 @@ export const AssetInfo = ({ asset, price }) => {
                   Change
                 </BodyCopyTiny>
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-                  {dexAsset.price24Change}%
+                  {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>
             </Fragment>
@@ -262,8 +257,7 @@ export const AssetInfo = ({ asset, price }) => {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired,
-  price: PropTypes.object
+  asset: PropTypes.object.isRequired
 }
 
-export default AssetInfo
+export default withAssetPriceQuery(AssetInfo)

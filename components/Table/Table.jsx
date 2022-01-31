@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useSortBy, useTable } from 'react-table'
-
-import Icon from 'components/Icon'
+import { BrightGraySpan } from '@/components/Typography'
+import Icon from '@/components/Icon'
 import InfoFlyover from './InfoFlyover'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -9,13 +9,13 @@ import { rgba } from 'polished'
 import styled from 'styled-components'
 import { usePopperTooltip } from 'react-popper-tooltip'
 
-export const SortIcon = styled(Icon)`
+const SortIcon = styled(Icon)`
   position: relative;
   top: -1px;
   margin-left: 0.25rem;
 `
 
-export const Container = styled.div`
+const Container = styled.div`
   // min-width: 600px;
   // overflow: hidden;
 
@@ -86,6 +86,11 @@ export const Container = styled.div`
 // const AbsoluteTemp = styled.div`
 //   position: absolute;
 // `
+
+export function DefaultCell({ value }) {
+  return <BrightGraySpan>{value}</BrightGraySpan>
+}
+DefaultCell.propTypes = { value: PropTypes.any }
 
 /**
  * Table Component

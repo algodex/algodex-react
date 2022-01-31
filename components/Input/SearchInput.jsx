@@ -145,8 +145,7 @@ export function SearchInput(props) {
   useEffect(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchText])
+  }, [onChange, debouncedSearchText])
 
   /**
    * This ref is forwarded to the search input

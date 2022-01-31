@@ -133,3 +133,7 @@ export const NavLabel = (props) => (
   </BaseComponent>
 )
 NavLabel.propTypes = { children }
+
+export const BrightGraySpan = styled.span`
+  color: ${({ theme }) => theme.colors.gray['000']};
+`
