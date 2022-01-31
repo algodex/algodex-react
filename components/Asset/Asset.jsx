@@ -107,7 +107,8 @@ const AlgoExplorerLink = styled.div`
     }
   }
 `
-export function AssetInfo({ asset, price: dexAsset }) {
+export function AssetInfo({ asset }) {
+  console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -157,7 +158,7 @@ export function AssetInfo({ asset, price: dexAsset }) {
   return (
     <Container>
       <InfoContainer>
-        {dexAsset?.isTraded ? (
+        {asset?.price_info?.isTraded ? (
           <button onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
@@ -185,7 +186,7 @@ export function AssetInfo({ asset, price: dexAsset }) {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'TODO'}
+              {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -213,7 +214,7 @@ export function AssetInfo({ asset, price: dexAsset }) {
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
-          {dexAsset?.isTraded ? (
+          {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
                 <BodyCopyTiny as="dt" color="gray.500">
@@ -222,8 +223,8 @@ export function AssetInfo({ asset, price: dexAsset }) {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
-                      : dexAsset.price
+                      ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
+                      : asset?.price_info.price
                   )}{' '}
                   ALGO
                 </BodyCopy>
@@ -233,7 +234,7 @@ export function AssetInfo({ asset, price: dexAsset }) {
                   Change
                 </BodyCopyTiny>
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-                  {dexAsset.price24Change}%
+                  {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>
             </Fragment>
@@ -256,8 +257,7 @@ export function AssetInfo({ asset, price: dexAsset }) {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired,
-  price: PropTypes.object
+  asset: PropTypes.object.isRequired
 }
 
 export default withAssetPriceQuery(AssetInfo)

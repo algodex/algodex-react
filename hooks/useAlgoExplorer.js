@@ -15,16 +15,16 @@ const refetchInterval = 3000
  * @returns {Object}
  * @todo: Refactor to use Algorand
  */
-export const useExplorerAssetInfo = ({ id, options }) => {
+export const useExplorerAssetInfo = ({ asset, options }) => {
   DEBUG && console.debug(`useExplorerAssetInfo(${id})`, options)
   const router = useRouter()
-
+  const { id } = asset
   const { data, isError, error, ...rest } = useQuery(
     ['explorerAsset', id],
     () => fetchExplorerAssetInfo(id),
     options
   )
-
+  console.log(data)
   useEffect(() => {
     let mounted = true
     if (mounted) {

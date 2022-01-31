@@ -1,27 +1,31 @@
 import React from 'react'
-import { OrderBook as Component, default as ComponentWithData } from './OrderBook'
+import { OrderBook as Component, default as ComponentWithData, OrderBookPrice } from './OrderBook'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { useQueryClient } from 'react-query'
+import { isUndefined } from 'lodash/lang'
 
 const assets = {
-  VOTE: { id: 48806985, decimals: 6 },
+  VOTE: { id: 48806985, decimals: 6, price_info: { price: 1, price24Change: -10 } },
   LAMP: { id: 15322902, decimals: 6 }
 }
 
 export default {
   title: '@algodex/recipes/Asset/Orderbook',
   component: Component,
-  // argTypes: {
-  //   asset: {
-  //     options: Object.keys(assets),
-  //     mapping: assets,
-  //     control: {
-  //       type: 'select'
-  //     },
-  //     defaultValue: 'VOTE'
-  //   }
-  // },
+  argTypes: {
+    asset: {
+      options: Object.keys(assets),
+      mapping: assets,
+      control: {
+        type: 'select'
+      }
+    }
+  },
   args: {
     isLive: false,
+    isCleared: false,
+    price: 1,
+    change: 20,
     asset: assets.VOTE,
     orders: {
       sell: [
@@ -55,7 +59,7 @@ export default {
       ]
     }
   },
-  parameters: { layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen', controls: { exclude: ['orders'] } },
   decorators: [
     (Story) => (
       <div
@@ -71,11 +75,21 @@ export default {
     )
   ]
 }
-//eslint-disable-next-line
-export const Orderbook = ({ asset, orders, isLive }) => (
-  <>
-    {!isLive && <Component asset={asset} orders={orders} />}
-    {isLive && <ComponentWithData asset={asset} />}
-    {isLive && <ReactQueryDevtools initialIsOpen={false} />}
-  </>
-)
+/* eslint-disable react/prop-types */
+export const Orderbook = ({ asset, price, change, orders, isLive, isCleared }) => {
+  const queryClient = useQueryClient()
+  if (isCleared) queryClient.clear()
+  if (!isLive && !isUndefined(asset.price_info)) {
+    asset.price_info.price = price
+    asset.price_info.price24Change = change
+  }
+  return (
+    <>
+      {!isLive && (
+        <Component asset={asset} orders={orders} components={{ PriceDisplay: OrderBookPrice }} />
+      )}
+      {isLive && <ComponentWithData asset={asset} />}
+      {isLive && <ReactQueryDevtools initialIsOpen={false} />}
+    </>
+  )
+}

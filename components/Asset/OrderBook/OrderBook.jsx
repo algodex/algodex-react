@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import useStore from 'store/use-store'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import PropTypes from 'prop-types'
@@ -14,9 +15,10 @@ import { Section } from '@/components/Layout/Section'
 import { floatToFixed } from '@/services/display'
 import { convertFromAsaUnits } from '@/services/convert'
 
-import { withAssetOrderbookQuery } from '@/hooks/withAlgodex'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import { withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks/withAlgodex'
 import { useEventDispatch } from '@/hooks/useEvents'
+import ServiceError from '@/components/ServiceError'
+import { isUndefined } from 'lodash/lang'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
@@ -65,7 +67,7 @@ const Arrow = styled.div`
 const PairSlash = styled.span`
   letter-spacing: 0.125rem;
 `
-function FirstOrderMsg(props) {
+export function FirstOrderMsg(props) {
   const { asset, isSignedIn } = props
 
   const renderMessage = () => {
@@ -244,49 +246,75 @@ const Price = styled.p`
 
 /**
  * @param price
- * @param decimals
- * @param change
  * @returns {JSX.Element}
  * @constructor
  */
-function OrderBookPrice({ price, decimals, change }) {
-  const isDecrease = change < 0
+export function OrderBookPrice({ asset }) {
+  console.log(`OrderBookPrice(`, arguments[0], `)`)
+  const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
-  const renderPrice = () => {
-    if (!price) {
-      return '--'
-    }
-
-    return floatToFixed(decimals !== 6 ? convertFromAsaUnits(price, decimals) : price)
+  function NoPriceInfo() {
+    return (
+      <Fragment>
+        --
+        <BodyCopySm as="span">0.00%</BodyCopySm>
+      </Fragment>
+    )
   }
 
-  const renderChange = () => {
-    if (!change) {
-      return <BodyCopySm as="span">0.00%</BodyCopySm>
-    }
-    return <BodyCopySm as="span">{`${floatToFixed(change, 2)}%`}</BodyCopySm>
+  function PriceInfo() {
+    return (
+      <Fragment>
+        {floatToFixed(
+          asset.decimals !== 6
+            ? convertFromAsaUnits(asset.price_info.price, asset.decimals)
+            : asset.price_info.price
+        )}
+        <BodyCopySm as="span">{`${floatToFixed(asset.price_info.price24Change, 2)}%`}</BodyCopySm>
+      </Fragment>
+    )
   }
-
   return (
     <Price color={color} data-testid="order-book-price">
-      {isDecrease ? <ArrowDown data-testid="arrow-down" /> : <ArrowUp data-testid="arrow-up" />}
-      {renderPrice()}
-      {renderChange()}
+      {!isUndefined(asset.price_info) && isDecrease ? (
+        <ArrowDown data-testid="arrow-down" />
+      ) : (
+        <ArrowUp data-testid="arrow-up" />
+      )}
+      {isUndefined(asset.price_info) ? (
+        <NoPriceInfo />
+      ) : (
+        <PriceInfo price_info={asset.price_info} />
+      )}
     </Price>
   )
 }
 
 OrderBookPrice.propTypes = {
-  price: PropTypes.number,
-  change: PropTypes.number,
-  decimals: PropTypes.number
+  asset: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    decimals: PropTypes.number.isRequired,
+    price_info: PropTypes.shape({
+      price: PropTypes.number.isRequired,
+      price24Change: PropTypes.number.isRequired
+    })
+  }).isRequired
 }
 
 OrderBookPrice.defaultProps = {
-  decimals: 3
+  asset: {
+    price24Change: 0,
+    price: false
+  }
 }
 
+const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
+  components: {
+    Loading: OrderBookPrice,
+    ServiceError: ServiceError
+  }
+})
 /**
  * Recipe: Orderbook Component
  *
@@ -298,17 +326,13 @@ OrderBookPrice.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBook({ asset, orders }) {
+export function OrderBook({ asset, orders, components }) {
+  console.log(`OrderBook(`, arguments[0], `)`)
+  const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
   const dispatcher = useEventDispatch()
-  const {
-    data: { price: dexAsset },
-    isLoading
-  } = useAssetPriceQuery({
-    asset
-  })
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -387,14 +411,7 @@ export function OrderBook({ asset, orders }) {
         </SellOrders>
 
         <CurrentPrice>
-          {isLoading && <OrderBookPrice price={false} decimals={6} change={0} />}
-          {!isLoading && (
-            <OrderBookPrice
-              price={dexAsset.price}
-              decimals={decimals}
-              change={dexAsset.price24Change}
-            />
-          )}
+          <PriceDisplay asset={asset} />
         </CurrentPrice>
 
         <BuyOrders>
@@ -434,11 +451,17 @@ OrderBook.propTypes = {
         total: PropTypes.number.isRequired
       })
     )
-  })
+  }),
+  components: {
+    PriceDisplay: PropTypes.elementType.isRequired
+  }
 }
 
 OrderBook.defaultProps = {
-  orders: { sell: [], buy: [] }
+  orders: { sell: [], buy: [] },
+  components: {
+    PriceDisplay: DefaultOrderBookPrice
+  }
 }
 
 export default withAssetOrderbookQuery(OrderBook)

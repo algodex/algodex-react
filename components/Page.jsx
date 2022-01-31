@@ -69,7 +69,7 @@ const Page = ({
   }
 
   const { data, isLoading } = useExplorerAssetInfo({
-    id: query.id || explorerAsset?.id,
+    asset: { id: query.id || explorerAsset?.id },
     options
   })
 

@@ -74,19 +74,26 @@ export function useSearchResultsQuery({
  * @returns {object} Massaged Query
  */
 export function useAssetPriceQuery({
-  asset,
+  asset: algorandAsset,
   options = {
     refetchInterval
   }
 } = {}) {
-  const { id } = asset
+  console.log(`useAssetPriceQuery(`, arguments[0], `)`)
+  const { id } = algorandAsset
   const { data: dexAsset, ...rest } = useQuery(
     ['assetPrice', { id }],
     () => fetchAssetPrice(id),
     options
   )
+  const asset = useMemo(() => {
+    return {
+      ...algorandAsset,
+      price_info: dexAsset
+    }
+  }, [algorandAsset, dexAsset])
 
-  return { data: { price: dexAsset }, ...rest }
+  return { data: { asset }, ...rest }
 }
 
 function mapPriceData(data) {
