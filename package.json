@@ -23,17 +23,8 @@
     "cypress": "cypress open",
     "cypress-run": "cypress run",
     "chromatic": "npx chromatic --project-token=ef5af38aec3a",
-    "translate": "node bin/translate.js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "./**/*.{js,jsx}": [
-      "eslint --fix"
-    ]
+    "translate": "node bin/translate.js",
+    "prepare": "husky install"
   },
   "resolutions": {
     "styled-components": "^5"
@@ -121,7 +112,8 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-storybook": "^0.5.6",
-    "husky": "^6.0.0",
+    "gitmoji-cli": "^4.7.0",
+    "husky": "^7.0.0",
     "hygen-cra": "^1.0.0",
     "jest": "^27.0.1",
     "jest-coverage-badges": "^1.1.2",
