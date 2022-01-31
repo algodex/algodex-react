@@ -9,40 +9,46 @@ const getDefaultAsset = () => {
   // Default to LAMP (available on Testnet only)
   return process.env.NEXT_PUBLIC_DEFAULT_ASSET || 15322902
 }
+
+const PUBLIC_API = process.env.NEXT_PUBLIC_API
+
+if (typeof PUBLIC_API === 'undefined') throw new Error('Must have Public API!')
+
 const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
 const nextPWA = require('next-pwa')
-const withMDX = require('@next/mdx')({
-  extension: /\.(md|mdx)$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: []
-  }
-})
+
 const moduleExports = nextPWA(
-  nextTranslate(
-    withMDX({
-      pageExtensions: ['js', 'jsx', 'md', 'mdx'],
-      pwa: {
-        dest: 'public',
-        disable: process.env.NODE_ENV === 'development'
-      },
-      async redirects() {
-        return [
+  nextTranslate({
+    pwa: {
+      dest: 'public',
+      disable: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+    },
+    async rewrites() {
+      return {
+        beforeFiles: [
           {
-            source: '/',
-            destination: '/trade/' + defaultAsset,
-            permanent: true
-          },
-          {
-            source: '/trade',
-            destination: '/trade/' + defaultAsset,
-            permanent: true
+            source: '/algodex-backend/:path*',
+            destination: `${PUBLIC_API}/algodex-backend/:path*`
           }
         ]
       }
-    })
-  )
+    },
+    async redirects() {
+      return [
+        {
+          source: '/',
+          destination: '/trade/' + defaultAsset,
+          permanent: true
+        },
+        {
+          source: '/trade',
+          destination: '/trade/' + defaultAsset,
+          permanent: true
+        }
+      ]
+    }
+  })
 )
 
 const SentryWebpackPluginOptions = {
@@ -59,5 +65,8 @@ const SentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions)
-// module.exports = moduleExports
+if (!process.env.DISABLE_SENTRY) {
+  module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions)
+} else {
+  module.exports = moduleExports
+}

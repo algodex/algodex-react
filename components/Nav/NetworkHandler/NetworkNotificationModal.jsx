@@ -2,15 +2,20 @@ import NotificationModal from 'components/Nav/NetworkHandler/NotificationModal'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import { useUserStore } from '../../store'
 
-const NetworkNotificationModal = ({
-  activeNetwork,
-  hasMainnetNotificationModal,
-  hasTestnetNotificationModal,
-  setHasTestnetNotificationModal,
-  setHasMainnetNotificationModal
-}) => {
+const NetworkNotificationModal = () => {
   const { t } = useTranslation('network-notification')
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
+  const hasMainnetNotificationModal = useUserStore((state) => state.hasMainnetNotificationModal)
+  const hasTestnetNotificationModal = useUserStore((state) => state.hasTestnetNotificationModal)
+  const setHasTestnetNotificationModal = useUserStore(
+    (state) => state.setHasTestnetNotificationModal
+  )
+  const setHasMainnetNotificationModal = useUserStore(
+    (state) => state.setHasMainnetNotificationModal
+  )
 
   const closeModalFn = (bool) => {
     activeNetwork === 'testnet' && setHasTestnetNotificationModal(bool)
@@ -24,9 +29,9 @@ const NetworkNotificationModal = ({
         subTitle: t('modal-subtitle-mainnet'),
         paragraphone: t('modal-first-paragraph-mainnet'),
         paragraphTwo: t('modal-second-paragraph-mainnet'),
-        linkTextOne: t('modal-disclaimer'),
+        linkTextOne: t('modal-terms'),
         linkTextTwo: t('modal-documentation'),
-        linkAddressOne: 'https://about.algodex.com/disclaimers/',
+        linkAddressOne: '/algodex_tos.pdf',
         linkAddressTwo: 'https://about.algodex.com/docs/',
         button: t('modal-cta')
       }
@@ -39,8 +44,8 @@ const NetworkNotificationModal = ({
         paragraphTwo: t('modal-second-paragraph-testnet'),
         linkTextOne: t('modal-faucet'),
         linkTextTwo: t('modal-documentation'),
-        linkAddressOne: 'https://about.algodex.com/docs/',
-        linkAddressTwo: 'https://about.algodex.com/docs/',
+        linkAddressOne: 'https://bank.testnet.algorand.network/',
+        linkAddressTwo: '/docs/',
         button: t('modal-cta')
       }
     }

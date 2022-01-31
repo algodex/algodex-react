@@ -1,12 +1,13 @@
 module.exports = {
-  setupFilesAfterEnv: ['./jest.setup.js'],
+  globalSetup: './jest.setup.js',
+  setupFilesAfterEnv: ['./jest.setup.after-env.js'],
   moduleDirectories: ['node_modules', '<rootDir>'],
   testEnvironment: 'jsdom',
   collectCoverage: true,
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 10
+      branches: 5
     }
   },
   collectCoverageFrom: [

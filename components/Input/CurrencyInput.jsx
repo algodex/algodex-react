@@ -19,6 +19,12 @@ const Input = styled.input`
     border-color: ${({ theme }) => theme.colors.gray['400']};
   }
 
+  &:disabled {
+    outline: 0;
+    border-color: transparent;
+    background-color: ${({ theme }) => theme.colors.gray['700']};
+  }
+
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray['600']};
   }

@@ -81,6 +81,29 @@ const OrderService = {
       )
     }
 
+    // const marketPrice = order.price
+
+    if (order.execution === 'market') {
+      console.log(`Market ${order.type} order`, {
+        isSellOrder,
+        assetId,
+        address,
+        limitPrice,
+        asaAmount,
+        algoAmount
+      })
+      return algodex.executeMarketOrderAsTaker(
+        AlgodClient,
+        isSellOrder,
+        assetId,
+        address,
+        limitPrice,
+        asaAmount,
+        algoAmount,
+        allOrderBookOrders
+      )
+    }
+
     // order.execution === 'both' (default)
 
     console.log(`Maker/Taker ${order.type} order`, {

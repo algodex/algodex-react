@@ -7,9 +7,10 @@ import {
   NavTextLg,
   NavTextSm,
   Navigation,
-  NetworkDropdown
+  NetworkDropdown,
+  NetworkDropdownOption
 } from './header.css'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 import NavActiveLink from 'components/Nav/ActiveLink'
 import Hamburger from 'components/Button/Hamburger'
@@ -18,9 +19,13 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
-import { withRouter } from 'next/router'
 
-export function Header({ router }) {
+const ENABLE_NETWORK_SELECTION =
+  process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
+const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
+const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
+
+export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
@@ -29,15 +34,16 @@ export function Header({ router }) {
    * Route to other network
    * @type {(function(*): void)|*}
    */
-  const handleNetworkChangeFn = useCallback(
-    (value) => {
-      if (activeNetwork !== value) {
-        // This can also be window.location =
-        router.push(window.location.href.replace(activeNetwork, value))
-      }
-    },
-    [router, activeNetwork]
-  )
+  const handleNetworkChangeFn = (value) => {
+    if (!ENABLE_NETWORK_SELECTION) {
+      return
+    }
+    if (value === 'mainnet') {
+      window.location = MAINNET_LINK
+    } else {
+      window.location = TESTNET_LINK
+    }
+  }
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -53,10 +59,12 @@ export function Header({ router }) {
         value={activeNetwork}
         onChange={(e) => handleNetworkChangeFn(e.target.value)}
       >
-        <option value="testnet">TESTNET</option>
-        <option disabled value="mainnet">
+        <NetworkDropdownOption value="testnet" enableLinks={ENABLE_NETWORK_SELECTION}>
+          TESTNET
+        </NetworkDropdownOption>
+        <NetworkDropdownOption value="mainnet" enableLinks={ENABLE_NETWORK_SELECTION}>
           MAINNET
-        </option>
+        </NetworkDropdownOption>
       </NetworkDropdown>
       <Navigation>
         <NavActiveLink href="/about" matches={/^\/about/}>
@@ -137,4 +145,4 @@ Header.propTypes = {
   router: PropTypes.object
 }
 
-export default withRouter(Header)
+export default Header

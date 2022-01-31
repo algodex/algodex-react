@@ -1,5 +1,6 @@
 module.exports = {
   env: {
+    'cypress/globals': true,
     browser: true,
     amd: true,
     node: true,
@@ -20,7 +21,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: ['react'],
+  plugins: ['react', 'cypress'],
   settings: {
     react: {
       version: 'detect'
