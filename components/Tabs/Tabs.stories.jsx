@@ -1,4 +1,4 @@
-import { Tabs as Component } from './Tabs'
+import { TabsComponent as Component } from './Tabs'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -13,7 +13,7 @@ const Container = styled.div`
   margin: 0;
 `
 export default {
-  title: '@algodex/components/Tabs/Tabs',
+  title: '@algodex/components/Tabs/TabsComponent',
   component: Component,
   parameters: { layout: 'fullscreen' },
   decorators: [

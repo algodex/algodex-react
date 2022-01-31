@@ -1,56 +1,46 @@
-import * as React from 'react'
-
 import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled'
 
+import Box from '@mui/material/Box'
+import PropTypes from 'prop-types'
+import Tab from '@mui/material/Tab'
 import TabPanelUnstyled from '@mui/base/TabPanelUnstyled'
+import Tabs from '@mui/material/Tabs'
 import TabsListUnstyled from '@mui/base/TabsListUnstyled'
 import TabsUnstyled from '@mui/base/TabsUnstyled'
+import Typography from '@mui/material/Typography'
 import { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled'
+import { lighten } from 'polished'
 import { styled } from '@mui/system'
 import theme from '../../theme'
+import { useState } from 'react'
 
-const blue = {
-  50: '#F0F7FF',
-  100: '#C2E0FF',
-  200: '#80BFFF',
-  300: '#66B2FF',
-  400: '#3399FF',
-  500: '#007FFF',
-  600: '#0072E5',
-  700: '#0059B2',
-  800: '#004C99',
-  900: '#003A75'
-}
-
-const Tab = styled(TabUnstyled)`
-  font-family: IBM Plex Sans, sans-serif;
+const TabBtnItem = styled(TabUnstyled)`
   color: white;
   cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: bold;
-  // background-color: transparent;
-  background-color: ${theme.colors.gray['700']};
   width: 100%;
-  padding: 12px 16px;
-  margin: 6px 0px;
-  border: none;
   border-radius: 0px;
   display: flex;
   justify-content: center;
 
-  &:hover {
-    background-color: ${blue[400]};
+  &.first-item {
+    &:hover {
+      background-color: ${lighten(0.05, theme.colors.gray['700'])};
+      border-top-left-radius: 7px;
+      border-bottom-left-radius: 7px;
+    }
+  }
+  &.last-item {
+    &:hover {
+      background-color: ${lighten(0.05, theme.colors.gray['700'])};
+      border-top-right-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
   }
 
   &:focus {
-    color: #fff;
-    outline: 2px solid ${blue[200]};
-    outline-offset: 2px;
+    // color: #fff;
   }
-
   &.${tabUnstyledClasses.selected} {
-    background-color: ${blue[50]};
-    color: ${blue[600]};
   }
 
   &.${buttonUnstyledClasses.disabled} {
@@ -60,41 +50,130 @@ const Tab = styled(TabUnstyled)`
 `
 
 const TabPanel = styled(TabPanelUnstyled)`
-  width: 100%;
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
+  // width: 100%;
 `
-// background-color: ${blue[500]};
 const TabsList = styled(TabsListUnstyled)`
   min-width: 320px;
-
-  border-radius: 3px;
+  background-color: ${theme.colors.gray['700']};
+  border-radius: 7px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   align-content: space-between;
-  & :first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+`
+
+const TabsMain = styled(Tabs)`
+  .MuiTabs-indicator {
+    height: 5px;
+    background-color: white;
   }
-  & :last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+  .MuiTab-textColorPrimary {
+    color: ${theme.colors.gray['600']};
+    &:hover {
+      color: ${theme.colors.gray['400']};
+    }
+  }
+`
+const NativeTabItem = styled(Tab)`
+  &.${tabUnstyledClasses.selected} {
+    color: #fff;
   }
 `
 
-export function Tabs() {
+export function TabsComponent() {
+  const [value, setValue] = useState(0)
+  const [type, setType] = useState('native')
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
+  const renderButtonTab = () => {
+    return (
+      <TabsUnstyled defaultValue={0} onChange={handleChange}>
+        <TabsList value={value}>
+          <TabBtnItem className="first-item">
+            <div
+              className={`py-3 py-4 w-full ${
+                value === 0 && 'bg-red-700 hover:bg-red-500 rounded-l-lg'
+              }`}
+            >
+              Buy
+            </div>
+          </TabBtnItem>
+          <TabBtnItem className="last-item">
+            <div
+              className={`py-3 py-4 w-full ${
+                value === 1 && 'bg-green-600 rounded-r-lg hover:bg-green-500'
+              }`}
+            >
+              Sell
+            </div>
+          </TabBtnItem>
+        </TabsList>
+        <TabPanel value={0}>First content</TabPanel>
+        <TabPanel value={1}>Second content</TabPanel>
+      </TabsUnstyled>
+    )
+  }
+
+  function NativeTabPanel(props) {
+    const { children, value, index, ...other } = props
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    )
+  }
+
+  NativeTabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired
+  }
+
+  const renderNativeTab = () => {
+    return (
+      <TabsUnstyled defaultValue={0} sx={{ width: '100%' }}>
+        <TabsMain
+          style={{ marginBottom: '16px', borderBottom: 'solid 1px' }}
+          value={value}
+          textColor="primary"
+          onChange={handleChange}
+          aria-label="secondary tabs example"
+        >
+          <NativeTabItem value={0} label="Item One" />
+          <NativeTabItem value={1} label="Item Two" />
+        </TabsMain>
+
+        <NativeTabPanel value={value} index={0}>
+          First content
+        </NativeTabPanel>
+        <NativeTabPanel value={value} index={1}>
+          Second content
+        </NativeTabPanel>
+      </TabsUnstyled>
+    )
+  }
+
   return (
-    <TabsUnstyled defaultValue={0}>
-      <TabsList>
-        <Tab>Buy</Tab>
-        <Tab>Sell</Tab>
-      </TabsList>
-      <TabPanel value={0}>First content</TabPanel>
-      <TabPanel value={1}>Second content</TabPanel>
-    </TabsUnstyled>
+    <>
+      {type === 'button' && renderButtonTab()}
+      {type === 'native' && renderNativeTab()}
+    </>
   )
 }
 
-export default Tabs
+export default TabsComponent
