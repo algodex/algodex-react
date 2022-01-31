@@ -24,8 +24,8 @@ export function withQuery(Component, { hook = useQuery, components }) {
   const { Loading, ServiceError } = components
   function withQueryWrapper(props) {
     const { isSuccess, isLoading, isError, data, error } = hook(props)
-    if (isSuccess) return <Component {...data} {...props} />
-    if (isLoading) return <Loading flex />
+    if (isSuccess) return <Component {...props} {...data} />
+    if (isLoading) return <Loading {...props} />
     if (isError) return <ServiceError message={error.message} />
   }
 
