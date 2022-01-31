@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import theme, { parseThemeColor } from 'theme'
+import theme from 'theme'
 import * as Icons from 'react-feather'
 import { has } from 'lodash/object'
-import {isNumber} from "lodash";
+import { isNumber } from 'lodash'
 
 export const ICONS = {
   wallet: {
@@ -54,7 +54,7 @@ function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
 function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
-function getColor({ theme, color = 'gray', gradient = 900 }){
+function getColor({ theme, color = 'gray', gradient = 900 }) {
   return theme.colors[color][gradient]
 }
 
