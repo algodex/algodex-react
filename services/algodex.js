@@ -8,9 +8,11 @@
  * @copyright Algodev Inc
  */
 
+import Router from 'next/router'
 import axios from 'axios'
+
 // TODO: Implement getLogger() from '@algodex/common'
-const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
 export const PUBLIC_API = process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com'
 
@@ -41,12 +43,19 @@ async function getEtagResponse(url) {
     urlToLastResp = {}
   }
 
-  let headers = {}
-
+  const authToken = process.env.GEO_PASSWORD
+  const authHeader = `Bearer ${authToken}`
+  let headers = { headers: {} }
   if (urlToEtag[url]) {
-    headers = { headers: { 'if-none-match': urlToEtag[url] } }
+    headers.headers = { 'if-none-match': urlToEtag[url] }
   }
 
+  if (typeof authToken !== 'undefined' && typeof window === 'undefined') {
+    headers.headers.Authorization = authHeader
+  }
+
+  DEBUG && console.debug({ headers })
+  DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, headers)
     .then((res) => {
@@ -63,6 +72,10 @@ async function getEtagResponse(url) {
       const errorResp = error.response
       if (errorResp && errorResp.status === 304) {
         return urlToLastResp[url]
+      } else if (error && !errorResp) {
+        console.debug('preflight failing?')
+      } else if (errorResp && errorResp.status === 451) {
+        console.debug('Error 451!')
       } else {
         throw new Error(`Invalid response: ${error.message}`)
       }

@@ -13,27 +13,53 @@ const WalletService = {
       return {}
     }
 
-    try {
-      const algodex_environment = getAlgodexEnvironment()
-      const AlgodClient = new algodex.initAlgodClient(algodex_environment)
+    const algodex_environment = getAlgodexEnvironment()
+    algodex.initIndexer(algodex_environment)
 
-      const promises = addresses.map(async (address) => {
-        const accountInfo = await AlgodClient.accountInformation(address).do()
-
-        return WalletService.setWalletData(accountInfo)
-      })
-
-      const wallets = await Promise.all(promises)
-
+    const getEmptyAccountInfo = (address) => {
       return {
-        wallets
+        address: address,
+        amount: 0,
+        'amount-without-pending-rewards': 0,
+        'apps-local-state': [],
+        'apps-total-schema': { 'num-byte-slice': 0, 'num-uint': 0 },
+        assets: [],
+        'created-apps': [],
+        'created-assets': [],
+        'pending-rewards': 0,
+        'reward-base': 0,
+        rewards: 0,
+        round: -1,
+        status: 'Offline'
       }
-    } catch (e) {
-      console.error(e)
+    }
+
+    const promises = addresses.map(async (address) => {
+      try {
+        const accountInfo = await algodex.getAccountInfo(address)
+        if (accountInfo) {
+          return WalletService.setWalletData(accountInfo)
+        } else {
+          const emptyAccountInfo = getEmptyAccountInfo(address)
+          return WalletService.setWalletData(emptyAccountInfo)
+        }
+      } catch (e) {
+        const emptyAccountInfo = getEmptyAccountInfo(address)
+        return WalletService.setWalletData(emptyAccountInfo)
+      }
+    })
+
+    const wallets = await Promise.all(promises)
+
+    return {
+      wallets
     }
   },
 
   setWalletData: (accountInfo) => {
+    if (accountInfo.assets === undefined) {
+      accountInfo.assets = []
+    }
     return {
       address: accountInfo.address,
       name: truncateAddress(accountInfo.address),
