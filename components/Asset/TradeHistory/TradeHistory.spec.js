@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'test/test-utils'
-import { TradeHistoryView } from './TradeHistory'
+import { TradeHistory } from './TradeHistory'
 
 const HISTORY_ROW = 'trade-history-row'
 
@@ -8,7 +8,7 @@ describe('Trade History', () => {
   const asset = { id: 123, name: 'YLDY', decimals: 6 }
 
   it('should not show rows if no data is provided', () => {
-    const { queryByTestId } = render(<TradeHistoryView asset={asset} tradesData={[]} />)
+    const { queryByTestId } = render(<TradeHistory asset={asset} orders={[]} />)
 
     expect(queryByTestId(HISTORY_ROW)).toBeNull()
   })
@@ -18,7 +18,7 @@ describe('Trade History', () => {
       { id: 1, type: 'buyASA', price: 1.0, amount: 123, timestamp: 1623600112000 }
     ]
 
-    const { queryByTestId } = render(<TradeHistoryView asset={asset} tradesData={tradesData} />)
+    const { queryByTestId } = render(<TradeHistory asset={asset} orders={tradesData} />)
 
     expect(queryByTestId(HISTORY_ROW)).not.toBeNull()
   })
