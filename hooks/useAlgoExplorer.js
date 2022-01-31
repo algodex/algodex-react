@@ -16,7 +16,7 @@ const refetchInterval = 3000
  * @todo: Refactor to use Algorand
  */
 export const useExplorerAssetInfo = ({ asset, options }) => {
-  DEBUG && console.debug(`useExplorerAssetInfo(${id})`, options)
+  DEBUG && console.debug(`useExplorerAssetInfo`)
   const router = useRouter()
   const { id } = asset
   const { data, isError, error, ...rest } = useQuery(
