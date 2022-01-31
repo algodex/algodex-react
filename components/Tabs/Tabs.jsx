@@ -69,13 +69,13 @@ const TabsMain = styled(Tabs)`
     background-color: white;
   }
   .MuiTab-textColorPrimary {
-    color: ${theme.colors.gray['600']};
     &:hover {
-      color: ${theme.colors.gray['400']};
+      color: #fff;
     }
   }
 `
 const NativeTabItem = styled(Tab)`
+  color: ${theme.colors.gray['500']};
   &.${tabUnstyledClasses.selected} {
     color: #fff;
   }
