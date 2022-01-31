@@ -9,12 +9,12 @@ import useUserStore from 'store/use-user-state'
  */
 export const useRouteQueryError = ({ isError, error, router }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
+
   if (isError && error.message.match(404)) {
     router.push('/404')
   } else if (isError && error.message.match(500)) {
     // Do nothing. The component will handle this.
-  } else if (isError && activeNetwork === 'mainnet') {
-    // router.push('/500')
+  } else if (isError && error.message.match(451) && activeNetwork === 'mainnet') {
     console.error({ error })
     router.push('/restricted')
   }

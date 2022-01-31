@@ -79,10 +79,6 @@ async function getEtagResponse(url) {
       const errorResp = error.response
       if (errorResp && errorResp.status === 304) {
         return urlToLastResp[url]
-      } else if (error && !errorResp) {
-        console.debug('preflight failing?')
-      } else if (errorResp && errorResp.status === 451) {
-        console.debug('Error 451!')
       } else {
         throw new Error(`Invalid response: ${error.message}`)
       }
