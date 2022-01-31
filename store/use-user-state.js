@@ -21,7 +21,7 @@ const userState = (set, get) => ({
    * @true when Mainnet notification ribbon is visible
    * @false when Mainnet notification ribbon is hidden
    */
-  hasMainnetRibbon: true,
+  hasMainnetRibbon: null,
   setHasMainnetRibbon: (bool) => {
     const check = get().hasMainnetRibbon
     if (bool !== check) {
@@ -35,10 +35,11 @@ const userState = (set, get) => ({
    * @true when Testnet notification ribbon is visible
    * @false when Testnet notification ribbon is hidden
    */
-  hasTestnetRibbon: true,
+  hasTestnetRibbon: null,
   setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
 
   /**
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
    * Current network user is trading on.
@@ -59,12 +60,14 @@ const userState = (set, get) => ({
 
   /**
 >>>>>>> next
+=======
+>>>>>>> next
    * Modal notification for Mainnet.
    *
    * @true when Mainnet notification modal is visible
    * @false when Mainnet notification modal is hidden
    */
-  hasMainnetNotificationModal: true,
+  hasMainnetNotificationModal: null,
   setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
 
   /**
@@ -73,7 +76,7 @@ const userState = (set, get) => ({
    * @true when Testnet notification modal is visible
    * @false when Testnet notification modal is hidden
    */
-  hasTestnetNotificationModal: true,
+  hasTestnetNotificationModal: null,
   setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
 
   /**

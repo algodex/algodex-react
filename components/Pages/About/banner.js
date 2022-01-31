@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { BannerWrapper } from './styles.css'
 import Link from 'next/link'
+<<<<<<< HEAD:components/about-assets/banner.js
 import { Container } from 'components/about-assets/styles.css'
 import useAxios from 'axios-hooks'
+=======
+import { Container } from 'components/About/styles.css'
+>>>>>>> next:components/Pages/About/banner.js
 
 export const AboutBanner = () => {
   const [email, setEmail] = useState('')

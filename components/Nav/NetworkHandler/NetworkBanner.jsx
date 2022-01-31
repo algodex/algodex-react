@@ -2,7 +2,7 @@ import Icon from '@mdi/react'
 import { mdiWindowClose } from '@mdi/js'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
-import { useUserStore } from '../../store'
+import useUserStore from '@/store/use-user-state'
 
 const NetworkBanner = () => {
   const { t } = useTranslation('network-notification')

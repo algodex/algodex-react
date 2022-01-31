@@ -1,18 +1,13 @@
-import Error from 'components/Error'
-import Spinner from 'components/Spinner'
-import millify from 'millify'
 import PropTypes from 'prop-types'
-import { useMemo, useRef, useState } from 'react'
-import useStore, { getChartTimeInterval } from 'store/use-store'
-import { useAssetChartQuery, useAssetOrdersQuery } from 'hooks/useAlgodex'
-import useAreaChart from 'hooks/use-area-chart'
-import useCandleChart from 'hooks/use-candle-chart'
-import ReactDOM from 'react-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { withAssetChartQuery } from '@/hooks/withAlgodex'
+import useAreaChart from '@/hooks/use-area-chart'
+import useCandleChart from '@/hooks/use-candle-chart'
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
-import { floatToFixed } from 'services/display'
-import Big from 'big.js'
 import styled from 'styled-components'
+import millify from 'millify'
+import * as ReactDOM from 'react-dom'
 
 const Container = styled.div`
   position: relative;
@@ -63,62 +58,6 @@ const SettingsContainer = styled.div`
     height: 2.75rem;
   }
 `
-const mapPriceData = (data) => {
-  const prices =
-    data?.chart_data.map(
-      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
-        const time = parseInt(unixTime)
-        return {
-          time: time,
-          open: floatToFixed(formatted_open),
-          high: floatToFixed(formatted_high),
-          low: floatToFixed(formatted_low),
-          close: floatToFixed(formatted_close)
-        }
-      }
-    ) || []
-  return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
-}
-
-const getOhlc = (data) => {
-  const lastPriceData = data?.chart_data[0]
-
-  return lastPriceData
-    ? {
-        open: floatToFixed(lastPriceData.formatted_open),
-        high: floatToFixed(lastPriceData.formatted_high),
-        low: floatToFixed(lastPriceData.formatted_low),
-        close: floatToFixed(lastPriceData.formatted_close)
-      }
-    : {}
-}
-
-const mapVolumeData = (data, volUpColor, volDownColor) => {
-  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
-    const time = parseInt(unixTime)
-    return {
-      time: time,
-      value: asaVolume
-    }
-  })
-  const volumeColors = data?.chart_data.map(({ open, close }) =>
-    open > close ? volDownColor : volUpColor
-  )
-  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
-}
-
-const getBidAskSpread = (orderBook) => {
-  const { buyOrders, sellOrders } = orderBook
-
-  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
-  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
-
-  const bid = floatToFixed(bidPrice)
-  const ask = floatToFixed(askPrice)
-  const spread = floatToFixed(new Big(ask).minus(bid).abs())
-
-  return { bid, ask, spread }
-}
 function autoScaleProvider(original, chart, priceData) {
   let visibleRange = chart.timeScale().getVisibleRange()
   if (!visibleRange) {
@@ -155,187 +94,179 @@ function autoScaleProvider(original, chart, priceData) {
 
   return res
 }
+export function Chart({
+  asset,
+  interval: _interval,
+  mode: _mode,
+  volume,
+  ohlc,
+  overlay: _overlay,
+  onChange
+}) {
+  // console.log(`Chart(`, arguments[0], `)`)
+  const [interval, setInterval] = useState(_interval)
+  const [overlay, setOverlay] = useState(_overlay)
+  const [chartMode, setChartMode] = useState(_mode)
+  const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
 
-export function ChartView(props) {
-  const { asset, volumeData, priceData } = props
-  const [currentPrices, setCurrentPrices] = useState(props)
-  const [currentLogical, setCurrentLogical] = useState(priceData.length - 1)
+  useEffect(() => {
+    setOverlay(_overlay)
+    setCurrentLogical(ohlc.length - 1)
+  }, [ohlc, _overlay, setOverlay])
 
-  useMemo(() => {
-    setCurrentPrices(props)
-    setCurrentLogical(priceData.length - 1)
-  }, [asset, priceData, props])
+  useEffect(() => {
+    setInterval(_interval)
+  }, [_interval, setInterval])
+
+  useEffect(() => {
+    setChartMode(_mode)
+  }, [_mode, setChartMode])
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(candleChartRef, volumeData, priceData, autoScaleProvider)
-  const { areaChart } = useAreaChart(areaChartRef, priceData, autoScaleProvider)
+  const { candleChart } = useCandleChart(candleChartRef, volume, ohlc, autoScaleProvider)
+  const { areaChart } = useAreaChart(areaChartRef, ohlc, autoScaleProvider)
 
-  const chartMode = useStore((state) => state.chartMode)
-  const setChartMode = useStore((state) => state.setChartMode)
+  const onSettingsChange = useCallback(
+    (e) => {
+      if (e?.target?.name === 'mode') {
+        setChartMode(e.target.value)
 
-  const changeMode = (mode) => {
-    setChartMode(mode)
+        if (e.target.value === 'candle') {
+          const logicalRange = areaChart?.timeScale().getVisibleLogicalRange()
+          candleChart?.timeScale().setVisibleLogicalRange(logicalRange)
+        } else {
+          const logicalRange = candleChart?.timeScale().getVisibleLogicalRange()
+          areaChart?.timeScale().setVisibleLogicalRange(logicalRange)
+        }
+      } else {
+        onChange(e)
+      }
+    },
+    [setChartMode, candleChart, areaChart, onChange]
+  )
 
-    if (mode === 'candle') {
-      const logicalRange = areaChart?.timeScale().getVisibleLogicalRange()
-      candleChart?.timeScale().setVisibleLogicalRange(logicalRange)
-    } else {
-      const logicalRange = candleChart?.timeScale().getVisibleLogicalRange()
-      areaChart?.timeScale().setVisibleLogicalRange(logicalRange)
-    }
-  }
+  const updateHoverPrices = useCallback(
+    (logical) => {
+      if (ohlc == null || volume == null) {
+        return
+      }
+      const priceEntry = ohlc[logical]
+      const volumeEntry = volume[logical]
 
-  const updateHoverPrices = (logical) => {
-    if (priceData == null || volumeData == null) {
-      return
-    }
-    const priceEntry = priceData[logical]
-    const volumeEntry = volumeData[logical]
+      setOverlay({
+        ...overlay,
+        ohlc: priceEntry,
+        volume: volumeEntry != null ? millify(volumeEntry.value) : '0'
+      })
+    },
+    [ohlc, volume, setOverlay, overlay]
+  )
 
-    const prices = {
-      ...currentPrices
-    }
-    prices.ohlc = {
-      ...priceEntry
-    }
-    prices.asaVolume = volumeEntry != null ? millify(volumeEntry.value) : '0'
+  const mouseOut = useCallback(() => {
+    setOverlay(_overlay)
+  }, [setOverlay, _overlay])
 
-    setCurrentPrices(prices)
-  }
+  const mouseMove = useCallback(
+    (ev) => {
+      const chart = chartMode === 'candle' ? candleChart : areaChart
+      if (chart == null) {
+        setOverlay(_overlay)
+        return
+      }
+      // eslint-disable-next-line react/no-find-dom-node
+      const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect()
+      const x = ev.clientX - rect.left
+      const logical = candleChart.timeScale().coordinateToLogical(x)
 
-  const mouseOut = () => {
-    setCurrentPrices(props)
-  }
-  const mouseMove = (ev) => {
-    const chart = chartMode === 'candle' ? candleChart : areaChart
-    if (chart == null) {
-      setCurrentPrices(props)
-      return
-    }
+      if (logical >= ohlc.length || logical >= volume.length) {
+        setOverlay(_overlay)
+        return
+      }
 
-    /* eslint-disable */
-    const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect()
-    const x = ev.clientX - rect.left
-    const logical = candleChart.timeScale().coordinateToLogical(x)
-
-    if (logical >= priceData.length || logical >= volumeData.length) {
-      setCurrentPrices(props)
-      return
-    }
-
-    if (logical !== currentLogical) {
-      setCurrentLogical(logical)
-      updateHoverPrices(logical)
-    }
-  }
+      if (logical !== currentLogical) {
+        setCurrentLogical(logical)
+        updateHoverPrices(logical)
+      }
+    },
+    [
+      chartMode,
+      currentLogical,
+      candleChart,
+      areaChart,
+      setOverlay,
+      _overlay,
+      setCurrentLogical,
+      updateHoverPrices,
+      volume,
+      ohlc
+    ]
+  )
 
   return (
-      <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={(ev) => mouseOut(ev)}>
-        <>
-          <CandleStickChart
-              ref={candleChartRef}
-              isVisible={chartMode === 'candle'}
-              data-testid="candleStickChart"
-          />
-
-          <AreaSeriesChart
-              ref={areaChartRef}
-              isVisible={chartMode === 'area'}
-              data-testid="areaChart"
-          />
-        </>
-        <ChartOverlay
-            asset={currentPrices.asset}
-            ohlc={currentPrices.ohlc}
-            bid={currentPrices.bid}
-            ask={currentPrices.ask}
-            spread={currentPrices.spread}
-            volume={currentPrices.asaVolume}
+    <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={() => mouseOut()}>
+      {/*{!isFetched && isFetching && <Spinner flex={true}/> }*/}
+      {/*{isFetched && <>*/}
+      <>
+        <CandleStickChart
+          ref={candleChartRef}
+          isVisible={chartMode === 'candle'}
+          data-testid="candleStickChart"
         />
-        <SettingsContainer>
-          <ChartSettings chartMode={chartMode} onChartModeClick={(mode) => changeMode(mode)} />
-        </SettingsContainer>
-      </Container>
-  )
-}
 
-ChartView.propTypes = {
-  candleChartRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any })
-  ]),
-  areaChartRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any })
-  ]),
-  asset: PropTypes.object,
-  asaVolume: PropTypes.string,
-  ohlc: PropTypes.object,
-  bid: PropTypes.string,
-  ask: PropTypes.string,
-  spread: PropTypes.string,
-  volumeData: PropTypes.array,
-  priceData: PropTypes.array
-}
+        <AreaSeriesChart
+          ref={areaChartRef}
+          isVisible={chartMode === 'area'}
+          data-testid="areaChart"
+        />
+      </>
 
-// Common
-const VOLUME_UP_COLOR = '#2fb16c2c'
-const VOLUME_DOWN_COLOR = '#e53e3e2c'
-const baseAsset = 'ALGO'
-
-function Chart({ asset, ...rest }) {
-  const { data: assetOrders } = useAssetOrdersQuery({ asset })
-
-  const orderBook = useMemo(
-      () => ({
-        buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
-        sellOrders: assetOrders?.sellASAOrdersInEscrow || []
-      }),
-      [assetOrders]
-  )
-
-  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
-  const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
-
-  const { isLoading, isError, data } = useAssetChartQuery({
-    asset,
-    chartInterval: chartTimeInterval
-  })
-
-  const priceData = useMemo(() => mapPriceData(data), [data])
-  const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
-  const ohlc = useMemo(() => getOhlc(data), [data])
-
-  const asaVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
-
-  if (isLoading) {
-    return <Spinner flex />
-  }
-
-  if (isError) {
-    return <Error message="Error loading chart" flex />
-  }
-
-  return (
-      <ChartView
-          bid={bid}
-          ask={ask}
-          baseAsset={baseAsset}
-          spread={spread}
-          asaVolume={asaVolume}
-          asset={asset}
-          ohlc={ohlc}
-          priceData={priceData}
-          volumeData={volumeData}
-          {...rest}
+      <ChartOverlay
+        asset={asset}
+        ohlc={overlay.ohlc}
+        bid={overlay.orderbook.bid}
+        ask={overlay.orderbook.ask}
+        spread={overlay.orderbook.spread}
+        volume={overlay.volume}
       />
+      <SettingsContainer>
+        <ChartSettings interval={interval} mode={chartMode} onChange={(e) => onSettingsChange(e)} />
+      </SettingsContainer>
+    </Container>
   )
 }
-
-export default Chart
 
 Chart.propTypes = {
-  asset: PropTypes.object.isRequired
+  asset: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    decimals: PropTypes.string.isRequired
+  }).isRequired,
+  interval: PropTypes.string.isRequired,
+  mode: PropTypes.string.isRequired,
+  overlay: PropTypes.shape({
+    ohlc: PropTypes.shape({
+      open: PropTypes.string.isRequired,
+      high: PropTypes.string.isRequired,
+      low: PropTypes.string.isRequired,
+      close: PropTypes.string.isRequired
+    }),
+    volume: PropTypes.string.isRequired,
+    orderbook: PropTypes.shape({
+      bid: PropTypes.string.isRequired,
+      ask: PropTypes.string.isRequired,
+      spread: PropTypes.string.isRequired
+    })
+  }),
+  ohlc: PropTypes.array.isRequired,
+  volume: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired
 }
+
+Chart.defaultProps = {
+  mode: 'candle',
+  interval: '1h'
+  // onChange: ()=>console.log('Chart Change')
+}
+
+export default withAssetChartQuery(Chart)

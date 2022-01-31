@@ -14,7 +14,6 @@ const Modal = (props) => {
       className="absolute w-full h-full justify-center items-center"
       hideBackdrop={props.hideBackdrop}
       {...props}
-      hideBackdrop={props.hideBackdrop}
     >
       {props.children}
     </ModalWrapper>

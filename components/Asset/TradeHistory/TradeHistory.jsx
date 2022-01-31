@@ -1,8 +1,5 @@
-import Spinner from 'components/Spinner'
-import Error from 'components/Error'
 import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
-import { useAssetTradeHistoryQuery } from 'hooks/useAlgodex'
 import styled from 'styled-components'
 import { rgba } from 'polished'
 import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
@@ -11,20 +8,8 @@ import Icon from 'components/Icon'
 import Big from 'big.js'
 import dayjs from 'dayjs'
 import { Section } from '@/components/Layout/Section'
-// const AssetTradeHistorySection = styled.section`
-//   display: flex;
-//   flex-direction: column;
-//   height: 100%;
-//   width: 100%;
-//
-//   // display: ${({ active }) => (active ? 'flex' : 'none')};
-//   // height: calc(100% - 50px);
-//   // @media (min-width: 996px) {
-//   //   grid-area: history;
-//   //   display: flex;
-//   //   height: inherit;
-//   // }
-// `
+import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
+
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -125,13 +110,15 @@ const PriceHeader = () => {
 }
 
 /**
- * @todo Refactor to AssetTradeHistory withAssetTradeHistoryQuery
- * @param props
+ * Asset Trade History
+ *
+ * @param {object} props Component Properties
+ * @param {object} props.asset Algorand Asset Information
+ * @param {object} props.orders Algodex Historical Orders
  * @returns {JSX.Element}
  * @constructor
  */
-export function TradeHistoryView(props) {
-  const { asset, tradesData } = props
+export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
@@ -213,42 +200,12 @@ export function TradeHistoryView(props) {
   )
 }
 
-TradeHistoryView.propTypes = {
-  asset: PropTypes.object.isRequired,
-  tradesData: PropTypes.array.isRequired
-}
-
-/**
- * @todo Move into TradeHistoryView
- * @deprecated
- * @param asset
- * @returns {JSX.Element}
- * @constructor
- */
-export default function TradeHistory({ asset }) {
-  const { status, data } = useAssetTradeHistoryQuery({ asset })
-
-  if (status === 'loading') {
-    return <Spinner flex />
-  }
-  if (status === 'error') {
-    return <Error message="Error loading trade history" flex />
-  }
-
-  const tradesData =
-    data?.transactions.map((txn) => ({
-      id: txn.PK_trade_history_id,
-      type: txn.tradeType,
-      price: floatToFixed(txn.formattedPrice),
-      amount: txn.formattedASAAmount,
-      timestamp: txn.unix_time * 1000
-    })) || []
-
-  if (!asset?.id) {
-    return <Spinner flex />
-  }
-  return <TradeHistoryView asset={asset} tradesData={tradesData} />
-}
 TradeHistory.propTypes = {
-  asset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired,
+  orders: PropTypes.array.isRequired
 }
+
+TradeHistory.defalutProps = {
+  orders: []
+}
+export default withAssetTradeHistoryQuery(TradeHistory)

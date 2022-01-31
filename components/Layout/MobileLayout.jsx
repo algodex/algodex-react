@@ -1,21 +1,19 @@
-import { useState } from 'react'
-import styled from 'styled-components'
-
-import AssetOrderBook from 'components/Asset/OrderBook'
-// import AssetTradeHistory from 'components/Asset/TradeHistory'
-import Button from 'components/Button'
-import NavSearchSidebar from 'components/Nav/SearchSidebar'
-// import PlaceOrder from '@/components/Wallet/PlaceOrder'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Spinner from 'components/Spinner'
-import WalletConnect from '@/components/Wallet/Connect/WalletConnect'
-// import WalletTabs from 'components/Wallet/WalletTabs'
-import { useEvent } from 'hooks/useEvents'
+import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
+
+import AssetOrderBook from '@/components/Asset/OrderBook'
+// import AssetTradeHistory from 'components/Asset/TradeHistory'
+import Button from '@/components/Button'
+import NavSearchSidebar from '@/components/Nav/SearchSidebar'
+
+import { useEvent } from '@/hooks/useEvents'
+import useStore, { useStorePersisted } from '@/store/use-store'
+import Spinner from '@/components/Spinner'
+import WalletConnect from '@/components/Wallet/Connect/WalletConnect'
 import { Section } from '@/components/Layout/Section'
-// import PlaceOrder from '@/components/Wallet/PlaceOrder'
-import PlaceOrderForm from '@/components/Wallet/PlaceOrder'
-import useStore, { useStorePersisted } from '../../store/use-store'
+// import PlaceOrderForm from '@/components/Wallet/PlaceOrder'
 import WalletTabs from '@/components/Wallet/WalletTabs'
 
 const DefaultContent = styled.section`
@@ -215,7 +213,8 @@ export function Layout({
       <Content area="content" border="dashed" borderColor="green">
         {activeMobile === TABS.CHART && children}
         {activeMobile === TABS.TRADE && isSignedIn && (
-          <PlaceOrderForm area="content" asset={asset} wallet={wallet} />
+          <div>TODO Place Order</div>
+          // <PlaceOrderForm area="content" asset={asset} wallet={wallet} />
         )}
         {activeMobile === TABS.TRADE && !isSignedIn && <div>Sign In!</div>}
         {activeMobile === TABS.ORDERS && isSignedIn && <WalletTabs wallet={wallet} />}

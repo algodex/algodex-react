@@ -18,8 +18,12 @@ module.exports = {
   ],
   coverageReporters: ['lcov', 'text', 'json-summary', 'text'],
   moduleNameMapper: {
-    '^components(.*)$': '<rootDir>/components$1',
-    '^lib(.*)$': '<rootDir>/lib$1',
+    '^@/components(.*)$': '<rootDir>/components$1',
+    '^@/lib(.*)$': '<rootDir>/lib$1',
+    '^@/hooks(.*)$': '<rootDir>/hooks$1',
+    '^@/services(.*)$': '<rootDir>/services$1',
+    '^@/store(.*)$': '<rootDir>/store$1',
+    '^@/utils(.*)$': '<rootDir>/utils$1',
     '^theme(.*)$': '<rootDir>/theme$1'
   },
   transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)']

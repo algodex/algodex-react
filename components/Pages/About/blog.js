@@ -2,7 +2,7 @@ import React from 'react'
 import { BlogWrapper } from './styles.css'
 import Icon from '@mdi/react'
 import { mdiCalendarBlank } from '@mdi/js'
-import { Container } from 'components/about-assets/styles.css'
+import { Container } from 'components/About/styles.css'
 
 export const BlogPreview = () => {
   return (

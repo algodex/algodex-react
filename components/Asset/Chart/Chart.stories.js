@@ -1,7 +1,7 @@
 import {
   DEMO_ALGO_VOLUME,
   DEMO_ASK,
-  DEMO_ASSET,
+  // DEMO_ASSET,
   DEMO_BID,
   DEMO_OHLC,
   DEMO_PRICE_DATA,
@@ -9,7 +9,7 @@ import {
   DEMO_VOLUME_DATA
 } from 'spec/Chart'
 
-import { ChartView as Component, default as ComponentWithData } from './Chart'
+import { Chart as Component, default as ComponentWithData } from './Chart'
 import React from 'react'
 import styled from 'styled-components'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -31,22 +31,46 @@ const assets = {
 export default {
   title: '@algodex/recipes/Asset/Chart',
   component: Component,
-  parameters: { layout: 'fullscreen', controls: { include: ['asset', 'isLive'] } },
+  parameters: {
+    layout: 'fullscreen',
+    controls: { include: ['asset', 'interval', 'mode', 'isLive'] }
+  },
   args: {
-    asset: DEMO_ASSET,
+    interval: '1h',
+    asset: 'LAMP',
+    mode: 'candle',
     isLive: false,
-    asaVolume: DEMO_ALGO_VOLUME,
-    ohlc: DEMO_OHLC,
-    bid: DEMO_BID,
-    ask: DEMO_ASK,
-    spread: DEMO_SPREAD,
-    priceData: DEMO_PRICE_DATA,
-    volumeData: DEMO_VOLUME_DATA
+    overlay: {
+      orderbook: {
+        bid: DEMO_BID,
+        ask: DEMO_ASK,
+        spread: DEMO_SPREAD
+      },
+      ohlc: DEMO_OHLC,
+      volume: DEMO_ALGO_VOLUME
+    },
+    ohlc: DEMO_PRICE_DATA,
+    volume: DEMO_VOLUME_DATA,
+    onChange: console.log
   },
   argTypes: {
     asset: {
       options: Object.keys(assets),
       mapping: assets,
+      control: {
+        type: 'select'
+      },
+      defaultValue: 'LAMP'
+    },
+    interval: {
+      options: ['1m', '5m', '15m', '1h', '4h', '1d'],
+      control: {
+        type: 'select'
+      },
+      defaultValue: '1h'
+    },
+    mode: {
+      options: ['candle', 'area'],
       control: {
         type: 'select'
       }
@@ -61,30 +85,12 @@ export default {
   ]
 }
 
-// const Template = (args) => <Component {...args} />
-// const TemplateWithData = (args) => <ComponentWithData {...args} />
 //eslint-disable-next-line
-export const Chart = ({ isLive, asset, ...props }) => (
+export const Chart = ({ isLive, asset, interval, mode, ...props }) => (
   <>
-    {!isLive && <Component asset={asset} {...props} />}
-    {isLive && <ComponentWithData asset={asset} />}
+    {/*<Component asset={asset} overlay={overlay} {...props} />*/}
+    {!isLive && <Component asset={asset} interval={interval} mode={mode} {...props} />}
+    {isLive && <ComponentWithData asset={asset} interval={interval} mode={mode} />}
     {isLive && <ReactQueryDevtools initialIsOpen={false} />}
   </>
 )
-// export const Chart = Template.bind({})
-// Chart.parameters =
-// Chart.args = {
-//   asset: DEMO_ASSET,
-//   asaVolume: DEMO_ALGO_VOLUME,
-//   ohlc: DEMO_OHLC,
-//   bid: DEMO_BID,
-//   ask: DEMO_ASK,
-//   spread: DEMO_SPREAD,
-//   priceData: DEMO_PRICE_DATA,
-//   volumeData: DEMO_VOLUME_DATA
-// }
-// export const ChartPreview = TemplateWithData.bind({})
-// ChartPreview.parameters = { layout: 'fullscreen', controls: { include: ['asset'] } }
-// ChartPreview.args = {
-//   asset: DEMO_ASSET
-// }

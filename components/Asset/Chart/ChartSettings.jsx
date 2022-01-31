@@ -1,12 +1,11 @@
-import React from 'react'
+import { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import useStore, { getChartTimeInterval } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import styled from 'styled-components'
 import Button from 'components/Button'
 import { lighten } from 'polished'
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -23,7 +22,7 @@ export const Container = styled.div`
   }
 `
 
-export const ToggleWrapper = styled.div`
+const ToggleWrapper = styled.div`
   display: flex;
   // margin-bottom: 1.5rem;
 
@@ -32,13 +31,12 @@ export const ToggleWrapper = styled.div`
   }
 `
 
-export const ToggleInput = styled.input`
+const ToggleInput = styled.input`
   opacity: 0;
   position: absolute;
 `
 
-// @todo: Fix Button component `size` prop instead of using custom styles
-export const ToggleBtn = styled(Button)`
+const ToggleBtn = styled(Button)`
   flex: 1 1 auto;
   display: flex;
   justify-content: center;
@@ -89,35 +87,38 @@ export const ToggleBtn = styled(Button)`
   }
 `
 
+/**
+ * Chart Settings
+ *
+ * @param {Object} props Component Properties
+ * @param {String} props.mode Chart mode, Area or Candlestick
+ * @param {String} props.chartInterval Interval for Chart Data
+ * @param {Function} props.onChange Fired when an item changes
+ * @param {Function} props.onClick Fired when an item is clicked
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function ChartSettings(props) {
-  const { chartMode, onChartModeClick } = props
+  // console.log(`ChartSettings(`, arguments[0], `)`)
+  const { mode, onChange, interval } = props
   const { t } = useTranslation('chart')
-  const chartTime = useStore((state) => getChartTimeInterval(state))
-  const onChartTimeClick = useStore((state) => state.setChartTimeInterval)
-
-  const handleModeClick = (e) => {
-    onChartModeClick(e.target.value)
-  }
-
-  const handleTimeClick = (e) => {
-    onChartTimeClick(e.target.value)
-  }
 
   const renderTimeIntervals = () => {
     // @todo: should be handled in view and passed as props when supported
     return ['1m', '5m', '15m', '1h', '4h', '1d'].map((i) => (
-      <React.Fragment key={i}>
+      <Fragment key={i}>
         <ToggleInput
           type="radio"
+          name="interval"
           id={`time-${i}`}
           value={i}
-          checked={i === chartTime}
-          onChange={handleTimeClick}
+          checked={i === interval}
+          onChange={onChange}
         />
         <ToggleBtn size="small">
           <label htmlFor={`time-${i}`}>{i}</label>
         </ToggleBtn>
-      </React.Fragment>
+      </Fragment>
     ))
   }
 
@@ -126,20 +127,22 @@ function ChartSettings(props) {
       <ToggleWrapper>
         <ToggleInput
           type="radio"
+          name="mode"
           id="mode-candle"
           value="candle"
-          checked={chartMode === 'candle'}
-          onChange={handleModeClick}
+          checked={mode === 'candle'}
+          onChange={onChange}
         />
         <ToggleBtn size="small">
           <label htmlFor="mode-candle">{t('candle')}</label>
         </ToggleBtn>
         <ToggleInput
           type="radio"
+          name="mode"
           id="mode-area"
           value="area"
-          checked={chartMode === 'area'}
-          onChange={handleModeClick}
+          checked={mode === 'area'}
+          onChange={onChange}
         />
         <ToggleBtn size="small">
           <label htmlFor="mode-area">{t('area')}</label>
@@ -151,10 +154,11 @@ function ChartSettings(props) {
 }
 
 ChartSettings.propTypes = {
-  chartMode: PropTypes.string,
-  chartTime: PropTypes.string,
-  onChartModeClick: PropTypes.func,
-  onChartTimeClick: PropTypes.func
+  mode: PropTypes.string.isRequired,
+  interval: PropTypes.string.isRequired,
+  onChange: PropTypes.func
 }
-
+// ChartSettings.defaultProps = {
+//   onChange: (e) => console.info(`${e.target.id} changed to ${e.target.value}!`)
+// }
 export default ChartSettings

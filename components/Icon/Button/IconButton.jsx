@@ -9,7 +9,7 @@ function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
 function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
-function getColor({ theme, color = 'gray', gradient = 900 }){
+function getColor({ theme, color = 'gray', gradient = 900 }) {
   return theme.colors[color][gradient]
 }
 const style = css`
@@ -24,7 +24,7 @@ const style = css`
   color: ${getColor};
   svg {
     height: ${getSize};
-    fill: ${getFill};
+    fill: ${getFillColor};
     color: ${getColor};
   }
 `
