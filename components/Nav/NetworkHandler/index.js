@@ -1,7 +1,7 @@
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
 import { useEffect } from 'react'
-import { useUserStore } from '../../store'
+import useUserStore from '@/store/use-user-state'
 
 const NetworkHandler = () => {
   const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)

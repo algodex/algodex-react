@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
-
-import Head from 'next/head'
-import Header from 'components/Nav/Header'
-import Layout from 'components/Layout'
-import NetworkHandler from 'components/Nav/NetworkHandler'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import Spinner from 'components/Spinner'
 import styled from 'styled-components'
-import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import useUserStore from 'store/use-user-state'
+
+import Header from '@/components/Nav/Header'
+import NetworkHandler from '@/components/Nav/NetworkHandler'
+import Layout from '@/components/Layout'
+import Spinner from '@/components/Spinner'
+import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
+import useUserStore from '@/store/use-user-state'
 
 const DEBUG = process.env.NEXT_PUBLIC_DEBUG
 

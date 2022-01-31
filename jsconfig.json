@@ -5,7 +5,8 @@
       "@/components/*": ["./components/*"],
       "@/store/*": ["./store/*"],
       "@/hooks/*": ["./hooks/*"],
-      "@/services/*": ["./services/*"]
+      "@/services/*": ["./services/*"],
+      "@/utils/*": ["./utils/*"]
     }
   },
   "exclude": ["node_modules"]

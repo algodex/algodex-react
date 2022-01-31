@@ -40,13 +40,13 @@
   },
   "dependencies": {
     "@algodex/algodex-sdk": "^1.1.7",
-    "@iconify/react": "^3.1.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@iconify/react": "^3.1.0",
     "@mdi/js": "^6.5.95",
     "@mdi/react": "^1.5.0",
-    "@mui/material": "^5.3.1",
     "@mdx-js/loader": "^1.6.22",
+    "@mui/material": "^5.3.1",
     "@next/mdx": "^12.0.7",
     "@randlabs/myalgo-connect": "^1.0.1",
     "@sentry/nextjs": "^6.11.0",
@@ -114,8 +114,6 @@
     "cross-env": "^7.0.3",
     "cypress": "^7.4.0",
     "eslint": "^7.27.0",
-    "storybook-addon-jsx": "^7.3.10",
-    "storybook-addon-next-router": "^3.0.5",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -134,6 +132,8 @@
     "prettier": "2.3.0",
     "react-test-renderer": "^17.0.2",
     "start-server-and-test": "^1.14.0",
+    "storybook-addon-jsx": "^7.3.10",
+    "storybook-addon-next-router": "^3.0.5",
     "tailwindcss": "^2.2.16",
     "webpack": "^5.65.0"
   }

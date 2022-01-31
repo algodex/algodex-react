@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import detectMobileDisplay from '../../utils/detectMobileDisplay'
-import DesktopLayout from '@/components/Layout/DesktopLayout'
-import MobileLayout from '@/components/Layout/MobileLayout'
-import useDebounce from 'hooks/useDebounce'
 import { isUndefined } from 'lodash/lang'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import useDebounce from '@/hooks/useDebounce'
 import Spinner from '@/components/Spinner'
 import ServiceError from '@/components/ServiceError'
 
+import DesktopLayout from './DesktopLayout'
+import MobileLayout from './MobileLayout'
 /**
  * Detect Mobile
  * @returns {unknown}
@@ -46,6 +46,7 @@ export function Layout({ loading, error, offline, ...props }) {
   if (isError) return <ServiceError flex={true} size={10} message={'Something is up'} />
   if (isOffline) return <ServiceError flex={true} size={10} message={'You are offline!'} />
   if (isSizeDetected && isMobile) return <MobileLayout {...props} />
+  // if (isSizeDetected && isMobile) return <div>Something went wrong!</div>
   if (isSizeDetected && !isMobile) return <DesktopLayout {...props} />
 }
 Layout.propTypes = {

@@ -2,7 +2,7 @@ import NotificationModal from 'components/Nav/NetworkHandler/NotificationModal'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { useUserStore } from '../../store'
+import useUserStore from '@/store/use-user-state'
 
 const NetworkNotificationModal = () => {
   const { t } = useTranslation('network-notification')
