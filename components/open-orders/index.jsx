@@ -17,7 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import useStore, { useStorePersisted } from 'store/use-store'
 
 import Link from 'next/link'
-import OrderService from 'services/order'
+import {initAlgodClient, OrderService} from '@algodex/algodex-sdk'
 import OrdersTable from 'components/orders-table'
 import { mapOpenOrdersData } from './helpers'
 import toast from 'react-hot-toast'
@@ -101,7 +101,10 @@ function OpenOrders() {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
-        const cancelOrderPromise = OrderService.closeOrder(
+        const AlgodClient = new initAlgodClient('public_test')
+        const orderService = OrderService()
+        
+        const cancelOrderPromise = orderService.closeOrder(AlgodClient,
           escrowAddress,
           ownerAddress,
           orderBookEntry,

@@ -23,11 +23,10 @@ import Big from 'big.js'
 import Error from 'components/error'
 import Icon from 'components/icon'
 import { Info } from 'react-feather'
-import OrderService from 'services/order'
+import { initAlgodClient, OrderService, WalletService} from '@algodex/algodex-sdk'
 import PropTypes from 'prop-types'
 import Spinner from '../spinner'
 import { Tooltip } from 'components/tooltip'
-import {WalletService} from '@algodex/algodex-sdk'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
@@ -182,7 +181,10 @@ function PlaceOrderView(props) {
         return equivAlgoAmount.gte(new Big(newOrderSizeFilter))
       })
     }
-    return OrderService.placeOrder(orderData, filteredOrderBook)
+    const AlgodClient = new initAlgodClient('public_test')
+    const orderService= OrderService()
+    debugger;
+    return orderService.placeOrder(AlgodClient, orderData, filteredOrderBook)
   }
 
   const checkPopupBlocker = () => {
@@ -205,7 +207,7 @@ function PlaceOrderView(props) {
       return
     }
     const minWalletBalance = await WalletService().getMinWalletBalance(activeWallet)
-    debugger;
+   
     console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))
