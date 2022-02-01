@@ -2,6 +2,7 @@ import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components
 import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
 import { useMemo, useState } from 'react'
 
+// import Tabs from 'components/Tabs'
 import AdvancedOptions from './Form/AdvancedOptions'
 import { default as AmountRange } from 'components/Input/Slider'
 import Big from 'big.js'
@@ -302,7 +303,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               {asset.name || asset.id}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {hasBalance && wallet.assets[asset.id].balance}
+              {hasBalance && wallet?.assets[asset.id]?.balance}
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>
@@ -344,7 +345,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               onChange={handleChange}
               autocomplete="false"
               min="0"
-              step={new Big(10).pow(-1 * asset.decimals).toString()}
+              // step={new Big(10).pow(-1 * asset.decimals).toString()}
               inputMode="decimal"
             />
             <AmountRange
