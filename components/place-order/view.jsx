@@ -23,7 +23,9 @@ import Big from 'big.js'
 import Error from 'components/error'
 import Icon from 'components/icon'
 import { Info } from 'react-feather'
-import OrderService from 'services/order'
+import algodex from '@algodex/algodex-sdk'
+// import algodex from  '@algodex/algodex-sdk'
+
 import PropTypes from 'prop-types'
 import Spinner from '../spinner'
 import { Tooltip } from 'components/tooltip'
@@ -182,7 +184,8 @@ function PlaceOrderView(props) {
         return equivAlgoAmount.gte(new Big(newOrderSizeFilter))
       })
     }
-    return OrderService.placeOrder(orderData, filteredOrderBook)
+
+    return algodex.OrderService().placeOrder(algodex.initAlgodClient('public_test'), orderData, filteredOrderBook)
   }
 
   const checkPopupBlocker = () => {
