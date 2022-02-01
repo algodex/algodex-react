@@ -1,4 +1,8 @@
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
+// import Tabs from 'components/Tabs/Tabs'
+import { TabBtnItem, TabItemWrapper, TabsList, TabsWrapper } from 'components/Tabs/Tabs'
+import { TabPanelUnstyled, TabsListUnstyled, TabsUnstyled, buttonUnstyledClasses } from '@mui/base'
+import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled'
 // import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
 import { useMemo, useState } from 'react'
 
@@ -13,7 +17,6 @@ import Icon from 'components/Icon'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import Tabs from 'components/Tabs/Tabs'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
 // import { lighten } from 'polished'
@@ -45,95 +48,12 @@ const AvailableBalance = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 `
 
-// const ToggleInput = styled.input`
-//   opacity: 0;
-//   position: absolute;
-// `
-
-// const ToggleBtn = styled(Button)`
-//   flex: 1 1 auto;
-//   display: flex;
-//   justify-content: center;
-//   margin: 0;
-//   line-height: 1.25;
-//   background-color: ${({ theme }) => theme.colors.gray['700']};
-
-//   &:hover {
-//     background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
-//   }
-//   label {
-//     cursor: pointer;
-//     width: 100%;
-//   }
-//   && {
-//     ${ToggleInput}:focus + & {
-//       z-index: 1;
-//       border-radius: 3px;
-//     }
-//   }
-// `
-
-// const BuyButton = styled(ToggleBtn)`
-//   border-top-right-radius: 0;
-//   border-bottom-right-radius: 0;
-
-//   && {
-//     ${ToggleInput}:checked + & {
-//       background-color: ${({ theme }) => theme.colors.green['500']};
-//     }
-
-//     ${ToggleInput}:checked + &:hover {
-//       background-color: ${({ theme }) => lighten(0.05, theme.colors.green['500'])};
-//     }
-
-//     ${ToggleInput}:focus + & {
-//       box-shadow: 0 0 0 0.2rem #4b9064;
-//     }
-//   }
-// `
-
-// const SellButton = styled(ToggleBtn)`
-//   border-top-left-radius: 0;
-//   border-bottom-left-radius: 0;
-
-//   && {
-//     ${ToggleInput}:checked + & {
-//       background-color: ${({ theme }) => theme.colors.red['500']};
-//     }
-
-//     ${ToggleInput}:checked + &:hover {
-//       background-color: ${({ theme }) => lighten(0.05, theme.colors.red['500'])};
-//     }
-
-//     ${ToggleInput}:focus + & {
-//       box-shadow: 0 0 0 0.2rem #b23639;
-//     }
-//   }
-// `
-
 const BalanceRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.25rem;
 `
-
-// const Tab = styled(_Tab)`
-//   font-size: 0.875rem;
-//   padding: 0.625rem 0;
-//   letter-spacing: 0.12rem;
-//   border-bottom-width: 4px;
-// `
-
-// const Tabs = styled(_Tabs)`
-//   padding: 0;
-//   margin-bottom: 1rem;
-
-//   ${Tab} {
-//     border-bottom-color: ${({ orderType, theme }) =>
-//       orderType === 'sell' ? theme.colors.red['500'] : theme.colors.green['500']};
-//   }
-// `
 
 const SubmitButton = styled(Button)`
   &:focus {
@@ -208,6 +128,10 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
     })
   }
 
+  const handleChangeFn = (event, value) => {
+    setActiveTab(value)
+  }
+
   return (
     <Container data-testid="place-order">
       {showTitle && (
@@ -243,21 +167,34 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           </SellButton>
         </section> */}
         <div className="w-full">
-          {
-            // Tabs List (We can have multiple tabs)
-            // Action for each tab when the tab is clicked
-            // has Panel (if the page should render a panel else return active tab index)
-            // size (small, medium, large)
-            // other props
-          }
-          <Tabs
-            type="button"
-            onClick={(e) => handleChange(e, 'type')}
-            size="medium"
-            hasPanel={false}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          <TabsUnstyled className="w-full" defaultValue={0} onChange={handleChangeFn}>
+            <TabsList value={activeTab}>
+              <TabBtnItem className="first-item">
+                <button
+                  onClick={(e) => handleChange(e, 'type')}
+                  name="buy"
+                  value="buy"
+                  className={`py-3 py-4 w-full ${
+                    activeTab === 0 && 'bg-green-700 hover:bg-green-500 rounded-l-lg'
+                  }`}
+                >
+                  {t('buy')}
+                </button>
+              </TabBtnItem>
+              <TabBtnItem className="last-item">
+                <button
+                  onClick={(e) => handleChange(e, 'type')}
+                  name="sell"
+                  value="sell"
+                  className={`py-3 py-4 w-full ${
+                    activeTab === 1 && 'bg-red-600 rounded-r-lg hover:bg-red-500'
+                  }`}
+                >
+                  {t('sell')}
+                </button>
+              </TabBtnItem>
+            </TabsList>
+          </TabsUnstyled>
         </div>
 
         <AvailableBalance>
@@ -330,6 +267,17 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
         {/* <Tabs orderType={order.type}>
           <Tab isActive>{t('limit')}</Tab>
         </Tabs> */}
+        <TabsUnstyled defaultValue={0} sx={{ width: '100%' }}>
+          <TabsWrapper
+            style={{ marginBottom: '16px', borderBottom: 'solid 1px' }}
+            value={activeTab}
+            textColor="primary"
+            onChange={handleChange}
+            aria-label="secondary tabs example"
+          >
+            <TabItemWrapper value={0} label={t('limit')} />
+          </TabsWrapper>
+        </TabsUnstyled>
         {!hasBalance && (
           <BodyCopy color="gray.500" textAlign="center" m={32}>
             {t('insufficient-balance')}
