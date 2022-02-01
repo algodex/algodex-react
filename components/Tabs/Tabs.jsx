@@ -9,7 +9,8 @@ import Typography from '@mui/material/Typography'
 import { lighten } from 'polished'
 import { styled } from '@mui/system'
 import theme from '../../theme'
-import { useState } from 'react'
+
+// import { useState } from 'react'
 
 const TabBtnItem = styled(TabUnstyled)`
   color: white;
@@ -104,21 +105,18 @@ TabPanelWrapper.propTypes = {
 }
 
 export function TabsComponent({
-  tabsList,
-  action,
-  hasPanel,
-  size,
-  type,
-  activeTab,
-  setActiveTab,
-  onChange,
+  tabsList, // Tab should handle rendition of the tabs
+  hasPanel, // If the tab should render the panels passed in
+  size, // Size of the tab (can be any of ['small', 'medium', 'large'])
+  type, // Type of Tab (can be any of ['button', 'native'])
+  activeTab, // Active tab
+  setActiveTab, // Handles which tab is active
+  onClick, // Handles external action
   panelList
 }) {
   const handleChange = (event, value) => {
-    // setValue(newValue)
-    console.log(event, value, 'new value')
     setActiveTab(value)
-    // onChange(event, newValue)
+    console.log(tabsList, size, panelList)
   }
 
   const renderButtonTab = () => {
@@ -126,22 +124,28 @@ export function TabsComponent({
       <TabsUnstyled className="w-full" defaultValue={0} onChange={handleChange}>
         <TabsList value={activeTab}>
           <TabBtnItem className="first-item">
-            <div
+            <button
+              onClick={onClick}
+              name="buy"
+              value="buy"
               className={`py-3 py-4 w-full ${
-                activeTab === 0 && 'bg-red-700 hover:bg-red-500 rounded-l-lg'
+                activeTab === 0 && 'bg-green-700 hover:bg-green-500 rounded-l-lg'
               }`}
             >
               Buy
-            </div>
+            </button>
           </TabBtnItem>
           <TabBtnItem className="last-item">
-            <div
+            <button
+              onClick={onClick}
+              name="sell"
+              value="sell"
               className={`py-3 py-4 w-full ${
-                activeTab === 1 && 'bg-green-600 rounded-r-lg hover:bg-green-500'
+                activeTab === 1 && 'bg-red-600 rounded-r-lg hover:bg-red-500'
               }`}
             >
               Sell
-            </div>
+            </button>
           </TabBtnItem>
         </TabsList>
         {hasPanel && (
@@ -195,6 +199,7 @@ TabsComponent.propTypes = {
   activeTab: PropTypes.number,
   panelList: PropTypes.elementType,
   onChange: PropTypes.func,
+  onClick: PropTypes.func,
   setActiveTab: PropTypes.func
 }
 

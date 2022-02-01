@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 // import Tabs from 'components/Tabs'
 import AdvancedOptions from './Form/AdvancedOptions'
 import { default as AmountRange } from 'components/Input/Slider'
-import Big from 'big.js'
+// import Big from 'big.js'
 import Button from '../../Button'
 import CurrencyInput from '../../Input/CurrencyInput'
 import { FormControl } from '@mui/material'
@@ -16,7 +16,7 @@ import { Section } from '@/components/Layout/Section'
 import Tabs from 'components/Tabs/Tabs'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
-import { lighten } from 'polished'
+// import { lighten } from 'polished'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -45,71 +45,71 @@ const AvailableBalance = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 `
 
-const ToggleInput = styled.input`
-  opacity: 0;
-  position: absolute;
-`
+// const ToggleInput = styled.input`
+//   opacity: 0;
+//   position: absolute;
+// `
 
-const ToggleBtn = styled(Button)`
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  line-height: 1.25;
-  background-color: ${({ theme }) => theme.colors.gray['700']};
+// const ToggleBtn = styled(Button)`
+//   flex: 1 1 auto;
+//   display: flex;
+//   justify-content: center;
+//   margin: 0;
+//   line-height: 1.25;
+//   background-color: ${({ theme }) => theme.colors.gray['700']};
 
-  &:hover {
-    background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
-  }
-  label {
-    cursor: pointer;
-    width: 100%;
-  }
-  && {
-    ${ToggleInput}:focus + & {
-      z-index: 1;
-      border-radius: 3px;
-    }
-  }
-`
+//   &:hover {
+//     background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
+//   }
+//   label {
+//     cursor: pointer;
+//     width: 100%;
+//   }
+//   && {
+//     ${ToggleInput}:focus + & {
+//       z-index: 1;
+//       border-radius: 3px;
+//     }
+//   }
+// `
 
-const BuyButton = styled(ToggleBtn)`
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+// const BuyButton = styled(ToggleBtn)`
+//   border-top-right-radius: 0;
+//   border-bottom-right-radius: 0;
 
-  && {
-    ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.colors.green['500']};
-    }
+//   && {
+//     ${ToggleInput}:checked + & {
+//       background-color: ${({ theme }) => theme.colors.green['500']};
+//     }
 
-    ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.colors.green['500'])};
-    }
+//     ${ToggleInput}:checked + &:hover {
+//       background-color: ${({ theme }) => lighten(0.05, theme.colors.green['500'])};
+//     }
 
-    ${ToggleInput}:focus + & {
-      box-shadow: 0 0 0 0.2rem #4b9064;
-    }
-  }
-`
+//     ${ToggleInput}:focus + & {
+//       box-shadow: 0 0 0 0.2rem #4b9064;
+//     }
+//   }
+// `
 
-const SellButton = styled(ToggleBtn)`
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+// const SellButton = styled(ToggleBtn)`
+//   border-top-left-radius: 0;
+//   border-bottom-left-radius: 0;
 
-  && {
-    ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.colors.red['500']};
-    }
+//   && {
+//     ${ToggleInput}:checked + & {
+//       background-color: ${({ theme }) => theme.colors.red['500']};
+//     }
 
-    ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.colors.red['500'])};
-    }
+//     ${ToggleInput}:checked + &:hover {
+//       background-color: ${({ theme }) => lighten(0.05, theme.colors.red['500'])};
+//     }
 
-    ${ToggleInput}:focus + & {
-      box-shadow: 0 0 0 0.2rem #b23639;
-    }
-  }
-`
+//     ${ToggleInput}:focus + & {
+//       box-shadow: 0 0 0 0.2rem #b23639;
+//     }
+//   }
+// `
 
 const BalanceRow = styled.div`
   display: flex;
@@ -184,7 +184,6 @@ const DEFAULT_ORDER = {
  * @constructor
  */
 export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
-  console.log(wallet, 'wallet')
   const [activeTab, setActiveTab] = useState(0)
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
@@ -203,17 +202,10 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
   }
 
   const handleChange = (e, field) => {
-    // console.log(e, field, e.target.value, 'all here')
     setOrder({
       ...order,
       [field || e.target.name]: e.target.value
     })
-  }
-
-  const handleTabChangeFn = (e) => {
-    // handleChange(e, 'type')}
-    console.log(e.target.value)
-    // setActiveTab(e.target.value)
   }
 
   return (
@@ -260,7 +252,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           }
           <Tabs
             type="button"
-            onChange={(e) => console.log(e)}
+            onClick={(e) => handleChange(e, 'type')}
             size="medium"
             hasPanel={false}
             activeTab={activeTab}
