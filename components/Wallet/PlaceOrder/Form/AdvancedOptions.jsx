@@ -6,6 +6,7 @@ import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
 import OrderSizeFilter from 'components/Input/Slider'
 import PropTypes from 'prop-types'
+import Tabs from 'components/Tabs/Tabs'
 import { lighten } from 'polished'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -226,6 +227,19 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
               <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
                 {t('maker-taker')}
               </OptionsButton>
+              <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
+                {t('taker-only')}
+              </OptionsButton>
+              {/* <div className="w-full">
+                {
+                  // Tabs List (We can have multiple tabs)
+                  // Action for each tab when the tab is clicked
+                  // has Panel (if the page should render a panel else return active tab index)
+                  // size (small, medium, large)
+                  // other props
+                }
+                <Tabs />
+              </div> */}
 
               {showMakerOnly && (
                 <>
@@ -249,9 +263,6 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 checked={order.execution === 'taker'}
                 onChange={handleChange}
               />
-              <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
-                {t('taker-only')}
-              </OptionsButton>
             </OptionsWrapper>
             <BodyCopyTiny color="gray.500" textTransform="none">
               {renderMessage()}

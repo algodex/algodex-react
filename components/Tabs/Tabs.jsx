@@ -103,22 +103,32 @@ TabPanelWrapper.propTypes = {
   value: PropTypes.number.isRequired
 }
 
-export function TabsComponent() {
-  const [value, setValue] = useState(0)
-  const [type, setType] = useState('button')
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
+export function TabsComponent({
+  tabsList,
+  action,
+  hasPanel,
+  size,
+  type,
+  activeTab,
+  setActiveTab,
+  onChange,
+  panelList
+}) {
+  const handleChange = (event, value) => {
+    // setValue(newValue)
+    console.log(event, value, 'new value')
+    setActiveTab(value)
+    // onChange(event, newValue)
   }
 
   const renderButtonTab = () => {
     return (
-      <TabsUnstyled defaultValue={0} onChange={handleChange}>
-        <TabsList value={value}>
+      <TabsUnstyled className="w-full" defaultValue={0} onChange={handleChange}>
+        <TabsList value={activeTab}>
           <TabBtnItem className="first-item">
             <div
               className={`py-3 py-4 w-full ${
-                value === 0 && 'bg-red-700 hover:bg-red-500 rounded-l-lg'
+                activeTab === 0 && 'bg-red-700 hover:bg-red-500 rounded-l-lg'
               }`}
             >
               Buy
@@ -127,15 +137,19 @@ export function TabsComponent() {
           <TabBtnItem className="last-item">
             <div
               className={`py-3 py-4 w-full ${
-                value === 1 && 'bg-green-600 rounded-r-lg hover:bg-green-500'
+                activeTab === 1 && 'bg-green-600 rounded-r-lg hover:bg-green-500'
               }`}
             >
               Sell
             </div>
           </TabBtnItem>
         </TabsList>
-        <TabPanel value={0}>First content</TabPanel>
-        <TabPanel value={1}>Second content</TabPanel>
+        {hasPanel && (
+          <>
+            <TabPanel value={0}>First content</TabPanel>
+            <TabPanel value={1}>Second content</TabPanel>
+          </>
+        )}
       </TabsUnstyled>
     )
   }
@@ -145,7 +159,7 @@ export function TabsComponent() {
       <TabsUnstyled defaultValue={0} sx={{ width: '100%' }}>
         <TabsWrapper
           style={{ marginBottom: '16px', borderBottom: 'solid 1px' }}
-          value={value}
+          value={activeTab}
           textColor="primary"
           onChange={handleChange}
           aria-label="secondary tabs example"
@@ -154,10 +168,10 @@ export function TabsComponent() {
           <TabItemWrapper value={1} label="Item Two" />
         </TabsWrapper>
 
-        <TabPanelWrapper value={value} index={0}>
+        <TabPanelWrapper value={activeTab} index={0}>
           First content
         </TabPanelWrapper>
-        <TabPanelWrapper value={value} index={1}>
+        <TabPanelWrapper value={activeTab} index={1}>
           Second content
         </TabPanelWrapper>
       </TabsUnstyled>
@@ -170,6 +184,18 @@ export function TabsComponent() {
       {type === 'native' && renderNativeTab()}
     </>
   )
+}
+
+TabsComponent.propTypes = {
+  tabsList: PropTypes.elementType,
+  action: PropTypes.func,
+  hasPanel: PropTypes.bool,
+  size: PropTypes.string,
+  type: PropTypes.string,
+  activeTab: PropTypes.number,
+  panelList: PropTypes.elementType,
+  onChange: PropTypes.func,
+  setActiveTab: PropTypes.func
 }
 
 export default TabsComponent

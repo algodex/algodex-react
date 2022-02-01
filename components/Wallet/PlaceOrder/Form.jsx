@@ -1,5 +1,5 @@
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
-import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
+// import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
 import { useMemo, useState } from 'react'
 
 // import Tabs from 'components/Tabs'
@@ -13,6 +13,7 @@ import Icon from 'components/Icon'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import Tabs from 'components/Tabs/Tabs'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
 import { lighten } from 'polished'
@@ -117,22 +118,22 @@ const BalanceRow = styled.div`
   margin-bottom: 0.25rem;
 `
 
-const Tab = styled(_Tab)`
-  font-size: 0.875rem;
-  padding: 0.625rem 0;
-  letter-spacing: 0.12rem;
-  border-bottom-width: 4px;
-`
+// const Tab = styled(_Tab)`
+//   font-size: 0.875rem;
+//   padding: 0.625rem 0;
+//   letter-spacing: 0.12rem;
+//   border-bottom-width: 4px;
+// `
 
-const Tabs = styled(_Tabs)`
-  padding: 0;
-  margin-bottom: 1rem;
+// const Tabs = styled(_Tabs)`
+//   padding: 0;
+//   margin-bottom: 1rem;
 
-  ${Tab} {
-    border-bottom-color: ${({ orderType, theme }) =>
-      orderType === 'sell' ? theme.colors.red['500'] : theme.colors.green['500']};
-  }
-`
+//   ${Tab} {
+//     border-bottom-color: ${({ orderType, theme }) =>
+//       orderType === 'sell' ? theme.colors.red['500'] : theme.colors.green['500']};
+//   }
+// `
 
 const SubmitButton = styled(Button)`
   &:focus {
@@ -184,6 +185,7 @@ const DEFAULT_ORDER = {
  */
 export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
   console.log(wallet, 'wallet')
+  const [activeTab, setActiveTab] = useState(0)
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
 
@@ -201,10 +203,17 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
   }
 
   const handleChange = (e, field) => {
+    // console.log(e, field, e.target.value, 'all here')
     setOrder({
       ...order,
       [field || e.target.name]: e.target.value
     })
+  }
+
+  const handleTabChangeFn = (e) => {
+    // handleChange(e, 'type')}
+    console.log(e.target.value)
+    // setActiveTab(e.target.value)
   }
 
   return (
@@ -217,7 +226,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
         </header>
       )}
       <FormControl onSubmit={onSubmit} autocomplete="off">
-        <section className="flex pb-6">
+        {/* <section className="flex pb-6">
           <ToggleInput
             type="radio"
             name="type"
@@ -240,7 +249,25 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           <SellButton>
             <label htmlFor="type-sell">{t('sell')}</label>
           </SellButton>
-        </section>
+        </section> */}
+        <div className="w-full">
+          {
+            // Tabs List (We can have multiple tabs)
+            // Action for each tab when the tab is clicked
+            // has Panel (if the page should render a panel else return active tab index)
+            // size (small, medium, large)
+            // other props
+          }
+          <Tabs
+            type="button"
+            onChange={(e) => console.log(e)}
+            size="medium"
+            hasPanel={false}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        </div>
+
         <AvailableBalance>
           <IconTextContainer style={{ marginBottom: '10px' }}>
             <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
@@ -308,9 +335,9 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           </BalanceRow>
         </AvailableBalance>
 
-        <Tabs orderType={order.type}>
+        {/* <Tabs orderType={order.type}>
           <Tab isActive>{t('limit')}</Tab>
-        </Tabs>
+        </Tabs> */}
         {!hasBalance && (
           <BodyCopy color="gray.500" textAlign="center" m={32}>
             {t('insufficient-balance')}
