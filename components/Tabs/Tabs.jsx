@@ -1,14 +1,11 @@
+import { TabPanelUnstyled, TabsListUnstyled, TabsUnstyled, buttonUnstyledClasses } from '@mui/base'
 import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled'
 
 import Box from '@mui/material/Box'
 import PropTypes from 'prop-types'
 import Tab from '@mui/material/Tab'
-import TabPanelUnstyled from '@mui/base/TabPanelUnstyled'
 import Tabs from '@mui/material/Tabs'
-import TabsListUnstyled from '@mui/base/TabsListUnstyled'
-import TabsUnstyled from '@mui/base/TabsUnstyled'
 import Typography from '@mui/material/Typography'
-import { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled'
 import { lighten } from 'polished'
 import { styled } from '@mui/system'
 import theme from '../../theme'
@@ -108,7 +105,7 @@ TabPanelWrapper.propTypes = {
 
 export function TabsComponent() {
   const [value, setValue] = useState(0)
-  const [type, setType] = useState('native')
+  const [type, setType] = useState('button')
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
