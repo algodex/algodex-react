@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
-import WalletService from 'services/wallet'
+import {WalletService} from '@algodex/algodex-sdk'
 import useStore, { useStorePersisted } from 'store/use-store'
 import useMyAlgo from 'hooks/use-my-algo'
 import shallow from 'zustand/shallow'
@@ -30,7 +30,7 @@ function useWallets() {
 
   const addresses = adminWalletAddr ? [adminWalletAddr] : walletAddresses
 
-  const query = useQuery(['wallets', addresses], () => WalletService.fetchWallets(addresses), {
+  const query = useQuery(['wallets', addresses], () => WalletService().fetchWallets(addresses), {
     refetchInterval: 10000,
     enabled: Array.isArray(addresses) && addresses.length > 0,
     select: data => data.wallets,

@@ -2,7 +2,7 @@
 import React from 'react'
 import { render } from '../../test/test-utils'
 import PlaceOrderView from './view'
-import WalletService from 'services/wallet'
+import {WalletService} from '@algodex/algodex-sdk' 
 jest.mock('services/wallet')
 
 const PLACE_ORDER = 'place-order'
@@ -35,7 +35,7 @@ const wallets = [
 
 describe('PlaceOrder', () => {
   it('should render', () => {
-    WalletService.getMinWalletBalance = jest.fn().mockResolvedValue(1000000)
+    WalletService().getMinWalletBalance = jest.fn().mockResolvedValue(1000000)
     /**
      * TODO: Migrate to withQuery and test for well defined props
      */

@@ -27,7 +27,7 @@ import OrderService from 'services/order'
 import PropTypes from 'prop-types'
 import Spinner from '../spinner'
 import { Tooltip } from 'components/tooltip'
-import WalletService from 'services/wallet'
+import {WalletService} from '@algodex/algodex-sdk'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
@@ -204,7 +204,8 @@ function PlaceOrderView(props) {
       )
       return
     }
-    const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
+    const minWalletBalance = await WalletService().getMinWalletBalance(activeWallet)
+    debugger;
     console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))

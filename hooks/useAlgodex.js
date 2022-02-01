@@ -9,7 +9,7 @@ import {
   searchAssets
 } from 'services/algodex'
 
-import WalletService from 'services/wallet'
+import {WalletService} from '@algodex/algodex-sdk'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 import { useRouteQueryError } from './useRouteQueryError'
@@ -195,7 +195,7 @@ export const useWalletMinBalanceQuery = ({
 }) =>
   useQuery(
     ['walletMinBalance', { address: wallet?.address }],
-    async () => await WalletService.getMinWalletBalance(wallet),
+    async () => await WalletService().getMinWalletBalance(wallet),
     options
   )
 
@@ -216,7 +216,7 @@ export const useWalletsQuery = ({
   const router = useRouter()
   const { data, isError, error, ...rest } = useQuery(
     'wallets',
-    () => WalletService.fetchWallets(wallets),
+    () => WalletService().fetchWallets(wallets),
     options
   )
   useRouteQueryError({ isError, error, router })
