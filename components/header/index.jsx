@@ -12,8 +12,6 @@ import {
 } from './header.css'
 import { useState } from 'react'
 
-
-
 import ActiveLink from 'components/active-link'
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
