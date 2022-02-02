@@ -10,8 +10,6 @@ import { lighten } from 'polished'
 import { styled } from '@mui/system'
 import theme from '../../theme'
 
-// import { useState } from 'react'
-
 export const BtnTabsList = styled(TabsListUnstyled)`
   min-width: 320px;
   border-radius: 7px;

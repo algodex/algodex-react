@@ -4,32 +4,23 @@ import { useMemo, useState } from 'react'
 
 import AdvancedOptions from './Form/AdvancedOptions'
 import { default as AmountRange } from 'components/Input/Slider'
-import Button from '../../Button'
-import CurrencyInput from '../../Input/CurrencyInput'
+// import Button from '../../Button'
 import { FormControl } from '@mui/material'
 import Icon from 'components/Icon'
 import { Info } from 'react-feather'
+import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
+import { default as MUIOutlinedInput } from '@mui/material/OutlinedInput'
+import { default as MaterialBox } from '@mui/material/Box'
+import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
-import { Section } from '@/components/Layout/Section'
+// import { Section } from '@/components/Layout/Section'
 import { TabsUnstyled } from '@mui/base'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
-// import { lighten } from 'polished'
+import { lighten } from 'polished'
 import styled from 'styled-components'
+import theme from '../../../theme'
 import useTranslation from 'next-translate/useTranslation'
-
-const Container = styled(Section)`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.dark};
-  overflow: hidden scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`
 
 const IconTextContainer = styled.div`
   display: flex;
@@ -50,12 +41,6 @@ const BalanceRow = styled.div`
   margin-bottom: 0.25rem;
 `
 
-const SubmitButton = styled(Button)`
-  &:focus {
-    box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
-  }
-`
-
 const IconButton = styled.button`
   cursor: pointer;
   pointer-events: all;
@@ -71,6 +56,42 @@ const IconButton = styled.button`
     color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
+
+const MainInput = styled(MUIOutlinedInput)(({ theme }) => ({
+  '.MuiOutlinedInput-input': {
+    color: theme.colors.gray['000'],
+    marginRight: '0.5rem',
+    textAlign: 'right'
+  },
+
+  '.Mui-disabled': {
+    color: theme.colors.gray[500]
+  },
+  '& input': {
+    ':disabled': {
+      '-webkit-text-fill-color': 'unset'
+    },
+    '&[type=number]': {
+      '-moz-appearance': 'textfield'
+    },
+    '&::-webkit-outer-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0
+    },
+    '&::-webkit-inner-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0
+    }
+  }
+}))
+
+MainInput.defaultProps = {
+  size: 'small',
+  placeholder: '0.00',
+  className: 'text-sm font-bold ',
+  fullWidth: true
+}
+
 const DEFAULT_ORDER = {
   type: 'buy',
   price: 0,
@@ -98,7 +119,7 @@ const DEFAULT_ORDER = {
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
+export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, components: { Box } }) {
   const [activeTab, setActiveTab] = useState(0)
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
@@ -128,70 +149,77 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
   }
 
   return (
-    <Container data-testid="place-order">
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '1.25rem'
+      }}
+      data-testid="place-order"
+    >
       {showTitle && (
-        <header className="p-5">
+        <header className="pb-5">
           <HeaderCaps color="gray.500" mb={1}>
             {t('place-order')}
           </HeaderCaps>
         </header>
       )}
       <FormControl onSubmit={onSubmit} autocomplete="off">
-        {/* <section className="flex pb-6">
-          <ToggleInput
-            type="radio"
-            name="type"
-            id="type-buy"
-            value="buy"
-            checked={order.type === 'buy'}
-            onChange={(e) => handleChange(e, 'type')}
-          />
-          <BuyButton>
-            <label htmlFor="type-buy">{t('buy')}</label>
-          </BuyButton>
-          <ToggleInput
-            type="radio"
-            name="type"
-            id="type-sell"
-            value="sell"
-            checked={order.type === 'sell'}
-            onChange={(e) => handleChange(e, 'type')}
-          />
-          <SellButton>
-            <label htmlFor="type-sell">{t('sell')}</label>
-          </SellButton>
-        </section> */}
         <div className="w-full">
           <TabsUnstyled className="w-full" defaultValue={0} onChange={handleChangeFn}>
             <BtnTabsList value={activeTab}>
               <BtnTabItem className="first-item">
-                <button
-                  size="small"
-                  className={`py-2 py-3 w-full ${
-                    activeTab === 0
-                      ? 'bg-green-700 rounded-l-md hover:bg-green-800'
-                      : 'bg-gray-700 rounded-l-md hover:bg-gray-600'
-                  }`}
+                <MaterialButton
+                  disableElevation={activeTab === 0}
+                  variant="contained"
+                  fullWidth
+                  sx={{
+                    borderTopLeftRadius: '7px',
+                    borderBottomLeftRadius: '7px',
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                    backgroundColor:
+                      activeTab === 0 ? theme.colors.green['500'] : theme.colors.gray['700'],
+                    '&:hover': {
+                      backgroundColor:
+                        activeTab === 0
+                          ? lighten(0.05, theme.colors.green['500'])
+                          : lighten(0.05, theme.colors.gray['700'])
+                    }
+                  }}
                   onClick={(e) => handleChange(e, 'type')}
                   name="buy"
                   value="buy"
                 >
                   {t('buy')}
-                </button>
+                </MaterialButton>
               </BtnTabItem>
               <BtnTabItem className="last-item">
-                <button
-                  className={`py-2 py-3 w-full ${
-                    activeTab === 1
-                      ? 'bg-red-600 rounded-r-lg hover:bg-red-700'
-                      : 'bg-gray-700 rounded-r-md hover:bg-gray-600'
-                  }`}
+                <MaterialButton
+                  disableElevation={activeTab === 1}
+                  variant="contained"
+                  fullWidth
+                  sx={{
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    borderTopRightRadius: 7,
+                    borderBottomRightRadius: 7,
+                    backgroundColor:
+                      activeTab === 1 ? theme.colors.red['500'] : theme.colors.gray['700'],
+                    '&:hover': {
+                      backgroundColor:
+                        activeTab === 1
+                          ? lighten(0.05, theme.colors.red['500'])
+                          : lighten(0.05, theme.colors.gray['700'])
+                    }
+                  }}
                   onClick={(e) => handleChange(e, 'type')}
                   name="sell"
                   value="sell"
                 >
                   {t('sell')}
-                </button>
+                </MaterialButton>
               </BtnTabItem>
             </BtnTabsList>
           </TabsUnstyled>
@@ -281,38 +309,70 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           </BodyCopy>
         )}
         {hasBalance && (
-          <section className="flex flex-col mb-4">
-            <CurrencyInput
+          <MaterialBox className="flex flex-col mb-4">
+            <MainInput
+              sx={{
+                backgroundColor: theme.colors.gray['900'],
+                border: 2,
+                borderColor: theme.colors.gray['700'],
+                marginBottom: '1rem'
+              }}
               type="number"
               pattern="\d*"
               id="price"
-              name="af2Km9q"
-              label={t('price')}
-              asset="ALGO"
-              currecy="ALGO"
+              name="price"
               decimals={6}
               orderType={order.type}
-              // value={order.price}
-              // onChange={handleChange}
+              value={order.price}
+              onChange={handleChange}
               autocomplete="false"
               min="0"
               step="0.000001"
               inputMode="decimal"
+              startAdornment={
+                <MUIInputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('price')}</span>
+                </MUIInputAdornment>
+              }
+              endAdornment={
+                <MUIInputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">ALGO</span>
+                </MUIInputAdornment>
+              }
             />
-            <CurrencyInput
+            <MainInput
+              id="amount"
               type="number"
               pattern="\d*"
               name="amount"
-              label={t('amount')}
-              currency={asset.name}
+              sx={{
+                backgroundColor: theme.colors.gray['900'],
+                border: 2,
+                borderColor: theme.colors.gray['700'],
+                marginBottom: '1rem'
+              }}
               value={order.amount}
               onChange={handleChange}
               autocomplete="false"
               min="0"
               // step={new Big(10).pow(-1 * asset.decimals).toString()}
               inputMode="decimal"
+              startAdornment={
+                <MUIInputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
+                </MUIInputAdornment>
+              }
+              endAdornment={
+                <MUIInputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">{asset.name}</span>
+                </MUIInputAdornment>
+              }
             />
             <AmountRange
+              sx={{
+                margin: '0px 0.5rem',
+                width: '95%'
+              }}
               // txnFee={txnFee}
               onChange={(e) => handleChange(e, 'type')}
               value={order.amount}
@@ -321,15 +381,31 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               min={0}
               max={100}
             />
-            <CurrencyInput
+            <MainInput
+              id="total"
               name="total"
               type="text"
-              label={t('total')}
-              currency="ALGO"
               decimals={6}
+              color="primary"
+              sx={{
+                backgroundColor: theme.colors.gray['900'],
+                border: 2,
+                borderColor: theme.colors.gray['700'],
+                marginBottom: '1rem'
+              }}
               value={order.amount * order.price}
               readOnly
               disabled
+              startAdornment={
+                <MUIInputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('total')}</span>
+                </MUIInputAdornment>
+              }
+              endAdornment={
+                <MUIInputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">ALGO</span>
+                </MUIInputAdornment>
+              }
             />
             {/* <TxnFeeContainer>
                 <BodyCopyTiny color="gray.500" textTransform="none">
@@ -342,20 +418,24 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
               // onChange={handleOptionsChange}
               allowTaker={typeof asset !== 'undefined'}
             />
-          </section>
+          </MaterialBox>
         )}
-        <SubmitButton
+        <MaterialButton
           type="submit"
-          variant={buttonProps[order.type].variant}
-          size="large"
-          block
-          orderType={order.type}
+          variant="contained"
+          sx={{
+            backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
+            '&:hover': {
+              backgroundColor:
+                order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
+            }
+          }}
           disabled={order.valid}
         >
           {buttonProps[order.type].text}
-        </SubmitButton>
+        </MaterialButton>
       </FormControl>
-    </Container>
+    </Box>
   )
 }
 
@@ -367,6 +447,7 @@ PlaceOrderForm.propTypes = {
   /**
    * Asset for the Order
    */
+  components: PropTypes.object,
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
@@ -385,6 +466,9 @@ PlaceOrderForm.propTypes = {
   onSubmit: PropTypes.func
 }
 PlaceOrderForm.defaultProps = {
-  showTitle: true
+  showTitle: true,
+  components: {
+    Box: MaterialBox
+  }
 }
 export default PlaceOrderForm
