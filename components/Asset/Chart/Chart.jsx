@@ -239,28 +239,28 @@ export function Chart({
 
 Chart.propTypes = {
   asset: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    decimals: PropTypes.string.isRequired
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   }).isRequired,
   interval: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
   overlay: PropTypes.shape({
     ohlc: PropTypes.shape({
-      open: PropTypes.string.isRequired,
-      high: PropTypes.string.isRequired,
-      low: PropTypes.string.isRequired,
-      close: PropTypes.string.isRequired
+      open: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      high: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      low: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      close: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }),
-    volume: PropTypes.string.isRequired,
+    volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     orderbook: PropTypes.shape({
-      bid: PropTypes.string.isRequired,
-      ask: PropTypes.string.isRequired,
-      spread: PropTypes.string.isRequired
+      bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   }),
   ohlc: PropTypes.array.isRequired,
   volume: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func
 }
 
 Chart.defaultProps = {

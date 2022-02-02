@@ -50,7 +50,9 @@ export const TradingPair = styled.h3`
     font-size: 1.25rem;
   }
 `
-
+TradingPair.defaultProps = {
+  'data-testid': 'trading-pair'
+}
 export const IconButton = styled.button`
   cursor: pointer;
   pointer-events: all;
@@ -130,17 +132,23 @@ const BidAskSpreadItem = styled.span`
 export const Bid = styled(BidAskSpreadItem)`
   background-color: ${({ theme }) => theme.palette.green[800]};
 `
-
+Bid.defaultProps = {
+  'data-testid': 'bid'
+}
 export const Ask = styled(BidAskSpreadItem)`
   background-color: ${({ theme }) => theme.palette.red[800]};
 `
-
+Ask.defaultProps = {
+  'data-testid': 'ask'
+}
 export const Spread = styled(BidAskSpreadItem)`
   background-color: ${({ theme }) => theme.palette.gray[900]};
   padding-left: 0.375em;
   padding-right: 0.375em;
 `
-
+Spread.defaultProps = {
+  'data-testid': 'spread'
+}
 export const VolumeContainer = styled.dl`
   display: flex;
   align-items: center;
@@ -211,22 +219,22 @@ function ChartOverlay(props) {
         <OhlcList>
           <OhlcItem value={ohlc.open}>
             <dt>O:</dt>
-            <dd>{ohlc.open}</dd>
+            <dd data-testid="open24hr">{ohlc.open}</dd>
           </OhlcItem>
           <OhlcItem value={ohlc.high}>
             <dt>H:</dt>
-            <dd>{ohlc.high}</dd>
+            <dd data-testid="high24hr">{ohlc.high}</dd>
           </OhlcItem>
           <OhlcItem value={ohlc.low}>
             <dt>L:</dt>
-            <dd>{ohlc.low}</dd>
+            <dd data-testid="low24hr">{ohlc.low}</dd>
           </OhlcItem>
           <OhlcItem value={ohlc.close}>
             <dt>C:</dt>
-            <dd>{ohlc.close}</dd>
+            <dd data-testid="close24hr">{ohlc.close}</dd>
           </OhlcItem>
           <OhlcItem value={changeAmt}>
-            <dd>{openCloseChange()}</dd>
+            <dd data-testid="dailyChange">{openCloseChange()}</dd>
           </OhlcItem>
         </OhlcList>
       </Header>
@@ -248,10 +256,10 @@ function ChartOverlay(props) {
 ChartOverlay.propTypes = {
   asset: PropTypes.object.isRequired,
   ohlc: PropTypes.object.isRequired,
-  bid: PropTypes.string,
-  ask: PropTypes.string,
-  spread: PropTypes.string,
-  volume: PropTypes.string
+  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
 
 export default ChartOverlay

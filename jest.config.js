@@ -7,11 +7,14 @@ module.exports = {
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 5
+      branches: 10
     }
   },
   collectCoverageFrom: [
     '**/components/**/*.{js,jsx}',
+    '**/hooks/**/*.{js,jsx}',
+    '**/utils/**/*.{js,jsx}',
+    '**/services/**/*.{js,jsx}',
     '!**/components/**/*.stories.{js,jsx}',
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'
