@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from '@emotion/styled'
 
 const move = keyframes`
   0% {
@@ -19,7 +19,7 @@ const move = keyframes`
 `
 
 export const Float = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray['000']};
+  background-color: ${({ theme }) => theme.palette.gray['000']};
   padding: 1.3rem;
   width: fit-content;
   position: fixed;
@@ -31,7 +31,7 @@ export const Float = styled.div`
     flex-direction: column;
     align-items: center;
     li {
-      color: ${({ theme }) => theme.colors.gray['800']};
+      color: ${({ theme }) => theme.palette.gray['800']};
       cursor: pointer;
       font-size: 1.5rem;
       transition: 0.3s ease all;

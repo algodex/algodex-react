@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Section } from '@/components/Layout/Section'
 
 const Grid = styled.main`

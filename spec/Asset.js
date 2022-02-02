@@ -20,7 +20,8 @@ export const Schema = {
   type: 'object',
   properties: {
     id: {
-      type: 'integer'
+      type: 'integer',
+      minimum: 1
     },
     deleted: {
       type: 'boolean'
@@ -38,13 +39,17 @@ export const Schema = {
       maximum: 19
     },
     name: {
-      type: 'string'
+      type: 'string',
+      minimum: 1,
+      maximum: 8
     },
     txns: {
       type: 'integer'
     },
     fullName: {
-      type: 'string'
+      type: 'string',
+      minimum: 0,
+      maximum: 32
     },
     circulating: {
       type: 'integer',

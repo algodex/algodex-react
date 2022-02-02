@@ -74,7 +74,8 @@ export async function getStaticProps({ params: { id } }) {
  * @constructor
  */
 const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
-  console.debug('Trade Page Render')
+  // eslint-disable-next-line no-undef
+  console.debug(`TradePage(`, arguments[0], `)`)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)

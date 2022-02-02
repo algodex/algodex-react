@@ -1,10 +1,8 @@
 import React from 'react'
-import { Button } from './Button'
-import { FlexContainer } from 'components/Layout'
-
+import { Button as Component } from './Button'
 export default {
   title: '@algodex/components/Button',
-  component: Button,
+  component: Component,
   argTypes: {
     variant: {
       options: ['primary', 'secondary', 'none'],
@@ -15,20 +13,14 @@ export default {
       control: { type: 'radio' }
     }
   },
-  decorators: [
-    (Story) => (
-      <FlexContainer>
-        <Story />
-      </FlexContainer>
-    )
-  ]
+  args: {
+    variant: 'primary',
+    type: 'button',
+    children: 'Storybook'
+  }
 }
 
-const Template = (args) => <Button {...args}>{args.children}</Button>
-
-export const Default = Template.bind({})
-Default.args = {
-  variant: 'primary',
-  type: 'button',
-  children: 'Storybook'
+//eslint-disable-next-line
+export const Button = (props) => {
+  return <Component {...props} />
 }

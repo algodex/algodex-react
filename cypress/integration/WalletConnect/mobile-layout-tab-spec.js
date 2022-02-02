@@ -1,6 +1,6 @@
 const sizes = ['iphone-x', 'samsung-note9']
 
-describe('Check Mobile Tabs on Different Screens', () => {
+describe.skip('Check Mobile Tabs on Different Screens', () => {
   sizes.forEach((size) => {
     it(`Should render landing page and all mobile tabs on a ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
@@ -30,7 +30,7 @@ describe('Check Mobile Tabs on Different Screens', () => {
   })
 })
 
-describe('Checks if order book renders and is visible on Mobile view on Different Screens', () => {
+describe.skip('Checks if order book renders and is visible on Mobile view on Different Screens', () => {
   sizes.forEach((size) => {
     it(`Should render order book page on a ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
@@ -54,7 +54,7 @@ describe('Checks if order book renders and is visible on Mobile view on Differen
   })
 })
 
-describe('Checks if chart is visible on Mobile view on Different Screens', () => {
+describe.skip('Checks if chart is visible on Mobile view on Different Screens', () => {
   sizes.forEach((size) => {
     it(`Should render chart page on a ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
@@ -82,7 +82,7 @@ describe('Checks if chart is visible on Mobile view on Different Screens', () =>
   })
 })
 
-describe('Checks if trade section is visible on Mobile view on Different Screens', () => {
+describe.skip('Checks if trade section is visible on Mobile view on Different Screens', () => {
   sizes.forEach((size) => {
     it(`Should render trade section page on a ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
@@ -108,7 +108,7 @@ describe('Checks if trade section is visible on Mobile view on Different Screens
   })
 })
 
-describe('Checks if wallet section is visible on Mobile view on Different Screens', () => {
+describe.skip('Checks if wallet section is visible on Mobile view on Different Screens', () => {
   sizes.forEach((size) => {
     it(`Should render wallet section page on a ${size} screen`, () => {
       if (Cypress._.isArray(size)) {

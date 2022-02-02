@@ -5,14 +5,14 @@ import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { useState } from 'react'
 import { Container, Header, Tab } from 'components/Tabs'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Section } from '@/components/Layout/Section'
 import { useStorePersisted } from '../../store/use-store'
 export const WalletOrdersSection = styled.section`
-  border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  border-top: 1px solid ${({ theme }) => theme.palette.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
     border-top: none;
-    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
+    border-right: 1px solid ${({ theme }) => theme.palette.gray['700']};
   }
   display: ${({ active }) => (active ? 'flex' : 'none')};
   @media (min-width: 996px) {

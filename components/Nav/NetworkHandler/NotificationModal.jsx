@@ -4,7 +4,7 @@ import Icon from '@mdi/react'
 import Link from 'next/link'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const Button = styled.button`
   width: 100%;

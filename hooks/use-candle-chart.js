@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
 import theme from 'theme'
 import moment from 'moment'
-const UP_COLOR = theme.colors.green[500]
-const DOWN_COLOR = theme.colors.red[500]
-const LINE_COLOR = theme.colors.gray[800]
-const BACKGROUND_COLOR = theme.colors.gray[900]
-const BORDER_COLOR = theme.colors.gray[500]
-const TEXT_COLOR = theme.colors.gray[300]
+const UP_COLOR = theme.palette.green[500]
+const DOWN_COLOR = theme.palette.red[500]
+const LINE_COLOR = theme.palette.gray[800]
+const BACKGROUND_COLOR = theme.palette.gray[900]
+const BORDER_COLOR = theme.palette.gray[500]
+const TEXT_COLOR = theme.palette.gray[300]
 
 export default function useCandleChart(containerRef, volumeData, priceData, autoScaleProvider) {
   const [candleChart, setCandleChart] = useState()

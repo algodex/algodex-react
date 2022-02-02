@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme, { parseThemeColor } from 'theme'
 
 const IMAGES = {
@@ -70,13 +70,13 @@ const IMAGES = {
     viewBox: '0 0 24 24',
     markup: (
       <g>
-        <circle fill={theme.colors.green['500']} cx="12" cy="12" r="10.8" />
+        <circle fill={theme.palette.green['500']} cx="12" cy="12" r="10.8" />
         <path
-          fill={theme.colors.gray['000']}
+          fill={theme.palette.gray['000']}
           d="M12,23.5C5.7,23.5,0.5,18.3,0.5,12C0.5,5.7,5.7,0.5,12,0.5c6.3,0,11.5,5.2,11.5,11.5 C23.5,18.3,18.3,23.5,12,23.5z M12,1.9C6.4,1.9,1.9,6.4,1.9,12S6.4,22.1,12,22.1S22.1,17.6,22.1,12S17.6,1.9,12,1.9z"
         />
         <path
-          fill={theme.colors.gray['000']}
+          fill={theme.palette.gray['000']}
           d="M10.2,16.9L10.2,16.9c-0.4,0-0.7-0.1-1-0.4L5.8,13c-0.5-0.5-0.5-1.4,0-1.9c0.5-0.5,1.4-0.5,1.9,0l2.6,2.6 l6.1-6.1c0.5-0.5,1.4-0.5,1.9,0c0.5,0.5,0.5,1.4,0,1.9l-7,7C10.9,16.7,10.6,16.9,10.2,16.9z"
         />
       </g>

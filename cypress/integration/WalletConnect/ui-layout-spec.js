@@ -11,7 +11,7 @@ const sizes = [
   'macbook-16'
 ]
 
-describe('Landing Page In Potrait Mode', () => {
+describe.skip('Landing Page In Potrait Mode', () => {
   sizes.forEach((size) => {
     it(`Should render landing page on ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
@@ -31,7 +31,7 @@ describe('Landing Page In Potrait Mode', () => {
   })
 })
 
-describe('Landing Page In Landscape Mode', () => {
+describe.skip('Landing Page In Landscape Mode', () => {
   sizes.forEach((size) => {
     it(`Should render landing page on ${size} screen`, () => {
       if (Cypress._.isArray(size)) {

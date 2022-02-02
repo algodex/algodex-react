@@ -1,11 +1,11 @@
 import { default as Component } from './Slider'
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gray['400']};
+  background: ${({ theme }) => theme.palette.gray['400']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

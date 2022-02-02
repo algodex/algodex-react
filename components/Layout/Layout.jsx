@@ -46,8 +46,9 @@ export function Layout({ loading, error, offline, ...props }) {
   if (isError) return <ServiceError flex={true} size={10} message={'Something is up'} />
   if (isOffline) return <ServiceError flex={true} size={10} message={'You are offline!'} />
   if (isSizeDetected && isMobile) return <MobileLayout {...props} />
-  // if (isSizeDetected && isMobile) return <div>Something went wrong!</div>
+  if (isSizeDetected && isMobile) return <div>Something went wrong!</div>
   if (isSizeDetected && !isMobile) return <DesktopLayout {...props} />
+  // return <div>Hello</div>
 }
 Layout.propTypes = {
   loading: PropTypes.bool,

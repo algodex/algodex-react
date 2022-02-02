@@ -5,7 +5,7 @@ import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
 import { default as SearchInput } from 'components/Input/SearchInput'
 import { Section } from '@/components/Layout/Section'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
@@ -22,7 +22,7 @@ import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   position: relative;
   overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
 
@@ -36,7 +36,7 @@ export const AssetsContainer = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['800']};
+  background-color: ${({ theme }) => theme.palette.gray['800']};
   z-index: 30;
 
   @media (min-width: 1536px) {

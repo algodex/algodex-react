@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { parseThemeColor } from 'theme'
 import { AlertIcon } from 'components/Icon'
 export const FlexContainer = styled.div`

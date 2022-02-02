@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { Fragment, useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { ArrowLeft, ExternalLink } from 'react-feather'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -15,7 +15,7 @@ import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   flex: 1 1 0%;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
 `
 
 const InfoContainer = styled.div`
@@ -30,7 +30,7 @@ const ButtonText = styled.button`
   display: flex;
   align-content: center;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.gray[400]};
+  color: ${({ theme }) => theme.palette.gray[400]};
   padding: 5px 0;
 
   div {
@@ -56,12 +56,12 @@ const HeaderContainer = styled.div`
 
 const AssetUrl = styled.p`
   a {
-    color: ${({ theme }) => theme.colors.gray[400]};
+    color: ${({ theme }) => theme.palette.gray[400]};
     text-decoration: none;
     transition: color 100ms;
 
     &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
   }
 `
@@ -77,7 +77,7 @@ const InfoItem = styled.div`
 `
 
 const ExternalLinkIcon = styled(ExternalLink)`
-  stroke: ${({ theme }) => theme.colors.gray[500]};
+  stroke: ${({ theme }) => theme.palette.gray[500]};
   width: 1rem;
   height: 1rem;
 `
