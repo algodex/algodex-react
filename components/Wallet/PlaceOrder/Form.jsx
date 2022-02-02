@@ -1,15 +1,9 @@
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
-// import Tabs from 'components/Tabs/Tabs'
-import { TabBtnItem, TabItemWrapper, TabsList, TabsWrapper } from 'components/Tabs/Tabs'
-import { TabPanelUnstyled, TabsListUnstyled, TabsUnstyled, buttonUnstyledClasses } from '@mui/base'
-import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled'
-// import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
+import { BtnTabItem, BtnTabsList, NativeTabItem, NativeTabsList } from 'components/Tabs/Tabs'
 import { useMemo, useState } from 'react'
 
-// import Tabs from 'components/Tabs'
 import AdvancedOptions from './Form/AdvancedOptions'
 import { default as AmountRange } from 'components/Input/Slider'
-// import Big from 'big.js'
 import Button from '../../Button'
 import CurrencyInput from '../../Input/CurrencyInput'
 import { FormControl } from '@mui/material'
@@ -17,6 +11,7 @@ import Icon from 'components/Icon'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import { TabsUnstyled } from '@mui/base'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
 // import { lighten } from 'polished'
@@ -168,32 +163,37 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
         </section> */}
         <div className="w-full">
           <TabsUnstyled className="w-full" defaultValue={0} onChange={handleChangeFn}>
-            <TabsList value={activeTab}>
-              <TabBtnItem className="first-item">
+            <BtnTabsList value={activeTab}>
+              <BtnTabItem className="first-item">
                 <button
+                  size="small"
+                  className={`py-2 py-3 w-full ${
+                    activeTab === 0
+                      ? 'bg-green-700 rounded-l-md hover:bg-green-800'
+                      : 'bg-gray-700 rounded-l-md hover:bg-gray-600'
+                  }`}
                   onClick={(e) => handleChange(e, 'type')}
                   name="buy"
                   value="buy"
-                  className={`py-3 py-4 w-full ${
-                    activeTab === 0 && 'bg-green-700 hover:bg-green-500 rounded-l-lg'
-                  }`}
                 >
                   {t('buy')}
                 </button>
-              </TabBtnItem>
-              <TabBtnItem className="last-item">
+              </BtnTabItem>
+              <BtnTabItem className="last-item">
                 <button
+                  className={`py-2 py-3 w-full ${
+                    activeTab === 1
+                      ? 'bg-red-600 rounded-r-lg hover:bg-red-700'
+                      : 'bg-gray-700 rounded-r-md hover:bg-gray-600'
+                  }`}
                   onClick={(e) => handleChange(e, 'type')}
                   name="sell"
                   value="sell"
-                  className={`py-3 py-4 w-full ${
-                    activeTab === 1 && 'bg-red-600 rounded-r-lg hover:bg-red-500'
-                  }`}
                 >
                   {t('sell')}
                 </button>
-              </TabBtnItem>
-            </TabsList>
+              </BtnTabItem>
+            </BtnTabsList>
           </TabsUnstyled>
         </div>
 
@@ -264,19 +264,16 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
           </BalanceRow>
         </AvailableBalance>
 
-        {/* <Tabs orderType={order.type}>
-          <Tab isActive>{t('limit')}</Tab>
-        </Tabs> */}
         <TabsUnstyled defaultValue={0} sx={{ width: '100%' }}>
-          <TabsWrapper
-            style={{ marginBottom: '16px', borderBottom: 'solid 1px' }}
+          <NativeTabsList
+            style={{ marginBottom: '16px' }}
             value={activeTab}
             textColor="primary"
             onChange={handleChange}
             aria-label="secondary tabs example"
           >
-            <TabItemWrapper value={0} label={t('limit')} />
-          </TabsWrapper>
+            <NativeTabItem value={0} label={t('limit')} />
+          </NativeTabsList>
         </TabsUnstyled>
         {!hasBalance && (
           <BodyCopy color="gray.500" textAlign="center" m={32}>
