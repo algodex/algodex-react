@@ -1,6 +1,6 @@
 import React from 'react'
 import { AssetInfo as Component, default as ComponentWithData } from './Asset'
-import generateAsset from '../../spec/Asset'
+import generateAsset, { Example } from '../../spec/Asset'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import styled from '@emotion/styled'
 import { useQueryClient } from 'react-query'
@@ -18,25 +18,6 @@ const Container = styled.div`
   overflow: hidden;
 `
 
-/**
- * @todo: Add Selection for Assets
- * @todo: Add withData hooks and isLive flag
- */
-// const asset = {
-//   circulating: 99989322377,
-//   decimals: 6,
-//   deleted: false,
-//   fullName: 'Lamps',
-//   id: 15322902,
-//   name: 'LAMP',
-//   timestamp: 1618666459,
-//   total: 100000000000,
-//   txid: 'NOFSUK4EXHFFXJK3ZA6DZMGE6CAGQ7G5JT2X7FYTYQBSQEBZHY4Q',
-//   txns: 550235,
-//   url: null,
-//   verified: false
-// }
-
 export default {
   title: '@algodex/recipes/Asset/Asset Info',
   component: Component,
@@ -45,10 +26,7 @@ export default {
     isLive: false,
     isCleared: false,
     isRegenerate: false,
-    asset: {
-      ...generateAsset(),
-      id: 15322902
-    }
+    asset: Example
   },
   decorators: [
     (Story) => (
