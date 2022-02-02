@@ -226,13 +226,10 @@ export const parseThemeColor = (str) => {
 
 const theme = createTheme({
   background: colors.gray['800'],
-  old: {
-    name: 'Dark',
-    textStyles,
-    fontSizes,
-    fontFamilies,
-    buttons
-  },
+  textStyles,
+  fontSizes,
+  fontFamilies,
+  buttons,
   palette: {
     primary: {
       main: colors.gray['800']
@@ -240,6 +237,10 @@ const theme = createTheme({
     background: {
       light: colors.gray['000'],
       dark: colors.gray['800']
+    },
+    focus: {
+      green: '#4b9064',
+      red: '#b23639'
     },
     ...colors
   },

@@ -7,7 +7,7 @@ const Container = styled.div`
   height: 100vh;
   padding: 0;
   margin: 0;
-  background: ${({ theme }) => theme.colors.gray['700']};
+  background: ${({ theme }) => theme.palette.gray['700']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

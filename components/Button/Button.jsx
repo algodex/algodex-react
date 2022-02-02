@@ -29,7 +29,7 @@ export const Button = styled.button`
   }};
 
   text-transform: uppercase;
-  font-family: ${({ theme }) => theme.old.fontFamilies.body};
+  font-family: ${({ theme }) => theme.fontFamilies.body};
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.05em;

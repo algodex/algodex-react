@@ -67,7 +67,7 @@ const MobileMenuButton = styled(Button)`
   width: 100%;
   background-color: ${({ theme }) => theme.palette.gray['800']};
   padding: 0;
-  border: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  border: 1px solid ${({ theme }) => theme.palette.gray['700']};
   max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
   min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};

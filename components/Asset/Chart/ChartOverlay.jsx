@@ -33,7 +33,7 @@ export const Header = styled.header`
 export const TradingPair = styled.h3`
   margin-right: 1.5em;
   margin-bottom: 0.375em;
-  font-family: ${({ theme }) => theme.old.fontFamilies.body};
+  font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
   font-weight: 600;
   color: ${({ theme }) => theme.palette.gray[500]};
@@ -78,7 +78,7 @@ export const OhlcItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.5em;
-  font-family: ${({ theme }) => theme.old.fontFamilies.monospace};
+  font-family: ${({ theme }) => theme.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
@@ -94,7 +94,7 @@ export const OhlcItem = styled.div`
 
   dd {
     color: ${({ theme, value }) =>
-      parseFloat(value) < 0 ? theme.colors.red[500] : theme.colors.green[500]};
+      parseFloat(value) < 0 ? theme.palette.red[500] : theme.palette.green[500]};
   }
 
   @media (min-width: 1024px) {
@@ -105,7 +105,7 @@ export const OhlcItem = styled.div`
 export const BidAskSpreadContainer = styled.div`
   display: flex;
   align-items: center;
-  font-family: ${({ theme }) => theme.old.fontFamilies.monospace};
+  font-family: ${({ theme }) => theme.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
@@ -118,7 +118,7 @@ export const BidAskSpreadContainer = styled.div`
 `
 
 const BidAskSpreadItem = styled.span`
-  color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.palette.gray[100]};
   padding: 0.25em 0.625em;
   border-radius: 2px;
 
@@ -128,15 +128,15 @@ const BidAskSpreadItem = styled.span`
 `
 
 export const Bid = styled(BidAskSpreadItem)`
-  background-color: ${({ theme }) => theme.colors.green[800]};
+  background-color: ${({ theme }) => theme.palette.green[800]};
 `
 
 export const Ask = styled(BidAskSpreadItem)`
-  background-color: ${({ theme }) => theme.colors.red[800]};
+  background-color: ${({ theme }) => theme.palette.red[800]};
 `
 
 export const Spread = styled(BidAskSpreadItem)`
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
   padding-left: 0.375em;
   padding-right: 0.375em;
 `
@@ -150,18 +150,18 @@ export const VolumeContainer = styled.dl`
 export const Volume = styled.div`
   display: flex;
   align-items: center;
-  font-family: ${({ theme }) => theme.old.fontFamilies.monospace};
+  font-family: ${({ theme }) => theme.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
 
   dt {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     margin-right: 0.375em;
   }
 
   dd {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   @media (min-width: 1024px) {
@@ -196,7 +196,7 @@ function ChartOverlay(props) {
               path={mdiCheckDecagram}
               title="Verified Asset"
               size={0.7}
-              color={theme.colors.gray['500']}
+              color={theme.palette.gray['500']}
             />
           )}
           <div>

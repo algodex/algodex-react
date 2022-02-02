@@ -4,7 +4,7 @@ import { NavSearchTable as Component /*, default as ComponentWithData*/ } from '
 const Container = styled.div`
   width: 50vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gray['800']};
+  background: ${({ theme }) => theme.palette.gray['800']};
   display: flex;
   flex-direction: column;
   margin: 0;

@@ -193,6 +193,10 @@ const styles = css`
     -webkit-appearance: none;
     margin: 0;
   }
+  button {
+    background-color: transparent;
+    border: none;
+  }
 `
 function Algodex(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props

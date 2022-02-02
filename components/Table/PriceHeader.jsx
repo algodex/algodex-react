@@ -7,7 +7,7 @@ export const PriceHeaderText = styled(BodyCopyTiny)`
   display: flex;
   align-items: center;
   margin: 0;
-  color: ${({ theme }) => theme.colors.gray['500']};
+  color: ${({ theme }) => theme.palette.gray['500']};
 
   svg {
     margin-left: 0.25rem;

@@ -12,7 +12,7 @@ import {
   system
 } from 'styled-system'
 import PropTypes from 'prop-types'
-console.log(theme.breakpoints)
+
 const {
   title,
   headerLg,
@@ -28,7 +28,7 @@ const {
   labelMd,
   labelSm,
   navLabel
-} = theme.old.textStyles
+} = theme.textStyles
 
 export const BaseComponent = styled.div`
   ${space}
@@ -134,5 +134,5 @@ export const NavLabel = (props) => (
 NavLabel.propTypes = { children }
 
 export const BrightGraySpan = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
+  color: ${({ theme }) => theme.palette.gray['000']};
 `

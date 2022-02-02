@@ -30,7 +30,7 @@ const ButtonText = styled.button`
   display: flex;
   align-content: center;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.gray[400]};
+  color: ${({ theme }) => theme.palette.gray[400]};
   padding: 5px 0;
 
   div {
@@ -56,12 +56,12 @@ const HeaderContainer = styled.div`
 
 const AssetUrl = styled.p`
   a {
-    color: ${({ theme }) => theme.colors.gray[400]};
+    color: ${({ theme }) => theme.palette.gray[400]};
     text-decoration: none;
     transition: color 100ms;
 
     &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
   }
 `
@@ -77,7 +77,7 @@ const InfoItem = styled.div`
 `
 
 const ExternalLinkIcon = styled(ExternalLink)`
-  stroke: ${({ theme }) => theme.colors.gray[500]};
+  stroke: ${({ theme }) => theme.palette.gray[500]};
   width: 1rem;
   height: 1rem;
 `
@@ -177,7 +177,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('description')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.heading} fontWeight="400">
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
               {description}
             </BodyCopy>
           </InfoItem>
@@ -185,7 +185,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('circulating-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
@@ -193,7 +193,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('total-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.total}
             </BodyCopy>
           </InfoItem>
@@ -201,7 +201,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               ASA ID
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
               {asset.id}
             </BodyCopy>
           </InfoItem>
@@ -209,7 +209,7 @@ export function AssetInfo({ asset }) {
           {/*  <BodyCopyTiny as="dt" color="gray.500">*/}
           {/*    {t('total-transactions')}*/}
           {/*  </BodyCopyTiny>*/}
-          {/*  <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">*/}
+          {/*  <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
           {/*    {asset.txns}*/}
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
@@ -220,7 +220,7 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Price
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
@@ -233,7 +233,7 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Change
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>

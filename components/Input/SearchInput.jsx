@@ -14,7 +14,7 @@ const Container = styled.div`
   display: flex;
   position: relative;
   height: 51px;
-  border: solid 1px ${({ theme }) => theme.colors.gray['700']};
+  border: solid 1px ${({ theme }) => theme.palette.gray['700']};
   border-radius: 4px;
   // margin: 0 2rem;
 
@@ -44,7 +44,7 @@ export const CancelButton = styled.button`
   &:focus {
     svg {
       line {
-        stroke: ${({ theme }) => theme.colors.gray['000']};
+        stroke: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
@@ -83,7 +83,7 @@ export const Search = forwardRef(
             className="ml-2"
             title="Search icon"
             size={0.85}
-            color={theme.colors.gray['500']}
+            color={theme.palette.gray['500']}
           />
           <Input
             hasOutline={false}
@@ -96,7 +96,7 @@ export const Search = forwardRef(
           />
           {onCancel && value !== '' && (
             <CancelButton onClick={onCancel}>
-              <CancelIcon color={theme.colors.gray['500']} size={16} />
+              <CancelIcon color={theme.palette.gray['500']} size={16} />
             </CancelButton>
           )}
         </Container>

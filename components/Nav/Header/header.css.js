@@ -5,8 +5,8 @@ import { ReactSVG } from 'react-svg'
 import styled from '@emotion/styled'
 
 export const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray[800]};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  background-color: ${({ theme }) => theme.palette.gray[800]};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray['700']};
   padding: 1rem;
   margin: 0;
   // display: none;
@@ -48,7 +48,7 @@ export const MobileNavigation = styled.nav`
   width: 100%;
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   pointer-events: ${({ isOpen }) => (isOpen ? 'all' : 'none')};
-  background-color: ${({ theme }) => theme.colors.gray[800]};
+  background-color: ${({ theme }) => theme.palette.gray[800]};
   z-index: 10;
 
   @media (min-width: 1024px) {
@@ -76,7 +76,7 @@ export const NavTextLg = styled.span`
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
   ${fontSize}
   ${color}
@@ -84,33 +84,34 @@ export const NavTextLg = styled.span`
   transition: color 0.1s ease-in;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   & > a {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     padding: 1rem 0;
 
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
-      isActive && border ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
+      isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
 
     &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
 
     &:active {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
 
     @media (min-width: 1024px) {
       color: ${({ isActive, theme }) =>
-        isActive ? theme.colors.gray[100] : theme.colors.gray[500]};
+        isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     }
   }
 
   @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
+    color: ${({ isActive, theme }) =>
+      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     display: flex;
     margin: 0 15px;
   }
@@ -123,7 +124,7 @@ export const NavTextSm = styled.span`
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  color: ${({ theme, isActive }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
+  color: ${({ theme, isActive }) => (isActive ? theme.palette.gray[100] : theme.palette.gray[500])};
   font-weight: 600;
   ${fontSize}
   ${color}
@@ -131,32 +132,33 @@ export const NavTextSm = styled.span`
   transition: color 0.1s ease-in;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   & > a {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     padding: 1rem 0;
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
-      isActive && border ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
+      isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
 
     &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
 
     &:active {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
 
     @media (min-width: 1024px) {
       color: ${({ isActive, theme }) =>
-        isActive ? theme.colors.gray[100] : theme.colors.gray[500]};
+        isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     }
   }
 
   @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
+    color: ${({ isActive, theme }) =>
+      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     display: none;
   }
 `
@@ -168,7 +170,7 @@ export const NavIcon = styled.span`
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
   ${fontSize}
   ${color}
@@ -176,32 +178,33 @@ export const NavIcon = styled.span`
   transition: color 0.1s ease-in;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   & > a {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     padding: 1rem 0;
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
-      isActive && border ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
+      isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
 
     &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
 
     &:active {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
 
     @media (min-width: 1024px) {
       color: ${({ isActive, theme }) =>
-        isActive ? theme.colors.gray[100] : theme.colors.gray[500]};
+        isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     }
   }
 
   @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
+    color: ${({ isActive, theme }) =>
+      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
   }
 `
 
@@ -224,18 +227,18 @@ export const IconLogo = styled(ReactSVG)`
 export const MenuButton = styled.button`
   background: none;
   border: none;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme }) => theme.palette.gray[500]};
   padding: 0.5rem 1rem;
   transition: color 0.1s ease-in;
   cursor: pointer;
   ${fontSize}
 
   &:hover {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   &:active {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   & > svg {
@@ -260,9 +263,9 @@ export const NetworkDropdown = styled.select`
   background: unset;
   border: solid 2px
     ${({ theme, value }) =>
-      value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+      value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
   color: ${({ theme, value }) =>
-    value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+    value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
   border-radius: 3px;
   padding: 0.3rem 0.5rem;
 `

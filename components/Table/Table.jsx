@@ -35,7 +35,7 @@ const Container = styled.div`
 
       &:nth-child(odd) {
         td {
-          background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.01)};
+          background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.01)};
         }
       }
 
@@ -43,7 +43,7 @@ const Container = styled.div`
       &:nth-child(even) {
         &:hover {
           td {
-            background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.04)};
+            background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.04)};
           }
         }
       }
@@ -53,7 +53,7 @@ const Container = styled.div`
     td {
       margin: 0;
       padding: 0.5rem 0;
-      color: ${({ theme }) => theme.colors.gray['600']};
+      color: ${({ theme }) => theme.palette.gray['600']};
       font-size: 0.75rem;
       line-height: 1.25;
 
@@ -70,8 +70,8 @@ const Container = styled.div`
           position: sticky;
           top: 0;
           padding: 0.75rem 0;
-          background-color: ${({ theme }) => theme.colors.gray['800']};
-          color: ${({ theme }) => theme.colors.gray['500']};
+          background-color: ${({ theme }) => theme.palette.gray['800']};
+          color: ${({ theme }) => theme.palette.gray['500']};
           text-align: left;
           text-transform: uppercase;
           font-weight: 500;

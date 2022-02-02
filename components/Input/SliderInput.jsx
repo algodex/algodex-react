@@ -113,7 +113,7 @@ const Container = styled.div`
 //   width: ${tickWidth};
 //   height: 1rem;
 //   background: ${({ theme, isActive }) =>
-//     isActive ? theme.colors.gray['000'] : theme.colors.gray['700']};
+//     isActive ? theme.palette.gray['000'] : theme.palette.gray['700']};
 //
 //   &:first-child {
 //     transform: translateX(1px);

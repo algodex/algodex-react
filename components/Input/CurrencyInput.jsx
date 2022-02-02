@@ -4,29 +4,29 @@ import styled from '@emotion/styled'
 const Input = styled.input`
   flex: 1 1 auto;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['900']};
-  border: 2px solid ${({ theme }) => theme.colors.gray['700']};
+  background-color: ${({ theme }) => theme.palette.gray['900']};
+  border: 2px solid ${({ theme }) => theme.palette.gray['700']};
   border-radius: 3px;
   padding: 0.5rem 0.75rem;
   padding-right: 4.5rem;
-  color: ${({ theme }) => theme.colors.gray['000']};
+  color: ${({ theme }) => theme.palette.gray['000']};
   text-align: right;
   font-size: 1rem;
   line-height: 1;
 
   &:focus {
     outline: 0;
-    border-color: ${({ theme }) => theme.colors.gray['400']};
+    border-color: ${({ theme }) => theme.palette.gray['400']};
   }
 
   &:disabled {
     outline: 0;
     border-color: transparent;
-    background-color: ${({ theme }) => theme.colors.gray['700']};
+    background-color: ${({ theme }) => theme.palette.gray['700']};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors.gray['600']};
+    color: ${({ theme }) => theme.palette.gray['600']};
   }
 
   &::-webkit-outer-spin-button,
@@ -52,7 +52,7 @@ const InputLabel = styled.span`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  color: ${({ theme }) => theme.colors.gray['500']};
+  color: ${({ theme }) => theme.palette.gray['500']};
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1;

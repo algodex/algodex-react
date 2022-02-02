@@ -29,8 +29,8 @@ export const BannerWrapper = styled.section`
     opacity: 0.1;
   }
   input {
-    background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.25)};
-    color: ${({ theme }) => theme.colors.gray['800']};
+    background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.25)};
+    color: ${({ theme }) => theme.palette.gray['800']};
     font-size: 1rem;
     font-weight: 400;
     width: 100%;
@@ -49,7 +49,7 @@ export const BannerWrapper = styled.section`
     line-height: 1.3em;
     transition: 0.2s ease;
     &:focus {
-      background-color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.72)};
+      background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.72)};
       outline: none;
     }
   }
@@ -58,7 +58,7 @@ export const BannerWrapper = styled.section`
     font-weight: 500;
     line-height: 1.2;
     word-break: break-all;
-    color: ${({ theme }) => theme.colors.gray['000']};
+    color: ${({ theme }) => theme.palette.gray['000']};
   }
   button {
     font-size: 0.8rem;
@@ -66,12 +66,12 @@ export const BannerWrapper = styled.section`
     padding: 0.6rem;
     min-width: 6.2rem;
     margin-top: 2rem;
-    color: ${({ theme }) => theme.colors.gray['800']};
-    background-color: ${({ theme }) => theme.colors.gray['000']};
+    color: ${({ theme }) => theme.palette.gray['800']};
+    background-color: ${({ theme }) => theme.palette.gray['000']};
   }
 
   .tagline {
-    color: ${({ theme }) => rgba(theme.colors.gray['000'], 0.64)};
+    color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.64)};
   }
 `
 
@@ -80,23 +80,23 @@ export const HowItWorksWrapper = styled.section`
   font-weight: 500;
   padding: 0.1rem;
   min-width: 6.2rem;
-  color: ${({ theme }) => theme.colors.gray['800']};
-  background-color: ${({ theme }) => theme.colors.gray['000']};
+  color: ${({ theme }) => theme.palette.gray['800']};
+  background-color: ${({ theme }) => theme.palette.gray['000']};
   h2 {
     font-size: 3rem;
     font-weight: 500;
     line-height: 1.2;
     word-break: break-all;
-    color: ${({ theme }) => theme.colors.gray['800']};
+    color: ${({ theme }) => theme.palette.gray['800']};
   }
   .mockup-img {
     padding: 1rem 9rem 0px 0px;
   }
   .btn-outline {
-    color: ${({ theme }) => theme.colors.gray['800']};
+    color: ${({ theme }) => theme.palette.gray['800']};
     border-radius: 0.4rem;
     background-color: #ed141400;
-    border: ${({ theme }) => theme.colors.gray['800']} solid 0.12rem;
+    border: ${({ theme }) => theme.palette.gray['800']} solid 0.12rem;
     font-size: 0.875rem;
     padding: 0.6rem 2rem;
     font-weight: bold;
@@ -117,8 +117,8 @@ export const BlogWrapper = styled.section`
   .btn-gray {
     padding: 0.2rem 0.6rem 0.2rem 0.6rem;
     border-radius: 0.13rem;
-    background-color: ${({ theme }) => rgba(theme.colors.gray['800'], 0.1)};
-    color: ${({ theme }) => theme.colors.gray['700']};
+    background-color: ${({ theme }) => rgba(theme.palette.gray['800'], 0.1)};
+    color: ${({ theme }) => theme.palette.gray['700']};
     margin-bottom: 0.6rem;
   }
   .update-container {
@@ -131,7 +131,7 @@ export const BlogWrapper = styled.section`
 export const Accordion = styled.section`
   .accordion-header {
     span {
-      color: ${({ theme }) => theme.colors.red['500']};
+      color: ${({ theme }) => theme.palette.red['500']};
       transition: all 0.3s ease;
       margin-right: 0.7rem;
       &.angle-down {
@@ -149,7 +149,7 @@ export const Accordion = styled.section`
     transition: all 0.3s ease;
     p {
       font-size: 1rem;
-      color: ${({ theme }) => theme.colors.gray[('800', 0.6)]};
+      color: ${({ theme }) => theme.palette.gray[('800', 0.6)]};
     }
   }
 `
