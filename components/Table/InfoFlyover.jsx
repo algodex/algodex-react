@@ -9,7 +9,7 @@ function InfoFlyover({ row, components, children, isActive }) {
   const isEmpty = !isRow && !isChildren
 
   return (
-    <Root class="hello">
+    <Root>
       {isChildren && children}
       {isRow &&
         Object.keys(row).map((key, idx) => (
@@ -26,7 +26,7 @@ function DefaultRoot({ children }) {
   return <div>{children}</div>
 }
 DefaultRoot.propTypes = {
-  children: PropTypes.elementType
+  children: PropTypes.any
 }
 
 InfoFlyover.propTypes = {

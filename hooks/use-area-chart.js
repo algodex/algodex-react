@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
-import theme from 'theme'
+import theme from '../theme/index'
 import moment from 'moment'
 
-const LINE_COLOR = theme.colors.gray[800]
-const BACKGROUND_COLOR = theme.colors.gray[900]
-const BORDER_COLOR = theme.colors.gray[500]
-const TEXT_COLOR = theme.colors.gray[300]
+const LINE_COLOR = theme.palette.gray[800]
+const BACKGROUND_COLOR = theme.palette.gray[900]
+const BORDER_COLOR = theme.palette.gray[500]
+const TEXT_COLOR = theme.palette.gray[300]
 
 const TOP_COLOR = '#248350'
-const TOP_LINE_COLOR = theme.colors.green[500]
+const TOP_LINE_COLOR = theme.palette.green[500]
 const BOTTOM_COLOR = 'rgba(56, 161, 105, 0.17)'
 const LINE_WIDTH = 2
 

@@ -5,13 +5,13 @@ import useAreaChart from '@/hooks/use-area-chart'
 import useCandleChart from '@/hooks/use-candle-chart'
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import millify from 'millify'
 import * as ReactDOM from 'react-dom'
 
 const Container = styled.div`
   position: relative;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
   height: 100%;
 
   @media (min-width: 996px) {
@@ -239,28 +239,28 @@ export function Chart({
 
 Chart.propTypes = {
   asset: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    decimals: PropTypes.string.isRequired
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   }).isRequired,
   interval: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
   overlay: PropTypes.shape({
     ohlc: PropTypes.shape({
-      open: PropTypes.string.isRequired,
-      high: PropTypes.string.isRequired,
-      low: PropTypes.string.isRequired,
-      close: PropTypes.string.isRequired
+      open: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      high: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      low: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      close: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }),
-    volume: PropTypes.string.isRequired,
+    volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     orderbook: PropTypes.shape({
-      bid: PropTypes.string.isRequired,
-      ask: PropTypes.string.isRequired,
-      spread: PropTypes.string.isRequired
+      bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   }),
   ohlc: PropTypes.array.isRequired,
   volume: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func
 }
 
 Chart.defaultProps = {

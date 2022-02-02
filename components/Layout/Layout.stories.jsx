@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Component from './Layout'
 import { Section } from '@/components/Layout/Section'
 
@@ -34,7 +34,7 @@ const components = {
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gray['800']};
+  background: ${({ theme }) => theme.palette.gray['800']};
   display: flex;
   flex-direction: column;
   margin: 0;

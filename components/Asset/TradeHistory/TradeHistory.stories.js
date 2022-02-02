@@ -1,7 +1,7 @@
 import React from 'react'
 import { TradeHistory as Component, default as ComponentWithData } from './TradeHistory'
 import asset from 'spec/Asset'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 const Container = styled.div`
@@ -9,7 +9,7 @@ const Container = styled.div`
   height: 100vh;
   padding: 0;
   margin: 0;
-  background: ${({ theme }) => theme.colors.gray['800']};
+  background: ${({ theme }) => theme.palette.gray['800']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

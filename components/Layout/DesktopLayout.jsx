@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
-import { useStore /*, useStorePersisted */ } from '@/store/use-store'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+import { useStore /*, useStorePersisted*/ } from '@/store/use-store'
 
 import AssetOrderBook from '@/components/Asset/OrderBook'
 import AssetTradeHistory from '@/components/Asset/TradeHistory'

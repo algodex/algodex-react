@@ -14,7 +14,7 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import { flatten } from 'lodash'
 import { floatToFixed } from '@/services/display'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
@@ -79,15 +79,15 @@ const PairSlash = styled.span`
 `
 
 const AssetPrice = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
+  color: ${({ theme }) => theme.palette.gray['000']};
 `
 
 const AssetChange = styled.span`
   color: ${({ theme, value }) => {
     if (value === null || value === '--') {
-      return theme.colors.gray['400']
+      return theme.palette.gray['400']
     }
-    return value < 0 ? theme.colors.red['500'] : theme.colors.green['500']
+    return value < 0 ? theme.palette.red['500'] : theme.palette.green['500']
   }};
 `
 
@@ -137,7 +137,7 @@ export const NavSearchTable = ({
 
   const handleFavoritesFn = useCallback(
     (id) => {
-      return favoritesState[id] === true ? theme.colors.amber['400'] : theme.colors.gray['600']
+      return favoritesState[id] === true ? theme.palette.amber['400'] : theme.palette.gray['600']
     },
     [favoritesState]
   )
@@ -221,7 +221,7 @@ export const NavSearchTable = ({
                   path={mdiCheckDecagram}
                   title="Verified asset"
                   size={0.5}
-                  color={theme.colors.gray['500']}
+                  color={theme.palette.gray['500']}
                 />
               )}
             </div>
@@ -255,7 +255,7 @@ export const NavSearchTable = ({
                 title="View favourited items"
                 size={0.5}
                 color={
-                  isFilteringByFavorites ? theme.colors.amber['400'] : theme.colors.gray['500']
+                  isFilteringByFavorites ? theme.palette.amber['400'] : theme.palette.gray['500']
                 }
               />
               {t('pair')}

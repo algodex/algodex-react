@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
-
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 export const Section = styled.section`
   height: 100%;
   width: 100%;

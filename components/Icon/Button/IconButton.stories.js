@@ -1,6 +1,6 @@
 import React from 'react'
 import { IconButton as Component } from './IconButton'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import * as Icons from 'react-feather'
 
 const colors = ['blue', 'amber', 'green', 'gray', 'red']
@@ -10,7 +10,7 @@ const mapping = Object.keys(Icons).reduce((previousValue, next) => {
 }, {})
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray[200]};
+  background-color: ${({ theme }) => theme.palette.gray[200]};
   display: flex;
   width: 100vw;
   height: 100vh;

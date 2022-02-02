@@ -7,7 +7,7 @@ import { mdiCheckDecagram } from '@mdi/js'
 import theme from 'theme'
 import { useCallback } from 'react'
 import { useUserStore } from 'store'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const Container = styled.div`
   position: absolute;
@@ -36,11 +36,11 @@ export const TradingPair = styled.h3`
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
 
   span {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   display: flex;
@@ -50,13 +50,15 @@ export const TradingPair = styled.h3`
     font-size: 1.25rem;
   }
 `
-
+TradingPair.defaultProps = {
+  'data-testid': 'trading-pair'
+}
 export const IconButton = styled.button`
   cursor: pointer;
   pointer-events: all;
   border: none;
   background: transparent;
-  color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.palette.gray[100]};
   margin-left: 0.125rem;
   padding: 0;
 
@@ -88,13 +90,13 @@ export const OhlcItem = styled.div`
   }
 
   dt {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     margin-right: 0.375em;
   }
 
   dd {
     color: ${({ theme, value }) =>
-      parseFloat(value) < 0 ? theme.colors.red[500] : theme.colors.green[500]};
+      parseFloat(value) < 0 ? theme.palette.red[500] : theme.palette.green[500]};
   }
 
   @media (min-width: 1024px) {
@@ -118,7 +120,7 @@ export const BidAskSpreadContainer = styled.div`
 `
 
 const BidAskSpreadItem = styled.span`
-  color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.palette.gray[100]};
   padding: 0.25em 0.625em;
   border-radius: 2px;
 
@@ -128,19 +130,25 @@ const BidAskSpreadItem = styled.span`
 `
 
 export const Bid = styled(BidAskSpreadItem)`
-  background-color: ${({ theme }) => theme.colors.green[800]};
+  background-color: ${({ theme }) => theme.palette.green[800]};
 `
-
+Bid.defaultProps = {
+  'data-testid': 'bid'
+}
 export const Ask = styled(BidAskSpreadItem)`
-  background-color: ${({ theme }) => theme.colors.red[800]};
+  background-color: ${({ theme }) => theme.palette.red[800]};
 `
-
+Ask.defaultProps = {
+  'data-testid': 'ask'
+}
 export const Spread = styled(BidAskSpreadItem)`
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
   padding-left: 0.375em;
   padding-right: 0.375em;
 `
-
+Spread.defaultProps = {
+  'data-testid': 'spread'
+}
 export const VolumeContainer = styled.dl`
   display: flex;
   align-items: center;
@@ -156,12 +164,12 @@ export const Volume = styled.div`
   white-space: nowrap;
 
   dt {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     margin-right: 0.375em;
   }
 
   dd {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   @media (min-width: 1024px) {
@@ -196,7 +204,7 @@ function ChartOverlay(props) {
               path={mdiCheckDecagram}
               title="Verified Asset"
               size={0.7}
-              color={theme.colors.gray['500']}
+              color={theme.palette.gray['500']}
             />
           )}
           <div>
@@ -211,22 +219,22 @@ function ChartOverlay(props) {
         <OhlcList>
           <OhlcItem value={ohlc.open}>
             <dt>O:</dt>
-            <dd>{ohlc.open}</dd>
+            <dd data-testid="open24hr">{ohlc.open}</dd>
           </OhlcItem>
           <OhlcItem value={ohlc.high}>
             <dt>H:</dt>
-            <dd>{ohlc.high}</dd>
+            <dd data-testid="high24hr">{ohlc.high}</dd>
           </OhlcItem>
           <OhlcItem value={ohlc.low}>
             <dt>L:</dt>
-            <dd>{ohlc.low}</dd>
+            <dd data-testid="low24hr">{ohlc.low}</dd>
           </OhlcItem>
           <OhlcItem value={ohlc.close}>
             <dt>C:</dt>
-            <dd>{ohlc.close}</dd>
+            <dd data-testid="close24hr">{ohlc.close}</dd>
           </OhlcItem>
           <OhlcItem value={changeAmt}>
-            <dd>{openCloseChange()}</dd>
+            <dd data-testid="dailyChange">{openCloseChange()}</dd>
           </OhlcItem>
         </OhlcList>
       </Header>
@@ -248,10 +256,10 @@ function ChartOverlay(props) {
 ChartOverlay.propTypes = {
   asset: PropTypes.object.isRequired,
   ohlc: PropTypes.object.isRequired,
-  bid: PropTypes.string,
-  ask: PropTypes.string,
-  spread: PropTypes.string,
-  volume: PropTypes.string
+  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
 
 export default ChartOverlay

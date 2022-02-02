@@ -1,7 +1,9 @@
 import React from 'react'
 import { jsxDecorator } from 'storybook-addon-jsx'
 import { RouterContext } from 'next/dist/shared/lib/router-context'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@mui/material/styles';
+import { Global, css } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from 'react-query'
 import theme from '../theme'
 import "tailwindcss/tailwind.css"
@@ -28,7 +30,7 @@ Object.defineProperty(NextImage, "default", {
         />
     ),
 });
-const GlobalStyle = createGlobalStyle`
+const base = css`
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -77,8 +79,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     box-sizing: border-box;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    /* background: ${theme.colors.background.dark}; */
-    color: ${theme.colors.gray['400']};
+    /* background: ${theme.palette.background.dark}; */
+    color: ${theme.palette.gray['400']};
   }
   *,
   *:before,
@@ -128,7 +130,8 @@ export const decorators = [
   ),
   (Story) => (
     <>
-      <GlobalStyle />
+        <CssBaseline />
+      <Global styles={base} />
       {Story()}
     </>
   )

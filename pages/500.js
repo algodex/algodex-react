@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
 
@@ -7,8 +7,8 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background.dark};
-  color: ${({ theme }) => theme.colors.gray['400']};
+  background-color: ${({ theme }) => theme.palette.background.dark};
+  color: ${({ theme }) => theme.palette.gray['400']};
 `
 
 /**

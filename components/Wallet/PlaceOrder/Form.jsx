@@ -14,14 +14,14 @@ import { Section } from '@/components/Layout/Section'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
 import { lighten } from 'polished'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   overflow: hidden scroll;
   scrollbar-width: none;
 
@@ -36,13 +36,13 @@ const Header = styled.header`
 const IconTextContainer = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.gray['300']};
+  color: ${({ theme }) => theme.palette.gray['300']};
 `
 
 const AvailableBalance = styled.div`
   margin-bottom: 1.25rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray['700']};
 `
 
 const Form = styled.form`
@@ -66,10 +66,10 @@ const ToggleBtn = styled(Button)`
   justify-content: center;
   margin: 0;
   line-height: 1.25;
-  background-color: ${({ theme }) => theme.colors.gray['700']};
+  background-color: ${({ theme }) => theme.palette.gray['700']};
 
   &:hover {
-    background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
+    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
   }
   label {
     cursor: pointer;
@@ -89,11 +89,11 @@ const BuyButton = styled(ToggleBtn)`
 
   && {
     ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.colors.green['500']};
+      background-color: ${({ theme }) => theme.palette.green['500']};
     }
 
     ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.colors.green['500'])};
+      background-color: ${({ theme }) => lighten(0.05, theme.palette.green['500'])};
     }
 
     ${ToggleInput}:focus + & {
@@ -108,11 +108,11 @@ const SellButton = styled(ToggleBtn)`
 
   && {
     ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.colors.red['500']};
+      background-color: ${({ theme }) => theme.palette.red['500']};
     }
 
     ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.colors.red['500'])};
+      background-color: ${({ theme }) => lighten(0.05, theme.palette.red['500'])};
     }
 
     ${ToggleInput}:focus + & {
@@ -141,7 +141,7 @@ const Tabs = styled(_Tabs)`
 
   ${Tab} {
     border-bottom-color: ${({ orderType, theme }) =>
-      orderType === 'sell' ? theme.colors.red['500'] : theme.colors.green['500']};
+      orderType === 'sell' ? theme.palette.red['500'] : theme.palette.green['500']};
   }
 `
 
@@ -168,8 +168,8 @@ const IconButton = styled.button`
 
   svg {
     height: 15px;
-    fill: ${({ theme }) => theme.colors.gray[500]};
-    color: ${({ theme }) => theme.colors.gray[900]};
+    fill: ${({ theme }) => theme.palette.gray[500]};
+    color: ${({ theme }) => theme.palette.gray[900]};
   }
 `
 const DEFAULT_ORDER = {
