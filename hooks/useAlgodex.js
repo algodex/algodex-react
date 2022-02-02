@@ -61,7 +61,7 @@ export const useAssetPriceQuery = ({
     () => fetchAssetPrice(id),
     options
   )
-  useRouteQueryError({ isError, error, router })
+  useRouteQueryError({ isError, error, router, enabled: isError && !error.message.match(404) })
   return { data, isError, error, ...rest }
 }
 

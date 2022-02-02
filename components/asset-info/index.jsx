@@ -43,7 +43,7 @@ const AssetInfo = ({ asset, price }) => {
     asset,
     options: {
       refetchInterval: 5000,
-      enabled: price?.isTraded || false,
+      enabled: true,
       initialData: price
     }
   })
