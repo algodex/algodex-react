@@ -1,4 +1,5 @@
 import { lighten } from 'polished'
+import { createTheme } from '@mui/material'
 
 const colors = {
   white: '#FFFFFF',
@@ -223,13 +224,25 @@ export const parseThemeColor = (str) => {
   return str.split('.').reduce((o, i) => o[i], colors)
 }
 
-export default {
-  name: 'Dark',
-  textStyles,
-  fontSizes,
-  fontFamilies,
-  breakpoints,
-  buttons,
+const theme = createTheme({
+  background: colors.gray['800'],
+  old: {
+    name: 'Dark',
+    textStyles,
+    fontSizes,
+    fontFamilies,
+    buttons
+  },
+  palette: {
+    primary: {
+      main: colors.gray['800']
+    },
+    background: {
+      light: colors.gray['000'],
+      dark: colors.gray['800']
+    },
+    ...colors
+  },
   colors: {
     ...colors,
     background: {
@@ -241,4 +254,7 @@ export default {
       red: '#b23639'
     }
   }
-}
+})
+
+theme.breakpoints = breakpoints
+export default theme

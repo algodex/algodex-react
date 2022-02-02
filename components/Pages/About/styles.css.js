@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { rgba } from 'polished'
 
 export const Container = styled.div`

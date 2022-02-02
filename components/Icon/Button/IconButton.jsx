@@ -1,16 +1,17 @@
-import styled, { css } from 'styled-components'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import * as Icons from 'react-feather'
 import { isNumber } from 'lodash'
 import PropTypes from 'prop-types'
 
 function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
-  return theme.colors[color][fillGradient]
+  return theme.palette[color][fillGradient]
 }
 function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
 function getColor({ theme, color = 'gray', gradient = 900 }) {
-  return theme.colors[color][gradient]
+  return theme.palette[color][gradient]
 }
 const style = css`
   cursor: pointer;

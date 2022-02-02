@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-import theme from 'theme'
-
+import styled from '@emotion/styled'
+import theme from '../theme/index'
 import {
   space,
   fontFamily,
@@ -13,7 +12,7 @@ import {
   system
 } from 'styled-system'
 import PropTypes from 'prop-types'
-
+console.log(theme.breakpoints)
 const {
   title,
   headerLg,
@@ -29,7 +28,7 @@ const {
   labelMd,
   labelSm,
   navLabel
-} = theme.textStyles
+} = theme.old.textStyles
 
 export const BaseComponent = styled.div`
   ${space}

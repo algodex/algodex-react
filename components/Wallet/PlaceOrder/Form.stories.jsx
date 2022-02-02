@@ -1,12 +1,12 @@
 import React from 'react'
 import { PlaceOrderForm as Component } from './Form'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import asset from 'spec/Asset'
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gray['800']};
+  background: ${({ theme }) => theme.palette.gray['800']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

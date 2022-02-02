@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { Fragment, useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { ArrowLeft, ExternalLink } from 'react-feather'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -15,7 +15,7 @@ import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   flex: 1 1 0%;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
 `
 
 const InfoContainer = styled.div`
@@ -177,7 +177,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('description')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
+            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.heading} fontWeight="400">
               {description}
             </BodyCopy>
           </InfoItem>
@@ -185,7 +185,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('circulating-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
               {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
@@ -193,7 +193,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('total-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
               {asset.total}
             </BodyCopy>
           </InfoItem>
@@ -201,7 +201,7 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               ASA ID
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
               {asset.id}
             </BodyCopy>
           </InfoItem>
@@ -209,7 +209,7 @@ export function AssetInfo({ asset }) {
           {/*  <BodyCopyTiny as="dt" color="gray.500">*/}
           {/*    {t('total-transactions')}*/}
           {/*  </BodyCopyTiny>*/}
-          {/*  <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
+          {/*  <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">*/}
           {/*    {asset.txns}*/}
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
@@ -220,7 +220,7 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Price
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
@@ -233,7 +233,7 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Change
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy as="dd" fontFamily={theme.old.fontFamilies.monospace} fontSize="1.25rem">
                   {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>

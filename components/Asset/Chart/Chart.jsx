@@ -5,13 +5,13 @@ import useAreaChart from '@/hooks/use-area-chart'
 import useCandleChart from '@/hooks/use-candle-chart'
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import millify from 'millify'
 import * as ReactDOM from 'react-dom'
 
 const Container = styled.div`
   position: relative;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
   height: 100%;
 
   @media (min-width: 996px) {

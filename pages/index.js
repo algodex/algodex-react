@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const Container = styled.div`
   display: flex;

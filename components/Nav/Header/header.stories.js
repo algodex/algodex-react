@@ -1,6 +1,6 @@
 import { default as Component } from '.'
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Container = styled.div`
   width: 100vw;

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { useCallback, useMemo } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import { BrightGraySpan } from '@/components/Typography'

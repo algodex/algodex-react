@@ -4,7 +4,7 @@ import OrderHistory from 'components/Wallet/Table/TradeHistoryTable'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const Tab = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ export const Tab = styled.div`
   align-items: center;
   text-align: center;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.palette.gray[100]};
   padding: 1rem 0;
   transition: all 0.1s ease-in;
   cursor: pointer;
@@ -22,25 +22,26 @@ export const Tab = styled.div`
   line-height: 1.25;
 
   border-bottom: ${({ isActive, theme }) =>
-    isActive ? `6px inset ${theme.colors.green[500]}` : `6px inset transparent`};
+    isActive ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
 
   &:hover {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   &:active {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
+    color: ${({ isActive, theme }) =>
+      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
   }
 `
 
 export const Header = styled.div`
   display: flex;
   padding: 0 1.125rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray[700]};
 
   & > * {
     margin: 0 1rem;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import PropTypes from 'prop-types'
 
@@ -40,7 +40,7 @@ const OrderCancelButton = styled.button`
   color: inherit;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.red['500']};
+    background: ${({ theme }) => theme.palette.red['500']};
   }
 `
 

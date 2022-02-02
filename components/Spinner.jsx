@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
-import styled, { keyframes } from 'styled-components'
+import styled from '@emotion/styled'
+import { keyframes } from '@emotion/react'
 import { parseThemeColor } from 'theme'
 
 const rotate = keyframes`
@@ -38,9 +39,7 @@ const FlexContainer = styled.div`
  * Spinner SVG
  * @type {StyledComponent}
  */
-const Svg = styled.svg.attrs({
-  viewBox: '0 0 50 50'
-})`
+const Svg = styled.svg`
   animation: ${rotate} 2s linear infinite;
   width: ${({ size }) => `${size}rem`};
   height: ${({ size }) => `${size}rem`};
@@ -56,7 +55,9 @@ const Svg = styled.svg.attrs({
     will-change: stroke-dasharray, stroke-dashoffset;
   }
 `
-
+Svg.defaultProps = {
+  viewBox: '0 0 50 50'
+}
 /**
  * Loading Spinner
  *

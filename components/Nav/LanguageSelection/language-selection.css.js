@@ -1,7 +1,7 @@
 import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const NavTextLg = styled.span`
   display: none;

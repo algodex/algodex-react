@@ -6,7 +6,7 @@ import InfoFlyover from './InfoFlyover'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { rgba } from 'polished'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { usePopperTooltip } from 'react-popper-tooltip'
 
 const SortIcon = styled(Icon)`

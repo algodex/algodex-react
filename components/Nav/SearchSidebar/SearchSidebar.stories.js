@@ -1,7 +1,7 @@
 // SearchSidebar.stories.js
 import { NavSearchSidebar as Component, default as ComponentWithData } from './SearchSidebar'
 import { NavSearchTable as Table /*, default as LiveTable*/ } from './SearchTable'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import React from 'react'
 

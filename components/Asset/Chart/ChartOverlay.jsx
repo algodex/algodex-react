@@ -7,7 +7,7 @@ import { mdiCheckDecagram } from '@mdi/js'
 import theme from 'theme'
 import { useCallback } from 'react'
 import { useUserStore } from 'store'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const Container = styled.div`
   position: absolute;
@@ -33,14 +33,14 @@ export const Header = styled.header`
 export const TradingPair = styled.h3`
   margin-right: 1.5em;
   margin-bottom: 0.375em;
-  font-family: ${({ theme }) => theme.fontFamilies.body};
+  font-family: ${({ theme }) => theme.old.fontFamilies.body};
   font-size: 1rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.gray[500]};
+  color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
 
   span {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
   }
 
   display: flex;
@@ -56,7 +56,7 @@ export const IconButton = styled.button`
   pointer-events: all;
   border: none;
   background: transparent;
-  color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.palette.gray[100]};
   margin-left: 0.125rem;
   padding: 0;
 
@@ -78,7 +78,7 @@ export const OhlcItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.5em;
-  font-family: ${({ theme }) => theme.fontFamilies.monospace};
+  font-family: ${({ theme }) => theme.old.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
@@ -88,7 +88,7 @@ export const OhlcItem = styled.div`
   }
 
   dt {
-    color: ${({ theme }) => theme.colors.gray[100]};
+    color: ${({ theme }) => theme.palette.gray[100]};
     margin-right: 0.375em;
   }
 
@@ -105,7 +105,7 @@ export const OhlcItem = styled.div`
 export const BidAskSpreadContainer = styled.div`
   display: flex;
   align-items: center;
-  font-family: ${({ theme }) => theme.fontFamilies.monospace};
+  font-family: ${({ theme }) => theme.old.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;
@@ -150,7 +150,7 @@ export const VolumeContainer = styled.dl`
 export const Volume = styled.div`
   display: flex;
   align-items: center;
-  font-family: ${({ theme }) => theme.fontFamilies.monospace};
+  font-family: ${({ theme }) => theme.old.fontFamilies.monospace};
   font-size: 0.6875rem;
   line-height: 1;
   white-space: nowrap;

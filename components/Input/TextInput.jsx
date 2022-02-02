@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 /**
  * @param {object} props Component Properties
@@ -7,11 +7,7 @@ import styled from 'styled-components'
  * @param {boolean} props.hasBackgroundColor Enable Backgroung Color
  * @type {StyledComponent}
  */
-export const TextInput = styled.input.attrs(({ type, hasOutline, hasBackgroundColor }) => ({
-  type,
-  hasOutline,
-  hasBackgroundColor
-}))`
+export const TextInput = styled.input`
   flex: 1 1 auto;
   background-color: ${({ theme, hasBackgroundColor }) =>
     hasBackgroundColor ? theme.colors.gray['900'] : 'inherit'};
@@ -20,7 +16,7 @@ export const TextInput = styled.input.attrs(({ type, hasOutline, hasBackgroundCo
   border-radius: 3px;
   padding: 0.5rem;
   color: ${({ theme }) => theme.colors.gray['000']};
-  font-family: ${({ theme }) => theme.fontFamilies.body};
+  font-family: ${({ theme }) => theme.old.fontFamilies.body};
   font-size: 1rem;
   line-height: 1;
   min-height: 2.5rem;

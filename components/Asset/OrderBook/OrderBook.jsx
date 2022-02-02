@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import useStore from 'store/use-store'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { rgba } from 'polished'
 import useTranslation from 'next-translate/useTranslation'
 import Big from 'big.js'
@@ -25,7 +25,7 @@ const FirstOrderContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.875rem 0 1rem;
 `
 
@@ -114,7 +114,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.3rem;
 
   @media (min-width: 996px) {
@@ -145,12 +145,12 @@ const BookRow = styled.div`
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buy' ? 'green' : 'red'
-      return rgba(theme.colors[color]['500'], 0.15)
+      return rgba(theme.palette[color]['500'], 0.15)
     }};
 
     p {
       &:not(:first-child) {
-        color: ${({ theme }) => theme.colors.gray['000']};
+        color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
@@ -182,13 +182,13 @@ const SellOrders = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
     border-radius: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
   }
 `
 
@@ -213,13 +213,13 @@ const BuyOrders = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
     border-radius: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
   }
 `
 
@@ -231,7 +231,7 @@ const Price = styled.p`
   align-items: center;
   font-size: 1.25rem;
   font-weight: 600;
-  color: ${({ theme, color }) => theme.colors[color]['500']};
+  color: ${({ theme, color }) => theme.palette[color]['500']};
   margin: 0;
 
   svg {
