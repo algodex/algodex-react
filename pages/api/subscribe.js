@@ -1,3 +1,5 @@
+/*eslint-disable no-useless-escape */
+
 import axios from 'axios'
 
 //Extract credentials into .env
@@ -22,10 +24,8 @@ export default async (req, res) => {
       },
       headers: { 'Content-Type': 'application/json' }
     })
+    res.status(200).json(response.data)
   } catch (error) {
     return res.status(500).json({ success: false })
   }
-
-  res.status(200).json({ success: true, email })
 }
-
