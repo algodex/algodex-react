@@ -1,24 +1,12 @@
-import PropTypes from 'prop-types'
-<<<<<<< HEAD
-import { fetchExplorerAssetInfo } from 'services/algoexplorer'
-import styled from 'styled-components'
-import { useUserStore } from '../../store'
-import { useAssetPriceQuery } from '../../hooks/useAlgodex'
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-=======
->>>>>>> 93fe0e374e70f29441d050a8a5988aa1ba7fc33a
-
 import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import useUserStore from '@/store/use-user-state'
+import { useCallback, useState } from 'react'
 
-import Page from '@/components/Page'
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
-import { useState, useCallback } from 'react'
+import Page from '@/components/Page'
+import PropTypes from 'prop-types'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
+import useUserStore from '@/store/use-user-state'
 
 /**
  * Fetch Traded Asset Paths
@@ -91,18 +79,6 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
-<<<<<<< HEAD
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset: staticExplorerAsset || {},
-    options: {
-      refetchInterval: 5000,
-      enabled:
-        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
-      initialData: staticAssetPrice
-    }
-  })
-
-=======
   const [interval, setInterval] = useState('1h')
   const onChange = useCallback(
     (e) => {
@@ -112,7 +88,6 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
     },
     [setInterval, interval]
   )
->>>>>>> 93fe0e374e70f29441d050a8a5988aa1ba7fc33a
   return (
     <Page
       title={`${prefix} ${title}`}

@@ -30,16 +30,12 @@
     "styled-components": "^5"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@algodex/algodex-sdk": "^1.1.8",
-=======
     "@algodex/algodex-sdk": "^1.1.7",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.6.0",
     "@iconify/react": "^3.1.0",
->>>>>>> 93fe0e374e70f29441d050a8a5988aa1ba7fc33a
     "@mdi/js": "^6.5.95",
     "@mdi/react": "^1.5.0",
     "@mdx-js/loader": "^2.0.0",
