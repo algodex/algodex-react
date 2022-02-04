@@ -95,7 +95,7 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
       staticExplorerAsset={staticExplorerAsset}
       noFollow={true}
     >
-      {({ asset }) =>
+      {({ asset, dexAsset }) =>
         showAssetInfo || !dexAsset?.isTraded ? (
           <AssetInfo asset={asset} price={dexAsset} />
         ) : (

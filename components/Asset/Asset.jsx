@@ -1,16 +1,16 @@
+import { ArrowLeft, ExternalLink } from 'react-feather'
+import { BodyCopy, BodyCopyTiny, HeaderLg } from '@/components/Typography'
+import { Fragment, useCallback } from 'react'
+
 import Image from 'next/image'
 import PropTypes from 'prop-types'
-import { Fragment, useCallback } from 'react'
-import styled from '@emotion/styled'
-import { ArrowLeft, ExternalLink } from 'react-feather'
-import useTranslation from 'next-translate/useTranslation'
-
-import theme from '../../theme/index'
-import useUserStore from '@/store/use-user-state'
-import { floatToFixed } from '@/services/display'
-import { convertFromBaseUnits } from '@/services/convert'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from '@/components/Typography'
 import SvgImage from '@/components/SvgImage'
+import { convertFromBaseUnits } from '@/services/convert'
+import { floatToFixed } from '@/services/display'
+import styled from '@emotion/styled'
+import theme from '../../theme/index'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
@@ -122,18 +122,6 @@ export function AssetInfo({ asset }) {
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
-<<<<<<< HEAD:components/asset-info/index.jsx
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset,
-    options: {
-      refetchInterval: 5000,
-      enabled: true,
-      initialData: price
-    }
-  })
-=======
-
->>>>>>> 93fe0e374e70f29441d050a8a5988aa1ba7fc33a:components/Asset/Asset.jsx
   const renderName = () => {
     if (asset.verified) {
       return (
