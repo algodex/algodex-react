@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { render } from '@testing-library/react'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import I18nProvider from 'next-translate/I18nProvider'
 import theme from '../theme'

@@ -1,44 +1,25 @@
-import { useEffect, useState } from 'react'
-
-import Head from 'next/head'
-import Header from 'components/header'
-import MainLayout from 'components/main-layout'
-import NetworkHandler from 'components/network-notification'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import Spinner from 'components/spinner'
-import styled from 'styled-components'
-import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
+import styled from '@emotion/styled'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import useUserStore from 'store/use-user-state'
+
+import Header from '@/components/Nav/Header'
+import NetworkHandler from '@/components/Nav/NetworkHandler'
+import Layout from '@/components/Layout'
+import Spinner from '@/components/Spinner'
+import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
+import useUserStore from '@/store/use-user-state'
 
 const DEBUG = process.env.NEXT_PUBLIC_DEBUG
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
 
   overflow: hidden;
   max-height: 100%;
   height: 100%;
-
-  @media (min-width: 996px) {
-    overflow: scroll;
-    max-height: none;
-  }
-`
-
-export const Ribbon = styled.div`
-  background: ;
-  padding: 1rem 0;
-  text-align: center;
-`
-
-export const Button = styled.button`
-  width: 100%;
-  background: white;
-  color: black;
-  padding: 9% 3%;
-  border-radius: 3px;
 `
 
 /**
@@ -48,7 +29,7 @@ export const Button = styled.button`
  * @param {string} description
  * @param {Object} staticExplorerAsset
  * @param {boolean} noFollow
- * @param {JSX.Element|JSX.Element[]} children
+ * @param {JSX.Element|JSX.Element[]|function} children
  * @returns {JSX.Element}
  * @constructor
  */
@@ -88,7 +69,7 @@ const Page = ({
   }
 
   const { data, isLoading } = useExplorerAssetInfo({
-    id: query.id || explorerAsset?.id,
+    asset: { id: query.id || explorerAsset?.id },
     options
   })
 
@@ -113,10 +94,10 @@ const Page = ({
       </Head>
       <Header />
       <NetworkHandler />
-      <MainLayout asset={explorerAsset}>
+      <Layout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
         {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}
-      </MainLayout>
+      </Layout>
     </Container>
   )
 }
@@ -125,6 +106,6 @@ Page.propTypes = {
   description: PropTypes.string,
   staticExplorerAsset: PropTypes.object,
   noFollow: PropTypes.bool,
-  children: PropTypes.func
+  children: PropTypes.node
 }
 export default Page

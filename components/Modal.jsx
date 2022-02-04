@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const ModalWrapper = styled.div`
   z-index: 200;
@@ -25,6 +25,7 @@ Modal.propTypes = {
   isVisible: PropTypes.bool,
   hideBackdrop: PropTypes.bool
 }
+
 Modal.defaultProps = {
   hideBackdrop: true
 }
