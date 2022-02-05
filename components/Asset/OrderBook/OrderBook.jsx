@@ -256,7 +256,9 @@ export function OrderBookPrice({ asset }) {
     return (
       <Fragment>
         --
-        <BodyCopySm data-testid="no-price-info" as="span">0.00%</BodyCopySm>
+        <BodyCopySm data-testid="no-price-info" as="span">
+          0.00%
+        </BodyCopySm>
       </Fragment>
     )
   }
@@ -269,7 +271,10 @@ export function OrderBookPrice({ asset }) {
             ? convertFromAsaUnits(asset.price_info.price, asset.decimals)
             : asset.price_info.price
         )}
-        <BodyCopySm data-testid="has-price-info"  as="span">{`${floatToFixed(asset.price_info.price24Change, 2)}%`}</BodyCopySm>
+        <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
+          asset.price_info.price24Change,
+          2
+        )}%`}</BodyCopySm>
       </Fragment>
     )
   }

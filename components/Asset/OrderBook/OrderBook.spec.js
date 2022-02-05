@@ -37,16 +37,16 @@ describe('Order Book', () => {
     verified: false
   }
 
-  const decreaseInPrice = { 
-    ...baseAssetData, 
+  const decreaseInPrice = {
+    ...baseAssetData,
     price_info: {
-      price24Change: -15.166066426570628,
+      price24Change: -15.166066426570628
     }
   }
-  const increaseInPrice = { 
-    ...baseAssetData, 
+  const increaseInPrice = {
+    ...baseAssetData,
     price_info: {
-      price24Change: 1.5166066426570628,
+      price24Change: 1.5166066426570628
     }
   }
 
@@ -71,31 +71,23 @@ describe('Order Book', () => {
 
   it('should show price', () => {
     // Should show the actual price
-    const { queryByTestId } = render(
-      <OrderBookPriceView asset={baseAssetData} />
-    )
+    const { queryByTestId } = render(<OrderBookPriceView asset={baseAssetData} />)
     expect(queryByTestId('has-price-info')).not.toBeNull()
   })
 
   it('should not show price', () => {
-    const { queryByTestId } = render(
-      <OrderBookPriceView asset={{}} />
-    )
+    const { queryByTestId } = render(<OrderBookPriceView asset={{}} />)
     expect(queryByTestId('no-price-info')).not.toBeNull()
     expect(queryByTestId('has-price-info')).toBeNull()
   })
 
   it('should reflect price increase', () => {
-    const { queryByTestId } = render(
-      <OrderBookPriceView asset={increaseInPrice} />
-    )
+    const { queryByTestId } = render(<OrderBookPriceView asset={increaseInPrice} />)
     expect(queryByTestId('arrow-up')).not.toBeNull()
   })
 
   it('should reflect price decrease', () => {
-    const { queryByTestId } = render(
-      <OrderBookPriceView asset={increaseInPrice} />
-    )
+    const { queryByTestId } = render(<OrderBookPriceView asset={decreaseInPrice} />)
     expect(queryByTestId('arrow-down')).not.toBeNull()
   })
 })
