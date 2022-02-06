@@ -11,7 +11,7 @@ import {
 } from './asset-info.css'
 import { BodyCopy, BodyCopyTiny, HeaderLg } from 'components/type'
 import { Fragment, useCallback } from 'react'
-import { convertFromAsaUnits, numberFormatter } from 'services/convert'
+import { convertFromAsaUnits, convertFromBaseUnits } from 'services/convert'
 
 import { ArrowLeft } from 'react-feather'
 import Image from 'next/image'
@@ -108,7 +108,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {numberFormatter(asset.circulating)}
+              {convertFromBaseUnits(asset.circulating, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -116,7 +116,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {numberFormatter(asset.total)}
+              {convertFromBaseUnits(asset.total, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
