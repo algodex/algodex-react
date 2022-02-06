@@ -1,29 +1,27 @@
-import PropTypes from 'prop-types'
-import Image from 'next/image'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
-import SvgImage from 'components/svg-image'
-
-import theme from 'theme'
+import {
+  AlgoExplorerLink,
+  AssetUrl,
+  ButtonText,
+  Container,
+  ExternalLinkIcon,
+  HeaderContainer,
+  InfoContainer,
+  InfoItem,
+  InfoList
+} from './asset-info.css'
+import { BodyCopy, BodyCopyTiny, HeaderLg } from 'components/type'
+import { Fragment, useCallback } from 'react'
+import { convertFromAsaUnits, convertFromBaseUnits } from 'services/convert'
 
 import { ArrowLeft } from 'react-feather'
-
-import {
-  Container,
-  InfoContainer,
-  HeaderContainer,
-  AssetUrl,
-  InfoList,
-  InfoItem,
-  AlgoExplorerLink,
-  ExternalLinkIcon,
-  ButtonText
-} from './asset-info.css'
-import useTranslation from 'next-translate/useTranslation'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import { Fragment, useCallback } from 'react'
-import { useUserStore } from '../../store'
+import Image from 'next/image'
+import PropTypes from 'prop-types'
+import SvgImage from 'components/svg-image'
 import { floatToFixed } from 'services/display'
-import { convertFromAsaUnits, numberFormatter } from 'services/convert'
+import theme from 'theme'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
+import useTranslation from 'next-translate/useTranslation'
+import { useUserStore } from '../../store'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
@@ -110,7 +108,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {numberFormatter(asset.circulating)}
+              {convertFromBaseUnits(asset.circulating, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -118,7 +116,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {numberFormatter(asset.total)}
+              {convertFromBaseUnits(asset.total, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
