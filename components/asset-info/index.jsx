@@ -1,29 +1,27 @@
-import PropTypes from 'prop-types'
-import Image from 'next/image'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
-import SvgImage from 'components/svg-image'
-
-import theme from 'theme'
+import {
+  AlgoExplorerLink,
+  AssetUrl,
+  ButtonText,
+  Container,
+  ExternalLinkIcon,
+  HeaderContainer,
+  InfoContainer,
+  InfoItem,
+  InfoList
+} from './asset-info.css'
+import { BodyCopy, BodyCopyTiny, HeaderLg } from 'components/type'
+import { Fragment, useCallback } from 'react'
+import { convertFromAsaUnits, numberFormatter } from 'services/convert'
 
 import { ArrowLeft } from 'react-feather'
-
-import {
-  Container,
-  InfoContainer,
-  HeaderContainer,
-  AssetUrl,
-  InfoList,
-  InfoItem,
-  AlgoExplorerLink,
-  ExternalLinkIcon,
-  ButtonText
-} from './asset-info.css'
-import useTranslation from 'next-translate/useTranslation'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import { Fragment, useCallback } from 'react'
-import { useUserStore } from '../../store'
+import Image from 'next/image'
+import PropTypes from 'prop-types'
+import SvgImage from 'components/svg-image'
 import { floatToFixed } from 'services/display'
-import { convertFromAsaUnits, numberFormatter } from 'services/convert'
+import theme from 'theme'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
+import useTranslation from 'next-translate/useTranslation'
+import { useUserStore } from '../../store'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
