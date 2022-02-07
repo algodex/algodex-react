@@ -4,6 +4,7 @@ module.exports = {
   moduleDirectories: ['node_modules', '<rootDir>'],
   testEnvironment: 'jsdom',
   collectCoverage: true,
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
