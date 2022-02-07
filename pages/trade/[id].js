@@ -5,12 +5,9 @@ import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import useUserStore from '@/store/use-user-state'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
-
+import useUserStore from '@/store/use-user-state'
 
 /**
  * Fetch Traded Asset Paths
