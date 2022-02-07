@@ -147,7 +147,7 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy data-testid="asset-url" as="span">{asset.url}</BodyCopy>
+            <BodyCopy data-testid="asset-url"  as="span">{asset.url}</BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -159,7 +159,7 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button onClick={onClick} data-testid="back-btn">
+          <button onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
