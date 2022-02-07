@@ -31,8 +31,8 @@ export const immer = (config) => (set, get, api) =>
 
 export const createStore = ({ config, options, localstorage = false, name = 'Algodex' }) =>
   localstorage
-    ? create(devtools(persist(immer(config), options), name))
-    : create(devtools(immer(config), name))
+    ? create(devtools(persist(immer(config), options), { name }))
+    : create(devtools(immer(config), { name }))
 
 export const useStorePersisted = create(
   devtools(
@@ -49,7 +49,7 @@ export const useStorePersisted = create(
         version: 3
       }
     ),
-    'Wallet'
+    { name: 'Wallet' }
   )
 )
 export const useStore = create(
@@ -144,7 +144,7 @@ export const useStore = create(
       chartMode: 'candle',
       setChartMode: (input) => set({ chartMode: input })
     })),
-    'Original'
+    { name: 'Original' }
   )
 )
 
