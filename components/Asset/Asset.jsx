@@ -108,7 +108,7 @@ const AlgoExplorerLink = styled.div`
   }
 `
 export function AssetInfo({ asset }) {
-  console.log(`AssetInfo(`, arguments[0], `)`)
+  // console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -147,7 +147,7 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy as="span">{asset.url}</BodyCopy>
+            <BodyCopy data-testid="asset-url" as="span">{asset.url}</BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -159,7 +159,7 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button onClick={onClick}>
+          <button onClick={onClick} data-testid="back-btn">
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
