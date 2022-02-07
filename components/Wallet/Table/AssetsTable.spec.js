@@ -1,6 +1,6 @@
 import React from 'react'
 import { AssetsTable, AssetCoinCell } from './AssetsTable'
-import { render } from 'test/test-utils'
+import { render, waitFor } from 'test/test-utils'
 import { cleanup } from '@testing-library/react'
 
 const ASSETS_ROW = 'asset-coin-cell'
@@ -13,13 +13,14 @@ afterEach(() => {
 })
 
 describe('Assets', () => {
-  it('should not show any rows if no data is provided', () => {
+  it('should not show any rows if no data is provided', async () => {
     const { queryByTestId } = render(<AssetsTable wallet={wallet} />)
 
-    expect(queryByTestId(ASSETS_ROW)).toBeNull()
+    const data = await waitFor(() => queryByTestId(ASSETS_ROW))
+    expect(data).toBeNull()
   })
 
-  it('should show rows if data is provided', () => {
+  it('should show rows if data is provided', async () => {
     const assets = [
       {
         unit: 'TEST',
@@ -35,11 +36,11 @@ describe('Assets', () => {
       address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
     }
     const { queryByTestId } = render(<AssetsTable assets={assets} wallet={wallet} />)
-
-    expect(queryByTestId(ASSETS_ROW)).not.toBeNull()
+    const data = await waitFor(() => queryByTestId(ASSETS_ROW))
+    expect(data).not.toBeNull()
   })
 
-  it('should show rows if data is provided', () => {
+  it('should show rows if data is provided', async () => {
     const row = {
       original: {
         unit: 'TEST',
@@ -58,7 +59,7 @@ describe('Assets', () => {
     }
 
     const { queryByTestId } = render(<AssetCoinCell {...props} />)
-
-    expect(queryByTestId(ASSETS_ROW)).not.toBeNull()
+    const data = await waitFor(() => queryByTestId(ASSETS_ROW))
+    expect(data).not.toBeNull()
   })
 })
