@@ -17,7 +17,7 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import Big from 'big.js'
 import Error from 'components/error'
@@ -88,20 +88,20 @@ function PlaceOrderView(props) {
 
   const {
     data: minBalance,
-    isLoading,
-    isError
+    isLoading: isWalletBalanceLoading,
+    isError: isWalletBalanceError
   } = useWalletMinBalanceQuery({
     wallet: wallets.find((wallet) => wallet.address === activeWalletAddress)
   })
 
   useEffect(() => {
-    if (!isLoading && !isError) {
+    if (!isWalletBalanceLoading && !isWalletBalanceError) {
       const total = new Big(algoBalance)
       const min = new Big(minBalance).div(1000000)
       const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
       setMaxSpendableAlgo(Math.max(0, max))
     }
-  }, [minBalance, algoBalance, isLoading, isError])
+  }, [minBalance, algoBalance, isWalletBalanceLoading, isWalletBalanceError])
 
   /**
    * When asset or active wallet changes, reset the form
@@ -115,19 +115,31 @@ function PlaceOrderView(props) {
     )
   }, [asset, activeWalletAddress, setOrder])
 
-  const handleChange = (e, field) => {
-    setOrder(
-      {
-        [field || e.target.id]: e.target.value
-      },
-      asset
-    )
-  }
-  const { data: assetOrders, isLoading: assetOrderLoading } = useAssetOrdersQuery({ asset })
+  const handleChange = useCallback(
+    (e, field) => {
+      setOrder(
+        {
+          [field || e.target.id]: e.target.value
+        },
+        asset
+      )
+    },
+    [asset, setOrder]
+  )
+  const {
+    data: assetOrders,
+    isLoading: isAssetOrderLoading,
+    isError: isAssetOrderError
+  } = useAssetOrdersQuery({ asset })
+
+  const isLoading = isAssetOrderLoading || isWalletBalanceLoading
+  const isError = isAssetOrderError || isWalletBalanceError
+
   useEffect(() => {
     if (
       assetOrders &&
-      !assetOrderLoading &&
+      !isAssetOrderLoading &&
+      !isAssetOrderError &&
       typeof assetOrders.sellASAOrdersInEscrow !== 'undefined' &&
       typeof assetOrders.buyASAOrdersInEscrow !== 'undefined'
     ) {
@@ -141,22 +153,29 @@ function PlaceOrderView(props) {
       )
       setMarketSellPrice(Math.max(...list2))
     }
-  }, [assetOrderLoading, assetOrders, setMarketBuyPrice, setMarketSellPrice, asset])
+  }, [
+    isAssetOrderLoading,
+    isAssetOrderError,
+    assetOrders,
+    setMarketBuyPrice,
+    setMarketSellPrice,
+    asset
+  ])
 
-  const handleMarketOrderChange = () => {
+  const handleMarketOrderChange = useCallback(() => {
     setOrder(
       {
-        price: (order.type == 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
+        price: (order.type === 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
       },
       asset
     )
-  }
+  }, [setOrder, order, asset, marketBuyPrice, marketSellPrice])
 
   useEffect(() => {
-    if (orderView == MARKET_PANEL) {
+    if (orderView === MARKET_PANEL) {
       handleMarketOrderChange()
     }
-  }, [assetOrders, order.type, marketBuyPrice, marketSellPrice])
+  }, [assetOrders, order.type, marketBuyPrice, marketSellPrice, handleMarketOrderChange, orderView])
 
   const handleRangeChange = (update) => {
     setOrder(update, asset)
@@ -191,7 +210,7 @@ function PlaceOrderView(props) {
 
   const handleSubmit = async (e) => {
     handleOptionsChange({
-      target: { value: orderView == LIMIT_PANEL ? order.execution : 'market' }
+      target: { value: orderView === LIMIT_PANEL ? order.execution : 'market' }
     })
     console.log('order submitted')
 
@@ -213,7 +232,7 @@ function PlaceOrderView(props) {
     }
     const orderData = {
       ...order,
-      execution: orderView == LIMIT_PANEL ? order.execution : 'market',
+      execution: orderView === LIMIT_PANEL ? order.execution : 'market',
       address: activeWalletAddress,
       asset
     }
@@ -252,7 +271,7 @@ function PlaceOrderView(props) {
       setStatus({ submitted: true, submitting: false })
 
       // reset order form if it is not a market order
-      if (order.execution != 'market') {
+      if (order.execution !== 'market') {
         setOrder(
           {
             ...DEFAULT_ORDER,
@@ -417,7 +436,7 @@ function PlaceOrderView(props) {
         <Tabs>
           <Tab
             orderType={order.type}
-            isActive={orderView == LIMIT_PANEL}
+            isActive={orderView === LIMIT_PANEL}
             onClick={() => {
               setOrderView(LIMIT_PANEL)
               handleOptionsChange({ target: { value: 'both' } })
@@ -427,7 +446,7 @@ function PlaceOrderView(props) {
           </Tab>
           <Tab
             orderType={order.type}
-            isActive={orderView == MARKET_PANEL}
+            isActive={orderView === MARKET_PANEL}
             onClick={() => {
               setOrderView(MARKET_PANEL)
               handleMarketOrderChange()
@@ -437,7 +456,7 @@ function PlaceOrderView(props) {
             Market
           </Tab>
         </Tabs>
-        {orderView == LIMIT_PANEL ? (
+        {orderView === LIMIT_PANEL ? (
           <LimitOrder
             order={order}
             handleChange={handleChange}

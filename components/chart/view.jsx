@@ -27,7 +27,7 @@ function autoScaleProvider(original, chart, priceData) {
     max = Math.max(priceItem.close, max)
     max = Math.max(priceItem.open, max)
     max = Math.max(priceItem.high, max)
-    if (min == -1) {
+    if (min === -1) {
       min = priceItem.open
     }
     min = Math.min(priceItem.close, min)
@@ -39,7 +39,7 @@ function autoScaleProvider(original, chart, priceData) {
   }
 
   const res = original()
-  if (res !== null && min != -1) {
+  if (res !== null && min !== -1) {
     res.priceRange.maxValue = max
     res.priceRange.minValue = min
   }
@@ -48,14 +48,14 @@ function autoScaleProvider(original, chart, priceData) {
 }
 
 function ChartView(props) {
-  const { asset, volumeData, priceData } = props
+  const { volumeData, priceData } = props
   const [currentPrices, setCurrentPrices] = useState(props)
   const [currentLogical, setCurrentLogical] = useState(priceData.length - 1)
 
   useMemo(() => {
     setCurrentPrices(props)
     setCurrentLogical(priceData.length - 1)
-  }, [asset])
+  }, [setCurrentPrices, setCurrentLogical, priceData, props])
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
@@ -91,7 +91,10 @@ function ChartView(props) {
     prices.ohlc = {
       ...priceEntry
     }
-    prices.asaVolume = volumeEntry != null ? millify(volumeEntry.value) : '0'
+    prices.asaVolume =
+      typeof volumeEntry !== 'undefined' && typeof volumeEntry.value !== 'undefined'
+        ? millify(volumeEntry.value)
+        : '0'
 
     setCurrentPrices(prices)
   }
@@ -116,7 +119,7 @@ function ChartView(props) {
       return
     }
 
-    if (logical != currentLogical) {
+    if (logical !== currentLogical) {
       setCurrentLogical(logical)
       updateHoverPrices(logical)
     }
