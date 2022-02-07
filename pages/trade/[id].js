@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import useUserStore from '@/store/use-user-state'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 
 import Page from '@/components/Page'
 import AssetInfo from '@/components/Asset/Asset'
@@ -89,6 +90,17 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
     },
     [setInterval, interval]
   )
+
+  const { data: dexAsset } = useAssetPriceQuery({
+    asset: staticExplorerAsset || {},
+    options: {
+      refetchInterval: 5000,
+      enabled:
+        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
+      initialData: staticAssetPrice
+    }
+  })
+
   return (
     <Page
       title={`${prefix} ${title}`}
@@ -97,8 +109,8 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
       noFollow={true}
     >
       {({ asset }) =>
-        showAssetInfo || !staticAssetPrice?.isTraded ? (
-          <AssetInfo asset={asset} price={staticAssetPrice} />
+        showAssetInfo || !dexAsset?.isTraded ? (
+          <AssetInfo asset={asset} price={dexAsset} />
         ) : (
           <Chart asset={asset} interval={interval} onChange={onChange} />
         )
