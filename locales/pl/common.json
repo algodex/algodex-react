@@ -3,8 +3,8 @@
     "header-trade": "O nas",
     "header-docs": "Operacja handlowa",
     "header-support": "Dokumenty",
-    "price": "Pomoc",
-    "amount": "Cena",
+    "price": "Cena",
+    "amount": "ilość",
     "total": "Kwota",
     "time": "Suma",
     "no-trades-completed": " Czas ",
@@ -14,5 +14,5 @@
     "mobilefooter-ORDERS":"Zlecen",
     "mobilefooter-WALLET":"Portfel",
     "trade-history":"Historia handlu",
-    "order-book":"Zamów książkę"
+    "order-book":"księga zamówień"
 }

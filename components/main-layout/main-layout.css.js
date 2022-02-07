@@ -30,6 +30,7 @@ export const PlaceOrderSection = styled.section`
 export const ContentSection = styled.section`
   position: relative;
   height: auto;
+  overflow-y: scroll;
 `
 
 export const AssetsSection = styled.section`
