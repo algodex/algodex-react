@@ -52,14 +52,12 @@ describe('Assets', () => {
       }
     }
 
-    const cell = [
-      {
-        row: row,
-        value: '20'
-      }
-    ]
+    const props = {
+      row: row,
+      value: '20'
+    }
 
-    const { queryByTestId } = render(<AssetCoinCell {...cell} />)
+    const { queryByTestId } = render(<AssetCoinCell {...props} />)
 
     expect(queryByTestId(ASSETS_ROW)).not.toBeNull()
   })
