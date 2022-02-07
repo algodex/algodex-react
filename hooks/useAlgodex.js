@@ -85,8 +85,71 @@ export function useAssetPriceQuery({
     () => fetchAssetPrice(id),
     options
   )
-  useRouteQueryError({ isError, error, router, enabled: isError && !error.message.match(404) })
-  return { data, isError, error, ...rest }
+  const asset = useMemo(() => {
+    return {
+      ...algorandAsset,
+      price_info: dexAsset
+    }
+  }, [algorandAsset, dexAsset])
+
+  return { data: { asset }, ...rest }
+}
+
+function mapPriceData(data) {
+  const prices =
+    data?.chart_data.map(
+      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+        const time = parseInt(unixTime)
+        return {
+          time: time,
+          open: floatToFixed(formatted_open),
+          high: floatToFixed(formatted_high),
+          low: floatToFixed(formatted_low),
+          close: floatToFixed(formatted_close)
+        }
+      }
+    ) || []
+  return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
+}
+
+function getOhlc(data) {
+  const lastPriceData = data?.chart_data[0]
+
+  return lastPriceData
+    ? {
+        open: floatToFixed(lastPriceData.formatted_open),
+        high: floatToFixed(lastPriceData.formatted_high),
+        low: floatToFixed(lastPriceData.formatted_low),
+        close: floatToFixed(lastPriceData.formatted_close)
+      }
+    : {}
+}
+
+function mapVolumeData(data, volUpColor, volDownColor) {
+  const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
+    const time = parseInt(unixTime)
+    return {
+      time: time,
+      value: asaVolume
+    }
+  })
+  const volumeColors = data?.chart_data.map(({ open, close }) =>
+    open > close ? volDownColor : volUpColor
+  )
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
+}
+
+function getBidAskSpread(orderBook) {
+  const { buyOrders, sellOrders } = orderBook
+
+  const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
+  const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
+
+  const bid = floatToFixed(bidPrice)
+  const ask = floatToFixed(askPrice)
+  const spread = floatToFixed(new Big(ask).minus(bid).abs())
+
+  return { bid, ask, spread }
 }
 
 /**
@@ -220,15 +283,40 @@ export function useAssetOrderbookQuery({
   options = {
     refetchInterval
   }
-}) {
-  const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery(
+} = {}) {
+  // console.log(`useAssetOrderbookQuery(${JSON.stringify({ asset })})`)
+  const { id, decimals } = asset
+  const [sell, setSellOrders] = useState([])
+  const [buy, setBuyOrders] = useState([])
+
+  // Orderbook Query
+  const { data, isLoading, ...rest } = useQuery(
     ['assetOrders', { id }],
     () => fetchAssetOrders(id),
     options
   )
-  useRouteQueryError({ isError, error, router })
-  return { data, isError, error, ...rest }
+
+  // Massage Orders
+  useEffect(() => {
+    if (
+      data &&
+      !isLoading &&
+      typeof data.sellASAOrdersInEscrow !== 'undefined' &&
+      typeof data.buyASAOrdersInEscrow !== 'undefined'
+    ) {
+      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, decimals, 'sell'))
+      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, decimals, 'buy'))
+    }
+  }, [isLoading, data, setSellOrders, setBuyOrders, decimals])
+
+  // Return OrderBook
+  return { data: { orders: { sell, buy }, isLoading }, isLoading, ...rest }
+}
+
+export function useAssetOrdersQuery({ asset, options = {} }) {
+  // console.log(`useAssetOrdersQuery(${JSON.stringify({ asset })})`)
+  const { id } = asset
+  return useQuery(['assetOrders', { id }], () => fetchAssetOrders(id), options)
 }
 
 /**

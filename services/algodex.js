@@ -12,7 +12,6 @@
  * @copyright Algodev Inc
  */
 
-import Router from 'next/router'
 import axios from 'axios'
 
 // TODO: Implement getLogger() from '@algodex/common'

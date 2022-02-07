@@ -5,15 +5,11 @@ import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import styled from 'styled-components'
-import { useAssetPriceQuery } from '../../hooks/useAlgodex'
-import useUserStore from '@/store/use-user-state'
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
+import useUserStore from '@/store/use-user-state'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 
 
 /**
@@ -86,6 +82,16 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
+
+  const [interval, setInterval] = useState('1h')
+  const onChange = useCallback(
+    (e) => {
+      if (e.target.name === 'interval' && e.target.value !== interval) {
+        setInterval(e.target.value)
+      }
+    },
+    [setInterval, interval]
+  )
 
   const { data: dexAsset } = useAssetPriceQuery({
     asset: staticExplorerAsset || {},

@@ -22,7 +22,7 @@ export const truncateAddress = (addr) => {
  * @returns {String}
  */
 export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
-  float =  float || 0
+  float = float || 0
   let numDigits
   const absValue = new Big(float).abs().toNumber()
 
