@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import FirstOrderMsg from 'components/first-order-msg'
 import Spinner from 'components/spinner'
 import Error from 'components/error'
-import { useAssetOrdersQuery } from 'hooks/useAlgodex'
+import { useAssetOrdersQuery, useAssetPriceQuery } from 'hooks/useAlgodex'
 
 /**
  * @param asset
@@ -20,7 +20,20 @@ export default function OrderBook({ asset }) {
   const isSignedIn = useStore((state) => state.isSignedIn)
 
   // Orderbook Query
-  const { data, isLoading, isError } = useAssetOrdersQuery({ asset })
+  const {
+    data,
+    isLoading: isAssetOrdersLoading,
+    isError: isAssetOrdersError
+  } = useAssetOrdersQuery({ asset })
+  const {
+    data: price,
+    isLoading: isAssetPriceLoading,
+    isError: isAssetPriceError
+  } = useAssetPriceQuery({
+    asset
+  })
+  const isLoading = isAssetPriceLoading || isAssetOrdersLoading
+  const isError = isAssetPriceError || isAssetOrdersError
 
   // Massage Orders
   useEffect(() => {
@@ -47,13 +60,13 @@ export default function OrderBook({ asset }) {
 
   // Has no orders
   if (typeof sellOrders !== 'undefined' && typeof buyOrders !== 'undefined') {
-    if (sellOrders.length === 0 && buyOrders.length === 0) {
+    if (sellOrders.length === 0 && buyOrders.length === 0 && !price.isTraded) {
       return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
     }
   }
 
   // Return OrderBook
-  return <OrderBookView asset={asset} buyData={buyOrders} sellData={sellOrders} />
+  return <OrderBookView asset={asset} price={price} buyData={buyOrders} sellData={sellOrders} />
 }
 OrderBook.propTypes = {
   asset: PropTypes.object.isRequired
