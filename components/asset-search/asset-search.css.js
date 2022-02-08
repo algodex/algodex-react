@@ -62,7 +62,6 @@ export const TableWrapper = styled.div`
   top: 51px;
 
   @media (max-width: 996px) {
-    top: 51px;
     margin-bottom: 3rem;
   }
 
