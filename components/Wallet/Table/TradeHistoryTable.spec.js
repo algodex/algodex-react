@@ -1,6 +1,6 @@
 import React from 'react'
 import { TradeHistoryTable } from './TradeHistoryTable'
-import { render } from 'test/test-utils'
+import { render, waitFor } from 'test/test-utils'
 
 const ORDER_HISTORY_ROW = 'default-cell'
 
@@ -8,13 +8,13 @@ const wallet = {
   address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
 }
 describe('Wallet Trade History Table', () => {
-  it('should not show any rows if no data is provided', () => {
+  it('should not show any rows if no data is provided', async () => {
     const { queryByTestId } = render(<TradeHistoryTable wallet={wallet} />)
-
-    expect(queryByTestId(ORDER_HISTORY_ROW)).toBeNull()
+    const data = waitFor(queryByTestId(ORDER_HISTORY_ROW))
+    expect(data).toBeNull()
   })
 
-  it('should show rows if data is provided', () => {
+  it('should show rows if data is provided', async () => {
     const orderHistory = [
       {
         id: 21547225,
@@ -27,8 +27,8 @@ describe('Wallet Trade History Table', () => {
     ]
 
     const { queryAllByTestId } = render(<TradeHistoryTable orders={orderHistory} wallet={wallet} />)
-
-    expect(queryAllByTestId(ORDER_HISTORY_ROW)).not.toBeNull()
+    const data = waitFor(queryAllByTestId(ORDER_HISTORY_ROW))
+    expect(data).not.toBeNull()
     // expect(queryByTestId(EMPTY_STATE)).toBeNull()
   })
 })
