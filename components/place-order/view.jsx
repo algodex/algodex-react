@@ -163,12 +163,16 @@ function PlaceOrderView(props) {
   ])
 
   const handleMarketOrderChange = useCallback(() => {
-    setOrder(
-      {
-        price: (order.type === 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
-      },
-      asset
-    )
+    if (typeof marketBuyPrice !== 'undefined' && typeof marketSellPrice !== 'undefined') {
+      if (marketSellPrice !== -Infinity && marketBuyPrice !== Infinity) {
+        setOrder(
+          {
+            price: order.type === 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`
+          },
+          asset
+        )
+      }
+    }
   }, [setOrder, order, asset, marketBuyPrice, marketSellPrice])
 
   useEffect(() => {
