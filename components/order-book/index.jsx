@@ -25,15 +25,10 @@ export default function OrderBook({ asset }) {
     isLoading: isAssetOrdersLoading,
     isError: isAssetOrdersError
   } = useAssetOrdersQuery({ asset })
-  const {
-    data: price,
-    isLoading: isAssetPriceLoading,
-    isError: isAssetPriceError
-  } = useAssetPriceQuery({
+  const { data: price, isLoading: isAssetPriceLoading } = useAssetPriceQuery({
     asset
   })
   const isLoading = isAssetPriceLoading || isAssetOrdersLoading
-  const isError = isAssetPriceError || isAssetOrdersError
 
   // Massage Orders
   useEffect(() => {
@@ -54,7 +49,7 @@ export default function OrderBook({ asset }) {
   }
 
   // Is in error
-  if (isError || (!asset?.id && !isLoading)) {
+  if (isAssetOrdersError || (!asset?.id && !isLoading)) {
     return <Error message={'Issue fetching Orderbook'} />
   }
 
@@ -66,7 +61,7 @@ export default function OrderBook({ asset }) {
   }
 
   // Return OrderBook
-  return <OrderBookView asset={asset} price={price} buyData={buyOrders} sellData={sellOrders} />
+  return <OrderBookView asset={asset} buyData={buyOrders} sellData={sellOrders} />
 }
 OrderBook.propTypes = {
   asset: PropTypes.object.isRequired
