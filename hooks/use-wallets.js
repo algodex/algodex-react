@@ -18,7 +18,7 @@ function useWallets() {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
 
-  const isSignedIn = useStore(state => state.isSignedIn);
+  const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
 
   const myAlgo = useMyAlgo()
@@ -33,12 +33,11 @@ function useWallets() {
   const query = useQuery(['wallets', addresses], () => WalletService.fetchWallets(addresses), {
     refetchInterval: 10000,
     enabled: Array.isArray(addresses) && addresses.length > 0,
-    select: data => data.wallets,
+    select: (data) => data.wallets,
     onSuccess: (data) => {
       if (data.wallets) {
-
         if (!isSignedIn) {
-          setIsSignedIn(true);
+          setIsSignedIn(true)
         }
 
         if (!activeWalletAddress) {

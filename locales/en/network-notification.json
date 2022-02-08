@@ -2,8 +2,8 @@
   "modal-title-mainnet": "Welcome to Algodex Mainnet!",
   "modal-title-testnet": "Welcome to Algodex Testnet!",
   "modal-subtitle-mainnet": "Be aware of potential risks -",
-  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with mainnet assets with real value and trades are permanent.",
-  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit, however losses may occur due to unforeseen circumstances. Please review our Disclaimer and Documentation before continuing.",
+  "modal-first-paragraph-mainnet": "You are trading on the Mainnet version of Algodex. Please be careful with your funds while making any orders as these transactions are with Mainnet assets with real value, and trades are permanent.",
+  "modal-second-paragraph-mainnet": "Algodex has gone through a security audit. However, losses may occur due to unforeseen circumstances. Please review our Terms of Service and Documentation before continuing.",
   
   "modal-subtitle-testnet": "Test new features risk free!",
   "modal-first-paragraph-testnet": "You are trading on the Testnet version of Algodex used to test our new features and find bugs. All trades on Testnet use testnet algos and assets with no real value. You are able to get Algos to test with from the Faucet link below.",

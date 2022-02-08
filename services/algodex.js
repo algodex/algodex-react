@@ -12,7 +12,6 @@
  * @copyright Algodev Inc
  */
 
-import Router from 'next/router'
 import axios from 'axios'
 
 // TODO: Implement getLogger() from '@algodex/common'
@@ -85,10 +84,6 @@ async function getEtagResponse(url) {
       const errorResp = error.response
       if (errorResp && errorResp.status === 304) {
         return urlToLastResp[url]
-      } else if (error && !errorResp) {
-        console.debug('preflight failing?', error)
-      } else if (errorResp && errorResp.status === 451) {
-        console.debug('Error 451!')
       } else {
         throw new Error(`Invalid response: ${error.message}`)
       }
