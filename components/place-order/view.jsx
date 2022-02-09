@@ -163,13 +163,17 @@ function PlaceOrderView(props) {
   ])
 
   const handleMarketOrderChange = useCallback(() => {
-    setOrder(
-      {
-        price: (order.type === 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`) || ''
-      },
-      asset
-    )
-  }, [setOrder, order, asset, marketBuyPrice, marketSellPrice])
+    if (typeof marketBuyPrice !== 'undefined' && typeof marketSellPrice !== 'undefined') {
+      if (marketSellPrice !== -Infinity && marketBuyPrice !== Infinity) {
+        setOrder(
+          {
+            price: order.type === 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`
+          },
+          asset
+        )
+      }
+    }
+  }, [setOrder, order.type, asset, marketBuyPrice, marketSellPrice])
 
   useEffect(() => {
     if (orderView === MARKET_PANEL) {
@@ -177,18 +181,24 @@ function PlaceOrderView(props) {
     }
   }, [assetOrders, order.type, marketBuyPrice, marketSellPrice, handleMarketOrderChange, orderView])
 
-  const handleRangeChange = (update) => {
-    setOrder(update, asset)
-  }
+  const handleRangeChange = useCallback(
+    (update) => {
+      setOrder(update, asset)
+    },
+    [setOrder, asset]
+  )
 
-  const handleOptionsChange = (e) => {
-    setOrder(
-      {
-        execution: e.target.value
-      },
-      asset
-    )
-  }
+  const handleOptionsChange = useCallback(
+    (e) => {
+      setOrder(
+        {
+          execution: e.target.value
+        },
+        asset
+      )
+    },
+    [setOrder, asset]
+  )
 
   const placeOrder = (orderData) => {
     // Filter buy and sell orders to only include orders with a microalgo amount greater than the set filter amount
