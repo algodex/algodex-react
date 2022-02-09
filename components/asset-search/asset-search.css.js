@@ -61,6 +61,10 @@ export const TableWrapper = styled.div`
   scrollbar-width: none;
   top: 51px;
 
+  @media (max-width: 996px) {
+    margin-bottom: 3rem;
+  }
+
   @media (min-width: 996px) {
     top: 51px;
   }
