@@ -51,8 +51,7 @@ const AssetNameCell = ({ value, row }) => {
             </NameVerifiedWrapper>
           </AssetNameBlock>
         </div>
-        <br />
-        <div className="flex item-center -mt-3">
+        <div className="flex item-center">
           <div className="mr-1">
             <AssetId>{row.original.id}</AssetId>
           </div>
