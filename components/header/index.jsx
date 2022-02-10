@@ -39,7 +39,7 @@ const localeToFlags = {
   se: 'SE',
   hu: 'HU',
   no: 'NO',
-  ct: 'ES',
+  ct: 'ES-CT',
   th: 'TH',
   in: 'IN',
   de: 'DE',
