@@ -14,5 +14,8 @@
     "mobilefooter-ORDERS":"ORDRENE",
     "mobilefooter-WALLET":"LOMMEBOK",
     "trade-history":"Handelshistorie",
-    "order-book":"bestillingsliste"
+    "order-book":"bestillingsliste",
+    "place-maker-description":"Legg inn en kjøps-/salgsordre for å legge til likviditet for dette handelsparet",
+    "connect-wallet-liquidity":" Koble til lommeboken og legg inn en bestilling for å legge til likviditet for dette handelsparet",
+    "place-first":"Legg inn den første grensebestillingen for"
 }
