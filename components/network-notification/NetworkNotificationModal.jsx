@@ -32,7 +32,7 @@ const NetworkNotificationModal = () => {
         linkTextOne: t('modal-terms'),
         linkTextTwo: t('modal-documentation'),
         linkAddressOne: '/algodex_tos.pdf',
-        linkAddressTwo: 'https://about.algodex.com/docs/',
+        linkAddressTwo: 'https://about.algodex.com/docs/algodex-trading-guide-mainnet/',
         button: t('modal-cta')
       }
     }
@@ -44,7 +44,7 @@ const NetworkNotificationModal = () => {
         paragraphTwo: t('modal-second-paragraph-testnet'),
         linkTextOne: t('modal-faucet'),
         linkTextTwo: t('modal-documentation'),
-        linkAddressOne: 'https://bank.testnet.algorand.network/',
+        linkAddressOne: 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/',
         linkAddressTwo: '/docs/',
         button: t('modal-cta')
       }
