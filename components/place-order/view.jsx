@@ -17,27 +17,27 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
+import { useAssetOrdersQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import { useCallback, useEffect, useState } from 'react'
 
 import Big from 'big.js'
 import Error from 'components/error'
 import Icon from 'components/icon'
 import { Info } from 'react-feather'
+import { LimitOrder } from './limit-order'
+import { MarketOrder } from './market-order'
 import OrderService from 'services/order'
 import PropTypes from 'prop-types'
 import Spinner from '../spinner'
 import { Tooltip } from 'components/tooltip'
 import WalletService from 'services/wallet'
+import { aggregateOrders } from 'components/order-book/helpers'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
-import { useAssetOrdersQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import useUserStore from '../../store/use-user-state'
-import { MarketOrder } from './market-order'
-import { LimitOrder } from './limit-order'
-import { aggregateOrders } from 'components/order-book/helpers'
 
 const DEFAULT_ORDER = {
   type: 'buy',
