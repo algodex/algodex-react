@@ -53,7 +53,7 @@ function AssetSearch({ gridRef, algoPrice }) {
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
-  const [isActive, setIsActive] = useState(true)
+  const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
   const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
