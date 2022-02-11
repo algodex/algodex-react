@@ -10,13 +10,13 @@ import {
   NetworkDropdown,
   NetworkDropdownOption
 } from './header.css'
-import { useState } from 'react'
 
 import ActiveLink from 'components/active-link'
 import Hamburger from 'components/hamburger'
 import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 
@@ -76,7 +76,14 @@ export function Header() {
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </ActiveLink>
-        <ActiveLink href="/docs" matches={/^\/docs/}>
+        <ActiveLink
+          href={
+            activeNetwork == 'mainnet'
+              ? ' https://about.algodex.com/docs/algodex-trading-guide-mainnet/'
+              : 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'
+          }
+          matches={/^\/docs/}
+        >
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </ActiveLink>
         {/*<a*/}
