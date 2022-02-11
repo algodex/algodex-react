@@ -50,6 +50,8 @@ const DEFAULT_ORDER = {
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, orderBook } = props
   const { t } = useTranslation('place-order')
+  const buyOrders = useStore((state) => state.buyOrders)
+  const sellOrders = useStore((state) => state.sellOrders)
 
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
@@ -162,6 +164,26 @@ function PlaceOrderView(props) {
     asset
   ])
 
+  const updateInitialState = (order) => {
+    if (order.type === 'buy' && sellOrders.length) {
+      setOrder(
+        {
+          price: sellOrders.length ? sellOrders[sellOrders.length - 1].price : 0.00
+        },
+        asset
+      )
+    }
+
+    if (order.type === 'sell' && buyOrders.length) {
+      setOrder(
+        {
+          price: buyOrders.length ? buyOrders[0].price : 0.00
+        },
+        asset
+      )
+    }
+  }
+
   const handleMarketOrderChange = useCallback(() => {
     if (typeof marketBuyPrice !== 'undefined' && typeof marketSellPrice !== 'undefined') {
       if (marketSellPrice !== -Infinity && marketBuyPrice !== Infinity) {
@@ -211,6 +233,7 @@ function PlaceOrderView(props) {
         return equivAlgoAmount.gte(new Big(newOrderSizeFilter))
       })
     }
+    console.log(orderBook, 'order book')
     return OrderService.placeOrder(orderData, filteredOrderBook)
   }
 
@@ -461,6 +484,7 @@ function PlaceOrderView(props) {
               setOrderView(MARKET_PANEL)
               handleMarketOrderChange()
               handleOptionsChange({ target: { value: 'market' } })
+              updateInitialState(order)
             }}
           >
             Market

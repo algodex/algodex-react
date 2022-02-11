@@ -100,6 +100,22 @@ export const useStore = create(
       //     }
       //   }),
 
+      buyOrders: [],
+      setBuyOrders: (buyOrders) => {
+        console.log(buyOrders, 'buyorders here')
+        set({
+          buyOrders
+        })
+      },
+
+      sellOrders: [],
+      setSellOrders: (sellOrders) => {
+        console.log(sellOrders, 'sellorders here')
+        set({
+          sellOrders
+        })
+      },
+
       order: {
         type: 'buy',
         price: '',

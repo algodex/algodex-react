@@ -1,3 +1,4 @@
+import { BodyCopyTiny, HeaderCaps } from 'components/type'
 import {
   BookRow,
   BuyOrders,
@@ -9,7 +10,6 @@ import {
 } from './order-book.css'
 
 import Big from 'big.js'
-import { BodyCopyTiny, HeaderCaps } from 'components/type'
 import OrderBookPrice from 'components/order-book-price'
 import PriceHeader from 'components/price-header'
 import PropTypes from 'prop-types'
@@ -25,6 +25,7 @@ function OrderBookView({ asset, sellData, buyData }) {
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
   const currentOrder = useStore((state) => state.order)
+
   const dispatcher = useEventDispatch()
   const { data, isLoading, isError } = useAssetPriceQuery({
     asset

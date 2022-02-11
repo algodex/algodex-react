@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { aggregateOrders } from './helpers'
-import OrderBookView from './view'
-import useStore from 'store/use-store'
-import { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import FirstOrderMsg from 'components/first-order-msg'
-import Spinner from 'components/spinner'
 import Error from 'components/error'
+import FirstOrderMsg from 'components/first-order-msg'
+import OrderBookView from './view'
+import PropTypes from 'prop-types'
+import Spinner from 'components/spinner'
+import { aggregateOrders } from './helpers'
 import { useAssetOrdersQuery } from 'hooks/useAlgodex'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import useStore from 'store/use-store'
 
 /**
  * @param asset
@@ -15,9 +15,13 @@ import { useAssetOrdersQuery } from 'hooks/useAlgodex'
  * @constructor
  */
 export default function OrderBook({ asset }) {
-  const [sellOrders, setSellOrders] = useState()
-  const [buyOrders, setBuyOrders] = useState()
+  // const [sellOrders, setSellOrders] = useState()
+  // const [buyOrders, setBuyOrders] = useState()
   const isSignedIn = useStore((state) => state.isSignedIn)
+  const buyOrders = useStore((state) => state.buyOrders)
+  const setBuyOrders = useStore((state) => state.setBuyOrders)
+  const sellOrders = useStore((state) => state.sellOrders)
+  const setSellOrders = useStore((state) => state.setSellOrders)
 
   // Orderbook Query
   const { data, isLoading, isError } = useAssetOrdersQuery({ asset })
