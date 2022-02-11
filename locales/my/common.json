@@ -14,5 +14,8 @@
     "mobilefooter-ORDERS":"PESANAN",
     "mobilefooter-WALLET":"WALLET",
     "trade-history":"Sejarah Perdagangan",
-    "order-book":"Memesan buku"
+    "order-book":"Memesan buku",
+    "place-maker-description":"Tempatkan pembuat pesanan beli/jual untuk menambah likuiditas untuk pasangan perdagangan ini",
+    "connect-wallet-liquidity":"Hubungkan dompet Anda dan lakukan pemesanan untuk menambah likuiditas untuk pasangan perdagangan ini ",
+    "place-first":"Tempatkan pesanan batas pertama untuk"
 }
