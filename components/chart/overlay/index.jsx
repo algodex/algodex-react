@@ -27,23 +27,8 @@ import { useUserStore } from '../../../store'
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
-  const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
-  // const changeAmt = asset.priceChange24hr
-  //   ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
-  //   : '0'
 
   const { data, isLoading, isError } = useAssetPriceQuery({ asset })
-  // const changeAmt = useMemo(() => {
-  //   if (isLoading || isError) return 0
-  //   if (typeof data.price24Change !== 'undefined') return data.price24Change
-  // }, [data, isLoading, isError])
-  // const changeAmt = useMemo(() => {
-  //   if (isLoading || isError) return '0'
-  //   if (typeof data.price24Change !== 'undefined') {
-  //     con
-  //   }
-  //     return Math(data.price).sub(Math(data.price).div(new Big(1 + data.price24Change / 100))).toString()
-  // })
 
   const changeAmt = useMemo(() => {
     if (
@@ -63,7 +48,7 @@ function ChartOverlay(props) {
     if (isLoading || isError) return '0'
     if (typeof data.price24Change !== 'undefined') return data.price24Change
   }, [data, isLoading, isError])
-  
+
   const openCloseChange = () => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
