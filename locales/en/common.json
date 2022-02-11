@@ -14,5 +14,8 @@
     "mobilefooter-ORDERS":"ORDERS",
     "mobilefooter-WALLET":"WALLET",
     "trade-history":"Trade History",
-    "order-book":"Order Book"
+    "order-book":"Order Book",
+    "place-maker-description":"Place a maker buy/sell order to add liquidity for this trading pair",
+    "connect-wallet-liquidity":" Connect your wallet and place an order to add liquidity for this trading pair",
+    "place-first":"Place the first limit order for"
 }
