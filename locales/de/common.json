@@ -14,5 +14,8 @@
     "mobilefooter-ORDERS":"Orders",
     "mobilefooter-WALLET":"Wallet",
     "trade-history":"Handelsgeschichte",
-    "order-book":"Auftragsbuch"
+    "order-book":"Auftragsbuch",
+    "place-maker-description":"Platzieren Sie eine Maker-Kauf-/Verkaufsorder, um Liquidität für dieses Handelspaar hinzuzufügen",
+    "connect-wallet-liquidity":"Verbinden Sie Ihre Brieftasche und geben Sie eine Bestellung auf, um Liquidität für dieses Handelspaar hinzuzufügen",
+    "place-first":"Platzieren Sie die erste Limit-Order für"
 }
