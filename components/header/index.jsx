@@ -1,27 +1,25 @@
 import {
   Container,
-  Flag,
   IconLogo,
   InlineLogo,
-  LanguageDropDown,
-  LanguageItem,
-  LanguagesContainer,
   MobileNavContainer,
   MobileNavigation,
   NavTextLg,
   NavTextSm,
-  Navigation
+  Navigation,
+  NetworkDropdown,
+  NetworkDropdownOption
 } from './header.css'
+import { useState } from 'react'
 
 import ActiveLink from 'components/active-link'
-// import AssetSearch from "../asset-search";
-/* eslint-disable */
 import Hamburger from 'components/hamburger'
+import LanguageSelection from 'components/language-selection'
 import Link from 'next/link'
-import i18n from '../../i18n.json'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
+import useUserStore from 'store/use-user-state'
+
 
 // Map locale code to the flag used in 'react-country-flag'
 const localeToFlags = {
@@ -47,21 +45,54 @@ const localeToFlags = {
   fr: 'FR',
   pl: 'PL'
 }
+=======
+const ENABLE_NETWORK_SELECTION =
+  process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
+const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
+const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
-export default function Header() {
+
+export function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const { asPath, locale } = useRouter()
-
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
 
+  /**
+   * Route to other network
+   * @type {(function(*): void)|*}
+   */
+  const handleNetworkChangeFn = (value) => {
+    if (!ENABLE_NETWORK_SELECTION) {
+      return
+    }
+    if (value === 'mainnet') {
+      window.location = MAINNET_LINK
+    } else {
+      window.location = TESTNET_LINK
+    }
+  }
+
   return (
-    <Container data-testid="header-container">
-      <Link href="/">
+    <Container className="flex" data-testid="header-container">
+      <Link href="/trade">
         <a>
           <InlineLogo src="/logo-inline-dark.svg" />
           <IconLogo src="/logo-icon-dark.svg" />
         </a>
       </Link>
+      &nbsp;
+      <NetworkDropdown
+        className="font-medium"
+        value={activeNetwork}
+        onChange={(e) => handleNetworkChangeFn(e.target.value)}
+      >
+        <NetworkDropdownOption value="testnet" enableLinks={ENABLE_NETWORK_SELECTION}>
+          TESTNET
+        </NetworkDropdownOption>
+        <NetworkDropdownOption value="mainnet" enableLinks={ENABLE_NETWORK_SELECTION}>
+          MAINNET
+        </NetworkDropdownOption>
+      </NetworkDropdown>
       <Navigation>
         <ActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
@@ -104,41 +135,8 @@ export default function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
-
-        <LanguagesContainer>
-          <Link href={asPath} locale={locale}>
-            <a href="#">
-              <NavTextLg>
-                {locale} <Flag countryCode={localeToFlags[locale]} svg />
-              </NavTextLg>
-            </a>
-          </Link>
-
-          <LanguageDropDown>
-            <LanguageItem key={locale}>
-              <Link href={asPath} locale={locale}>
-                <a href="#">
-                  <NavTextLg>
-                    {locale} <Flag countryCode={localeToFlags[locale]} svg />
-                  </NavTextLg>
-                </a>
-              </Link>
-            </LanguageItem>
-            {i18n.locales
-              .filter((localeCd) => localeCd !== locale)
-              .map((localeCd) => (
-                <LanguageItem key={localeCd}>
-                  <Link href={asPath} locale={localeCd}>
-                    <a href="#">
-                      <NavTextLg>
-                        {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                      </NavTextLg>
-                    </a>
-                  </Link>
-                </LanguageItem>
-              ))}
-          </LanguageDropDown>
-        </LanguagesContainer>
+        <LanguageSelection isMobile={false} />
+        <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
       <MobileNavigation isOpen={isOpen}>
@@ -164,11 +162,14 @@ export default function Header() {
             <NavTextSm>Support</NavTextSm>
           </ActiveLink>
           */}
-          <NavTextSm>
-            EN <Flag countryCode="US" svg />
-          </NavTextSm>
         </MobileNavContainer>
       </MobileNavigation>
     </Container>
   )
 }
+
+Header.propTypes = {
+  router: PropTypes.object
+}
+
+export default Header

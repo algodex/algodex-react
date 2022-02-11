@@ -1,36 +1,41 @@
-/* eslint-disable react/prop-types  */
-import { useMemo, useState, useEffect, useCallback } from 'react'
-import { BodyCopyTiny, BodyCopySm } from 'components/type'
-import OrdersTable from 'components/orders-table'
-import { mapOpenOrdersData } from './helpers'
-import OrderService from 'services/order'
-import useStore, { useStorePersisted } from 'store/use-store'
-import toast from 'react-hot-toast'
-import Link from 'next/link'
-
-import useTranslation from 'next-translate/useTranslation'
-
+import { BodyCopySm, BodyCopyTiny } from 'components/type'
 import {
-  OrderDate,
-  OrderPrice,
-  OrderPair,
-  OrderType,
+  OpenOrdersContainer,
   OrderAmount,
-  OrderStatus,
   OrderCancel,
   OrderCancelButton,
+  OrderDate,
+  OrderPair,
+  OrderPrice,
+  OrderStatus,
+  OrderType,
   StatusContainer,
-  TableWrapper,
-  OpenOrdersContainer
+  TableWrapper
 } from './open-orders.css'
-import { useWalletOrdersQuery } from '../../hooks/useAlgodex'
+/* eslint-disable react/prop-types  */
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import useStore, { useStorePersisted } from 'store/use-store'
+
+import Link from 'next/link'
+import OrderService from 'services/order'
+import OrdersTable from 'components/orders-table'
+import { mapOpenOrdersData } from './helpers'
+import toast from 'react-hot-toast'
 import { useEventDispatch } from '../../hooks/useEvents'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '../../store/use-user-state'
+import { useWalletOrdersQuery } from '../../hooks/useAlgodex'
 
 function OpenOrders() {
-  const { t, lang } = useTranslation('orders')
+  // const { t, lang } = useTranslation('orders')
+  const { t } = useTranslation('orders')
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const [openOrdersData, setOpenOrdersData] = useState(null)
+  const [openOrdersData, setOpenOrdersData] = useState([])
   const isSignedIn = useStore((state) => state.isSignedIn)
+
+  const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
+  const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
+
   const { data, isLoading, isError } = useWalletOrdersQuery({
     wallet: { address: activeWalletAddress },
     options: {
@@ -46,6 +51,7 @@ function OpenOrders() {
   }, [data])
 
   const openOrdersDataMemoized = useMemo(() => openOrdersData, [openOrdersData])
+  // const openOrdersDataMemoized = openOrdersData
 
   const OrderDateCell = ({ value }) => <OrderDate>{value}</OrderDate>
 
@@ -124,7 +130,7 @@ function OpenOrders() {
         </OrderCancel>
       )
     },
-    [openOrdersData]
+    [t, openOrdersData]
   )
 
   const columns = useMemo(
@@ -166,7 +172,7 @@ function OpenOrders() {
         disableSortBy: true
       }
     ],
-    [OrderCancelCell, lang]
+    [t, OrderTypeCell, OrderCancelCell]
   )
 
   const renderStatus = () => {
@@ -184,7 +190,15 @@ function OpenOrders() {
   return (
     <OpenOrdersContainer>
       <TableWrapper>
-        <OrdersTable columns={columns} data={openOrdersDataMemoized || []} />
+        <OrdersTable
+          initialState={walletOpenOrdersTableState}
+          onStateChange={(state) => {
+            console.log('State changing', state)
+            setWalletOpenOrdersTableState(state)
+          }}
+          columns={columns}
+          data={openOrdersDataMemoized || []}
+        />
       </TableWrapper>
 
       {renderStatus()}

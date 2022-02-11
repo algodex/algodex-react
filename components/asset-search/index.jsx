@@ -8,7 +8,7 @@ import SearchInput from './search'
 import { rgba } from 'polished'
 import styled from 'styled-components'
 import useUserStore from 'store/use-user-state'
-import { withfetchAlgorandPriceQuery } from 'hooks/withAlgodex'
+import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -29,7 +29,7 @@ export const AssetsContainer = styled.div`
   height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.colors.gray['800']};
   box-shadow: 3px 64px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
-  z-index: 1000;
+  z-index: 30;
 
   @media (min-width: 1536px) {
     position: static;
@@ -53,7 +53,7 @@ function AssetSearch({ gridRef, algoPrice }) {
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
-  const [isActive, setIsActive] = useState(true)
+  const [isActive, setIsActive] = useState(false)
   const [searchHeight, setSearchHeight] = useState(0)
   const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -106,8 +106,9 @@ function AssetSearch({ gridRef, algoPrice }) {
    * @type {(function(*): Promise<void>)|*}
    */
   const handleAssetClick = useCallback(() => {
-    setIsActive(false)
-  }, [setIsActive])
+    handleExternalClick()
+  }, [handleExternalClick])
+
   const handleAssetFocus = useCallback(
     (asset) => {
       setAssetInfo(asset)
@@ -173,4 +174,4 @@ AssetSearch.propTypes = {
   gridRef: PropTypes.object.isRequired
 }
 
-export default withfetchAlgorandPriceQuery(AssetSearch)
+export default withAlgorandPriceQuery(AssetSearch)

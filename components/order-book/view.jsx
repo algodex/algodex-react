@@ -1,31 +1,32 @@
-import PropTypes from 'prop-types'
-import Big from 'big.js'
-import OrderBookPrice from 'components/order-book-price'
-import { BodyCopyTiny } from 'components/type'
-import PriceHeader from 'components/price-header'
-import { floatToFixed } from 'services/display'
-import { useStore } from 'store/use-store'
-
 import {
-  Container,
-  Header,
   BookRow,
-  OrdersWrapper,
-  SellOrders,
   BuyOrders,
-  CurrentPrice
+  Container,
+  CurrentPrice,
+  Header,
+  OrdersWrapper,
+  SellOrders
 } from './order-book.css'
-import useTranslation from 'next-translate/useTranslation'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
+
+import Big from 'big.js'
+import { BodyCopyTiny, HeaderCaps } from 'components/type'
+import OrderBookPrice from 'components/order-book-price'
+import PriceHeader from 'components/price-header'
+import PropTypes from 'prop-types'
 import Spinner from '../spinner'
+import { floatToFixed } from 'services/display'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { useEventDispatch } from '../../hooks/useEvents'
+import { useStore } from 'store/use-store'
+import useTranslation from 'next-translate/useTranslation'
 
 function OrderBookView({ asset, sellData, buyData }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
+  const currentOrder = useStore((state) => state.order)
   const dispatcher = useEventDispatch()
-  const { data, isLoading } = useAssetPriceQuery({
+  const { data, isLoading, isError } = useAssetPriceQuery({
     asset
   })
   const renderOrders = (data, type) => {
@@ -39,7 +40,7 @@ function OrderBookView({ asset, sellData, buyData }) {
         dispatcher('clicked', 'order')
         setOrder(
           {
-            price: row.price,
+            price: currentOrder.execution === 'market' ? currentOrder.price : row.price,
             type: type === 'buy' ? 'sell' : 'buy'
           },
           asset
@@ -85,6 +86,10 @@ function OrderBookView({ asset, sellData, buyData }) {
   }
   return (
     <Container>
+      <HeaderCaps color="gray.500" mb={1}>
+        {t('order-book')}
+      </HeaderCaps>
+      <br></br>
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
@@ -101,9 +106,10 @@ function OrderBookView({ asset, sellData, buyData }) {
 
       <CurrentPrice>
         {isLoading && <Spinner flex />}
-        {!isLoading && (
+        {!isLoading && !isError && (
           <OrderBookPrice price={data.price} decimals={decimals} change={data.price24Change} />
         )}
+        {isError && <OrderBookPrice decimals={decimals} />}
       </CurrentPrice>
 
       <BuyOrders>

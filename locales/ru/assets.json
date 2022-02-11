@@ -1,0 +1,14 @@
+{
+  "search": "Поиск",
+  "pair": "Пара",
+  "price": "Цена",
+  "change": "Изменение",
+  "24-hr-change": "Изменение за 24ч",
+  "liquidity": "Ликвидность",
+  "loading": "Загрузка...",
+  "back-to-chart": "Вернутся к графику",
+  "description": "Описание",
+  "circulating-supply": "Количество в циркуляции",
+  "total-supply": "Всего количество ",
+  "view-verified-asset": "просмотр-проверенный-актив"
+}

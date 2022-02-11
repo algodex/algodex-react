@@ -1,0 +1,23 @@
+{
+  "_comment": "Translation for Korean",
+  "modal-title-mainnet": "알고덱스 메인넷에 오신 것을 환영합니다!",
+  "modal-title-testnet": "알고덱스 테스트넷에 오신 것을 환영합니다!",
+  "modal-subtitle-mainnet": "잠재적인 위험에 주의하십시오 -",
+  "modal-first-paragraph-mainnet": "귀하는 Algodex의 메인넷 버전에서 거래하고 있습니다. 이러한 거래는 실제 가치가 있는 메인넷 자산으로 이루어지며 거래는 영구적이므로 주문 시 자금에 주의하십시오.",
+  "modal-second-paragraph-mainnet": "Algodex는 보안 감사를 받았지만 예상치 못한 상황으로 인해 손실이 발생할 수 있습니다. 계속하기 전에 면책 조항 및 문서를 검토하십시오.",
+  
+  "modal-subtitle-testnet": "새로운 기능을 위험 부담 없이 테스트하십시오!",
+  "modal-first-paragraph-testnet": "귀하는 새로운 기능을 테스트하고 버그를 찾는 데 사용되는 테스트넷 버전의 Algodex에서 거래하고 있습니다. Testnet의 모든 거래는 실제 가치가 없는 testnet 알고리즘과 자산을 사용합니다. 아래의 Faucet 링크에서 Algos를 테스트할 수 있습니다.",
+  "modal-second-paragraph-testnet": "버그나 기능 요청에 대한 피드백을 보내주세요!",
+  
+  "network-name-mainnet": "메인넷",
+  "network-name-testnet": "테스트넷",
+
+  "modal-disclaimer": "부인 성명",
+  "modal-terms": "서비스 약관",
+  "modal-faucet": "수도꼭지",
+  "modal-documentation": "선적 서류 비치",
+  "modal-cta": "동의하기",
+  "ribbon-message-mainnet": "알고덱스의 메인넷 버전입니다. 모든 거래를 조심하십시오.",
+  "ribbon-message-testnet": "이것은 Algodex의 테스트넷 버전입니다. 모든 거래를 조심하십시오."
+}

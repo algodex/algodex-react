@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { ArrowUp, ArrowDown } from 'react-feather'
-import { floatToFixed } from 'services/display'
+import { ArrowDown, ArrowUp } from 'react-feather'
+
 import { BodyCopySm } from 'components/type'
-import { convertFromBaseUnits } from 'services/convert'
+import PropTypes from 'prop-types'
+import { convertFromAsaUnits } from 'services/convert'
+import { floatToFixed } from 'services/display'
+import styled from 'styled-components'
 
 const Price = styled.p`
   display: flex;
@@ -32,7 +33,7 @@ function OrderBookPrice({ price, decimals, change }) {
       return '--'
     }
 
-    return floatToFixed(decimals !== 6 ? convertFromBaseUnits(price, decimals) : price)
+    return floatToFixed(decimals !== 6 ? convertFromAsaUnits(price, decimals) : price)
   }
 
   const renderChange = () => {

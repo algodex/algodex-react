@@ -22,6 +22,7 @@ export const mapOpenOrdersData = (data) => {
     return {
       /** @todo get date/time from API */
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
+      // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
       pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,

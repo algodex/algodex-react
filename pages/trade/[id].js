@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { fetchExplorerAssetInfo } from 'services/algoexplorer'
 import styled from 'styled-components'
 import { useUserStore } from '../../store'
+import { useAssetPriceQuery } from '../../hooks/useAlgodex'
 
 export const Container = styled.div`
   display: flex;
@@ -110,6 +111,17 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
+
+  const { data: dexAsset } = useAssetPriceQuery({
+    asset: staticExplorerAsset || {},
+    options: {
+      refetchInterval: 5000,
+      enabled:
+        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
+      initialData: staticAssetPrice
+    }
+  })
+
   return (
     <Page
       title={`${prefix} ${title}`}
@@ -118,8 +130,8 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
       noFollow={true}
     >
       {({ asset }) =>
-        showAssetInfo || !staticAssetPrice?.isTraded ? (
-          <AssetInfo asset={asset} price={staticAssetPrice} />
+        showAssetInfo || !dexAsset?.isTraded ? (
+          <AssetInfo asset={asset} price={dexAsset} />
         ) : (
           <Chart asset={asset} />
         )

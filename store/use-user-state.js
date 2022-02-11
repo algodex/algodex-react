@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import { createStore } from './use-store'
+import { getActiveNetwork } from '../services/environment'
+
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
@@ -10,6 +12,50 @@ const userState = (set, get) => ({
    * This list is composed of a Algodex Assets Query and
    */
   assets: {},
+
+  activeNetwork: getActiveNetwork(),
+
+  /**
+   * Ribbon notification for Mainnet
+   *
+   * @true when Mainnet notification ribbon is visible
+   * @false when Mainnet notification ribbon is hidden
+   */
+  hasMainnetRibbon: null,
+  setHasMainnetRibbon: (bool) => {
+    const check = get().hasMainnetRibbon
+    if (bool !== check) {
+      set({ hasMainnetRibbon: bool })
+    }
+  },
+
+  /**
+   * Ribbon notification for Testnet
+   *
+   * @true when Testnet notification ribbon is visible
+   * @false when Testnet notification ribbon is hidden
+   */
+  hasTestnetRibbon: null,
+  setHasTestnetRibbon: (bool) => set({ hasTestnetRibbon: bool }),
+
+  /**
+   * Modal notification for Mainnet.
+   *
+   * @true when Mainnet notification modal is visible
+   * @false when Mainnet notification modal is hidden
+   */
+  hasMainnetNotificationModal: null,
+  setHasMainnetNotificationModal: (bool) => set({ hasMainnetNotificationModal: bool }),
+
+  /**
+   * Modal notification for Testnet.
+   *
+   * @true when Testnet notification modal is visible
+   * @false when Testnet notification modal is hidden
+   */
+  hasTestnetNotificationModal: null,
+  setHasTestnetNotificationModal: (bool) => set({ hasTestnetNotificationModal: bool }),
+
   /**
    * Favourite should be a reduced list keyed by Asset ID and UserID
    *
@@ -110,6 +156,70 @@ const userState = (set, get) => ({
         ...get().search,
         ...search
       }
+    }),
+  /**
+   * Wallet OrderHistory State
+   */
+  walletOrderHistoryTableState: {
+    sortBy: []
+  },
+  /**
+   * Set Wallet OrderHistory Table State
+   * @param walletOrderHistoryTableState
+   */
+  setWalletOrderHistoryTableState: (walletOrderHistoryTableState) =>
+    set({
+      walletOrderHistoryTableState: {
+        ...get().walletOrderHistoryTableState,
+        ...walletOrderHistoryTableState
+      }
+    }),
+  /**
+   * Wallet OpenOrders Table State
+   */
+  walletOpenOrdersTableState: {
+    sortBy: []
+  },
+  /**
+   * Set Wallet OpenOrders Table State
+   * @param walletOpenOrdersTableState
+   */
+  setWalletOpenOrdersTableState: (walletOpenOrdersTableState) =>
+    set({
+      walletOpenOrdersTableState: {
+        ...get().walletOpenOrdersTableState,
+        ...walletOpenOrdersTableState
+      }
+    }),
+  /**
+   * Wallet Assets Table State
+   */
+  walletAssetsTableState: {
+    sortBy: []
+  },
+  /**
+   * Set Wallet Assets Table State
+   * @param walletAssetsTableState
+   */
+  setWalletAssetsTableState: (walletAssetsTableState) =>
+    set({
+      walletAssetsTableState: {
+        ...get().walletAssetsTableState,
+        ...walletAssetsTableState
+      }
+    }),
+
+  /**
+   * New Orders Size Filter
+   */
+  newOrderSizeFilter: 0,
+  /**
+   * Set Order Size Filter
+   * @param newOrderSizeFilter
+   */
+  setNewOrderSizeFilter: (newOrderSizeFilter) =>
+    set({
+      newOrderSizeFilter
     }),
   /**
    * Wallet Accounts[Work in Progress]

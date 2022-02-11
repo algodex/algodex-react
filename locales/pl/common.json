@@ -2,9 +2,9 @@
     "header-about": "Popularny",
     "header-trade": "O nas",
     "header-docs": "Operacja handlowa",
-    "header-support": "Dokuments",
-    "price": "Pomoc",
-    "amount": "Cena",
+    "header-support": "Dokumenty",
+    "price": "Cena",
+    "amount": "ilość",
     "total": "Kwota",
     "time": "Suma",
     "no-trades-completed": " Czas ",
@@ -12,5 +12,10 @@
     "mobilefooter-BOOK":" Arkusz Zleceń",
     "mobilefooter-TRADE":"Operacja handlowa",
     "mobilefooter-ORDERS":"Zlecen",
-    "mobilefooter-WALLET":"Portfel"
+    "mobilefooter-WALLET":"Portfel",
+    "trade-history":"Historia handlu",
+    "order-book":"księga zamówień",
+    "place-maker-description":"Złóż zlecenie kupna/sprzedaży producenta, aby dodać płynność dla tej pary handlowej",
+    "connect-wallet-liquidity":" Podłącz portfel i złóż zamówienie, aby zwiększyć płynność dla tej pary handlowej",
+    "place-first":"Złóż pierwsze zlecenie z limitem za"
 }

@@ -1,0 +1,23 @@
+{
+  "_comment": "Translation for French",
+  "modal-title-mainnet": "Bienvenue sur le réseau principal d'Algodex !",
+  "modal-title-testnet": "Bienvenue sur Algodex Testnet !",
+  "modal-subtitle-mainnet": "Soyez conscient des risques potentiels -",
+  "modal-first-paragraph-mainnet": "Vous négociez sur la version Mainnet d'Algodex. Soyez prudent avec vos fonds lorsque vous passez des commandes, car ces transactions sont effectuées avec des actifs du réseau principal avec une valeur réelle et les transactions sont permanentes.",
+  "modal-second-paragraph-mainnet": "Algodex a subi un audit de sécurité, mais des pertes peuvent survenir en raison de circonstances imprévues. Veuillez consulter notre avis de non-responsabilité et notre documentation avant de continuer.",
+  
+  "modal-subtitle-testnet": "Testez les nouvelles fonctionnalités sans risque !",
+  "modal-first-paragraph-testnet": "Vous négociez sur la version Testnet d'Algodex utilisée pour tester nos nouvelles fonctionnalités et trouver des bugs. Toutes les transactions sur Testnet utilisent des algorithmes et des actifs de testnet sans valeur réelle. Vous pouvez faire tester Algos à partir du lien Faucet ci-dessous.",
+  "modal-second-paragraph-testnet": "Veuillez envoyer des commentaires sur tout bug ou demande de fonctionnalité !",
+  
+  "network-name-mainnet": "RESEAU PRINCIPAL",
+  "network-name-testnet": "TESTNET",
+
+  "modal-disclaimer": "Avertissement",
+  "modal-terms": "Conditions d'utilisation",
+  "modal-faucet": "Robinet",
+  "modal-documentation": "Documentation",
+  "modal-cta": "J'ACCEPTE",
+  "ribbon-message-mainnet": "Ceci est la version Mainnet d'Algodex. S'il vous plaît soyez prudent en faisant des transactions.",
+  "ribbon-message-testnet": "Ceci est la version Testnet d'Algodex. S'il vous plaît soyez prudent en faisant des transactions."
+}

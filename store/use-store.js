@@ -1,7 +1,8 @@
-import create from 'zustand'
-import { persist, devtools } from 'zustand/middleware'
-import produce from 'immer'
+import { devtools, persist } from 'zustand/middleware'
+
 import Big from 'big.js'
+import create from 'zustand'
+import produce from 'immer'
 
 export const roundValue = (value, decimalLimit) => {
   if (value === '' || value.slice(-1) === '0') {
@@ -65,7 +66,7 @@ export const useStore = create(
       //   verified: false,
       //   info: {
       //     fullName: 'Lamps',
-      //     algoExplorerUrl: 'https://testnet.algoexplorer.io/asset/15322902',
+      //     algoExplorerUrl: 'https://algoindexer.testnet.algoexplorerapi.io/asset/15322902',
       //     supply: {
       //       circulating: '99989.339745',
       //       total: '100000.000000'

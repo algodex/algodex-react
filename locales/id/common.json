@@ -12,5 +12,10 @@
     "mobilefooter-BOOK":" BUKU",
     "mobilefooter-TRADE":"PERDAGANGAN",
     "mobilefooter-ORDERS":"PESANAN",
-    "mobilefooter-WALLET":"DOMPET"
+    "mobilefooter-WALLET":"DOMPET",
+    "trade-history":"perdagangan sejarah",
+    "order-book":"memesan buku",
+    "place-maker-description":"Letakkan pesanan beli/jual pembuat untuk menambah kecairan untuk pasangan dagangan ini",
+    "connect-wallet-liquidity":"Sambungkan dompet anda dan buat pesanan untuk menambah kecairan untuk pasangan dagangan ini",
+    "place-first":"Letakkan pesanan had pertama untuk"
 }

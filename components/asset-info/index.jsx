@@ -1,41 +1,47 @@
-import PropTypes from 'prop-types'
-import Image from 'next/image'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from 'components/type'
-import SvgImage from 'components/svg-image'
-
-import theme from 'theme'
+import {
+  AlgoExplorerLink,
+  AssetUrl,
+  ButtonText,
+  Container,
+  ExternalLinkIcon,
+  HeaderContainer,
+  InfoContainer,
+  InfoItem,
+  InfoList
+} from './asset-info.css'
+import { BodyCopy, BodyCopyTiny, HeaderLg } from 'components/type'
+import { Fragment, useCallback } from 'react'
+import { convertFromAsaUnits, convertFromBaseUnits } from 'services/convert'
 
 import { ArrowLeft } from 'react-feather'
-
-import {
-  Container,
-  InfoContainer,
-  HeaderContainer,
-  AssetUrl,
-  InfoList,
-  InfoItem,
-  AlgoExplorerLink,
-  ExternalLinkIcon,
-  ButtonText
-} from './asset-info.css'
-import useTranslation from 'next-translate/useTranslation'
-import { useAssetPriceQuery } from 'hooks/useAlgodex'
-import { Fragment, useCallback } from 'react'
-import { useUserStore } from '../../store'
+import Image from 'next/image'
+import PropTypes from 'prop-types'
+import SvgImage from 'components/svg-image'
 import { floatToFixed } from 'services/display'
-import { convertFromBaseUnits } from 'services/convert'
+import theme from 'theme'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
+import useTranslation from 'next-translate/useTranslation'
+import { useUserStore } from '../../store'
 
 const AssetInfo = ({ asset, price }) => {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
+  const explorerURL =
+    activeNetwork === 'testnet'
+      ? `https://testnet.algoexplorer.io/asset/`
+      : `https://algoexplorer.io/asset/`
+
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
-  }, [asset])
+  }, [setShowAssetInfo])
   const { data: dexAsset } = useAssetPriceQuery({
     asset,
     options: {
-      enabled: price?.isTraded || false,
+      refetchInterval: 5000,
+      enabled: true,
       initialData: price
     }
   })
@@ -102,7 +108,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'TODO'}
+              {convertFromBaseUnits(asset.circulating, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -110,7 +116,7 @@ const AssetInfo = ({ asset, price }) => {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.total}
+              {convertFromBaseUnits(asset.total, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
@@ -139,7 +145,7 @@ const AssetInfo = ({ asset, price }) => {
                 <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
                   {floatToFixed(
                     asset.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset.price, asset.decimals)
+                      ? convertFromAsaUnits(dexAsset.price, asset.decimals)
                       : dexAsset.price
                   )}{' '}
                   ALGO
@@ -158,7 +164,7 @@ const AssetInfo = ({ asset, price }) => {
         </InfoList>
         <AlgoExplorerLink>
           {/*TODO: Accredit Explorer for Information Provided*/}
-          <a href={asset.explorerUrl} target="_blank" rel="noreferrer">
+          <a href={`${explorerURL}${asset.id}`} target="_blank" rel="noreferrer">
             <Image
               src="/algo-explorer.png"
               alt="View asset on Algo Explorer"

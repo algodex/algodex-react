@@ -1,25 +1,41 @@
-/* eslint-disable react/jsx-key  */
-import React from 'react'
-import PropTypes from 'prop-types'
-import { useTable, useSortBy } from 'react-table'
 import { Container, SortIcon } from './orders-table.css'
+/* eslint-disable react/jsx-key  */
+import React, { useEffect } from 'react'
+import { useSortBy, useTable } from 'react-table'
+
+import PropTypes from 'prop-types'
+import _ from 'lodash'
 
 /**
  * WARNING! This is also an Assets Table!
+ * @param initialState
+ * @param onStateChange
  * @param columns
  * @param data
  * @returns {JSX.Element}
  * @constructor
  */
-function OrdersTable({ columns, data }) {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+function OrdersTable({ initialState, onStateChange, columns, data }) {
+  const {
+    state: tableState,
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable(
     {
       columns,
-      data
+      data,
+      initialState
     },
     useSortBy
   )
-
+  useEffect(() => {
+    if (!_.isEqual(tableState, initialState)) {
+      onStateChange(tableState)
+    }
+  }, [onStateChange, initialState, tableState])
   return (
     <Container>
       <table {...getTableProps()}>
@@ -60,6 +76,8 @@ function OrdersTable({ columns, data }) {
 }
 
 OrdersTable.propTypes = {
+  initialState: PropTypes.any.isRequired,
+  onStateChange: PropTypes.func.isRequired,
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired
 }

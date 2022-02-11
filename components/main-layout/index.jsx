@@ -82,43 +82,64 @@ function MainLayout({ asset, children }) {
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
           <OrderBook asset={asset} />
         </AssetOrderBookSection>
-
         <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
           <TradeHistory asset={asset} />
         </AssetTradeHistorySection>
-
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
           <Orders />
         </WalletOrdersSection>
         <MobileMenu>
           <ul>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
+              <MobileMenuButton
+                characterLength={t('mobilefooter-CHART').length}
+                type="button"
+                onClick={() => setActiveMobile(TABS.CHART)}
+              >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
+              <MobileMenuButton
+                characterLength={t('mobilefooter-BOOK').length}
+                type="button"
+                onClick={() => setActiveMobile(TABS.BOOK)}
+              >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
+              <MobileMenuButton
+                characterLength={t('mobilefooter-TRADE').length}
+                type="button"
+                onClick={() => setActiveMobile(TABS.TRADE)}
+              >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
+              <MobileMenuButton
+                characterLength={t('mobilefooter-ORDERS').length}
+                type="button"
+                onClick={() => setActiveMobile(TABS.ORDERS)}
+              >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
+            {/*
             <li>
+              // Trade history. Disable for now until it is refactored into the Orders tab
               <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
                 History
               </MobileMenuButton>
             </li>
+            */}
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
+              <MobileMenuButton
+                type="button"
+                characterLength={t('mobilefooter-WALLET').length}
+                onClick={() => setActiveMobile(TABS.WALLET)}
+              >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>

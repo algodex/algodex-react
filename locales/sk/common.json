@@ -1,0 +1,21 @@
+{
+  "header-about": "O projekte",
+  "header-trade": "Obchodovať",
+  "header-docs": "Dokumentácia",
+  "header-support": "Podpora",
+  "price": "Cena",
+  "amount": "Množstvo",
+  "total": "Celkovo",
+  "time": "Čas",
+  "no-trades-completed": " Nebol uzavretý žiadny obchod ",
+  "mobilefooter-CHART":"Graf",
+  "mobilefooter-BOOK":" Kniha pokynov",
+  "mobilefooter-TRADE":"Obchod",
+  "mobilefooter-ORDERS":"Pokyny",
+  "mobilefooter-WALLET":"Peňaženka",
+  "trade-history":"História obchodu",
+  "order-book": "Kniha objednávok",
+  "place-maker-description":"Umiestnite príkaz na nákup/predaj výrobcu, aby ste pridali likviditu pre tento obchodný pár",
+  "connect-wallet-liquidity":" pripojte svoju peňaženku a zadajte objednávku na doplnenie likvidity pre tento obchodný pár",
+  "place-first":"Zadajte prvú limitnú objednávku pre"
+}

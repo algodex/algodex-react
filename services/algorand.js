@@ -1,11 +1,10 @@
 import axios from 'axios'
 
-const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
-export const ALGORAND_API = process.env.NEXT_ALGORAND_API || 'https://testnet.algoexplorerapi.io'
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
+export const ALGORAND_API = process.env.NEXT_PUBLIC_ALGORAND_API || 'https://testnet.algoexplorerapi.io'
 export const ALGORAND_INDEXER_API =
-  process.env.NEXT_ALGORAND_INDEXER_API || 'https://testnet.algoexplorerapi.io/idx2'
+  process.env.NEXT_PUBLIC_ALGORAND_INDEXER_API || 'https://testnet.algoexplorerapi.io/idx2'
 
-DEBUG && console.debug('process.env.NEXT_ALGORAND_API: ' + process.env.NEXT_ALGORAND_API)
 DEBUG && console.info('ALGORAND_HOST: ' + ALGORAND_API)
 
 /**

@@ -1,0 +1,21 @@
+{
+  "header-about": "AlgoDexについて",
+  "header-trade": "トレード",
+  "header-docs": "説明書",
+  "header-support": "サポート",
+  "price": "価格",
+  "amount": "量",
+  "total": "合計",
+  "time": "時間",
+  "no-trades-completed": "取引不成立  ",
+  "mobilefooter-CHART":"チャート",
+  "mobilefooter-BOOK":"板取引（オーダーブック） ",
+  "mobilefooter-TRADE":"トレード",
+  "mobilefooter-ORDERS":"注文",
+  "mobilefooter-WALLET":"ウォレット",
+  "trade-history":"貿易の歴史",
+  "order-book":"オーダーブック",
+  "place-maker-description":"このトレーディングペアの流動性を追加するには、メーカーの売買注文を出します",
+  "connect-wallet-liquidity":"ウォレットを接続し、このトレーディングペアの流動性を追加するために注文します",
+  "place-first":"の最初の指値注文を出す"
+}

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
 import Big from 'big.js'
-import { BodyCopyTiny } from 'components/type'
+import { BodyCopyTiny, HeaderCaps } from 'components/type'
 import PriceHeader from 'components/price-header'
 import { floatToFixed } from 'services/display'
 
@@ -14,7 +14,6 @@ dayjs.extend(localizedFormat)
 function TradeHistoryView(props) {
   const { asset, tradesData } = props
   const { t } = useTranslation('common')
-
   const hasTradeHistory = tradesData.length > 0
 
   const renderHistory = () => {
@@ -65,6 +64,10 @@ function TradeHistoryView(props) {
 
   return (
     <Container>
+      <HeaderCaps color="gray.500" mb={1}>
+        {t('trade-history')}
+      </HeaderCaps>
+      <br></br>
       <Header>
         <PriceHeader />
         <BodyCopyTiny color="gray.500" textAlign="right" m={0}>

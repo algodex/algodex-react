@@ -9,7 +9,7 @@ export const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   padding: 1rem;
   margin: 0;
-  display: none;
+  // display: none;
   justify-content: space-between;
   align-items: center;
   position: relative;
@@ -256,30 +256,17 @@ export const MenuContainer = styled.div`
   }
 `
 
-export const LanguagesContainer = styled.ul`
-  width: 100px;
-  &:hover,
-  &:focus-within {
-    ul {
-      position: absolute;
-      display: block;
-      top: 20px;
-      width: 100px;
-    }
-  }
+export const NetworkDropdown = styled.select`
+  background: unset;
+  border: solid 2px
+    ${({ theme, value }) =>
+      value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+  color: ${({ theme, value }) =>
+    value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+  border-radius: 3px;
+  padding: 0.3rem 0.5rem;
 `
 
-export const LanguageItem = styled.li`
-  display: block;
-  height: 50px;
-
-  span {
-    line-height: 50px;
-  }
-`
-export const LanguageDropDown = styled.ul`
-  background-color: ${({ theme }) => theme.colors.gray[900]};
-  display: none;
-  max-height: 500px;
-  overflow: scroll;
+export const NetworkDropdownOption = styled.option`
+  color: ${({ enableLinks }) => (enableLinks ? 'black' : '#AAA')};
 `

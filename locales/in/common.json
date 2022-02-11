@@ -12,5 +12,10 @@
     "mobilefooter-BOOK":"बुक (ऑर्डर बुक) ",
     "mobilefooter-TRADE":"व्यापार",
     "mobilefooter-ORDERS":"आदेश",
-    "mobilefooter-WALLET":"बटुआ"
+    "mobilefooter-WALLET":"बटुआ",
+    "trade-history":"व्यापार इतिहास",
+    "order-book":"अॉर्डर बुक",
+    "place-maker-description":"इस ट्रेडिंग जोड़ी के लिए तरलता जोड़ने के लिए मेकर बाय/सेल ऑर्डर दें",
+    "connect-wallet-liquidity":"अपना वॉलेट कनेक्ट करें और इस ट्रेडिंग जोड़ी के लिए तरलता जोड़ने का ऑर्डर दें",
+    "place-first":"के लिए प्रथम सीमा आदेश दें"
 }

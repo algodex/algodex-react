@@ -1,8 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+cypress/videos
+cypress/screenshots
+
 .idea
-public/fallback-*.js
-public/sw.js
-public/workbox-*.js
+public/fallback-*
+public/sw.*
+public/workbox-*
 
 # dependencies
 /node_modules

@@ -14,7 +14,11 @@ const VOLUME_DOWN_COLOR = '#e53e3e2c'
 const baseAsset = 'ALGO'
 
 function Chart({ asset, ...rest }) {
-  const { data: assetOrders } = useAssetOrdersQuery({ asset })
+  const {
+    data: assetOrders,
+    isLoading: isOrdersLoading,
+    isError: isOrdersError
+  } = useAssetOrdersQuery({ asset })
 
   const orderBook = useMemo(
     () => ({
@@ -27,16 +31,26 @@ function Chart({ asset, ...rest }) {
   const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
   const chartTimeInterval = useStore((state) => getChartTimeInterval(state))
 
-  const { isLoading, isError, data } = useAssetChartQuery({
+  const {
+    isLoading: isChartLoading,
+    isError: isChartError,
+    data
+  } = useAssetChartQuery({
     asset,
     chartInterval: chartTimeInterval
   })
+
+  const isLoading = isChartLoading || isOrdersLoading
+  const isError = isChartError || isOrdersError
 
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
   const ohlc = useMemo(() => getOhlc(data), [data])
 
-  const asaVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
+  const asaVolume = useMemo(
+    () => millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0),
+    [data]
+  )
 
   if (isLoading) {
     return <Spinner flex />

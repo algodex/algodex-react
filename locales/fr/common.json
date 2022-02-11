@@ -12,5 +12,11 @@
     "mobilefooter-BOOK":"CARNET (carnet d'ordres) ",
     "mobilefooter-TRADE":"ÉCHANGER",
     "mobilefooter-ORDERS":"ORDRES",
-    "mobilefooter-WALLET":"PORTEFEUILLE"
+    "mobilefooter-WALLET":"PORTEFEUILLE",
+    "trade-history":"Histoire Du Commerce",
+    "order-book":"carnet de commande",
+    "place-maker-description":"Passez un ordre d'achat/vente de fabricant pour ajouter de la liquidité à cette paire de trading",
+    "connect-wallet-liquidity":"Connectez votre portefeuille et passez une commande pour ajouter de la liquidité à cette paire de trading",
+    "place-first":"Passez le premier ordre à cours limité pour"
+    
 }

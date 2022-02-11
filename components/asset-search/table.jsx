@@ -8,13 +8,14 @@ import {
   PairSlash,
   SortIcon,
   TableContainer,
+  TableData,
   TableHeader,
   TableWrapper
 } from './asset-search.css'
 import { BodyCopySm, BodyCopyTiny } from '../type'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useEffect, useMemo } from 'react'
-import { useRowSelect, useSortBy, useTable } from 'react-table'
+import { useFlexLayout, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import AlgoIcon from 'components/icon'
 import Icon from '@mdi/react'
@@ -50,8 +51,7 @@ const AssetNameCell = ({ value, row }) => {
             </NameVerifiedWrapper>
           </AssetNameBlock>
         </div>
-        <br />
-        <div className="flex item-center -mt-3">
+        <div className="flex item-center">
           <div className="mr-1">
             <AssetId>{row.original.id}</AssetId>
           </div>
@@ -132,7 +132,7 @@ const AssetSearchTable = ({
       // If there is data, use it
       return assets.map(mapToSearchResults)
     }
-  }, [assets, isListingVerifiedAssets, isFilteringByFavorites])
+  }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 
   /**
    * React-Table Columns
@@ -160,6 +160,9 @@ const AssetSearchTable = ({
           )
         },
         accessor: 'name',
+        minWidth: 45,
+        width: 45,
+        maxWidth: 45,
         Cell: AssetNameCell
       },
       {
@@ -172,6 +175,9 @@ const AssetSearchTable = ({
           )
         },
         accessor: 'price',
+        minWidth: 35,
+        width: 35,
+        maxWidth: 35,
         Cell: AssetPriceCell
       },
       {
@@ -179,6 +185,9 @@ const AssetSearchTable = ({
           return <div className="inline-flex">{t('change')}</div>
         },
         accessor: 'change',
+        minWidth: 35,
+        width: 35,
+        maxWidth: 35,
         Cell: AssetChangeCell
       }
     ],
@@ -226,7 +235,8 @@ const AssetSearchTable = ({
       initialState: searchState
     },
     useSortBy,
-    useRowSelect
+    useRowSelect,
+    useFlexLayout
   )
   useEffect(() => {
     setSearchState(tableState)
@@ -243,12 +253,15 @@ const AssetSearchTable = ({
   const renderTableData = (cell, idx) => {
     if (idx === 0) {
       return (
-        <td
+        <TableData
           className="flex item-center"
-          style={{
-            borderRight: 'solid 1px #2D3747'
-          }}
           key={idx}
+          style={{
+            boxSizing: 'border-box',
+            flex: '45 0 auto',
+            minWidth: '45px',
+            width: '45px'
+          }}
         >
           <Icon
             role="button"
@@ -257,38 +270,27 @@ const AssetSearchTable = ({
             tabIndex={0}
             className="mr-1"
             path={mdiStar}
-            title="Favourite item"
+            title="Favorite item"
             size={0.5}
+            style={{ minWidth: '0.75rem' }}
             color={handleFavoritesFn(cell?.row?.original?.id)}
           />
           {cell.render('Cell')}
-        </td>
+        </TableData>
       )
     } else if (idx === 1) {
       return (
-        <td
-          style={{
-            borderRight: 'solid 1px #2D3747'
-          }}
-          key={idx}
-          {...cell.getCellProps()}
-        >
+        <TableData key={idx} {...cell.getCellProps()}>
           <span>{cell.render('Cell')}</span>
           <br />
           {cell?.value != '--' ? <span>{(algoPrice * cell.value).toLocaleString()} USD</span> : ''}
-        </td>
+        </TableData>
       )
     } else {
       return (
-        <td
-          style={{
-            borderRight: 'solid 1px #2D3747'
-          }}
-          key={idx}
-          {...cell.getCellProps()}
-        >
+        <TableData key={idx} {...cell.getCellProps()}>
           {cell.render('Cell')}
-        </td>
+        </TableData>
       )
     }
   }

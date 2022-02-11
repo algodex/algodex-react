@@ -12,5 +12,11 @@
     "mobilefooter-BOOK":"หนังสือ (หนังสือสั่งซื้อ) ",
     "mobilefooter-TRADE":"ซื้อขาย",
     "mobilefooter-ORDERS":"คำสั่งซื้อ",
-    "mobilefooter-WALLET":"กระเป๋าสตางค์"
+    "mobilefooter-WALLET":"กระเป๋าสตางค์",
+    "trade-history":"ประวัติการค้า",
+    "order-book":"สั่งหนังสือ",
+    "place-maker-description":"วางคำสั่งซื้อ/ขายของผู้ผลิตเพื่อเพิ่มสภาพคล่องให้กับคู่การซื้อขายนี้",
+    "connect-wallet-liquidity":"เชื่อมต่อกระเป๋าเงินของคุณและสั่งซื้อเพื่อเพิ่มสภาพคล่องให้กับคู่การซื้อขายนี้",
+    "place-first":"วางคำสั่งจำกัดครั้งแรกสำหรับ"
+    
 }

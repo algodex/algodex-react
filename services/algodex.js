@@ -3,16 +3,26 @@
  *
  * Includes all responses from the publicly exposed routes
  *
+ * TODO: Make deterministic in @algodex/sdk or @algodex/common.
+ * Refactor the api client to accept a URL. The consumers of the api client should handle their
+ * own ENV variables. For this project it would be ./hooks/useAlgodex
+ *
  * @author Alexander Trefonas
  * @author Michael Feher
  * @copyright Algodev Inc
  */
 
 import axios from 'axios'
-// TODO: Implement getLogger() from '@algodex/common'
-const DEBUG = process.env.NEXT_DEBUG || process.env.DEBUG || false
 
-export const PUBLIC_API = process.env.NEXT_PUBLIC_API || 'https://api-testnet-public.algodex.com'
+// TODO: Implement getLogger() from '@algodex/common'
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
+
+const NEXT_API = process.env.NEXT_PUBLIC_API
+const NODE_ENV = process.env.NODE_ENV
+export const PUBLIC_API =
+  (typeof window === 'undefined' && NEXT_API) || (NODE_ENV === 'test' && NEXT_API)
+    ? NEXT_API
+    : `${window.location.protocol}//${window.location.host}`
 
 export const API_HOST = `${PUBLIC_API}/algodex-backend`
 
@@ -33,7 +43,7 @@ let urlToLastResp
  * @returns {Promise<AxiosResponse<Object>>} Response or Cached Result
  */
 async function getEtagResponse(url) {
-  DEBUG && console.debug(`getEtagResponse(${url.replace(`${API_HOST}`, '')})`)
+  DEBUG && console.debug(`getEtagResponse(${API_HOST})`)
   if (typeof urlToEtag === 'undefined') {
     urlToEtag = {}
   }
@@ -41,14 +51,25 @@ async function getEtagResponse(url) {
     urlToLastResp = {}
   }
 
-  let headers = {}
-
-  if (urlToEtag[url]) {
-    headers = { headers: { 'if-none-match': urlToEtag[url] } }
+  const authToken = process.env.GEO_PASSWORD
+  const authHeader = `Bearer ${authToken}`
+  let options = { headers: {} }
+  if (
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
+    typeof authToken !== 'undefined' &&
+    NODE_ENV !== 'test'
+  ) {
+    options.headers['Authorization'] = authHeader
   }
 
+  if (urlToEtag[url]) {
+    options.headers['if-none-match'] = urlToEtag[url]
+  }
+
+  DEBUG && console.debug(options)
+  DEBUG && console.debug('url: ' + url)
   return await axios
-    .get(url, headers)
+    .get(url, options)
     .then((res) => {
       if (res && res.status === 200) {
         let etag = res.headers.etag

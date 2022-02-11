@@ -21,5 +21,8 @@
     "disable-popup": "Si us plau, desactiveu el bloquejador de finestres emergents (probablement a la part superior dreta de la finestra del vostre navegador)",
     "disable-popup-mobile": "Si us plau, desactiveu el bloquejador de finestres emergents",
     "order-cancelled": "Comanda cancel·lada",
-    "max-spend-explanation": "El saldo total inclou {{amount}} algos que s'han de guardar a la cartera per permetre operacions"
+    "max-spend-explanation": "El saldo total inclou {{amount}} algos que s'han de guardar a la cartera per permetre operacions",
+    "order-size-filtering": "Filtrat de la mida de la comanda",
+    "less-lag": "Menys retard",
+    "better-execution": "Millor Execució"
 }

@@ -1,0 +1,20 @@
+{
+  "_comment": "Translation for Hungarian",
+  "modal-title-mainnet": "Üdvözöljük az Algodex Mainnet oldalán!",
+  "modal-title-testnet": "Üdvözöljük az Algodex Testnet oldalán!",
+  "modal-subtitle-mainnet": "Legyen tisztában a lehetséges kockázatokkal -",
+  "modal-first-paragraph-mainnet": "Ön az Algodex Mainnet verziójával kereskedik. Kérjük, legyen óvatos a pénzeszközeivel, amikor bármilyen megbízást ad, mivel ezek a tranzakciók valós értékű mainnet eszközökkel zajlanak, és a kereskedések állandóak.",
+  "modal-second-paragraph-mainnet": "Az Algodex biztonsági auditon esett át, azonban előre nem látható körülmények miatt előfordulhatnak veszteségek. Kérjük, olvassa el a felelősség kizárását és a dokumentációt, mielőtt folytatná.",
+  "modal-subtitle-testnet": "Tesztelje az új funkciókat kockázatmentesen!",
+  "modal-first-paragraph-testnet": "Ön az Algodex Testnet verziójával kereskedik, amelyet új funkcióink tesztelésére és hibák felkutatására használnak. A Testnet minden kereskedése testnet algokat és valós érték nélküli eszközöket használ. Az alábbi Csaptelep linkről tesztelheti az Algos-t.",
+  "modal-second-paragraph-testnet": "Kérjük, küldjön visszajelzést az esetleges hibákról vagy funkciókra vonatkozó kérésekről!",
+  "network-name-mainnet": "MAINNET",
+  "network-name-testnet": "TESTNET",
+  "modal-disclaimer": "Jogi nyilatkozat",
+  "modal-terms": "Szolgáltatás feltételei",
+  "modal-faucet": "Csap",
+  "modal-documentation": "Dokumentáció",
+  "modal-cta": "ELFOGAD",
+  "ribbon-message-mainnet": "Ez az Algodex Mainnet verziója. Kérjük, legyen körültekintő az esetleges kereskedéseknél.",
+  "ribbon-message-testnet": "Ez az Algodex Testnet verziója. Kérjük, legyen körültekintő az esetleges kereskedéseknél."
+}

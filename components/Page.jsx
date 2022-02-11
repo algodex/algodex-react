@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Header from 'components/header'
 import MainLayout from 'components/main-layout'
+import NetworkHandler from 'components/network-notification'
 import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import styled from 'styled-components'
@@ -10,7 +11,7 @@ import { useExplorerAssetInfo } from 'hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 
-const DEBUG = process.env.NEXT_DEBUG
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG
 
 export const Container = styled.div`
   display: flex;
@@ -24,6 +25,20 @@ export const Container = styled.div`
     overflow: scroll;
     max-height: none;
   }
+`
+
+export const Ribbon = styled.div`
+  background: ;
+  padding: 1rem 0;
+  text-align: center;
+`
+
+export const Button = styled.button`
+  width: 100%;
+  background: white;
+  color: black;
+  padding: 9% 3%;
+  border-radius: 3px;
 `
 
 /**
@@ -97,6 +112,7 @@ const Page = ({
         {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
+      <NetworkHandler />
       <MainLayout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
         {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}

@@ -12,5 +12,10 @@
     "mobilefooter-BOOK":" رزرو کردن",
     "mobilefooter-TRADE":"معامله",
     "mobilefooter-ORDERS":"سفارشات",
-    "mobilefooter-WALLET":"کیف"
+    "mobilefooter-WALLET":"کیف",
+    "trade-history":"تاریخچه تجارت",
+    "order-book":"سفارش کتاب",
+    "place-maker-description":"برای افزودن نقدینگی برای این جفت معاملاتی، یک سفارش خرید/فروش سازنده بدهید",
+    "connect-wallet-liquidity":"کیف پول خود را وصل کنید و برای افزودن نقدینگی برای این جفت معاملاتی سفارش دهید ",
+    "place-first":"اولین سفارش محدود را برای"
 }

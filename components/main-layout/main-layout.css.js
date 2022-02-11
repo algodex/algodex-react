@@ -30,6 +30,7 @@ export const PlaceOrderSection = styled.section`
 export const ContentSection = styled.section`
   position: relative;
   height: auto;
+  overflow-y: scroll;
 `
 
 export const AssetsSection = styled.section`
@@ -197,6 +198,10 @@ export const MobileMenuButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
+  min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
+  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
+  overflow-wrap: anywhere;
 `
 
 export const MobilePriceSection = styled.section`
