@@ -76,14 +76,7 @@ export function Header() {
         <ActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </ActiveLink>
-        <ActiveLink
-          href={
-            activeNetwork == 'mainnet'
-              ? ' https://about.algodex.com/docs/algodex-trading-guide-mainnet/'
-              : 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'
-          }
-          matches={/^\/docs/}
-        >
+        <ActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </ActiveLink>
         {/*<a*/}
