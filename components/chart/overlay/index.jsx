@@ -12,6 +12,7 @@ import {
   Volume,
   VolumeContainer
 } from './chart-overlay.css'
+import { useCallback, useMemo } from 'react'
 
 import Big from 'big.js'
 import Icon from '@mdi/react'
@@ -20,21 +21,51 @@ import PropTypes from 'prop-types'
 import { floatToFixed } from 'services/display'
 import { mdiCheckDecagram } from '@mdi/js'
 import theme from '../../../theme'
-import { useCallback } from 'react'
+import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { useUserStore } from '../../../store'
 
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
-  const changeAmt = asset.priceChange24hr
-    ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
-    : '0'
-  const changePct = asset.priceChange24hr ? new Big(asset.priceChange24hr) : new Big(0)
+  // const changeAmt = asset.priceChange24hr
+  //   ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
+  //   : '0'
 
+  const { data, isLoading, isError } = useAssetPriceQuery({ asset })
+  // const changeAmt = useMemo(() => {
+  //   if (isLoading || isError) return 0
+  //   if (typeof data.price24Change !== 'undefined') return data.price24Change
+  // }, [data, isLoading, isError])
+  // const changeAmt = useMemo(() => {
+  //   if (isLoading || isError) return '0'
+  //   if (typeof data.price24Change !== 'undefined') {
+  //     con
+  //   }
+  //     return Math(data.price).sub(Math(data.price).div(new Big(1 + data.price24Change / 100))).toString()
+  // })
+
+  const changeAmt = useMemo(() => {
+    if (
+      isLoading ||
+      isError ||
+      typeof data === 'undefined' ||
+      typeof data.price === 'undefined' ||
+      typeof data.price24Change === 'undefined'
+    )
+      return '0'
+
+    const price = new Big(data.price)
+    return price.sub(price.div(new Big(1 + data.price24Change / 100))).toString()
+  }, [data, isLoading, isError])
+
+  const changePct = useMemo(() => {
+    if (isLoading || isError) return '0'
+    if (typeof data.price24Change !== 'undefined') return data.price24Change
+  }, [data, isLoading, isError])
+  
   const openCloseChange = () => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
   }
   const onClick = useCallback(() => {
@@ -79,9 +110,7 @@ function ChartOverlay(props) {
             <dt>C:</dt>
             <dd>{ohlc.close}</dd>
           </OhlcItem>
-          <OhlcItem value={changeAmt}>
-            <dd>{openCloseChange()}</dd>
-          </OhlcItem>
+          <OhlcItem value={changeAmt}>{<dd>{openCloseChange()}</dd>}</OhlcItem>
         </OhlcList>
       </Header>
       <BidAskSpreadContainer>
