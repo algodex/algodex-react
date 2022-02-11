@@ -1,12 +1,12 @@
 import AmountRange from 'components/amount-range'
-import OrderInput from 'components/order-input'
-import useTranslation from 'next-translate/useTranslation'
-import React from 'react'
-import { LimitOrder } from './place-order.css'
 import Big from 'big.js'
-import OrderOptions from 'components/order-options'
 import { BodyCopy } from 'components/type'
+import { LimitOrder } from './place-order.css'
+import OrderInput from 'components/order-input'
+import OrderOptions from 'components/order-options'
 import PropTypes from 'prop-types'
+import React from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
 export const OrderForm = ({
   order,
