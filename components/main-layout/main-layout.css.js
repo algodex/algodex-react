@@ -30,7 +30,6 @@ export const PlaceOrderSection = styled.section`
 export const ContentSection = styled.section`
   position: relative;
   height: auto;
-  max-height: 75vh;
   overflow-y: scroll;
 `
 
