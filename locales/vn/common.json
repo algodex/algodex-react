@@ -14,5 +14,8 @@
   "mobilefooter-ORDERS": "LỆNH",
   "mobilefooter-WALLET": "VÍ",
   "trade-history":"Lịch sử thương mại",
-  "order-book":"Quyển sổ đặc Mua hàng"
+  "order-book":"Quyển sổ đặc Mua hàng",
+  "place-maker-description":"Đặt lệnh mua / bán của người tạo để thêm thanh khoản cho cặp giao dịch này",
+  "connect-wallet-liquidity":"Kết nối ví của bạn và đặt hàng để thêm thanh khoản cho cặp giao dịch này",
+  "place-first":"Đặt lệnh giới hạn đầu tiên cho"
 }
