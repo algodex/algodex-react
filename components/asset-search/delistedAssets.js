@@ -14,6 +14,18 @@ export const DelistedAssets = [
     formattedASALiquidity: '140961.4845331884',
     formattedAlgoLiquidity: '56470.725607'
   },
+
+  {
+    assetName: 'mikasa',
+    unitName: 'mike',
+    verified: false,
+    destroyed: false,
+    assetId: 52773879,
+    isTraded: false,
+    hasOrders: false,
+    formattedASALiquidity: '0',
+    formattedAlgoLiquidity: '0.000000'
+  },
   {
     assetName: 'mikasa',
     unitName: 'mike',
