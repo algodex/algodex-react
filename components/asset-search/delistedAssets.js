@@ -1,119 +1,17 @@
 export const DelistedAssets = [
-  {
-    assetName: 'Algodex',
-    unitName: 'ALGX',
-    verified: false,
-    destroyed: false,
-    assetId: 57867695,
-    isTraded: true,
-    decimals: 10,
-    priceChg24Pct: 2.1186605106317757,
-    price: '0.000120500000',
-    formattedPrice: '1.205000',
-    hasOrders: true,
-    formattedASALiquidity: '140961.4845331884',
-    formattedAlgoLiquidity: '56470.725607'
-  },
+  389993157, // ALGX
+  352620637, // ALGX
+  553727907, // 11mike10
+  553612041, // 11mike10
 
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52773879,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52773530,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52772474,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52771043,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52769853,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52769581,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'mikasa',
-    unitName: 'mike',
-    verified: false,
-    destroyed: false,
-    assetId: 52768943,
-    isTraded: false,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'JONAH',
-    unitName: 'MIKE',
-    verified: false,
-    destroyed: false,
-    assetId: 25340506,
-    isTraded: false,
-    decimals: 6,
-    hasOrders: false,
-    formattedASALiquidity: '0.000000',
-    formattedAlgoLiquidity: '0.000000'
-  },
-  {
-    assetName: 'Mike Token',
-    unitName: 'MKT',
-    verified: false,
-    destroyed: false,
-    assetId: 15175087,
-    isTraded: false,
-    decimals: 0,
-    hasOrders: false,
-    formattedASALiquidity: '0',
-    formattedAlgoLiquidity: '0.000000'
-  }
+  57867695, //ALGX Testnet
+  52773530, //Mike Testnet
+  52773879, //Mike Testnet
+  52772474, //Mike Testnet
+  52771043, //Mike Testnet
+  52769853, //Mike Testnet
+  52769581, //Mike Testnet
+  52768943, //Mike Testnet
+  25340506, //Mike Testnet
+  15175087 //Mike Testnet
 ]

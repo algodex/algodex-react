@@ -119,10 +119,7 @@ const AssetSearchTable = ({
   const searchResultData = useMemo(() => {
     // Filter the assets and remove the delisted assets before passing to the table
     const filteredList = assets.filter((asset) => {
-      return (
-        asset.assetId !=
-        DelistedAssets.find((delistedAsset) => delistedAsset.assetId == asset.assetId)?.assetId
-      )
+      return asset.assetId != DelistedAssets.find((delistedAsset) => delistedAsset == asset.assetId)
     })
     // Return nothing if no data exists
     if (!filteredList || !Array.isArray(filteredList)) {
