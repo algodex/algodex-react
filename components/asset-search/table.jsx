@@ -122,9 +122,7 @@ const AssetSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    const filteredList = assets.filter((asset) => {
-      return !(asset.assetId in bannedAssets)
-    })
+    const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Return nothing if no data exists
     if (!filteredList || !Array.isArray(filteredList)) {
       return []
