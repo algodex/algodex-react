@@ -20,14 +20,12 @@ import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
 import { useCallback, useEffect, useState } from 'react'
 
 import Big from 'big.js'
-import Error from 'components/error'
 import Icon from 'components/icon'
 import { Info } from 'react-feather'
 import { LimitOrder } from './limit-order'
 import { MarketOrder } from './market-order'
 import OrderService from 'services/order'
 import PropTypes from 'prop-types'
-import Spinner from '../spinner'
 import { Tooltip } from 'components/tooltip'
 import WalletService from 'services/wallet'
 import { aggregateOrders } from 'components/order-book/helpers'
@@ -132,7 +130,6 @@ function PlaceOrderView(props) {
 
     let buyOrders = aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy')
     setBuyOrders(buyOrders)
-
   }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const updateInitialState = () => {
@@ -474,8 +471,6 @@ function PlaceOrderView(props) {
     )
   }
 
-  // if (isError) return <Error />
-  // if (isLoading) return <Spinner flex />
   return (
     <Container data-testid="place-order">
       <Header>
