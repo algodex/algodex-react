@@ -208,7 +208,7 @@ const MobileMenuButton = styled(Button)`
 import { useEffect, useRef, useState } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
-import OrderBook from '@/components/Asset/Orderbook'
+import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder'
 import PropTypes from 'prop-types'
