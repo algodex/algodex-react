@@ -1,9 +1,19 @@
 import { calculateAsaBuyAmount } from 'services/convert'
 import { floatToFixed } from 'services/display'
+import { convertFromAsaUnits } from 'services/convert'
+import BigJS from 'big.js'
 
 export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'
   let total = 0
+
+  const leftPriceDecimalsLength = orders.map((order) => {
+    const price = new BigJS(convertFromAsaUnits(order.asaPrice, asaDecimals))
+    const left = Math.floor(price)
+    const right = price.sub(left)
+    return right.toString().length - 2
+  })
+  const decimalLength = Math.max(...leftPriceDecimalsLength)
 
   const sortOrdersToAggregate = (a, b) => {
     if (isBuyOrder) {
@@ -13,8 +23,8 @@ export const aggregateOrders = (orders, asaDecimals, type) => {
   }
 
   const reduceAggregateData = (result, order) => {
-    const price = floatToFixed(order.formattedPrice)
-
+    const _price = convertFromAsaUnits(order.asaPrice, asaDecimals)
+    const price = floatToFixed(_price, decimalLength, decimalLength)
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
 
     const amount = isBuyOrder
