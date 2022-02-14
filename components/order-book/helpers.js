@@ -6,14 +6,16 @@ import BigJS from 'big.js'
 export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'
   let total = 0
-
   const leftPriceDecimalsLength = orders.map((order) => {
     const price = new BigJS(convertFromAsaUnits(order.asaPrice, asaDecimals))
     const left = Math.floor(price)
     const right = price.sub(left)
-    return right.toString().length - 2
+
+    return right !== 0 && right.toString().length > 2 ? right.toString().length - 2 : 0
   })
-  const decimalLength = Math.max(...leftPriceDecimalsLength)
+
+  const decimalLength =
+    leftPriceDecimalsLength.length === 0 ? 0 : Math.max(...leftPriceDecimalsLength)
 
   const sortOrdersToAggregate = (a, b) => {
     if (isBuyOrder) {
