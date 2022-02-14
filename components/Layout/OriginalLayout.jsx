@@ -1,4 +1,4 @@
-import Button from 'components/button'
+import Button from '@/components/Button'
 import styled from '@emotion/styled'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 const WalletSection = styled.section`
