@@ -45,7 +45,6 @@ const localeToFlags = {
   fr: 'FR',
   pl: 'PL'
 }
-=======
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
