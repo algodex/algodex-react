@@ -119,7 +119,7 @@ const AssetSearchTable = ({
   const searchResultData = useMemo(() => {
     // Filter the assets and remove the delisted assets before passing to the table
     const bannedAssets = {}
-    DelistedAssets.forEach((element, index) => {
+    DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
     const filteredList = assets.filter((asset) => {
