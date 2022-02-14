@@ -125,18 +125,15 @@ function PlaceOrderView(props) {
   )
 
   useEffect(() => {
-    let sellOrders = aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell')
-    setSellOrders(sellOrders)
-
-    let buyOrders = aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy')
-    setBuyOrders(buyOrders)
+    setSellOrders(aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
   }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const updateInitialState = () => {
     if (order.type === 'buy') {
       setOrder(
         {
-          price: sellOrders.length ? sellOrders[sellOrders.length - 1].price : '0.00'
+          price: sellOrders?.length ? sellOrders[sellOrders.length - 1].price : '0.00'
         },
         asset
       )
@@ -145,7 +142,7 @@ function PlaceOrderView(props) {
     if (order.type === 'sell') {
       setOrder(
         {
-          price: buyOrders.length ? buyOrders[0].price : '0.00'
+          price: buyOrders?.length ? buyOrders[0].price : '0.00'
         },
         asset
       )
@@ -153,10 +150,8 @@ function PlaceOrderView(props) {
   }
 
   useEffect(() => {
-    if (sellOrders?.length || buyOrders?.length) {
-      updateInitialState()
-    }
-  }, [order.type, sellOrders, buyOrders])
+    updateInitialState()
+  }, [order.type])
 
   const handleRangeChange = useCallback(
     (update) => {
