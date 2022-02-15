@@ -27,6 +27,7 @@ import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
+import { DelistedAssets } from './delistedAssets'
 
 const Loading = () => {
   const { t } = useTranslation('assets')
@@ -51,8 +52,7 @@ const AssetNameCell = ({ value, row }) => {
             </NameVerifiedWrapper>
           </AssetNameBlock>
         </div>
-        <br />
-        <div className="flex item-center -mt-3">
+        <div className="flex item-center">
           <div className="mr-1">
             <AssetId>{row.original.id}</AssetId>
           </div>
@@ -117,21 +117,27 @@ const AssetSearchTable = ({
    * @type {Array}
    */
   const searchResultData = useMemo(() => {
+    // Filter the assets and remove the delisted assets before passing to the table
+    const bannedAssets = {}
+    DelistedAssets.forEach((element) => {
+      bannedAssets[element] = element
+    })
+    const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Return nothing if no data exists
-    if (!assets || !Array.isArray(assets)) {
+    if (!filteredList || !Array.isArray(filteredList)) {
       return []
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
-      return assets.filter((asset) => asset.verified).map(mapToSearchResults)
+      return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isFilteringByFavorites) {
       // Filter assets by favorites
       const result = Object.keys(favoritesState).map((assetId) => {
-        return assets.filter((asset) => asset.assetId == parseInt(assetId, 10))
+        return filteredList.filter((asset) => asset.assetId == parseInt(assetId, 10))
       })
       return flatten(result).map(mapToSearchResults)
     } else {
       // If there is data, use it
-      return assets.map(mapToSearchResults)
+      return filteredList.map(mapToSearchResults)
     }
   }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 

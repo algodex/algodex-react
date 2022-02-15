@@ -1,6 +1,6 @@
-import React from 'react'
 import { OrderForm } from './order-form'
 import PropTypes from 'prop-types'
+import React from 'react'
 
 export const MarketOrder = ({
   order,
