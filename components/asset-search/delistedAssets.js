@@ -2,7 +2,8 @@ export const MainetDelistedAssets = [
   389993157, // ALGX
   352620637, // ALGX
   553727907, // 11mike10
-  553612041 // 11mike10
+  553612041, // 11mike10
+  433100599 // 11mike10
 ]
 
 export const TestnetDelistedAssets = [
