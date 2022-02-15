@@ -20,10 +20,38 @@ import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 
+
+// Map locale code to the flag used in 'react-country-flag'
+const localeToFlags = {
+  en: 'US',
+  es: 'MX',
+  nl: 'NL',
+  ch: 'CN',
+  tr: 'TR',
+  vn: 'VN',
+  id: 'ID',
+  iq: 'IQ',
+  my: 'MY',
+  ir: 'IR',
+  it: 'IT',
+  se: 'SE',
+  hu: 'HU',
+  no: 'NO',
+  ct: 'ES-CT',
+  th: 'TH',
+  in: 'IN',
+  de: 'DE',
+  kr: 'KR',
+  fr: 'FR',
+  pl: 'PL'
+}
+
+
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
+
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
