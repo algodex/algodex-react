@@ -151,7 +151,7 @@ function PlaceOrderView(props) {
 
   useEffect(() => {
     updateInitialState()
-  }, [order.type, orderView])
+  }, [order.type, orderView, activeWalletAddress])
 
   const handleRangeChange = useCallback(
     (update) => {
