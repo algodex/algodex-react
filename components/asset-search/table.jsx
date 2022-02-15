@@ -120,8 +120,9 @@ const AssetSearchTable = ({
   const searchResultData = useMemo(() => {
     // Filter the assets and remove the delisted assets before passing to the table
     const bannedAssets = {}
-    const list = activeNetwork === 'testnet' ? TestnetDelistedAssets : MainetDelistedAssets
-    list.forEach((element) => {
+    const delistedAssets =
+      activeNetwork === 'testnet' ? TestnetDelistedAssets : MainetDelistedAssets
+    delistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
     const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
