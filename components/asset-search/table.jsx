@@ -27,7 +27,7 @@ import theme from '../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { withSearchResultsQuery } from 'hooks/withAlgodex'
-import { DelistedAssets } from './delistedAssets'
+import { MainetDelistedAssets, TestnetDelistedAssets } from './delistedAssets'
 
 const Loading = () => {
   const { t } = useTranslation('assets')
@@ -110,6 +110,7 @@ const AssetSearchTable = ({
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t, lang } = useTranslation('assets')
 
   /**
@@ -119,7 +120,9 @@ const AssetSearchTable = ({
   const searchResultData = useMemo(() => {
     // Filter the assets and remove the delisted assets before passing to the table
     const bannedAssets = {}
-    DelistedAssets.forEach((element) => {
+    const delistedAssets =
+      activeNetwork === 'testnet' ? TestnetDelistedAssets : MainetDelistedAssets
+    delistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
     const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
