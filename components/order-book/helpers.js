@@ -26,7 +26,7 @@ export const aggregateOrders = (orders, asaDecimals, type) => {
 
   const reduceAggregateData = (result, order) => {
     const _price = convertFromAsaUnits(order.asaPrice, asaDecimals)
-    const price = floatToFixed(_price, decimalLength, decimalLength)
+    const price = floatToFixed(_price, 6, decimalLength)
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
 
     const amount = isBuyOrder
