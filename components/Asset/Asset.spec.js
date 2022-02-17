@@ -23,7 +23,8 @@ describe('Asset Info', () => {
     expect(queryByTestId(ASA_ID)).not.toBeNull()
     expect(queryByTestId(ASA_PRICE)).not.toBeNull()
     expect(queryByTestId(ASA_PCT_CHANGE)).not.toBeNull()
-
+    expect(queryByTestId(ASA_URL)).not.toBeNull()
+    expect(queryByTestId(BACK_BTN)).not.toBeNull()
   })
 
   it('should show asset description', () => {
