@@ -16,52 +16,47 @@ const BACK_BTN = 'back-btn'
 describe('Asset Info', () => {
   it('should show asset name', () => {
     const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
     expect(queryByTestId(ASA_NAME)).not.toBeNull()
+    expect(queryByTestId(ASA_DESC)).not.toBeNull()
+    expect(queryByTestId(ASA_CIRC_SUPPLY)).not.toBeNull()
+    expect(queryByTestId(ASA_TOTAL_SUPPLY)).not.toBeNull()
+    expect(queryByTestId(ASA_ID)).not.toBeNull()
+    expect(queryByTestId(ASA_PRICE)).not.toBeNull()
+    expect(queryByTestId(ASA_PCT_CHANGE)).not.toBeNull()
+
   })
 
   it('should show asset description', () => {
-
-    const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_DESC)).not.toBeNull()
+    const { getByTestId } = render(<AssetInfo asset={asset}  />)
+    expect(getByTestId(ASA_DESC)).toHaveTextContent(asset.description)
   })
 
-  it('should show asset circulating supply', () => {
-    const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_CIRC_SUPPLY)).not.toBeNull()
+  it('should show N/A when asset is not set', () => {
+    const _asset = asset
+    delete _asset.description
+    const { getByTestId } = render(<AssetInfo asset={_asset}  />)
+    
+    expect(getByTestId(ASA_DESC)).toHaveTextContent('N/A')
   })
 
-  it('should show asset total supply', () => {
-    const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_TOTAL_SUPPLY)).not.toBeNull()
+  it('should show NA when no circulating supply is provided', () => {
+    const _asset = asset
+    delete _asset.circulating
+    const { getByTestId } = render(<AssetInfo asset={_asset}  />)
+    
+    expect(getByTestId(ASA_CIRC_SUPPLY)).toHaveTextContent('NA')
   })
 
-  it('should show asset id', () => {
+  it('should show asset URL when available', () => {
     const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_ID)).not.toBeNull()
+    expect(queryByTestId(ASA_URL)).not.toBeNull()
   })
 
-  it('should show asset price', () => {
-    const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_PRICE)).not.toBeNull()
-  })
-
-
-  it('should show percentage change in asset', () => {
-    const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_PCT_CHANGE)).not.toBeNull()
-  })
-
-  it('should have url link if provided', () => {
-    const { queryByTestId } = render(<AssetInfo asset={asset} />)
-
-    expect(queryByTestId(ASA_URL).textContent).toMatch(asset.url);
+  it('should not show asset URL when unavailable', () => {
+    const _asset = asset
+    delete _asset.url
+    const { queryByTestId } = render(<AssetInfo asset={_asset} />)
+    expect(queryByTestId(ASA_URL)).toBeNull()
   })
 
 })

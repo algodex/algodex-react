@@ -159,12 +159,12 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button onClick={onClick}>
+          <div onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
             </ButtonText>
-          </button>
+          </div>
         ) : null}
         <HeaderContainer>
           <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>

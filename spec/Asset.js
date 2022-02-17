@@ -4,6 +4,7 @@ export const AssetData = {
   circulating: 99989322377,
   decimals: 6,
   deleted: false,
+  description: 'Description for Lamp',
   fullName: 'Lamps',
   id: 15322902,
   name: 'LAMP',

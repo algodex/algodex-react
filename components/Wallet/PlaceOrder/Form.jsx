@@ -321,7 +321,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 {asset.name || asset.id}
               </LabelMd>
               <LabelMd color="gray.300" fontWeight="500">
-                {hasBalance && wallet.assets[asset.id].balance}
+                {hasBalance && wallet.assets[asset.id]?.balance}
               </LabelMd>
             </BalanceRow>
           </AvailableBalance>
