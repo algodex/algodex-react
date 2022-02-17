@@ -14,7 +14,6 @@ import OrderBookPrice from 'components/order-book-price'
 import PriceHeader from 'components/price-header'
 import PropTypes from 'prop-types'
 import Spinner from '../spinner'
-import { floatToFixed } from 'services/display'
 import { useAssetPriceQuery } from 'hooks/useAlgodex'
 import { useEventDispatch } from '../../hooks/useEvents'
 import { useStore } from 'store/use-store'
@@ -61,7 +60,7 @@ function OrderBookView({ asset, sellData, buyData }) {
             title={row.price}
             m={0}
           >
-            {floatToFixed(row.price)}
+            {row.price}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
