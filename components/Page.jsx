@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 import Header from '@/components/Nav/Header'
 import NetworkHandler from '@/components/Nav/NetworkHandler'
-import Layout from '@/components/Layout'
+import Layout from '@/components/Layout/OriginalLayout'
 import Spinner from '@/components/Spinner'
 import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
 import useUserStore from '@/store/use-user-state'

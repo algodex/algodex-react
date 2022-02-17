@@ -169,7 +169,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
   }
 
   return (
-    <Section area="bottomLeft">
+    <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('trade-history')}
@@ -205,7 +205,7 @@ TradeHistory.propTypes = {
   orders: PropTypes.array.isRequired
 }
 
-TradeHistory.defalutProps = {
+TradeHistory.defaultProps = {
   orders: []
 }
 export default withAssetTradeHistoryQuery(TradeHistory)
