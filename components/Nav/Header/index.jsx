@@ -10,13 +10,13 @@ import {
   NetworkDropdown,
   NetworkDropdownOption
 } from './header.css'
-import { useState } from 'react'
 
 import NavActiveLink from 'components/Nav/ActiveLink'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 
