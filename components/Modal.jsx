@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import MUIModal from '@mui/material/Modal'
 import PropTypes from 'prop-types'
 
@@ -8,7 +7,7 @@ const ModalWrapper = (props) => {
       open={props.isVisible}
       hideBackdrop={props.hideBackdrop}
       className="w-full"
-      style={{ backgroundColor: `${props.hideBackdrop ? 'rgba(0, 0, 0, 0.7)' : 'none'}`}}
+      style={{ backgroundColor: `${props.hideBackdrop ? 'rgba(0, 0, 0, 0.7)' : 'none'}` }}
       {...props}
     >
       {props.children}
