@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Header from 'components/Nav/Header'
 import { useUserStore } from '../store'
 
 /**
