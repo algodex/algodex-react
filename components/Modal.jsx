@@ -1,32 +1,30 @@
+import MUIModal from '@mui/material/Modal'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-export const ModalWrapper = styled.div`
-  z-index: 200;
-  background: ${({ hideBackdrop }) => (hideBackdrop ? 'rgba(0, 0, 0, 0.7)' : 'none')};
-  visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+export const ModalContainer = styled(MUIModal)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 50%;
 `
-const Modal = (props) => {
+
+const ModalWrapper = (props) => {
   return (
-    <ModalWrapper
-      isVisible={props.isVisible}
-      className="absolute w-full h-full justify-center items-center"
-      hideBackdrop={props.hideBackdrop}
-      {...props}
-    >
+    <ModalContainer open={props.isVisible} hideBackdrop={props.hideBackdrop} {...props}>
       {props.children}
-    </ModalWrapper>
+    </ModalContainer>
   )
 }
 
-Modal.propTypes = {
+ModalWrapper.propTypes = {
   children: PropTypes.element,
   isVisible: PropTypes.bool,
   hideBackdrop: PropTypes.bool
 }
 
-Modal.defaultProps = {
+ModalWrapper.defaultProps = {
   hideBackdrop: true
 }
-export default Modal
+export default ModalWrapper

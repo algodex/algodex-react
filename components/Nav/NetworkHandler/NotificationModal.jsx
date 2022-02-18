@@ -77,7 +77,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
   }
   return (
     <Modal isVisible={isModalActive}>
-      <ModalContainer className="flex flex-col justify-between text-white xs:h-5/6 xs:w-5/6 md:h-3/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg xs:p-4 md:p-8">
+      <ModalContainer className="flex flex-col justify-between text-white bg-gray-600 rounded-lg xs:p-4 md:p-8">
         <ModalBody className="flex flex-col justify-between">
           <ModalTitle className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
             {content.title}
