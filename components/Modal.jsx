@@ -1,20 +1,18 @@
+import Box from '@mui/material/Box';
 import MUIModal from '@mui/material/Modal'
 import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-
-export const ModalContainer = styled(MUIModal)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 50%;
-`
 
 const ModalWrapper = (props) => {
   return (
-    <ModalContainer open={props.isVisible} hideBackdrop={props.hideBackdrop} {...props}>
+    <MUIModal
+      open={props.isVisible}
+      hideBackdrop={props.hideBackdrop}
+      className="w-full"
+      style={{ backgroundColor: `${props.hideBackdrop ? 'rgba(0, 0, 0, 0.7)' : 'none'}`}}
+      {...props}
+    >
       {props.children}
-    </ModalContainer>
+    </MUIModal>
   )
 }
 
