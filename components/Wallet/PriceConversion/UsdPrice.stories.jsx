@@ -9,14 +9,23 @@ export default {
     isRegenerate: false,
     data: { algoPrice: '260' },
     fontSize: '1rem',
-    priceToConvert: 3000
+    priceToConvert: 3000,
+    currency: '$'
   }
 }
 
 /* eslint-disable */
-export const UsdPrice = ({ isRegenerate, data, fontSize, priceToConvert, ...props }) => {
+export const UsdPrice = ({ isRegenerate, data, fontSize, priceToConvert, currency, ...props }) => {
   if (isRegenerate) {
     data = {}
   }
-  return <Component data={data} fontSize={fontSize} priceToConvert={priceToConvert} {...props} />
+  return (
+    <Component
+      data={data}
+      fontSize={fontSize}
+      priceToConvert={priceToConvert}
+      currency={currency}
+      {...props}
+    />
+  )
 }

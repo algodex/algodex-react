@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { UsdPrice } from '../Wallet/PriceConversion/UsdPrice'
 
 const Input = styled.input`
   flex: 1 1 auto;
@@ -13,6 +14,8 @@ const Input = styled.input`
   text-align: right;
   font-size: 1rem;
   line-height: 1;
+  height: ${({ includeUSD }) => (includeUSD ? '3rem' : 'auto')};
+  padding-bottom: ${({ includeUSD }) => (includeUSD ? '1.2rem' : '0.5rem')};
 
   &:focus {
     outline: 0;
@@ -45,6 +48,7 @@ const Container = styled.div`
   flex: 1 1 auto;
   display: flex;
   position: relative;
+  align-items: center;
   // margin-bottom: 1rem;
 `
 
@@ -65,7 +69,20 @@ const Label = styled(InputLabel)`
 const Asset = styled(InputLabel)`
   right: 1.25rem;
   width: 2.75rem;
+  top: ${({ includeUSD }) => (includeUSD ? '39%' : '50%')};
   font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
+`
+const PriceContainer = styled.div`
+  position: absolute;
+  display: flex;
+  right: 2.2rem;
+  top: 1.7rem;
+  color: ${({ theme }) => theme.palette.gray['500']};
+  font-size: 0.875rem;
+  font-weight: 600;
+  p {
+    margin-left: 0.5rem;
+  }
 `
 
 /**
@@ -76,14 +93,24 @@ const Asset = styled(InputLabel)`
  * @returns {JSX.Element}
  * @constructor
  */
-export function CurrencyInput({ label, currency, ...props }) {
+export function CurrencyInput({ label, currency, includeUSD, ...props }) {
   const condenseAssetName = currency?.length > 5
 
   return (
     <Container>
-      <Input placeholder="0.00" {...props} />
+      <Input placeholder="0.00" includeUSD={includeUSD} {...props} />
       <Label>{label}</Label>
-      <Asset isCondensed={condenseAssetName}>{currency}</Asset>
+      {/* <div> */}
+      <Asset isCondensed={condenseAssetName} includeUSD={includeUSD}>
+        {currency}
+      </Asset>
+      {includeUSD && (
+        <PriceContainer>
+          <UsdPrice priceToConvert={props.value} fontSize={'0.875rem'} />
+          <p>USD</p>
+        </PriceContainer>
+      )}
+      {/* </div> */}
     </Container>
   )
 }
