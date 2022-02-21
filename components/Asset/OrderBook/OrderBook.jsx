@@ -266,11 +266,7 @@ export function OrderBookPrice({ asset }) {
   function PriceInfo() {
     return (
       <Fragment>
-        {floatToFixed(
-          asset.decimals !== 6
-            ? convertFromAsaUnits(asset.price_info.price, asset.decimals)
-            : asset.price_info.price
-        )}
+        {floatToFixed(convertFromAsaUnits(asset.price_info.price, asset.decimals))}
         <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
           asset.price_info.price24Change,
           2
