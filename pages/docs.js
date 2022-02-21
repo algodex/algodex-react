@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
+import { useUserStore } from '../store'
 
 /**
  * Documentation Landing Page
@@ -8,6 +9,8 @@ import Header from 'components/Nav/Header'
  * @constructor
  */
 const DocsPage = () => {
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
   return (
     <>
       <Head>
@@ -19,7 +22,11 @@ const DocsPage = () => {
         height="100%"
         width="100%"
         title="about"
-        src={'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'}
+        src={
+          activeNetwork == 'mainnet'
+            ? 'https://about.algodex.com/docs/algodex-trading-guide-mainnet/'
+            : 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'
+        }
       />
     </>
   )

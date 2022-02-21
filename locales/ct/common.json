@@ -14,5 +14,8 @@
     "mobilefooter-ORDERS":"ORDERS",
     "mobilefooter-WALLET":"CARTERA",
     "trade-history":"Comerç-Història",
-    "order-book":"Llibre De Comandes"
+    "order-book":"Llibre De Comandes",
+    "place-maker-description":"Col·loqueu una ordre de compra/venda del fabricant per afegir liquiditat per a aquesta parella comercial",
+    "connect-wallet-liquidity":" Connecteu la vostra cartera i feu una comanda per afegir liquiditat per a aquesta parella comercial",
+    "place-first":"Col·loqueu la primera comanda límit per"
 }
