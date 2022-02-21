@@ -1,5 +1,4 @@
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
-import { Tab as _Tab, Header as _Tabs } from '../../Tabs/orders.css'
 import { useMemo, useState } from 'react'
 
 import AdvancedOptions from './Form/AdvancedOptions'
@@ -16,6 +15,57 @@ import { has } from 'lodash'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+
+const _Tab = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.palette.gray[100]};
+  padding: 1rem 0;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+
+  border-bottom: ${({ isActive, theme }) =>
+    isActive ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
+
+  &:hover {
+    color: ${({ theme }) => theme.palette.gray[100]};
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.palette.gray[100]};
+  }
+
+  @media (min-width: 1024px) {
+    color: ${({ isActive, theme }) =>
+      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+  }
+`
+
+const _Tabs = styled.div`
+  display: flex;
+  padding: 0 1.125rem;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray[700]};
+
+  & > * {
+    margin: 0 1rem;
+  }
+
+  justify-content: space-between;
+  @media (min-width: 996px) {
+    justify-content: flex-start;
+    & > * {
+      margin-left: 0;
+      margin-right: 6rem;
+    }
+  }
+`
 
 const Container = styled.div`
   flex: 1 1 0%;

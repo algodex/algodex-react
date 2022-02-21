@@ -1,24 +1,22 @@
-import { Fragment } from 'react'
-import useStore from 'store/use-store'
 import { ArrowDown, ArrowUp } from 'react-feather'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import { rgba } from 'polished'
-import useTranslation from 'next-translate/useTranslation'
-import Big from 'big.js'
-
 import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
-import TablePriceHeader from '@/components/Table/PriceHeader'
-import SvgImage from '@/components/SvgImage'
-import { Section } from '@/components/Layout/Section'
-
-import { floatToFixed } from '@/services/display'
-import { convertFromAsaUnits } from '@/services/convert'
-
 import { withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks/withAlgodex'
-import { useEventDispatch } from '@/hooks/useEvents'
+
+import Big from 'big.js'
+import { Fragment } from 'react'
+import PropTypes from 'prop-types'
+import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
+import SvgImage from '@/components/SvgImage'
+import TablePriceHeader from '@/components/Table/PriceHeader'
+import { convertFromAsaUnits } from '@/services/convert'
+import { floatToFixed } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
+import { rgba } from 'polished'
+import styled from '@emotion/styled'
+import { useEventDispatch } from '@/hooks/useEvents'
+import useStore from 'store/use-store'
+import useTranslation from 'next-translate/useTranslation'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
@@ -258,7 +256,9 @@ export function OrderBookPrice({ asset }) {
     return (
       <Fragment>
         --
-        <BodyCopySm as="span">0.00%</BodyCopySm>
+        <BodyCopySm data-testid="no-price-info" as="span">
+          0.00%
+        </BodyCopySm>
       </Fragment>
     )
   }
@@ -266,12 +266,11 @@ export function OrderBookPrice({ asset }) {
   function PriceInfo() {
     return (
       <Fragment>
-        {floatToFixed(
-          asset.decimals !== 6
-            ? convertFromAsaUnits(asset.price_info.price, asset.decimals)
-            : asset.price_info.price
-        )}
-        <BodyCopySm as="span">{`${floatToFixed(asset.price_info.price24Change, 2)}%`}</BodyCopySm>
+        {floatToFixed(convertFromAsaUnits(asset.price_info.price, asset.decimals))}
+        <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
+          asset.price_info.price24Change,
+          2
+        )}%`}</BodyCopySm>
       </Fragment>
     )
   }

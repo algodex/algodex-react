@@ -147,7 +147,9 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy data-testid="asset-url"  as="span">{asset.url}</BodyCopy>
+            <BodyCopy data-testid="asset-url" as="span">
+              {asset.url}
+            </BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -159,12 +161,12 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <div data-testid="asset-info-back-btn" onClick={onClick}>
+          <button data-testid="asset-info-back-btn" onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
             </ButtonText>
-          </div>
+          </button>
         ) : null}
         <HeaderContainer>
           <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>
@@ -177,7 +179,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('description')}
             </BodyCopyTiny>
-            <BodyCopy data-testid="asset-info-desc" as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
+            <BodyCopy
+              data-testid="asset-info-desc"
+              as="dd"
+              fontFamily={theme.fontFamilies.heading}
+              fontWeight="400"
+            >
               {description}
             </BodyCopy>
           </InfoItem>
@@ -185,7 +192,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('circulating-supply')}
             </BodyCopyTiny>
-            <BodyCopy data-testid="asset-info-circ-supply" as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-circ-supply"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
@@ -193,7 +205,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('total-supply')}
             </BodyCopyTiny>
-            <BodyCopy data-testid="asset-info-total-supply" as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-total-supply"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.total}
             </BodyCopy>
           </InfoItem>
@@ -201,7 +218,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               ASA ID
             </BodyCopyTiny>
-            <BodyCopy data-testid="asset-info-asa-id" as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-asa-id"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.id}
             </BodyCopy>
           </InfoItem>
@@ -220,7 +242,12 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Price
                 </BodyCopyTiny>
-                <BodyCopy data-testid="asset-info-price" as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy
+                  data-testid="asset-info-price"
+                  as="dd"
+                  fontFamily={theme.fontFamilies.monospace}
+                  fontSize="1.25rem"
+                >
                   {floatToFixed(
                     asset.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
@@ -233,7 +260,12 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Change
                 </BodyCopyTiny>
-                <BodyCopy data-testid="asset-info-pct-change" as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy
+                  data-testid="asset-info-pct-change"
+                  as="dd"
+                  fontFamily={theme.fontFamilies.monospace}
+                  fontSize="1.25rem"
+                >
                   {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>

@@ -1,16 +1,15 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 import WalletService from 'services/wallet'
 import useStore, { useStorePersisted } from 'store/use-store'
 import useMyAlgo from 'hooks/use-my-algo'
-import shallow from 'zustand/shallow'
 
 function useWallets() {
   const router = useRouter()
   const adminWalletAddr = router.query.adminWalletAddr
 
-  const [wallets, setWallets] = useState([])
+  // const [wallets, setWallets] = useState([])
 
   const walletAddresses = useStorePersisted((state) => state.walletAddresses)
   const setWalletAddresses = useStorePersisted((state) => state.setWalletAddresses)
