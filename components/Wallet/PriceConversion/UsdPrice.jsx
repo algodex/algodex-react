@@ -13,19 +13,17 @@ export function UsdPrice({ data, fontSize, priceToConvert }) {
 }
 
 UsdPrice.propTypes = {
-  /**
-   * Algorand price Information
-   */
+  /** Algorand price Information*/
   data: PropTypes.object.isRequired,
-
-  /**
-   * Price to convert to USD
-   */
-  priceToConvert: PropTypes.number.isRequired
+  /**  Price to convert to USD */
+  priceToConvert: PropTypes.number.isRequired,
+  /**  Font size to render the text as expected */
+  fontSize: PropTypes.string.isRequired
 }
 
 UsdPrice.defaultProps = {
   data: { algoPrice: '' },
+  fontSize: '1rem',
   priceToConvert: 0
 }
 
