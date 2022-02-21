@@ -14,5 +14,8 @@
   "mobilefooter-ORDERS": "Emirler",
   "mobilefooter-WALLET": "CÜZDAN",
   "trade-history":"Ticaret Tarihi",
-  "order-book":"Sipariş defteri"
+  "order-book":"Sipariş defteri",
+  "place-maker-description":"Bu ticaret çifti için likidite eklemek için bir üretici alım/satım emri verin",
+  "connect-wallet-liquidity":"Cüzdanınızı bağlayın ve bu işlem çifti için likidite eklemek için bir sipariş verin ",
+  "place-first":"için ilk limit siparişini verin"
 }

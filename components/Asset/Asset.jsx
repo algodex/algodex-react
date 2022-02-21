@@ -122,6 +122,7 @@ export function AssetInfo({ asset }) {
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
+
   const renderName = () => {
     if (asset.verified) {
       return (
@@ -185,7 +186,7 @@ export function AssetInfo({ asset }) {
               {t('circulating-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.circulating || 'NA'}
+              {convertFromBaseUnits(asset.circulating, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
@@ -193,7 +194,7 @@ export function AssetInfo({ asset }) {
               {t('total-supply')}
             </BodyCopyTiny>
             <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {asset.total}
+              {convertFromBaseUnits(asset.total, asset.decimals).toLocaleString()}
             </BodyCopy>
           </InfoItem>
           <InfoItem>

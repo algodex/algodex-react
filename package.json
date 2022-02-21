@@ -30,7 +30,7 @@
     "styled-components": "^5"
   },
   "dependencies": {
-    "@algodex/algodex-sdk": "^1.1.7",
+    "@algodex/algodex-sdk": "^1.1.8",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
@@ -76,7 +76,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
+    "@cypress/code-coverage": "^3.9.12",
     "@emotion/babel-plugin": "^11.3.0",
+    "@emotion/jest": "^11.7.1",
     "@storybook/addon-actions": "^6.4.14",
     "@storybook/addon-essentials": "^6.4.14",
     "@storybook/addon-links": "^6.4.14",
@@ -99,6 +101,7 @@
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
     "cypress": "^9.4.1",
+    "enzyme-to-json": "^3.6.2",
     "eslint": "^8.8.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-cypress": "^2.12.1",
@@ -110,6 +113,7 @@
     "gitmoji-cli": "^4.7.0",
     "husky": "^7.0.0",
     "hygen-cra": "^1.0.0",
+    "istanbul-merge": "^1.1.1",
     "jest": "^27.0.1",
     "jest-coverage-badges": "^1.1.2",
     "json-schema-faker": "^0.5.0-rcv.41",
@@ -123,5 +127,23 @@
     "storybook-addon-next-router": "^3.0.5",
     "tailwindcss": "^3.0.18",
     "webpack": "^5.65.0"
+  },
+  "nyc": {
+    "report-dir": "coverage/integration",
+    "reporter": [
+      "text",
+      "json",
+      "lcov"
+    ],
+    "all": true,
+    "include": [
+      "components/**/*.js"
+    ],
+    "exclude": [
+      "**/*.spec.js",
+      "**/spec.js",
+      "**/*.stories.js",
+      "**/stories.js"
+    ]
   }
 }

@@ -29,7 +29,7 @@ const TableWrapper = styled.div`
   }
 `
 
-const AssetCoinCell = (props) => {
+export const AssetCoinCell = (props) => {
   const dispatcher = useEventDispatch()
   const onClick = useCallback(() => {
     dispatcher('clicked', 'asset')

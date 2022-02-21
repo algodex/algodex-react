@@ -1,11 +1,12 @@
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import { fetchAssets } from '@/services/algodex'
 import { useCallback, useState } from 'react'
+
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import useUserStore from '@/store/use-user-state'
 
 /**
@@ -29,8 +30,7 @@ export async function getStaticPaths() {
  * @returns {object} Response Object or Redirect Object
  */
 export async function getStaticProps({ params: { id } }) {
-  let staticExplorerAsset,
-    staticAssetPrice = {}
+  let staticExplorerAsset
 
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
@@ -43,19 +43,8 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
-  try {
-    staticAssetPrice = await fetchAssetPrice(id)
-  } catch (error) {
-    if (typeof staticAssetPrice.isTraded === 'undefined') {
-      staticAssetPrice = {
-        isTraded: false,
-        id: staticExplorerAsset.id
-      }
-    }
-  }
-
   return {
-    props: { staticExplorerAsset, staticAssetPrice }
+    props: { staticExplorerAsset }
   }
 }
 
@@ -68,13 +57,12 @@ export async function getStaticProps({ params: { id } }) {
  * found
  *
  * @param {object} staticExplorerAsset The Explorer Response
- * @param {object} staticAssetPrice The Asset Price Response
  * @returns {JSX.Element}
  * @constructor
  */
-const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
+const TradePage = ({ staticExplorerAsset }) => {
   // eslint-disable-next-line no-undef
-  console.debug(`TradePage(`, arguments[0], `)`, staticAssetPrice)
+  console.debug(`TradePage(`, arguments[0], `)`)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
@@ -88,6 +76,7 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
     },
     [setInterval, interval]
   )
+
   return (
     <Page
       title={`${prefix} ${title}`}
@@ -95,9 +84,9 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
       staticExplorerAsset={staticExplorerAsset}
       noFollow={true}
     >
-      {({ asset, dexAsset }) =>
-        showAssetInfo || !dexAsset?.isTraded ? (
-          <AssetInfo asset={asset} price={dexAsset} />
+      {({ asset }) =>
+        showAssetInfo ? (
+          <AssetInfo asset={asset} />
         ) : (
           <Chart asset={asset} interval={interval} onChange={onChange} />
         )

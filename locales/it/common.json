@@ -14,5 +14,8 @@
     "mobilefooter-ORDERS":"ORDINI",
     "mobilefooter-WALLET":"PORTAFOGLIO", 
     "trade-history":"Storia del commercio",
-    "order-book":"portafoglio ordini"
+    "order-book":"portafoglio ordini",
+    "place-maker-description":"Effettua un ordine di acquisto/vendita da parte di un produttore per aggiungere liquidità a questa coppia di trading",
+    "connect-wallet-liquidity":"Collega il tuo portafoglio ed effettua un ordine per aggiungere liquidità per questa coppia di trading",
+    "place-first":"Effettua il primo ordine limite per"
 }
