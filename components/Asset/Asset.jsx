@@ -1,16 +1,16 @@
+import { ArrowLeft, ExternalLink } from 'react-feather'
+import { BodyCopy, BodyCopyTiny, HeaderLg } from '@/components/Typography'
+import { Fragment, useCallback } from 'react'
+
 import Image from 'next/image'
 import PropTypes from 'prop-types'
-import { Fragment, useCallback } from 'react'
-import styled from '@emotion/styled'
-import { ArrowLeft, ExternalLink } from 'react-feather'
-import useTranslation from 'next-translate/useTranslation'
-
-import theme from '../../theme/index'
-import useUserStore from '@/store/use-user-state'
-import { floatToFixed } from '@/services/display'
-import { convertFromBaseUnits } from '@/services/convert'
-import { HeaderLg, BodyCopy, BodyCopyTiny } from '@/components/Typography'
 import SvgImage from '@/components/SvgImage'
+import { convertFromBaseUnits } from '@/services/convert'
+import { floatToFixed } from '@/services/display'
+import styled from '@emotion/styled'
+import theme from '../../theme/index'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
@@ -108,7 +108,7 @@ const AlgoExplorerLink = styled.div`
   }
 `
 export function AssetInfo({ asset }) {
-  console.log(`AssetInfo(`, arguments[0], `)`)
+  // console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -147,7 +147,9 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy as="span">{asset.url}</BodyCopy>
+            <BodyCopy data-testid="asset-url" as="span">
+              {asset.url}
+            </BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -159,7 +161,7 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button onClick={onClick}>
+          <button data-testid="asset-info-back-btn" onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
@@ -167,7 +169,7 @@ export function AssetInfo({ asset }) {
           </button>
         ) : null}
         <HeaderContainer>
-          <HeaderLg color="gray.100" mb={2}>
+          <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>
             {renderName()}
           </HeaderLg>
           {renderLink()}
@@ -177,7 +179,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('description')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
+            <BodyCopy
+              data-testid="asset-info-desc"
+              as="dd"
+              fontFamily={theme.fontFamilies.heading}
+              fontWeight="400"
+            >
               {description}
             </BodyCopy>
           </InfoItem>
@@ -185,23 +192,38 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('circulating-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {convertFromBaseUnits(asset.circulating, asset.decimals).toLocaleString()}
+            <BodyCopy
+              data-testid="asset-info-circ-supply"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
+              {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
           <InfoItem halfWidth>
             <BodyCopyTiny as="dt" color="gray.500">
               {t('total-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
-              {convertFromBaseUnits(asset.total, asset.decimals).toLocaleString()}
+            <BodyCopy
+              data-testid="asset-info-total-supply"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
+              {asset.total}
             </BodyCopy>
           </InfoItem>
           <InfoItem>
             <BodyCopyTiny as="dt" color="gray.500">
               ASA ID
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-asa-id"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.id}
             </BodyCopy>
           </InfoItem>
@@ -220,7 +242,12 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Price
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy
+                  data-testid="asset-info-price"
+                  as="dd"
+                  fontFamily={theme.fontFamilies.monospace}
+                  fontSize="1.25rem"
+                >
                   {floatToFixed(
                     asset.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
@@ -233,7 +260,12 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Change
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy
+                  data-testid="asset-info-pct-change"
+                  as="dd"
+                  fontFamily={theme.fontFamilies.monospace}
+                  fontSize="1.25rem"
+                >
                   {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>

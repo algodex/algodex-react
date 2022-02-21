@@ -10,7 +10,7 @@ const wallet = {
 describe('Wallet Trade History Table', () => {
   it('should not show any rows if no data is provided', async () => {
     const { queryByTestId } = render(<TradeHistoryTable wallet={wallet} />)
-    const data = waitFor(queryByTestId(ORDER_HISTORY_ROW))
+    const data = await waitFor(() => queryByTestId(ORDER_HISTORY_ROW))
     expect(data).toBeNull()
   })
 
@@ -27,7 +27,7 @@ describe('Wallet Trade History Table', () => {
     ]
 
     const { queryAllByTestId } = render(<TradeHistoryTable orders={orderHistory} wallet={wallet} />)
-    const data = waitFor(queryAllByTestId(ORDER_HISTORY_ROW))
+    const data = await waitFor(() => queryAllByTestId(ORDER_HISTORY_ROW))
     expect(data).not.toBeNull()
     // expect(queryByTestId(EMPTY_STATE)).toBeNull()
   })

@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-
 import { fetchAssets } from '@/services/algodex'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import useUserStore from '@/store/use-user-state'
+import { useCallback, useState } from 'react'
 
-import Page from '@/components/Page'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
+
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
-import { useState, useCallback } from 'react'
+import Page from '@/components/Page'
+import PropTypes from 'prop-types'
+import useUserStore from '@/store/use-user-state'
 
 /**
  * Fetch Traded Asset Paths
