@@ -1,32 +1,25 @@
 import { BodyCopySm } from '@/components/Typography'
-import { withUSDPriceQuery } from '@/hooks/withAlgodex'
+import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 import PropTypes from 'prop-types'
 
-export function UsdPrice({ data, fontSize, priceToConvert, currency }) {
-  console.log('algoData', data)
-  console.log('priceToConvert', priceToConvert)
+export function UsdPrice({ algoPrice, priceToConvert, currency, ...props }) {
   return (
-    <BodyCopySm fontFamily="'Open Sans Condensed', inherit" color={`gray.500`} fontSize={fontSize}>
-      {currency} {(priceToConvert * data.algoPrice).toLocaleString()}
+    <BodyCopySm fontFamily="'Open Sans Condensed', inherit" color={`gray.500`} {...props}>
+      {currency} {(priceToConvert * algoPrice).toLocaleString()}
     </BodyCopySm>
   )
 }
 
 UsdPrice.propTypes = {
-  /** Algorand price Information*/
-  data: PropTypes.object.isRequired,
-  /**  Price to convert to USD */
-  priceToConvert: PropTypes.number.isRequired,
-  /**  Font size to render the text as expected */
-  fontSize: PropTypes.string.isRequired,
-  currency: PropTypes.string.isRequired
+  algoPrice: PropTypes.number,
+  priceToConvert: PropTypes.number,
+  currency: PropTypes.string
 }
 
 UsdPrice.defaultProps = {
-  data: { algoPrice: 0 },
-  fontSize: '1rem',
   priceToConvert: 0,
-  currency: ''
+  algoPrice: 0,
+  currency: '$'
 }
 
-export default withUSDPriceQuery(UsdPrice)
+export default withAlgorandPriceQuery(UsdPrice)

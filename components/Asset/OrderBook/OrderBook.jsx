@@ -250,7 +250,6 @@ const Price = styled.p`
  * @constructor
  */
 export function OrderBookPrice({ asset }) {
-  console.log(`OrderBookPrice(`, arguments[0], `)`)
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
@@ -327,7 +326,6 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @constructor
  */
 export function OrderBook({ asset, orders, components }) {
-  console.log(`OrderBook(`, arguments[0], `)`)
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset

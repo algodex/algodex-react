@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { UsdPrice } from '../Wallet/PriceConversion/UsdPrice'
 
 const Input = styled.input`
   flex: 1 1 auto;
@@ -13,6 +14,8 @@ const Input = styled.input`
   text-align: right;
   font-size: 1rem;
   line-height: 1;
+  height: '3rem;
+  padding-bottom:'1.2rem';
 
   &:focus {
     outline: 0;
@@ -45,6 +48,7 @@ const Container = styled.div`
   flex: 1 1 auto;
   display: flex;
   position: relative;
+  align-items: center;
   // margin-bottom: 1rem;
 `
 
@@ -65,7 +69,20 @@ const Label = styled(InputLabel)`
 const Asset = styled(InputLabel)`
   right: 1.25rem;
   width: 2.75rem;
+  top: '39%';
   font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
+`
+const PriceContainer = styled.div`
+  position: absolute;
+  display: flex;
+  right: 2.2rem;
+  top: 1.7rem;
+  color: ${({ theme }) => theme.palette.gray['500']};
+  font-size: 0.875rem;
+  font-weight: 600;
+  p {
+    margin-left: 0.5rem;
+  }
 `
 
 /**
@@ -76,7 +93,7 @@ const Asset = styled(InputLabel)`
  * @returns {JSX.Element}
  * @constructor
  */
-export function CurrencyInput({ label, currency, ...props }) {
+export function TotalAmountInput({ label, currency, value, ...props }) {
   const condenseAssetName = currency?.length > 5
 
   return (
@@ -84,14 +101,19 @@ export function CurrencyInput({ label, currency, ...props }) {
       <Input placeholder="0.00" {...props} />
       <Label>{label}</Label>
       <Asset isCondensed={condenseAssetName}>{currency}</Asset>
+      <PriceContainer>
+        <UsdPrice priceToConvert={value} fontSize={'0.875rem'} />
+        <p>USD</p>
+      </PriceContainer>
     </Container>
   )
 }
 
-CurrencyInput.propTypes = {
+TotalAmountInput.propTypes = {
   label: PropTypes.string,
   currency: PropTypes.string,
-  isCondensed: PropTypes.bool
+  isCondensed: PropTypes.bool,
+  value: PropTypes.number
 }
 
-export default CurrencyInput
+export default TotalAmountInput

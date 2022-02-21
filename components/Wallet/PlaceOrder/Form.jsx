@@ -15,7 +15,8 @@ import { has } from 'lodash'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-import { UsdPrice } from '../PriceConversion/UsdPrice'
+import UsdPrice from '../PriceConversion/UsdPrice'
+import TotalAmountInput from '@/components/Input/TotalAmountInput'
 
 const _Tab = styled.div`
   display: flex;
@@ -251,7 +252,6 @@ const DEFAULT_ORDER = {
  * @constructor
  */
 export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
-  console.log(wallet, 'wallet')
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
 
@@ -358,7 +358,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 </BalanceRow>
               </Tooltip>
             </IconTextContainer>
-            <BalanceRow>
+            <BalanceRow style={{ alignItems: 'baseline' }}>
               <LabelMd color="gray.400" fontWeight="500">
                 ALGO
               </LabelMd>
@@ -367,7 +367,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 <UsdPrice priceToConvert={wallet.balance} fontSize={'0.7rem'} currency="$" />
               </LabelMd>
             </BalanceRow>
-            <BalanceRow>
+            <BalanceRow style={{ alignItems: 'baseline' }}>
               <LabelMd color="gray.400" fontWeight="500">
                 <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
                 {asset.name || asset.id}
@@ -432,13 +432,12 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 min={0}
                 max={100}
               />
-              <CurrencyInput
+              <TotalAmountInput
                 name="total"
                 type="number"
                 label={t('total')}
                 currency="ALGO"
                 asset="ALGO"
-                includeUSD={true}
                 decimals={6}
                 value={order.amount * order.price}
                 readOnly
