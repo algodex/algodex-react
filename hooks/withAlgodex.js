@@ -10,6 +10,8 @@ import {
   useWalletTradeHistoryQuery
 } from '@/hooks/useAlgodex'
 
+import { useAlgorandPriceQuery } from '@/hooks/useAlgoExplorer'
+
 import { withQuery } from '@/hooks/withQuery'
 import Spinner from '@/components/Spinner'
 import ServiceError from '@/components/ServiceError'
@@ -108,6 +110,13 @@ export function withWalletOrdersQuery(Component, options) {
 export function withWalletTradeHistoryQuery(Component, options) {
   return withQuery(Component, {
     hook: useWalletTradeHistoryQuery,
+    components,
+    ...options
+  })
+}
+export function withUSDPriceQuery(Component, options) {
+  return withQuery(Component, {
+    hook: useAlgorandPriceQuery,
     components,
     ...options
   })
