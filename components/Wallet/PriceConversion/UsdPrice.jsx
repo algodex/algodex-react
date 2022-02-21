@@ -23,7 +23,7 @@ UsdPrice.propTypes = {
 }
 
 UsdPrice.defaultProps = {
-  data: { algoPrice: 70 },
+  data: { algoPrice: 0 },
   fontSize: '1rem',
   priceToConvert: 0,
   currency: ''

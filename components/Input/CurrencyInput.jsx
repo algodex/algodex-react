@@ -93,7 +93,7 @@ const PriceContainer = styled.div`
  * @returns {JSX.Element}
  * @constructor
  */
-export function CurrencyInput({ label, currency, includeUSD, ...props }) {
+export function CurrencyInput({ label, currency, includeUSD, value, ...props }) {
   const condenseAssetName = currency?.length > 5
 
   return (
@@ -106,7 +106,7 @@ export function CurrencyInput({ label, currency, includeUSD, ...props }) {
       </Asset>
       {includeUSD && (
         <PriceContainer>
-          <UsdPrice priceToConvert={props.value} fontSize={'0.875rem'} />
+          <UsdPrice priceToConvert={value} fontSize={'0.875rem'} />
           <p>USD</p>
         </PriceContainer>
       )}
@@ -118,7 +118,9 @@ export function CurrencyInput({ label, currency, includeUSD, ...props }) {
 CurrencyInput.propTypes = {
   label: PropTypes.string,
   currency: PropTypes.string,
-  isCondensed: PropTypes.bool
+  isCondensed: PropTypes.bool,
+  includeUSD: PropTypes.bool,
+  value: PropTypes.number
 }
 
 export default CurrencyInput
