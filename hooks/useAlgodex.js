@@ -1,7 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
-import { useRouter } from 'next/router'
-
 import {
   fetchAssetChart,
   fetchAssetOrders,
@@ -12,13 +8,16 @@ import {
   fetchWalletTradeHistory,
   searchAssets
 } from '@/services/algodex'
+import { useEffect, useMemo, useState } from 'react'
 
-import { floatToFixed } from '@/services/display'
-import { calculateAsaBuyAmount } from '@/services/convert'
-import WalletService from '@/services/wallet'
 import Big from 'big.js'
-import millify from 'millify'
+import WalletService from '@/services/wallet'
+import { calculateAsaBuyAmount } from '@/services/convert'
 import dayjs from 'dayjs'
+import { floatToFixed } from '@/services/display'
+import millify from 'millify'
+import { useQuery } from 'react-query'
+import { useRouter } from 'next/router'
 
 /**
  * Route based on Error
