@@ -9,13 +9,12 @@ expect.extend(matchers)
 
 describe('Button', () => {
   it('Should show button as block', () => {
-    const tree = renderer
-      .create(
-        <ThemeProvider theme={theme}>
-          <Button block="primary">hello world</Button>
-        </ThemeProvider>
-      )
-      .toJSON()
-    expect(tree).toHaveStyleRule('display', 'block')
+    const { queryByTestId } = render(
+      <Button data-testid="button-element" block="primary">
+        hello world
+      </Button>
+    )
+    expect(queryByTestId('button-element')).toHaveStyleRule('display', 'block')
+    expect(queryByTestId('button-element')).not.toHaveStyleRule('display', 'flex')
   })
 })
