@@ -15,9 +15,7 @@ describe('Icon Button', () => {
   })
 
   it('Should render icon with the right size', () => {
-    const { queryByTestId } = render(
-      <IconButton icon="Info" size="500" />
-    )
+    const { queryByTestId } = render(<IconButton icon="Info" size="500" />)
     expect(queryByTestId('info-icon-wrapper')).toHaveStyleRule('height', '500')
     expect(queryByTestId('info-icon-wrapper')).toHaveStyleRule('width', '500')
   })
@@ -29,11 +27,9 @@ describe('Icon Button', () => {
   it('Should render correct icon', () => {
     expect(() => render(<IconButton icon="Info" size="500" />)).not.toThrow('Icon Not Found!')
   })
-  
+
   it('Child component should be an svg element', () => {
-    const { queryByTestId } = render(
-      <IconButton icon="Info" size="500" />
-    )
+    const { queryByTestId } = render(<IconButton icon="Info" size="500" />)
     expect(queryByTestId('svg')).toBeDefined()
   })
 
@@ -41,7 +37,7 @@ describe('Icon Button', () => {
     expect(getSize({ size: 500 })).toBe('500px')
     expect(getSize({ size: '500' })).toBe('500')
   })
-  
+
   it('Should return the correct color hex for icon', () => {
     expect(getColor({ theme, color: 'gray', gradient: 900 })).toBe('#171923')
     expect(getColor({ theme })).toBe('#171923')
@@ -51,5 +47,4 @@ describe('Icon Button', () => {
     expect(getFillColor({ theme, color: 'blue', fillGradient: 500 })).not.toBe('#2668c0')
     expect(getFillColor({ theme })).toBe('#718096')
   })
-
 })
