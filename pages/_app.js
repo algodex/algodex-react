@@ -18,7 +18,8 @@ import ReactGA from 'react-ga'
 import { Toaster } from 'react-hot-toast'
 import { EventEmitter } from '@/hooks/useEvents'
 import theme from '../theme/index'
-
+import useUserStore from '@/store/use-user-state'
+import useStore from '@/store/use-store'
 import '../styles/global.css'
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -201,6 +202,7 @@ const styles = css`
 function Algodex(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const TRACKING_ID = 'UA-195819772-1'
+
   ReactGA.initialize(TRACKING_ID)
   ReactGA.pageview('/')
   const queryClient = new QueryClient({
@@ -212,6 +214,12 @@ function Algodex(props) {
       }
     }
   })
+  // Lift stores and cache for tests
+  if (typeof window !== 'undefined' && window.Cypress) {
+    window.userStore = useUserStore
+    window.store = useStore
+    window.queryClient = queryClient
+  }
   return (
     <QueryClientProvider client={queryClient}>
       <CssBaseline />

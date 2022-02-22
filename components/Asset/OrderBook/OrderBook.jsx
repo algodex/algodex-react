@@ -389,7 +389,7 @@ export function OrderBook({ asset, orders, components }) {
     })
   }
   return (
-    <Section area="topLeft">
+    <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('order-book')}

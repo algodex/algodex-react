@@ -1,6 +1,6 @@
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import useUserStore from '@/store/use-user-state'
 
 const NetworkHandler = () => {
@@ -18,16 +18,25 @@ const NetworkHandler = () => {
     (state) => state.setHasTestnetNotificationModal
   )
 
-  const isRibbonActive = activeNetwork === 'testnet' ? hasTestnetRibbon : hasMainnetRibbon
-  const isModalActive =
-    activeNetwork === 'testnet' ? hasTestnetNotificationModal : hasMainnetNotificationModal
+  const isRibbonActive = useMemo(() => {
+    return activeNetwork === 'testnet' ? hasTestnetRibbon : hasMainnetRibbon
+  }, [activeNetwork, hasTestnetRibbon, hasMainnetRibbon])
+
+  const isModalActive = useMemo(() => {
+    return activeNetwork === 'testnet' ? hasTestnetNotificationModal : hasMainnetNotificationModal
+  }, [activeNetwork, hasTestnetNotificationModal, hasMainnetNotificationModal])
 
   useEffect(() => {
     hasMainnetRibbon === null && setHasMainnetRibbon(true)
     hasTestnetRibbon === null && setHasTestnetRibbon(true)
     hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
     hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
-  }, []) // eslint-disable-line
+  }, [
+    hasMainnetRibbon,
+    hasTestnetRibbon,
+    setHasTestnetNotificationModal,
+    setHasMainnetNotificationModal
+  ])
 
   return (
     <div>
