@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://localhost:3000",
+    "baseUrl": "http://algodex.local:3000",
     "env": {
         "cypress-react-selector": {
           "root": "#__next"
@@ -11,5 +11,5 @@
     "requestTimeout": 100000,
     "responseTimeout": 100000,
     "pageLoadTimeout": 100000,
-    "video": false
+    "video": true
 }

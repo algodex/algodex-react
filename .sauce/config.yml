@@ -1,0 +1,54 @@
+apiVersion: v1alpha
+kind: cypress
+defaults:
+  mode: sauce
+sauce:
+  tunnel:
+    name: algodex
+  region: us-west-1
+  concurrency: 2
+cypress:
+  configFile: cypress.json
+  version: 9.3.1
+suites:
+- name: Algodex-Chrome
+  browser: chrome
+  config:
+    testFiles:
+    - '**/*.*'
+  mode: sauce
+- name: Algodex-Firefox
+  config:
+    testFiles:
+      - '**/*.*'
+  browser: firefox
+  mode: sauce
+#- name: Algodex-Safari
+#  config:
+#    testFiles:
+#      - '**/*.*'
+#  browser: safari
+#  mode: sauce
+#- name: Algodex-Opera
+#  config:
+#    testFiles:
+#      - '**/*.*'
+#  browser: opera
+#  mode: sauce
+#- name: Algodex-Edge
+#  config:
+#    testFiles:
+#      - '**/*.*'
+#  browser: opera
+#  mode: sauce
+rootDir: .
+tunnel-identifier: "Mfeher_tunnel_name"
+artifacts:
+  download:
+    match:
+    - '*'
+    when: fail
+    directory: ./artifacts
+npm:
+  packages:
+    cypress-react-selector: "2.3.16"
