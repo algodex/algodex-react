@@ -1,6 +1,8 @@
 import IconButton from './IconButton'
+import { matchers } from '@emotion/jest'
 import { render } from 'test/test-utils'
 
+expect.extend(matchers)
 describe('Icon Button', () => {
   it('Should render icon with the right props', () => {
     const { queryByTestId } = render(
