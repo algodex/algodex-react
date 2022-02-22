@@ -8,7 +8,7 @@ describe('Button', () => {
   it('Should show button as block', () => {
     const { queryByTestId } = render(
       <Button data-testid="button-element" block="primary">
-        hello world
+        Example component
       </Button>
     )
     expect(queryByTestId('button-element')).toHaveStyleRule('display', 'block')
