@@ -12,6 +12,18 @@ const sizes = [
 ]
 
 describe('Landing Page In Potrait Mode', () => {
+  beforeEach(() => {
+    cy.clearLocalStorage()
+  })
+  afterEach(async () => {
+    await cy.window().then((win) => {
+      win.queryClient.cancelQueries()
+      win.queryClient.clear()
+      win.store.setState({}, true)
+      win.userStore.setState({}, true)
+      cy.clearLocalStorage()
+    })
+  })
   sizes.forEach((size) => {
     it(`Should render landing page on ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
@@ -32,6 +44,18 @@ describe('Landing Page In Potrait Mode', () => {
 })
 
 describe('Landing Page In Landscape Mode', () => {
+  beforeEach(() => {
+    cy.clearLocalStorage()
+  })
+  afterEach(async () => {
+    await cy.window().then((win) => {
+      win.queryClient.cancelQueries()
+      win.queryClient.clear()
+      win.store.setState({}, true)
+      win.userStore.setState({}, true)
+      cy.clearLocalStorage()
+    })
+  })
   sizes.forEach((size) => {
     it(`Should render landing page on ${size} screen`, () => {
       if (Cypress._.isArray(size)) {
