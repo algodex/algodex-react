@@ -1,8 +1,9 @@
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
 import * as Icons from 'react-feather'
-import { isNumber } from 'lodash'
+
 import PropTypes from 'prop-types'
+import { css } from '@emotion/react'
+import { isNumber } from 'lodash'
+import styled from '@emotion/styled'
 
 function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
   return theme.palette[color][fillGradient]
@@ -13,20 +14,20 @@ function getSize({ size }) {
 function getColor({ theme, color = 'gray', gradient = 900 }) {
   return theme.palette[color][gradient]
 }
-const style = css`
+const style = (props) => css`
   cursor: pointer;
   pointer-events: all;
   border: none;
   background: transparent;
   margin: 0;
   padding: 0;
-  height: ${getSize};
-  width: ${getSize};
-  color: ${getColor};
+  height: ${getSize(props)};
+  width: ${getSize(props)};
+  color: ${getColor(props)};
   svg {
-    height: ${getSize};
-    fill: ${getFillColor};
-    color: ${getColor};
+    height: ${getSize(props)};
+    fill: ${getFillColor(props)};
+    color: ${getColor(props)};
   }
 `
 /**
@@ -38,7 +39,7 @@ export const IconButton = styled(({ icon, color, ...rest }) => {
   if (typeof Icons[icon] === 'undefined') throw new Error('Icon Not Found!')
   const Icon = Icons[icon]
   return (
-    <button color={color} {...rest}>
+    <button data-testid="info-icon" color={color} {...rest}>
       <Icon {...rest} />
     </button>
   )
