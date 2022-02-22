@@ -19,7 +19,7 @@ UsdPrice.propTypes = {
 UsdPrice.defaultProps = {
   priceToConvert: 0,
   algoPrice: 0,
-  currency: '$'
+  currency: ''
 }
 
 export default withAlgorandPriceQuery(UsdPrice)

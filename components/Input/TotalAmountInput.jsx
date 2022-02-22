@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { UsdPrice } from '../Wallet/PriceConversion/UsdPrice'
+import UsdPrice from '../Wallet/PriceConversion/UsdPrice'
 
 const Input = styled.input`
   flex: 1 1 auto;
@@ -14,8 +14,8 @@ const Input = styled.input`
   text-align: right;
   font-size: 1rem;
   line-height: 1;
-  height: '3rem;
-  padding-bottom:'1.2rem';
+  height: 3rem;
+  padding-bottom: 1.2rem;
 
   &:focus {
     outline: 0;
@@ -69,7 +69,7 @@ const Label = styled(InputLabel)`
 const Asset = styled(InputLabel)`
   right: 1.25rem;
   width: 2.75rem;
-  top: '39%';
+  top: 39%;
   font-family: ${({ isCondensed }) => (isCondensed ? `'Open Sans Condensed'` : 'inherit')};
 `
 const PriceContainer = styled.div`
