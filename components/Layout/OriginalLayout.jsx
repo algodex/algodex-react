@@ -113,7 +113,7 @@ const MainWrapper = styled.div`
   position: relative;
   height: 100%;
   min-height: 500px;
-
+  overflow: scroll;
   @media (min-width: 996px) {
     min-height: 100%;
     height: auto;
