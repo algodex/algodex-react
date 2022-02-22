@@ -1,5 +1,5 @@
-import { lighten } from 'polished'
 import { createTheme } from '@mui/material'
+import { lighten } from 'polished'
 
 const colors = {
   white: '#FFFFFF',
