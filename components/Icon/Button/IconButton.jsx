@@ -5,13 +5,15 @@ import { css } from '@emotion/react'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
 
-function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
+export function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
   return theme.palette[color][fillGradient]
 }
-function getSize({ size }) {
+
+export function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
-function getColor({ theme, color = 'gray', gradient = 900 }) {
+
+export function getColor({ theme, color = 'gray', gradient = 900 }) {
   return theme.palette[color][gradient]
 }
 const style = (props) => css`
@@ -39,8 +41,8 @@ export const IconButton = styled(({ icon, color, ...rest }) => {
   if (typeof Icons[icon] === 'undefined') throw new Error('Icon Not Found!')
   const Icon = Icons[icon]
   return (
-    <button data-testid="info-icon" color={color} {...rest}>
-      <Icon {...rest} />
+    <button data-testid="info-icon-wrapper" color={color} {...rest}>
+      <Icon data-testid="info-icon" {...rest} />
     </button>
   )
 })`
