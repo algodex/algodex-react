@@ -30,12 +30,12 @@
     "styled-components": "^5"
   },
   "dependencies": {
+    "@algodex/algodex-sdk": "^1.1.12",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.6.0",
     "@iconify/react": "^3.1.0",
-    "@algodex/algodex-sdk": "^1.1.12",
     "@mdi/js": "^6.5.95",
     "@mdi/react": "^1.5.0",
     "@mdx-js/loader": "^2.0.0",
@@ -78,7 +78,7 @@
     "@babel/core": "^7.14.3",
     "@cypress/code-coverage": "^3.9.12",
     "@emotion/babel-plugin": "^11.3.0",
-    "@emotion/jest": "^11.7.1",
+    "@emotion/jest": "^11.8.0",
     "@storybook/addon-actions": "^6.4.14",
     "@storybook/addon-essentials": "^6.4.14",
     "@storybook/addon-links": "^6.4.14",
