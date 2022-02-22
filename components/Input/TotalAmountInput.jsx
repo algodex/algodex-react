@@ -75,6 +75,7 @@ const Asset = styled(InputLabel)`
 const PriceContainer = styled.div`
   position: absolute;
   display: flex;
+  align-items: center;
   right: 2.2rem;
   top: 1.7rem;
   color: ${({ theme }) => theme.palette.gray['500']};
