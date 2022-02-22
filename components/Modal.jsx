@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 const ModalWrapper = (props) => {
   return (
     <MUIModal
+      data-testid="modal-element"
       open={props.isVisible}
       hideBackdrop={props.hideBackdrop}
       className="w-full"
