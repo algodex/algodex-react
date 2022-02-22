@@ -1,9 +1,6 @@
 import Button from './Button'
-import { ThemeProvider } from '@mui/material/styles'
 import { matchers } from '@emotion/jest'
 import { render } from 'test/test-utils'
-import renderer from 'react-test-renderer'
-import theme from '../../theme'
 
 expect.extend(matchers)
 
