@@ -1,28 +1,21 @@
 apiVersion: v1alpha
 kind: cypress
 defaults:
+  config:
+    testFiles:
+      - '**/*.*'
   mode: sauce
 sauce:
-  tunnel:
-    name: algodex
   region: us-west-1
   concurrency: 2
 cypress:
-  configFile: cypress.json
+  configFile: cypress-sauce.json
   version: 9.3.1
 suites:
 - name: Algodex-Chrome
   browser: chrome
-  config:
-    testFiles:
-    - '**/*.*'
-  mode: sauce
 - name: Algodex-Firefox
-  config:
-    testFiles:
-      - '**/*.*'
   browser: firefox
-  mode: sauce
 #- name: Algodex-Safari
 #  config:
 #    testFiles:
