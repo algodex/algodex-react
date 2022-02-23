@@ -164,7 +164,11 @@ function Table({
           {headerGroups.map((headerGroup, rowKey) => (
             <tr data-testid="header-row" key={rowKey} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, headerKey) => (
-                <th data-testid="header-item-col" key={headerKey} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th
+                  data-testid="header-item-col"
+                  key={headerKey}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                >
                   {column.render('Header')}
                   {!column.disableSortBy && (
                     <SortIcon

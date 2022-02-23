@@ -102,6 +102,6 @@ describe('Table Component', () => {
       />
     )
     fireEvent.mouseEnter(getByTestId('row-item'))
-    expect(getByText(/Flyout component/i)).toBeVisible();
+    expect(getByText(/Flyout component/i)).toBeVisible()
   })
 })
