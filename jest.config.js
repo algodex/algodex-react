@@ -8,7 +8,7 @@ module.exports = {
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 15
+      branches: 20
     }
   },
   collectCoverageFrom: [
@@ -18,11 +18,12 @@ module.exports = {
     // '**/services/**/*.{js,jsx}',
     '!**/components/**/index.{js,jsx}',
     '!**/components/Input/*.{js,jsx}',
+    '!**/components/Pages/*.{js,jsx}',
     '!**/components/**/*.stories.{js,jsx}',
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'
   ],
-  coverageReporters: ['lcov', 'text', 'json-summary', 'text'],
+  coverageReporters: ['lcov', 'text', 'json-summary'],
   moduleNameMapper: {
     '^@/components(.*)$': '<rootDir>/components$1',
     '^@/lib(.*)$': '<rootDir>/lib$1',
