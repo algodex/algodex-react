@@ -22,7 +22,7 @@ module.exports = {
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'
   ],
-  coverageReporters: ['lcov', 'text', 'json-summary', 'text'],
+  coverageReporters: ['lcov', 'text', 'json-summary'],
   moduleNameMapper: {
     '^@/components(.*)$': '<rootDir>/components$1',
     '^@/lib(.*)$': '<rootDir>/lib$1',
