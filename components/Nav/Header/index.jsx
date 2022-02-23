@@ -55,6 +55,7 @@ export function Header() {
       </Link>
       &nbsp;
       <NetworkDropdown
+        data-testid="header-network-dropdown-element"
         className="font-medium"
         value={activeNetwork}
         onChange={(e) => handleNetworkChangeFn(e.target.value)}
@@ -66,7 +67,7 @@ export function Header() {
           MAINNET
         </NetworkDropdownOption>
       </NetworkDropdown>
-      <Navigation>
+      <Navigation data-testid="header-navigation-element">
         <NavActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
         </NavActiveLink>
@@ -112,7 +113,7 @@ export function Header() {
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Navigation>
-      <MobileNavigation isOpen={isOpen}>
+      <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
           <NavActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
