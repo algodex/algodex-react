@@ -162,9 +162,13 @@ function Table({
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
-            <tr key={rowKey} {...headerGroup.getHeaderGroupProps()}>
+            <tr data-testid="header-row" key={rowKey} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, headerKey) => (
-                <th key={headerKey} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th
+                  data-testid="header-item-col"
+                  key={headerKey}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                >
                   {column.render('Header')}
                   {!column.disableSortBy && (
                     <SortIcon
@@ -188,10 +192,10 @@ function Table({
               customProps.onMouseEnter = () => handleRowFocus(row)
             }
             return (
-              <tr key={rowKey} {...row.getRowProps(customProps)}>
+              <tr data-testid="row-item" key={rowKey} {...row.getRowProps(customProps)}>
                 {row.cells.map((cell, cellKey) => {
                   return (
-                    <td key={cellKey} {...cell.getCellProps()}>
+                    <td data-testid="item" key={cellKey} {...cell.getCellProps()}>
                       {cell.render('Cell')}
                     </td>
                   )
@@ -208,7 +212,7 @@ function Table({
             ref={setTooltipRef}
             {...getTooltipProps({ style: { height: 'inherit' }, className: 'tooltip-container' })}
           >
-            <Flyover row={itemInfo} {...componentsProps.Flyover} />
+            <Flyover data-testid="flyover-item" row={itemInfo} {...componentsProps.Flyover} />
             <div {...getArrowProps({ className: 'tooltip-arrow' })} />
           </div>
         </div>
