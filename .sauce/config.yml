@@ -1,9 +1,6 @@
 apiVersion: v1alpha
 kind: cypress
 defaults:
-  config:
-    testFiles:
-      - '**/*.*'
   mode: sauce
 sauce:
   region: us-west-1
@@ -14,8 +11,14 @@ cypress:
 suites:
 - name: Algodex-Chrome
   browser: chrome
+  config:
+    testFiles:
+      - '**/*.*'
 - name: Algodex-Firefox
-  browser: firefox
+  browser: firefox  
+  config:
+    testFiles:
+      - '**/*.*'
 #- name: Algodex-Safari
 #  config:
 #    testFiles:
