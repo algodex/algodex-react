@@ -97,4 +97,3 @@ jobs:
         with:
           sauce-username: ${{ secrets.SAUCE_USERNAME }}
           sauce-access-key: ${{ secrets.SAUCE_ACCESS_KEY }}
-          testing-environment: sauce
