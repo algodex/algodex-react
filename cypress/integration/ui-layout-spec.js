@@ -10,65 +10,57 @@ const sizes = [
   'macbook-15',
   'macbook-16'
 ]
-
+function clear() {
+  cy.clearLocalStorage()
+}
 describe('Landing Page In Potrait Mode', () => {
-  beforeEach(() => {
-    cy.clearLocalStorage()
-  })
+  beforeEach(clear)
+  afterEach(clear)
   sizes.forEach((size) => {
-    it(`Should render landing page on ${size} screen`, async () => {
-      await cy.window().then((win) => {
-        if (typeof win !== 'undefined') {
-          win?.queryClient?.cancelQueries()
-          win?.queryClient?.clear()
-          win?.store?.setState({}, true)
-          win?.userStore?.setState({}, true)
-        }
-        if (Cypress._.isArray(size)) {
-          cy.viewport(size[0], size[1])
-          cy.visit('/en/trade/15322902')
-          cy.get('button').contains('ACCEPT').should('be.visible')
-          cy.get('button').contains('ACCEPT').click()
-          cy.get('[data-testid=candleStickChart]').should('be.visible')
-        } else {
-          cy.viewport(size)
-          cy.visit('/en/trade/15322902')
-          cy.get('button').contains('ACCEPT').should('be.visible')
-          cy.get('button').contains('ACCEPT').click()
-          cy.get('[data-testid=candleStickChart]').should('be.visible')
-        }
-      })
+    it(`Should render landing page on ${size} screen`, () => {
+      if (Cypress._.isArray(size)) {
+        cy.viewport(size[0], size[1])
+        cy.visit('/en/about')
+        clear()
+        cy.visit('/en/trade/15322902')
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+      } else {
+        cy.viewport(size)
+        cy.visit('/en/about')
+        clear()
+        cy.visit('/en/trade/15322902')
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+      }
     })
   })
 })
 
 describe('Landing Page In Landscape Mode', () => {
-  beforeEach(() => {
-    cy.clearLocalStorage()
-  })
+  beforeEach(clear)
+  afterEach(clear)
   sizes.forEach((size) => {
-    it(`Should render landing page on ${size} screen`, async () => {
-      await cy.window().then((win) => {
-        if (typeof win !== 'undefined') {
-          win?.queryClient?.cancelQueries()
-          win?.queryClient?.clear()
-          win?.store?.setState({}, true)
-          win?.userStore?.setState({}, true)
-        }
-        if (Cypress._.isArray(size)) {
-          cy.viewport(size[0], size[1], 'landscape')
-          cy.visit('/en/trade/15322902')
-          cy.get('button').contains('ACCEPT').should('be.visible')
-          cy.get('button').contains('ACCEPT').click()
-          cy.get('[data-testid=candleStickChart]').should('be.visible')
-        } else {
-          cy.viewport(size, 'landscape')
-          cy.visit('/en/trade/15322902')
-          cy.get('button').contains('ACCEPT').should('be.visible')
-          cy.get('button').contains('ACCEPT').click()
-          cy.get('[data-testid=candleStickChart]').should('be.visible')
-        }
-      })
+    it(`Should render landing page on ${size} screen`, () => {
+      if (Cypress._.isArray(size)) {
+        cy.viewport(size[0], size[1], 'landscape')
+        cy.visit('/en/about')
+        clear()
+        cy.visit('/en/trade/15322902')
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+      } else {
+        cy.viewport(size, 'landscape')
+        cy.visit('/en/about')
+        clear()
+        cy.visit('/en/trade/15322902')
+        cy.get('button').contains('ACCEPT').should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+      }
     })
   })
 })
