@@ -23,7 +23,7 @@ const NavActiveLink = ({ children, matches, ...props }) => {
   const isActive = matches ? matches.test(asPath) : asPath === props.href
 
   return (
-    <Link {...props}>
+    <Link {...props} data-testid="activelink-element">
       {React.cloneElement(child, {
         isActive
       })}
