@@ -158,6 +158,7 @@ export const Tooltip = ({
       {hasRenderButton && renderButton(setTriggerRef)}
       {visible && (
         <TooltipContainer
+          data-testid="tooltip-component"
           ref={setTooltipRef}
           {...getTooltipProps({ className: 'tooltip-container' })}
         >
