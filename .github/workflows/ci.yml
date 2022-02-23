@@ -80,6 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     # TODO: Only run on pr or push to main, use manual testing tunnels for development
     needs: [e2e]
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
         with:
