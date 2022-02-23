@@ -1,10 +1,10 @@
 import React from 'react'
 import { default as Component } from './Spinner'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gray['700']};
+  background: ${({ theme }) => theme.palette.gray['700']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

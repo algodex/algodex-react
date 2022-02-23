@@ -2,7 +2,7 @@
 
 exports[`MenuButton: default 1`] = `
 <svg
-  className="Hamburger__StyledMotionSvg-sc-w4kf3p-0 dWLgoW"
+  className="css-145sz59-StyledMotionSvg e13rx5dl0"
   height={15}
   overflow="visible"
   preserveAspectRatio="none"

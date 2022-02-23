@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { BrightGraySpan } from '@/components/Typography'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
-    ('' + value).toUpperCase() === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
+    ('' + value).toUpperCase() === 'BUY' ? theme.palette.green[500] : theme.palette.red[500]};
 `
 
 /**

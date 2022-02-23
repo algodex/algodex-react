@@ -4,7 +4,7 @@ import Icon from '@mdi/react'
 import Link from 'next/link'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export const Button = styled.button`
   width: 100%;
@@ -77,7 +77,10 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
   }
   return (
     <Modal isVisible={isModalActive}>
-      <ModalContainer className="flex flex-col justify-between text-white xs:h-5/6 xs:w-5/6 md:h-3/5 md:w-2/5 max-w-screen-lg bg-gray-600 rounded-lg xs:p-4 md:p-8">
+      <ModalContainer
+        className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg xs:p-4 md:p-8"
+        style={{ transform: 'translate(-50%, -50%)' }}
+      >
         <ModalBody className="flex flex-col justify-between">
           <ModalTitle className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
             {content.title}

@@ -1,42 +1,65 @@
 import React from 'react'
-import { AssetsTable } from './AssetsTable'
-import { render } from 'test/test-utils'
+import { AssetsTable, AssetCoinCell } from './AssetsTable'
+import { render, waitFor } from 'test/test-utils'
+import { cleanup } from '@testing-library/react'
 
-const ASSETS_ROW = 'assets-row'
-const EMPTY_STATE = 'empty-state'
+const ASSETS_ROW = 'asset-coin-cell'
 const wallet = {
   address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
 }
+
+afterEach(() => {
+  cleanup()
+})
+
 describe('Assets', () => {
-  it('should not show any rows if no data is provided', () => {
+  it('should not show any rows if no data is provided', async () => {
     const { queryByTestId } = render(<AssetsTable wallet={wallet} />)
 
-    expect(queryByTestId(ASSETS_ROW)).toBeNull()
+    const data = await waitFor(() => queryByTestId(ASSETS_ROW))
+    expect(data).toBeNull()
   })
 
-  it.skip('should display empty state if no data is provided', () => {
-    const { queryByTestId } = render(<AssetsTable wallet={wallet} />)
-
-    expect(queryByTestId(EMPTY_STATE)).not.toBeNull()
-  })
-
-  it.skip('should show rows if data is provided', () => {
+  it('should show rows if data is provided', async () => {
     const assets = [
       {
-        icon: 'algo',
-        coin: 'ALGO',
-        name: 'Algorand',
-        total: 12000,
-        inOrder: 2000,
-        algoValue: 12000
+        unit: 'TEST',
+        id: 22847687,
+        name: 'TEST',
+        total: '100',
+        available: '10',
+        'in-order': '0',
+        'algo-value': '0.888'
       }
     ]
     const wallet = {
       address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
     }
     const { queryByTestId } = render(<AssetsTable assets={assets} wallet={wallet} />)
+    const data = await waitFor(() => queryByTestId(ASSETS_ROW))
+    expect(data).not.toBeNull()
+  })
 
-    expect(queryByTestId(ASSETS_ROW)).not.toBeNull()
-    expect(queryByTestId(EMPTY_STATE)).toBeNull()
+  it('should show rows if data is provided', async () => {
+    const row = {
+      original: {
+        unit: 'TEST',
+        id: 22847687,
+        name: 'TEST',
+        total: '100',
+        available: '10',
+        'in-order': '0',
+        'algo-value': '0.888'
+      }
+    }
+
+    const props = {
+      row: row,
+      value: '20'
+    }
+
+    const { queryByTestId } = render(<AssetCoinCell {...props} />)
+    const data = await waitFor(() => queryByTestId(ASSETS_ROW))
+    expect(data).not.toBeNull()
   })
 })

@@ -2,7 +2,7 @@ import useStore, { useStorePersisted } from 'store/use-store'
 import useMyAlgo from 'hooks/useMyAlgo'
 import { useWalletsQuery } from 'hooks/useAlgodex'
 import { useEffect, useMemo } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import toast from 'react-hot-toast'
 import Icon from 'components/Icon/Icon'
@@ -16,7 +16,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.875rem 0 1rem;
 `
 
@@ -70,17 +70,17 @@ const Wallets = styled.div`
     height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.gray[700]};
+    background: ${({ theme }) => theme.palette.gray[700]};
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[600]};
+    background: ${({ theme }) => theme.palette.gray[600]};
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.gray[500]};
+    background: ${({ theme }) => theme.palette.gray[500]};
   }
   ::-webkit-scrollbar-corner {
-    background: ${({ theme }) => theme.colors.gray[700]};
+    background: ${({ theme }) => theme.palette.gray[700]};
   }
 `
 
@@ -123,7 +123,7 @@ const WalletRow = styled.div`
   cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
   transition: color 50ms ease-out;
   color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.gray['000'] : theme.colors.gray['500']};
+    isActive ? theme.palette.gray['000'] : theme.palette.gray['500']};
 
   span,
   p {
@@ -143,7 +143,7 @@ const WalletRow = styled.div`
   &:hover,
   &:focus {
     color: ${({ theme, isActive }) =>
-      isActive ? theme.colors.gray['000'] : theme.colors.gray['300']};
+      isActive ? theme.palette.gray['000'] : theme.palette.gray['300']};
   }
 
   &:focus {

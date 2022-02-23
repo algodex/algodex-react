@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { AlertTriangle } from 'react-feather'
 import { parseThemeColor } from 'theme'
 

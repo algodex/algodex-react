@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { parseThemeColor } from 'theme'
 import { AlertIcon } from 'components/Icon'
+import PropTypes from 'prop-types'
+import { parseThemeColor } from 'theme'
+import styled from '@emotion/styled'
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -40,9 +40,8 @@ const Message = styled.p`
  */
 export function ServiceError({ size, color, flex, message, Icon }) {
   const showMsg = message?.length > 0
-
   return flex ? (
-    <FlexContainer>
+    <FlexContainer data-testid="flex-service">
       <Icon size={size} color={color} />
       {showMsg && (
         <Message color={color} flex={flex}>
@@ -51,7 +50,7 @@ export function ServiceError({ size, color, flex, message, Icon }) {
       )}
     </FlexContainer>
   ) : (
-    <Message color={color} flex={flex}>
+    <Message data-testid="mssg-service" color={color} flex={flex}>
       <Icon size={size} color={color} />
       {message}
     </Message>

@@ -14,5 +14,8 @@
   "mobilefooter-ORDERS":"Pokyny",
   "mobilefooter-WALLET":"Peňaženka",
   "trade-history":"História obchodu",
-  "order-book": "Kniha objednávok"
+  "order-book": "Kniha objednávok",
+  "place-maker-description":"Umiestnite príkaz na nákup/predaj výrobcu, aby ste pridali likviditu pre tento obchodný pár",
+  "connect-wallet-liquidity":" pripojte svoju peňaženku a zadajte objednávku na doplnenie likvidity pre tento obchodný pár",
+  "place-first":"Zadajte prvú limitnú objednávku pre"
 }

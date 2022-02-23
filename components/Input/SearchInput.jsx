@@ -5,7 +5,7 @@ import Checkbox from './CheckboxInput'
 import PropTypes from 'prop-types'
 import useDebounce from 'hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Icon from '@mdi/react'
 import { mdiMagnify } from '@mdi/js'
 import { X as CancelIcon } from 'react-feather'
@@ -14,7 +14,7 @@ const Container = styled.div`
   display: flex;
   position: relative;
   height: 51px;
-  border: solid 1px ${({ theme }) => theme.colors.gray['700']};
+  border: solid 1px ${({ theme }) => theme.palette.gray['700']};
   border-radius: 4px;
   // margin: 0 2rem;
 
@@ -28,9 +28,7 @@ const Container = styled.div`
   }
 `
 
-export const CancelButton = styled.button.attrs({
-  type: 'button'
-})`
+export const CancelButton = styled.button`
   position: absolute;
   right: 0.75rem;
   top: 50%;
@@ -46,7 +44,7 @@ export const CancelButton = styled.button.attrs({
   &:focus {
     svg {
       line {
-        stroke: ${({ theme }) => theme.colors.gray['000']};
+        stroke: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
@@ -56,7 +54,9 @@ export const CancelButton = styled.button.attrs({
     box-shadow: 0 0 0 0.2rem rgba(121, 255, 156, 0.5);
   }
 `
-
+CancelButton.defaultProps = {
+  type: 'button'
+}
 const Input = styled(TextInput)`
   font-size: 0.75rem;
   // padding-left: 2.25rem;
@@ -83,7 +83,7 @@ export const Search = forwardRef(
             className="ml-2"
             title="Search icon"
             size={0.85}
-            color={theme.colors.gray['500']}
+            color={theme.palette.gray['500']}
           />
           <Input
             hasOutline={false}
@@ -96,7 +96,7 @@ export const Search = forwardRef(
           />
           {onCancel && value !== '' && (
             <CancelButton onClick={onCancel}>
-              <CancelIcon color={theme.colors.gray['500']} size={16} />
+              <CancelIcon color={theme.palette.gray['500']} size={16} />
             </CancelButton>
           )}
         </Container>

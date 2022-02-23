@@ -2,7 +2,7 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const MainInput = styled(OutlinedInput)(({ theme }) => ({
   '.MuiOutlinedInput-input': {

@@ -1,6 +1,6 @@
 import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { rgba } from 'polished'
 import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
 import useTranslation from 'next-translate/useTranslation'
@@ -15,7 +15,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.75rem 0.625rem 1rem;
 `
 
@@ -48,13 +48,13 @@ const Trades = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
     border-radius: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
   }
 `
 
@@ -77,12 +77,12 @@ const TradesRow = styled.div`
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buyASA' ? 'green' : 'red'
-      return rgba(theme.colors[color]['500'], 0.15)
+      return rgba(theme.palette[color]['500'], 0.15)
     }};
 
     p {
       &:not(:first-child) {
-        color: ${({ theme }) => theme.colors.gray['000']};
+        color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
@@ -92,7 +92,7 @@ const PriceHeaderText = styled(BodyCopyTiny)`
   display: flex;
   align-items: center;
   margin: 0;
-  color: ${({ theme }) => theme.colors.gray['500']};
+  color: ${({ theme }) => theme.palette.gray['500']};
 
   svg {
     margin-left: 0.25rem;
@@ -169,7 +169,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
   }
 
   return (
-    <Section area="bottomLeft">
+    <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('trade-history')}
@@ -205,7 +205,7 @@ TradeHistory.propTypes = {
   orders: PropTypes.array.isRequired
 }
 
-TradeHistory.defalutProps = {
+TradeHistory.defaultProps = {
   orders: []
 }
 export default withAssetTradeHistoryQuery(TradeHistory)

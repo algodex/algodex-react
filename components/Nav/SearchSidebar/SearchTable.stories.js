@@ -1,10 +1,10 @@
 // SearchTable.stories.js
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { NavSearchTable as Component /*, default as ComponentWithData*/ } from './SearchTable'
 const Container = styled.div`
   width: 50vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gray['800']};
+  background: ${({ theme }) => theme.palette.gray['800']};
   display: flex;
   flex-direction: column;
   margin: 0;

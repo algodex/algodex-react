@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { useCallback, useMemo } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
 import { BrightGraySpan } from '@/components/Typography'
@@ -29,7 +29,7 @@ const TableWrapper = styled.div`
   }
 `
 
-const AssetCoinCell = (props) => {
+export const AssetCoinCell = (props) => {
   const dispatcher = useEventDispatch()
   const onClick = useCallback(() => {
     dispatcher('clicked', 'asset')
@@ -37,7 +37,7 @@ const AssetCoinCell = (props) => {
   return (
     <Link href={`/trade/${props.row.original.id}`}>
       <button onClick={onClick}>
-        <AssetNameBlock>
+        <AssetNameBlock data-testid="asset-coin-cell">
           <BrightGraySpan>{props.value}</BrightGraySpan>
           <br />
           <AssetId>{props.row.original.id}</AssetId>

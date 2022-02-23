@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { indexerAssetMap } from './algorand'
-export const EXPLORER_API = process.env.NEXT_PUBLIC_EXPLORER_API || 'https://node.testnet.algoexplorerapi.io'
+export const EXPLORER_API =
+  process.env.NEXT_PUBLIC_EXPLORER_API || 'https://node.testnet.algoexplorerapi.io'
 export const EXPLORER_INDEXER_API =
   process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API || 'https://algoindexer.testnet.algoexplorerapi.io'
-export const ALGO_EXPLORER_V1_API = 
+export const ALGO_EXPLORER_V1_API =
   process.env.NEXT_PUBLIC_ALGO_EXPLORER_V1_API || 'https://testnet.algoexplorerapi.io'
 export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/algo-usd'
 

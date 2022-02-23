@@ -4,19 +4,26 @@ module.exports = {
   moduleDirectories: ['node_modules', '<rootDir>'],
   testEnvironment: 'jsdom',
   collectCoverage: true,
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 5
+      branches: 20
     }
   },
   collectCoverageFrom: [
     '**/components/**/*.{js,jsx}',
+    // '**/hooks/**/*.{js,jsx}',
+    // '**/utils/**/*.{js,jsx}',
+    // '**/services/**/*.{js,jsx}',
+    '!**/components/**/index.{js,jsx}',
+    '!**/components/Input/*.{js,jsx}',
+    '!**/components/Pages/*.{js,jsx}',
     '!**/components/**/*.stories.{js,jsx}',
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'
   ],
-  coverageReporters: ['lcov', 'text', 'json-summary', 'text'],
+  coverageReporters: ['lcov', 'text', 'json-summary'],
   moduleNameMapper: {
     '^@/components(.*)$': '<rootDir>/components$1',
     '^@/lib(.*)$': '<rootDir>/lib$1',

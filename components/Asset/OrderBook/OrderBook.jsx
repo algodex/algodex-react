@@ -1,31 +1,29 @@
-import { Fragment } from 'react'
-import useStore from 'store/use-store'
 import { ArrowDown, ArrowUp } from 'react-feather'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { rgba } from 'polished'
-import useTranslation from 'next-translate/useTranslation'
-import Big from 'big.js'
-
 import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
-import TablePriceHeader from '@/components/Table/PriceHeader'
-import SvgImage from '@/components/SvgImage'
-import { Section } from '@/components/Layout/Section'
-
-import { floatToFixed } from '@/services/display'
-import { convertFromAsaUnits } from '@/services/convert'
-
 import { withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks/withAlgodex'
-import { useEventDispatch } from '@/hooks/useEvents'
+
+import Big from 'big.js'
+import { Fragment } from 'react'
+import PropTypes from 'prop-types'
+import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
+import SvgImage from '@/components/SvgImage'
+import TablePriceHeader from '@/components/Table/PriceHeader'
+import { convertFromAsaUnits } from '@/services/convert'
+import { floatToFixed } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
+import { rgba } from 'polished'
+import styled from '@emotion/styled'
+import { useEventDispatch } from '@/hooks/useEvents'
+import useStore from 'store/use-store'
+import useTranslation from 'next-translate/useTranslation'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.875rem 0 1rem;
 `
 
@@ -114,7 +112,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${({ theme }) => theme.colors.background.dark};
+  background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.3rem;
 
   @media (min-width: 996px) {
@@ -145,12 +143,12 @@ const BookRow = styled.div`
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buy' ? 'green' : 'red'
-      return rgba(theme.colors[color]['500'], 0.15)
+      return rgba(theme.palette[color]['500'], 0.15)
     }};
 
     p {
       &:not(:first-child) {
-        color: ${({ theme }) => theme.colors.gray['000']};
+        color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
@@ -182,13 +180,13 @@ const SellOrders = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
     border-radius: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
   }
 `
 
@@ -213,13 +211,13 @@ const BuyOrders = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
     border-radius: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
   }
 `
 
@@ -231,7 +229,7 @@ const Price = styled.p`
   align-items: center;
   font-size: 1.25rem;
   font-weight: 600;
-  color: ${({ theme, color }) => theme.colors[color]['500']};
+  color: ${({ theme, color }) => theme.palette[color]['500']};
   margin: 0;
 
   svg {
@@ -258,7 +256,9 @@ export function OrderBookPrice({ asset }) {
     return (
       <Fragment>
         --
-        <BodyCopySm as="span">0.00%</BodyCopySm>
+        <BodyCopySm data-testid="no-price-info" as="span">
+          0.00%
+        </BodyCopySm>
       </Fragment>
     )
   }
@@ -266,12 +266,11 @@ export function OrderBookPrice({ asset }) {
   function PriceInfo() {
     return (
       <Fragment>
-        {floatToFixed(
-          asset.decimals !== 6
-            ? convertFromAsaUnits(asset.price_info.price, asset.decimals)
-            : asset.price_info.price
-        )}
-        <BodyCopySm as="span">{`${floatToFixed(asset.price_info.price24Change, 2)}%`}</BodyCopySm>
+        {floatToFixed(convertFromAsaUnits(asset.price_info.price, asset.decimals))}
+        <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
+          asset.price_info.price24Change,
+          2
+        )}%`}</BodyCopySm>
       </Fragment>
     )
   }
@@ -390,7 +389,7 @@ export function OrderBook({ asset, orders, components }) {
     })
   }
   return (
-    <Section area="topLeft">
+    <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <HeaderCaps color="gray.500" mb={1}>
           {t('order-book')}

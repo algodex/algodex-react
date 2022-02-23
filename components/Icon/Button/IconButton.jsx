@@ -1,31 +1,35 @@
-import styled, { css } from 'styled-components'
 import * as Icons from 'react-feather'
-import { isNumber } from 'lodash'
-import PropTypes from 'prop-types'
 
-function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
-  return theme.colors[color][fillGradient]
+import PropTypes from 'prop-types'
+import { css } from '@emotion/react'
+import { isNumber } from 'lodash'
+import styled from '@emotion/styled'
+
+export function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
+  return theme.palette[color][fillGradient]
 }
-function getSize({ size }) {
+
+export function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
-function getColor({ theme, color = 'gray', gradient = 900 }) {
-  return theme.colors[color][gradient]
+
+export function getColor({ theme, color = 'gray', gradient = 900 }) {
+  return theme.palette[color][gradient]
 }
-const style = css`
+const style = (props) => css`
   cursor: pointer;
   pointer-events: all;
   border: none;
   background: transparent;
   margin: 0;
   padding: 0;
-  height: ${getSize};
-  width: ${getSize};
-  color: ${getColor};
+  height: ${getSize(props)};
+  width: ${getSize(props)};
+  color: ${getColor(props)};
   svg {
-    height: ${getSize};
-    fill: ${getFillColor};
-    color: ${getColor};
+    height: ${getSize(props)};
+    fill: ${getFillColor(props)};
+    color: ${getColor(props)};
   }
 `
 /**
@@ -37,8 +41,8 @@ export const IconButton = styled(({ icon, color, ...rest }) => {
   if (typeof Icons[icon] === 'undefined') throw new Error('Icon Not Found!')
   const Icon = Icons[icon]
   return (
-    <button color={color} {...rest}>
-      <Icon {...rest} />
+    <button data-testid="info-icon-wrapper" color={color} {...rest}>
+      <Icon data-testid="info-icon" {...rest} />
     </button>
   )
 })`

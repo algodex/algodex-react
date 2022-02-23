@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import SvgImage from '@/components/SvgImage'
 import { convertFromBaseUnits } from '@/services/convert'
 import { floatToFixed } from '@/services/display'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
@@ -15,7 +15,7 @@ import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   flex: 1 1 0%;
-  background-color: ${({ theme }) => theme.colors.gray[900]};
+  background-color: ${({ theme }) => theme.palette.gray[900]};
 `
 
 const InfoContainer = styled.div`
@@ -30,7 +30,7 @@ const ButtonText = styled.button`
   display: flex;
   align-content: center;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.gray[400]};
+  color: ${({ theme }) => theme.palette.gray[400]};
   padding: 5px 0;
 
   div {
@@ -56,12 +56,12 @@ const HeaderContainer = styled.div`
 
 const AssetUrl = styled.p`
   a {
-    color: ${({ theme }) => theme.colors.gray[400]};
+    color: ${({ theme }) => theme.palette.gray[400]};
     text-decoration: none;
     transition: color 100ms;
 
     &:hover {
-      color: ${({ theme }) => theme.colors.gray[100]};
+      color: ${({ theme }) => theme.palette.gray[100]};
     }
   }
 `
@@ -77,7 +77,7 @@ const InfoItem = styled.div`
 `
 
 const ExternalLinkIcon = styled(ExternalLink)`
-  stroke: ${({ theme }) => theme.colors.gray[500]};
+  stroke: ${({ theme }) => theme.palette.gray[500]};
   width: 1rem;
   height: 1rem;
 `
@@ -147,7 +147,9 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy as="span">{asset.url}</BodyCopy>
+            <BodyCopy data-testid="asset-url" as="span">
+              {asset.url}
+            </BodyCopy>
           </a>
         </AssetUrl>
       )
@@ -159,7 +161,7 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button onClick={onClick}>
+          <button data-testid="asset-info-back-btn" onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
@@ -167,7 +169,7 @@ export function AssetInfo({ asset }) {
           </button>
         ) : null}
         <HeaderContainer>
-          <HeaderLg color="gray.100" mb={2}>
+          <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>
             {renderName()}
           </HeaderLg>
           {renderLink()}
@@ -177,7 +179,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('description')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.heading} fontWeight="400">
+            <BodyCopy
+              data-testid="asset-info-desc"
+              as="dd"
+              fontFamily={theme.fontFamilies.heading}
+              fontWeight="400"
+            >
               {description}
             </BodyCopy>
           </InfoItem>
@@ -185,7 +192,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('circulating-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-circ-supply"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.circulating || 'NA'}
             </BodyCopy>
           </InfoItem>
@@ -193,7 +205,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               {t('total-supply')}
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-total-supply"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.total}
             </BodyCopy>
           </InfoItem>
@@ -201,7 +218,12 @@ export function AssetInfo({ asset }) {
             <BodyCopyTiny as="dt" color="gray.500">
               ASA ID
             </BodyCopyTiny>
-            <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+            <BodyCopy
+              data-testid="asset-info-asa-id"
+              as="dd"
+              fontFamily={theme.fontFamilies.monospace}
+              fontSize="1.25rem"
+            >
               {asset.id}
             </BodyCopy>
           </InfoItem>
@@ -220,7 +242,12 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Price
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy
+                  data-testid="asset-info-price"
+                  as="dd"
+                  fontFamily={theme.fontFamilies.monospace}
+                  fontSize="1.25rem"
+                >
                   {floatToFixed(
                     asset.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
@@ -233,7 +260,12 @@ export function AssetInfo({ asset }) {
                 <BodyCopyTiny as="dt" color="gray.500">
                   Change
                 </BodyCopyTiny>
-                <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">
+                <BodyCopy
+                  data-testid="asset-info-pct-change"
+                  as="dd"
+                  fontFamily={theme.fontFamilies.monospace}
+                  fontSize="1.25rem"
+                >
                   {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>

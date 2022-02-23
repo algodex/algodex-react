@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { variant } from 'styled-system'
 
 /**
@@ -6,9 +6,7 @@ import { variant } from 'styled-system'
  * @todo refactor to TailwindsCSS
  * @type {StyledComponent}
  */
-export const Button = styled.button.attrs(({ type }) => ({
-  type
-}))`
+export const Button = styled.button`
   ${variant({
     scale: 'buttons'
   })}

@@ -1,13 +1,13 @@
 import { default as Component } from '.'
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
   padding: 0;
   margin: 0;
-  background: ${({ theme }) => theme.colors.gray['700']};
+  background: ${({ theme }) => theme.palette.gray['700']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

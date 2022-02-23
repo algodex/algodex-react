@@ -18,8 +18,8 @@ import { TabsUnstyled } from '@mui/base'
 import Tooltip from 'components/Tooltip'
 import { has } from 'lodash'
 import { lighten } from 'polished'
-import styled from 'styled-components'
 import theme from '../../../theme'
+import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
 const IconTextContainer = styled.div`

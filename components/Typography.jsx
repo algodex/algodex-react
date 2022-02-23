@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-import theme from 'theme'
-
+import styled from '@emotion/styled'
+import theme from '../theme/index'
 import {
   space,
   fontFamily,
@@ -135,5 +134,5 @@ export const NavLabel = (props) => (
 NavLabel.propTypes = { children }
 
 export const BrightGraySpan = styled.span`
-  color: ${({ theme }) => theme.colors.gray['000']};
+  color: ${({ theme }) => theme.palette.gray['000']};
 `
