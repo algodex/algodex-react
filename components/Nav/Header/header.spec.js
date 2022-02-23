@@ -2,12 +2,14 @@ import React from 'react'
 import singletonRouter from 'next/router'
 import { render } from 'test/test-utils'
 import { Header } from './index'
+import { matchers } from '@emotion/jest'
 
-jest.mock('next/dist/client/router', () => require('next-router-mock'))
+expect.extend(matchers)
 
 describe('Header', () => {
-  it.skip('should render the container', () => {
-    const { queryByTestId } = render(<Header router={singletonRouter} />)
+  it('should render the container', () => {
+    const { queryByTestId } = render(<Header />)
+    expect(queryByTestId('header-container')).toHaveClass('flex')
     expect(queryByTestId('header-container')).not.toBeNull()
   })
 })
