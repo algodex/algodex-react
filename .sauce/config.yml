@@ -3,42 +3,54 @@ kind: cypress
 defaults:
   mode: sauce
 sauce:
+  metadata:
+    tags:
+      - e2e
+      - acceptance
+    build: algodex $GITHUB_RUN_ID
   region: us-west-1
   concurrency: 2
 cypress:
   configFile: cypress-sauce.json
   version: 9.3.1
 suites:
-- name: Algodex-Chrome
-  browser: chrome
+- name: "Chrome on Win 10"
+  browser: "chrome"
+  shard: spec
+  platformName: "Windows 10"
   config:
-    testFiles:
-      - '**/*.*'
-- name: Algodex-Firefox
-  browser: firefox  
+    testFiles: [ "**/*.*" ]
+- name: "Chrome on Mac 12"
+  browser: "chrome"
+  shard: spec
+  platformName: "mac 12.00"
   config:
-    testFiles:
-      - '**/*.*'
-#- name: Algodex-Safari
-#  config:
-#    testFiles:
-#      - '**/*.*'
-#  browser: safari
-#  mode: sauce
-#- name: Algodex-Opera
-#  config:
-#    testFiles:
-#      - '**/*.*'
-#  browser: opera
-#  mode: sauce
-#- name: Algodex-Edge
-#  config:
-#    testFiles:
-#      - '**/*.*'
-#  browser: opera
-#  mode: sauce
+    testFiles: [ "**/*.*" ]
+- name: "Firefox on Win 10"
+  browser: "firefox"
+  shard: spec
+  platformName: "Windows 10"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Firefox on Mac 12"
+  browser: "firefox"
+  shard: spec
+  platformName: "mac 12.00"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Safari on Mac 12"
+  browser: "safari"
+  shard: spec
+  platformName: "mac 12.00"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Edge on Win 10"
+  browser: "edge"
+  shard: spec
+  platformName: "Windows 10"
+  config:
+    testFiles: [ "**/*.*" ]
 rootDir: .
-tunnel-identifier: "Mfeher_tunnel_name"
 artifacts:
   download:
     match:
