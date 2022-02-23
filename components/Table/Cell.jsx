@@ -45,6 +45,10 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
  */
 export const OrderTypeCell = ({ value }) => {
   const { t } = useTranslation('orders')
-  return <OrderTypeSpan data-testid="cell-item" value={value}>{t(value.toLowerCase())}</OrderTypeSpan>
+  return (
+    <OrderTypeSpan data-testid="cell-item" value={value}>
+      {t(value.toLowerCase())}
+    </OrderTypeSpan>
+  )
 }
 OrderTypeCell.propTypes = { value: PropTypes.any }

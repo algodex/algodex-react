@@ -1,7 +1,6 @@
-import { fireEvent, render } from 'test/test-utils'
-
 import { OrderTypeCell } from './Cell'
 import { matchers } from '@emotion/jest'
+import { render } from 'test/test-utils'
 
 expect.extend(matchers)
 
