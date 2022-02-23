@@ -1,7 +1,7 @@
+import { BodyCopyTiny } from 'components/Typography'
+import Icon from 'components/Icon'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-import Icon from 'components/Icon'
-import { BodyCopyTiny } from 'components/Typography'
 
 export const PriceHeaderText = styled(BodyCopyTiny)`
   display: flex;
@@ -17,7 +17,7 @@ export const PriceHeaderText = styled(BodyCopyTiny)`
 export const TablePriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText>
+    <PriceHeaderText data-testid="header-item">
       {t('price')}
       <Icon use="algoLogo" size={0.625} />
     </PriceHeaderText>
