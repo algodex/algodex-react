@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useSortBy, useTable } from 'react-table'
+
 import { BrightGraySpan } from '@/components/Typography'
 import Icon from '@/components/Icon'
 import InfoFlyover from './InfoFlyover'
