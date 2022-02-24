@@ -44,7 +44,7 @@ export const AssetInfo = ({ asset, price, isLive, isRegenerate, isCleared, ...pr
   if (isRegenerate) asset = generateAsset()
   return (
     <>
-      {!isLive && <Component asset={asset} price={price} {...props} />}
+      {!isLive && <Component asset={asset} {...props} />}
       {isLive && <LiveComponent asset={asset} />}
       {isLive && <ReactQueryDevtools initialIsOpen={false} />}
     </>

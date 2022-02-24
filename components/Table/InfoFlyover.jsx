@@ -5,7 +5,7 @@ function InfoFlyover({ row, components, children, isActive }) {
   const { Root } = components
 
   const isChildren = isActive && !isUndefined(children)
-  const isRow = !isChildren
+  const isRow = !isChildren && Object.keys(row).length > 0
   const isEmpty = !isRow && !isChildren
 
   return (
@@ -17,7 +17,7 @@ function InfoFlyover({ row, components, children, isActive }) {
             {key}: {row[key]}
           </div>
         ))}
-      {isEmpty && <div>Nothing Found!</div>}
+      {isEmpty && <div data-testid="empty-flyover">Nothing Found!</div>}
     </Root>
   )
 }

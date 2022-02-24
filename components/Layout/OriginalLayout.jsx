@@ -292,7 +292,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {!isSignedIn && <div>Please Sign in</div>}
+          {!isSignedIn && <div data-testid="not-signed-in">Please Sign in</div>}
           {isMobile && activeMobile === TABS.TRADE && isSignedIn && (
             <PlaceOrder asset={asset} wallet={wallet} />
           )}

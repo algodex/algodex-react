@@ -56,7 +56,7 @@ jobs:
   chromatic-deployment:
     name: Storybook
     runs-on: ubuntu-latest
-    needs: [jest]
+    needs: [e2e]
     env:
       NODE_ENV: test
     steps:
@@ -75,3 +75,26 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+  sauce:
+    name: Saucelabs
+    runs-on: ubuntu-latest
+    # TODO: Only run on pr or push to main, use manual testing tunnels for development
+    needs: [e2e]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GHP_AUTH_TOKEN }}" >> ~/.npmrc
+          echo "@algodex:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          yarn
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
+      # Saucelabs
+      - name: Run Saucelabs
+        uses: saucelabs/saucectl-run-action@v1
+        with:
+          sauce-username: ${{ secrets.SAUCE_USERNAME }}
+          sauce-access-key: ${{ secrets.SAUCE_ACCESS_KEY }}

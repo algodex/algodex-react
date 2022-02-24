@@ -3,11 +3,15 @@
 [![story-book](https://raw.githubusercontent.com/storybookjs/brand/master/badge/badge-storybook.svg)](https://www.chromatic.com/builds?appId=60b0bd43c7a26d003be10f53)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-
+[![CI](https://github.com/algodex/algodex-react/actions/workflows/ci.yml/badge.svg)](https://github.com/algodex/algodex-react/actions/workflows/ci.yml)
+[![Sauce Test Status](https://app.saucelabs.com/buildstatus/algodex?auth=a575d8742c484fe2f6006e9bf6c1022c)](https://app.saucelabs.com/u/algodex)
 [![unit-branches](./assets/badge-branches.svg)](./components)
 [![unit-functions](./assets/badge-functions.svg)](./components)
 [![unit-lines](./assets/badge-lines.svg)](./components)
 [![unit-statements](./assets/badge-statements.svg)](./components)
+
+
+[![Sauce Test Status](https://app.saucelabs.com/browser-matrix/algodex.svg?auth=a575d8742c484fe2f6006e9bf6c1022c)](https://app.saucelabs.com/u/algodex)
 
 Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Note that `development` is the default branch.
 

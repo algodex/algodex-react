@@ -106,18 +106,21 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
       <Container>
         <Header>
           <Tab
+            data-testid="open-orders-tab"
             isActive={selectedPanel === OPEN_ORDERS_PANEL}
             onClick={() => setSelectedPanel(OPEN_ORDERS_PANEL)}
           >
             {t('open-orders')}
           </Tab>
           <Tab
+            data-testid="order-history-tab"
             isActive={selectedPanel === ORDER_HISTORY_PANEL}
             onClick={() => setSelectedPanel(ORDER_HISTORY_PANEL)}
           >
             {t('order-history')}
           </Tab>
           <Tab
+            data-testid="assets-panel-tab"
             isActive={selectedPanel === ASSETS_PANEL}
             onClick={() => setSelectedPanel(ASSETS_PANEL)}
           >
