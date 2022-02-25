@@ -36,16 +36,20 @@ describe('Network Banner Component', () => {
 })
 
 describe('Notification Modal Component', () => {
-  it('Should render Network notification Modal', () => {
+  it('Should not render Network notification Modal', () => {
     const { queryByTestId } = render(
       <NotificationModal isModalActive={false} content={<div>Hello World</div>} />
     )
     expect(queryByTestId('notification-modal-wrapper')).toBeNull()
   })
-  it('Should not render Network notification Modal', () => {
+  it('Should render Network notification Modal', async () => {
     const { queryByTestId } = render(
-      <NotificationModal isModalActive={true} content={<div>Hello World</div>} />
+      <NotificationModal
+        isModalActive={true}
+        content={{ linkAddressOne: 'https://google.com', linkAddressTwo: 'https://google.com' }}
+      />
     )
-    expect(queryByTestId('notification-modal-wrapper')).not.toBeNull()
+    const result = queryByTestId('notification-modal-wrapper')
+    expect(result).not.toBeNull()
   })
 })
