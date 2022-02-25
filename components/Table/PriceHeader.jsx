@@ -16,7 +16,8 @@ export const PriceHeader = styled.div`
 export const TablePriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeader>
+    <PriceHeader data-testid="header-item">
+      {t('price')}
       <Typography variant="bodyCopyTiny">{t('price')}</Typography>
       <Icon use="algoLogo" size={0.625} />
     </PriceHeader>

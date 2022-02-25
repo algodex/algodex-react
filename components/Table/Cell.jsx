@@ -1,10 +1,10 @@
-import { useEventDispatch } from '@/hooks/useEvents'
-import { useCallback } from 'react'
-import Link from 'next/link'
 import { BrightGraySpan } from '@/components/Typography'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
-import useTranslation from 'next-translate/useTranslation'
 import styled from '@emotion/styled'
+import { useCallback } from 'react'
+import { useEventDispatch } from '@/hooks/useEvents'
+import useTranslation from 'next-translate/useTranslation'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
@@ -45,6 +45,10 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
  */
 export const OrderTypeCell = ({ value }) => {
   const { t } = useTranslation('orders')
-  return <OrderTypeSpan value={value}>{t(value.toLowerCase())}</OrderTypeSpan>
+  return (
+    <OrderTypeSpan data-testid="cell-item" value={value}>
+      {t(value.toLowerCase())}
+    </OrderTypeSpan>
+  )
 }
 OrderTypeCell.propTypes = { value: PropTypes.any }
