@@ -24,6 +24,7 @@ const NetworkBanner = () => {
       {((hasMainnetRibbon && activeNetwork === 'mainnet') ||
         (hasTestnetRibbon && activeNetwork === 'testnet')) && (
         <div
+          data-testid="banner-container"
           style={{
             padding: '0.8rem 0',
             background: `${
@@ -37,11 +38,13 @@ const NetworkBanner = () => {
               width: '90%',
               color: '#FFFFFF'
             }}
+            data-testid="banner-message"
             className="flex justify-center font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
           >
             {activeNetwork == 'mainnet' ? t('ribbon-message-mainnet') : t('ribbon-message-testnet')}
           </p>
           <Icon
+            data-testid="banner-close-btn"
             onClick={() => closeRibbonFn(false)}
             path={mdiWindowClose}
             title="Close ribbon"
