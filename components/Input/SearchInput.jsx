@@ -1,6 +1,5 @@
 import { createRef, forwardRef, useEffect, useState } from 'react'
 import theme from 'theme'
-import TextInput from './TextInput'
 import Checkbox from './CheckboxInput'
 import PropTypes from 'prop-types'
 import useDebounce from 'hooks/useDebounce'
@@ -9,12 +8,51 @@ import styled from '@emotion/styled'
 import Icon from '@mdi/react'
 import { mdiMagnify } from '@mdi/js'
 import { X as CancelIcon } from 'react-feather'
+const TextInput = styled.input`
+  flex: 1 1 auto;
+  background-color: ${({ theme, hasBackgroundColor }) =>
+    hasBackgroundColor ? theme.colors.gray['900'] : 'inherit'};
+  border: ${({ theme, hasOutline }) =>
+    hasOutline ? `2px solid ${theme.colors.gray['700']}` : 'none'};
+  border-radius: 3px;
+  padding: 0.5rem;
+  color: ${({ theme }) => theme.colors.gray['000']};
+  font-family: ${({ theme }) => theme.fontFamilies.body};
+  font-size: 1rem;
+  line-height: 1;
+  min-height: 2.5rem;
 
+  // &:focus {
+  //   outline: 0;
+  //   box-shadow: 0 0 0 0.2rem rgba(121, 255, 156, 0.5);
+  //   border-color: ${({ theme }) => theme.colors.gray['400']};
+  // }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray['600']};
+    font-size: medium;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.33;
+  }
+
+  &[read-only] {
+    pointer-events: none;
+  }
+`
+
+TextInput.defaultProps = {
+  type: 'text',
+  hasOutline: true,
+  hasBackgroundColor: true
+}
 const Container = styled.div`
   display: flex;
   position: relative;
   height: 51px;
-  border: solid 1px ${({ theme }) => theme.palette.gray['700']};
+  border: solid 1px ${({ theme }) => theme.colors.gray['700']};
   border-radius: 4px;
   // margin: 0 2rem;
 
@@ -44,7 +82,7 @@ export const CancelButton = styled.button`
   &:focus {
     svg {
       line {
-        stroke: ${({ theme }) => theme.palette.gray['000']};
+        stroke: ${({ theme }) => theme.colors.gray['000']};
       }
     }
   }
@@ -83,7 +121,7 @@ export const Search = forwardRef(
             className="ml-2"
             title="Search icon"
             size={0.85}
-            color={theme.palette.gray['500']}
+            color={theme.colors.gray['500']}
           />
           <Input
             hasOutline={false}
@@ -96,7 +134,7 @@ export const Search = forwardRef(
           />
           {onCancel && value !== '' && (
             <CancelButton onClick={onCancel}>
-              <CancelIcon color={theme.palette.gray['500']} size={16} />
+              <CancelIcon color={theme.colors.gray['500']} size={16} />
             </CancelButton>
           )}
         </Container>

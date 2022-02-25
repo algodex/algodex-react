@@ -27,7 +27,7 @@ const NetworkBanner = () => {
           style={{
             padding: '0.8rem 0',
             background: `${
-              activeNetwork == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']
+              activeNetwork == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']
             }`
           }}
           className="flex items-center justify-between"

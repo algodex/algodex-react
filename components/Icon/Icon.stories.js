@@ -7,7 +7,7 @@ import * as Icons from 'react-feather'
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.palette.gray['300']};
+  background: ${({ theme }) => theme.colors.gray['300']};
   display: flex;
   align-items: center;
   justify-content: center;

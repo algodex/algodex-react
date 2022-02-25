@@ -6,7 +6,7 @@ import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
 
 export function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
-  return theme.palette[color][fillGradient]
+  return theme.colors[color][fillGradient]
 }
 
 export function getSize({ size }) {
@@ -14,7 +14,7 @@ export function getSize({ size }) {
 }
 
 export function getColor({ theme, color = 'gray', gradient = 900 }) {
-  return theme.palette[color][gradient]
+  return theme.colors[color][gradient]
 }
 const style = (props) => css`
   cursor: pointer;

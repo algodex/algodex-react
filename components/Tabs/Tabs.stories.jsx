@@ -1,6 +1,6 @@
-import { TabsComponent as Component } from './Tabs'
+import { NativeTabItem as Component } from './Tabs'
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Container = styled.div`
   width: 100vw;

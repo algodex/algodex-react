@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { useQueryClient } from 'react-query'
 import { withExplorerAssetInfo } from '@/hooks/withAlgoExplorer'
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.palette.gray[200]};
+  background-color: ${({ theme }) => theme.colors.gray[200]};
   display: flex;
   width: 100vw;
   height: 100vh;

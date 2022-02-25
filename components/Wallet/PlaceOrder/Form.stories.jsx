@@ -1,8 +1,19 @@
 import { PlaceOrderForm as Component } from './Form'
 import React from 'react'
 // import asset from 'spec/Asset'
-// import styled from 'styled-components'
+import styled from '@emotion/styled'
 import generateAsset, { Example } from 'spec/Asset'
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: ${({ theme }) => theme.colors.gray['800']};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+`
 
 export default {
   title: '@algodex/recipes/Wallet/Place Order Form',
@@ -32,7 +43,14 @@ export default {
       console.log(order)
       e.preventDefault()
     }
-  }
+  },
+  decorators: [
+    (Story) => (
+      <Container>
+        <Story />
+      </Container>
+    )
+  ]
 }
 
 /* eslint-disable */

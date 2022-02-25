@@ -15,8 +15,8 @@ const IconButton = styled.button`
 
   svg {
     height: 15px;
-    fill: ${({ theme }) => theme.palette.gray[500]};
-    color: ${({ theme }) => theme.palette.gray[900]};
+    fill: ${({ theme }) => theme.colors.gray[500]};
+    color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
 

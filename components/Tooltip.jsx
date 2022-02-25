@@ -10,14 +10,14 @@ import { usePopperTooltip } from 'react-popper-tooltip'
  */
 const TooltipContainer = styled.div`
   &.tooltip-container {
-    --tooltipBackground: ${({ theme }) => theme.palette.gray[600]};
-    --tooltipBorder: ${({ theme }) => theme.palette.gray[600]};
+    --tooltipBackground: ${({ theme }) => theme.colors.gray[600]};
+    --tooltipBorder: ${({ theme }) => theme.colors.gray[600]};
 
     background-color: var(--tooltipBackground);
     border-radius: 3px;
     border: 1px solid var(--tooltipBorder);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-    color: ${({ theme }) => theme.palette.gray[400]};
+    color: ${({ theme }) => theme.colors.gray[400]};
     display: flex;
     flex-direction: column;
     padding: 0.4rem;

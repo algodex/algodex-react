@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
 import styled from '@emotion/styled'
-import Button from 'components/Button'
+import Button from '@mui/material/Button'
 import { lighten } from 'polished'
 
 const Container = styled.div`
@@ -43,13 +43,13 @@ const ToggleBtn = styled(Button)`
   margin: 0;
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
-  background-color: ${({ theme }) => theme.palette.gray['900']};
+  background-color: ${({ theme }) => theme.colors.gray['900']};
   label {
     cursor: pointer;
     width: 100%;
   }
   &:hover {
-    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['900'])};
+    background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['900'])};
   }
 
   &:not(:last-child) {
@@ -58,11 +58,11 @@ const ToggleBtn = styled(Button)`
 
   && {
     ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.palette.gray['700']};
+      background-color: ${({ theme }) => theme.colors.gray['700']};
     }
 
     ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
+      background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
     }
 
     ${ToggleInput}:focus + & {

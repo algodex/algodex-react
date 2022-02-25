@@ -1,11 +1,11 @@
 import React from 'react'
-import { CurrencyInput as Component } from './CurrencyInput'
+import { OutlinedInput as Component } from './OutlinedInput'
 import styled from '@emotion/styled'
-import asset from 'spec/Asset'
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.palette.gray['400']};
+  background: ${({ theme }) => theme.colors.gray['700']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -13,9 +13,10 @@ const Container = styled.div`
   margin: 0;
 `
 export default {
-  title: '@algodex/components/Input',
+  title: '@algodex/components/Input/Outlined Input',
   component: Component,
   parameters: { layout: 'fullscreen' },
+  args: {},
   decorators: [
     (Story) => (
       <Container>
@@ -25,10 +26,6 @@ export default {
   ]
 }
 
-const Template = (args) => <Component {...args} />
-
-export const OrderInput = Template.bind({})
-OrderInput.args = {
-  label: 'Price',
-  currency: asset.name
+export function OutlinedInput(props) {
+  return <Component {...props} />
 }

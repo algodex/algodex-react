@@ -6,8 +6,9 @@ import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import toast from 'react-hot-toast'
 import Icon from 'components/Icon/Icon'
-import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
-import Button from 'components/Button'
+// import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 import SvgImage from 'components/SvgImage'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -16,7 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.palette.background.dark};
+  background-color: ${({ theme }) => theme.colors.background.dark};
   padding: 0.875rem 0 1rem;
 `
 
@@ -70,17 +71,17 @@ const Wallets = styled.div`
     height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.palette.gray[700]};
+    background: ${({ theme }) => theme.colors.gray[700]};
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.palette.gray[600]};
+    background: ${({ theme }) => theme.colors.gray[600]};
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.palette.gray[500]};
+    background: ${({ theme }) => theme.colors.gray[500]};
   }
   ::-webkit-scrollbar-corner {
-    background: ${({ theme }) => theme.palette.gray[700]};
+    background: ${({ theme }) => theme.colors.gray[700]};
   }
 `
 
@@ -123,7 +124,7 @@ const WalletRow = styled.div`
   cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
   transition: color 50ms ease-out;
   color: ${({ theme, isActive }) =>
-    isActive ? theme.palette.gray['000'] : theme.palette.gray['500']};
+    isActive ? theme.colors.gray['000'] : theme.colors.gray['500']};
 
   span,
   p {
@@ -143,7 +144,7 @@ const WalletRow = styled.div`
   &:hover,
   &:focus {
     color: ${({ theme, isActive }) =>
-      isActive ? theme.palette.gray['000'] : theme.palette.gray['300']};
+      isActive ? theme.colors.gray['000'] : theme.colors.gray['300']};
   }
 
   &:focus {
@@ -202,10 +203,10 @@ export function WalletView(props) {
     return (
       <Balance>
         <Icon use="algoLogo" size={0.625} />
-        <LabelMd fontWeight="500">
+        <Typography variant="labelMdLight" component="span">
           {`${split[0]}.`}
           <span>{split[1]}</span>
-        </LabelMd>
+        </Typography>
       </Balance>
     )
   }
@@ -220,10 +221,10 @@ export function WalletView(props) {
         onClick={() => handleWalletClick(wallet.address)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
-        <LabelMd fontWeight="500" title={wallet.address}>
+        <Typography variant="labelMdLight" component="span" title={wallet.address}>
           <Icon onClick={() => copyAddress(wallet.address)} use="wallet" size={0.75} />
           {wallet.name}
-        </LabelMd>
+        </Typography>
         {renderBalance(wallet.balance)}
       </WalletRow>
     ))
@@ -241,7 +242,8 @@ export function WalletView(props) {
       <Container>
         <ButtonContainer>
           <Button
-            variant={getButtonVariant()}
+            variant="contained"
+            color={getButtonVariant()}
             onClick={getButtonState}
             data-testid="connect-wallet-btn"
           >
@@ -251,10 +253,12 @@ export function WalletView(props) {
         {isSignedIn ? (
           <>
             <Header>
-              <BodyCopyTiny color="gray.500">{t('wallet')}</BodyCopyTiny>
-              <BodyCopyTiny color="gray.500" textAlign="right">
+              <Typography component="p" variant="bodyCopyTiny" color="gray.500">
+                {t('wallet')}
+              </Typography>
+              <Typography component="p" variant="bodyCopyTiny" color="gray.500" textAlign="right">
                 {t('balance')}
-              </BodyCopyTiny>
+              </Typography>
             </Header>
             <Wallets>
               <WalletsWrapper>{renderWallets()}</WalletsWrapper>
@@ -265,12 +269,12 @@ export function WalletView(props) {
             <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow>
-            <HeaderSm color="gray.100" m={0} mb={16}>
+            <Typography variant="headerSm" component="h3" color="gray.100" m={0} mb={16}>
               {t('start-by')}
-            </HeaderSm>
-            <BodyCopySm color="gray.500" m={0}>
+            </Typography>
+            <Typography variant="bodyCopySm" component="p" color="gray.500" m={0}>
               {t('once-connected')}
-            </BodyCopySm>
+            </Typography>
           </EmptyState>
         )}
       </Container>

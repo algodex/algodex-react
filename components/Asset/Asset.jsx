@@ -1,7 +1,6 @@
 import { ArrowLeft, ExternalLink } from 'react-feather'
-import { BodyCopy, BodyCopyTiny, HeaderLg } from '@/components/Typography'
 import { Fragment, useCallback } from 'react'
-
+import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import SvgImage from '@/components/SvgImage'
@@ -15,7 +14,7 @@ import { withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   flex: 1 1 0%;
-  background-color: ${({ theme }) => theme.palette.gray[900]};
+  background-color: ${({ theme }) => theme.colors.gray[900]};
 `
 
 const InfoContainer = styled.div`
@@ -30,7 +29,7 @@ const ButtonText = styled.button`
   display: flex;
   align-content: center;
   cursor: pointer;
-  color: ${({ theme }) => theme.palette.gray[400]};
+  color: ${({ theme }) => theme.colors.gray[400]};
   padding: 5px 0;
 
   div {
@@ -56,12 +55,12 @@ const HeaderContainer = styled.div`
 
 const AssetUrl = styled.p`
   a {
-    color: ${({ theme }) => theme.palette.gray[400]};
+    color: ${({ theme }) => theme.colors.gray[400]};
     text-decoration: none;
     transition: color 100ms;
 
     &:hover {
-      color: ${({ theme }) => theme.palette.gray[100]};
+      color: ${({ theme }) => theme.colors.gray[100]};
     }
   }
 `
@@ -77,7 +76,7 @@ const InfoItem = styled.div`
 `
 
 const ExternalLinkIcon = styled(ExternalLink)`
-  stroke: ${({ theme }) => theme.palette.gray[500]};
+  stroke: ${({ theme }) => theme.colors.gray[500]};
   width: 1rem;
   height: 1rem;
 `
@@ -147,9 +146,9 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy data-testid="asset-url" as="span">
+            <Typography variant="bodyCopy" data-testid="asset-url" component="span">
               {asset.url}
-            </BodyCopy>
+            </Typography>
           </a>
         </AssetUrl>
       )
@@ -169,63 +168,72 @@ export function AssetInfo({ asset }) {
           </button>
         ) : null}
         <HeaderContainer>
-          <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>
+          <Typography
+            variant="headerLg"
+            component="h1"
+            data-testid="asset-info-asa-name"
+            color="gray.100"
+          >
             {renderName()}
-          </HeaderLg>
+          </Typography>
           {renderLink()}
         </HeaderContainer>
         <InfoList>
           <InfoItem>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               {t('description')}
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
+              variant="bodyCopy"
               data-testid="asset-info-desc"
-              as="dd"
+              component="dd"
               fontFamily={theme.fontFamilies.heading}
               fontWeight="400"
             >
               {description}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               {t('circulating-supply')}
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
+              variant="bodyCopy"
               data-testid="asset-info-circ-supply"
-              as="dd"
+              component="dd"
               fontFamily={theme.fontFamilies.monospace}
               fontSize="1.25rem"
             >
               {asset.circulating || 'NA'}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               {t('total-supply')}
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
+              variant="bodyCopy"
               data-testid="asset-info-total-supply"
-              as="dd"
+              component="dd"
               fontFamily={theme.fontFamilies.monospace}
               fontSize="1.25rem"
             >
               {asset.total}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               ASA ID
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
+              variant="bodyCopy"
               data-testid="asset-info-asa-id"
-              as="dd"
+              component="dd"
               fontFamily={theme.fontFamilies.monospace}
               fontSize="1.25rem"
             >
               {asset.id}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           {/*<InfoItem>*/}
           {/*  <BodyCopyTiny as="dt" color="gray.500">*/}
@@ -239,12 +247,13 @@ export function AssetInfo({ asset }) {
           {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
-                <BodyCopyTiny as="dt" color="gray.500">
+                <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                   Price
-                </BodyCopyTiny>
-                <BodyCopy
+                </Typography>
+                <Typography
+                  variant="bodyCopy"
                   data-testid="asset-info-price"
-                  as="dd"
+                  component="dd"
                   fontFamily={theme.fontFamilies.monospace}
                   fontSize="1.25rem"
                 >
@@ -254,20 +263,21 @@ export function AssetInfo({ asset }) {
                       : asset?.price_info.price
                   )}{' '}
                   ALGO
-                </BodyCopy>
+                </Typography>
               </InfoItem>
               <InfoItem>
-                <BodyCopyTiny as="dt" color="gray.500">
+                <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                   Change
-                </BodyCopyTiny>
-                <BodyCopy
+                </Typography>
+                <Typography
+                  variant="bodyCopy"
                   data-testid="asset-info-pct-change"
-                  as="dd"
+                  component="dd"
                   fontFamily={theme.fontFamilies.monospace}
                   fontSize="1.25rem"
                 >
                   {asset?.price_info.price24Change}%
-                </BodyCopy>
+                </Typography>
               </InfoItem>
             </Fragment>
           ) : null}

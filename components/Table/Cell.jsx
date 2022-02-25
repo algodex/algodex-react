@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
-    ('' + value).toUpperCase() === 'BUY' ? theme.palette.green[500] : theme.palette.red[500]};
+    ('' + value).toUpperCase() === 'BUY' ? theme.colors.green[500] : theme.colors.red[500]};
 `
 
 /**

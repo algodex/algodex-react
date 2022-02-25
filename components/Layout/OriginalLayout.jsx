@@ -1,4 +1,4 @@
-import Button from '@/components/Button'
+import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 const WalletSection = styled.section`
@@ -110,27 +110,18 @@ const WalletOrdersSection = styled.section`
 `
 
 const MainWrapper = styled.div`
-  position: relative;
   height: 100%;
-  min-height: 500px;
-
-  @media (min-width: 996px) {
-    min-height: 100%;
-    height: auto;
-  }
+  overflow: hidden;
 `
 
 const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  overflow: hidden scroll;
   height: 100%;
-
 
   @media (min-width: 996px) {
     height: 100%;
-    min-height: 900px;
     display: grid;
     grid-template-columns: 1fr 1fr 280px;
     grid-template-rows: 240px 200px 300px 300px;
@@ -284,7 +275,7 @@ function MainLayout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
-  console.log(isMobile)
+
   return (
     <MainWrapper>
       <Main ref={gridRef}>

@@ -40,7 +40,7 @@ const OrderCancelButton = styled.button`
   color: inherit;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.red['500']};
+    background: ${({ theme }) => theme.colors.red['500']};
   }
 `
 

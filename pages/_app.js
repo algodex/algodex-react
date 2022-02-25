@@ -149,8 +149,14 @@ const styles = css`
     border-collapse: collapse;
     border-spacing: 0;
   }
-  #__next {
-    height: 100%;
+  html,
+  #__next,
+  body {
+    height: 100% !important;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
   html,
   body {
@@ -158,8 +164,8 @@ const styles = css`
     box-sizing: border-box;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
       Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background: ${theme.palette.background.dark};
-    color: ${theme.palette.gray['400']};
+    background: ${theme.colors.background.dark};
+    color: ${theme.colors.gray['400']};
   }
   *,
   *:before,
@@ -176,17 +182,17 @@ const styles = css`
     height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: ${theme.palette.gray[700]};
+    background: ${theme.colors.gray[700]};
   }
   ::-webkit-scrollbar-thumb {
-    background: ${theme.palette.gray[600]};
+    background: ${theme.colors.gray[600]};
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: ${theme.palette.gray[500]};
+    background: ${theme.colors.gray[500]};
   }
   ::-webkit-scrollbar-corner {
-    background: ${theme.palette.gray[700]};
+    background: ${theme.colors.gray[700]};
   }
 
   input[type='number']::-webkit-inner-spin-button,

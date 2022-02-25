@@ -1,11 +1,9 @@
-import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/Typography'
-// import { lighten, rgba } from 'polished'
-
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
-import SvgImage from 'components/SvgImage'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+import Typography from '@mui/material/Typography'
+import SvgImage from '@/components/SvgImage'
 
 const HeaderContainer = styled.div`
   h3 {
@@ -65,12 +63,12 @@ export function SearchFlyover(props) {
 
     return (
       <InfoItem halfWidth>
-        <BodyCopyTiny as="dt" color="gray.500">
+        <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
           {t('24-hr-change')}
-        </BodyCopyTiny>
-        <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem" color={color}>
+        </Typography>
+        <Typography variant="bodyCopyMono" component="dd" color={color}>
           {display}
-        </BodyCopy>
+        </Typography>
       </InfoItem>
     )
   }
@@ -80,29 +78,29 @@ export function SearchFlyover(props) {
       {row && (
         <>
           <HeaderContainer>
-            <HeaderSm color="gray.100" mb={3}>
+            <Typography variant="headerSm" component="h3" color="gray.100">
               {renderName()}
-            </HeaderSm>
+            </Typography>
           </HeaderContainer>
           <InfoList>
             <InfoItem>
-              <BodyCopyTiny as="dt" color="gray.500">
+              <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                 ASA ID
-              </BodyCopyTiny>
-              <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+              </Typography>
+              <Typography variant="bodyCopyMono" component="dd">
                 {row.id}
-              </BodyCopy>
+              </Typography>
             </InfoItem>
 
             {row.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                     {t('price')} <Algos use="algoLogo" size={0.625} />
-                  </BodyCopyTiny>
-                  <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+                  </Typography>
+                  <Typography variant="bodyCopyMono" component="dd">
                     {row.price}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
                 {renderChange()}
               </>
@@ -111,20 +109,20 @@ export function SearchFlyover(props) {
             {row.hasBeenOrdered && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                     {t('liquidity')} (Algos)
-                  </BodyCopyTiny>
-                  <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+                  </Typography>
+                  <Typography variant="bodyCopyMono" component="dd">
                     {row.liquidityAlgo}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                     {`${t('liquidity')} (${row.name})`}
-                  </BodyCopyTiny>
-                  <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+                  </Typography>
+                  <Typography variant="bodyCopyMono" component="dd">
                     {row.liquidityAsa}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
               </>
             )}

@@ -2,20 +2,20 @@ import { floatToFixed } from 'services/display'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { rgba } from 'polished'
-import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
 import useTranslation from 'next-translate/useTranslation'
 import Icon from 'components/Icon'
 import Big from 'big.js'
 import dayjs from 'dayjs'
 import { Section } from '@/components/Layout/Section'
 import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
+import Typography from '@mui/material/Typography'
 
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.palette.background.dark};
+  background-color: ${({ theme }) => theme.colors.background.dark};
   padding: 0.75rem 0.625rem 1rem;
 `
 
@@ -48,13 +48,13 @@ const Trades = styled.div`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.colors[color][gradient]};
     border-radius: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
+    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.colors[color][gradient]};
   }
 `
 
@@ -77,22 +77,22 @@ const TradesRow = styled.div`
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buyASA' ? 'green' : 'red'
-      return rgba(theme.palette[color]['500'], 0.15)
+      return rgba(theme.colors[color]['500'], 0.15)
     }};
 
     p {
       &:not(:first-child) {
-        color: ${({ theme }) => theme.palette.gray['000']};
+        color: ${({ theme }) => theme.colors.gray['000']};
       }
     }
   }
 `
 
-const PriceHeaderText = styled(BodyCopyTiny)`
+const PriceHeaderBox = styled.div`
   display: flex;
   align-items: center;
   margin: 0;
-  color: ${({ theme }) => theme.palette.gray['500']};
+  color: ${({ theme }) => theme.colors.gray['500']};
 
   svg {
     margin-left: 0.25rem;
@@ -102,10 +102,10 @@ const PriceHeaderText = styled(BodyCopyTiny)`
 const PriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText>
-      {t('price')}
+    <PriceHeaderBox>
+      <Typography variant="bodyCopyTiny">{t('price')}</Typography>
       <Icon use="algoLogo" size={0.625} />
-    </PriceHeaderText>
+    </PriceHeaderBox>
   )
 }
 
@@ -137,32 +137,35 @@ export function TradeHistory({ asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-            <BodyCopyTiny
-              fontFamily="'Roboto Mono', monospace"
+            <Typography
+              component="p"
+              variant="bodyCopyTinyMono"
               color={getColor(row.type)}
               title={row.price}
               m={0}
             >
               {floatToFixed(row.price)}
-            </BodyCopyTiny>
-            <BodyCopyTiny
-              fontFamily="'Roboto Mono', monospace"
+            </Typography>
+            <Typography
+              component="p"
+              variant="bodyCopyTinyMono"
               color="gray.400"
               textAlign="right"
               title={amount.toFixed(asset.decimals)}
               m={0}
             >
               {amount.toFixed(Math.min(3, asset.decimals))}
-            </BodyCopyTiny>
-            <BodyCopyTiny
-              fontFamily="'Roboto Mono', monospace"
+            </Typography>
+            <Typography
+              component="p"
+              variant="bodyCopyTinyMono"
               color="gray.400"
               textAlign="right"
               title={dayjs(row.timestamp).format('lll')}
               m={0}
             >
               {dayjs(row.timestamp).format('HH:mm:ss')}
-            </BodyCopyTiny>
+            </Typography>
           </TradesRow>
         )
       })
@@ -171,27 +174,27 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <HeaderCaps color="gray.500" mb={1}>
+        <Typography variant="headerCaps" color="gray.500" mb={1}>
           {t('trade-history')}
-        </HeaderCaps>
+        </Typography>
         <br />
         <Header>
           <PriceHeader />
-          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+          <Typography variant="bodyCopyTiny" component="p" color="gray.500" textAlign="right">
             {t('amount')}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+          </Typography>
+          <Typography variant="bodyCopyTiny" component="p" color="gray.500" textAlign="right">
             {t('time')}
-          </BodyCopyTiny>
+          </Typography>
         </Header>
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
+              <Typography variant="bodyCopyTiny" component="p" color="gray.600" textAlign="center">
                 {t('no-trades-completed')}
-              </BodyCopyTiny>
+              </Typography>
             )}
           </TradesWrapper>
         </Trades>

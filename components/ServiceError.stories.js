@@ -5,7 +5,7 @@ import { default as Component } from './ServiceError'
 const Container = styled.div`
   width: 320px;
   height: 320px;
-  background: ${({ theme }) => theme.palette.gray['800']};
+  background: ${({ theme }) => theme.colors.gray['800']};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

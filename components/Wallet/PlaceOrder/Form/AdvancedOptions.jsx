@@ -1,6 +1,6 @@
-import { BodyCopyTiny, LabelSm } from 'components/Typography'
+// import { BodyCopyTiny, LabelSm } from 'components/Typography'
 
-import Button from '../../../Button'
+import Button from '@mui/material/Button'
 import { ChevronDown } from 'react-feather'
 import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '../../../../store/use-user-state'
+import Typography from '@mui/material/Typography'
 
 export const ExpandToggle = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ export const ArrowContainer = styled.div`
   transition: transform 200ms ease 0s;
 
   svg {
-    color: ${({ theme }) => theme.palette.gray['500']};
+    color: ${({ theme }) => theme.colors.gray['500']};
     width: 1rem;
     height: 1rem;
     transition: transform 200ms ease-in-out;
@@ -56,7 +57,7 @@ export const Container = styled.div`
       outline: 0;
       box-shadow: ${({ theme, type }) => {
         const color = type === 'buy' ? 'green' : 'red'
-        return `0 0 0 0.2rem ${theme.palette.focus[color]}`
+        return `0 0 0 0.2rem ${theme.colors.focus[color]}`
       }};
     }
   }
@@ -104,10 +105,10 @@ export const OptionsButton = styled(Button)`
   text-align: center;
   text-transform: none;
   margin-right: 1px;
-  background-color: ${({ theme }) => theme.palette.gray['700']};
+  background-color: ${({ theme }) => theme.colors.gray['700']};
 
   &:hover {
-    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
+    background-color: ${({ theme }) => lighten(0.05, theme.colors.gray['700'])};
   }
 
   &:nth-child(2) {
@@ -125,21 +126,21 @@ export const OptionsButton = styled(Button)`
     ${OptionsInput}:checked + & {
       background-color: ${({ theme, type }) => {
         const color = type === 'buy' ? 'green' : 'red'
-        return theme.palette[color]['500']
+        return theme.colors[color]['500']
       }};
     }
 
     ${OptionsInput}:checked + &:hover {
       background-color: ${({ theme, type }) => {
         const color = type === 'buy' ? 'green' : 'red'
-        return lighten(0.05, theme.palette[color]['500'])
+        return lighten(0.05, theme.colors[color]['500'])
       }};
     }
 
     ${OptionsInput}:focus + & {
       box-shadow: ${({ theme, type }) => {
         const color = type === 'buy' ? 'green' : 'red'
-        return `0 0 0 0.2rem ${theme.palette.focus[color]}`
+        return `0 0 0 0.2rem ${theme.colors.focus[color]}`
       }};
     }
 
@@ -208,7 +209,9 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
         onKeyDown={handleKeyDown}
         tabIndex="0"
       >
-        <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>
+        <Typography variant="labelSm" color="gray.500">
+          {t('advanced-options')}
+        </Typography>
         <ArrowContainer>
           <ChevronDown />
         </ArrowContainer>
@@ -264,9 +267,9 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 onChange={handleChange}
               />
             </OptionsWrapper>
-            <BodyCopyTiny color="gray.500" textTransform="none">
+            <Typography variant="bodyCopyTiny" color="gray.500" textTransform="none">
               {renderMessage()}
-            </BodyCopyTiny>
+            </Typography>
 
             <div className="flex flex-row justify-between mt-5 align-middle">
               {/* <span className="text-sm font-semibold py-1">{t("order-size-filtering")}:</span> */}

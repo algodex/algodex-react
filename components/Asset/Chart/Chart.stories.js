@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.palette.gray[900]};
+  background-color: ${({ theme }) => theme.colors.gray[900]};
   display: flex;
   width: 100vw;
   height: 100vh;

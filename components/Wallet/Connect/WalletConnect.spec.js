@@ -33,7 +33,7 @@ describe('Wallet', () => {
       )
 
       expect(getByTestId(CONNECT_BUTTON)).toHaveStyle({
-        backgroundColor: theme.palette.green['500']
+        backgroundColor: theme.colors.green['500']
       })
     })
   })
@@ -72,7 +72,7 @@ describe('Wallet', () => {
       )
 
       expect(getByTestId(CONNECT_BUTTON)).toHaveStyle({
-        backgroundColor: theme.palette.gray['600']
+        backgroundColor: theme.colors.gray['600']
       })
     })
   })

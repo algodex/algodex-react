@@ -16,8 +16,8 @@ export const ICONS = {
     viewBox: '0 0 24 24',
     markup: (
       <g>
-        <polygon fill={theme.palette.gray['600']} points="12,0 4,10 20,10" />
-        <polygon fill={theme.palette.gray['600']} points="12,24 20,14 4,14" />
+        <polygon fill={theme.colors.gray['600']} points="12,0 4,10 20,10" />
+        <polygon fill={theme.colors.gray['600']} points="12,24 20,14 4,14" />
       </g>
     )
   },
@@ -26,8 +26,8 @@ export const ICONS = {
     viewBox: '0 0 24 24',
     markup: (
       <g>
-        <polygon fill={theme.palette.green['500']} points="12,0 4,10 20,10" />
-        <polygon fill={theme.palette.gray['600']} points="12,24 20,14 4,14" />
+        <polygon fill={theme.colors.green['500']} points="12,0 4,10 20,10" />
+        <polygon fill={theme.colors.gray['600']} points="12,24 20,14 4,14" />
       </g>
     )
   },
@@ -36,8 +36,8 @@ export const ICONS = {
     viewBox: '0 0 24 24',
     markup: (
       <g>
-        <polygon fill={theme.palette.gray['600']} points="12,0 4,10 20,10" />
-        <polygon fill={theme.palette.green['500']} points="12,24 20,14 4,14" />
+        <polygon fill={theme.colors.gray['600']} points="12,0 4,10 20,10" />
+        <polygon fill={theme.colors.green['500']} points="12,24 20,14 4,14" />
       </g>
     )
   },
@@ -49,13 +49,13 @@ export const ICONS = {
 }
 
 function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
-  return theme.palette[color][fillGradient]
+  return theme.colors[color][fillGradient]
 }
 function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
 function getColor({ theme, color = 'gray', gradient = 900 }) {
-  return theme.palette[color][gradient]
+  return theme.colors[color][gradient]
 }
 
 const Svg = styled.svg`

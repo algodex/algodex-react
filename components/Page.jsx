@@ -17,8 +17,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
-  max-height: 100%;
+  overflow: scroll;
+  max-height: 100vh;
   height: 100%;
 `
 
