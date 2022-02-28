@@ -1,6 +1,6 @@
 import React from 'react'
 import { AssetsTable, AssetCoinCell } from './AssetsTable'
-import { render, waitFor } from 'test/test-utils'
+import { render, waitFor } from '@/test/test-utils'
 import { cleanup } from '@testing-library/react'
 
 const ASSETS_ROW = 'asset-coin-cell'

@@ -1,6 +1,6 @@
 import AlertIcon from './AlertIcon'
 import { matchers } from '@emotion/jest'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 
 expect.extend(matchers)
 describe('Icon Button', () => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { BannerWrapper } from './styles.css'
 import Link from 'next/link'
-import { Container } from 'components/About/styles.css'
+import { Container } from '@/components/About/styles.css'
 
 export const AboutBanner = () => {
   return (

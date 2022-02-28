@@ -1,4 +1,4 @@
-import { fireEvent, render } from 'test/test-utils'
+import { fireEvent, render } from '@/test/test-utils'
 
 import LanguageSelection from './LanguageSelection'
 import { matchers } from '@emotion/jest'

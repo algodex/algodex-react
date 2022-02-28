@@ -15,7 +15,7 @@ import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import useStore from 'store/use-store'
+import useStore from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import Typography from '@mui/material/Typography'
 
@@ -92,7 +92,14 @@ export function FirstOrderMsg(props) {
             <SvgImage use="walletArrow" h={4} color="gray.600" />
           </Arrow>
         )}
-        <Typography variant="headerSm" component="h3" color="gray.100" m={0} mb={16}>
+        <Typography
+          data-testid="order-book-first-order"
+          variant="headerSm"
+          component="h3"
+          color="gray.100"
+          m={0}
+          mb={16}
+        >
           Place the first limit order for {asset.name}
           {` `}
           <PairSlash>{`/`}</PairSlash>ALGO

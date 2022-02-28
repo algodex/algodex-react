@@ -1,7 +1,7 @@
 import { Info } from 'react-feather'
 import Tooltip from './Tooltip'
 import { matchers } from '@emotion/jest'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import styled from '@emotion/styled'
 
 const IconButton = styled.button`

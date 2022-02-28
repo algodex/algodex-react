@@ -1,4 +1,4 @@
-import { floatToFixed } from 'services/display'
+import { floatToFixed } from '@/services/display'
 
 describe('floatToFixed', () => {
   it(`should return a number rounded to the provided number of decimal points`, () => {

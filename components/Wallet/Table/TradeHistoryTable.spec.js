@@ -1,6 +1,6 @@
 import React from 'react'
 import { TradeHistoryTable } from './TradeHistoryTable'
-import { render, waitFor } from 'test/test-utils'
+import { render, waitFor } from '@/test/test-utils'
 
 const ORDER_HISTORY_ROW = 'default-cell'
 

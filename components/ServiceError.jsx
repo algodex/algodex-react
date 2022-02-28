@@ -1,4 +1,4 @@
-import { AlertIcon } from 'components/Icon'
+import { AlertIcon } from '@/components/Icon'
 import PropTypes from 'prop-types'
 import { parseThemeColor } from 'theme'
 import styled from '@emotion/styled'

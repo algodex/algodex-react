@@ -1,7 +1,8 @@
 import { OrderBookPrice as OrderBookPriceView } from './OrderBook'
 import { OrderBook as OrderBookView } from './OrderBook'
+import { FirstOrderMsg } from './OrderBook'
 import React from 'react'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 
 const SELL_ROW = 'order-book-sell-row'
 const BUY_ROW = 'order-book-buy-row'
@@ -89,5 +90,14 @@ describe('Order Book', () => {
   it('should reflect price decrease', () => {
     const { queryByTestId } = render(<OrderBookPriceView asset={decreaseInPrice} />)
     expect(queryByTestId('arrow-down')).not.toBeNull()
+  })
+
+  it('should render a first order message', () => {
+    const { queryByTestId } = render(<FirstOrderMsg asset={baseAssetData} isSignedIn={true} />)
+    expect(queryByTestId('order-book-first-order')).not.toBeNull()
+  })
+  it('should render a first order message when signed out', () => {
+    const { queryByTestId } = render(<FirstOrderMsg asset={baseAssetData} isSignedIn={false} />)
+    expect(queryByTestId('order-book-first-order')).not.toBeNull()
   })
 })

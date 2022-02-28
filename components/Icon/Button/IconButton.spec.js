@@ -1,7 +1,7 @@
 import { default as IconButton, getColor, getFillColor, getSize } from './IconButton'
 
 import { matchers } from '@emotion/jest'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import theme from '../../../theme'
 
 expect.extend(matchers)

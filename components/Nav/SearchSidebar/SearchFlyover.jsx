@@ -1,4 +1,4 @@
-import Icon from 'components/Icon'
+import Icon from '@/components/Icon'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'

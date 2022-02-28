@@ -1,7 +1,7 @@
 import { AssetInfo } from './Asset'
 import React from 'react'
 import { AssetData as asset } from '../../spec/Asset'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 
 const ASA_NAME = 'asset-info-asa-name'
 const ASA_DESC = 'asset-info-desc'

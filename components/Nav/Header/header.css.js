@@ -1,5 +1,3 @@
-import { color, fontSize } from 'styled-system'
-
 import ReactCountryFlag from 'react-country-flag'
 import { ReactSVG } from 'react-svg'
 import styled from '@emotion/styled'
@@ -78,8 +76,6 @@ export const NavTextLg = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.colors.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -125,8 +121,6 @@ export const NavTextSm = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme, isActive }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
   font-weight: 600;
-  ${fontSize}
-  ${color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -170,8 +164,6 @@ export const NavIcon = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.colors.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -228,7 +220,6 @@ export const MenuButton = styled.button`
   padding: 0.5rem 1rem;
   transition: color 0.1s ease-in;
   cursor: pointer;
-  ${fontSize}
 
   &:hover {
     color: ${({ theme }) => theme.colors.gray[100]};

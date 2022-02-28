@@ -1,5 +1,5 @@
 import { matchers } from '@emotion/jest'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import { AssetId } from './Typography'
 import { AssetName } from './Typography'
 

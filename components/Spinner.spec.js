@@ -1,5 +1,5 @@
 import { matchers } from '@emotion/jest'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import Spinner from './Spinner'
 
 expect.extend(matchers)

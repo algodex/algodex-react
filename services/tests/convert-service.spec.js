@@ -4,7 +4,7 @@ import {
   calculateAsaBuyAmount,
   convertToAsaUnits,
   convertFromAsaUnits
-} from 'services/convert'
+} from '@/services/convert'
 
 describe('convertFromBaseUnits', () => {
   it(`should convert microalgos to algos`, () => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from 'components/About/styles.css'
+import { Container } from '@/components/About/styles.css'
 import Link from 'next/link'
 
 export const Footer = () => {

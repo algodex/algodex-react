@@ -3,12 +3,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { default as NavSearchTable } from './SearchTable'
 // import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
-import { default as SearchInput } from 'components/Input/SearchInput'
+import { default as SearchInput } from '@/components/Input/SearchInput'
 import { Section } from '@/components/Layout/Section'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
-import useUserStore from 'store/use-user-state'
-import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
+import useUserStore from '@/store/use-user-state'
+import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 
 // export const Section = styled.section`
 //   height: inherit;

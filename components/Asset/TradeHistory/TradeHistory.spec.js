@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import { TradeHistory } from './TradeHistory'
 
 const HISTORY_ROW = 'trade-history-row'

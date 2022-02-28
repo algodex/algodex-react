@@ -11,14 +11,14 @@ import {
   NetworkDropdownOption
 } from './header.css'
 
-import NavActiveLink from 'components/Nav/ActiveLink'
-import Hamburger from 'components/Button/Hamburger'
-import LanguageSelection from 'components/Nav/LanguageSelection'
+import NavActiveLink from '@/components/Nav/ActiveLink'
+import Hamburger from '@/components/Button/Hamburger'
+import LanguageSelection from '@/components/Nav/LanguageSelection'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
+import useUserStore from '@/store/use-user-state'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK

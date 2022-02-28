@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import { WalletView } from './WalletConnect'
 import theme from 'theme'
 

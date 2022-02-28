@@ -1,6 +1,6 @@
 import React from 'react'
 import { OpenOrdersTable } from './OpenOrdersTable'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 
 const OPEN_ORDER_ROW = 'cancel-order-button'
 const wallet = {

@@ -2,7 +2,7 @@ import { mdiDiscord, mdiReddit, mdiSend, mdiTwitter } from '@mdi/js'
 
 import Icon from '@mdi/react'
 import Link from 'next/link'
-import Modal from 'components/Modal'
+import Modal from '@/components/Modal'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 

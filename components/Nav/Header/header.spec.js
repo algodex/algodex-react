@@ -1,6 +1,6 @@
 import React from 'react'
 import singletonRouter from 'next/router'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import { Header } from './index'
 import { matchers } from '@emotion/jest'
 import { MobileNavigation } from './header.css'

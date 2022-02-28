@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { HowItWorksWrapper, Container, Accordion } from './styles.css'
 import Link from 'next/link'
-import Modal from 'components/Modal'
+import Modal from '@/components/Modal'
 import { Icon } from '@iconify/react'
 
 export const AboutFAQ = () => {

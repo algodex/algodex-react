@@ -206,7 +206,7 @@ import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import { useEvent } from 'hooks/useEvents'
+import { useEvent } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useStore, useStorePersisted } from '@/store/use-store'
 import useDebounce from '@/hooks/useDebounce'
@@ -312,7 +312,7 @@ function MainLayout({ asset, children }) {
           <ul>
             <li>
               <MobileMenuButton
-                characterLength={t('mobilefooter-CHART').length}
+                // characterLength={t('mobilefooter-CHART').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.CHART)}
               >
@@ -321,7 +321,7 @@ function MainLayout({ asset, children }) {
             </li>
             <li>
               <MobileMenuButton
-                characterLength={t('mobilefooter-BOOK').length}
+                // characterLength={t('mobilefooter-BOOK').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.BOOK)}
               >
@@ -330,7 +330,7 @@ function MainLayout({ asset, children }) {
             </li>
             <li>
               <MobileMenuButton
-                characterLength={t('mobilefooter-TRADE').length}
+                // characterLength={t('mobilefooter-TRADE').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.TRADE)}
               >
@@ -339,7 +339,7 @@ function MainLayout({ asset, children }) {
             </li>
             <li>
               <MobileMenuButton
-                characterLength={t('mobilefooter-ORDERS').length}
+                // characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
                 onClick={() => setActiveMobile(TABS.ORDERS)}
               >
@@ -357,7 +357,7 @@ function MainLayout({ asset, children }) {
             <li>
               <MobileMenuButton
                 type="button"
-                characterLength={t('mobilefooter-WALLET').length}
+                // characterLength={t('mobilefooter-WALLET').length}
                 onClick={() => setActiveMobile(TABS.WALLET)}
               >
                 {t('mobilefooter-WALLET')}
