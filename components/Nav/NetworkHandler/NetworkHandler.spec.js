@@ -1,4 +1,4 @@
-import { fireEvent, render } from 'test/test-utils'
+import { fireEvent, render } from '@/test/test-utils'
 
 import NetworkBanner from './NetworkBanner'
 import NotificationModal from './NotificationModal'
