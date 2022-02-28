@@ -1,14 +1,12 @@
-module.exports = {
-  globalSetup: './jest.setup.js',
-  setupFilesAfterEnv: ['./jest.setup.after-env.js'],
-  moduleDirectories: ['node_modules', '<rootDir>'],
-  testEnvironment: 'jsdom',
+const config = {
+  coverageProvider: 'v8',
+  setupFilesAfterEnv: ['./jest.setup.js'],
+  testEnvironment: 'jest-environment-jsdom',
   collectCoverage: true,
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 20
+      branches: 50
     }
   },
   collectCoverageFrom: [
@@ -24,6 +22,7 @@ module.exports = {
     '!**/components/**/*spec.{js,jsx}'
   ],
   coverageReporters: ['lcov', 'text', 'json-summary'],
+  moduleFileExtensions: ['js', 'jsx', 'json'],
   moduleNameMapper: {
     '^@/components(.*)$': '<rootDir>/components$1',
     '^@/lib(.*)$': '<rootDir>/lib$1',
@@ -31,7 +30,9 @@ module.exports = {
     '^@/services(.*)$': '<rootDir>/services$1',
     '^@/store(.*)$': '<rootDir>/store$1',
     '^@/utils(.*)$': '<rootDir>/utils$1',
+    '^@/test(.*)$': '<rootDir>/test$1',
+    '^i18n.json$': '<rootDir>/i18n.json',
     '^theme(.*)$': '<rootDir>/theme$1'
-  },
-  transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)']
+  }
 }
+module.exports = config

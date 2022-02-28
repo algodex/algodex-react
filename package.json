@@ -54,7 +54,7 @@
     "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "moment": "^2.29.1",
-    "next": "^12.0.10",
+    "next": "^12.1.0",
     "next-pwa": "^5.4.0",
     "next-translate": "^1.0.7",
     "polished": "^4.1.3",
@@ -97,6 +97,7 @@
     "@testing-library/react": "^12.1.2",
     "@typescript-eslint/experimental-utils": "^5.10.0",
     "autoprefixer": "^10.4.0",
+    "babel-jest": "^26.6.3",
     "chromatic": "^6.4.3",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
@@ -128,23 +129,5 @@
     "storybook-addon-next-router": "^3.0.5",
     "tailwindcss": "^3.0.18",
     "webpack": "^5.65.0"
-  },
-  "nyc": {
-    "report-dir": "coverage/integration",
-    "reporter": [
-      "text",
-      "json",
-      "lcov"
-    ],
-    "all": true,
-    "include": [
-      "components/**/*.js"
-    ],
-    "exclude": [
-      "**/*.spec.js",
-      "**/spec.js",
-      "**/*.stories.js",
-      "**/stories.js"
-    ]
   }
 }
