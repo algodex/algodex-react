@@ -76,7 +76,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
     })
   }
   return (
-    <Modal isVisible={isModalActive}>
+    <Modal data-testid="notification-modal-wrapper" isVisible={isModalActive}>
       <ModalContainer
         className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg xs:p-4 md:p-8"
         style={{ transform: 'translate(-50%, -50%)' }}
