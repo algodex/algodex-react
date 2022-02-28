@@ -6,7 +6,7 @@ const config = {
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      branches: 50
+      branches: 45
     }
   },
   collectCoverageFrom: [
@@ -15,8 +15,8 @@ const config = {
     // '**/utils/**/*.{js,jsx}',
     // '**/services/**/*.{js,jsx}',
     '!**/components/**/index.{js,jsx}',
-    '!**/components/Input/*.{js,jsx}',
-    '!**/components/Pages/*.{js,jsx}',
+    '!**/components/Input/**/*.{js,jsx}',
+    '!**/components/Pages/**/*.{js,jsx}',
     '!**/components/**/*.stories.{js,jsx}',
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'

@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
-import WalletService from 'services/wallet'
+import WalletService from '@/services/wallet'
 import useStore, { useStorePersisted } from 'store/use-store'
-import useMyAlgo from 'hooks/use-my-algo'
+import useMyAlgo from '@/hooks/use-my-algo'
 
 function useWallets() {
   const router = useRouter()
