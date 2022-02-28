@@ -14,6 +14,9 @@ const userState = (set, get) => ({
   assets: {},
 
   activeNetwork: getActiveNetwork(),
+  setActiveNetwork: (network) => {
+    set({ activeNetwork: network })
+  },
 
   /**
    * Ribbon notification for Mainnet
