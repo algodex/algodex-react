@@ -10,7 +10,6 @@
 [![unit-lines](./assets/badge-lines.svg)](./components)
 [![unit-statements](./assets/badge-statements.svg)](./components)
 
-
 [![Sauce Test Status](https://app.saucelabs.com/browser-matrix/algodex.svg?auth=a575d8742c484fe2f6006e9bf6c1022c)](https://app.saucelabs.com/u/algodex)
 
 Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). Note that `development` is the default branch.

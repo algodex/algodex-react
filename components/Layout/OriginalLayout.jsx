@@ -239,7 +239,7 @@ function useMobileDetect() {
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
 
   const isSignedIn = useStore((state) => state.isSignedIn)
   const wallets = useStorePersisted((state) => state.wallets)

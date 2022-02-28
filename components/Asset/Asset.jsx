@@ -7,7 +7,6 @@ import SvgImage from '@/components/SvgImage'
 import { convertFromBaseUnits } from '@/services/convert'
 import { floatToFixed } from '@/services/display'
 import styled from '@emotion/styled'
-import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
@@ -107,7 +106,7 @@ const AlgoExplorerLink = styled.div`
   }
 `
 export function AssetInfo({ asset }) {
-  console.log(`AssetInfo(`, arguments[0], `)`)
+  // console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
@@ -183,13 +182,7 @@ export function AssetInfo({ asset }) {
             <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               {t('description')}
             </Typography>
-            <Typography
-              variant="bodyCopy"
-              data-testid="asset-info-desc"
-              component="dd"
-              fontFamily={theme.fontFamilies.heading}
-              fontWeight="400"
-            >
+            <Typography variant="bodyCopy" data-testid="asset-info-desc" component="dd">
               {description}
             </Typography>
           </InfoItem>
@@ -197,13 +190,7 @@ export function AssetInfo({ asset }) {
             <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               {t('circulating-supply')}
             </Typography>
-            <Typography
-              variant="bodyCopy"
-              data-testid="asset-info-circ-supply"
-              component="dd"
-              fontFamily={theme.fontFamilies.monospace}
-              fontSize="1.25rem"
-            >
+            <Typography variant="bodyCopy" data-testid="asset-info-circ-supply" component="dd">
               {asset.circulating || 'NA'}
             </Typography>
           </InfoItem>
@@ -211,13 +198,7 @@ export function AssetInfo({ asset }) {
             <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               {t('total-supply')}
             </Typography>
-            <Typography
-              variant="bodyCopy"
-              data-testid="asset-info-total-supply"
-              component="dd"
-              fontFamily={theme.fontFamilies.monospace}
-              fontSize="1.25rem"
-            >
+            <Typography variant="bodyCopy" data-testid="asset-info-total-supply" component="dd">
               {asset.total}
             </Typography>
           </InfoItem>
@@ -225,13 +206,7 @@ export function AssetInfo({ asset }) {
             <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
               ASA ID
             </Typography>
-            <Typography
-              variant="bodyCopy"
-              data-testid="asset-info-asa-id"
-              component="dd"
-              fontFamily={theme.fontFamilies.monospace}
-              fontSize="1.25rem"
-            >
+            <Typography variant="bodyCopy" data-testid="asset-info-asa-id" component="dd">
               {asset.id}
             </Typography>
           </InfoItem>
@@ -250,13 +225,7 @@ export function AssetInfo({ asset }) {
                 <Typography variant="bodyCopyTiny" component="dt" color="gray.500">
                   Price
                 </Typography>
-                <Typography
-                  variant="bodyCopy"
-                  data-testid="asset-info-price"
-                  component="dd"
-                  fontFamily={theme.fontFamilies.monospace}
-                  fontSize="1.25rem"
-                >
+                <Typography variant="bodyCopyMono" data-testid="asset-info-price" component="dd">
                   {floatToFixed(
                     asset.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
@@ -270,11 +239,9 @@ export function AssetInfo({ asset }) {
                   Change
                 </Typography>
                 <Typography
-                  variant="bodyCopy"
+                  variant="bodyCopyMono"
                   data-testid="asset-info-pct-change"
                   component="dd"
-                  fontFamily={theme.fontFamilies.monospace}
-                  fontSize="1.25rem"
                 >
                   {asset?.price_info.price24Change}%
                 </Typography>

@@ -62,7 +62,7 @@ ServiceError.propTypes = {
   color: PropTypes.string,
   message: PropTypes.string,
   flex: PropTypes.bool,
-  Icon: PropTypes.element
+  Icon: PropTypes.elementType
 }
 
 ServiceError.defaultProps = {

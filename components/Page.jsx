@@ -106,6 +106,6 @@ Page.propTypes = {
   description: PropTypes.string,
   staticExplorerAsset: PropTypes.object,
   noFollow: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.func
 }
 export default Page

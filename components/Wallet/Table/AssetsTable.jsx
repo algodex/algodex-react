@@ -49,7 +49,7 @@ export function AssetCoinCell(props) {
 AssetCoinCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 
 export function AssetsTable({ assets }) {
-  console.log(`AssetsTable(`, arguments[0], `)`)
+  //console.log(`AssetsTable(`, arguments[0], `)`)
 
   const { t } = useTranslation('orders')
 

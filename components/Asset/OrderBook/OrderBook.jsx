@@ -463,9 +463,9 @@ OrderBook.propTypes = {
       })
     )
   }),
-  components: {
+  components: PropTypes.shape({
     PriceDisplay: PropTypes.elementType.isRequired
-  }
+  }).isRequired
 }
 
 OrderBook.defaultProps = {

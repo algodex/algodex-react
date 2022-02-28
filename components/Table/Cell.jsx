@@ -2,8 +2,6 @@ import { BrightGraySpan } from '@/components/Typography'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useCallback } from 'react'
-import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
 const OrderTypeSpan = styled.span`
@@ -20,16 +18,10 @@ const OrderTypeSpan = styled.span`
  * @constructor
  */
 export const AssetNameCell = ({ value, row }) => {
-  const dispatcher = useEventDispatch()
   const assetId = row?.original?.asset?.id || row?.original?.id
-  const onClick = useCallback(() => {
-    dispatcher('clicked', 'asset')
-  }, [dispatcher])
   return (
     <Link href={`/trade/${assetId}`}>
-      <button onClick={onClick}>
-        <BrightGraySpan>{value}</BrightGraySpan>
-      </button>
+      <BrightGraySpan data-testid="cell-item">{value}</BrightGraySpan>
     </Link>
   )
 }

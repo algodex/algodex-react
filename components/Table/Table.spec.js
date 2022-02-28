@@ -1,9 +1,7 @@
-import { fireEvent, render } from '@/test/test-utils'
+import { fireEvent, render, waitFor } from '@/test/test-utils'
 
 import Table from './Table'
-import { matchers } from '@emotion/jest'
 
-expect.extend(matchers)
 const columns = [
   {
     Header: () => {
@@ -51,57 +49,55 @@ const searchResultData = [
   }
 ]
 
-describe('Table Component', () => {
-  it('Should render the table properly (header and body)', () => {
-    const { queryByTestId } = render(
-      <Table
-        flyover={true}
-        components={{
-          Flyover: () => <div>Flyout component</div>
-        }}
-        initialState={{}}
-        onStateChange={(tableState) => console.log(tableState)}
-        getRowProps={getRowProps}
-        columns={columns}
-        data={searchResultData}
-      />
-    )
-    expect(queryByTestId('header-row')).not.toBeNull()
-    expect(queryByTestId('row-item')).not.toBeNull()
-  })
-  it('Should not render table body when there are no data', () => {
-    const { queryByTestId } = render(
-      <Table
-        flyover={true}
-        components={{
-          Flyover: () => <div>Flyout component</div>
-        }}
-        initialState={{}}
-        onStateChange={(tableState) => console.log(tableState)}
-        getRowProps={getRowProps}
-        columns={columns}
-        data={[]}
-      />
-    )
-    expect(queryByTestId('header-row')).not.toBeNull()
-    expect(queryByTestId('row-item')).toBeNull()
-  })
+it('Should render the table properly (header and body)', async () => {
+  const { queryByTestId } = render(
+    <Table
+      flyover={true}
+      components={{
+        Flyover: () => <div>Flyout component</div>
+      }}
+      initialState={{}}
+      onStateChange={() => {}}
+      getRowProps={getRowProps}
+      columns={columns}
+      data={searchResultData}
+    />
+  )
+  expect(await waitFor(() => queryByTestId('header-row'))).not.toBeNull()
+  expect(await waitFor(() => queryByTestId('row-item'))).not.toBeNull()
+})
+it('Should not render table body when there are no data', async () => {
+  const { queryByTestId } = render(
+    <Table
+      flyover={true}
+      components={{
+        Flyover: () => <div>Flyout component</div>
+      }}
+      initialState={{}}
+      onStateChange={() => {}}
+      getRowProps={getRowProps}
+      columns={columns}
+      data={[]}
+    />
+  )
+  expect(await waitFor(() => queryByTestId('header-row'))).not.toBeNull()
+  expect(await waitFor(() => queryByTestId('row-item'))).toBeNull()
+})
 
-  it('Should update Item Flyout Info with row property on mouse over', () => {
-    const { getByTestId, getByText } = render(
-      <Table
-        flyover={true}
-        components={{
-          Flyover: () => <div>Flyout component</div>
-        }}
-        initialState={{}}
-        onStateChange={(tableState) => console.log(tableState)}
-        getRowProps={getRowProps}
-        columns={columns}
-        data={searchResultData}
-      />
-    )
-    fireEvent.mouseEnter(getByTestId('row-item'))
-    expect(getByText(/Flyout component/i)).toBeVisible()
-  })
+it('Should update Item Flyout Info with row property on mouse over', async () => {
+  const { getByTestId, getByText } = render(
+    <Table
+      flyover={true}
+      components={{
+        Flyover: () => <div>Flyout component</div>
+      }}
+      initialState={{}}
+      onStateChange={() => {}}
+      getRowProps={getRowProps}
+      columns={columns}
+      data={searchResultData}
+    />
+  )
+  fireEvent.mouseEnter(getByTestId('row-item'))
+  expect(await waitFor(() => getByText(/Flyout component/i))).toBeVisible()
 })
