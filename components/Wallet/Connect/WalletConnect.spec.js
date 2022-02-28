@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@/test/test-utils'
+import { render, waitFor } from '@/test/test-utils'
 import { WalletView } from './WalletConnect'
 import theme from 'theme'
 
@@ -7,7 +7,7 @@ const CONNECT_BUTTON = 'connect-wallet-btn'
 
 describe('Wallet', () => {
   describe('if no wallets are connected', () => {
-    it('should show connect wallet message', () => {
+    it('should show connect wallet message', async () => {
       const { getByText } = render(
         <WalletView
           wallets={[]}
@@ -17,8 +17,8 @@ describe('Wallet', () => {
           onSetActiveWallet={() => null}
         />
       )
-
-      expect(getByText(/Connect Wallet/i)).toBeVisible()
+      const result = await waitFor(() => getByText(/Connect Wallet/i))
+      expect(result).toBeVisible()
     })
 
     it('should show primary connect button', () => {

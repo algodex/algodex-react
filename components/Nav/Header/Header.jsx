@@ -1,17 +1,5 @@
-import {
-  Container,
-  IconLogo,
-  InlineLogo,
-  MobileNavContainer,
-  MobileNavigation,
-  NavTextLg,
-  NavTextSm,
-  Navigation,
-  NetworkDropdown,
-  NetworkDropdownOption
-} from './header.css'
-
 import NavActiveLink from '@/components/Nav/ActiveLink'
+import { NavTextLg, NavTextSm } from '@/components/Nav/Typography'
 import Hamburger from '@/components/Button/Hamburger'
 import LanguageSelection from '@/components/Nav/LanguageSelection'
 import Link from 'next/link'
@@ -19,11 +7,102 @@ import PropTypes from 'prop-types'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
+import styled from '@emotion/styled'
+import { ReactSVG } from 'react-svg'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
+
+const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray[800]};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
+  padding: 1rem;
+  margin: 0;
+  // display: none;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  z-index: 99;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    padding: 2rem;
+  }
+`
+
+const MobileNavContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 30%;
+  margin: auto;
+
+  @media (min-width: 768px) {
+    height: 15%;
+  }
+`
+
+const MobileNavigation = styled.nav`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  top: 103%;
+  left: 0;
+  height: calc(100vh - 65.16px);
+  flex: 1 1 0%;
+  position: absolute;
+  width: 100%;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  pointer-events: ${({ isOpen }) => (isOpen ? 'all' : 'none')};
+  background-color: ${({ theme }) => theme.colors.gray[800]};
+  z-index: 10;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`
+const Navigation = styled.nav`
+  display: flex;
+  justify-content: flex-end;
+  width: 75%;
+  align-items: center;
+`
+
+const InlineLogo = styled(ReactSVG)`
+  height: auto;
+  width: 10rem;
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+  }
+`
+const IconLogo = styled(ReactSVG)`
+  height: auto;
+  width: 1.7rem;
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`
+
+const NetworkDropdown = styled.select`
+  background: unset;
+  border: solid 2px
+    ${({ theme, value }) =>
+      value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+  color: ${({ theme, value }) =>
+    value == 'mainnet' ? theme.colors.blue['500'] : theme.colors.green['500']};
+  border-radius: 3px;
+  padding: 0.3rem 0.5rem;
+`
+
+const NetworkDropdownOption = styled.option`
+  color: ${({ enableLinks }) => (enableLinks ? 'black' : '#AAA')};
+`
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)

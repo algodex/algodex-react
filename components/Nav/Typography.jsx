@@ -1,4 +1,3 @@
-import ReactCountryFlag from 'react-country-flag'
 import styled from '@emotion/styled'
 
 export const NavTextLg = styled.span`
@@ -86,62 +85,5 @@ export const NavTextSm = styled.span`
   @media (min-width: 1024px) {
     color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[100] : theme.colors.gray[500])};
     display: none;
-  }
-`
-export const Flag = styled(ReactCountryFlag)`
-  margin-left: 0.5rem;
-  width: 1rem;
-  height: auto;
-`
-
-export const LanguageButton = styled.div`
-  @media (max-width: 1024px) {
-    background: ${({ theme }) => theme.colors.gray['700']};
-    padding: 0.3rem 0.6rem;
-    border-radius: 3px;
-  }
-`
-
-export const LanguageDropdownContainerMob = styled.div`
-  position: absolute;
-  top: 45px;
-  right: 54px;
-  z-index: 40;
-  background: ${({ theme }) => theme.colors.gray['700']};
-  padding: 0.3rem 0.5rem;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  height: 35vh;
-  overflow-x: scroll;
-`
-
-export const LanguagesContainer = styled.ul`
-  width: 100px;
-  &:hover,
-  &:focus-within {
-    ul {
-      position: absolute;
-      display: block;
-      top: 20px;
-      width: 100px;
-    }
-  }
-`
-
-export const LanguageDropDown = styled.ul`
-  background-color: ${({ theme }) => theme.colors.gray[900]};
-  display: none;
-  max-height: 500px;
-  overflow: scroll;
-`
-
-export const LanguageItem = styled.li`
-  display: block;
-  height: 50px;
-
-  span {
-    line-height: 50px;
   }
 `

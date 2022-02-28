@@ -160,12 +160,12 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button data-testid="asset-info-back-btn" onClick={onClick}>
-            <ButtonText type="button">
+          <div data-testid="asset-info-back-btn">
+            <ButtonText type="button" onClick={onClick}>
               <ArrowLeft />
               <div>{t('back-to-chart')}</div>
             </ButtonText>
-          </button>
+          </div>
         ) : null}
         <HeaderContainer>
           <Typography

@@ -1,19 +1,69 @@
-import {
-  Flag,
-  LanguageButton,
-  LanguageDropDown,
-  LanguageDropdownContainerMob,
-  LanguageItem,
-  LanguagesContainer,
-  NavTextLg,
-  NavTextSm
-} from './language-selection.css'
-
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import i18n from 'i18n.json'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import styled from '@emotion/styled'
+import ReactCountryFlag from 'react-country-flag'
+import { NavTextSm, NavTextLg } from '@/components/Nav/Typography'
+
+const Flag = styled(ReactCountryFlag)`
+  margin-left: 0.5rem;
+  width: 1rem;
+  height: auto;
+`
+
+const LanguageButton = styled.div`
+  @media (max-width: 1024px) {
+    background: ${({ theme }) => theme.colors.gray['700']};
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+  }
+`
+
+const LanguageDropdownContainerMob = styled.div`
+  position: absolute;
+  top: 45px;
+  right: 54px;
+  z-index: 40;
+  background: ${({ theme }) => theme.colors.gray['700']};
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 35vh;
+  overflow-x: scroll;
+`
+
+const LanguagesContainer = styled.ul`
+  width: 100px;
+  &:hover,
+  &:focus-within {
+    ul {
+      position: absolute;
+      display: block;
+      top: 20px;
+      width: 100px;
+    }
+  }
+`
+
+const LanguageDropDown = styled.ul`
+  background-color: ${({ theme }) => theme.colors.gray[900]};
+  display: none;
+  max-height: 500px;
+  overflow: scroll;
+`
+
+const LanguageItem = styled.li`
+  display: block;
+  height: 50px;
+
+  span {
+    line-height: 50px;
+  }
+`
 
 // import useTranslation from 'next-translate/useTranslation'
 
