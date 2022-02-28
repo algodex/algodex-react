@@ -85,7 +85,7 @@ const Page = ({
   }, [explorerAsset, addAsset, data])
 
   return (
-    <Container>
+    <Container data-testid="page-layout">
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
