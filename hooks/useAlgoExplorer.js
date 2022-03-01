@@ -24,7 +24,7 @@ export const useExplorerAssetInfo = ({ asset, options }) => {
     () => fetchExplorerAssetInfo(id),
     options
   )
-  console.log(data)
+  //console.log(data)
   useEffect(() => {
     let mounted = true
     if (mounted) {

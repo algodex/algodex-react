@@ -206,7 +206,7 @@ function PlaceOrderView(props) {
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
-    console.log('activeWallet', { activeWallet })
+    //console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))
       toast.error('Please fund your wallet with more ALGO before placing orders!')
