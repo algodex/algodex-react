@@ -6,7 +6,7 @@ import { ChevronDown } from 'react-feather'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
-import Icon from 'components/icon'
+import Icon from 'components/Icon'
 
 import {
   Container,
