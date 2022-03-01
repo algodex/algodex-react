@@ -30,7 +30,7 @@ function PlaceOrder({ asset }) {
             {t('place-order')}
           </HeaderCaps>
         </Header>
-        <BodyCopy color="gray.500" textAlign="center" m={16}>
+        <BodyCopy data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
           {t('not-signed-in')}
         </BodyCopy>
       </Container>
