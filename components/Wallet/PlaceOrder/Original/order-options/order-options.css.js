@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { lighten } from 'polished'
-import Button from 'components/button'
+import Button from '@/components/Button'
 
 export const ExpandToggle = styled.div`
   display: flex;
