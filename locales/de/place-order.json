@@ -24,5 +24,6 @@
     "max-spend-explanation": "Gesamtbalance einschließlich {{amount}} Algos, welche in der Wallet enthalten sein müssen um Trades zu erlauben.",
     "order-size-filtering": "Filtern der Bestellgröße",
     "less-lag": "Weniger Verzögerung",
-    "better-execution": "Bessere Ausführung"
+    "better-execution": "Bessere Ausführung",
+    "fund-wallet":"Bitte füllen Sie Ihr Guthaben mit mehr ALGO auf, bevor Sie Bestellungen aufgeben!"
 }
