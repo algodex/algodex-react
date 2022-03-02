@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSortBy, useTable } from 'react-table'
+import { useFlexLayout, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import { BrightGraySpan } from '@/components/Typography'
 import Fade from '@mui/material/Fade'
@@ -157,7 +157,9 @@ function Table({
       data,
       initialState
     },
-    useSortBy
+    useSortBy,
+    useFlexLayout,
+    useRowSelect
   )
   useEffect(() => {
     if (!_.isEqual(tableState, initialState)) {
@@ -174,7 +176,7 @@ function Table({
                 <th
                   data-testid="header-item-col"
                   key={headerKey}
-                  className="border-r border-solid border-gray-700"
+                  className="flex items-center border-r border-solid border-gray-700"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
