@@ -1,6 +1,21 @@
+import { useEffect, useRef, useState } from 'react'
+import { useStore, useStorePersisted } from '@/store/use-store'
+
+import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
-import styled from '@emotion/styled'
+import OrderBook from '@/components/Asset/OrderBook'
+import Orders from '@/components/Wallet/WalletTabs'
+import PlaceOrder from '@/components/Wallet/PlaceOrder'
+import PropTypes from 'prop-types'
+import Spinner from '@/components/Spinner'
+import TradeHistory from '@/components/Asset/TradeHistory'
+import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import styled from '@emotion/styled'
+import useDebounce from '@/hooks/useDebounce'
+import { useEvent } from 'hooks/useEvents'
+import useTranslation from 'next-translate/useTranslation'
+
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -204,21 +219,6 @@ const MobileMenuButton = styled(Button)`
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
 `
-
-import { useEffect, useRef, useState } from 'react'
-
-import AssetSearch from '@/components/Nav/SearchSidebar'
-import OrderBook from '@/components/Asset/OrderBook'
-import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder'
-import PropTypes from 'prop-types'
-import Spinner from '@/components/Spinner'
-import TradeHistory from '@/components/Asset/TradeHistory'
-import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import { useEvent } from 'hooks/useEvents'
-import useTranslation from 'next-translate/useTranslation'
-import { useStore, useStorePersisted } from '@/store/use-store'
-import useDebounce from '@/hooks/useDebounce'
 
 /**
  * Detect Mobile

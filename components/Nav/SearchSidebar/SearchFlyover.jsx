@@ -1,11 +1,17 @@
 import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/Typography'
-// import { lighten, rgba } from 'polished'
+import { lighten, rgba } from 'polished'
 
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import SvgImage from 'components/SvgImage'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+
+export const InfoPopup = styled.aside`
+  width: ${({ isLarge }) => (isLarge ? '480px' : '360px')};
+  background-color: ${({ theme }) => lighten(0.02, theme.colors.gray['800'])};
+  box-shadow: 3px 3px 3px 3px ${({ theme }) => rgba(theme.colors.gray['900'], 0.25)};
+`
 
 const HeaderContainer = styled.div`
   h3 {
@@ -36,8 +42,8 @@ const InfoItem = styled.div`
 
 const Algos = styled(Icon)`
   position: relative;
-  top: -0.125rem;
-  margin-left: 0.125rem;
+  margin-left: 0.225rem;
+  fill: ${({ theme }) => theme.palette.gray['500']};
 `
 
 export function SearchFlyover(props) {
@@ -76,7 +82,7 @@ export function SearchFlyover(props) {
   }
 
   return (
-    <div className="bg-gray-800 p-4 ml-4 rounded w-96" isLarge={row?.hasBeenOrdered}>
+    <InfoPopup className="bg-gray-800 p-4 ml-4 rounded" isLarge={row?.hasBeenOrdered}>
       {row && (
         <>
           <HeaderContainer>
@@ -97,7 +103,7 @@ export function SearchFlyover(props) {
             {row.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <BodyCopyTiny as="dt" color="gray.500" className="flex items-center">
                     {t('price')} <Algos use="algoLogo" size={0.625} />
                   </BodyCopyTiny>
                   <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
@@ -131,7 +137,7 @@ export function SearchFlyover(props) {
           </InfoList>
         </>
       )}
-    </div>
+    </InfoPopup>
   )
 }
 

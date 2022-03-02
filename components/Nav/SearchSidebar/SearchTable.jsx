@@ -91,6 +91,12 @@ const AssetChange = styled.span`
   }};
 `
 
+const Algos = styled(AlgoIcon)`
+  position: relative;
+  margin-left: 0.225rem;
+  fill: ${({ theme }) => theme.palette.gray['500']};
+`
+
 const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
     if (value === null) {
@@ -167,10 +173,12 @@ export const NavSearchTable = ({
   const AssetPriceCell = useCallback(
     ({ value }) => {
       return (
-        <AssetPrice>
+        <AssetPrice className="font-semibold">
           {value}
           <br />
-          {value !== '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
+          <p className="text-gray-600">
+            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
+          </p>
         </AssetPrice>
       )
     },
@@ -273,7 +281,7 @@ export const NavSearchTable = ({
           return (
             <div className="inline-flex">
               {t('price')}
-              <AlgoIcon className="mt-0.5 ml-1" use="algoLogo" size={0.625} />
+              <Algos className="mt-0.5 ml-1" color="blue" use="algoLogo" size={0.625} />
             </div>
           )
         },
@@ -331,8 +339,6 @@ export const NavSearchTable = ({
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
   assets: PropTypes.array.isRequired,
-  onAssetFocus: PropTypes.func,
-  onAssetLeave: PropTypes.func,
   onAssetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,

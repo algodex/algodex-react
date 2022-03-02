@@ -2,13 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useSortBy, useTable } from 'react-table'
 
 import { BrightGraySpan } from '@/components/Typography'
+import Fade from '@mui/material/Fade'
 import Icon from '@/components/Icon'
 import InfoFlyover from './InfoFlyover'
+import Popper from '@mui/material/Popper'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
-import { usePopperTooltip } from 'react-popper-tooltip'
+
+// import { usePopperTooltip } from 'react-popper-tooltip'
 
 const SortIcon = styled(Icon)`
   position: relative;
@@ -53,13 +56,17 @@ const Container = styled.div`
     th,
     td {
       margin: 0;
-      padding: 0.5rem 0;
+      padding: 0.5rem 0.4rem;
       color: ${({ theme }) => theme.palette.gray['600']};
       font-size: 0.75rem;
       line-height: 1.25;
 
       &:first-child {
         padding-left: 1.125rem;
+        box-sizing: border-box;
+        flex: 45 0 auto;
+        min-width: 45px;
+        width: 45px;
       }
       padding-right: 0.5rem;
     }
@@ -70,7 +77,7 @@ const Container = styled.div`
         th {
           position: sticky;
           top: 0;
-          padding: 0.75rem 0;
+          padding: 0.75rem 0.4rem;
           background-color: ${({ theme }) => theme.palette.gray['800']};
           color: ${({ theme }) => theme.palette.gray['500']};
           text-align: left;
@@ -84,9 +91,6 @@ const Container = styled.div`
     }
   }
 `
-// const AbsoluteTemp = styled.div`
-//   position: absolute;
-// `
 
 export function DefaultCell({ value }) {
   return <BrightGraySpan data-testid="default-cell">{value}</BrightGraySpan>
@@ -121,21 +125,24 @@ function Table({
 }) {
   const { Flyover = InfoFlyover } = components
 
-  const { getArrowProps, getTooltipProps, setTooltipRef, setTriggerRef, visible } =
-    usePopperTooltip({ placement: flyoverPlacement, visible: true })
-
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [open, setOpen] = useState(false)
   const [itemInfo, setItemInfo] = useState({})
 
   const handleRowFocus = useCallback(
-    (item) => {
+    (event, item) => {
       setItemInfo(item.original)
+      setAnchorEl(anchorEl ? null : event.currentTarget)
+      setOpen(true)
     },
     [setItemInfo]
   )
 
   const handleRowLeave = useCallback(() => {
     setItemInfo(null)
-  }, [setItemInfo])
+    setOpen(false)
+    setAnchorEl(null)
+  }, [])
 
   const {
     state: tableState,
@@ -158,7 +165,7 @@ function Table({
     }
   }, [onStateChange, initialState, tableState])
   return (
-    <Container ref={setTriggerRef}>
+    <Container>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
@@ -167,6 +174,7 @@ function Table({
                 <th
                   data-testid="header-item-col"
                   key={headerKey}
+                  className="border-r border-solid border-gray-700"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
@@ -188,14 +196,24 @@ function Table({
             prepareRow(row)
             const customProps = getRowProps(row)
             if (flyover) {
-              customProps.onMouseLeave = () => handleRowLeave(row)
-              customProps.onMouseEnter = () => handleRowFocus(row)
+              customProps.onMouseLeave = () => handleRowLeave()
+              customProps.onMouseEnter = (event) => handleRowFocus(event, row)
             }
             return (
-              <tr data-testid="row-item" key={rowKey} {...row.getRowProps(customProps)}>
+              <tr
+                className="border-t border-solid border-gray-700"
+                data-testid="row-item"
+                key={rowKey}
+                {...row.getRowProps(customProps)}
+              >
                 {row.cells.map((cell, cellKey) => {
                   return (
-                    <td data-testid="item" key={cellKey} {...cell.getCellProps()}>
+                    <td
+                      data-testid="item"
+                      className="border-r border-solid border-gray-700"
+                      key={cellKey}
+                      {...cell.getCellProps()}
+                    >
                       {cell.render('Cell')}
                     </td>
                   )
@@ -205,19 +223,28 @@ function Table({
           })}
         </tbody>
       </table>
-      {/*<AbsoluteTemp>*/}
-      {visible && itemInfo && (
-        <div className="absolute h-full w-full">
-          <div
-            ref={setTooltipRef}
-            {...getTooltipProps({ style: { height: 'inherit' }, className: 'tooltip-container' })}
-          >
-            <Flyover data-testid="flyover-item" row={itemInfo} {...componentsProps.Flyover} />
-            <div {...getArrowProps({ className: 'tooltip-arrow' })} />
-          </div>
-        </div>
+      {itemInfo && (
+        <Popper
+          style={{ zIndex: '10' }}
+          open={open}
+          anchorEl={anchorEl}
+          placement={flyoverPlacement}
+          transition
+        >
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={0}>
+              <div>
+                <Flyover
+                  data-testid="flyover-item"
+                  isLarge={true}
+                  row={itemInfo}
+                  {...componentsProps.Flyover}
+                />
+              </div>
+            </Fade>
+          )}
+        </Popper>
       )}
-      {/*</AbsoluteTemp>*/}
     </Container>
   )
 }
