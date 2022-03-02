@@ -4,10 +4,10 @@ import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
 import { floatToFixed } from 'services/display'
 import { mdiCheckDecagram } from '@mdi/js'
+import styled from '@emotion/styled'
 import theme from 'theme'
 import { useCallback } from 'react'
 import { useUserStore } from 'store'
-import styled from '@emotion/styled'
 
 export const Container = styled.div`
   position: absolute;

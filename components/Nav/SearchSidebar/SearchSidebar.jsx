@@ -150,7 +150,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container isActive={isActive}>
-        <AssetsContainer style={{ width: '100%' }} className="flex">
+        <AssetsContainer style={{ width: '100%' }} className="flex flex-col">
           <div style={{ width: '100%' }} ref={searchRef}>
             <SearchInput
               initialText={query}

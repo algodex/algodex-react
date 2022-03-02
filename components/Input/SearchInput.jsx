@@ -1,14 +1,15 @@
 import { createRef, forwardRef, useEffect, useState } from 'react'
-import theme from 'theme'
-import TextInput from './TextInput'
+
+import { X as CancelIcon } from 'react-feather'
 import Checkbox from './CheckboxInput'
+import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
+import TextInput from './TextInput'
+import { mdiMagnify } from '@mdi/js'
+import styled from '@emotion/styled'
+import theme from 'theme'
 import useDebounce from 'hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
-import styled from '@emotion/styled'
-import Icon from '@mdi/react'
-import { mdiMagnify } from '@mdi/js'
-import { X as CancelIcon } from 'react-feather'
 
 const Container = styled.div`
   display: flex;
@@ -103,7 +104,7 @@ export const Search = forwardRef(
         <div className={`${isActive ? '' : 'xs:invisible'} visible flex items-center ml-6`}>
           <Checkbox
             isChecked={isListingVerifiedAssets}
-            onCheckFn={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
+            onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
           />
           <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
         </div>
