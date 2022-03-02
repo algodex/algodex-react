@@ -28,14 +28,16 @@ export const immer = (config) => (set, get, api) =>
     get,
     api
   )
-
+function withDevTools(fn) {
+  return process.env.NODE_ENV !== 'test' ? devtools(fn) : fn
+}
 export const createStore = ({ config, options, localstorage = false, name = 'Algodex' }) =>
   localstorage
-    ? create(devtools(persist(immer(config), options), { name }))
-    : create(devtools(immer(config), { name }))
+    ? create(withDevTools(persist(immer(config), options), { name }))
+    : create(withDevTools(immer(config), { name }))
 
 export const useStorePersisted = create(
-  devtools(
+  withDevTools(
     persist(
       immer((set) => ({
         wallets: [],
@@ -53,7 +55,7 @@ export const useStorePersisted = create(
   )
 )
 export const useStore = create(
-  devtools(
+  withDevTools(
     immer((set) => ({
       // asset: {
       //   id: 15322902,
