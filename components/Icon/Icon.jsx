@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import theme from 'theme'
 import * as Icons from 'react-feather'
+
+import PropTypes from 'prop-types'
 import { has } from 'lodash/object'
 import { isNumber } from 'lodash'
+import styled from '@emotion/styled'
+import theme from 'theme'
 
 export const ICONS = {
   wallet: {
@@ -48,13 +49,13 @@ export const ICONS = {
   }
 }
 
-function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
+function getFillColor({ color = 'gray', fillGradient = 500 }) {
   return theme.palette[color][fillGradient]
 }
 function getSize({ size }) {
   return isNumber(size) ? `${size}px` : size
 }
-function getColor({ theme, color = 'gray', gradient = 900 }) {
+function getColor({ color = 'gray', gradient = 900 }) {
   return theme.palette[color][gradient]
 }
 
