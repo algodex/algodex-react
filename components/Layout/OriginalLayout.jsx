@@ -1,21 +1,19 @@
+import PropTypes from 'prop-types'
+import Button from '@/components/Button'
+import styled from '@emotion/styled'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { useEffect, useRef, useState } from 'react'
-import { useStore, useStorePersisted } from '@/store/use-store'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
-import Button from '@/components/Button'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder'
-import PropTypes from 'prop-types'
+import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
-import styled from '@emotion/styled'
-import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-
+import useDebounce from '@/hooks/useDebounce'
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -248,11 +246,6 @@ function useMobileDetect() {
  */
 function MainLayout({ asset, children }) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const wallets = useStorePersisted((state) => state.wallets)
-  const address = useStorePersisted((state) => state.activeWalletAddress)
-  const wallet = wallets.find((wallet) => wallet.address === address)
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const isMobile = useMobileDetect()
@@ -283,7 +276,7 @@ function MainLayout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
-  console.log(isMobile)
+  // console.log(isMobile)
   return (
     <MainWrapper>
       <Main ref={gridRef}>
@@ -291,11 +284,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {!isSignedIn && <div data-testid="not-signed-in">Please Sign in</div>}
-          {isMobile && activeMobile === TABS.TRADE && isSignedIn && (
-            <PlaceOrder asset={asset} wallet={wallet} />
-          )}
-          {!isMobile && isSignedIn && <PlaceOrder asset={asset} wallet={wallet} />}
+          <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
