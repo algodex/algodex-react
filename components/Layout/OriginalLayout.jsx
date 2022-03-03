@@ -34,7 +34,7 @@ const PlaceOrderSection = styled.section`
 
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   display: ${({ active }) => (active ? 'block' : 'none')};
-  overflow: hidden scroll;
+  // overflow: hidden scroll;
 
   @media (min-width: 996px) {
     grid-area: trade;
@@ -139,7 +139,7 @@ const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  overflow: hidden scroll;
+  // overflow: hidden scroll;
   height: 100%;
 
 
@@ -219,6 +219,8 @@ const MobileMenuButton = styled(Button)`
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
 `
+
+
 
 /**
  * Detect Mobile

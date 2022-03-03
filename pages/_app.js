@@ -1,26 +1,26 @@
+import '../styles/global.css'
+
 import * as React from 'react'
-import PropTypes from 'prop-types'
-import Head from 'next/head'
 
-// Material UI
-import { ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, Global, css } from '@emotion/react'
-import createEmotionCache from '@/utils/createEmotionCache'
-
 // React Query
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { Hydrate } from 'react-query/hydration'
-import { ReactQueryDevtools } from 'react-query/devtools'
 
+import CssBaseline from '@mui/material/CssBaseline'
+import { EventEmitter } from '@/hooks/useEvents'
+import Head from 'next/head'
+import { Hydrate } from 'react-query/hydration'
+import PropTypes from 'prop-types'
 // Algodex
 import ReactGA from 'react-ga'
+import { ReactQueryDevtools } from 'react-query/devtools'
+// Material UI
+import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
-import { EventEmitter } from '@/hooks/useEvents'
+import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
-import useUserStore from '@/store/use-user-state'
 import useStore from '@/store/use-store'
-import '../styles/global.css'
+import useUserStore from '@/store/use-user-state'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -172,11 +172,11 @@ const styles = css`
   }
 
   ::-webkit-scrollbar {
-    width: 0;
+    width: 8px;
     height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: ${theme.palette.gray[700]};
+    background: ${theme.palette.gray[900]};
   }
   ::-webkit-scrollbar-thumb {
     background: ${theme.palette.gray[600]};

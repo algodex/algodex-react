@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useFlexLayout, useRowSelect, useSortBy, useTable } from 'react-table'
+import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import { BrightGraySpan } from '@/components/Typography'
 import Fade from '@mui/material/Fade'
@@ -159,6 +159,7 @@ function Table({
     },
     useSortBy,
     useFlexLayout,
+    useResizeColumns,
     useRowSelect
   )
   useEffect(() => {

@@ -1,12 +1,13 @@
-import useTranslation from 'next-translate/useTranslation'
+import { useStore, useStorePersisted } from '@/store/use-store'
+
+import PropTypes from 'prop-types'
+import { Section } from '@/components/Layout/Section'
+import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
-import { default as WalletAssetsTable } from './Table/AssetsTable'
-import { useState } from 'react'
-import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { Section } from '@/components/Layout/Section'
-import { useStore, useStorePersisted } from '@/store/use-store'
+import { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
 const Tab = styled.div`
   display: flex;
