@@ -139,7 +139,6 @@ const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  // overflow: hidden scroll;
   height: 100%;
 
 
@@ -219,8 +218,6 @@ const MobileMenuButton = styled(Button)`
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
 `
-
-
 
 /**
  * Detect Mobile
