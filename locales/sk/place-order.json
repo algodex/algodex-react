@@ -24,5 +24,6 @@
   "max-spend-explanation": "Aby ste mohli obchodovať, musíte mať minimálny zostatok {{amount}} Algo na svojom účte",
   "order-size-filtering": "Filtrovanie veľkosti objednávky",
   "less-lag": "Menej oneskorenia",
-  "better-execution": "Lepšie prevedenie"
+  "better-execution": "Lepšie prevedenie",
+  "fund-wallet":"Pred zadaním objednávok si zafinancujte peňaženku s viacerými algo!"
 }

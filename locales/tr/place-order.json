@@ -24,5 +24,6 @@
   "max-spend-explanation": "Toplam bakiye, ticaret yapabilmek için cüzdanda saklanması gereken {{amount}} Algo içerir.",
   "order-size-filtering": "Sipariş boyutu filtreleme",
   "less-lag": "Daha Az Gecikme",
-  "better-execution": "Daha İyi Yürütme"
+  "better-execution": "Daha İyi Yürütme",
+  "fund-wallet":"Lütfen sipariş vermeden önce cüzdanınıza daha fazla ALGO ile fonlayın!"
 }
