@@ -223,7 +223,13 @@ export function WalletView(props) {
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <LabelMd fontWeight="500" title={wallet.address}>
-          <Icon color="gray" fillGradient="000" onClick={() => copyAddress(wallet.address)} use="wallet" size={0.75} />
+          <Icon
+            color="gray"
+            fillGradient="000"
+            onClick={() => copyAddress(wallet.address)}
+            use="wallet"
+            size={0.75}
+          />
           {wallet.name}
         </LabelMd>
         {renderBalance(wallet.balance)}

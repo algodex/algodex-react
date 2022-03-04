@@ -2,7 +2,7 @@ import { BodyCopyTiny, LabelSm } from 'components/Typography'
 
 import Button from '../../../Button'
 import { ChevronDown } from 'react-feather'
-import Icon from 'components/Icon/Icon'
+import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
 import OrderSizeFilter from 'components/Input/Slider'
 import PropTypes from 'prop-types'
@@ -275,7 +275,7 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                     onChange={(e) => setNewOrderSizeFilter(e.target.value)}
                   />
 
-                  <Icon color="gray" fillGradient={400} use="algoLogo" size={0.625} />
+                  <Icon use="algoLogo" size={0.625} />
                 </label>
               </div>
             </div>
@@ -283,11 +283,11 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
 
             <div className="pt-5 flex justify-between text-gray-500 text-sm">
               <span className="block align-middle">
-                0<Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} className="ml-1" />
+                0<Icon use="algoLogo" size={0.625} className="ml-1" />
               </span>
               <span className="block align-middle">
                 100
-                <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} className="ml-1" />
+                <Icon use="algoLogo" size={0.625} className="ml-1" />
               </span>
             </div>
             <OrderSizeFilter

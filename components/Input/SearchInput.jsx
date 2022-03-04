@@ -103,7 +103,7 @@ export const Search = forwardRef(
           )}
         </Container>
         <div className={`${isActive ? '' : 'xs:invisible'} visible flex items-center ml-6`}>
-        {/* <div className={`visible flex items-center ml-6`}> */}
+          {/* <div className={`visible flex items-center ml-6`}> */}
           <Checkbox
             isChecked={isListingVerifiedAssets}
             onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}

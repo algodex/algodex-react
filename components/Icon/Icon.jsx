@@ -1,7 +1,6 @@
 import * as Icons from 'react-feather'
 
 import PropTypes from 'prop-types'
-import { css } from '@emotion/react'
 import { has } from 'lodash/object'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
@@ -59,7 +58,6 @@ function getSize({ size }) {
 function getColor({ color = 'gray', gradient = 900 }) {
   return theme.palette[color][gradient]
 }
-
 
 const Svg = styled.svg`
   display: ${(flex) => (flex ? 'flex' : 'inline-block')};

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import Box from '@mui/material/Box';
 import { default as NavSearchTable } from './SearchTable'
 // import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
@@ -143,11 +142,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
-        <AssetsContainer
-          gridHeight={gridSize.height}
-          ref={containerRef}
-          className="flex flex-col"
-        >
+        <AssetsContainer gridHeight={gridSize.height} ref={containerRef} className="flex flex-col">
           <div ref={searchRef}>
             <SearchInput
               initialText={query}
