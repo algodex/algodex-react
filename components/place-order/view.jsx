@@ -200,9 +200,7 @@ function PlaceOrderView(props) {
     setStatus((prev) => ({ ...prev, submitting: true }))
     if (checkPopupBlocker()) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error(
-        'Please disable your popup blocker (likely in the top-right of your browser window)'
-      )
+      toast.error(t('disable-popup'))
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
