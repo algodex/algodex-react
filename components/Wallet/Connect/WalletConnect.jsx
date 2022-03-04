@@ -1,16 +1,17 @@
-import useStore, { useStorePersisted } from 'store/use-store'
-import useMyAlgo from 'hooks/useMyAlgo'
-import { useWalletsQuery } from 'hooks/useAlgodex'
-import { useEffect, useMemo } from 'react'
-import styled from '@emotion/styled'
-import useTranslation from 'next-translate/useTranslation'
-import toast from 'react-hot-toast'
-import Icon from 'components/Icon/Icon'
 import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
+import { useEffect, useMemo } from 'react'
+import useStore, { useStorePersisted } from 'store/use-store'
+
 import Button from 'components/Button'
-import SvgImage from 'components/SvgImage'
+import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import SvgImage from 'components/SvgImage'
+import styled from '@emotion/styled'
+import toast from 'react-hot-toast'
+import useMyAlgo from 'hooks/useMyAlgo'
+import useTranslation from 'next-translate/useTranslation'
+import { useWalletsQuery } from 'hooks/useAlgodex'
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
