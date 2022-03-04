@@ -24,5 +24,6 @@
     "max-spend-explanation": "saldo totale include {{amount}} algoritmi che devono essere mantenuti nel portafoglio per consentire le negoziazioni",
     "order-size-filtering": "Filtraggio delle dimensioni dell'ordine",
     "less-lag": "Meno ritardo",
-    "better-execution": "Migliore esecuzione"
+    "better-execution": "Migliore esecuzione",
+    "fund-wallet":"Si prega di finanziare il portafoglio con più ALGO prima di effettuare ordini!"
 }
