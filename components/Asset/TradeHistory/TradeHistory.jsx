@@ -1,13 +1,14 @@
-import { floatToFixed } from 'services/display'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import { rgba } from 'polished'
 import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
-import useTranslation from 'next-translate/useTranslation'
-import Icon from 'components/Icon'
+
 import Big from 'big.js'
-import dayjs from 'dayjs'
+import Icon from 'components/Icon'
+import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import dayjs from 'dayjs'
+import { floatToFixed } from 'services/display'
+import { rgba } from 'polished'
+import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`

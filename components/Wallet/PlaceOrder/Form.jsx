@@ -72,7 +72,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.palette.background.dark};
-  overflow: hidden scroll;
+  // overflow-y: hidden scroll;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {

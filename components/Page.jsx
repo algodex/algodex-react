@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
 
+import Head from 'next/head'
 import Header from '@/components/Nav/Header'
-import NetworkHandler from '@/components/Nav/NetworkHandler'
 import Layout from '@/components/Layout/OriginalLayout'
+import NetworkHandler from '@/components/Nav/NetworkHandler'
+import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
+import styled from '@emotion/styled'
 import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
+import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 
 const DEBUG = process.env.NEXT_PUBLIC_DEBUG
@@ -20,6 +20,10 @@ const Container = styled.div`
   overflow: hidden;
   max-height: 100%;
   height: 100%;
+  @media (min-width: 996px) {
+    overflow-y: scroll;
+    max-height: none;
+  }
 `
 
 /**
