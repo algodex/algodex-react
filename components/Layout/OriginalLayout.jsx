@@ -288,7 +288,7 @@ function MainLayout({ asset, children }) {
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
-          <AssetsSection style={{height: '100rem'}}>
+          <AssetsSection>
             <AssetSearch style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
           </AssetsSection>
           <ContentSection>{children}</ContentSection>

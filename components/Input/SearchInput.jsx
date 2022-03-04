@@ -14,6 +14,7 @@ import useTranslation from 'next-translate/useTranslation'
 const Container = styled.div`
   display: flex;
   position: relative;
+  overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
   height: 51px;
   border: solid 1px ${({ theme }) => theme.palette.gray['700']};
   border-radius: 4px;
@@ -78,7 +79,7 @@ export const Search = forwardRef(
 
     return (
       <div>
-        <Container className="flex items-center ml-4 mr-4 mt-2 mb-2">
+        <Container isActive={isActive} className="flex items-center ml-4 mr-4 mt-2 mb-2">
           <Icon
             path={mdiMagnify}
             className="ml-2"
@@ -102,6 +103,7 @@ export const Search = forwardRef(
           )}
         </Container>
         <div className={`${isActive ? '' : 'xs:invisible'} visible flex items-center ml-6`}>
+        {/* <div className={`visible flex items-center ml-6`}> */}
           <Checkbox
             isChecked={isListingVerifiedAssets}
             onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
@@ -142,7 +144,6 @@ export function SearchInput(props) {
   const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
   const debouncedSearchText = useDebounce(searchText, 500)
-
   useEffect(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)

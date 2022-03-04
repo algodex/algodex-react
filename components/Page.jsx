@@ -7,6 +7,7 @@ import NetworkHandler from '@/components/Nav/NetworkHandler'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import styled from '@emotion/styled'
+import theme from '../theme/index'
 import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
@@ -20,9 +21,11 @@ const Container = styled.div`
   overflow: hidden;
   max-height: 100%;
   height: 100%;
+
   @media (min-width: 996px) {
     overflow-y: scroll;
     max-height: none;
+    border-bottom: solid 6px ${theme.palette.gray['700']};
   }
 `
 

@@ -25,17 +25,18 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.palette.background.dark};
   position: relative;
   overflow: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
+  min-height: 4rem;
 
   @media (min-width: 1536px) {
     flex-direction: column;
-    // height: auto;
     height: 99%;
   }
 `
 export const AssetsContainer = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  // height: 100%;
+  height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.palette.gray['800']};
   z-index: 30;
 
@@ -52,12 +53,12 @@ export const AssetsContainer = styled.div`
     height: inherit;
   }
 `
-export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'sidebar' }) {
+export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, area = 'sidebar' }) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
   // const [controlledVisible, setControlledVisible] = useState(false)
   const setQuery = useUserStore((state) => state.setQuery)
-  const [gridSize] = useState({ width: 0, height: '100%' })
+  const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
@@ -66,7 +67,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
-  const [isActive, setIsActive] = useState(true)
+  const [isActive, setIsActive] = useState(false)
   // const [searchHeight, setSearchHeight] = useState(0)
   // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -102,6 +103,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
    * @type {(function(): void)|*}
    */
   const handleSearchFocus = useCallback(() => {
+    console.log(isActive, 'focus')
     !isActive && setIsActive(true)
   }, [setIsActive, isActive])
 
@@ -135,23 +137,27 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
   // const handleAssetLeave = useCallback(() => {
   //   setAssetInfo(null)
   // }, [setAssetInfo])
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (gridRef?.current) {
-  //       const { width, height } = gridRef.current.getBoundingClientRect()
-  //       setGridSize({ width, height })
-  //     }
-  //   }
-  //   window.addEventListener('resize', handleResize)
-  //   handleResize()
-  //
-  //   return () => removeEventListener('resize', handleResize)
-  // }, [gridRef, setGridSize])
+  useEffect(() => {
+    const handleResize = () => {
+      if (gridRef?.current) {
+        const { width, height } = gridRef.current.getBoundingClientRect()
+        setGridSize({ width, height })
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => removeEventListener('resize', handleResize)
+  }, [gridRef, setGridSize])
   return (
     <Section area={area} borderColor="red" border="dashed">
-      <Container isActive={isActive}>
-        <AssetsContainer style={{ width: '100%' }} className="flex flex-col">
-          <div style={{ width: '100%' }} ref={searchRef}>
+      <Container gridHeight={gridSize.height} isActive={isActive}>
+        <AssetsContainer
+          gridHeight={gridSize.height}
+          ref={containerRef}
+          className="flex flex-col"
+        >
+          <div ref={searchRef}>
             <SearchInput
               initialText={query}
               onChange={(q) => setQuery(q)}
@@ -169,6 +175,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
           >
             <NavTable
               query={query}
+              isActive={isActive}
               options={{ refetchInterval: 5000 }}
               onAssetClick={handleAssetClick}
               algoPrice={algoPrice}
@@ -186,6 +193,7 @@ export function NavSearchSidebar({ algoPrice, components, tableProps, area = 'si
 }
 
 NavSearchSidebar.propTypes = {
+  gridRef: PropTypes.object,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
     NavTable: PropTypes.node
