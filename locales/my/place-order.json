@@ -24,5 +24,6 @@
     "max-spend-explanation": "Jumlah baki merangkumi {{jumlah}} Algos yang mesti disimpan dalam dompet untuk membolehkan perdagangan",
     "order-size-filtering": "Pemfilteran Ukuran Pesanan",
     "less-lag": "Kurang Lag",
-    "better-execution": "Pelaksanaan yang Lebih Baik"
+    "better-execution": "Pelaksanaan yang Lebih Baik",
+    "fund-wallet":"Harap mendanai dompet Anda dengan lebih banyak ALGO sebelum melakukan pemesanan!"
 }
