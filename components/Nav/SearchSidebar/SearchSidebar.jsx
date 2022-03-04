@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import Box from '@mui/material/Box';
 import { default as NavSearchTable } from './SearchTable'
 // import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
@@ -35,7 +36,6 @@ export const Container = styled.div`
 export const AssetsContainer = styled.div`
   position: absolute;
   width: 100%;
-  // height: 100%;
   height: ${({ gridHeight }) => `${gridHeight}px`};
   background-color: ${({ theme }) => theme.palette.gray['800']};
   z-index: 30;
@@ -128,15 +128,6 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
     [push, handleExternalClick]
   )
 
-  // const handleAssetFocus = useCallback(
-  //   (asset) => {
-  //     setAssetInfo(asset)
-  //   },
-  //   [setAssetInfo]
-  // )
-  // const handleAssetLeave = useCallback(() => {
-  //   setAssetInfo(null)
-  // }, [setAssetInfo])
   useEffect(() => {
     const handleResize = () => {
       if (gridRef?.current) {

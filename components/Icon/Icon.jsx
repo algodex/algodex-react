@@ -1,6 +1,7 @@
 import * as Icons from 'react-feather'
 
 import PropTypes from 'prop-types'
+import { css } from '@emotion/react'
 import { has } from 'lodash/object'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
@@ -59,14 +60,16 @@ function getColor({ color = 'gray', gradient = 900 }) {
   return theme.palette[color][gradient]
 }
 
+
 const Svg = styled.svg`
   display: ${(flex) => (flex ? 'flex' : 'inline-block')};
   vertical-align: middle;
   cursor: pointer;
+  fill: ${(props) => getFillColor(props)};
   path {
-    height: ${getSize}
-    fill: ${getFillColor};
-    color: ${getColor};      
+    height: ${(props) => getSize(props)}
+    fill: ${(props) => getFillColor(props)};
+    color: ${(props) => getColor(props)};      
   }
 `
 

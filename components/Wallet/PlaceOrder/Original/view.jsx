@@ -364,7 +364,7 @@ function PlaceOrderView(props) {
                   <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
                     {maxSpendableAlgo}
                   </LabelMd>
-                  <Icon use="algoLogo" size={0.625} />
+                  <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
                 </IconTextContainer>
               </BalanceRow>
               <BalanceRow>
@@ -375,7 +375,7 @@ function PlaceOrderView(props) {
                   <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
                     {algoBalance}
                   </LabelMd>
-                  <Icon use="algoLogo" size={0.625} />
+                  <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
                 </IconTextContainer>
               </BalanceRow>
               <BalanceRow>

@@ -87,9 +87,9 @@ const TableWrapper = styled.div`
   //   top: 35px;
   // }
 
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const PairSlash = styled.span`
