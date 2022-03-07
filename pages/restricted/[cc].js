@@ -16,6 +16,7 @@ const Input = (props) => {
 
 const Restricted = () => {
   const router = useRouter()
+  const { cc } = router.query
   const showEmail = router.query.showEmailForm
   return (
     <div className="h-screen flex flex-col items-center text-gray-200 font-semibold leading-5 tracking-wider">
@@ -29,7 +30,9 @@ const Restricted = () => {
                 <Image src={'/icon-warning.png'} alt="Warning" width={40} height={40} />
               </div>
               <div className="mx-8 mb-8 flex-1 md:m-4 md:ml-0">
-                <p className="my-4">At this time, Algodex is not available in your region (USA).</p>
+                <p className="my-4">
+                  At this time, Algodex is not available in your region ({cc}).
+                </p>
                 <p className="my-4">
                   If you wish to try the platform, you can use{' '}
                   <a href="//testnet.algodex.com" className="text-blue-400">
