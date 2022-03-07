@@ -48,10 +48,10 @@ function WalletView(props) {
   const copyAddress = (address) => {
     navigator.clipboard.writeText(address).then(
       () => {
-        toast.success('Copied wallet address to clipboard!')
+        toast.success(t('copy-success'))
       },
       () => {
-        toast.error('Failed to copy wallet address to clipboard')
+        toast.error(t('copy-fail'))
       }
     )
   }
