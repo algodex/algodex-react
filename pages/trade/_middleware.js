@@ -12,12 +12,7 @@ export function middleware(request) {
   const country = request.geo.country || 'US'
   const to = `/restricted/${country}`
 
-  const matches = url.pathname.match(/svg|json|png|css|_next/g)
-  const isStatic = typeof matches !== 'undefined' ? matches.length > 0 : false
-
   if (
-    // Next loaders
-    !isStatic &&
     // Not already on restricted
     url.pathname !== to &&
     // Mainnet check
