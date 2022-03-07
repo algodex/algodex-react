@@ -63,10 +63,11 @@ const Svg = styled.svg`
   display: ${(flex) => (flex ? 'flex' : 'inline-block')};
   vertical-align: middle;
   cursor: pointer;
+  fill: ${(props) => getFillColor(props)};
   path {
-    height: ${getSize}
-    fill: ${getFillColor};
-    color: ${getColor};      
+    height: ${(props) => getSize(props)}
+    fill: ${(props) => getFillColor(props)};
+    color: ${(props) => getColor(props)};      
   }
 `
 

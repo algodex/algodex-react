@@ -1,19 +1,20 @@
-import PropTypes from 'prop-types'
-import Button from '@/components/Button'
-import styled from '@emotion/styled'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { useEffect, useRef, useState } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
+import Button from '@/components/Button'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import styled from '@emotion/styled'
+import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import useDebounce from '@/hooks/useDebounce'
+
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
@@ -47,7 +48,7 @@ const ContentSection = styled.section`
 `
 
 const AssetsSection = styled.section`
-  overflow: hidden;
+  // overflow: hidden;
   @media (min-width: 1536px) {
     display: flex !important;
   }
@@ -213,7 +214,7 @@ const MobileMenuButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
   max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
   min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
-  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
+  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '1.5rem')};
   overflow-wrap: anywhere;
 `
 

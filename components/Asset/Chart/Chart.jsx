@@ -1,13 +1,15 @@
-import PropTypes from 'prop-types'
+import * as ReactDOM from 'react-dom'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { withAssetChartQuery } from '@/hooks/withAlgodex'
-import useAreaChart from '@/hooks/use-area-chart'
-import useCandleChart from '@/hooks/use-candle-chart'
+
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
-import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
 import millify from 'millify'
-import * as ReactDOM from 'react-dom'
+import styled from '@emotion/styled'
+import useAreaChart from '@/hooks/use-area-chart'
+import useCandleChart from '@/hooks/use-candle-chart'
+import { withAssetChartQuery } from '@/hooks/withAlgodex'
 
 const Container = styled.div`
   position: relative;

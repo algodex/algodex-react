@@ -1,26 +1,25 @@
-/* eslint-disable */
-import { useState } from 'react'
-import PropTypes from 'prop-types'
-import { BodyCopyTiny, LabelSm } from '@/components/Typography'
-import { ChevronDown } from 'react-feather'
-import { useRouter } from 'next/router'
-import useTranslation from 'next-translate/useTranslation'
-
-import Icon from 'components/Icon'
-
 import {
-  Container,
-  ExpandToggle,
   ArrowContainer,
+  Container,
   ExpandContainer,
-  ExpandContentWrapper,
   ExpandContent,
-  OptionsWrapper,
+  ExpandContentWrapper,
+  ExpandToggle,
+  OptionsButton,
   OptionsInput,
-  OptionsButton
+  OptionsWrapper
 } from './order-options.css'
+import { BodyCopyTiny, LabelSm } from '@/components/Typography'
+
+import { ChevronDown } from 'react-feather'
+import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
 import OrderSizeFilter from '../order-size-filter'
+import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
+/* eslint-disable */
+import { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation'
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker, orderFilter, setOrderFilter } = props
@@ -119,7 +118,7 @@ function OrderOptions(props) {
               <span className="text-sm font-semibold py-1">Order Size Filtering:</span>
               <div className="relative">
                 <input
-                  className="bg-gray-900 h-7 w-14 rounded-sm border-2 border-gray-700 pr-5 text-right appearance-none"
+                  className="text-white text-lg bg-gray-900 h-7 w-14 rounded-sm border-2 border-gray-700 pr-5 text-right appearance-none"
                   type="number"
                   placeholder="0"
                   min="0"
@@ -130,19 +129,19 @@ function OrderOptions(props) {
                   value={orderFilter}
                   onChange={(e) => setOrderFilter(e.target.value)}
                 ></input>
-                <label className="absolute right-2 top-1">
-                  <Icon use="algoLogo" size={0.625} />
+                <label className="absolute right-2 top-2">
+                  <Icon color="gray" fillGradient={400} use="algoLogo" size={0.625} />
                 </label>
               </div>
             </div>
             {/* <span className="text-xs"><InfoButton className="inline fill-current text-gray-500 " size={12} /> See FAQ</span> */}
 
             <div className="pt-5 flex justify-between text-gray-500 text-sm">
-              <span className="block align-middle">
-                0<Icon use="algoLogo" size={0.625} className="ml-1"></Icon>
+              <span className="flex items-center block align-middle">
+                0<Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} className="ml-1"></Icon>
               </span>
-              <span className="block align-middle">
-                100<Icon use="algoLogo" size={0.625} className="ml-1"></Icon>
+              <span className="flex items-center block align-middle">
+                100<Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} className="ml-1"></Icon>
               </span>
             </div>
             <OrderSizeFilter value={orderFilter} onChange={setOrderFilter}></OrderSizeFilter>

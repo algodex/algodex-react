@@ -69,9 +69,27 @@ export const mapToSearchResults = ({
 }
 
 const TableWrapper = styled.div`
-  // position: absolute;
-  // inset: 0;
-  // overflow-y: auto;
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  top: 85px;
+
+  // @media (max-width: 996px) {
+  //   margin-bottom: 3rem;
+  // }
+
+  @media (min-width: 996px) {
+    top: 85px;
+  }
+
+  // @media (min-width: 1536px) {
+  //   top: 35px;
+  // }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const PairSlash = styled.span`

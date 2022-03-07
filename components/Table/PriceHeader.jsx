@@ -19,7 +19,7 @@ export const TablePriceHeader = () => {
   return (
     <PriceHeaderText data-testid="header-item">
       {t('price')}
-      <Icon use="algoLogo" size={0.625} />
+      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
   )
 }

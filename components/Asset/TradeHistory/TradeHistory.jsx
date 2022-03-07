@@ -105,7 +105,7 @@ const PriceHeader = () => {
   return (
     <PriceHeaderText>
       {t('price')}
-      <Icon use="algoLogo" size={0.625} />
+      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
   )
 }

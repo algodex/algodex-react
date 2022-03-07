@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 import useMyAlgo from 'hooks/useMyAlgo'
 import useTranslation from 'next-translate/useTranslation'
 import { useWalletsQuery } from 'hooks/useAlgodex'
+
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -202,7 +203,7 @@ export function WalletView(props) {
 
     return (
       <Balance>
-        <Icon use="algoLogo" size={0.625} />
+        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
         <LabelMd fontWeight="500">
           {`${split[0]}.`}
           <span>{split[1]}</span>
@@ -222,7 +223,13 @@ export function WalletView(props) {
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <LabelMd fontWeight="500" title={wallet.address}>
-          <Icon onClick={() => copyAddress(wallet.address)} use="wallet" size={0.75} />
+          <Icon
+            color="gray"
+            fillGradient="000"
+            onClick={() => copyAddress(wallet.address)}
+            use="wallet"
+            size={0.75}
+          />
           {wallet.name}
         </LabelMd>
         {renderBalance(wallet.balance)}

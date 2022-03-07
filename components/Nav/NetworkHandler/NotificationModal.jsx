@@ -96,7 +96,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
             <hr />
             <Link href={content.linkAddressOne}>
               <a>
-                <ModalExternalLink className="xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+                <ModalExternalLink className="text-white xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
                   {content.linkTextOne}
                 </ModalExternalLink>
               </a>
@@ -104,7 +104,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
             <hr />
             <Link href={content.linkAddressTwo}>
               <a>
-                <ModalExternalLink className="xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+                <ModalExternalLink className="text-white xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
                   {content.linkTextTwo}
                 </ModalExternalLink>
               </a>
