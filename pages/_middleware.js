@@ -5,7 +5,7 @@ export function middleware(request) {
   const url = request.nextUrl.clone()
   const country = request.geo.country || 'GB'
   if (
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
+    // process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
     BLOCKED_COUNTRIES.includes(country) &&
     url.pathname !== '/restricted'
   ) {
