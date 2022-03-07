@@ -9,18 +9,15 @@ import { NextResponse } from 'next/server'
  */
 export function middleware(request) {
   const url = request.nextUrl.clone()
-  const country = request.geo.country || 'US'
-  const to = `/restricted/${country}`
+  const country = request.geo.country || 'GB'
 
   if (
-    // Not already on restricted
-    url.pathname !== to &&
     // Mainnet check
     // process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
     // Blocked country check
     BLOCKED_COUNTRIES.includes(country)
   ) {
-    url.pathname = to
+    url.pathname = `/restricted/${country}`
     return NextResponse.redirect(url)
   }
 }
