@@ -161,7 +161,7 @@ Input.defaultProps = {
 }
 export const Container = styled.div`
   position: relative;
-  margin: 1rem 0;
+  margin: 1rem 1rem;
   height: 1.25rem;
 `
 

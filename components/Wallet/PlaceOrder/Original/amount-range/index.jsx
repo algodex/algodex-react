@@ -17,7 +17,6 @@ function AmountRange(props) {
   // const value = isBuyOrder
   //   ? ((price * amount + txnFee) * 100) / algoBalance
   //   : (amount * 100) / asaBalance
-
   const calculateValue = () => {
     if (isBuyOrder) {
       if (_algoBalance === 0) {
@@ -33,7 +32,6 @@ function AmountRange(props) {
   }
 
   const value = calculateValue()
-
   // @todo: calculate txn fees
   // const handleChange = (e) => {
   //   const adjustAlgoBalance = algoBalance - txnFee
