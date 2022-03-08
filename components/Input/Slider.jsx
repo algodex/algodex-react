@@ -56,6 +56,11 @@ export const Slider = styled(MUISlider)(({ theme, type }) => {
         }
 
   return {
+    '&.Mui-disabled': {
+      opacity: 0.5,
+      pointerEvents: 'none',
+      cursor: 'default'
+    },
     '& .MuiSlider-thumb': {
       height: 13,
       width: 13,
@@ -77,6 +82,7 @@ export const Slider = styled(MUISlider)(({ theme, type }) => {
       height: 2,
       backgroundColor: theme.palette.gray[500]
     },
+
     ...muiStyle
   }
 })
