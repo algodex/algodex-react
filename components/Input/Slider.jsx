@@ -37,12 +37,21 @@ export const Slider = styled(MUISlider)(({ theme, type }) => {
             width: 8,
             height: 8,
             backgroundColor: theme.palette.gray['700'],
-            'border-radius': '50%',
+            borderRadius: '50%',
             '&.MuiSlider-markActive': {
               opacity: 1,
               color: theme.palette.white,
               backgroundColor: theme.palette.white
             }
+          },
+          '& .MuiSlider-markLabel': {
+            color: theme.palette.gray[500],
+            fontWeight: '700',
+            fontSize: '12px',
+            top: '-10px'
+          },
+          '& .MuiSlider-markLabelActive': {
+            color: theme.palette.white
           }
         }
 
@@ -75,9 +84,8 @@ export const Slider = styled(MUISlider)(({ theme, type }) => {
 Slider.defaultProps = {
   type: 'default',
   // type: 'line-marks',
-  value: 50,
-  onChange: () => console.log('No value passed'),
-  marks: false
+  // value: 50,
+  onChange: () => console.log('No value passed')
 }
 
 export default Slider
