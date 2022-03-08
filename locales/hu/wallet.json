@@ -4,5 +4,7 @@
   "wallet": "Tárca",
   "balance": "EGYENLEG",
   "start-by": "A kezdéshez csatlakoztasd Algorand tárcádat",
-  "once-connected": "Megkezdheted a kereskedést, amint a MyAlgo használatával csatlakoztattad Algorand tárcádat"
+  "once-connected": "Megkezdheted a kereskedést, amint a MyAlgo használatával csatlakoztattad Algorand tárcádat",
+  "copy-success":"A pénztárca címe a vágólapra másolva!",
+  "copy-fail":"Nem sikerült a pénztárca címét a vágólapra másolni"
 }

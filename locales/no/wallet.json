@@ -4,5 +4,7 @@
   "wallet": "Lommebok",
   "balance": "BALANSERE",
   "start-by": "  Start med å koble til en Algorand-lommebok  ",
-  "once-connected": "Når du har koblet til en lommebok med MyAlgo, kan du begynne å handle "
+  "once-connected": "Når du har koblet til en lommebok med MyAlgo, kan du begynne å handle ",
+  "copy-success":"Kopierte lommebokadressen til utklippstavlen!",
+  "copy-fail":"Kunne ikke kopiere lommebokadressen til utklippstavlen"
 }
