@@ -1,6 +1,6 @@
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { rgba } from 'polished'
+import styled from '@emotion/styled'
 
 const trackHeight = '0.125rem'
 const thumbDiameter = '0.75rem'

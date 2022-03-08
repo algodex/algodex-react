@@ -1,7 +1,9 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { Container, Input, InputWrapper, Tick, TickWrapper } from './amount-range.css'
+
 import Big from 'big.js'
-import { Input, Container, TickWrapper, InputWrapper, Tick } from './amount-range.css'
+import PropTypes from 'prop-types'
+import { default as Slider } from 'components/Input/Slider'
+import { useState } from 'react'
 
 function AmountRange(props) {
   const { order, algoBalance: _algoBalance, asaBalance: _asaBalance, asset, onChange } = props
@@ -77,9 +79,32 @@ function AmountRange(props) {
     })
   }
 
+  const marks = [
+    {
+      value: 0,
+      label: '0%',
+    },
+    {
+      value: 25,
+      label: '25%',
+    },
+    {
+      value: 50,
+      label: '50%',
+    },
+    {
+      value: 75,
+      label: '75%',
+    },
+    {
+      value: 100,
+      label: '100%',
+    },
+  ];
+
   return (
     <Container>
-      <TickWrapper>
+      {/* <TickWrapper>
         <Tick className={price == 0 && 'disabled'} amt={0} isActive isHighlighted={!value} />
         <Tick amt={25} isActive={rounded >= 25} isHighlighted={rounded === 25} />
         <Tick amt={50} isActive={rounded >= 50} isHighlighted={rounded === 50} />
@@ -99,7 +124,17 @@ function AmountRange(props) {
           onMouseUp={() => setIsMouseDown(false)}
           isMouseDown={isMouseDown}
         />
-      </InputWrapper>
+      </InputWrapper> */}
+      <Slider
+        type="default"
+        disabled={price == 0 ? true : false}
+        onChange={handleChange}
+        value={value || 0}
+        marks={marks}
+        defaultValue={0}
+        orderType={order.type}
+        max={100}
+      />
     </Container>
   )
 }

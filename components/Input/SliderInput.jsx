@@ -1,8 +1,8 @@
-import styled from '@emotion/styled'
-
 // import { InputWrapper } from 'components/Input'
 import PropTypes from 'prop-types'
 import Slider from '@mui/material/Slider'
+import styled from '@emotion/styled'
+
 // import { useState } from 'react'
 
 // const trackHeight = '0.125rem'

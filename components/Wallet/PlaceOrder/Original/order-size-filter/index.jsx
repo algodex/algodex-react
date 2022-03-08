@@ -1,14 +1,34 @@
-import { useState } from 'react'
+import { Container, Input, InputWrapper, Tick, TickWrapper } from './order-size-filter.css'
+
 import PropTypes from 'prop-types'
-import { Input, Container, TickWrapper, InputWrapper, Tick } from './order-size-filter.css'
+import { default as Slider } from 'components/Input/Slider'
+import { useState } from 'react'
 
 function OrderSizeFilter(props) {
   const { onChange, value } = props
   const [isMouseDown, setIsMouseDown] = useState(false)
 
+  const marks = [
+    {
+      value: 0
+    },
+    {
+      value: 25
+    },
+    {
+      value: 50
+    },
+    {
+      value: 75
+    },
+    {
+      value: 100
+    }
+  ]
+
   return (
     <Container>
-      <TickWrapper>
+      {/* <TickWrapper>
         <Tick amt={0} isActive isHighlighted={!value} />
         <Tick amt={20} isActive={value >= 20} isHighlighted={value === 20} />
         <Tick amt={40} isActive={value >= 40} isHighlighted={value === 40} />
@@ -28,7 +48,16 @@ function OrderSizeFilter(props) {
           onMouseUp={() => setIsMouseDown(false)}
           isMouseDown={isMouseDown}
         />
-      </InputWrapper>
+      </InputWrapper> */}
+      <Slider
+        type="line-marks"
+        onChange={(e) => onChange(e.target.value)}
+        value={value || 0}
+        marks={marks}
+        defaultValue={0}
+        step={null}
+        max={100}
+      />
     </Container>
   )
 }
