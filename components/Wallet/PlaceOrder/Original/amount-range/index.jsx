@@ -1,14 +1,10 @@
-import { Container, Input, InputWrapper, Tick, TickWrapper } from './amount-range.css'
-
 import Big from 'big.js'
+import { Container } from './amount-range.css'
 import PropTypes from 'prop-types'
 import { default as Slider } from 'components/Input/Slider'
-import { useState } from 'react'
 
 function AmountRange(props) {
   const { order, algoBalance: _algoBalance, asaBalance: _asaBalance, asset, onChange } = props
-
-  const [isMouseDown, setIsMouseDown] = useState(false)
 
   const isBuyOrder = order.type === 'buy'
   const price = new Big(order.price || 0).toString()
@@ -37,8 +33,6 @@ function AmountRange(props) {
   }
 
   const value = calculateValue()
-
-  const rounded = new Big(value).div(5).round().times(5).toNumber()
 
   // @todo: calculate txn fees
   // const handleChange = (e) => {
@@ -82,49 +76,28 @@ function AmountRange(props) {
   const marks = [
     {
       value: 0,
-      label: '0%',
+      label: '0%'
     },
     {
       value: 25,
-      label: '25%',
+      label: '25%'
     },
     {
       value: 50,
-      label: '50%',
+      label: '50%'
     },
     {
       value: 75,
-      label: '75%',
+      label: '75%'
     },
     {
       value: 100,
-      label: '100%',
-    },
-  ];
+      label: '100%'
+    }
+  ]
 
   return (
     <Container>
-      {/* <TickWrapper>
-        <Tick className={price == 0 && 'disabled'} amt={0} isActive isHighlighted={!value} />
-        <Tick amt={25} isActive={rounded >= 25} isHighlighted={rounded === 25} />
-        <Tick amt={50} isActive={rounded >= 50} isHighlighted={rounded === 50} />
-        <Tick amt={75} isActive={rounded >= 75} isHighlighted={rounded === 75} />
-        <Tick amt={100} isActive={rounded === 100} isHighlighted={rounded === 100} />
-      </TickWrapper>
-      <InputWrapper>
-        <Input
-          min={0}
-          max={100}
-          step={5}
-          disabled={price == 0 ? true : false}
-          value={value || 0}
-          onChange={handleChange}
-          orderType={order.type}
-          onMouseDown={() => setIsMouseDown(true)}
-          onMouseUp={() => setIsMouseDown(false)}
-          isMouseDown={isMouseDown}
-        />
-      </InputWrapper> */}
       <Slider
         type="default"
         disabled={price == 0 ? true : false}
