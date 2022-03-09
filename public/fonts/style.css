@@ -1,8 +1,8 @@
-@media (max-width: 992px) {
+/* @media (max-width: 992px) {
   html {
     font-size: 62.5%;
   }
-}
+} */
 
 @media (min-width: 320px) and (max-width: 656px) {
   .container {

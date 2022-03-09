@@ -20,6 +20,10 @@ const Container = styled.div`
   border-radius: 4px;
   // margin: 0 2rem;
 
+  @media (max-width: 996px) {
+    height: 50px;
+  }
+  
   @media (min-width: 996px) {
     top: 8px;
     height: auto;
@@ -84,7 +88,7 @@ export const Search = forwardRef(
             path={mdiMagnify}
             className="ml-2"
             title="Search icon"
-            size={0.85}
+            size={0.825}
             color={theme.palette.gray['500']}
           />
           <Input
