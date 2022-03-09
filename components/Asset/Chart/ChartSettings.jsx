@@ -16,6 +16,10 @@ const Container = styled.div`
     flex-direction: row;
   }
 
+  @media (max-width: 996px) {
+    padding-bottom: 0.5rem;
+  }
+
   @media (min-width: 996px) {
     flex-direction: row;
     height: 2.75rem;
