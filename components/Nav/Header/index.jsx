@@ -11,10 +11,10 @@ import {
   NetworkDropdownOption
 } from './header.css'
 
-import NavActiveLink from 'components/Nav/ActiveLink'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -56,7 +56,7 @@ export function Header() {
       &nbsp;
       <NetworkDropdown
         data-testid="header-network-dropdown-element"
-        className="font-medium"
+        className="font-bold"
         value={activeNetwork}
         onChange={(e) => handleNetworkChangeFn(e.target.value)}
       >

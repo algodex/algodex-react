@@ -131,7 +131,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
             onClick={closeModal}
             onKeyDown={closeModal}
           >
-            <Button data-testid="modal-accept" className="font-bold">
+            <Button data-testid="modal-accept" className="cursor-pointer font-bold">
               {content.button}
             </Button>
           </div>

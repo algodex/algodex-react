@@ -1,8 +1,8 @@
+import { NavSearchTable as Component } from './SearchTable'
 // SearchTable.stories.js
 import styled from '@emotion/styled'
-import { NavSearchTable as Component /*, default as ComponentWithData*/ } from './SearchTable'
 const Container = styled.div`
-  width: 50vw;
+  width: 100vw;
   height: 100vh;
   background: ${({ theme }) => theme.palette.gray['800']};
   display: flex;
