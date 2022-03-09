@@ -261,13 +261,15 @@ export const MenuContainer = styled.div`
 
 export const NetworkDropdown = styled.select`
   background: unset;
-  border: solid 2px
-    ${({ theme, value }) =>
-      value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
+  ${({ theme, value }) =>
+    value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
   color: ${({ theme, value }) =>
     value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
   border-radius: 3px;
   padding: 0.3rem 0.5rem;
+  border: 0;
+  outline: 2px solid;
+  border-right: 8px solid transparent;
 `
 
 export const NetworkDropdownOption = styled.option`
