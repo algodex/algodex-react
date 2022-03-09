@@ -157,7 +157,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
           </div>
           <div
             className="mt-1.5"
-            style={{ borderTop: 'solid 1px #2D3748', height: '91%', overflowY: 'scroll' }}
+            style={{ height: '91%', overflowY: 'scroll' }}
           >
             <NavTable
               query={query}
