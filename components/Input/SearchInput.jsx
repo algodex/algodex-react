@@ -23,7 +23,7 @@ const Container = styled.div`
   @media (max-width: 996px) {
     height: 50px;
   }
-  
+
   @media (min-width: 996px) {
     top: 8px;
     height: auto;

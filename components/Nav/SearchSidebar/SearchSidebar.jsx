@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
-// import { default as InfoFlyover } from './InfoFlyover'
 import PropTypes from 'prop-types'
 import { default as SearchInput } from 'components/Input/SearchInput'
 import { Section } from '@/components/Layout/Section'
@@ -155,10 +154,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
             />
           </div>
-          <div
-            className="mt-1.5"
-            style={{ height: '91%', overflowY: 'scroll' }}
-          >
+          <div className="mt-1.5" style={{ height: '91%', overflowY: 'scroll' }}>
             <NavTable
               query={query}
               isActive={isActive}
