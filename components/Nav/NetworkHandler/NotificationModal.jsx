@@ -14,7 +14,15 @@ export const Button = styled.button`
   border-radius: 3px;
 `
 
-export const ModalContainer = styled.div``
+export const ModalContainer = styled.div`
+  transform: translate(-50%, -50%);
+  @media (max-width: 992px) {
+    width: 90%;
+    transform: translate(-50%, -65%);
+    overflow-y: auto;
+    max-height: 100%;
+  }
+`
 
 export const ModalBody = styled.div``
 
@@ -123,7 +131,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
             onClick={closeModal}
             onKeyDown={closeModal}
           >
-            <Button className="font-bold">{content.button}</Button>
+            <Button data-testid="modal-accept" className="font-bold">{content.button}</Button>
           </div>
         </ModalFooter>
       </ModalContainer>
