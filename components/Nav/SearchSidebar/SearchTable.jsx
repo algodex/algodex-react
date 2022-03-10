@@ -71,9 +71,12 @@ export const mapToSearchResults = ({
 const TableWrapper = styled.div`
   position: absolute;
   inset: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   top: 85px;
+  width: 100%;
+  height: 85%;
 
   @media (max-width: 996px) {
     margin-bottom: 3rem;
