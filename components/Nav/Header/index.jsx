@@ -11,11 +11,13 @@ import {
   NetworkDropdownOption
 } from './header.css'
 
+import Button from '@mui/material/Button'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
+import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
@@ -27,6 +29,7 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
 
@@ -109,6 +112,14 @@ export function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
+        <Button
+          onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
+          className="font-semibold hover:font-bold text-white border-white hover:border-white"
+          variant="outlined"
+        >
+          CONNECT A WALLET
+        </Button>
+        {openWalletConnectDropdown && <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />}
         <LanguageSelection isMobile={false} />
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
