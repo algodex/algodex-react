@@ -1,7 +1,7 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 import { setExplorerLink, subStringFn } from './helper'
 
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 import Icon from '@mdi/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -282,15 +282,15 @@ DropdownBody.propTypes = {
 }
 
 DropdownBody.defaultProps = {
-  connectMyAlgoWallet: () => console.log("Hello Connect"),
-  connectAlgorandMobileWallet: () => console.log("Hello Connect"),
-  closeFn: () => console.log("Hello Connect"),
+  connectMyAlgoWallet: () => console.log('Hello Connect'),
+  connectAlgorandMobileWallet: () => console.log('Hello Connect'),
+  closeFn: () => console.log('Hello Connect'),
   activeWalletAddress: null,
   allAddresses: [],
-  disconnectAlgorandWallet: () => console.log("Hello Connect"),
-  setActiveWalletAddress: () => console.log("Hello Connect"),
+  disconnectAlgorandWallet: () => console.log('Hello Connect'),
+  setActiveWalletAddress: () => console.log('Hello Connect'),
   activeNetwork: 'testnet',
-  handleDisconnectFn: () => console.log("Hello Connect"),
+  handleDisconnectFn: () => console.log('Hello Connect')
 }
 
 export default DropdownBody
