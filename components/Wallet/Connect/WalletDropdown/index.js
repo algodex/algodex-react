@@ -15,14 +15,14 @@ const Container = styled.div`
   overflow: none;
   right: 9rem;
   top: 4rem;
-
 `
 
 const WalletConnectDropdown = ({ closeDropdown, children }) => {
-  return <Container className="">
-    <div className="flex flex-col justify-between">
-      <DropdownHeader closeFn={closeDropdown} />
-      <DropdownBody
+  return (
+    <Container className="">
+      <div className="flex flex-col justify-between">
+        <DropdownHeader closeFn={closeDropdown} />
+        <DropdownBody
         // connectMyAlgoWallet={() => addConnection('MyAlgo')}
         // connectAlgorandMobileWallet={() => addConnection('AlgorandOfficial')}
         // disconnectAlgorandWallet={disconnectAlgorandWallet}
@@ -32,10 +32,11 @@ const WalletConnectDropdown = ({ closeDropdown, children }) => {
         // setActiveWalletAddress={setActiveWalletAddress}
         // activeNetwork={activeNetwork}
         // handleDisconnectFn={handleDisconnectFn}
-      />
-      <DropdownFooter />
-    </div>
-  </Container>
+        />
+        <DropdownFooter />
+      </div>
+    </Container>
+  )
 }
 
 WalletConnectDropdown.propTypes = {
