@@ -119,7 +119,9 @@ export function Header() {
         >
           CONNECT A WALLET
         </Button>
-        {openWalletConnectDropdown && <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />}
+        {openWalletConnectDropdown && (
+          <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
+        )}
         <LanguageSelection isMobile={false} />
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
