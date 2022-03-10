@@ -260,7 +260,6 @@ export const MenuContainer = styled.div`
 `
 
 export const NetworkDropdown = styled.select`
-  background: unset;
   ${({ theme, value }) =>
     value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
   color: ${({ theme, value }) =>
@@ -269,7 +268,18 @@ export const NetworkDropdown = styled.select`
   padding: 0.3rem 0.5rem;
   border: 0;
   outline: 2px solid;
-  border-right: 8px solid transparent;
+  border-right: 16px solid transparent;
+
+  background: unset;
+  background-image: ${({ value }) =>
+    value == 'mainnet'
+      ? `url("data:image/svg+xml;utf8,<svg fill='%232d75d6' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")`
+      : `url("data:image/svg+xml;utf8,<svg fill='%2338A169' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")`};
+  background-repeat: no-repeat;
+  background-position-x: 130%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 `
 
 export const NetworkDropdownOption = styled.option`
