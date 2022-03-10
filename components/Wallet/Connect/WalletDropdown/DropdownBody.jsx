@@ -1,7 +1,6 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 import { setExplorerLink, subStringFn } from './helper'
 
-import Box from '@mui/material/Box'
 import Icon from '@mdi/react'
 import Image from 'next/image'
 import Link from 'next/link'

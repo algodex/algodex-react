@@ -17,7 +17,7 @@ const Container = styled.div`
   top: 4rem;
 `
 
-const WalletConnectDropdown = ({ closeDropdown, children }) => {
+const WalletConnectDropdown = ({ closeDropdown }) => {
   return (
     <Container className="">
       <div className="flex flex-col justify-between">
@@ -40,7 +40,6 @@ const WalletConnectDropdown = ({ closeDropdown, children }) => {
 }
 
 WalletConnectDropdown.propTypes = {
-  children: PropTypes.element,
   closeDropdown: PropTypes.func
 }
 
