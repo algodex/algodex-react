@@ -3,10 +3,11 @@ import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { useStorePersisted } from 'store/use-store'
 
 const Container = styled.div`
   position: absolute;
-  max-height: 16rem;
+  min-height: 16rem;
   background-color: ${({ theme }) => theme.colors.gray[700]};
   max-width: 23rem;
   width: 100%;
@@ -18,20 +19,33 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  
+  const connectWallet = (type) => {
+    console.log('Connect wallet: ', type)
+  }
+
+  const disconnectWallet = (type) => {
+    console.log('Disconnect wallet: ', type)
+  }
+
+  const switchWalletAddress = () => {
+    console.log('Switching Wallet address...')
+  }
+
+  const fetchWallets = () => {
+    console.log('Fetch Wallet')
+  }
+  
   return (
     <Container className="">
       <div className="flex flex-col justify-between">
         <DropdownHeader closeFn={closeDropdown} />
         <DropdownBody
-        // connectMyAlgoWallet={() => addConnection('MyAlgo')}
-        // connectAlgorandMobileWallet={() => addConnection('AlgorandOfficial')}
-        // disconnectAlgorandWallet={disconnectAlgorandWallet}
-        // closeFn={closeFn}
-        // activeWalletAddress={activeWalletAddress}
-        // allAddresses={allAddresses}
-        // setActiveWalletAddress={setActiveWalletAddress}
-        // activeNetwork={activeNetwork}
-        // handleDisconnectFn={handleDisconnectFn}
+          connectWallet={connectWallet}
+          disconnectWallet={disconnectWallet}
+          switchWalletAddress={switchWalletAddress}
+          activeWalletAddress={activeWalletAddress}
         />
         <DropdownFooter />
       </div>

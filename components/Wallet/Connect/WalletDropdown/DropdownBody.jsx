@@ -1,11 +1,12 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-import { setExplorerLink, subStringFn } from './helper'
+import { setExplorerLink, truncatedWalletAddress } from './helper'
 
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import WalletOptionsList from './WalletOptionsList'
 import { find } from 'lodash'
 import theme from 'theme'
 import toast from 'react-hot-toast'
@@ -48,51 +49,6 @@ const DropdownBody = ({
     !isWalletActive(addr) && setActiveWalletAddress(addr)
   }
 
-  const renderWalletOptionList = () => {
-    return (
-      <div
-        className="text-xs text-white rounded p-2"
-        style={{
-          backgroundColor: theme.colors.gray['500']
-        }}
-      >
-        <div className="flex justify-between">
-          <p className="font-semibold mb-2">CONNECT A WALLET</p>
-          {isConnectingAddress && (
-            <button onClick={() => setIsConnectingAddress(!isConnectingAddress)}>Go back</button>
-          )}
-        </div>
-        <div className="mt-4 ml-4">
-          <div
-            role="button"
-            tabIndex="0"
-            className="cursor-pointer flex items-center mb-2"
-            onClick={() => handleWalletConnect('algomobilewallet')}
-            onKeyPress={() => console.log('key pressed')}
-          >
-            <Image
-              src="/Official-Algo-Wallet-icon.svg"
-              alt="Algorand Mobile Wallet"
-              width={25}
-              height={25}
-            />
-            <p className="ml-2 font-medium underline">Algorand Mobile Wallet</p>
-          </div>
-          <div
-            className="cursor-pointer flex items-center mb-2"
-            role="button"
-            tabIndex="0"
-            onClick={() => handleWalletConnect('myalgowallet')}
-            onKeyPress={() => console.log('key pressed')}
-          >
-            <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
-            <p className="ml-2 font-medium underline">My Algo Wallet</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   const renderActiveWalletList = () => {
     const walletExample = {
       address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
@@ -114,13 +70,7 @@ const DropdownBody = ({
             >
               <div className="flex justify-between items-center">
                 <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
-                  <p>
-                    {`${subStringFn(0, 11, address)}....${subStringFn(
-                      address.length - 11,
-                      address.length,
-                      address
-                    )}`}
-                  </p>
+                  <p>{truncatedWalletAddress(address, 11)}</p>
                   <Icon
                     onClick={() => copyAddress(address)}
                     path={mdiContentCopy}
@@ -130,7 +80,7 @@ const DropdownBody = ({
                     color="#FFFFFF"
                   />
                 </div>
-                <div
+                {/* <div
                   role="button"
                   tabIndex="0"
                   onKeyDown={(e) => console.log(e)}
@@ -141,7 +91,17 @@ const DropdownBody = ({
                   }}
                 >
                   DISCONNECT
-                </div>
+                </div> */}
+                <Button
+                  className="rounded ml-2 text-xs font-semibold"
+                  variant="contained"
+                  style={{
+                    backgroundColor: theme.colors.gray['700']
+                  }}
+                  onClick={() => handleDisconnectFn(address, type)}
+                >
+                  DISCONNECT
+                </Button>
               </div>
               <div>
                 <Link href={setExplorerLink(address, activeNetwork)}>
@@ -171,9 +131,9 @@ const DropdownBody = ({
       //   type: 'algomobilewallet'
       // },
       {
-        address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocgRZ',
+        address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocRZ',
         type: 'algomobilewallet'
-      },
+      }
     ]
     // return allAddresses.map(({ address, type }, idx) => {
     return walletExample.map(({ address, type }, idx) => {
@@ -187,13 +147,7 @@ const DropdownBody = ({
               onClick={() => handleWalletClick(address)}
               className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
             >
-              <p>
-                {`${subStringFn(0, 11, address)}....${subStringFn(
-                  address.length - 11,
-                  address.length,
-                  address
-                )}`}
-              </p>
+              <p>{truncatedWalletAddress(address, 11)}</p>
               <Icon
                 onClick={() => copyAddress(address)}
                 path={mdiContentCopy}
@@ -203,7 +157,7 @@ const DropdownBody = ({
                 color="#FFFFFF"
               />
             </div>
-            <div
+            {/* <div
               role="button"
               tabIndex="0"
               onKeyDown={(e) => console.log(e)}
@@ -214,7 +168,17 @@ const DropdownBody = ({
               }}
             >
               DISCONNECT
-            </div>
+            </div> */}
+            <Button
+              className="rounded ml-2 text-xs font-semibold"
+              variant="contained"
+              style={{
+                backgroundColor: theme.colors.gray['800']
+              }}
+              onClick={() => handleDisconnectFn(address, type)}
+            >
+              DISCONNECT
+            </Button>
           </div>
           <div>
             <Link href={setExplorerLink(address, activeNetwork)}>
@@ -262,26 +226,26 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      <>
+      {/* <>
         {renderActiveWalletList()}
         {renderSwitchWalletAddress()}
-        <Button
-          className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-          variant="contained"
-          style={{
-            backgroundColor: theme.colors.gray['700']
-          }}
-          onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-        >
-          CONNECT ANOTHER WALLET
-        </Button>
       </>
-      {/* {(!activeWalletAddress || isConnectingAddress) && renderWalletOptionList()} */}
-      {/* {activeWalletAddress && !isConnectingAddress && (
+      <Button
+        className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+        variant="contained"
+        style={{
+          backgroundColor: theme.colors.gray['700']
+        }}
+        onClick={() => setIsConnectingAddress(!isConnectingAddress)}
+      >
+        CONNECT ANOTHER WALLET
+      </Button> */}
+      {(!activeWalletAddress || isConnectingAddress) && <WalletOptionsList isRenderingList={!activeWalletAddress}/>}
+      {activeWalletAddress && !isConnectingAddress && (
         <>
           {renderActiveWalletList()}
           {renderSwitchWalletAddress()}
-          <div
+          {/* <div
             role="button"
             tabIndex="0"
             onKeyDown={(e) => console.log(e)}
@@ -292,9 +256,20 @@ const DropdownBody = ({
             onClick={() => setIsConnectingAddress(!isConnectingAddress)}
           >
             CONNECT ANOTHER WALLET
-          </div>
+          </div> */}
+          {/* <Button
+            className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+            variant="contained"
+            style={{
+              backgroundColor: theme.colors.gray['700']
+            }}
+            onClick={() => setIsConnectingAddress(!isConnectingAddress)}
+          >
+            CONNECT ANOTHER WALLET
+          </Button> */}
+          <WalletOptionsList isRenderingList={!activeWalletAddress}/>
         </>
-      )} */}
+      )}
     </div>
   )
 }

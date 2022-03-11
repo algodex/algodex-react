@@ -18,7 +18,9 @@ import Link from 'next/link'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
+import { truncatedWalletAddress } from 'components/Wallet/Connect/WalletDropdown/helper'
 import { useState } from 'react'
+import { useStorePersisted } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 
@@ -30,6 +32,7 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
 
@@ -117,7 +120,9 @@ export function Header() {
           className="font-semibold hover:font-bold text-white border-white hover:border-white"
           variant="outlined"
         >
-          CONNECT A WALLET
+          {activeWalletAddress
+            ? `${truncatedWalletAddress(activeWalletAddress, 5)}`
+            : 'CONNECT A WALLET'}
         </Button>
         {openWalletConnectDropdown && (
           <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
