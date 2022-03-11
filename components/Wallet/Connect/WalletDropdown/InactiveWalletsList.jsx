@@ -1,0 +1,103 @@
+import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
+import { setExplorerLink, truncatedWalletAddress } from './helper'
+
+import Button from '@mui/material/Button'
+import Icon from '@mdi/react'
+import Link from 'next/link'
+import PropTypes from 'prop-types'
+import theme from 'theme'
+import useUserStore from 'store/use-user-state'
+
+const InactiveWalletsList = ({ walletsLst, handleWalletClick, handleDisconnectFn }) => {
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  return (
+    <div
+      className="mt-2 p-2 text-xs rounded text-white"
+      style={{
+        backgroundColor: theme.colors.gray['700']
+      }}
+    >
+      <div>
+        <p className="font-bold text-xs mb-1.5">SWITCH WALLETS</p>
+        <p>Click on address to switch active wallets</p>
+      </div>
+      <div>
+        {walletsLst.map(({ address, type }, idx) => {
+          return (
+            <div className="mt-4" key={idx}>
+              <div className="flex justify-between items-center">
+                <div
+                  role="button"
+                  tabIndex="0"
+                  onKeyDown={(e) => console.log(e)}
+                  onClick={() => handleWalletClick(address)}
+                  className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
+                >
+                  <p>{truncatedWalletAddress(address, 11)}</p>
+                  <Icon
+                    onClick={() => copyAddress(address)}
+                    path={mdiContentCopy}
+                    title="Copy Address"
+                    size={0.8}
+                    className="cursor-pointer"
+                    color="#FFFFFF"
+                  />
+                </div>
+                <Button
+                  className="rounded ml-2 text-xs font-semibold"
+                  variant="contained"
+                  style={{
+                    backgroundColor: theme.colors.gray['800']
+                  }}
+                  onClick={() => handleDisconnectFn(address, type)}
+                >
+                  DISCONNECT
+                </Button>
+              </div>
+              <div>
+                <Link href={setExplorerLink(address, activeNetwork)}>
+                  <a
+                    target="_blank"
+                    className="flex justify-end items-center text-white mr-10 mt-3 font-medium"
+                  >
+                    <p>View on AlgoExplorer</p>
+                    <Icon
+                      path={mdiOpenInNew}
+                      title="Algo explorer link"
+                      size={0.8}
+                      className="cursor-pointer"
+                      color="#FFFFFF"
+                    />
+                  </a>
+                </Link>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+InactiveWalletsList.PropTypes = {
+  walletsLst: PropTypes.array,
+  handleWalletClick: PropTypes.func,
+  handleDisconnectFn: PropTypes.func,
+}
+
+InactiveWalletsList.defaultProps = {
+  walletsLst: [
+    {
+      address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
+      type: 'algomobilewallet'
+    },
+    {
+      address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocRZ',
+      type: 'algomobilewallet'
+    }
+  ],
+  handleWalletClick: () => console.log("Wallet click"),
+  handleDisconnectFn: () => console.log("Wallet click")
+}
+
+export default InactiveWalletsList

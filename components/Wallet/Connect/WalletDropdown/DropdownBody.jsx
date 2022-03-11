@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
+import WalletsList from './WalletsList'
 import { find } from 'lodash'
 import theme from 'theme'
 import toast from 'react-hot-toast'
@@ -29,17 +30,6 @@ const DropdownBody = ({
     type === 'myalgowallet' && (await connectMyAlgoWallet())
     // closeFn()
   }
-
-  // const copyAddress = (address) => {
-  //   navigator.clipboard.writeText(address).then(
-  //     () => {
-  //       toast.success('Copied wallet address to clipboard!')
-  //     },
-  //     () => {
-  //       toast.error('Failed to copy wallet address to clipboard')
-  //     }
-  //   )
-  // }
 
   const isWalletActive = (addr) => {
     return activeWalletAddress === addr
@@ -229,8 +219,9 @@ const DropdownBody = ({
       {(!activeWalletAddress || isConnectingAddress) && <WalletOptionsList isRenderingList={!activeWalletAddress}/>}
       {activeWalletAddress && !isConnectingAddress && (
         <>
-          {renderActiveWalletList()}
-          {renderSwitchWalletAddress()}
+          {/* {renderActiveWalletList()}
+          {renderSwitchWalletAddress()} */}
+          <WalletsList />
           <WalletOptionsList isRenderingList={!activeWalletAddress}/>
         </>
       )}
