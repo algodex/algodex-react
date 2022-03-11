@@ -1,6 +1,7 @@
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 import { setExplorerLink, subStringFn } from './helper'
 
+import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -93,9 +94,14 @@ const DropdownBody = ({
   }
 
   const renderActiveWalletList = () => {
+    const walletExample = {
+      address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
+      type: 'algomobilewallet'
+    }
     const wallet = find(allAddresses, ({ address }) => address === activeWalletAddress)
-    if (wallet) {
-      const { address, type } = wallet
+    // if (wallet) {
+    if (walletExample) {
+      const { address, type } = walletExample
       return (
         <div>
           <p className="text-white font-medium mb-2 text-xs">ACTIVE WALLET</p>
@@ -159,7 +165,18 @@ const DropdownBody = ({
   }
 
   const renderAddressesList = () => {
-    return allAddresses.map(({ address, type }, idx) => {
+    const walletExample = [
+      // {
+      //   address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
+      //   type: 'algomobilewallet'
+      // },
+      {
+        address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocgRZ',
+        type: 'algomobilewallet'
+      },
+    ]
+    // return allAddresses.map(({ address, type }, idx) => {
+    return walletExample.map(({ address, type }, idx) => {
       return (
         <div className="mt-4" key={idx}>
           <div className="flex justify-between items-center">
@@ -245,8 +262,22 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {(!activeWalletAddress || isConnectingAddress) && renderWalletOptionList()}
-      {activeWalletAddress && !isConnectingAddress && (
+      <>
+        {renderActiveWalletList()}
+        {renderSwitchWalletAddress()}
+        <Button
+          className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+          variant="contained"
+          style={{
+            backgroundColor: theme.colors.gray['700']
+          }}
+          onClick={() => setIsConnectingAddress(!isConnectingAddress)}
+        >
+          CONNECT ANOTHER WALLET
+        </Button>
+      </>
+      {/* {(!activeWalletAddress || isConnectingAddress) && renderWalletOptionList()} */}
+      {/* {activeWalletAddress && !isConnectingAddress && (
         <>
           {renderActiveWalletList()}
           {renderSwitchWalletAddress()}
@@ -263,7 +294,7 @@ const DropdownBody = ({
             CONNECT ANOTHER WALLET
           </div>
         </>
-      )}
+      )} */}
     </div>
   )
 }
