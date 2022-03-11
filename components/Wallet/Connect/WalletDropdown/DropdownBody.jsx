@@ -226,47 +226,11 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {/* <>
-        {renderActiveWalletList()}
-        {renderSwitchWalletAddress()}
-      </>
-      <Button
-        className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-        variant="contained"
-        style={{
-          backgroundColor: theme.colors.gray['700']
-        }}
-        onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-      >
-        CONNECT ANOTHER WALLET
-      </Button> */}
       {(!activeWalletAddress || isConnectingAddress) && <WalletOptionsList isRenderingList={!activeWalletAddress}/>}
       {activeWalletAddress && !isConnectingAddress && (
         <>
           {renderActiveWalletList()}
           {renderSwitchWalletAddress()}
-          {/* <div
-            role="button"
-            tabIndex="0"
-            onKeyDown={(e) => console.log(e)}
-            className="cursor-pointer flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-            style={{
-              backgroundColor: theme.colors.gray['700']
-            }}
-            onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-          >
-            CONNECT ANOTHER WALLET
-          </div> */}
-          {/* <Button
-            className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-            variant="contained"
-            style={{
-              backgroundColor: theme.colors.gray['700']
-            }}
-            onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-          >
-            CONNECT ANOTHER WALLET
-          </Button> */}
           <WalletOptionsList isRenderingList={!activeWalletAddress}/>
         </>
       )}
