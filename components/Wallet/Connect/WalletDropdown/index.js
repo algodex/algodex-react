@@ -25,16 +25,8 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     console.log('Connect wallet: ', type)
   }
 
-  const disconnectWallet = (type) => {
+  const disconnectWalletFn = (type) => {
     console.log('Disconnect wallet: ', type)
-  }
-
-  const switchWalletAddress = () => {
-    console.log('Switching Wallet address...')
-  }
-
-  const fetchWallets = () => {
-    console.log('Fetch Wallet')
   }
   
   return (
@@ -43,8 +35,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
         <DropdownHeader closeFn={closeDropdown} />
         <DropdownBody
           connectWallet={connectWallet}
-          disconnectWallet={disconnectWallet}
-          switchWalletAddress={switchWalletAddress}
+          disconnectWalletFn={disconnectWalletFn}
           activeWalletAddress={activeWalletAddress}
         />
         <DropdownFooter />

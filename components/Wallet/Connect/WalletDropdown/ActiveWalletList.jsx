@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import theme from 'theme'
 import useUserStore from 'store/use-user-state'
 
-const ActiveWalletList = ({ wallet, handleDisconnectFn }) => {
+const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { address, type } = wallet
   return (
@@ -66,7 +66,7 @@ const ActiveWalletList = ({ wallet, handleDisconnectFn }) => {
 
 ActiveWalletList.propTypes = {
   wallet: PropTypes.object,
-  handleDisconnectFn: PropTypes.func
+  disconnectWalletFn: PropTypes.func
 }
 
 ActiveWalletList.defaultProps = {
@@ -74,7 +74,7 @@ ActiveWalletList.defaultProps = {
     address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
     type: 'algomobilewallet'
   },
-  handleDisconnectFn: () => console.log('Handle Disconnect function')
+  disconnectWalletFn: () => console.log('Handle Disconnect function')
 }
 
 export default ActiveWalletList

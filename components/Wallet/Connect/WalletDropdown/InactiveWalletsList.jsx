@@ -6,10 +6,22 @@ import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import theme from 'theme'
+import { useStorePersisted } from 'store/use-store'
 import useUserStore from 'store/use-user-state'
 
-const InactiveWalletsList = ({ walletsLst, handleWalletClick, handleDisconnectFn }) => {
+const InactiveWalletsList = ({ walletsLst, handleDisconnectFn }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
+
+  const isWalletActive = (addr) => {
+    return activeWalletAddress === addr
+  }
+
+  const switchWalletAddress = (addr) => {
+    !isWalletActive(addr) && setActiveWalletAddress(addr)
+  }
+
   return (
     <div
       className="mt-2 p-2 text-xs rounded text-white"
@@ -30,7 +42,7 @@ const InactiveWalletsList = ({ walletsLst, handleWalletClick, handleDisconnectFn
                   role="button"
                   tabIndex="0"
                   onKeyDown={(e) => console.log(e)}
-                  onClick={() => handleWalletClick(address)}
+                  onClick={() => switchWalletAddress(address)}
                   className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
                 >
                   <p>{truncatedWalletAddress(address, 11)}</p>
@@ -81,7 +93,6 @@ const InactiveWalletsList = ({ walletsLst, handleWalletClick, handleDisconnectFn
 
 InactiveWalletsList.PropTypes = {
   walletsLst: PropTypes.array,
-  handleWalletClick: PropTypes.func,
   handleDisconnectFn: PropTypes.func,
 }
 
@@ -96,7 +107,6 @@ InactiveWalletsList.defaultProps = {
       type: 'algomobilewallet'
     }
   ],
-  handleWalletClick: () => console.log("Wallet click"),
   handleDisconnectFn: () => console.log("Wallet click")
 }
 
