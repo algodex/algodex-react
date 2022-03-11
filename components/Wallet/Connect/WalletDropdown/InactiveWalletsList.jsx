@@ -1,5 +1,5 @@
+import { copyAddress, setExplorerLink, truncatedWalletAddress } from './helper'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-import { setExplorerLink, truncatedWalletAddress } from './helper'
 
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
@@ -9,7 +9,7 @@ import theme from 'theme'
 import { useStorePersisted } from 'store/use-store'
 import useUserStore from 'store/use-user-state'
 
-const InactiveWalletsList = ({ walletsLst, handleDisconnectFn }) => {
+const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
@@ -34,7 +34,7 @@ const InactiveWalletsList = ({ walletsLst, handleDisconnectFn }) => {
         <p>Click on address to switch active wallets</p>
       </div>
       <div>
-        {walletsLst.map(({ address, type }, idx) => {
+        {walletsList.map(({ address, type }, idx) => {
           return (
             <div className="mt-4" key={idx}>
               <div className="flex justify-between items-center">
@@ -61,7 +61,8 @@ const InactiveWalletsList = ({ walletsLst, handleDisconnectFn }) => {
                   style={{
                     backgroundColor: theme.colors.gray['800']
                   }}
-                  onClick={() => handleDisconnectFn(address, type)}
+                  // onClick={() => handleDisconnectFn(address, type)}
+                  onClick={() => disconnectWalletFn(address, type)}
                 >
                   DISCONNECT
                 </Button>
@@ -91,13 +92,13 @@ const InactiveWalletsList = ({ walletsLst, handleDisconnectFn }) => {
   )
 }
 
-InactiveWalletsList.PropTypes = {
-  walletsLst: PropTypes.array,
-  handleDisconnectFn: PropTypes.func,
+InactiveWalletsList.propTypes = {
+  walletsList: PropTypes.array,
+  disconnectWalletFn: PropTypes.func
 }
 
 InactiveWalletsList.defaultProps = {
-  walletsLst: [
+  walletsList: [
     {
       address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
       type: 'algomobilewallet'
@@ -107,7 +108,7 @@ InactiveWalletsList.defaultProps = {
       type: 'algomobilewallet'
     }
   ],
-  handleDisconnectFn: () => console.log("Wallet click")
+  disconnectWalletFn: () => console.log('Wallet click')
 }
 
 export default InactiveWalletsList

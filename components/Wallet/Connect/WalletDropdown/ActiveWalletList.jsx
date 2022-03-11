@@ -1,5 +1,5 @@
+import { copyAddress, setExplorerLink, truncatedWalletAddress } from './helper'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-import { setExplorerLink, truncatedWalletAddress } from './helper'
 
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
@@ -39,7 +39,7 @@ const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
               style={{
                 backgroundColor: theme.colors.gray['700']
               }}
-              onClick={() => handleDisconnectFn(address, type)}
+              onClick={() => disconnectWalletFn(address, type)}
             >
               DISCONNECT
             </Button>

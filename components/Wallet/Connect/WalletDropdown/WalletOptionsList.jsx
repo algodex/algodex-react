@@ -8,7 +8,7 @@ const WalletsOptions = ({ handleWalletConnect, isRenderingList }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   return (
     <>
-      {(isRenderingList || isConnectingAddress) ? (
+      {isRenderingList || isConnectingAddress ? (
         <div
           className="text-xs text-white rounded p-2"
           style={{

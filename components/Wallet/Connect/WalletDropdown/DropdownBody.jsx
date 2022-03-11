@@ -1,26 +1,10 @@
-import { copyAddress, setExplorerLink, truncatedWalletAddress } from './helper'
-import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-
 import ActiveWalletList from './ActiveWalletList'
-import Button from '@mui/material/Button'
-import Icon from '@mdi/react'
-import Image from 'next/image'
 import InactiveWalletsList from './InactiveWalletsList'
-import Link from 'next/link'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
-import { find } from 'lodash'
 import theme from 'theme'
-import toast from 'react-hot-toast'
-import { useState } from 'react'
 
-const DropdownBody = ({
-  connectWallet,
-  disconnectWalletFn,
-  activeWalletAddress
-}) => {
-  const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-
+const DropdownBody = ({ connectWallet, disconnectWalletFn, activeWalletAddress }) => {
   const handleWalletConnect = async (type) => {
     type === 'algomobilewallet' && (await connectWallet('algomobilewallet'))
     type === 'myalgowallet' && (await connectWallet('myalgowallet'))
@@ -33,14 +17,20 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {(!activeWalletAddress || isConnectingAddress) && (
-        <WalletOptionsList isRenderingList={!activeWalletAddress} handleWalletConnect={handleWalletConnect} />
+      {!activeWalletAddress && (
+        <WalletOptionsList
+          isRenderingList={!activeWalletAddress}
+          handleWalletConnect={handleWalletConnect}
+        />
       )}
-      {activeWalletAddress && !isConnectingAddress && (
+      {activeWalletAddress && (
         <>
-          <ActiveWalletList  disconnectWalletFn={disconnectWalletFn} />
+          <ActiveWalletList disconnectWalletFn={disconnectWalletFn} />
           <InactiveWalletsList disconnectWalletFn={disconnectWalletFn} />
-          <WalletOptionsList isRenderingList={!activeWalletAddress} handleWalletConnect={handleWalletConnect}/>
+          <WalletOptionsList
+            isRenderingList={!activeWalletAddress}
+            handleWalletConnect={handleWalletConnect}
+          />
         </>
       )}
     </div>

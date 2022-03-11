@@ -11,11 +11,7 @@ export const setExplorerLink = (addr, network) => {
 }
 
 export const truncatedWalletAddress = (addr, size) => {
-  return `${subStringFn(0, size, addr)}....${subStringFn(
-    addr.length - size,
-    addr.length,
-    addr
-  )}`
+  return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
 }
 
 export const copyAddress = (address) => {

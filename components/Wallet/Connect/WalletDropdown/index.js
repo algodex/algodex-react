@@ -20,15 +20,15 @@ const Container = styled.div`
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  
+
   const connectWallet = (type) => {
     console.log('Connect wallet: ', type)
   }
 
-  const disconnectWalletFn = (type) => {
-    console.log('Disconnect wallet: ', type)
+  const disconnectWalletFn = (address, type) => {
+    console.log('Disconnect wallet: ', address, type)
   }
-  
+
   return (
     <Container className="">
       <div className="flex flex-col justify-between">
