@@ -1,5 +1,5 @@
+import { copyAddress, setExplorerLink, truncatedWalletAddress } from './helper'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-import { setExplorerLink, truncatedWalletAddress } from './helper'
 
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
@@ -30,16 +30,16 @@ const DropdownBody = ({
     // closeFn()
   }
 
-  const copyAddress = (address) => {
-    navigator.clipboard.writeText(address).then(
-      () => {
-        toast.success('Copied wallet address to clipboard!')
-      },
-      () => {
-        toast.error('Failed to copy wallet address to clipboard')
-      }
-    )
-  }
+  // const copyAddress = (address) => {
+  //   navigator.clipboard.writeText(address).then(
+  //     () => {
+  //       toast.success('Copied wallet address to clipboard!')
+  //     },
+  //     () => {
+  //       toast.error('Failed to copy wallet address to clipboard')
+  //     }
+  //   )
+  // }
 
   const isWalletActive = (addr) => {
     return activeWalletAddress === addr

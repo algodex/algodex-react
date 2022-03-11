@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast'
+
 export const subStringFn = (start, end, string) => {
   return `${string.substring(start, end)}`
 }
@@ -14,4 +16,15 @@ export const truncatedWalletAddress = (addr, size) => {
     addr.length,
     addr
   )}`
+}
+
+export const copyAddress = (address) => {
+  navigator.clipboard.writeText(address).then(
+    () => {
+      toast.success('Copied wallet address to clipboard!')
+    },
+    () => {
+      toast.error('Failed to copy wallet address to clipboard')
+    }
+  )
 }
