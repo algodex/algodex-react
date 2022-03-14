@@ -13,7 +13,7 @@ export function middleware(request) {
 
   if (
     // Mainnet check
-    // process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
     // Blocked country check
     BLOCKED_COUNTRIES.includes(country)
   ) {
