@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from 'react'
+
 import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
@@ -7,6 +9,7 @@ import styled from '@emotion/styled'
 import useMyAlgo from 'hooks/useMyAlgo'
 import useStore from 'store/use-store'
 import {useStorePersisted} from 'store/use-store'
+import { useWalletsQuery } from 'hooks/useAlgodex'
 
 const Container = styled.div`
   position: absolute;
@@ -26,13 +29,48 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
   const setWallets = useStorePersisted((state) => state.setWallets)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
+  const isSignedIn = useStore((state) => state.isSignedIn)
+  const wallets = useStorePersisted((state) => state.wallets)
+  const { connect, addresses } = useMyAlgo()
+
+  const walletAddresses = useMemo(() => {
+    if (addresses) {
+      return addresses
+    }
+    return wallets ? wallets.map((w) => w.address) : []
+  }, [addresses, wallets])
+
+  // fetch wallet balances from blockchain
+  const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
+  useEffect(() => {
+    if (walletsQuery.data?.wallets) {
+      setWallets(walletsQuery.data.wallets)
+
+      if (!isSignedIn) {
+        setIsSignedIn(true)
+      }
+
+      if (!walletAddresses.includes(activeWalletAddress)) {
+        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
+      }
+    }
+  }, [
+    activeWalletAddress,
+    isSignedIn,
+    setActiveWalletAddress,
+    setIsSignedIn,
+    setWallets,
+    walletAddresses,
+    walletsQuery.data
+  ])
+
 
   const connectWallet = (type) => {
-    const { connect, addresses } = useMyAlgo()
     switch (type) {
       case 'myalgowallet':
         connect()
-    
+      case 'algomobilewallet':
+        // Connect Algorand Mobile Wallet
       default:
         break;
     }
