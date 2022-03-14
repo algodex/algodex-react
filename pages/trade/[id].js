@@ -1,12 +1,12 @@
-import { fetchAssets } from '@/services/algodex'
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import { useCallback, useState } from 'react'
-
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useUserStore from '@/store/use-user-state'
 
 /**
@@ -31,10 +31,10 @@ export async function getStaticPaths() {
  */
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset
+  let staticAssetPrice = {}
 
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
-    console.log(staticExplorerAsset)
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -43,8 +43,22 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
+  // return {
+  //   props: { staticExplorerAsset }
+  // }
+  try {
+    staticAssetPrice = await fetchAssetPrice(id)
+  } catch (error) {
+    if (typeof staticAssetPrice.isTraded === 'undefined') {
+      staticAssetPrice = {
+        isTraded: false,
+        id: staticExplorerAsset.id
+      }
+    }
+  }
+
   return {
-    props: { staticExplorerAsset }
+    props: { staticExplorerAsset, staticAssetPrice }
   }
 }
 
@@ -60,13 +74,23 @@ export async function getStaticProps({ params: { id } }) {
  * @returns {JSX.Element}
  * @constructor
  */
-const TradePage = ({ staticExplorerAsset }) => {
+const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
   // eslint-disable-next-line no-undef
   console.debug(`TradePage(`, arguments[0], `)`)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
+  const { data: dexAsset } = useAssetPriceQuery({
+    asset: staticExplorerAsset || {},
+    options: {
+      refetchInterval: 5000,
+      enabled:
+        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
+      initialData: staticAssetPrice
+    }
+  })
+  
   const [interval, setInterval] = useState('1h')
   const onChange = useCallback(
     (e) => {
@@ -85,8 +109,8 @@ const TradePage = ({ staticExplorerAsset }) => {
       noFollow={true}
     >
       {({ asset }) =>
-        showAssetInfo ? (
-          <AssetInfo asset={asset} />
+        showAssetInfo || !dexAsset?.asset?.price_info?.isTraded ? (
+          <AssetInfo asset={asset} price={dexAsset} />
         ) : (
           <Chart asset={asset} interval={interval} onChange={onChange} />
         )

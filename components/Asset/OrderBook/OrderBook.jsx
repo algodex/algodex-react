@@ -266,11 +266,11 @@ export function OrderBookPrice({ asset }) {
   function PriceInfo() {
     return (
       <Fragment>
-        {floatToFixed(convertFromAsaUnits(asset.price_info.price, asset.decimals))}
-        <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
-          asset.price_info.price24Change,
-          2
-        )}%`}</BodyCopySm>
+        {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
+        <BodyCopySm data-testid="has-price-info" as="span">
+          {asset?.price_info?.price24Change &&
+            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`}
+        </BodyCopySm>
       </Fragment>
     )
   }
