@@ -90,7 +90,7 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
       initialData: staticAssetPrice
     }
   })
-  
+
   const [interval, setInterval] = useState('1h')
   const onChange = useCallback(
     (e) => {

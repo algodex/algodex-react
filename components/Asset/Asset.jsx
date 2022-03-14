@@ -297,7 +297,8 @@ export function AssetInfo({ asset, price }) {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired,
+  price: PropTypes.object
 }
 
 export default withAssetPriceQuery(AssetInfo)
