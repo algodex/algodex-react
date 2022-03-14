@@ -13,7 +13,6 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-
   const isWalletActive = (addr) => {
     return activeWalletAddress === addr
   }
@@ -41,7 +40,6 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
                 <div
                   role="button"
                   tabIndex="0"
-                  onKeyDown={(e) => console.log(e)}
                   onClick={() => switchWalletAddress(address)}
                   className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
                 >
@@ -98,16 +96,17 @@ InactiveWalletsList.propTypes = {
 }
 
 InactiveWalletsList.defaultProps = {
-  walletsList: [
-    {
-      address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
-      type: 'algomobilewallet'
-    },
-    {
-      address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocRZ',
-      type: 'algomobilewallet'
-    }
-  ],
+  // walletsList: [
+  //   {
+  //     address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk0Pza1lQ',
+  //     type: 'algomobilewallet'
+  //   },
+  //   {
+  //     address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocRZ9iZh2Dz',
+  //     type: 'myalgowallet'
+  //   }
+  // ],
+  walletsList: [],
   disconnectWalletFn: () => console.log('Wallet click')
 }
 

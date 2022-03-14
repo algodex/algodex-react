@@ -15,7 +15,7 @@ export const truncatedWalletAddress = (addr, size) => {
 }
 
 export const copyAddress = (address) => {
-  navigator.clipboard.writeText(address).then(
+  window.navigator.clipboard.writeText(address).then(
     () => {
       toast.success('Copied wallet address to clipboard!')
     },

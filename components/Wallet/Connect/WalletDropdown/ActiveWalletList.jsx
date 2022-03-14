@@ -72,7 +72,7 @@ ActiveWalletList.propTypes = {
 ActiveWalletList.defaultProps = {
   wallet: {
     address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
-    type: 'algomobilewallet'
+    type: 'myalgowallet'
   },
   disconnectWalletFn: () => console.log('Handle Disconnect function')
 }

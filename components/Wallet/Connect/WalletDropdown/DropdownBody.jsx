@@ -50,13 +50,13 @@ DropdownBody.propTypes = {
 
   connectWallet: PropTypes.func,
   disconnectWalletFn: PropTypes.func,
-  activeWalletAddress: PropTypes.func
+  activeWalletAddress: PropTypes.string
 }
 
 DropdownBody.defaultProps = {
   connectWallet: () => console.log('Hello Connect'),
   disconnectWalletFn: () => console.log('Hello Connect'),
-  activeWalletAddress: null
+  activeWalletAddress: ''
 }
 
 export default DropdownBody

@@ -2,8 +2,11 @@ import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
+import WalletService from '@/services/wallet'
 import styled from '@emotion/styled'
-import { useStorePersisted } from 'store/use-store'
+import useMyAlgo from 'hooks/useMyAlgo'
+import useStore from 'store/use-store'
+import {useStorePersisted} from 'store/use-store'
 
 const Container = styled.div`
   position: absolute;
@@ -20,13 +23,35 @@ const Container = styled.div`
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
+  const setWallets = useStorePersisted((state) => state.setWallets)
+  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
 
   const connectWallet = (type) => {
-    console.log('Connect wallet: ', type)
+    const { connect, addresses } = useMyAlgo()
+    switch (type) {
+      case 'myalgowallet':
+        connect()
+    
+      default:
+        break;
+    }
+
   }
 
   const disconnectWalletFn = (address, type) => {
-    console.log('Disconnect wallet: ', address, type)
+    switch (type) {
+      case 'myalgowallet':
+        setIsSignedIn(false)
+        setActiveWalletAddress('')
+        setWallets([])
+        return 'myalgowallet'
+      case 'algomobilewallet':
+        console.log('algomobilewallet')
+        return 'algomobilewallet'
+      default:
+        break;
+    }
   }
 
   return (

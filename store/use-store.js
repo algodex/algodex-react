@@ -42,7 +42,6 @@ export const useStorePersisted = create(
       immer((set) => ({
         wallets: [],
         setWallets: (wallets) => set({ wallets }),
-
         activeWalletAddress: '',
         setActiveWalletAddress: (addr) => set({ activeWalletAddress: addr })
       })),
