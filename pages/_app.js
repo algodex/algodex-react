@@ -21,9 +21,24 @@ import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useStore from '@/store/use-store'
 import useUserStore from '@/store/use-user-state'
-
+// import AlgodexAPI from '@algodex/algodex-sdk'
+import Provider from '@/utils/AlgodexContext'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
+const DEFAULT_CONFIG = {
+  algod: {
+    uri: 'https://testnet.algoexplorerapi.io',
+    token: ''
+  },
+  indexer: {
+    uri: 'https://algoindexer.testnet.algoexplorerapi.io',
+    token: ''
+  }
+}
+
+function AlgodexAPI() {}
+
+const dex = new AlgodexAPI({ config: DEFAULT_CONFIG })
 const styles = css`
   html,
   body,
@@ -231,10 +246,12 @@ function Algodex(props) {
               <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
             <ThemeProvider theme={theme}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <Toaster />
-              <ReactQueryDevtools initialIsOpen={false} />
-              <Component {...pageProps} />
+              <Provider dex={dex}>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <Toaster />
+                <ReactQueryDevtools initialIsOpen={false} />
+                <Component {...pageProps} />
+              </Provider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>
