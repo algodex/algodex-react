@@ -128,7 +128,7 @@ export function AssetInfo({ asset, price }) {
     options: {
       refetchInterval: 5000,
       enabled: true,
-      initialData: price
+      initialData: asset.price_info || price
     }
   })
   const renderName = () => {
