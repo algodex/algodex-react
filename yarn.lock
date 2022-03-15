@@ -26,10 +26,10 @@
   dependencies:
     tunnel "0.0.6"
 
-"@algodex/algodex-sdk@^1.1.9":
-  version "1.1.9"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.1.9/52bdd3b40f98865e56fcd600b3168f121019dbe053f60e9683a975317a9ad6e7#a7382cf93336282027fc857e5a45c986ed6e4306"
-  integrity sha512-jqKOemNiGCosuHjOGUYAJZaWIZI89V8nyEasDbCCEvzCWLsylLZ08sazlBKC6tlPzR9EXEDwLeFHLYi8H7JMUw==
+"@algodex/algodex-sdk@^1.1.13":
+  version "1.1.13"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.1.13/f67e798162c2c1fc64c853141679d862164d3e8104d6527a883e9ec03b8ebd19#078985b1321d736887cef9863e282ab4c2520207"
+  integrity sha512-DZmuLu7mi9uwRv/S2pu8bkGz3GRGrGnbZs5hOIJMnV7BcoNfDxiYGjfrpWOnQMRVdzRk3cjugzSjvXAAZmxCIQ==
   dependencies:
     "@json-rpc-tools/utils" "^1.7.6"
     "@randlabs/myalgo-connect" "^1.0.1"
