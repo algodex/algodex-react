@@ -17,18 +17,15 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/type'
-import { useAssetOrdersQuery, useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import { useCallback, useEffect, useState } from 'react'
 
 import Big from 'big.js'
-import Error from 'components/error'
 import Icon from 'components/icon'
 import { Info } from 'react-feather'
 import { LimitOrder } from './limit-order'
 import { MarketOrder } from './market-order'
 import OrderService from 'services/order'
 import PropTypes from 'prop-types'
-import Spinner from '../spinner'
 import { Tooltip } from 'components/tooltip'
 import WalletService from 'services/wallet'
 import { aggregateOrders } from 'components/order-book/helpers'
@@ -38,6 +35,7 @@ import toast from 'react-hot-toast'
 import { useStore } from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '../../store/use-user-state'
+import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -50,7 +48,8 @@ const DEFAULT_ORDER = {
 function PlaceOrderView(props) {
   const { asset, wallets, activeWalletAddress, orderBook } = props
   const { t } = useTranslation('place-order')
-
+  const [sellOrders, setSellOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
 
@@ -58,8 +57,6 @@ function PlaceOrderView(props) {
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
-  const [marketBuyPrice, setMarketBuyPrice] = useState(0)
-  const [marketSellPrice, setMarketSellPrice] = useState(0)
 
   const [status, setStatus] = useState({
     submitted: false,
@@ -126,60 +123,35 @@ function PlaceOrderView(props) {
     },
     [asset, setOrder]
   )
-  const {
-    data: assetOrders,
-    isLoading: isAssetOrderLoading,
-    isError: isAssetOrderError
-  } = useAssetOrdersQuery({ asset })
-
-  const isLoading = isAssetOrderLoading || isWalletBalanceLoading
-  const isError = isAssetOrderError || isWalletBalanceError
 
   useEffect(() => {
-    if (
-      assetOrders &&
-      !isAssetOrderLoading &&
-      !isAssetOrderError &&
-      typeof assetOrders.sellASAOrdersInEscrow !== 'undefined' &&
-      typeof assetOrders.buyASAOrdersInEscrow !== 'undefined'
-    ) {
-      let list = aggregateOrders(assetOrders.sellASAOrdersInEscrow, asset.decimals, 'sell').map(
-        (value) => parseFloat(value.price)
-      )
-      setMarketBuyPrice(Math.min(...list))
+    setSellOrders(aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  }, [orderBook, setSellOrders, setBuyOrders, asset])
 
-      let list2 = aggregateOrders(assetOrders.buyASAOrdersInEscrow, asset.decimals, 'buy').map(
-        (value) => parseFloat(value.price)
+  const updateInitialState = () => {
+    if (order.type === 'buy') {
+      setOrder(
+        {
+          price: sellOrders?.length ? sellOrders[sellOrders.length - 1].price : '0.00'
+        },
+        asset
       )
-      setMarketSellPrice(Math.max(...list2))
     }
-  }, [
-    isAssetOrderLoading,
-    isAssetOrderError,
-    assetOrders,
-    setMarketBuyPrice,
-    setMarketSellPrice,
-    asset
-  ])
 
-  const handleMarketOrderChange = useCallback(() => {
-    if (typeof marketBuyPrice !== 'undefined' && typeof marketSellPrice !== 'undefined') {
-      if (marketSellPrice !== -Infinity && marketBuyPrice !== Infinity) {
-        setOrder(
-          {
-            price: order.type === 'buy' ? `${marketBuyPrice}` : `${marketSellPrice}`
-          },
-          asset
-        )
-      }
+    if (order.type === 'sell') {
+      setOrder(
+        {
+          price: buyOrders?.length ? buyOrders[0].price : '0.00'
+        },
+        asset
+      )
     }
-  }, [setOrder, order.type, asset, marketBuyPrice, marketSellPrice])
+  }
 
   useEffect(() => {
-    if (orderView === MARKET_PANEL) {
-      handleMarketOrderChange()
-    }
-  }, [assetOrders, order.type, marketBuyPrice, marketSellPrice, handleMarketOrderChange, orderView])
+    updateInitialState()
+  }, [order.type, orderView, activeWalletAddress])
 
   const handleRangeChange = useCallback(
     (update) => {
@@ -459,7 +431,6 @@ function PlaceOrderView(props) {
             isActive={orderView === MARKET_PANEL}
             onClick={() => {
               setOrderView(MARKET_PANEL)
-              handleMarketOrderChange()
               handleOptionsChange({ target: { value: 'market' } })
             }}
           >
@@ -495,8 +466,6 @@ function PlaceOrderView(props) {
     )
   }
 
-  if (isError) return <Error />
-  if (isLoading) return <Spinner flex />
   return (
     <Container data-testid="place-order">
       <Header>

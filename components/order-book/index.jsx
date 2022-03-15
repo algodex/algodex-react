@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { aggregateOrders } from './helpers'
-import OrderBookView from './view'
-import useStore from 'store/use-store'
-import { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import FirstOrderMsg from 'components/first-order-msg'
-import Spinner from 'components/spinner'
 import Error from 'components/error'
+import FirstOrderMsg from 'components/first-order-msg'
+import OrderBookView from './view'
+import PropTypes from 'prop-types'
+import Spinner from 'components/spinner'
+import { aggregateOrders } from './helpers'
 import { useAssetOrdersQuery } from 'hooks/useAlgodex'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import useStore from 'store/use-store'
 
 /**
  * @param asset
