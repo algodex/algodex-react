@@ -9,6 +9,7 @@ import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
+import {aggregateOrders} from '@/hooks/useAlgodex'
 import { convertFromAsaUnits } from '@/services/convert'
 import { floatToFixed } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
@@ -335,7 +336,6 @@ export function OrderBook({ asset, orders, components }) {
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-
     return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
@@ -364,7 +364,7 @@ export function OrderBook({ asset, orders, components }) {
             title={row.price}
             m={0}
           >
-            {floatToFixed(row.price)}
+            {row.price}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
