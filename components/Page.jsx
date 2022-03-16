@@ -36,7 +36,7 @@ const Container = styled.div`
  * @param {string} description
  * @param {Object} staticExplorerAsset
  * @param {boolean} noFollow
- * @param {JSX.Element|JSX.Element[]|function} children
+ * @param {JSX.Element} children
  * @returns {JSX.Element}
  * @constructor
  */
@@ -103,7 +103,7 @@ const Page = ({
       <NetworkHandler />
       <Layout asset={explorerAsset}>
         {(isLoading || !explorerAsset?.id) && <Spinner flex />}
-        {!isLoading && explorerAsset?.id && children({ asset: explorerAsset })}
+        {!isLoading && explorerAsset?.id && children}
       </Layout>
     </Container>
   )

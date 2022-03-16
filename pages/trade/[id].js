@@ -82,7 +82,7 @@ const TradePage = ({ staticExplorerAsset }) => {
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
   const {
-    data: { asset: _asset }
+    data: { asset }
   } = useAssetPriceQuery({
     asset: staticExplorerAsset,
     options: {
@@ -109,13 +109,11 @@ const TradePage = ({ staticExplorerAsset }) => {
       staticExplorerAsset={staticExplorerAsset}
       noFollow={true}
     >
-      {({ asset }) =>
-        showAssetInfo || !_asset?.price_info?.isTraded ? (
-          <AssetInfo asset={asset} />
-        ) : (
-          <Chart asset={asset} interval={interval} onChange={onChange} />
-        )
-      }
+      {showAssetInfo || !asset?.price_info?.isTraded ? (
+        <AssetInfo asset={asset} />
+      ) : (
+        <Chart asset={asset} interval={interval} onChange={onChange} />
+      )}
     </Page>
   )
 }
