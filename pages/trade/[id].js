@@ -1,13 +1,13 @@
-import { fetchAssets } from '@/services/algodex'
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import { useCallback, useState } from 'react'
-
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import useUserStore from '@/store/use-user-state'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 
 /**
  * Fetch Traded Asset Paths
@@ -31,10 +31,10 @@ export async function getStaticPaths() {
  */
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset
+  let staticAssetPrice = {}
 
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
-    console.log(staticExplorerAsset)
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -43,6 +43,20 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
+  // return {
+  //   props: { staticExplorerAsset }
+  // }
+  try {
+    staticAssetPrice = await fetchAssetPrice(id)
+  } catch (error) {
+    if (typeof staticAssetPrice.isTraded === 'undefined') {
+      staticExplorerAsset.price_info = {
+        isTraded: false,
+        id: staticExplorerAsset.id
+      }
+    }
+  }
+
   return {
     props: { staticExplorerAsset }
   }
@@ -67,6 +81,18 @@ const TradePage = ({ staticExplorerAsset }) => {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
+  const {
+    data: { asset }
+  } = useAssetPriceQuery({
+    asset: staticExplorerAsset,
+    options: {
+      refetchInterval: 5000,
+      enabled:
+        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
+      initialData: staticExplorerAsset
+    }
+  })
+
   const [interval, setInterval] = useState('1h')
   const onChange = useCallback(
     (e) => {
@@ -76,7 +102,6 @@ const TradePage = ({ staticExplorerAsset }) => {
     },
     [setInterval, interval]
   )
-
   return (
     <Page
       title={`${prefix} ${title}`}
@@ -84,13 +109,11 @@ const TradePage = ({ staticExplorerAsset }) => {
       staticExplorerAsset={staticExplorerAsset}
       noFollow={true}
     >
-      {({ asset }) =>
-        showAssetInfo ? (
-          <AssetInfo asset={asset} />
-        ) : (
-          <Chart asset={asset} interval={interval} onChange={onChange} />
-        )
-      }
+      {showAssetInfo || !asset?.price_info?.isTraded ? (
+        <AssetInfo asset={asset} />
+      ) : (
+        <Chart asset={asset} interval={interval} onChange={onChange} />
+      )}
     </Page>
   )
 }

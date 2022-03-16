@@ -60,16 +60,18 @@ describe('Asset Info', () => {
     expect(queryByTestId(ASA_URL)).toBeNull()
   })
 
-  it('Should show back button when traded', () => {
+  it('Should not show back button when not traded', () => {
     const _asset = {
-      ...asset,
-      price_info: {
-        id: 15322902,
-        isTraded: false,
-        price: 2120,
-        price24Change: -15.166066426570628,
-        priceBefore: 2499,
-        unix_time: 1644016284
+      asset: {
+        ...asset,
+        price_info: {
+          id: 15322902,
+          isTraded: false,
+          price: 2120,
+          price24Change: -15.166066426570628,
+          priceBefore: 2499,
+          unix_time: 1644016284
+        }
       }
     }
     const { queryByTestId } = render(<AssetInfo asset={_asset} />)

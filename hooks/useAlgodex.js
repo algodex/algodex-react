@@ -73,7 +73,7 @@ export function useSearchResultsQuery({
  * @returns {object} Massaged Query
  */
 export function useAssetPriceQuery({
-  asset: algorandAsset,
+  asset: algorandAsset = {},
   options = {
     refetchInterval
   }
