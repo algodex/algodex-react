@@ -86,7 +86,7 @@ const Page = ({
       typeof data.id !== 'undefined' &&
       data.id !== explorerAsset?.id
     ) {
-      addAsset(data)
+      // addAsset(data)
       setExplorerAsset(data)
     }
   }, [explorerAsset, addAsset, data])

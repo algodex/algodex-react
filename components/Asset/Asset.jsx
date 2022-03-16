@@ -9,7 +9,6 @@ import { convertFromBaseUnits } from '@/services/convert'
 import { floatToFixed } from '@/services/display'
 import styled from '@emotion/styled'
 import theme from '../../theme/index'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
@@ -108,11 +107,11 @@ const AlgoExplorerLink = styled.div`
     }
   }
 `
-export function AssetInfo({ asset, price }) {
+export function AssetInfo({ asset }) {
   // console.log(`AssetInfo(`, arguments[0], `)`)
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
-  const description = asset.description || price?.asset?.verified_info?.description || 'N/A'
+  const description = asset.description || asset?.verified_info?.description || 'N/A'
   const activeNetwork = useUserStore((state) => state.activeNetwork)
 
   const explorerURL =
@@ -123,14 +122,7 @@ export function AssetInfo({ asset, price }) {
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset,
-    options: {
-      refetchInterval: 5000,
-      enabled: true,
-      initialData: asset.price_info || price
-    }
-  })
+
   const renderName = () => {
     if (asset.verified) {
       return (
@@ -168,7 +160,7 @@ export function AssetInfo({ asset, price }) {
   return (
     <Container>
       <InfoContainer>
-        {dexAsset?.asset?.price_info?.isTraded ? (
+        {asset?.price_info?.isTraded ? (
           <button data-testid="asset-info-back-btn" onClick={onClick}>
             <ButtonText type="button">
               <ArrowLeft />
@@ -244,7 +236,7 @@ export function AssetInfo({ asset, price }) {
           {/*  </BodyCopy>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
-          {dexAsset?.asset?.price_info?.isTraded ? (
+          {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
                 <BodyCopyTiny as="dt" color="gray.500">
@@ -257,9 +249,9 @@ export function AssetInfo({ asset, price }) {
                   fontSize="1.25rem"
                 >
                   {floatToFixed(
-                    dexAsset?.asset?.decimals !== 6
-                      ? convertFromBaseUnits(dexAsset?.asset?.price_info.price, asset.decimals)
-                      : dexAsset?.asset?.price_info.price
+                    asset?.decimals !== 6
+                      ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
+                      : asset?.price_info.price
                   )}{' '}
                   ALGO
                 </BodyCopy>
@@ -274,7 +266,7 @@ export function AssetInfo({ asset, price }) {
                   fontFamily={theme.fontFamilies.monospace}
                   fontSize="1.25rem"
                 >
-                  {dexAsset?.asset?.price_info.price24Change}%
+                  {asset?.price_info.price24Change}%
                 </BodyCopy>
               </InfoItem>
             </Fragment>

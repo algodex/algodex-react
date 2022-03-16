@@ -6,8 +6,8 @@ import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useUserStore from '@/store/use-user-state'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 
 /**
  * Fetch Traded Asset Paths
@@ -50,7 +50,7 @@ export async function getStaticProps({ params: { id } }) {
     staticAssetPrice = await fetchAssetPrice(id)
   } catch (error) {
     if (typeof staticAssetPrice.isTraded === 'undefined') {
-      staticAssetPrice = {
+      staticExplorerAsset.price_info = {
         isTraded: false,
         id: staticExplorerAsset.id
       }
@@ -58,7 +58,7 @@ export async function getStaticProps({ params: { id } }) {
   }
 
   return {
-    props: { staticExplorerAsset, staticAssetPrice }
+    props: { staticExplorerAsset }
   }
 }
 
@@ -74,20 +74,22 @@ export async function getStaticProps({ params: { id } }) {
  * @returns {JSX.Element}
  * @constructor
  */
-const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
+const TradePage = ({ staticExplorerAsset }) => {
   // eslint-disable-next-line no-undef
   console.debug(`TradePage(`, arguments[0], `)`)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset: staticExplorerAsset || {},
+  const {
+    data: { asset: _asset }
+  } = useAssetPriceQuery({
+    asset: staticExplorerAsset,
     options: {
       refetchInterval: 5000,
       enabled:
         typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
-      initialData: staticAssetPrice
+      initialData: staticExplorerAsset
     }
   })
 
@@ -100,7 +102,6 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
     },
     [setInterval, interval]
   )
-
   return (
     <Page
       title={`${prefix} ${title}`}
@@ -109,8 +110,8 @@ const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
       noFollow={true}
     >
       {({ asset }) =>
-        showAssetInfo || !dexAsset?.asset?.price_info?.isTraded ? (
-          <AssetInfo asset={asset} price={dexAsset} />
+        showAssetInfo || !_asset?.price_info?.isTraded ? (
+          <AssetInfo asset={asset} />
         ) : (
           <Chart asset={asset} interval={interval} onChange={onChange} />
         )
