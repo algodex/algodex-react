@@ -249,7 +249,7 @@ export function AssetInfo({ asset }) {
                   fontSize="1.25rem"
                 >
                   {floatToFixed(
-                    asset.decimals !== 6
+                    asset?.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
                       : asset?.price_info.price
                   )}{' '}
@@ -289,7 +289,8 @@ export function AssetInfo({ asset }) {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired,
+  price: PropTypes.object
 }
 
 export default withAssetPriceQuery(AssetInfo)

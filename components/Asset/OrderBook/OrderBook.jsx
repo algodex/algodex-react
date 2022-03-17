@@ -266,11 +266,11 @@ export function OrderBookPrice({ asset }) {
   function PriceInfo() {
     return (
       <Fragment>
-        {floatToFixed(convertFromAsaUnits(asset.price_info.price, asset.decimals))}
-        <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
-          asset.price_info.price24Change,
-          2
-        )}%`}</BodyCopySm>
+        {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
+        <BodyCopySm data-testid="has-price-info" as="span">
+          {asset?.price_info?.price24Change &&
+            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`}
+        </BodyCopySm>
       </Fragment>
     )
   }
@@ -331,6 +331,8 @@ export function OrderBook({ asset, orders, components }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
+  const isSignedIn = useStore((state) => state.isSignedIn)
+
   const dispatcher = useEventDispatch()
 
   const renderOrders = (data, type) => {
@@ -387,6 +389,11 @@ export function OrderBook({ asset, orders, components }) {
         </BookRow>
       )
     })
+  }
+  if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
+    if (orders.sell.length === 0 && orders.buy.length === 0) {
+      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+    }
   }
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
