@@ -128,6 +128,16 @@ function TradePage({ staticExplorerAsset }) {
     }
   }, [asset, setAsset, explorerAsset])
 
+  useEffect(() => {
+    if (
+      typeof staticExplorerAsset !== 'undefined' &&
+      typeof staticExplorerAsset.id !== 'undefined' &&
+      staticExplorerAsset.id !== asset.id
+    ) {
+      setAsset(staticExplorerAsset)
+    }
+  }, [asset, setAsset, staticExplorerAsset])
+
   const renderContent = () => {
     // Display spinner when invalid state
     if (isLoading || isFallback) return <Spinner flex />
