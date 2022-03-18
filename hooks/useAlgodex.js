@@ -1,3 +1,4 @@
+import { calculateAsaBuyAmount, convertFromAsaUnits } from '@/services/convert'
 import {
   fetchAssetChart,
   fetchAssetOrders,
@@ -12,7 +13,6 @@ import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
 import WalletService from '@/services/wallet'
-import { calculateAsaBuyAmount } from '@/services/convert'
 import dayjs from 'dayjs'
 import { floatToFixed } from '@/services/display'
 import millify from 'millify'
@@ -231,6 +231,17 @@ function aggregateOrders(orders, asaDecimals, type) {
   const isBuyOrder = type === 'buy'
   let total = 0
 
+  const leftPriceDecimalsLength = orders.map((order) => {
+    const price = new Big(convertFromAsaUnits(order.asaPrice, asaDecimals))
+    const left = Math.floor(price)
+    const right = price.sub(left)
+
+    return right !== 0 && right.toString().length > 2 ? right.toString().length - 2 : 0
+  })
+
+  const decimalLength =
+    leftPriceDecimalsLength.length === 0 ? 0 : Math.max(...leftPriceDecimalsLength)
+
   const sortOrdersToAggregate = (a, b) => {
     if (isBuyOrder) {
       return b.asaPrice - a.asaPrice
@@ -239,7 +250,8 @@ function aggregateOrders(orders, asaDecimals, type) {
   }
 
   const reduceAggregateData = (result, order) => {
-    const price = floatToFixed(order.formattedPrice)
+    const _price = convertFromAsaUnits(order.asaPrice, asaDecimals)
+    const price = floatToFixed(_price, 6, decimalLength)
 
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
 
