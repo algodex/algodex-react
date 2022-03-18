@@ -3,7 +3,6 @@ import { useQuery } from 'react-query'
 import { fetchExplorerAssetInfo, fetchAlgorandPrice } from 'services/algoexplorer'
 import { routeQueryError } from './useAlgodex'
 import { useEffect } from 'react'
-const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false
 
 const refetchInterval = 3000
 
@@ -15,8 +14,8 @@ const refetchInterval = 3000
  * @returns {Object}
  * @todo: Refactor to use Algorand
  */
-export const useExplorerAssetInfo = ({ asset, options }) => {
-  DEBUG && console.debug(`useExplorerAssetInfo`)
+export const useExplorerAssetInfo = ({ asset = {}, options }) => {
+  console.log(`useExplorerAssetInfo(`, asset, `)`)
   const router = useRouter()
   const { id } = asset
   const { data, isError, error, ...rest } = useQuery(
@@ -27,7 +26,7 @@ export const useExplorerAssetInfo = ({ asset, options }) => {
   //console.log(data)
   useEffect(() => {
     let mounted = true
-    if (mounted) {
+    if (mounted && typeof id !== 'undefined') {
       routeQueryError({ isError, error, router })
     }
     return () => (mounted = false)

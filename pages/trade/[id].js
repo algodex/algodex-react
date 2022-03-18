@@ -34,7 +34,7 @@ export async function getStaticPaths() {
  * @returns {object} Response Object or Redirect Object
  */
 export async function getStaticProps({ params: { id } }) {
-  let staticExplorerAsset
+  let staticExplorerAsset = { id }
   let staticAssetPrice = {}
 
   try {
@@ -80,37 +80,34 @@ export async function getStaticProps({ params: { id } }) {
  * @returns {JSX.Element}
  * @constructor
  */
-const TradePage = ({ staticExplorerAsset }) => {
+function TradePage({ staticExplorerAsset }) {
   // eslint-disable-next-line no-undef
-  console.debug(`TradePage(`, arguments[0], `)`)
+  console.debug(`TradePage(`, staticExplorerAsset, `)`)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
-  const { query } = useRouter()
-  const id = parseInt(query.id)
-  // Use the static asset or
-  const [asset, setAsset] = useState(staticExplorerAsset || { id })
+  const { isFallback } = useRouter()
 
-  const isRouted = typeof query.id !== 'undefined'
-  const isShallow = isRouted && id !== asset?.id
-  const isStatic = isRouted && id === staticExplorerAsset?.id
+  // Use the static asset or fallback to the route id
+  const [asset, setAsset] = useState(staticExplorerAsset)
 
   let options = {
-    enabled: isRouted || isShallow || typeof staticExplorerAsset === 'undefined',
+    enabled: isFallback,
     refetchInterval: 200000
   }
 
-  if (isStatic) {
+  if (!isFallback) {
     options.initialData = staticExplorerAsset
   }
 
-  const { data: explorerAsset, isLoading: isExplorerInfoLoading } = useExplorerAssetInfo({
-    asset: { id: query.id || asset?.id },
+  const { data: explorerAsset, isLoading } = useExplorerAssetInfo({
+    asset,
     options
   })
 
   const [interval, setInterval] = useState('1h')
+
   const onChange = useCallback(
     (e) => {
       if (e.target.name === 'interval' && e.target.value !== interval) {
@@ -125,17 +122,17 @@ const TradePage = ({ staticExplorerAsset }) => {
     if (
       typeof explorerAsset !== 'undefined' &&
       typeof explorerAsset.id !== 'undefined' &&
-      explorerAsset.id !== asset?.id
+      explorerAsset.id !== asset.id
     ) {
       setAsset(explorerAsset)
     }
   }, [asset, setAsset, explorerAsset])
 
-  const isLoading = isExplorerInfoLoading
-
   const renderContent = () => {
-    if (isLoading || !asset?.id) return <Spinner flex />
-    if (showAssetInfo || !asset.price_info.isTraded) return <AssetInfo asset={asset} />
+    // Display spinner when invalid state
+    if (isLoading || isFallback) return <Spinner flex />
+    // Render AssetInfo if showAssetInfo is selected or the asset is not traded
+    if (showAssetInfo || !asset?.price_info?.isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
   }
 
