@@ -1,5 +1,5 @@
 import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
@@ -7,7 +7,11 @@ import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import useUserStore from '@/store/use-user-state'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+
+import Spinner from '@/components/Spinner'
+import Layout from '@/components/Layout/OriginalLayout'
+import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
+import { useRouter } from 'next/router'
 
 /**
  * Fetch Traded Asset Paths
@@ -43,18 +47,20 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
-  // return {
-  //   props: { staticExplorerAsset }
-  // }
+
   try {
     staticAssetPrice = await fetchAssetPrice(id)
   } catch (error) {
     if (typeof staticAssetPrice.isTraded === 'undefined') {
-      staticExplorerAsset.price_info = {
+      staticAssetPrice = {
         isTraded: false,
         id: staticExplorerAsset.id
       }
     }
+  }
+
+  if (typeof staticAssetPrice.isTraded !== 'undefined') {
+    staticExplorerAsset.price_info = staticAssetPrice
   }
 
   return {
@@ -81,16 +87,27 @@ const TradePage = ({ staticExplorerAsset }) => {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
-  const {
-    data: { asset }
-  } = useAssetPriceQuery({
-    asset: staticExplorerAsset,
-    options: {
-      refetchInterval: 5000,
-      enabled:
-        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
-      initialData: staticExplorerAsset
-    }
+  const { query } = useRouter()
+  const id = parseInt(query.id)
+  // Use the static asset or
+  const [asset, setAsset] = useState(staticExplorerAsset || { id })
+
+  const isRouted = typeof query.id !== 'undefined'
+  const isShallow = isRouted && id !== asset?.id
+  const isStatic = isRouted && id === staticExplorerAsset?.id
+
+  let options = {
+    enabled: isRouted || isShallow || typeof staticExplorerAsset === 'undefined',
+    refetchInterval: 200000
+  }
+
+  if (isStatic) {
+    options.initialData = staticExplorerAsset
+  }
+
+  const { data: explorerAsset, isLoading: isExplorerInfoLoading } = useExplorerAssetInfo({
+    asset: { id: query.id || asset?.id },
+    options
   })
 
   const [interval, setInterval] = useState('1h')
@@ -102,18 +119,33 @@ const TradePage = ({ staticExplorerAsset }) => {
     },
     [setInterval, interval]
   )
+
+  // Effects for AlgoExplorer
+  useEffect(() => {
+    if (
+      typeof explorerAsset !== 'undefined' &&
+      typeof explorerAsset.id !== 'undefined' &&
+      explorerAsset.id !== asset?.id
+    ) {
+      setAsset(explorerAsset)
+    }
+  }, [asset, setAsset, explorerAsset])
+
+  const isLoading = isExplorerInfoLoading
+
+  const renderContent = () => {
+    if (isLoading || !asset?.id) return <Spinner flex />
+    if (showAssetInfo || !asset.price_info.isTraded) return <AssetInfo asset={asset} />
+    else return <Chart asset={asset} interval={interval} onChange={onChange} />
+  }
+
   return (
     <Page
       title={`${prefix} ${title}`}
       description={'Decentralized exchange for trading Algorand ASAs'}
-      staticExplorerAsset={staticExplorerAsset}
       noFollow={true}
     >
-      {showAssetInfo || !asset?.price_info?.isTraded ? (
-        <AssetInfo asset={asset} />
-      ) : (
-        <Chart asset={asset} interval={interval} onChange={onChange} />
-      )}
+      <Layout asset={asset}>{renderContent()}</Layout>
     </Page>
   )
 }
