@@ -10,7 +10,6 @@ import useUserStore from '@/store/use-user-state'
 
 import Spinner from '@/components/Spinner'
 import Layout from '@/components/Layout/OriginalLayout'
-import { useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
 import { useRouter } from 'next/router'
 
 /**
@@ -92,20 +91,6 @@ function TradePage({ staticExplorerAsset }) {
   // Use the static asset or fallback to the route id
   const [asset, setAsset] = useState(staticExplorerAsset)
 
-  let options = {
-    enabled: isFallback,
-    refetchInterval: 200000
-  }
-
-  if (!isFallback) {
-    options.initialData = staticExplorerAsset
-  }
-
-  const { data: explorerAsset, isLoading } = useExplorerAssetInfo({
-    asset,
-    options
-  })
-
   const [interval, setInterval] = useState('1h')
 
   const onChange = useCallback(
@@ -117,22 +102,11 @@ function TradePage({ staticExplorerAsset }) {
     [setInterval, interval]
   )
 
-  // Effects for AlgoExplorer
-  useEffect(() => {
-    if (
-      typeof explorerAsset !== 'undefined' &&
-      typeof explorerAsset.id !== 'undefined' &&
-      explorerAsset.id !== asset.id
-    ) {
-      setAsset(explorerAsset)
-    }
-  }, [asset, setAsset, explorerAsset])
-
   useEffect(() => {
     if (
       typeof staticExplorerAsset !== 'undefined' &&
       typeof staticExplorerAsset.id !== 'undefined' &&
-      staticExplorerAsset.id !== asset.id
+      staticExplorerAsset.id !== asset?.id
     ) {
       setAsset(staticExplorerAsset)
     }
@@ -140,7 +114,7 @@ function TradePage({ staticExplorerAsset }) {
 
   const renderContent = () => {
     // Display spinner when invalid state
-    if (isLoading || isFallback) return <Spinner flex />
+    if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !asset?.price_info?.isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
