@@ -27,7 +27,7 @@ export const AssetNameCell = ({ value, row }) => {
   }, [dispatcher])
   return (
     <Link href={`/trade/${assetId}`}>
-      <button onClick={onClick}>
+      <button className="text-left" onClick={onClick}>
         <BrightGraySpan>{value}</BrightGraySpan>
       </button>
     </Link>
