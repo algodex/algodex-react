@@ -169,7 +169,7 @@ function Table({
   }, [onStateChange, initialState, tableState])
   return (
     <Container>
-      <table {...getTableProps()}>
+      <table {...getTableProps()} data-testid="data-table">
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
             <tr data-testid="header-row" key={rowKey} {...headerGroup.getHeaderGroupProps()}>

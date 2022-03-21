@@ -97,6 +97,7 @@ export const Search = forwardRef(
             className="focus:outline-none"
             ref={ref}
             value={value}
+            data-testid="asa-table-search-input"
             onKeyDown={handleKeyDown}
             {...props}
           />
