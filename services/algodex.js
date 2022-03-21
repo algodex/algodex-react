@@ -52,16 +52,16 @@ async function getEtagResponse(url) {
   }
 
   // TODO: Add JWT for API
-  // const authToken = process.env.GEO_PASSWORD
-  // const authHeader = `Bearer ${authToken}`
+  const authToken = process.env.GEO_PASSWORD
+  const authHeader = `Bearer ${authToken}`
   let options = { headers: {} }
-  // if (
-  //   process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
-  //   typeof authToken !== 'undefined' &&
-  //   NODE_ENV !== 'test'
-  // ) {
-  //   options.headers['Authorization'] = authHeader
-  // }
+  if (
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' &&
+    typeof authToken !== 'undefined' &&
+    NODE_ENV !== 'test'
+  ) {
+    options.headers['Authorization'] = authHeader
+  }
 
   if (urlToEtag[url]) {
     options.headers['if-none-match'] = urlToEtag[url]
