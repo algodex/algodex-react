@@ -52,7 +52,7 @@ async function getEtagResponse(url) {
   }
 
   // TODO: Add JWT for API
-  const authToken = process.env.GEO_PASSWORD
+  const authToken = process.env.NEXT_PUBLIC_GEO_PASSWORD || process.env.GEO_PASSWORD
   const authHeader = `Bearer ${authToken}`
   let options = { headers: {} }
   if (
