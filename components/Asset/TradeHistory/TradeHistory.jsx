@@ -158,7 +158,6 @@ export function TradeHistory({ asset, orders: tradesData }) {
             >
               {amount.toFixed(Math.min(3, asset.decimals))}
             </BodyCopyTiny>
-            {console.log(dayjs(row.timestamp).format('lll'), row.timestamp)}
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"

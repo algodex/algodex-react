@@ -164,3 +164,37 @@ describe('Checks if wallet section is visible on Mobile view on Different Screen
     })
   })
 })
+
+describe('Render search table when Input is clicked on Mobile View on Different Screens', () => {
+  beforeEach(clear)
+  afterEach(clear)
+  sizes.forEach((size) => {
+    it(`Should render ASA table on ${size} screen`, () => {
+      if (Cypress._.isArray(size)) {
+        cy.viewport(size[0], size[1])
+        cy.visit('/en/about')
+        clear()
+        cy.visit('/en/trade/15322902')
+        cy.get('[data-testid=modal-accept]').contains('ACCEPT').scrollIntoView().should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+        cy.get('[data-testid=asa-table-search-input]').should('be.visible').click()
+        cy.get('[data-testid=data-table]').should('be.visible')
+        cy.get('[data-testid=data-table]').children().first().click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+      } else {
+        cy.viewport(size)
+        cy.visit('/en/about')
+        clear()
+        cy.visit('/en/trade/15322902')
+        cy.get('[data-testid=modal-accept]').contains('ACCEPT').scrollIntoView().should('be.visible')
+        cy.get('button').contains('ACCEPT').click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+        cy.get('[data-testid=asa-table-search-input]').should('be.visible').click()
+        cy.get('[data-testid=data-table]').should('be.visible')
+        cy.get('[data-testid=data-table]').children().first().click()
+        cy.get('[data-testid=candleStickChart]').should('be.visible')
+      }
+    })
+  })
+})
