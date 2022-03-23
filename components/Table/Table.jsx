@@ -238,7 +238,6 @@ function Table({
             <Fade {...TransitionProps} timeout={0}>
               <div>
                 <Flyover
-                  data-testid="flyover-item"
                   isLarge={true}
                   row={itemInfo}
                   {...componentsProps.Flyover}
