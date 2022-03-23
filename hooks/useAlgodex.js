@@ -73,9 +73,11 @@ export function useSearchResultsQuery({
  * @returns {object} Massaged Query
  */
 export function useAssetPriceQuery({
-  asset: algorandAsset = {},
+  asset: algorandAsset,
   options = {
-    refetchInterval
+    refetchInterval,
+    enabled: typeof algorandAsset !== 'undefined' && typeof algorandAsset.id !== 'undefined',
+    initialData: algorandAsset?.price_info
   }
 } = {}) {
   //console.log(`useAssetPriceQuery(`, arguments[0], `)`)

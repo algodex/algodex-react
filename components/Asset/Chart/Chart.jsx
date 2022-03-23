@@ -224,14 +224,26 @@ export function Chart({
         />
       </>
 
-      <ChartOverlay
-        asset={asset}
-        ohlc={overlay.ohlc}
-        bid={overlay.orderbook.bid}
-        ask={overlay.orderbook.ask}
-        spread={overlay.orderbook.spread}
-        volume={overlay.volume}
-      />
+      {typeof overlay?.ohlc !== 'undefined' && (
+        <ChartOverlay
+          asset={asset}
+          ohlc={overlay.ohlc}
+          bid={overlay.orderbook.bid}
+          ask={overlay.orderbook.ask}
+          spread={overlay.orderbook.spread}
+          volume={overlay.volume}
+        />
+      )}
+      {typeof overlay.ohlc === 'undefined' && (
+        <ChartOverlay
+          asset={asset}
+          ohlc={_overlay.ohlc}
+          bid={_overlay.orderbook.bid}
+          ask={_overlay.orderbook.ask}
+          spread={_overlay.orderbook.spread}
+          volume={_overlay.volume}
+        />
+      )}
       <SettingsContainer>
         <ChartSettings interval={interval} mode={chartMode} onChange={(e) => onSettingsChange(e)} />
       </SettingsContainer>
