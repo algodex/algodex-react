@@ -41,7 +41,7 @@ const Trades = styled.div`
   overflow: hidden scroll;
   /* width */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
   }
 
   /* Track */

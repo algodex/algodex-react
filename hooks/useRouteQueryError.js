@@ -16,7 +16,7 @@ export const useRouteQueryError = ({ isError, error, router, enabled = true }) =
       // Do nothing. The component will handle this.
     } else if (isError && error.message.match(451) && activeNetwork === 'mainnet') {
       console.error({ error })
-      router.push('/restricted')
+      router.push('/restricted/US')
     }
   }
 }
