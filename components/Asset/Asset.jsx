@@ -12,6 +12,7 @@ import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
+import Spinner from '@/components/Spinner'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -293,4 +294,6 @@ AssetInfo.propTypes = {
   price: PropTypes.object
 }
 
-export default withAssetPriceQuery(AssetInfo)
+export default withAssetPriceQuery(AssetInfo, {
+  components: { ServiceError: AssetInfo, Loading: Spinner }
+})

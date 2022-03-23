@@ -1,5 +1,5 @@
 import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
@@ -11,6 +11,7 @@ import useUserStore from '@/store/use-user-state'
 import Spinner from '@/components/Spinner'
 import Layout from '@/components/Layout/OriginalLayout'
 import { useRouter } from 'next/router'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 
 /**
  * Fetch Traded Asset Paths
@@ -86,12 +87,14 @@ function TradePage({ staticExplorerAsset }) {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
-  const { isFallback } = useRouter()
+  const { isFallback, query } = useRouter()
 
   // Use the static asset or fallback to the route id
   const [asset, setAsset] = useState(staticExplorerAsset)
 
   const [interval, setInterval] = useState('1h')
+  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const { data } = useAssetPriceQuery({ asset: _asset })
 
   const onChange = useCallback(
     (e) => {
@@ -103,6 +106,11 @@ function TradePage({ staticExplorerAsset }) {
   )
 
   useEffect(() => {
+    if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
+      setAsset(data)
+    }
+  }, [data, setAsset, staticExplorerAsset])
+  useEffect(() => {
     if (
       typeof staticExplorerAsset !== 'undefined' &&
       typeof staticExplorerAsset.id !== 'undefined' &&
@@ -112,11 +120,16 @@ function TradePage({ staticExplorerAsset }) {
     }
   }, [asset, setAsset, staticExplorerAsset])
 
+  const isTraded = useMemo(() => {
+    console.log(asset, data)
+    return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
+  }, [asset, data])
+
   const renderContent = () => {
     // Display spinner when invalid state
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
-    if (showAssetInfo || !asset?.price_info?.isTraded) return <AssetInfo asset={asset} />
+    if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
   }
 

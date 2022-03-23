@@ -76,10 +76,7 @@ export function useAssetPriceQuery({
   asset: algorandAsset,
   options = {
     refetchInterval,
-    enabled:
-      typeof algorandAsset !== 'undefined' &&
-      typeof algorandAsset.id !== 'undefined' &&
-      algorandAsset.price_info.isTraded,
+    enabled: typeof algorandAsset !== 'undefined' && typeof algorandAsset.id !== 'undefined',
     initialData: algorandAsset?.price_info
   }
 } = {}) {
