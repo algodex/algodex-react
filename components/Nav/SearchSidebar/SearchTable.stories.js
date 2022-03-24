@@ -38,7 +38,7 @@ export const SearchTable = Template.bind({})
 SearchTable.args = {
   onAssetFocus: false,
   onAssetLeave: false,
-  onAssetClick: () => console.log('Hello'),
+  assetClick: () => console.log('Hello'),
   assets: [
     {
       change: '22.22',
@@ -63,7 +63,7 @@ SearchTable.args = {
 //   query: '',
 //   onAssetFocus: false,
 //   onAssetLeave: false,
-//   onAssetClick: () => console.log('Hello'),
+//   assetClick: () => console.log('Hello'),
 //   isListingVerifiedAssets: false,
 //   algoPrice: 1.44,
 //   isFilteringByFavorites: false,

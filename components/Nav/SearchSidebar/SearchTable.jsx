@@ -118,7 +118,7 @@ const Algos = styled(AlgoIcon)`
   fill: ${({ theme }) => theme.palette.gray['500']};
 `
 
-const AssetChangeCell = ({ value }) => {
+export const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
     if (value === null) {
       return ''
@@ -128,14 +128,18 @@ const AssetChangeCell = ({ value }) => {
     }
     return `${value}%`
   }
-  return <AssetChange value={value}>{displayChange()}</AssetChange>
+  return (
+    <AssetChange value={value} data-testid="asa-change-cell">
+      {displayChange()}
+    </AssetChange>
+  )
 }
 AssetChangeCell.propTypes = {
   value: PropTypes.any
 }
 
 export const NavSearchTable = ({
-  onAssetClick,
+  assetClick,
   assets,
   isListingVerifiedAssets,
   algoPrice,
@@ -174,7 +178,7 @@ export const NavSearchTable = ({
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if (!assets || !Array.isArray(assets)) {
+    if (!assets || !Array.isArray(assets) || assets.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
@@ -208,10 +212,6 @@ export const NavSearchTable = ({
   AssetPriceCell.propTypes = {
     value: PropTypes.any
   }
-
-  // const AssetNameCell = ({ value, row }) => {
-
-  // }
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
@@ -333,16 +333,16 @@ export const NavSearchTable = ({
    */
   const getRowProps = (row) => ({
     role: 'button',
-    onClick: () => onAssetClick(row),
+    onClick: () => assetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
-        onAssetClick(row)
+        assetClick(row)
       }
     }
   })
 
   return (
-    <TableWrapper>
+    <TableWrapper data-testid="asa-table-wrapper">
       <Table
         flyover={true}
         components={{
@@ -360,7 +360,7 @@ export const NavSearchTable = ({
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
   assets: PropTypes.array.isRequired,
-  onAssetClick: PropTypes.func,
+  assetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,
   isFilteringByFavorites: PropTypes.bool,
