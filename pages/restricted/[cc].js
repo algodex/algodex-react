@@ -35,7 +35,7 @@ const Restricted = () => {
       <main className="flex flex-col flex-1 md:h-100 w-full items-center justify-center bg-cover bg-no-repeat bg-unauthorized-mobile md:bg-unauthorized">
         <Modal isVisible={true}>
           <ModalContainer
-            className="absolute h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5"
+            className="absolute top-2/4 left-2/4 h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5"
             style={{ transform: 'translate(-50%, -50%)' }}
           >
             <div className="flex flex-col md:flex-row text-center md:text-left h-full bg-gray-700 ">
