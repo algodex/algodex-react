@@ -25,15 +25,14 @@ describe('Search Sidebar Component', () => {
     function SearchTableComp() {
       const query = useUserStore((state) => state.query)
       const algoPrice = 0.1
-      const tableProps = {}
-      const onAssetClick = jest.fn()
+      const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
       return (
         <NavSearchTable
           query={query}
           isActive={false}
-          onAssetClick={onAssetClick}
+          assetClick={assetClick}
           assets={assets}
           options={{ refetchInterval: 5000 }}
           algoPrice={algoPrice}
@@ -50,15 +49,14 @@ describe('Search Sidebar Component', () => {
     function SearchTableComp() {
       const query = useUserStore((state) => state.query)
       const algoPrice = 0.1
-      const tableProps = {}
-      const onAssetClick = jest.fn()
+      const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
       return (
         <NavSearchTable
           query={query}
           isActive={false}
-          onAssetClick={onAssetClick}
+          assetClick={assetClick}
           assets={assets}
           options={{ refetchInterval: 5000 }}
           algoPrice={algoPrice}
@@ -75,15 +73,14 @@ describe('Search Sidebar Component', () => {
     function SearchTableComp() {
       const query = useUserStore((state) => state.query)
       const algoPrice = 0.1
-      const tableProps = {}
-      const onAssetClick = jest.fn()
+      const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
       return (
         <NavSearchTable
           query={query}
           isActive={false}
-          onAssetClick={onAssetClick}
+          assetClick={assetClick}
           assets={assets}
           options={{ refetchInterval: 5000 }}
           algoPrice={algoPrice}
@@ -96,19 +93,18 @@ describe('Search Sidebar Component', () => {
     }
     const { queryByTestId } = render(<SearchTableComp />)
   })
-  it('Should render Empty Search Table when Assets is Empty', () => {
+  it('Should render Empty Search Table when Assets list is Empty', () => {
     function SearchTableComp() {
       const query = useUserStore((state) => state.query)
       const algoPrice = 0.1
-      const tableProps = {}
-      const onAssetClick = jest.fn()
+      const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
       return (
         <NavSearchTable
           query={query}
           isActive={false}
-          onAssetClick={onAssetClick}
+          assetClick={assetClick}
           assets={[]}
           options={{ refetchInterval: 5000 }}
           algoPrice={algoPrice}

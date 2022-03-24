@@ -101,7 +101,6 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
    * @type {(function(): void)|*}
    */
   const handleSearchFocus = useCallback(() => {
-    console.log(isActive, 'focus')
     !isActive && setIsActive(true)
   }, [setIsActive, isActive])
 
@@ -159,7 +158,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
               query={query}
               isActive={isActive}
               options={{ refetchInterval: 5000 }}
-              onAssetClick={handleAssetClick}
+              assetClick={handleAssetClick}
               algoPrice={algoPrice}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}

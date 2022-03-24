@@ -237,11 +237,7 @@ function Table({
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={0}>
               <div>
-                <Flyover
-                  isLarge={true}
-                  row={itemInfo}
-                  {...componentsProps.Flyover}
-                />
+                <Flyover isLarge={true} row={itemInfo} {...componentsProps.Flyover} />
               </div>
             </Fade>
           )}

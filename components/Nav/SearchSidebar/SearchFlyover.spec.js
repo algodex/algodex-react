@@ -1,4 +1,4 @@
-import { fireEvent, render } from 'test/test-utils'
+import { render } from 'test/test-utils'
 
 import SearchFlyover from './SearchFlyover'
 
@@ -32,7 +32,7 @@ describe('Search Flyover Component', () => {
     expect(queryByTestId(KEYS.ASA_LIQUIDITY)).not.toBeNull()
   })
   it('Should not render Asset Info Flyover for table', () => {
-    const info = {...itemInfo}
+    const info = { ...itemInfo }
     delete info.liquidityAlgo
     delete info.liquidityAsa
     info.hasBeenOrdered = false

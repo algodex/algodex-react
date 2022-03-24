@@ -1,5 +1,5 @@
-import { fireEvent, render } from 'test/test-utils'
-import { useRef } from 'react'
+import { render } from 'test/test-utils'
+import React, { useRef } from 'react'
 import { NavSearchSidebar } from './SearchSidebar'
 import styled from '@emotion/styled'
 
@@ -50,22 +50,45 @@ const Main = styled.main`
 
 }
 `
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    query: { myProp: 'myValue' }
+  })
+}))
 
 describe('Search Sidebar Component', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn()
+      }))
+    })
+  })
   it('Should render Search Sidebar with Table', () => {
-    // function SearchSidebarComp() {
-    //   const gridRef = useRef()
-    //   return (
-    //     <Main ref={gridRef}>
-    //       <SearchSidebar
-    //         style={{ height: '6rem' }}
-    //         algoPrice={0.1}
-    //         className="h-24"
-    //         gridRef={gridRef}
-    //       />
-    //     </Main>
-    //   )
-    // }
-    // const { queryByTestId } = render(<SearchSidebarComp />)
+    function SearchSidebarComp() {
+      const gridRef = useRef()
+      const handleAssetClick = jest.fn()
+      return (
+        <Main ref={gridRef}>
+          <NavSearchSidebar
+            assetClick={handleAssetClick}
+            style={{ height: '6rem' }}
+            algoPrice={1}
+            className="h-24"
+            gridRef={gridRef}
+            components={{
+              NavTable: () => React.createElement('li', { id: 'li1' }, 'one')
+            }}
+          />
+        </Main>
+      )
+    }
+    const { queryByTestId } = render(<SearchSidebarComp />)
   })
 })

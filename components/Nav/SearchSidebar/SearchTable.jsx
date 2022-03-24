@@ -128,14 +128,18 @@ export const AssetChangeCell = ({ value }) => {
     }
     return `${value}%`
   }
-  return <AssetChange value={value} data-testid="asa-change-cell">{displayChange()}</AssetChange>
+  return (
+    <AssetChange value={value} data-testid="asa-change-cell">
+      {displayChange()}
+    </AssetChange>
+  )
 }
 AssetChangeCell.propTypes = {
   value: PropTypes.any
 }
 
 export const NavSearchTable = ({
-  onAssetClick,
+  assetClick,
   assets,
   isListingVerifiedAssets,
   algoPrice,
@@ -329,10 +333,10 @@ export const NavSearchTable = ({
    */
   const getRowProps = (row) => ({
     role: 'button',
-    onClick: () => onAssetClick(row),
+    onClick: () => assetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
-        onAssetClick(row)
+        assetClick(row)
       }
     }
   })
@@ -356,7 +360,7 @@ export const NavSearchTable = ({
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
   assets: PropTypes.array.isRequired,
-  onAssetClick: PropTypes.func,
+  assetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,
   isFilteringByFavorites: PropTypes.bool,

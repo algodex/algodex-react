@@ -95,7 +95,12 @@ export function SearchFlyover(props) {
               <BodyCopyTiny as="dt" color="gray.500">
                 ASA ID
               </BodyCopyTiny>
-              <BodyCopy data-testid="flyover-asa-id" as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+              <BodyCopy
+                data-testid="flyover-asa-id"
+                as="dd"
+                fontFamily="'Roboto Mono', monospace"
+                fontSize="1.125rem"
+              >
                 {row.id}
               </BodyCopy>
             </InfoItem>
@@ -106,7 +111,12 @@ export function SearchFlyover(props) {
                   <BodyCopyTiny as="dt" color="gray.500" className="flex items-center">
                     {t('price')} <Algos use="algoLogo" size={0.625} />
                   </BodyCopyTiny>
-                  <BodyCopy data-testid="flyover-asa-price" as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+                  <BodyCopy
+                    data-testid="flyover-asa-price"
+                    as="dd"
+                    fontFamily="'Roboto Mono', monospace"
+                    fontSize="1.125rem"
+                  >
                     {row.price}
                   </BodyCopy>
                 </InfoItem>
@@ -120,7 +130,12 @@ export function SearchFlyover(props) {
                   <BodyCopyTiny as="dt" color="gray.500">
                     {t('liquidity')} (Algos)
                   </BodyCopyTiny>
-                  <BodyCopy data-testid="flyover-algo-liquidity" as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+                  <BodyCopy
+                    data-testid="flyover-algo-liquidity"
+                    as="dd"
+                    fontFamily="'Roboto Mono', monospace"
+                    fontSize="1.125rem"
+                  >
                     {row.liquidityAlgo}
                   </BodyCopy>
                 </InfoItem>
@@ -128,7 +143,12 @@ export function SearchFlyover(props) {
                   <BodyCopyTiny as="dt" color="gray.500">
                     {`${t('liquidity')} (${row.name})`}
                   </BodyCopyTiny>
-                  <BodyCopy data-testid="flyover-asa-liqidity" as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem">
+                  <BodyCopy
+                    data-testid="flyover-asa-liqidity"
+                    as="dd"
+                    fontFamily="'Roboto Mono', monospace"
+                    fontSize="1.125rem"
+                  >
                     {row.liquidityAsa}
                   </BodyCopy>
                 </InfoItem>
