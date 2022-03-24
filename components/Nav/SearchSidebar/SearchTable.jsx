@@ -342,7 +342,7 @@ export const NavSearchTable = ({
   })
 
   return (
-    <TableWrapper>
+    <TableWrapper data-testid="asa-table-wrapper">
       <Table
         flyover={true}
         components={{

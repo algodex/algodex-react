@@ -44,6 +44,7 @@ describe('Search Sidebar Component', () => {
       )
     }
     const { queryByTestId } = render(<SearchTableComp />)
+    expect(queryByTestId('asa-table-wrapper')).not.toBeNull()
   })
   it('Should render Search Table for Verified Assets', () => {
     function SearchTableComp() {
@@ -68,6 +69,7 @@ describe('Search Sidebar Component', () => {
       )
     }
     const { queryByTestId } = render(<SearchTableComp />)
+    expect(queryByTestId('asa-table-wrapper')).not.toBeNull()
   })
   it('Should render Search Table for Favourited Assets', () => {
     function SearchTableComp() {
@@ -92,6 +94,7 @@ describe('Search Sidebar Component', () => {
       )
     }
     const { queryByTestId } = render(<SearchTableComp />)
+    expect(queryByTestId('asa-table-wrapper')).not.toBeNull()
   })
   it('Should render Empty Search Table when Assets list is Empty', () => {
     function SearchTableComp() {
@@ -116,6 +119,7 @@ describe('Search Sidebar Component', () => {
       )
     }
     const { queryByTestId } = render(<SearchTableComp />)
+    expect(queryByTestId('asa-table-wrapper')).not.toBeNull()
   })
   it('Should render Change cell with value', () => {
     const { queryByTestId } = render(
@@ -123,6 +127,7 @@ describe('Search Sidebar Component', () => {
         <AssetChangeCell value="10" />
       </>
     )
+    expect(queryByTestId('asa-change-cell').textContent).toBe('10%')
   })
   it('Should render null when no value is passed', () => {
     const { queryByTestId } = render(
@@ -130,6 +135,7 @@ describe('Search Sidebar Component', () => {
         <AssetChangeCell value={null} />
       </>
     )
+    expect(queryByTestId('asa-change-cell').textContent).toBe('')
   })
   it('Should render value when -- is passed', () => {
     const { queryByTestId } = render(
@@ -137,6 +143,6 @@ describe('Search Sidebar Component', () => {
         <AssetChangeCell value={`--`} />
       </>
     )
-    // expect(queryByTestId('asa-change-cell')).toBe('--')
+    expect(queryByTestId('asa-change-cell').textContent).toBe('--')
   })
 })
