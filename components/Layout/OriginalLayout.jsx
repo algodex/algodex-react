@@ -180,7 +180,6 @@ const Main = styled.main`
   }
 
 }
-
 `
 
 const MobileMenu = styled.nav`

@@ -118,7 +118,7 @@ const Algos = styled(AlgoIcon)`
   fill: ${({ theme }) => theme.palette.gray['500']};
 `
 
-const AssetChangeCell = ({ value }) => {
+export const AssetChangeCell = ({ value }) => {
   const displayChange = () => {
     if (value === null) {
       return ''
@@ -128,7 +128,7 @@ const AssetChangeCell = ({ value }) => {
     }
     return `${value}%`
   }
-  return <AssetChange value={value}>{displayChange()}</AssetChange>
+  return <AssetChange value={value} data-testid="asa-change-cell">{displayChange()}</AssetChange>
 }
 AssetChangeCell.propTypes = {
   value: PropTypes.any
@@ -174,7 +174,7 @@ export const NavSearchTable = ({
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if (!assets || !Array.isArray(assets)) {
+    if (!assets || !Array.isArray(assets) || assets.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
@@ -208,10 +208,6 @@ export const NavSearchTable = ({
   AssetPriceCell.propTypes = {
     value: PropTypes.any
   }
-
-  // const AssetNameCell = ({ value, row }) => {
-
-  // }
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
