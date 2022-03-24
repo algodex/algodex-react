@@ -32,7 +32,7 @@ const PlaceOrderSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
 
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'block' : 'none')};
+  display: ${({ active }) => (active ? 'flex' : 'none')};
   // overflow: hidden scroll;
 
   @media (min-width: 996px) {
