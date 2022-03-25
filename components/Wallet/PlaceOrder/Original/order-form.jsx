@@ -86,6 +86,7 @@ export const OrderForm = ({
           decimals={6}
           orderType={order.type}
           value={order.total}
+          usdEquivalent={order.total}
           readOnly
           disabled
         />
