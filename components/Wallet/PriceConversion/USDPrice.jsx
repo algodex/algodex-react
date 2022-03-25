@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 
 export function USDPrice({ algoPrice, priceToConvert, currency }) {
   return (
-    <>
+    <span data-testid="USDprice-element">
       {currency}
       {(priceToConvert * algoPrice).toLocaleString()}
-    </>
+    </span>
   )
 }
 
