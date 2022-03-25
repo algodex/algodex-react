@@ -406,7 +406,7 @@ function PlaceOrderView(props) {
               {maxSpendableAlgo}
               <br />
               <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice priceToConvert={maxSpendableAlgo} />
+                <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
               </LabelSm>
             </LabelMd>
           </BalanceRow>
@@ -418,7 +418,7 @@ function PlaceOrderView(props) {
               {asaBalance}
               <br />
               <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice priceToConvert={asaBalance} />
+                <USDPrice priceToConvert={asaBalance} currency="$" />
               </LabelSm>
             </LabelMd>
           </BalanceRow>

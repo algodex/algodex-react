@@ -8,14 +8,22 @@ export default {
   args: {
     isRegenerate: false,
     algoPrice: 260,
-    priceToConvert: 3000
+    priceToConvert: 3000,
+    currency: '$'
   }
 }
 
 /* eslint-disable */
-export const USDPrice = ({ isRegenerate, algoPrice, priceToConvert, ...props }) => {
+export const USDPrice = ({ isRegenerate, algoPrice, priceToConvert, currency, ...props }) => {
   if (isRegenerate) {
     algoPrice = 0
   }
-  return <Component algoPrice={algoPrice} priceToConvert={priceToConvert} {...props} />
+  return (
+    <Component
+      algoPrice={algoPrice}
+      priceToConvert={priceToConvert}
+      currency={currency}
+      {...props}
+    />
+  )
 }
