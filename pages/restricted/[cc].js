@@ -20,6 +20,7 @@ const Restricted = () => {
   const showEmail = router.query.showEmailForm
   const triggerError = () => {
     throw new Error(`Testing error reporting on sentry`)
+    // console.log('Hello here')
   }
   return (
     <div className="h-screen flex flex-col items-center text-gray-200 font-semibold leading-5 tracking-wider">
@@ -28,6 +29,9 @@ const Restricted = () => {
       <main className="flex flex-col flex-1 md:h-100 w-full items-center justify-center bg-cover bg-no-repeat bg-unauthorized-mobile md:bg-unauthorized">
         <Modal isVisible={true}>
           <div className="h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5">
+            <button onClick={() => triggerError()} className="text-center text-white">
+              Trigger Error
+            </button>
             <div className="flex flex-col md:flex-row text-center md:text-left h-full bg-gray-700 ">
               <div className="mt-4 md:mt-0 mx-8 md:mx-12 flex justify-center items-center ">
                 <Image src={'/icon-warning.png'} alt="Warning" width={40} height={40} />
@@ -56,7 +60,6 @@ const Restricted = () => {
             <Input name="email" type="email" placeholder="Email" />
           </div>
         )}
-        <button onClick={() => triggerError()}>Trigger Error</button>
       </main>
     </div>
   )
