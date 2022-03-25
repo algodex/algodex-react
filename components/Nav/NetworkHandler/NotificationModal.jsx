@@ -14,7 +14,7 @@ export const Button = styled.button`
   border-radius: 3px;
 `
 
-export const ModalContainer = styled.div`
+const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
   @media (max-width: 992px) {
     width: 90%;
