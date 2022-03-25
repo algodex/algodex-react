@@ -225,6 +225,9 @@ function useMobileDetect() {
   const [isMobile, setIsMobile] = useState(undefined)
   const debounceIsMobile = useDebounce(isMobile, 500)
   useEffect(() => {
+    throw new Error(
+      `Testing error reporting on sentry`
+    );
     function handleResize() {
       setIsMobile(detectMobileDisplay())
     }
