@@ -8,8 +8,8 @@ function OrderInput({ label, asset, orderType, usdEquivalent, ...props }) {
 
   if (usdEquivalent) {
     return (
-      <Container orderType={orderType} isTotal={usdEquivalent}>
-        <Input placeholder="0.00" {...props} isTotal={usdEquivalent} />
+      <Container orderType={orderType} isUsd={usdEquivalent}>
+        <Input placeholder="0.00" {...props} isUsd={usdEquivalent} />
         <Label>{label}</Label>
         <Asset isCondensed={condenseAssetName}>
           {asset}
