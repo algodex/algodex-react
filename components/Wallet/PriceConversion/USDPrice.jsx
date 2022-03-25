@@ -2,7 +2,6 @@ import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 import PropTypes from 'prop-types'
 
 export function USDPrice({ algoPrice, priceToConvert, currency }) {
-  console.log(currency)
   return (
     <>
       {currency}
