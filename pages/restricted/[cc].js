@@ -18,6 +18,9 @@ const Restricted = () => {
   const router = useRouter()
   const { cc } = router.query
   const showEmail = router.query.showEmailForm
+  const triggerError = () => {
+    throw new Error(`Testing error reporting on sentry`)
+  }
   return (
     <div className="h-screen flex flex-col items-center text-gray-200 font-semibold leading-5 tracking-wider">
       <Header />
@@ -53,6 +56,7 @@ const Restricted = () => {
             <Input name="email" type="email" placeholder="Email" />
           </div>
         )}
+        <button onClick={() => triggerError()}>Trigger Error</button>
       </main>
     </div>
   )
