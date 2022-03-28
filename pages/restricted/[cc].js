@@ -1,8 +1,8 @@
-import Header from 'components/header'
+import Header from 'components/Nav/Header'
 import Image from 'next/image'
 import Modal from 'components/Modal'
 import { useRouter } from 'next/router'
-
+import styled from '@emotion/styled'
 // import warning from "../public/icon-warning.png";
 
 const Input = (props) => {
@@ -14,6 +14,16 @@ const Input = (props) => {
   )
 }
 
+const ModalContainer = styled.div`
+  transform: translate(-50%, -50%);
+  @media (max-width: 992px) {
+    width: 90%;
+    transform: translate(-50%, -65%);
+    overflow-y: auto;
+    max-height: 100%;
+  }
+`
+
 const Restricted = () => {
   const router = useRouter()
   const { cc } = router.query
@@ -23,8 +33,11 @@ const Restricted = () => {
       <Header />
 
       <main className="flex flex-col flex-1 md:h-100 w-full items-center justify-center bg-cover bg-no-repeat bg-unauthorized-mobile md:bg-unauthorized">
-        <Modal isVisible={true} hideBackdrop={false}>
-          <div className="h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5">
+        <Modal isVisible={true}>
+          <ModalContainer
+            className="absolute top-2/4 left-2/4 h-auto w-10/12 md:w-8/12 max-w-screen-lg bg-gray-600 rounded-sm pt-5"
+            style={{ transform: 'translate(-50%, -50%)' }}
+          >
             <div className="flex flex-col md:flex-row text-center md:text-left h-full bg-gray-700 ">
               <div className="mt-4 md:mt-0 mx-8 md:mx-12 flex justify-center items-center ">
                 <Image src={'/icon-warning.png'} alt="Warning" width={40} height={40} />
@@ -44,7 +57,7 @@ const Restricted = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </ModalContainer>
         </Modal>
         {showEmail && (
           <div className="text-center text-xs m-6 mt-16 tracking-wide leading-normal">

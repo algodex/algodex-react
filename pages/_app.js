@@ -1,30 +1,111 @@
-/* eslint-disable react/prop-types */
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { EventEmitter } from 'hooks/useEvents'
-// import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
-// import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental'
-import { Hydrate } from 'react-query/hydration'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { Toaster } from 'react-hot-toast'
-import theme from 'theme'
-import ReactGA from 'react-ga'
-import 'tailwindcss/tailwind.css'
-import { ReactQueryDevtools } from 'react-query/devtools'
+import '../styles/global.css'
 
-const GlobalStyle = createGlobalStyle`
-  html, body, div, span, applet, object, iframe,
-  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-  a, abbr, acronym, address, big, cite, code,
-  del, dfn, em, img, ins, kbd, q, s, samp,
-  small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
-  dl, dt, dd, ol, ul, li,
-  fieldset, form, label, legend,
-  table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, canvas, details, embed, 
-  figure, figcaption, footer, header, hgroup, 
-  menu, nav, output, ruby, section, summary,
-  time, mark, audio, video {
+import * as React from 'react'
+
+import { CacheProvider, Global, css } from '@emotion/react'
+// React Query
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+import CssBaseline from '@mui/material/CssBaseline'
+import { EventEmitter } from '@/hooks/useEvents'
+import Head from 'next/head'
+import { Hydrate } from 'react-query/hydration'
+import PropTypes from 'prop-types'
+// Algodex
+import ReactGA from 'react-ga'
+import { ReactQueryDevtools } from 'react-query/devtools'
+// Material UI
+import { ThemeProvider } from '@mui/material/styles'
+import { Toaster } from 'react-hot-toast'
+import createEmotionCache from '@/utils/createEmotionCache'
+import theme from '../theme/index'
+import useStore from '@/store/use-store'
+import useUserStore from '@/store/use-user-state'
+
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache()
+const styles = css`
+  html,
+  body,
+  div,
+  span,
+  applet,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  acronym,
+  address,
+  big,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strike,
+  strong,
+  sub,
+  sup,
+  tt,
+  var,
+  b,
+  u,
+  i,
+  center,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  embed,
+  figure,
+  figcaption,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  output,
+  ruby,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -33,21 +114,34 @@ const GlobalStyle = createGlobalStyle`
     vertical-align: baseline;
   }
   /* HTML5 display-role reset for older browsers */
-  article, aside, details, figcaption, figure, 
-  footer, header, hgroup, menu, nav, section {
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section {
     display: block;
   }
   body {
     line-height: 1;
   }
-  ol, ul {
+  ol,
+  ul {
     list-style: none;
   }
-  blockquote, q {
+  blockquote,
+  q {
     quotes: none;
   }
-  blockquote:before, blockquote:after,
-  q:before, q:after {
+  blockquote:before,
+  blockquote:after,
+  q:before,
+  q:after {
     content: '';
     content: none;
   }
@@ -55,16 +149,17 @@ const GlobalStyle = createGlobalStyle`
     border-collapse: collapse;
     border-spacing: 0;
   }
-  #__next{
-    height:100%;
+  #__next {
+    height: 100%;
   }
   html,
   body {
     height: 100%;
     box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background: ${theme.colors.background.dark};
-    color: ${theme.colors.gray['400']};
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+      Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    background: ${theme.palette.background.dark};
+    color: ${theme.palette.gray['400']};
   }
   *,
   *:before,
@@ -77,32 +172,37 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
-    width: 0;
+    width: 6px;
     height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: ${theme.colors.gray[700]};
+    background: ${theme.palette.gray[900]};
   }
   ::-webkit-scrollbar-thumb {
-    background: ${theme.colors.gray[600]};
+    background: ${theme.palette.gray[600]};
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: ${theme.colors.gray[500]};
+    background: ${theme.palette.gray[500]};
   }
   ::-webkit-scrollbar-corner {
-    background: ${theme.colors.gray[700]};
+    background: ${theme.palette.gray[700]};
   }
 
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  button {
+    background-color: transparent;
+    border: none;
   }
 `
-
-export default function App({ Component, pageProps, err }) {
+function Algodex(props) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const TRACKING_ID = 'UA-195819772-1'
+
   ReactGA.initialize(TRACKING_ID)
   ReactGA.pageview('/')
   const queryClient = new QueryClient({
@@ -114,32 +214,38 @@ export default function App({ Component, pageProps, err }) {
       }
     }
   })
-  if (typeof window !== 'undefined') {
-    // const localStoragePersistor = createWebStoragePersistor({
-    //   storage: window.localStorage,
-    //   throttleTime: 1000,
-    //   maxAge: 10000
-    // })
-    // persistQueryClient({
-    //   queryClient,
-    //   persistor: localStoragePersistor
-    // })
+  // Lift stores and cache for tests
+  if (typeof window !== 'undefined' && window.Cypress) {
+    window.userStore = useUserStore
+    window.store = useStore
+    window.queryClient = queryClient
   }
-
   return (
-    <>
-      <GlobalStyle />
-      <Toaster />
-      <ThemeProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <ReactQueryDevtools initialIsOpen={false} />
-            <EventEmitter>
-              <Component {...pageProps} err={err} />
-            </EventEmitter>
-          </Hydrate>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <CssBaseline />
+      <Global styles={styles} />
+      <Hydrate state={pageProps.dehydratedState}>
+        <EventEmitter>
+          <CacheProvider value={emotionCache}>
+            <Head>
+              <meta name="viewport" content="initial-scale=1, width=device-width" />
+            </Head>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <Toaster />
+              <ReactQueryDevtools initialIsOpen={false} />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </CacheProvider>
+        </EventEmitter>
+      </Hydrate>
+    </QueryClientProvider>
   )
 }
+
+Algodex.propTypes = {
+  Component: PropTypes.elementType.isRequired,
+  emotionCache: PropTypes.object,
+  pageProps: PropTypes.object.isRequired
+}
+export default Algodex

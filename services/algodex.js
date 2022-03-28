@@ -26,8 +26,8 @@ export const PUBLIC_API =
 
 export const API_HOST = `${PUBLIC_API}/algodex-backend`
 
-DEBUG && console.debug('process.env.NEXT_PUBLIC_API: ' + process.env.NEXT_PUBLIC_API)
-console.debug('API_HOST: ' + API_HOST)
+// DEBUG && console.debug('process.env.NEXT_PUBLIC_API: ' + process.env.NEXT_PUBLIC_API)
+// console.debug('API_HOST: ' + API_HOST)
 
 let urlToEtag
 let urlToLastResp
@@ -52,7 +52,7 @@ async function getEtagResponse(url) {
   }
 
   // TODO: Add JWT for API
-  const authToken = process.env.GEO_PASSWORD
+  const authToken = process.env.NEXT_PUBLIC_GEO_PASSWORD || process.env.GEO_PASSWORD
   const authHeader = `Bearer ${authToken}`
   let options = { headers: {} }
   if (

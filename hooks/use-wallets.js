@@ -1,16 +1,15 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 import WalletService from 'services/wallet'
 import useStore, { useStorePersisted } from 'store/use-store'
 import useMyAlgo from 'hooks/use-my-algo'
-import shallow from 'zustand/shallow'
 
 function useWallets() {
   const router = useRouter()
   const adminWalletAddr = router.query.adminWalletAddr
 
-  const [wallets, setWallets] = useState([])
+  // const [wallets, setWallets] = useState([])
 
   const walletAddresses = useStorePersisted((state) => state.walletAddresses)
   const setWalletAddresses = useStorePersisted((state) => state.setWalletAddresses)
@@ -18,7 +17,7 @@ function useWallets() {
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
 
-  const isSignedIn = useStore(state => state.isSignedIn);
+  const isSignedIn = useStore((state) => state.isSignedIn)
   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
 
   const myAlgo = useMyAlgo()
@@ -33,12 +32,11 @@ function useWallets() {
   const query = useQuery(['wallets', addresses], () => WalletService.fetchWallets(addresses), {
     refetchInterval: 10000,
     enabled: Array.isArray(addresses) && addresses.length > 0,
-    select: data => data.wallets,
+    select: (data) => data.wallets,
     onSuccess: (data) => {
       if (data.wallets) {
-
         if (!isSignedIn) {
-          setIsSignedIn(true);
+          setIsSignedIn(true)
         }
 
         if (!activeWalletAddress) {

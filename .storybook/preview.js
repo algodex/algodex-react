@@ -1,8 +1,10 @@
 import React from 'react'
-import { jsxDecorator } from 'storybook-addon-jsx'
-import { RouterContext } from 'next/dist/shared/lib/router-context'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import {jsxDecorator} from 'storybook-addon-jsx'
+import {RouterContext} from 'next/dist/shared/lib/router-context'
+import {ThemeProvider} from '@mui/material/styles';
+import {Global, css} from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import {QueryClient, QueryClientProvider} from 'react-query'
 import theme from '../theme'
 import "tailwindcss/tailwind.css"
 import I18nProvider from 'next-translate/I18nProvider'
@@ -12,9 +14,25 @@ import assetsEN from '../locales/en/assets.json'
 import placeOrderEN from '../locales/en/place-order.json'
 import walletEN from '../locales/en/wallet.json'
 import chartEN from '../locales/en/chart.json'
-const queryClient = new QueryClient()
 
-const GlobalStyle = createGlobalStyle`
+const queryClient = new QueryClient()
+import * as NextImage from "next/image";
+import {INITIAL_VIEWPORTS} from '@storybook/addon-viewport';
+
+const OriginalNextImage = NextImage.default;
+
+Object.defineProperty(NextImage, "default", {
+    configurable: true,
+    value: (props) => (
+        <OriginalNextImage
+            {...props}
+            unoptimized
+            // this is new!
+            blurDataURL="data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAADAAQDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAbEAADAAMBAQAAAAAAAAAAAAABAgMABAURUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAwDAQACEQMRAD8Anz9voy1dCI2mectSE5ioFCqia+KCwJ8HzGMZPqJb1oPEf//Z"
+        />
+    ),
+});
+const base = css`
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -63,8 +81,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     box-sizing: border-box;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    /* background: ${theme.colors.background.dark}; */
-    color: ${theme.colors.gray['400']};
+    /* background: ${theme.palette.background.dark}; */
+    color: ${theme.palette.gray['400']};
   }
   *,
   *:before,
@@ -74,43 +92,51 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/
+    actions: {argTypesRegex: '^on[A-Z].*'},
+    viewport: {
+        viewports: INITIAL_VIEWPORTS,
+        defaultViewport: 'iphonex'
+    },
+
+    controls: {
+        matchers: {
+            color: /(background|color)$/i,
+            date: /Date$/
+        }
+    },
+    nextRouter: {
+        Provider: RouterContext.Provider
     }
-  },
-  nextRouter: {
-    Provider: RouterContext.Provider
-  }
 }
 
 export const decorators = [
-  jsxDecorator,
-  (Story) => (
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <I18nProvider
-            lang={'en'}
-            namespaces={{
-              common: commonEN,
-              orders: ordersEN,
-              assets: assetsEN,
-              'place-order': placeOrderEN,
-              chart: chartEN,
-              wallet: walletEN
-            }}
-        >
-        {Story()}
-        </I18nProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
-  ),
-  (Story) => (
-    <>
-      <GlobalStyle />
-      {Story()}
-    </>
-  )
+    jsxDecorator,
+    (Story) => (
+        <div>
+            <ThemeProvider theme={theme}>
+                <QueryClientProvider client={queryClient}>
+                    <I18nProvider
+                        lang={'en'}
+                        namespaces={{
+                            common: commonEN,
+                            orders: ordersEN,
+                            assets: assetsEN,
+                            'place-order': placeOrderEN,
+                            chart: chartEN,
+                            wallet: walletEN
+                        }}
+                    >
+                        {Story()}
+                    </I18nProvider>
+                </QueryClientProvider>
+            </ThemeProvider>
+        </div>
+    ),
+    (Story) => (
+        <>
+            <CssBaseline/>
+            <Global styles={base}/>
+            {Story()}
+        </>
+    )
 ]
