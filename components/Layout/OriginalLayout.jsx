@@ -266,7 +266,6 @@ function MainLayout({ asset, children }) {
    */
   useEvent('clicked', (data) => {
     if (data === 'asset') {
-      console.log('CLicked', data)
       setActiveMobile(TABS.CHART)
     }
     if (data === 'order') {

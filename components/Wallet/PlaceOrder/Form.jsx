@@ -250,7 +250,6 @@ const DEFAULT_ORDER = {
  * @constructor
  */
 export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
-  console.log(wallet, 'wallet')
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
 

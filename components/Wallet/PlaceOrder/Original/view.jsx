@@ -249,8 +249,7 @@ function PlaceOrderView(props) {
 
     try {
       const result = await orderPromise
-      console.log('Order successfully placed', result)
-
+      console.debug(result)
       setStatus({ submitted: true, submitting: false })
 
       // reset order form if it is not a market order
