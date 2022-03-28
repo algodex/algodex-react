@@ -236,7 +236,6 @@ export function OrderBookPrice({ asset }) {
       <Fragment>
         {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
         <BodyCopySm data-testid="has-price-info" as="span">
-          {console.log(asset?.price_info, 'hey oo')}
           {asset?.price_info?.price24Change &&
             `${floatToFixed(asset?.price_info?.price24Change, 2)}%` || '0%'}
         </BodyCopySm>
@@ -295,7 +294,6 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @constructor
  */
 export function OrderBook({ asset, orders, components }) {
-  // console.log(`OrderBook(`, arguments[0], `)`)
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset

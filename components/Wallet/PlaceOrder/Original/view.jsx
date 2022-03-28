@@ -248,7 +248,6 @@ function PlaceOrderView(props) {
 
     try {
       const result = await orderPromise
-      console.log('Order successfully placed', result)
 
       setStatus({ submitted: true, submitting: false })
 
