@@ -46,6 +46,7 @@ export const OrderForm = ({
           disabled={orderType === 'market'}
           orderType={order.type}
           value={order.price}
+          usdEquivalent={order.price}
           onChange={handleChange}
           autocomplete="false"
           min="0"
@@ -86,6 +87,7 @@ export const OrderForm = ({
           decimals={6}
           orderType={order.type}
           value={order.total}
+          usdEquivalent={order.total}
           readOnly
           disabled
         />
