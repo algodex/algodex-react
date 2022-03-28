@@ -202,7 +202,7 @@ export const NavSearchTable = ({
           {value}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
+            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()}USD</span> : ''}
           </p>
         </AssetPrice>
       )
@@ -245,10 +245,12 @@ export const NavSearchTable = ({
               <div className="ml-3">
                 <AssetId>{row.original.id}</AssetId>
               </div>
+              &nbsp;
               {row.original.verified && (
                 <Icon
                   path={mdiCheckDecagram}
                   title="Verified asset"
+                  className="mt-0.5"
                   size={0.5}
                   color={theme.palette.gray['500']}
                 />
