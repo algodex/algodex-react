@@ -33,7 +33,9 @@ module.exports = {
       {
         endOfLine: 'auto'
       },
-      { usePrettierrc: true }
+      {
+        usePrettierrc: true
+      }
     ],
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/anchor-is-valid': [

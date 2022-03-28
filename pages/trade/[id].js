@@ -1,46 +1,17 @@
-import { fetchAssetPrice, fetchAssets } from 'services/algodex'
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import AssetInfo from 'components/asset-info'
-import Chart from 'components/chart'
-import Page from 'components/Page'
+import AssetInfo from '@/components/Asset/Asset'
+import Chart from '@/components/Asset/Chart'
+import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from 'services/algoexplorer'
-import styled from 'styled-components'
-import { useUserStore } from '../../store'
-import { useAssetPriceQuery } from '../../hooks/useAlgodex'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
+import useUserStore from '@/store/use-user-state'
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  overflow: hidden;
-  max-height: calc(var(--vh, 1vh) * 100);
-  height: calc(var(--vh, 1vh) * 100);
-
-  @media (min-width: 996px) {
-    overflow: scroll;
-    max-height: none;
-  }
-
-  // for demo
-  p.demo {
-    flex: 1 1 0%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    margin: 0;
-    color: ${({ theme }) => theme.colors.gray['600']};
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-`
-
-export const StatusContainer = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-`
+import Spinner from '@/components/Spinner'
+import Layout from '@/components/Layout/OriginalLayout'
+import { useRouter } from 'next/router'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 
 /**
  * Fetch Traded Asset Paths
@@ -63,12 +34,11 @@ export async function getStaticPaths() {
  * @returns {object} Response Object or Redirect Object
  */
 export async function getStaticProps({ params: { id } }) {
-  let staticExplorerAsset,
-    staticAssetPrice = {}
+  let staticExplorerAsset = { id }
+  let staticAssetPrice = {}
 
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
-    console.log(staticExplorerAsset)
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -77,6 +47,7 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
+
   try {
     staticAssetPrice = await fetchAssetPrice(id)
   } catch (error) {
@@ -88,8 +59,12 @@ export async function getStaticProps({ params: { id } }) {
     }
   }
 
+  if (typeof staticAssetPrice.isTraded !== 'undefined') {
+    staticExplorerAsset.price_info = staticAssetPrice
+  }
+
   return {
-    props: { staticExplorerAsset, staticAssetPrice }
+    props: { staticExplorerAsset }
   }
 }
 
@@ -102,40 +77,69 @@ export async function getStaticProps({ params: { id } }) {
  * found
  *
  * @param {object} staticExplorerAsset The Explorer Response
- * @param {object} staticExplorerAsset The Asset Price Response
  * @returns {JSX.Element}
  * @constructor
  */
-const TradePage = ({ staticExplorerAsset, staticAssetPrice }) => {
-  console.debug('Trade Page Render')
+function TradePage({ staticExplorerAsset }) {
+  // eslint-disable-next-line no-undef
+  console.debug(`TradePage(`, staticExplorerAsset, `)`)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
-  const { data: dexAsset } = useAssetPriceQuery({
-    asset: staticExplorerAsset || {},
-    options: {
-      refetchInterval: 5000,
-      enabled:
-        typeof staticExplorerAsset !== 'undefined' && typeof staticExplorerAsset.id !== 'undefined',
-      initialData: staticAssetPrice
+  const { isFallback, query } = useRouter()
+
+  // Use the static asset or fallback to the route id
+  const [asset, setAsset] = useState(staticExplorerAsset)
+
+  const [interval, setInterval] = useState('1h')
+  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const { data } = useAssetPriceQuery({ asset: _asset })
+
+  const onChange = useCallback(
+    (e) => {
+      if (e.target.name === 'interval' && e.target.value !== interval) {
+        setInterval(e.target.value)
+      }
+    },
+    [setInterval, interval]
+  )
+
+  useEffect(() => {
+    if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
+      setAsset(data)
     }
-  })
+  }, [data, setAsset, staticExplorerAsset])
+  useEffect(() => {
+    if (
+      typeof staticExplorerAsset !== 'undefined' &&
+      typeof staticExplorerAsset.id !== 'undefined' &&
+      staticExplorerAsset.id !== asset?.id
+    ) {
+      setAsset(staticExplorerAsset)
+    }
+  }, [asset, setAsset, staticExplorerAsset])
+
+  const isTraded = useMemo(() => {
+    console.log(asset, data)
+    return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
+  }, [asset, data])
+
+  const renderContent = () => {
+    // Display spinner when invalid state
+    if (isFallback) return <Spinner flex />
+    // Render AssetInfo if showAssetInfo is selected or the asset is not traded
+    if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
+    else return <Chart asset={asset} interval={interval} onChange={onChange} />
+  }
 
   return (
     <Page
       title={`${prefix} ${title}`}
       description={'Decentralized exchange for trading Algorand ASAs'}
-      staticExplorerAsset={staticExplorerAsset}
       noFollow={true}
     >
-      {({ asset }) =>
-        showAssetInfo || !dexAsset?.isTraded ? (
-          <AssetInfo asset={asset} price={dexAsset} />
-        ) : (
-          <Chart asset={asset} />
-        )
-      }
+      <Layout asset={asset}>{renderContent()}</Layout>
     </Page>
   )
 }

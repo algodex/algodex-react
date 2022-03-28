@@ -1,0 +1,62 @@
+apiVersion: v1alpha
+kind: cypress
+defaults:
+  mode: sauce
+sauce:
+  metadata:
+    tags:
+      - e2e
+      - acceptance
+    build: algodex $GITHUB_RUN_ID
+  region: us-west-1
+  concurrency: 2
+cypress:
+  configFile: cypress-sauce.json
+  version: 9.3.1
+suites:
+- name: "Chrome on Win 10"
+  browser: "chrome"
+  shard: spec
+  platformName: "Windows 10"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Chrome on Mac 12"
+  browser: "chrome"
+  shard: spec
+  platformName: "mac 12.00"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Firefox on Win 10"
+  browser: "firefox"
+  shard: spec
+  platformName: "Windows 10"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Firefox on Mac 12"
+  browser: "firefox"
+  shard: spec
+  platformName: "mac 12.00"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Safari on Mac 12"
+  browser: "safari"
+  shard: spec
+  platformName: "mac 12.00"
+  config:
+    testFiles: [ "**/*.*" ]
+- name: "Edge on Win 10"
+  browser: "edge"
+  shard: spec
+  platformName: "Windows 10"
+  config:
+    testFiles: [ "**/*.*" ]
+rootDir: .
+artifacts:
+  download:
+    match:
+    - '*'
+    when: fail
+    directory: ./artifacts
+npm:
+  packages:
+    cypress-react-selector: "2.3.16"
