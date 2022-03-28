@@ -153,7 +153,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
             />
           </div>
-          <div className="mt-1.5" style={{ height: '91%', overflowY: 'scroll' }}>
+          <div className="mt-1.5" style={{ height: '91%' }}>
             <NavTable
               query={query}
               isActive={isActive}
