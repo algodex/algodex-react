@@ -213,7 +213,7 @@ function Table({
                   return (
                     <td
                       data-testid="item"
-                      className="border-r border-solid border-gray-700"
+                      className="whitespace-nowrap border-r border-solid border-gray-700"
                       key={cellKey}
                       {...cell.getCellProps()}
                     >
