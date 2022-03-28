@@ -238,7 +238,7 @@ export function OrderBookPrice({ asset }) {
         <BodyCopySm data-testid="has-price-info" as="span">
           {(asset?.price_info?.price24Change &&
             `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-            '0%'}
+            '0.00%'}
         </BodyCopySm>
       </Fragment>
     )
