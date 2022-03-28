@@ -236,8 +236,9 @@ export function OrderBookPrice({ asset }) {
       <Fragment>
         {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
         <BodyCopySm data-testid="has-price-info" as="span">
+          {console.log(asset?.price_info, 'hey oo')}
           {asset?.price_info?.price24Change &&
-            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`}
+            `${floatToFixed(asset?.price_info?.price24Change, 2)}%` || '0%'}
         </BodyCopySm>
       </Fragment>
     )
