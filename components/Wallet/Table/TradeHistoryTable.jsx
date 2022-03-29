@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
-import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
+import Table, { DefaultCell, OrderTypeCell, AssetNameCell, ExpandTradeDetail } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@/hooks/withAlgodex'
 
@@ -46,7 +46,7 @@ export function TradeHistoryTable({ orders }) {
       {
         Header: t('date'),
         accessor: 'date',
-        Cell: DefaultCell
+        Cell: ExpandTradeDetail
       },
       {
         Header: t('pair'),

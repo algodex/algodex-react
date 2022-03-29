@@ -5,10 +5,18 @@ import styled from '@emotion/styled'
 import { useCallback } from 'react'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import Icon from '@mdi/react'
+import { mdiOpenInNew } from '@mdi/js'
+import useUserStore from '@/store/use-user-state'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
     ('' + value).toUpperCase() === 'BUY' ? theme.palette.green[500] : theme.palette.red[500]};
+`
+
+const TradeDetailLink = styled.a`
+  color: ${({ theme }) => theme.palette.gray['000']};
+  text-decoration: underline;
 `
 
 /**
@@ -52,3 +60,42 @@ export const OrderTypeCell = ({ value }) => {
   )
 }
 OrderTypeCell.propTypes = { value: PropTypes.any }
+
+/**
+ * Show Trade Detail
+ * Show trade detail in Algoexplorer
+ *
+ * @param value
+ * @param row
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export const ExpandTradeDetail = ({
+  value,
+  row: {
+    original: { id }
+  }
+}) => {
+  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const explorerURL =
+    activeNetwork === 'testnet'
+      ? `https://testnet.algoexplorer.io/asset/`
+      : `https://algoexplorer.io/asset/`
+  return (
+    <Link href={`${explorerURL}${id}`}>
+      <TradeDetailLink
+        href={`${explorerURL}${id}`}
+        target="_blank"
+        rel="noreferrer"
+        className="flex items-center"
+        data-testid="trade-detail-cell"
+        value={value}
+      >
+        {value.toLowerCase()}
+        &nbsp;
+        <Icon path={mdiOpenInNew} title="View External Link" size={0.7} />
+      </TradeDetailLink>
+    </Link>
+  )
+}
+ExpandTradeDetail.propTypes = { row: PropTypes.any, value: PropTypes.any }
