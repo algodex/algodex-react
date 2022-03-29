@@ -203,7 +203,16 @@ export const NavSearchTable = ({
           {value}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()}&nbsp;USD</span> : ''}
+            {value !== '--' ? (
+              <span>
+                {algoPrice * value > 10000
+                  ? Math.round(algoPrice * value).toLocaleString()
+                  : (algoPrice * value).toLocaleString()}
+                &nbsp;USD
+              </span>
+            ) : (
+              ''
+            )}
           </p>
         </AssetPrice>
       )
