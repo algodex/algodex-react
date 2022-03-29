@@ -24,5 +24,6 @@
   "max-spend-explanation": "A teljes egyenleg {{summát}} Algót tartalmaz, amelyeket tárolni kell a pénztárcában, hogy lehetővé tegye a kereskedést",
   "order-size-filtering": "Rendelési méret szűrés",
   "less-lag": "Kevesebb késés",
-  "better-execution": "Jobb kivitelezés"
+  "better-execution": "Jobb kivitelezés",
+  "fund-wallet":"Kérjük, a megrendelések leadása előtt finanszírozza pénztárcáját több ALGO-val!"
 }

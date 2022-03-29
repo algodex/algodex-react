@@ -201,16 +201,14 @@ function PlaceOrderView(props) {
     setStatus((prev) => ({ ...prev, submitting: true }))
     if (checkPopupBlocker()) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error(
-        'Please disable your popup blocker (likely in the top-right of your browser window)'
-      )
+      toast.error(t('disable-popup'))
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
     //console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error('Please fund your wallet with more ALGO before placing orders!')
+      toast.error(t('fund-wallet'))
       return
     }
     const orderData = {

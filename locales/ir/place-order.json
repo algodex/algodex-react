@@ -24,5 +24,6 @@
     "max-spend-explanation": "کل موجودی شامل {{مبلغ}} Algos است که باید در کیف پول نگهداری شوند تا معاملات مجاز شود",
     "order-size-filtering": "سفارش فیلتر اندازه",
     "less-lag": "تاخیر کمتر",
-    "better-execution": "اجرای بهتر"
+    "better-execution": "اجرای بهتر",
+    "fund-wallet":"لطفا صندوق کیف پول خود را با ALGO بیشتر قبل از قرار دادن سفارشات!"
 }

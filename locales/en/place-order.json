@@ -25,5 +25,7 @@
     "max-spend-explanation": "Total balance includes {{amount}} Algos that must be kept in wallet to allow trades",
     "order-size-filtering": "Order Size Filtering",
     "less-lag": "Less Lag",
-    "better-execution": "Better Execution"
+    "better-execution": "Better Execution",
+    "fund-wallet":"Please fund your wallet with more ALGO before placing orders!"
+
 }
