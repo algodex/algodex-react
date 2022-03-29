@@ -79,7 +79,7 @@ const TableWrapper = styled.div`
   height: 85%;
 
   @media (max-width: 996px) {
-    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
   }
 
   @media (min-width: 996px) {
@@ -90,9 +90,10 @@ const TableWrapper = styled.div`
   //   top: 35px;
   // }
 
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+  }
 `
 
 const PairSlash = styled.span`
@@ -202,7 +203,7 @@ export const NavSearchTable = ({
           {value}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()}USD</span> : ''}
+            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()}&nbsp;USD</span> : ''}
           </p>
         </AssetPrice>
       )
