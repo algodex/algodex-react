@@ -101,7 +101,7 @@ const Container = styled.div`
       overflow-y: scroll;
       @media (max-width: 996px) {
         height: 34.7rem;
-      }    
+      }
     }
   }
 `
