@@ -440,7 +440,7 @@ function PlaceOrderView(props) {
               handleOptionsChange({ target: { value: 'market' } })
             }}
           >
-            Market
+            {t('market')}
           </Tab>
         </Tabs>
         {orderView === LIMIT_PANEL ? (
