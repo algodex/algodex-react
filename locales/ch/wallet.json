@@ -4,5 +4,7 @@
   "wallet": "钱包",
   "balance": "余额",
   "start-by": "连接一个Algorand钱包",
-  "once-connected": "使用 MyAlgo 连接钱包后，您就可以开始交易"
+  "once-connected": "使用 MyAlgo 连接钱包后，您就可以开始交易",
+  "copy-success":"将钱包地址复制到剪贴板！",
+  "copy-fail":"未能将钱包地址复制到剪贴板"
 }
