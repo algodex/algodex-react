@@ -24,5 +24,6 @@
     "max-spend-explanation": "Solde total incluant {{montant}} Algos qui doit être conservé dans le portefeuille pour permettre les transactions ",
     "order-size-filtering": "Filtrage de la taille de la commande",
     "less-lag": "Moins de décalage",
-    "better-execution": "Meilleure exécution"
+    "better-execution": "Meilleure exécution",
+    "fund-wallet":"S’il vous plaît financer votre portefeuille avec plus d’ALGO avant de passer des commandes!"
 }

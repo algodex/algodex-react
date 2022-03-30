@@ -24,5 +24,6 @@
   "max-spend-explanation": "Tổng số dư bao gồm {{amount}} Algos phải được giữ trong ví để cho phép giao dịch",
   "order-size-filtering": "Lọc kích thước đơn hàng",
   "less-lag": "Ít trễ hơn",
-  "better-execution": "Thực thi tốt hơn"
+  "better-execution": "Thực thi tốt hơn",
+  "fund-wallet":"Vui lòng nạp tiền vào ví của bạn với nhiều ALGO hơn trước khi đặt hàng!"
 }
