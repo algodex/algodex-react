@@ -4,5 +4,7 @@
   "wallet": "DOMPET",
   "balance": "SALDO",
   "start-by": " Mulai dengan menghubungkan dompet Algorand   ",
-  "once-connected": "Setelah Anda menghubungkan dompet menggunakan MyAlgo, Anda dapat memulai Perdagangan "
+  "once-connected": "Setelah Anda menghubungkan dompet menggunakan MyAlgo, Anda dapat memulai Perdagangan ",
+  "copy-success":"Salin alamat dompet ke papan klip!",
+  "copy-fail":"Gagal menyalin alamat dompet ke papan klip"
 }

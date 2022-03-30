@@ -4,6 +4,7 @@
     "sell": "Vendre",
     "available-balance": "Balanç disponible",
     "limit": "Límit",
+    "market": "Mercat",
     "price": "Preu",
     "amount": "Quantitat",
     "total": "Total",
@@ -24,5 +25,6 @@
     "max-spend-explanation": "El saldo total inclou {{amount}} algos que s'han de guardar a la cartera per permetre operacions",
     "order-size-filtering": "Filtrat de la mida de la comanda",
     "less-lag": "Menys retard",
-    "better-execution": "Millor Execució"
+    "better-execution": "Millor Execució",
+    "fund-wallet":"Si us plau, finança la teva cartera amb més ALGO abans de fer comandes!"
 }
