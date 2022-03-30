@@ -7,7 +7,7 @@ import { Section } from '@/components/Layout/Section'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
+import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 
 // export const Section = styled.section`
 //   height: inherit;

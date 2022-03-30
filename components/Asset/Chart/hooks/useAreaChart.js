@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
-import theme from '../theme/index'
+import theme from '@/theme/index'
 import moment from 'moment'
 
 const LINE_COLOR = theme.palette.gray[800]

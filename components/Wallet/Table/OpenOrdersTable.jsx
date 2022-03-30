@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { BrightGraySpan } from '@/components/Typography'
 import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
+import { withWalletOrdersQuery } from '@algodex/hooks/src/index.js'
 import useUserStore from '@/store/use-user-state'
 import OrderService from '@/services/order'
 

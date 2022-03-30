@@ -11,7 +11,7 @@ import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
-import useDebounce from '@/hooks/useDebounce'
+import useDebounce from '@algodex/hooks/src/utils/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 

@@ -35,7 +35,7 @@ import toast from 'react-hot-toast'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import useWalletMinBalanceQuery from '@algodex/hooks/src/http/useWalletMinBalanceQuery'
 import USDPrice from '../../PriceConversion/USDPrice'
 
 const DEFAULT_ORDER = {

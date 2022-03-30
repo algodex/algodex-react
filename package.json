@@ -26,16 +26,15 @@
     "translate": "node bin/translate.js",
     "prepare": "husky install"
   },
-  "resolutions": {
-    "styled-components": "^5"
-  },
   "dependencies": {
-    "@algodex/algodex-sdk": "^1.1.13",
+    "@algodex/algodex-sdk": "algodex/algodex-sdk#⚗-hooks-integration",
+    "@algodex/hooks": "algodex/algodex-hooks#development",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.6.0",
     "@iconify/react": "^3.1.0",
+    "@json-rpc-tools/utils": "^1.7.6",
     "@mdi/js": "^6.5.95",
     "@mdi/react": "^1.5.0",
     "@mdx-js/loader": "^2.0.0",
@@ -43,6 +42,7 @@
     "@next/mdx": "^12.0.7",
     "@randlabs/myalgo-connect": "^1.0.1",
     "@sentry/nextjs": "^6.11.0",
+    "algosdk": "^1.15.0",
     "axios": "^0.25.0",
     "big.js": "^6.1.1",
     "dayjs": "^1.10.5",

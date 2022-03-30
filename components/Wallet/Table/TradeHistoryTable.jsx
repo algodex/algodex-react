@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation'
 
 import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
-import { withWalletTradeHistoryQuery } from '@/hooks/withAlgodex'
+import { withWalletTradeHistoryQuery } from '@algodex/hooks/src/index.js'
 
 const OrderHistoryContainer = styled.div`
   display: flex;

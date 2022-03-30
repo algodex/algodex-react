@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
-import theme from 'theme'
+import theme from '@/theme'
 import moment from 'moment'
 const UP_COLOR = theme.palette.green[500]
 const DOWN_COLOR = theme.palette.red[500]
