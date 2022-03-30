@@ -6,10 +6,13 @@ import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
+
+dayjs.extend(localizedFormat)
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -38,7 +41,7 @@ const Trades = styled.div`
   overflow: hidden scroll;
   /* width */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
   }
 
   /* Track */

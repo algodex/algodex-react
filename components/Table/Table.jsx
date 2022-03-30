@@ -169,7 +169,7 @@ function Table({
   }, [onStateChange, initialState, tableState])
   return (
     <Container>
-      <table {...getTableProps()}>
+      <table {...getTableProps()} data-testid="data-table">
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
             <tr data-testid="header-row" key={rowKey} {...headerGroup.getHeaderGroupProps()}>
@@ -213,7 +213,7 @@ function Table({
                   return (
                     <td
                       data-testid="item"
-                      className="border-r border-solid border-gray-700"
+                      className="whitespace-nowrap border-r border-solid border-gray-700"
                       key={cellKey}
                       {...cell.getCellProps()}
                     >
@@ -237,12 +237,7 @@ function Table({
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={0}>
               <div>
-                <Flyover
-                  data-testid="flyover-item"
-                  isLarge={true}
-                  row={itemInfo}
-                  {...componentsProps.Flyover}
-                />
+                <Flyover isLarge={true} row={itemInfo} {...componentsProps.Flyover} />
               </div>
             </Fade>
           )}

@@ -36,6 +36,7 @@ import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import USDPrice from '../../PriceConversion/USDPrice'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -248,8 +249,7 @@ function PlaceOrderView(props) {
 
     try {
       const result = await orderPromise
-      console.log('Order successfully placed', result)
-
+      console.debug(result)
       setStatus({ submitted: true, submitting: false })
 
       // reset order form if it is not a market order
@@ -397,20 +397,28 @@ function PlaceOrderView(props) {
               </BalanceRow>
             </Tooltip>
           </IconTextContainer>
-          <BalanceRow>
+          <BalanceRow className="text-right items-start">
             <LabelMd color="gray.400" fontWeight="500">
               ALGO
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
               {maxSpendableAlgo}
+              <br />
+              <LabelSm color="gray.500" fontWeight="500">
+                <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
+              </LabelSm>
             </LabelMd>
           </BalanceRow>
-          <BalanceRow>
+          <BalanceRow className="text-right items-start">
             <LabelMd color="gray.400" fontWeight="500">
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
               {asaBalance}
+              <br />
+              <LabelSm color="gray.500" fontWeight="500">
+                <USDPrice priceToConvert={asaBalance} currency="$" />
+              </LabelSm>
             </LabelMd>
           </BalanceRow>
         </AvailableBalance>

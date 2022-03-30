@@ -169,24 +169,8 @@ const SellOrders = styled.div`
   flex-direction: column-reverse;
   /* width */
   ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    // box-shadow: inset 0 0 12px grey;
-    border-radius: 10px;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
-    border-radius: 10px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
+    width: 0px;
+    display: none;
   }
 `
 
@@ -200,24 +184,8 @@ const BuyOrders = styled.div`
   }
   /* width */
   ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    // box-shadow: inset 0 0 12px grey;
-    border-radius: 10px;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme, color = 'gray', gradient = 600 }) => theme.palette[color][gradient]};
-    border-radius: 10px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme, color = 'gray', gradient = 400 }) => theme.palette[color][gradient]};
+    width: 0px;
+    display: none;
   }
 `
 
@@ -266,11 +234,12 @@ export function OrderBookPrice({ asset }) {
   function PriceInfo() {
     return (
       <Fragment>
-        {floatToFixed(convertFromAsaUnits(asset.price_info.price, asset.decimals))}
-        <BodyCopySm data-testid="has-price-info" as="span">{`${floatToFixed(
-          asset.price_info.price24Change,
-          2
-        )}%`}</BodyCopySm>
+        {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
+        <BodyCopySm data-testid="has-price-info" as="span">
+          {(asset?.price_info?.price24Change &&
+            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
+            '0.00%'}
+        </BodyCopySm>
       </Fragment>
     )
   }
@@ -326,16 +295,16 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @constructor
  */
 export function OrderBook({ asset, orders, components }) {
-  // console.log(`OrderBook(`, arguments[0], `)`)
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
+  const isSignedIn = useStore((state) => state.isSignedIn)
+
   const dispatcher = useEventDispatch()
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-
     return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
@@ -364,7 +333,7 @@ export function OrderBook({ asset, orders, components }) {
             title={row.price}
             m={0}
           >
-            {floatToFixed(row.price)}
+            {row.price}
           </BodyCopyTiny>
           <BodyCopyTiny
             fontFamily="'Roboto Mono', monospace"
@@ -387,6 +356,11 @@ export function OrderBook({ asset, orders, components }) {
         </BookRow>
       )
     })
+  }
+  if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
+    if (orders.sell.length === 0 && orders.buy.length === 0) {
+      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+    }
   }
   return (
     <Section area="topLeft" data-testid="asset-orderbook">

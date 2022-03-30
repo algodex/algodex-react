@@ -12,6 +12,7 @@ import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
+import Spinner from '@/components/Spinner'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -249,7 +250,7 @@ export function AssetInfo({ asset }) {
                   fontSize="1.25rem"
                 >
                   {floatToFixed(
-                    asset.decimals !== 6
+                    asset?.decimals !== 6
                       ? convertFromBaseUnits(asset?.price_info.price, asset.decimals)
                       : asset?.price_info.price
                   )}{' '}
@@ -289,7 +290,10 @@ export function AssetInfo({ asset }) {
   )
 }
 AssetInfo.propTypes = {
-  asset: PropTypes.object.isRequired
+  asset: PropTypes.object.isRequired,
+  price: PropTypes.object
 }
 
-export default withAssetPriceQuery(AssetInfo)
+export default withAssetPriceQuery(AssetInfo, {
+  components: { ServiceError: AssetInfo, Loading: Spinner }
+})
