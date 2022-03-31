@@ -4,6 +4,7 @@
   "sell": "Verkoop",
   "available-balance": "Beschikbaar balans",
   "limit": "Limiet",
+  "market": "Markt",
   "price": "Prijs",
   "amount": "Hoeveelheid",
   "total": "Totaal",
@@ -24,5 +25,6 @@
   "max-spend-explanation": "Het totale saldo omvat {{amount}} Algos die in de portemonnee moeten worden opgeslagen om te kunnen handelen",
   "order-size-filtering": "Ordergrootte filteren",
   "less-lag": "Minder vertraging",
-  "better-execution": "Betere uitvoering"
+  "better-execution": "Betere uitvoering",
+  "fund-wallet":"Stort uw portemonnee op met meer ALGO voordat u bestellingen plaatst!"
 }

@@ -37,7 +37,7 @@ export const AssetCoinCell = (props) => {
   return (
     <Link href={`/trade/${props.row.original.id}`}>
       <button onClick={onClick}>
-        <AssetNameBlock data-testid="asset-coin-cell">
+        <AssetNameBlock className="text-left" data-testid="asset-coin-cell">
           <BrightGraySpan>{props.value}</BrightGraySpan>
           <br />
           <AssetId>{props.row.original.id}</AssetId>

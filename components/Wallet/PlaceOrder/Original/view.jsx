@@ -17,7 +17,7 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 
 import Big from 'big.js'
 import Icon from '@/components/Icon'
@@ -37,6 +37,8 @@ import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 import USDPrice from '../../PriceConversion/USDPrice'
+import { convertFromAsaUnits } from '@/services/convert'
+import { floatToFixed } from '@/services/display'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -201,16 +203,14 @@ function PlaceOrderView(props) {
     setStatus((prev) => ({ ...prev, submitting: true }))
     if (checkPopupBlocker()) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error(
-        'Please disable your popup blocker (likely in the top-right of your browser window)'
-      )
+      toast.error(t('disable-popup'))
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
     //console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error('Please fund your wallet with more ALGO before placing orders!')
+      toast.error(t('fund-wallet'))
       return
     }
     const orderData = {
@@ -278,6 +278,11 @@ function PlaceOrderView(props) {
       Sentry.captureException(err)
     }
   }
+
+  const calcAsaWorth = useMemo(
+    () => floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals)),
+    [asset]
+  )
 
   const renderSubmit = () => {
     const buttonProps = {
@@ -417,7 +422,7 @@ function PlaceOrderView(props) {
               {asaBalance}
               <br />
               <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice priceToConvert={asaBalance} currency="$" />
+                <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
               </LabelSm>
             </LabelMd>
           </BalanceRow>
@@ -442,7 +447,7 @@ function PlaceOrderView(props) {
               handleOptionsChange({ target: { value: 'market' } })
             }}
           >
-            Market
+            {t('market')}
           </Tab>
         </Tabs>
         {orderView === LIMIT_PANEL ? (
