@@ -72,7 +72,7 @@ OrderTypeCell.propTypes = { value: PropTypes.any }
  */
 export const ExpandTradeDetail = ({ value, row }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  
+
   // Open Trader History Link
   const explorerOpenOrderURL =
     activeNetwork === 'testnet'
