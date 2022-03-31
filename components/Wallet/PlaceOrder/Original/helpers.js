@@ -1,7 +1,7 @@
-import { calculateAsaBuyAmount } from 'services/convert'
-import { floatToFixed } from 'services/display'
-import { convertFromAsaUnits } from 'services/convert'
 import BigJS from 'big.js'
+import { calculateAsaBuyAmount } from 'services/convert'
+import { convertFromAsaUnits } from 'services/convert'
+import { floatToFixed } from 'services/display'
 
 export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'
