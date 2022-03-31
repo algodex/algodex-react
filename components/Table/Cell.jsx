@@ -1,12 +1,12 @@
 import { BrightGraySpan } from '@/components/Typography'
+import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { mdiOpenInNew } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useCallback } from 'react'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import Icon from '@mdi/react'
-import { mdiOpenInNew } from '@mdi/js'
 import useUserStore from '@/store/use-user-state'
 
 const OrderTypeSpan = styled.span`
@@ -72,9 +72,7 @@ OrderTypeCell.propTypes = { value: PropTypes.any }
  */
 export const ExpandTradeDetail = ({
   value,
-  row: {
-    original: { id }
-  }
+  row
 }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const explorerURL =
@@ -82,9 +80,9 @@ export const ExpandTradeDetail = ({
       ? `https://testnet.algoexplorer.io/asset/`
       : `https://algoexplorer.io/asset/`
   return (
-    <Link href={`${explorerURL}${id}`}>
+    <Link href={`${explorerURL}${row.original.id || row.original.asset.id}`}>
       <TradeDetailLink
-        href={`${explorerURL}${id}`}
+        href={`${explorerURL}${row.original.id || row.original.asset.id}`}
         target="_blank"
         rel="noreferrer"
         className="flex items-center"
@@ -93,7 +91,7 @@ export const ExpandTradeDetail = ({
       >
         {value.toLowerCase()}
         &nbsp;
-        <Icon path={mdiOpenInNew} title="View External Link" size={0.7} />
+        <div><Icon path={mdiOpenInNew} title="View External Link" size={0.6} /></div>
       </TradeDetailLink>
     </Link>
   )
