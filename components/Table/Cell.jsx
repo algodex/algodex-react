@@ -70,10 +70,7 @@ OrderTypeCell.propTypes = { value: PropTypes.any }
  * @returns {JSX.Element}
  * @constructor
  */
-export const ExpandTradeDetail = ({
-  value,
-  row
-}) => {
+export const ExpandTradeDetail = ({ value, row }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const explorerURL =
     activeNetwork === 'testnet'
@@ -91,7 +88,9 @@ export const ExpandTradeDetail = ({
       >
         {value.toLowerCase()}
         &nbsp;
-        <div><Icon path={mdiOpenInNew} title="View External Link" size={0.6} /></div>
+        <div>
+          <Icon path={mdiOpenInNew} title="View External Link" size={0.6} />
+        </div>
       </TradeDetailLink>
     </Link>
   )

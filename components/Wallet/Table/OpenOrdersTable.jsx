@@ -1,4 +1,9 @@
-import Table, { AssetNameCell, DefaultCell, ExpandTradeDetail, OrderTypeCell } from '@/components/Table'
+import Table, {
+  AssetNameCell,
+  DefaultCell,
+  ExpandTradeDetail,
+  OrderTypeCell
+} from '@/components/Table'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BrightGraySpan } from '@/components/Typography'
