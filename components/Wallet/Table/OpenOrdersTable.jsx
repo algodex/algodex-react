@@ -122,6 +122,9 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: t('date'),
         accessor: 'date',
+        minWidth: 160,
+        width: 160,
+        maxWidth: 160,
         Cell: ExpandTradeDetail
       },
       {
