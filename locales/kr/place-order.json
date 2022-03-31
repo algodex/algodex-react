@@ -4,6 +4,7 @@
     "sell": "매도",
     "available-balance": "사용 가능한 잔액",
     "limit": "리미트",
+    "market": "시장",
     "price": "가격",
     "amount": "수량",
     "total": "총합",
@@ -24,5 +25,6 @@
     "max-spend-explanation": "거래를 허용하기 위해 지갑에 보관해야 하는 총 잔액 ({{양}} 알고 포함)",
     "order-size-filtering": "주문 크기 필터링",
     "less-lag": "지연 감소",
-    "better-execution": "더 나은 실행"
+    "better-execution": "더 나은 실행",
+    "fund-wallet":"주문을하기 전에 더 많은 ALGO와 지갑에 자금을 주세요!"
 }

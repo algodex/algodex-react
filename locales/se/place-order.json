@@ -4,6 +4,7 @@
     "sell": "SÄLJ",
     "available-balance": "TILLGÄNGLIGT SALDO",
     "limit": "GRÄNS",
+    "market": "MARKNADSFÖRA",
     "price": "PRIS",
     "amount": "BELOPP",
     "total": "TOTALT",
@@ -24,5 +25,6 @@
     "max-spend-explanation": "Det totala saldot innehåller {{amount}} Något som måste lagras i plånboken för att kunna handlas",
     "order-size-filtering": "Beställningsstorleksfiltrering",
     "less-lag": "Mindre fördröjning",
-    "better-execution": "Bättre utförande"
+    "better-execution": "Bättre utförande",
+    "fund-wallet":"Vänligen finansiera din plånbok med mer ALGO innan du beställer!"
 }

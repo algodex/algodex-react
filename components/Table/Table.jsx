@@ -32,6 +32,11 @@ const Container = styled.div`
       min-width: unset;
     }
 
+    & ::-webkit-scrollbar {
+      display: none;
+      width: 0px;
+    }
+
     tr {
       &:hover {
         cursor: pointer;
@@ -87,6 +92,15 @@ const Container = styled.div`
           white-space: nowrap;
           padding-right: 0.5rem;
         }
+      }
+    }
+    tbody {
+      position: absolute;
+      width: 100%;
+      height: 29.7rem;
+      overflow-y: scroll;
+      @media (max-width: 996px) {
+        height: 34.7rem;
       }
     }
   }

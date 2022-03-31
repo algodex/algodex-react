@@ -4,5 +4,7 @@
   "wallet": "Peňaženka",
   "balance": "Zostatok",
   "start-by": "  Začnite pripojením algorand peňaženky  ",
-  "once-connected": " Po pripojení MyAlgo peňaženky môžete začať obchodovať"
+  "once-connected": " Po pripojení MyAlgo peňaženky môžete začať obchodovať",
+  "copy-success":"Adresa peňaženky bola skopírovaná do schránky!",
+  "copy-fail":"Nepodarilo sa skopírovať adresu peňaženky do schránky"
 }

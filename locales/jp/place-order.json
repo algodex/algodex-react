@@ -4,6 +4,7 @@
   "sell": "売",
   "available-balance": "利用可能残高",
   "limit": "限度額",
+  "market": "市場",
   "price": "価格",
   "amount": "数量",
   "total": "合計",
@@ -24,5 +25,6 @@
   "max-spend-explanation": "合計残高には取引のためにウォレットに入れておかなければならない {{amount}} ALGOが含まれています",
   "order-size-filtering": "注文サイズのフィルタリング",
   "less-lag": "ラグが少ない",
-  "better-execution": "より良い実行"
+  "better-execution": "より良い実行",
+  "fund-wallet":"注文を出す前に、より多くのALGOであなたの財布に資金を提供してください!"
 }

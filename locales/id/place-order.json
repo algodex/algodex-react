@@ -4,6 +4,7 @@
     "sell": "JUAL",
     "available-balance": "SALDO TERSEDIA",
     "limit": "BATAS",
+    "market": "Pasar",
     "price": "HARGA",
     "amount": "NILAI",
     "total": "TOTAL",
@@ -24,5 +25,7 @@
     "max-spend-explanation": "Total saldo termasuk {{amount}} Algos yang harus disimpan di dompet untuk memungkinkan perdagangan",
     "order-size-filtering": "Pemfilteran Ukuran Pesanan",
     "less-lag": "Lebih Sedikit Keterlambatan",
-    "better-execution": "Eksekusi yang Lebih Baik"
+    "better-execution": "Eksekusi yang Lebih Baik",
+    "fund-wallet":"Harap mendanai dompet Anda dengan lebih banyak ALGO sebelum melakukan pemesanan!"
+    
 }

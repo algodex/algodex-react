@@ -4,5 +4,7 @@
   "wallet": "Portfel",
   "balance": "Balans",
   "start-by": " Zacznij dołączajac Algorand portfel.  ",
-  "once-connected": "Kiedy dołączysz portfel używając MyAlgo, możesz zacząć trading. "
+  "once-connected": "Kiedy dołączysz portfel używając MyAlgo, możesz zacząć trading. ",
+  "copy-success":"Skopiowano adres portfela do schowka!",
+  "copy-fail":"Nie udało się skopiować adresu portfela do schowka"
 }
