@@ -72,14 +72,30 @@ OrderTypeCell.propTypes = { value: PropTypes.any }
  */
 export const ExpandTradeDetail = ({ value, row }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  const explorerURL =
+  
+  // Open Trader History Link
+  const explorerOpenOrderURL =
     activeNetwork === 'testnet'
-      ? `https://testnet.algoexplorer.io/asset/`
-      : `https://algoexplorer.io/asset/`
+      ? `https://testnet.algoexplorer.io/address/`
+      : `https://algoexplorer.io/address/`
+
+  // Open Orders Link
+  const explorerTradeHistoryURL =
+    activeNetwork === 'testnet'
+      ? `https://testnet.algoexplorer.io/tx/group/`
+      : `https://algoexplorer.io/tx/group/`
+
+  const urlFn = () => {
+    if (row.original.status === 'OPEN') {
+      return `${explorerOpenOrderURL}${row.original.metadata?.escrowAddress}`
+    } else {
+      return `${explorerTradeHistoryURL}${row.original.groupId}`
+    }
+  }
   return (
-    <Link href={`${explorerURL}${row.original.id || row.original.asset.id}`}>
+    <Link href={urlFn()}>
       <TradeDetailLink
-        href={`${explorerURL}${row.original.id || row.original.asset.id}`}
+        href={urlFn()}
         target="_blank"
         rel="noreferrer"
         className="flex items-center"
