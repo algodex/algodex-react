@@ -107,7 +107,11 @@ const Container = styled.div`
 `
 
 export function DefaultCell({ value }) {
-  return <BrightGraySpan data-testid="default-cell">{value}</BrightGraySpan>
+  return (
+    <BrightGraySpan title={value} data-testid="default-cell">
+      {value}
+    </BrightGraySpan>
+  )
 }
 DefaultCell.propTypes = { value: PropTypes.any }
 

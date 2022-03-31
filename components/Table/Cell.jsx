@@ -35,7 +35,7 @@ export const AssetNameCell = ({ value, row }) => {
   }, [dispatcher])
   return (
     <Link href={`/trade/${assetId}`}>
-      <button className="text-left whitespace-normal" onClick={onClick}>
+      <button className="cursor-pointer text-left whitespace-normal" onClick={onClick}>
         <BrightGraySpan>{value}</BrightGraySpan>
       </button>
     </Link>
@@ -54,7 +54,7 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 export const OrderTypeCell = ({ value }) => {
   const { t } = useTranslation('orders')
   return (
-    <OrderTypeSpan data-testid="cell-item" value={value}>
+    <OrderTypeSpan title={value} data-testid="cell-item" value={value}>
       {t(value.toLowerCase())}
     </OrderTypeSpan>
   )
