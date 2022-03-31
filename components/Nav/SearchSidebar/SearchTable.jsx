@@ -14,6 +14,7 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import { flatten } from 'lodash'
 import { floatToFixed } from '@/services/display'
+import {formatUSDPrice} from '@/components/helpers'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
@@ -205,10 +206,7 @@ export const NavSearchTable = ({
           <p className="text-gray-600">
             {value !== '--' ? (
               <span>
-                {algoPrice * value > 10000
-                  ? Math.round(algoPrice * value).toLocaleString()
-                  : (algoPrice * value).toLocaleString()}
-                &nbsp;USD
+                {formatUSDPrice(algoPrice * value)}&nbsp;USD
               </span>
             ) : (
               ''

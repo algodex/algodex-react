@@ -1,11 +1,11 @@
-import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 import PropTypes from 'prop-types'
-
+import { formatUSDPrice } from '@/components/helpers'
+import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
   return (
     <span data-testid="USDprice-element">
       {currency}
-      {(asaWorth * priceToConvert * algoPrice).toLocaleString()}
+      {formatUSDPrice(asaWorth * priceToConvert * algoPrice)}
     </span>
   )
 }
