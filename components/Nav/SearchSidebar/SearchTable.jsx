@@ -8,6 +8,7 @@ import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 
 import AlgoIcon from '@/components/Icon'
+import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
@@ -180,20 +181,25 @@ export const NavSearchTable = ({
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if (!assets || !Array.isArray(assets) || assets.length === 0) {
+    const bannedAssets = {}
+    DelistedAssets.forEach((element) => {
+      bannedAssets[element] = element
+    })
+    const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
+    if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
-      return assets.filter((asset) => asset.verified).map(mapToSearchResults)
+      return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isFilteringByFavorites) {
       // Filter assets by favorites
       const result = Object.keys(favoritesState).map((assetId) => {
-        return assets.filter((asset) => asset.assetId === parseInt(assetId, 10))
+        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
       })
       return flatten(result).map(mapToSearchResults)
     } else {
       // If there is data, use it
-      return assets.map(mapToSearchResults)
+      return filteredList.map(mapToSearchResults)
     }
   }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 
