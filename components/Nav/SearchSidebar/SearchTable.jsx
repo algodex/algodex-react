@@ -131,7 +131,7 @@ export const AssetChangeCell = ({ value }) => {
     return `${value}%`
   }
   return (
-    <AssetChange value={value} data-testid="asa-change-cell">
+    <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
       {displayChange()}
     </AssetChange>
   )
@@ -200,7 +200,7 @@ export const NavSearchTable = ({
   const AssetPriceCell = useCallback(
     ({ value }) => {
       return (
-        <AssetPrice className="font-semibold">
+        <AssetPrice className="cursor-pointer font-semibold">
           {value}
           <br />
           <p className="text-gray-600">
@@ -218,7 +218,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="flex items-center">
+        <div className="cursor-pointer flex items-center">
           <div className="flex flex-col">
             <div className="flex items-center">
               <Icon
