@@ -14,6 +14,7 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import { flatten } from 'lodash'
 import { floatToFixed } from '@/services/display'
+import { formatUSDPrice } from '@/components/helpers'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
@@ -130,7 +131,7 @@ export const AssetChangeCell = ({ value }) => {
     return `${value}%`
   }
   return (
-    <AssetChange value={value} data-testid="asa-change-cell">
+    <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
       {displayChange()}
     </AssetChange>
   )
@@ -199,11 +200,11 @@ export const NavSearchTable = ({
   const AssetPriceCell = useCallback(
     ({ value }) => {
       return (
-        <AssetPrice className="font-semibold">
+        <AssetPrice className="cursor-pointer font-semibold">
           {value}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()}&nbsp;USD</span> : ''}
+            {value !== '--' ? <span>{formatUSDPrice(algoPrice * value)}&nbsp;USD</span> : ''}
           </p>
         </AssetPrice>
       )
@@ -217,7 +218,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="flex items-center">
+        <div className="cursor-pointer flex items-center">
           <div className="flex flex-col">
             <div className="flex items-center">
               <Icon

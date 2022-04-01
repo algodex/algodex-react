@@ -39,7 +39,7 @@ const Container = styled.div`
 
     tr {
       &:hover {
-        cursor: pointer;
+        // cursor: pointer;
       }
 
       &:nth-child(odd) {
@@ -107,7 +107,11 @@ const Container = styled.div`
 `
 
 export function DefaultCell({ value }) {
-  return <BrightGraySpan data-testid="default-cell">{value}</BrightGraySpan>
+  return (
+    <BrightGraySpan className="cursor-default" title={value} data-testid="default-cell">
+      {value}
+    </BrightGraySpan>
+  )
 }
 DefaultCell.propTypes = { value: PropTypes.any }
 

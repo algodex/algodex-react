@@ -360,6 +360,7 @@ export function useAssetTradeHistoryQuery({
       type: txn.tradeType,
       price: floatToFixed(txn.formattedPrice),
       amount: txn.formattedASAAmount,
+      groupId: encodeURIComponent(txn.group_id),
       timestamp: txn.unix_time * 1000
     })) || []
 
@@ -523,13 +524,13 @@ export function useWalletTradeHistoryQuery({
       allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
       return allAssetsInfo
     }, {})
-
     return tradeHistoryData.map(
-      ({ unix_time, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
+      ({ unix_time, group_id, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
         const side = tradeType === 'buyASA' ? buyText : sellText
 
         return {
           id: asset_id,
+          groupId: encodeURIComponent(group_id),
           date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
           price: floatToFixed(formattedPrice),
           pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
