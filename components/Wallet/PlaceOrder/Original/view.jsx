@@ -87,7 +87,6 @@ function PlaceOrderView(props) {
 
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
-
   const {
     data: minBalance,
     isLoading: isWalletBalanceLoading,
@@ -310,8 +309,12 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
+    const isLessThanMicroAlgo = () => {
+      return convertToAsaUnits(order.price, order.decimals) < MICROALGO
+    }
+ 
     const isDisabled =
-      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || parseFloat(order.price) < MICROALGO || status.submitting
+      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || isLessThanMicroAlgo() || status.submitting
 
     return (
       <SubmitButton
@@ -463,6 +466,7 @@ function PlaceOrderView(props) {
             enableOrder={enableOrder}
             handleOptionsChange={handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
+            microAlgo={MICROALGO}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
           />
         ) : (

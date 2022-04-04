@@ -3,15 +3,15 @@ import { Asset, AssetUSD, Container, Input, Label } from './order-input.css'
 import { LabelSm } from '@/components/Typography'
 import PropTypes from 'prop-types'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
-import {ValidationMessage} from '@/components/InputValidations/ValidationMessage'
+import { ValidationMessage } from '@/components/InputValidations/ValidationMessage'
 
-function OrderInput({ label, asset, orderType, usdEquivalent, ...props }) {
+function OrderInput({ label, asset, orderType, usdEquivalent, hasError, errorMessage, ...props }) {
   const condenseAssetName = asset?.length > 5
 
   if (usdEquivalent) {
     return (
       <>
-        <Container orderType={orderType} isUsd={usdEquivalent}>
+        <Container hasError={hasError} orderType={orderType} isUsd={usdEquivalent}>
           <Input placeholder="0.00" {...props} isUsd={usdEquivalent} />
           <Label>{label}</Label>
           <Asset isCondensed={condenseAssetName}>
@@ -29,17 +29,20 @@ function OrderInput({ label, asset, orderType, usdEquivalent, ...props }) {
             </AssetUSD>
           )}
         </Container>
-        <ValidationMessage message='Number is too small' />
+        {hasError && <ValidationMessage message={errorMessage} />}
       </>
     )
   }
   return (
-    <Container orderType={orderType}>
-      <Input placeholder="0.00" {...props} />
-      <Label>{label}</Label>
-      <Asset isCondensed={condenseAssetName}>{asset}</Asset>
-      <Asset isCondensed={condenseAssetName}>{asset}</Asset>
-    </Container>
+    <>
+      <Container orderType={orderType}>
+        <Input placeholder="0.00" {...props} />
+        <Label>{label}</Label>
+        <Asset isCondensed={condenseAssetName}>{asset}</Asset>
+        <Asset isCondensed={condenseAssetName}>{asset}</Asset>
+      </Container>
+      {hasError && <ValidationMessage message={errorMessage} />}
+    </>
   )
 }
 

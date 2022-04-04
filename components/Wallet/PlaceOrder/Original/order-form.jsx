@@ -6,7 +6,9 @@ import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { convertToAsaUnits } from 'services/convert'
 import useTranslation from 'next-translate/useTranslation'
+
 export const OrderForm = ({
   order,
   handleChange,
@@ -18,10 +20,10 @@ export const OrderForm = ({
   handleOptionsChange,
   newOrderSizeFilter,
   setNewOrderSizeFilter,
-  orderType
+  orderType,
+  microAlgo
 }) => {
   const { t } = useTranslation('place-order')
-
   if (!enableOrder[order.type]) {
     // @todo: make this better, this is a placeholder
     return (
@@ -51,6 +53,8 @@ export const OrderForm = ({
           min="0"
           step="0.000001"
           inputMode="decimal"
+          hasError={convertToAsaUnits(order.price, order.decimals) < microAlgo}
+          errorMessage={`Price cannot be less than ${microAlgo}`}
         />
         <OrderInput
           type="number"
@@ -121,5 +125,6 @@ OrderForm.propTypes = {
   handleOptionsChange: PropTypes.func,
   enableOrder: PropTypes.object,
   newOrderSizeFilter: PropTypes.number,
-  setNewOrderSizeFilter: PropTypes.func
+  setNewOrderSizeFilter: PropTypes.func,
+  microAlgo: PropTypes.number
 }

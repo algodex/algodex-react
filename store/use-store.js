@@ -107,7 +107,8 @@ export const useStore = create(
         price: '',
         amount: '',
         total: '0',
-        execution: 'both'
+        execution: 'both',
+        decimals: 6,
       },
       setOrder: (order, asset) =>
         set((state) => {
@@ -118,6 +119,7 @@ export const useStore = create(
           const amount = typeof order.amount === 'undefined' ? state.order.amount : order.amount
           order.price = priceChanged ? roundValue(price, 6) : state.order.price
           order.amount = amountChanged ? roundValue(amount, asset.decimals) : state.order.amount
+          order.decimals = asset.decimals
           order.total =
             priceChanged || amountChanged
               ? new Big(order.price || 0)
