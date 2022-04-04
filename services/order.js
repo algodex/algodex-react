@@ -17,7 +17,18 @@ const OrderService = {
     const algoAmount = convertToBaseUnits(order.total)
 
     const price = convertToAsaUnits(order.price, order.asset.decimals)
-    const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
+    if (price.toString().includes('e')) {
+      try {
+        const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(
+          price.toFixed(order.asset.decimals)
+        )
+        console.log('came here with price')
+      } catch (error) {
+        console.log(error, error.message, 'error message')
+      }
+    } else {
+      const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
+    }
 
     if (order.execution === 'maker') {
       if (order.type === 'buy') {

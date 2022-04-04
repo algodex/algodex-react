@@ -44,7 +44,7 @@ export const Container = styled.div`
   flex: 1 1 auto;
   display: flex;
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 0.2rem;
   height: ${({ isUsd }) => (isUsd ? '3.1rem' : 'auto')};
   ${Input} {
     &:focus {

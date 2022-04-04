@@ -6,6 +6,8 @@ const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
   setShowAssetInfo: (bool) => set({ showAssetInfo: bool }),
+
+  MINALGO: 0.000001,
   /**
    * Assets should be a reduced list keyed by Asset ID
    *

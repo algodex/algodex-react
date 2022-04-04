@@ -7,7 +7,6 @@ import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import React from 'react'
 import useTranslation from 'next-translate/useTranslation'
-
 export const OrderForm = ({
   order,
   handleChange,

@@ -17,7 +17,7 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
-import { useCallback, useEffect, useState, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
 import Icon from '@/components/Icon'
@@ -27,18 +27,18 @@ import { MarketOrder } from './market-order'
 import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
 import { Tooltip } from '@/components/Tooltip'
+import USDPrice from '../../PriceConversion/USDPrice'
 import WalletService from '@/services/wallet'
 import { aggregateOrders } from './helpers'
+import { convertFromAsaUnits } from '@/services/convert'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
+import { floatToFixed } from '@/services/display'
 import toast from 'react-hot-toast'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
-import USDPrice from '../../PriceConversion/USDPrice'
-import { convertFromAsaUnits } from '@/services/convert'
-import { floatToFixed } from '@/services/display'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -55,7 +55,7 @@ function PlaceOrderView(props) {
   const [buyOrders, setBuyOrders] = useState()
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
-
+  
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance || 0
   const asaBalance = convertToAsaUnits(activeWallet?.assets?.[asset.id]?.balance, asset.decimals)
@@ -69,6 +69,8 @@ function PlaceOrderView(props) {
 
   const LIMIT_PANEL = 'limit'
   const MARKET_PANEL = 'market'
+
+  const MICROALGO = 0.000001
 
   // @todo: calculate transaction fees in total
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
@@ -309,7 +311,7 @@ function PlaceOrderView(props) {
     }
 
     const isDisabled =
-      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || status.submitting
+      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || parseFloat(order.price) < MICROALGO || status.submitting
 
     return (
       <SubmitButton
