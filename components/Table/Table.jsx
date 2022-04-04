@@ -100,7 +100,8 @@ const Container = styled.div`
       height: 29.7rem;
       overflow-y: scroll;
       @media (max-width: 996px) {
-        height: 34.7rem;
+        height: ${({ optionalGridInfo }) =>
+          optionalGridInfo && `${optionalGridInfo.height - 180}px`};
       }
     }
   }
@@ -139,7 +140,8 @@ function Table({
   onStateChange,
   columns,
   data,
-  getRowProps
+  getRowProps,
+  optionalGridInfo
 }) {
   const { Flyover = InfoFlyover } = components
 
@@ -186,7 +188,7 @@ function Table({
     }
   }, [onStateChange, initialState, tableState])
   return (
-    <Container>
+    <Container optionalGridInfo={optionalGridInfo}>
       <table {...getTableProps()} data-testid="data-table">
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
@@ -274,7 +276,8 @@ Table.propTypes = {
   data: PropTypes.array.isRequired,
   getRowProps: PropTypes.func,
   flyover: PropTypes.bool,
-  flyoverPlacement: PropTypes.string
+  flyoverPlacement: PropTypes.string,
+  optionalGridInfo: PropTypes.object
 }
 
 Table.defaultProps = {
@@ -284,7 +287,8 @@ Table.defaultProps = {
   flyoverPlacement: 'right',
   getRowProps: () => {
     return {}
-  }
+  },
+  optionalGridInfo: {}
 }
 
 export default Table
