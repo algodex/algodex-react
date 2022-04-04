@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { mdiAlertCircle } from '@mdi/js'
 import theme from 'theme'
 
-export const ValidationMessage = ({ components, message, ...props }) => {
+export const ValidationMessage = ({ components, message }) => {
   const { Icon } = components
   return (
     <div className="flex items-center text-xs mb-4 font-medium text-gray-500">
