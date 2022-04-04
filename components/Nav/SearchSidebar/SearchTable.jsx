@@ -147,7 +147,8 @@ export const NavSearchTable = ({
   isListingVerifiedAssets,
   algoPrice,
   isFilteringByFavorites,
-  setIsFilteringByFavorites
+  setIsFilteringByFavorites,
+  gridSize
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -358,6 +359,7 @@ export const NavSearchTable = ({
         components={{
           Flyover: SearchFlyover
         }}
+        optionalGridInfo={gridSize}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}
@@ -374,6 +376,7 @@ NavSearchTable.propTypes = {
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,
   isFilteringByFavorites: PropTypes.bool,
-  setIsFilteringByFavorites: PropTypes.func
+  setIsFilteringByFavorites: PropTypes.func,
+  gridSize: PropTypes.object
 }
 export default withSearchResultsQuery(NavSearchTable)

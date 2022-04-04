@@ -4,6 +4,7 @@ import { Fragment, useCallback } from 'react'
 
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import Spinner from '@/components/Spinner'
 import SvgImage from '@/components/SvgImage'
 import { convertFromBaseUnits } from '@/services/convert'
 import { floatToFixed } from '@/services/display'
@@ -12,7 +13,6 @@ import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@/hooks/withAlgodex'
-import Spinner from '@/components/Spinner'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -22,6 +22,7 @@ const Container = styled.div`
 const InfoContainer = styled.div`
   padding: 4rem;
   max-width: 40rem;
+  position: absolute;
 `
 
 const ButtonText = styled.button`
