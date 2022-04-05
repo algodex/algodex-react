@@ -13,7 +13,7 @@ export const roundValue = (value, decimalLimit) => {
   const hasDecimals = split.length > 1
 
   if (hasDecimals && split[1].length >= decimalLimit) {
-    return new Big(value).round(decimalLimit, Big.roundDown).toString()
+    return parseFloat(value).toFixed(decimalLimit).toString()
   }
 
   return value
