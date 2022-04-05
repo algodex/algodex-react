@@ -37,7 +37,7 @@ export const OrderForm = ({
     if (order.price === '0.00' || order.price === '') {
       return false
     }
-    if (convertToAsaUnits(order.price, order.decimals) < microAlgo) {
+    if (order.price < microAlgo) {
       return true
     }
   }

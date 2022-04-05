@@ -310,7 +310,7 @@ function PlaceOrderView(props) {
     }
 
     const isLessThanMicroAlgo = () => {
-      return convertToAsaUnits(order.price, order.decimals) < MICROALGO
+      return order.price < MICROALGO
     }
 
     const isDisabled =
