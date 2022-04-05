@@ -33,6 +33,15 @@ export const OrderForm = ({
     )
   }
 
+  const isErrorMsgVisible = () => {
+    if (order.price === '0.00' || order.price === '') {
+      return false
+    }
+    if (convertToAsaUnits(order.price, order.decimals) < microAlgo) {
+      return true
+    }
+  }
+
   return (
     <>
       <LimitOrder>
@@ -53,7 +62,7 @@ export const OrderForm = ({
           min="0"
           step="0.000001"
           inputMode="decimal"
-          hasError={convertToAsaUnits(order.price, order.decimals) < microAlgo}
+          hasError={isErrorMsgVisible()}
           errorMessage={`Price cannot be less than ${microAlgo}`}
         />
         <OrderInput
