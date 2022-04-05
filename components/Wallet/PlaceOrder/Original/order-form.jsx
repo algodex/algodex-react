@@ -6,7 +6,6 @@ import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { convertToAsaUnits } from 'services/convert'
 import useTranslation from 'next-translate/useTranslation'
 
 export const OrderForm = ({
