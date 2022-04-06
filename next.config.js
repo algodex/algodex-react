@@ -20,6 +20,11 @@ const nextPWA = require('next-pwa')
 
 const moduleExports = nextPWA(
   nextTranslate({
+    experimental: {
+      // this will allow nextjs to resolve files (js, ts, css)
+      // outside packages/app directory.
+      externalDir: true
+    },
     reactStrictMode: true,
     pwa: {
       dest: 'public',
