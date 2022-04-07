@@ -12,7 +12,8 @@ export const LimitOrder = ({
   handleOptionsChange,
   newOrderSizeFilter,
   setNewOrderSizeFilter,
-  enableOrder
+  enableOrder,
+  microAlgo
 }) => {
   return (
     <OrderForm
@@ -27,6 +28,7 @@ export const LimitOrder = ({
       newOrderSizeFilter={newOrderSizeFilter}
       setNewOrderSizeFilter={setNewOrderSizeFilter}
       orderType="limit"
+      microAlgo={microAlgo}
     />
   )
 }
@@ -41,5 +43,6 @@ LimitOrder.propTypes = {
   handleOptionsChange: PropTypes.func.isRequired,
   enableOrder: PropTypes.object,
   newOrderSizeFilter: PropTypes.number.isRequired,
-  setNewOrderSizeFilter: PropTypes.func.isRequired
+  setNewOrderSizeFilter: PropTypes.func.isRequired,
+  microAlgo: PropTypes.number.isRequired
 }
