@@ -21,7 +21,7 @@ import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useStore from '@/store/use-store'
 import useUserStore from '@/store/use-user-state'
-import AlgodexApi from '@algodex/algodex-sdk'
+import AlgodexApi from '@algodex/algodex-sdk/lib/AlgodexApi'
 import { Provider } from '@algodex/hooks/src/components/AlgodexContext'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()

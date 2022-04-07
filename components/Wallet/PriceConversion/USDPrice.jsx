@@ -1,4 +1,4 @@
-import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
+import { withAlgorandPriceQuery } from '@algodex/hooks/src/http/useAlgoExplorer'
 import PropTypes from 'prop-types'
 
 export function USDPrice({ algoPrice, priceToConvert, currency }) {

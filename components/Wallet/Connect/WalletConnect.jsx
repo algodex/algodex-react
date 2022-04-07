@@ -9,7 +9,7 @@ import { Section } from '@/components/Layout/Section'
 import SvgImage from 'components/SvgImage'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import useMyAlgo from 'hooks/useMyAlgo'
+import useMyAlgo from '@/hooks/useMyAlgo'
 import useTranslation from 'next-translate/useTranslation'
 import useWalletsQuery from '@/hooks/useWalletsQuery'
 
