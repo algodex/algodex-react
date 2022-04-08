@@ -52,7 +52,6 @@ const properties = {
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
-  console.log(AlgodexApi)
   let api = new AlgodexApi(properties)
   try {
     staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
@@ -78,6 +77,10 @@ export async function getStaticProps({ params: { id } }) {
 
   if (typeof staticAssetPrice.isTraded !== 'undefined') {
     staticExplorerAsset.price_info = staticAssetPrice
+  }
+
+  if (typeof staticExplorerAsset.name === 'undefined') {
+    staticExplorerAsset.name = ''
   }
 
   return {
