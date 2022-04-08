@@ -30,7 +30,7 @@
     "styled-components": "^5"
   },
   "dependencies": {
-    "@algodex/algodex-sdk": "^1.1.15",
+    "@algodex/algodex-sdk": "^1.1.16",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
