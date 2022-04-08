@@ -10,8 +10,8 @@ import useUserStore from '@/store/use-user-state'
 import Spinner from '@/components/Spinner'
 import Layout from '@/components/Layout/OriginalLayout'
 import { useRouter } from 'next/router'
-import useAssetPriceQuery from '@algodex/hooks/src/http/useAssetPriceQuery'
-import AlgodexApi from '@algodex/algodex-sdk/lib/AlgodexApi.js'
+import { useAssetPriceQuery } from '@algodex/algodex-hooks'
+import AlgodexApi from '@algodex/algodex-sdk'
 
 /**
  * Fetch Traded Asset Paths

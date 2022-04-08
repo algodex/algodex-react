@@ -11,7 +11,7 @@ import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withAssetPriceQuery } from '@algodex/hooks/src/index.js'
+import { withAssetPriceQuery } from '@algodex/algodex-hooks'
 import Spinner from '@/components/Spinner'
 
 const Container = styled.div`

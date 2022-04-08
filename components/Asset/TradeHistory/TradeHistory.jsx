@@ -10,7 +10,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-import { withAssetTradeHistoryQuery } from '@algodex/hooks/src/index.js'
+import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
 dayjs.extend(localizedFormat)
 

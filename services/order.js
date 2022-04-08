@@ -1,130 +1,130 @@
-import { convertToAsaUnits, convertToBaseUnits } from './convert'
+// import { convertToAsaUnits, convertToBaseUnits } from './convert'
 
-import algodex from '@algodex/algodex-sdk'
-import { getAlgodexEnvironment } from './environment'
+// import algodex from '@algodex/algodex-sdk'
+// import { getAlgodexEnvironment } from './environment'
 
-const algodex_environment = getAlgodexEnvironment()
-const AlgodClient = new algodex.initAlgodClient(algodex_environment)
+// const algodex_environment = getAlgodexEnvironment()
+// const AlgodClient = new algodex.initAlgodClient(algodex_environment)
 
 const OrderService = {
-  placeOrder: (order, orderBook) => {
-    console.log('OrderService.placeOrder', { order })
-    const assetId = order.asset.id
-    const address = order.address
-    const minimumAmount = 0
-
-    const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
-    const algoAmount = convertToBaseUnits(order.total)
-
-    const price = convertToAsaUnits(order.price, order.asset.decimals)
-    const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
-
-    if (order.execution === 'maker') {
-      if (order.type === 'buy') {
-        console.log('Maker buy order', {
-          address,
-          price,
-          assetId,
-          algoAmount
-        })
-        return algodex.placeAlgosToBuyASAOrderIntoOrderbook(
-          AlgodClient,
-          address,
-          numerator,
-          denominator,
-          minimumAmount,
-          assetId,
-          algoAmount
-        )
-      } else if (order.type === 'sell') {
-        console.log('Maker sell order', {
-          address,
-          price,
-          assetId,
-          asaAmount
-        })
-        return algodex.placeASAToSellASAOrderIntoOrderbook(
-          AlgodClient,
-          address,
-          numerator,
-          denominator,
-          minimumAmount,
-          assetId,
-          asaAmount
-        )
-      }
-    }
-
-    const isSellOrder = order.type === 'sell'
-    const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
-
-    const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
-
-    if (order.execution === 'taker') {
-      console.log(`Taker ${order.type} order`, {
-        isSellOrder,
-        assetId,
-        address,
-        limitPrice,
-        asaAmount,
-        algoAmount
-      })
-      return algodex.executeOrderAsTaker(
-        AlgodClient,
-        isSellOrder,
-        assetId,
-        address,
-        limitPrice,
-        asaAmount,
-        algoAmount,
-        allOrderBookOrders
-      )
-    }
-
-    // const marketPrice = order.price
-
-    if (order.execution === 'market') {
-      console.log(`Market ${order.type} order`, {
-        isSellOrder,
-        assetId,
-        address,
-        limitPrice,
-        asaAmount,
-        algoAmount
-      })
-      return algodex.executeMarketOrderAsTaker(
-        AlgodClient,
-        isSellOrder,
-        assetId,
-        address,
-        limitPrice,
-        asaAmount,
-        algoAmount,
-        allOrderBookOrders
-      )
-    }
-
-    // order.execution === 'both' (default)
-
-    console.log(`Maker/Taker ${order.type} order`, {
-      isSellOrder,
-      assetId,
-      address,
-      limitPrice,
-      asaAmount,
-      algoAmount
-    })
-
-    return algodex.executeOrderAsMakerAndTaker(
-      AlgodClient,
-      isSellOrder,
-      assetId,
-      address,
-      limitPrice,
-      asaAmount,
-      algoAmount,
-      allOrderBookOrders
-    )
+  placeOrder: (/*order, orderBook*/) => {
+    // console.log('OrderService.placeOrder', { order })
+    // const assetId = order.asset.id
+    // const address = order.address
+    // const minimumAmount = 0
+    //
+    // const asaAmount = convertToBaseUnits(order.amount, order.asset.decimals)
+    // const algoAmount = convertToBaseUnits(order.total)
+    //
+    // const price = convertToAsaUnits(order.price, order.asset.decimals)
+    // const { n: numerator, d: denominator } = algodex.getNumeratorAndDenominatorFromPrice(price)
+    //
+    // if (order.execution === 'maker') {
+    //   if (order.type === 'buy') {
+    //     console.log('Maker buy order', {
+    //       address,
+    //       price,
+    //       assetId,
+    //       algoAmount
+    //     })
+    //     return algodex.placeAlgosToBuyASAOrderIntoOrderbook(
+    //       AlgodClient,
+    //       address,
+    //       numerator,
+    //       denominator,
+    //       minimumAmount,
+    //       assetId,
+    //       algoAmount
+    //     )
+    //   } else if (order.type === 'sell') {
+    //     console.log('Maker sell order', {
+    //       address,
+    //       price,
+    //       assetId,
+    //       asaAmount
+    //     })
+    //     return algodex.placeASAToSellASAOrderIntoOrderbook(
+    //       AlgodClient,
+    //       address,
+    //       numerator,
+    //       denominator,
+    //       minimumAmount,
+    //       assetId,
+    //       asaAmount
+    //     )
+    //   }
+    // }
+    //
+    // const isSellOrder = order.type === 'sell'
+    // const limitPrice = convertToAsaUnits(order.price, order.asset.decimals)
+    //
+    // const allOrderBookOrders = OrderService.getAllEscrowOrders(orderBook)
+    //
+    // if (order.execution === 'taker') {
+    //   console.log(`Taker ${order.type} order`, {
+    //     isSellOrder,
+    //     assetId,
+    //     address,
+    //     limitPrice,
+    //     asaAmount,
+    //     algoAmount
+    //   })
+    //   return algodex.executeOrderAsTaker(
+    //     AlgodClient,
+    //     isSellOrder,
+    //     assetId,
+    //     address,
+    //     limitPrice,
+    //     asaAmount,
+    //     algoAmount,
+    //     allOrderBookOrders
+    //   )
+    // }
+    //
+    // // const marketPrice = order.price
+    //
+    // if (order.execution === 'market') {
+    //   console.log(`Market ${order.type} order`, {
+    //     isSellOrder,
+    //     assetId,
+    //     address,
+    //     limitPrice,
+    //     asaAmount,
+    //     algoAmount
+    //   })
+    //   return algodex.executeMarketOrderAsTaker(
+    //     AlgodClient,
+    //     isSellOrder,
+    //     assetId,
+    //     address,
+    //     limitPrice,
+    //     asaAmount,
+    //     algoAmount,
+    //     allOrderBookOrders
+    //   )
+    // }
+    //
+    // // order.execution === 'both' (default)
+    //
+    // console.log(`Maker/Taker ${order.type} order`, {
+    //   isSellOrder,
+    //   assetId,
+    //   address,
+    //   limitPrice,
+    //   asaAmount,
+    //   algoAmount
+    // })
+    //
+    // return algodex.executeOrderAsMakerAndTaker(
+    //   AlgodClient,
+    //   isSellOrder,
+    //   assetId,
+    //   address,
+    //   limitPrice,
+    //   asaAmount,
+    //   algoAmount,
+    //   allOrderBookOrders
+    // )
   },
 
   getAllEscrowOrders: (orderBook) => {
@@ -158,14 +158,14 @@ const OrderService = {
    * @param {int}              version: escrow contract version
    * @returns {Object} Promise for when the transaction is fully confirmed
    */
-  closeOrder: async (escrowAccountAddr, creatorAddr, orderBookEntry, version) => {
-    return await algodex.closeOrderFromOrderBookEntry(
-      AlgodClient,
-      escrowAccountAddr,
-      creatorAddr,
-      orderBookEntry,
-      version
-    )
+  closeOrder: async (/*escrowAccountAddr, creatorAddr, orderBookEntry, version*/) => {
+    // return await algodex.closeOrderFromOrderBookEntry(
+    //   AlgodClient,
+    //   escrowAccountAddr,
+    //   creatorAddr,
+    //   orderBookEntry,
+    //   version
+    // )
   }
 }
 

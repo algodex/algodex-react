@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
 import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
-import { withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/hooks/src/index.js'
+import { withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 import Big from 'big.js'
 import { Fragment } from 'react'

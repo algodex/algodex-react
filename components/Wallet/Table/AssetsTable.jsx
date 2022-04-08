@@ -8,7 +8,7 @@ import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
 import Table, { DefaultCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { useEventDispatch } from '@/hooks/useEvents'
-import { withWalletAssetsQuery } from '@algodex/hooks/src/index.js'
+import { withWalletAssetsQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   display: flex;

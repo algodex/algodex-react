@@ -11,7 +11,7 @@ import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
-import useDebounce from '@algodex/hooks/src/utils/useDebounce'
+import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -140,7 +140,6 @@ const Main = styled.main`
   grid-template-rows: 1fr;
   height: 100%;
 
-
   @media (min-width: 996px) {
     height: 100%;
     min-height: 900px;
@@ -178,8 +177,6 @@ const Main = styled.main`
       'chart chart book trade'
       'orders orders history trade';
   }
-
-}
 `
 
 const MobileMenu = styled.nav`

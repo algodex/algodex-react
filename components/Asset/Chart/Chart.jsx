@@ -9,7 +9,7 @@ import millify from 'millify'
 import styled from '@emotion/styled'
 import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
-import { withAssetChartQuery } from '@algodex/hooks/src/index.js'
+import { withAssetChartQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   position: relative;

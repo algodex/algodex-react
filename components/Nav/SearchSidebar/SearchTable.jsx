@@ -18,7 +18,7 @@ import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withSearchResultsQuery } from '@algodex/hooks/src/index.js'
+import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 
 /**
  * Map a Query Result to a Search Result
