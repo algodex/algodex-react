@@ -4,6 +4,7 @@
     "sell": "فرۆشتن",
     "available-balance": "باڵانسی بەردەست",
     "limit": "سنوور",
+    "market": "بازار",
     "price": "نرخ",
     "amount": "ڕێژە",
     "total": "کۆی گشتی",
@@ -24,5 +25,7 @@
     "max-spend-explanation": "Tevahiya hevsengiyê {{hejmar}} Algoyên ku divê di berîka xwe de werin hilanîn ji bo ku destûr bide bazirganiyê dihewîne",
     "order-size-filtering": "ترتيب حجم التصفية",
     "less-lag": "أقل تأخر",
-    "better-execution": "تنفيذ أفضل"
+    "better-execution": "تنفيذ أفضل",
+    "fund-wallet":"تکایە جزدانەکەت بە ئەی ئێل جی ئۆی زیاتر پارە بدە پێش دانانی فەرمانەکان!"
+    
 }

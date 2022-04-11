@@ -22,6 +22,7 @@ const Container = styled.div`
 const InfoContainer = styled.div`
   padding: 4rem;
   max-width: 40rem;
+  position: absolute;
 `
 
 const ButtonText = styled.button`

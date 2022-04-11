@@ -32,9 +32,14 @@ const Container = styled.div`
       min-width: unset;
     }
 
+    & ::-webkit-scrollbar {
+      display: none;
+      width: 0px;
+    }
+
     tr {
       &:hover {
-        cursor: pointer;
+        // cursor: pointer;
       }
 
       &:nth-child(odd) {
@@ -89,11 +94,25 @@ const Container = styled.div`
         }
       }
     }
+    tbody {
+      position: absolute;
+      width: 100%;
+      height: 29.7rem;
+      overflow-y: scroll;
+      @media (max-width: 996px) {
+        height: ${({ optionalGridInfo }) =>
+          optionalGridInfo && `${optionalGridInfo.height - 180}px`};
+      }
+    }
   }
 `
 
 export function DefaultCell({ value }) {
-  return <BrightGraySpan data-testid="default-cell">{value}</BrightGraySpan>
+  return (
+    <BrightGraySpan className="cursor-default" title={value} data-testid="default-cell">
+      {value}
+    </BrightGraySpan>
+  )
 }
 DefaultCell.propTypes = { value: PropTypes.any }
 
@@ -121,7 +140,8 @@ function Table({
   onStateChange,
   columns,
   data,
-  getRowProps
+  getRowProps,
+  optionalGridInfo
 }) {
   const { Flyover = InfoFlyover } = components
 
@@ -168,7 +188,7 @@ function Table({
     }
   }, [onStateChange, initialState, tableState])
   return (
-    <Container>
+    <Container optionalGridInfo={optionalGridInfo}>
       <table {...getTableProps()} data-testid="data-table">
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
@@ -256,7 +276,8 @@ Table.propTypes = {
   data: PropTypes.array.isRequired,
   getRowProps: PropTypes.func,
   flyover: PropTypes.bool,
-  flyoverPlacement: PropTypes.string
+  flyoverPlacement: PropTypes.string,
+  optionalGridInfo: PropTypes.object
 }
 
 Table.defaultProps = {
@@ -266,7 +287,8 @@ Table.defaultProps = {
   flyoverPlacement: 'right',
   getRowProps: () => {
     return {}
-  }
+  },
+  optionalGridInfo: {}
 }
 
 export default Table

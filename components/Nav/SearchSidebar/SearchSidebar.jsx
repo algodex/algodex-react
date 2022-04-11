@@ -66,19 +66,13 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(false)
-  // const [searchHeight, setSearchHeight] = useState(0)
+
   // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
-  const searchRef = useRef()
+
   // /**
   //  * Get the client height
   //  */
-  // useEffect(() => {
-  //   if (searchRef.current) {
-  //     const height = Math.floor(searchRef.current.getBoundingClientRect().height)
-  //     setSearchHeight(height)
-  //   }
-  // }, [searchRef])
 
   /**
    * The `gridSize` prop changes on window resize, so this is equivalent to a
@@ -137,11 +131,27 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize])
+
+  // useEffect(() => {
+  //   const handleTableResize = () => {
+  //     if (searchRef.current) {
+  //       const height = Math.floor(searchRef.current.getBoundingClientRect().height)
+  //       console.log(height, 'height here')
+  //       setSearchHeight(height)
+  //     }
+  //   }
+
+  //   window.addEventListener('resize', handleTableResize)
+  //   handleTableResize()
+
+  //   return () => removeEventListener('resize', handleTableResize)
+  // }, [searchRef])
+
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
         <AssetsContainer gridHeight={gridSize.height} ref={containerRef} className="flex flex-col">
-          <div ref={searchRef}>
+          <div>
             <SearchInput
               initialText={query}
               onChange={(q) => setQuery(q)}
@@ -165,6 +175,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
+              gridSize={gridSize}
             />
           </div>
         </AssetsContainer>

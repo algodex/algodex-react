@@ -1,9 +1,14 @@
-import styled from '@emotion/styled'
+import Table, {
+  AssetNameCell,
+  DefaultCell,
+  ExpandTradeDetail,
+  OrderTypeCell
+} from '@/components/Table'
+
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-
-import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@algodex/algodex-hooks'
 
@@ -35,7 +40,6 @@ const TableWrapper = styled.div`
 export function TradeHistoryTable({ orders }) {
   //console.log(`TradeHistoryTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
@@ -46,7 +50,10 @@ export function TradeHistoryTable({ orders }) {
       {
         Header: t('date'),
         accessor: 'date',
-        Cell: DefaultCell
+        minWidth: 160,
+        width: 160,
+        maxWidth: 160,
+        Cell: ExpandTradeDetail
       },
       {
         Header: t('pair'),

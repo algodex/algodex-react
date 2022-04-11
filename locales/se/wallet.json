@@ -4,6 +4,8 @@
     "wallet": "Plånbok",
     "balance": "Saldo",
     "start-by": "Starta genom att ansluta en Algorand plånbok",
-    "once-connected": "När du har anslutit en plånbok med MyAlgo så kan du börja handla"
+    "once-connected": "När du har anslutit en plånbok med MyAlgo så kan du börja handla",
+    "copy-success":"Kopierade plånboksadress till urklipp!",
+    "copy-fail":"Det gick inte att kopiera plånboksadress till urklipp"
   }
   

@@ -17,7 +17,7 @@ import {
   ToggleWrapper
 } from './place-order.css'
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
 import Icon from '@/components/Icon'
@@ -27,16 +27,18 @@ import { MarketOrder } from './market-order'
 import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
 import { Tooltip } from '@/components/Tooltip'
+import USDPrice from '../../PriceConversion/USDPrice'
 import WalletService from '@/services/wallet'
 import { aggregateOrders } from './helpers'
+import { convertFromAsaUnits } from '@/services/convert'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import toast from 'react-hot-toast'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
-import USDPrice from '../../PriceConversion/USDPrice'
 
 const DEFAULT_ORDER = {
   type: 'buy',
@@ -68,6 +70,8 @@ function PlaceOrderView(props) {
   const LIMIT_PANEL = 'limit'
   const MARKET_PANEL = 'market'
 
+  const MICROALGO = 0.000001
+
   // @todo: calculate transaction fees in total
   // const isAsaOptedIn = !!activeWallet?.assets?.[asset.id]
   // const txnFee = isAsaOptedIn ? 0.002 : 0.003
@@ -83,7 +87,6 @@ function PlaceOrderView(props) {
 
   const order = useStore((state) => state.order)
   const setOrder = useStore((state) => state.setOrder)
-
   const {
     data: minBalance,
     isLoading: isWalletBalanceLoading,
@@ -201,16 +204,14 @@ function PlaceOrderView(props) {
     setStatus((prev) => ({ ...prev, submitting: true }))
     if (checkPopupBlocker()) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error(
-        'Please disable your popup blocker (likely in the top-right of your browser window)'
-      )
+      toast.error(t('disable-popup'))
       return
     }
     const minWalletBalance = await WalletService.getMinWalletBalance(activeWallet)
     //console.log('activeWallet', { activeWallet })
     if (activeWallet.balance * 1000000 < minWalletBalance + 500001) {
       setStatus((prev) => ({ ...prev, submitting: false }))
-      toast.error('Please fund your wallet with more ALGO before placing orders!')
+      toast.error(t('fund-wallet'))
       return
     }
     const orderData = {
@@ -279,6 +280,11 @@ function PlaceOrderView(props) {
     }
   }
 
+  const calcAsaWorth = useMemo(
+    () => floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals)),
+    [asset]
+  )
+
   const renderSubmit = () => {
     const buttonProps = {
       buy: { variant: 'primary', text: `${t('buy')} ${asset.name}` },
@@ -303,8 +309,16 @@ function PlaceOrderView(props) {
       return new Big(order.amount).gt(asaBalance)
     }
 
+    const isLessThanMicroAlgo = () => {
+      return order.price < MICROALGO
+    }
+
     const isDisabled =
-      isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || status.submitting
+      isBelowMinOrderAmount() ||
+      isInvalid() ||
+      isBalanceExceeded() ||
+      isLessThanMicroAlgo() ||
+      status.submitting
 
     return (
       <SubmitButton
@@ -417,7 +431,7 @@ function PlaceOrderView(props) {
               {asaBalance}
               <br />
               <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice priceToConvert={asaBalance} currency="$" />
+                <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
               </LabelSm>
             </LabelMd>
           </BalanceRow>
@@ -442,7 +456,7 @@ function PlaceOrderView(props) {
               handleOptionsChange({ target: { value: 'market' } })
             }}
           >
-            Market
+            {t('market')}
           </Tab>
         </Tabs>
         {orderView === LIMIT_PANEL ? (
@@ -456,6 +470,7 @@ function PlaceOrderView(props) {
             enableOrder={enableOrder}
             handleOptionsChange={handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
+            microAlgo={MICROALGO}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
           />
         ) : (

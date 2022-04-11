@@ -1,40 +1,48 @@
-import { LabelSm } from '@/components/Typography'
-import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
-import PropTypes from 'prop-types'
-import { Container, Input, Label, Asset, AssetUSD } from './order-input.css'
+import { Asset, AssetUSD, Container, Input, Label } from './order-input.css'
 
-function OrderInput({ label, asset, orderType, usdEquivalent, ...props }) {
+import { LabelSm } from '@/components/Typography'
+import PropTypes from 'prop-types'
+import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
+import { ValidationMessage } from '@/components/InputValidations/ValidationMessage'
+
+function OrderInput({ label, asset, orderType, usdEquivalent, hasError, errorMessage, ...props }) {
   const condenseAssetName = asset?.length > 5
 
   if (usdEquivalent) {
     return (
-      <Container orderType={orderType} isUsd={usdEquivalent}>
-        <Input placeholder="0.00" {...props} isUsd={usdEquivalent} />
-        <Label>{label}</Label>
-        <Asset isCondensed={condenseAssetName}>
-          {asset}
+      <>
+        <Container hasError={hasError} orderType={orderType} isUsd={usdEquivalent}>
+          <Input placeholder="0.00" {...props} isUsd={usdEquivalent} />
+          <Label>{label}</Label>
+          <Asset isCondensed={condenseAssetName}>
+            {asset}
+            {usdEquivalent && (
+              <>
+                <br />
+                <LabelSm className="mt-3">USD</LabelSm>
+              </>
+            )}
+          </Asset>
           {usdEquivalent && (
-            <>
-              <br />
-              <LabelSm className="mt-3">USD</LabelSm>
-            </>
+            <AssetUSD isCondensed={condenseAssetName}>
+              <USDPrice priceToConvert={usdEquivalent} />
+            </AssetUSD>
           )}
-        </Asset>
-        {usdEquivalent && (
-          <AssetUSD isCondensed={condenseAssetName}>
-            <USDPrice priceToConvert={usdEquivalent} />
-          </AssetUSD>
-        )}
-      </Container>
+        </Container>
+        {hasError && <ValidationMessage message={errorMessage} />}
+      </>
     )
   }
   return (
-    <Container orderType={orderType}>
-      <Input placeholder="0.00" {...props} />
-      <Label>{label}</Label>
-      <Asset isCondensed={condenseAssetName}>{asset}</Asset>
-      <Asset isCondensed={condenseAssetName}>{asset}</Asset>
-    </Container>
+    <>
+      <Container orderType={orderType}>
+        <Input placeholder="0.00" {...props} />
+        <Label>{label}</Label>
+        <Asset isCondensed={condenseAssetName}>{asset}</Asset>
+        <Asset isCondensed={condenseAssetName}>{asset}</Asset>
+      </Container>
+      {hasError && <ValidationMessage message={errorMessage} />}
+    </>
   )
 }
 
@@ -43,7 +51,9 @@ OrderInput.propTypes = {
   asset: PropTypes.string,
   decimals: PropTypes.number,
   orderType: PropTypes.oneOf(['buy', 'sell']),
-  usdEquivalent: PropTypes.string
+  usdEquivalent: PropTypes.string,
+  hasError: PropTypes.bool,
+  errorMessage: PropTypes.string
 }
 
 export default OrderInput
