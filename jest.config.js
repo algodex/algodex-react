@@ -31,7 +31,6 @@ module.exports = {
     '^@/utils(.*)$': '<rootDir>/utils$1',
     '^@/theme(.*)$': '<rootDir>/theme$1',
     '^@/spec(.*)$': '<rootDir>/spec$1',
-    '^spec(.*)$': '<rootDir>/spec$1',
     '^theme(.*)$': '<rootDir>/theme$1'
   },
   transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)']
