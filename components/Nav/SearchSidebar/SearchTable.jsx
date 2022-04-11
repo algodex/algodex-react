@@ -8,17 +8,19 @@ import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 
 import AlgoIcon from '@/components/Icon'
+import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import { flatten } from 'lodash'
-import { floatToFixed } from '@/services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import { formatUSDPrice } from '@/components/helpers'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withSearchResultsQuery } from '@/hooks/withAlgodex'
+import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 
 /**
  * Map a Query Result to a Search Result
@@ -71,15 +73,15 @@ export const mapToSearchResults = ({
 const TableWrapper = styled.div`
   position: absolute;
   inset: 0;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+  // overflow-y: scroll;
+  // -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   top: 85px;
   width: 100%;
   height: 85%;
 
   @media (max-width: 996px) {
-    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
   }
 
   @media (min-width: 996px) {
@@ -92,6 +94,7 @@ const TableWrapper = styled.div`
 
   &::-webkit-scrollbar {
     display: none;
+    width: 0px;
   }
 `
 
@@ -129,7 +132,7 @@ export const AssetChangeCell = ({ value }) => {
     return `${value}%`
   }
   return (
-    <AssetChange value={value} data-testid="asa-change-cell">
+    <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
       {displayChange()}
     </AssetChange>
   )
@@ -144,7 +147,8 @@ export const NavSearchTable = ({
   isListingVerifiedAssets,
   algoPrice,
   isFilteringByFavorites,
-  setIsFilteringByFavorites
+  setIsFilteringByFavorites,
+  gridSize
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
@@ -178,31 +182,36 @@ export const NavSearchTable = ({
    */
   const searchResultData = useMemo(() => {
     // Return nothing if no data exists
-    if (!assets || !Array.isArray(assets) || assets.length === 0) {
+    const bannedAssets = {}
+    DelistedAssets.forEach((element) => {
+      bannedAssets[element] = element
+    })
+    const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
+    if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
       // Return only verified assets
-      return assets.filter((asset) => asset.verified).map(mapToSearchResults)
+      return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isFilteringByFavorites) {
       // Filter assets by favorites
       const result = Object.keys(favoritesState).map((assetId) => {
-        return assets.filter((asset) => asset.assetId === parseInt(assetId, 10))
+        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
       })
       return flatten(result).map(mapToSearchResults)
     } else {
       // If there is data, use it
-      return assets.map(mapToSearchResults)
+      return filteredList.map(mapToSearchResults)
     }
   }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 
   const AssetPriceCell = useCallback(
     ({ value }) => {
       return (
-        <AssetPrice className="font-semibold">
+        <AssetPrice className="cursor-pointer font-semibold">
           {value}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{(algoPrice * value).toLocaleString()} USD</span> : ''}
+            {value !== '--' ? <span>{formatUSDPrice(algoPrice * value)}&nbsp;USD</span> : ''}
           </p>
         </AssetPrice>
       )
@@ -216,7 +225,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="flex items-center">
+        <div className="cursor-pointer flex items-center">
           <div className="flex flex-col">
             <div className="flex items-center">
               <Icon
@@ -245,10 +254,12 @@ export const NavSearchTable = ({
               <div className="ml-3">
                 <AssetId>{row.original.id}</AssetId>
               </div>
+              &nbsp;
               {row.original.verified && (
                 <Icon
                   path={mdiCheckDecagram}
                   title="Verified asset"
+                  className="mt-0.5"
                   size={0.5}
                   color={theme.palette.gray['500']}
                 />
@@ -348,6 +359,7 @@ export const NavSearchTable = ({
         components={{
           Flyover: SearchFlyover
         }}
+        optionalGridInfo={gridSize}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}
@@ -364,6 +376,7 @@ NavSearchTable.propTypes = {
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,
   isFilteringByFavorites: PropTypes.bool,
-  setIsFilteringByFavorites: PropTypes.func
+  setIsFilteringByFavorites: PropTypes.func,
+  gridSize: PropTypes.object
 }
 export default withSearchResultsQuery(NavSearchTable)

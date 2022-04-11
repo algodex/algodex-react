@@ -4,6 +4,7 @@
   "sell": "Vender",
   "available-balance": "Saldo disponible",
   "limit": "Límite",
+  "market": "Mercado",
   "price": "Precio",
   "amount": "Monto",
   "total": "Total",
@@ -24,5 +25,6 @@
   "max-spend-explanation": "El saldo total incluye {{amount}} Algos que deben almacenarse en la billetera para poder comerciar",
   "order-size-filtering": "Filtrado por tamaño de pedido",
   "less-lag": "Menos retraso",
-  "better-execution": "Mejor ejecución"
+  "better-execution": "Mejor ejecución",
+  "fund-wallet":"¡Por favor, financie su billetera con más ALGO antes de realizar pedidos!"
 }

@@ -21,9 +21,43 @@ import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useStore from '@/store/use-store'
 import useUserStore from '@/store/use-user-state'
-
+import AlgodexApi from '@algodex/algodex-sdk'
+import { Provider } from '@algodex/algodex-hooks'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
+/**
+ *
+ * @type {APIProperties}
+ */
+const properties = {
+  config: {
+    algod: {
+      uri: 'https://testnet.algoexplorerapi.io',
+      token: ''
+    },
+    indexer: {
+      uri: 'https://algoindexer.testnet.algoexplorerapi.io',
+      token: ''
+    },
+    dexd: {
+      uri: 'https://testnet.algodex.com/algodex-backend',
+      token: ''
+    }
+  }
+}
+let api
+
+/**
+ *
+ * @return {AlgodexApi}
+ */
+function makeApi() {
+  if (typeof api === 'undefined') {
+    api = new AlgodexApi(properties)
+  }
+  return api
+}
+
 const styles = css`
   html,
   body,
@@ -199,6 +233,7 @@ const styles = css`
     border: none;
   }
 `
+
 function Algodex(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const TRACKING_ID = 'UA-195819772-1'
@@ -231,10 +266,12 @@ function Algodex(props) {
               <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
             <ThemeProvider theme={theme}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <Toaster />
-              <ReactQueryDevtools initialIsOpen={false} />
-              <Component {...pageProps} />
+              <Provider dex={makeApi()}>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <Toaster />
+                <ReactQueryDevtools initialIsOpen={false} />
+                <Component {...pageProps} />
+              </Provider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>

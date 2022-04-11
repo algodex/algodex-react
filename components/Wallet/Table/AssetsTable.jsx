@@ -8,7 +8,7 @@ import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
 import Table, { DefaultCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { useEventDispatch } from '@/hooks/useEvents'
-import { withWalletAssetsQuery } from '@/hooks/withAlgodex'
+import { withWalletAssetsQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ export const AssetCoinCell = (props) => {
   return (
     <Link href={`/trade/${props.row.original.id}`}>
       <button onClick={onClick}>
-        <AssetNameBlock data-testid="asset-coin-cell">
+        <AssetNameBlock className="text-left" data-testid="asset-coin-cell">
           <BrightGraySpan>{props.value}</BrightGraySpan>
           <br />
           <AssetId>{props.row.original.id}</AssetId>

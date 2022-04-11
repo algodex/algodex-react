@@ -4,6 +4,7 @@
     "sell": "बेच दो",
     "available-balance": "उपलब्ध शेष राशि",
     "limit": "सीमा",
+    "market": "मंडी",
     "price": "कीमत",
     "amount": "रकम",
     "total": "कुल",
@@ -24,5 +25,6 @@
     "max-spend-explanation": "कुल शेष राशि में {{रकम}} Algos शामिल हैं जिन्हें ट्रेडों की अनुमति देने के लिए वॉलेट में रखा जाना चाहिए",
     "order-size-filtering": "आदेश आकार फ़िल्टरिंग",
     "less-lag": "कम अंतराल",
-    "better-execution": "बेहतर निष्पादन"
+    "better-execution": "बेहतर निष्पादन",
+    "fund-wallet":"आदेश देने से पहले अधिक ALGO के साथ अपने बटुए निधि कृपया!"
 }

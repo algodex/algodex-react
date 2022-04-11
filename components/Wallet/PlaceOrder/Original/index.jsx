@@ -1,7 +1,7 @@
 import PlaceOrderView from './view'
 import useStore, { useStorePersisted } from 'store/use-store'
 import PropTypes from 'prop-types'
-import { useAssetOrdersQuery } from '@/hooks/useAlgodex'
+import { useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import Spinner from '@/components/Spinner'
 import Error from '@/components/ServiceError'
 import { useMemo } from 'react'

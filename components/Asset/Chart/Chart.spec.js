@@ -9,7 +9,7 @@ import {
   DEMO_SPREAD,
   DEMO_ALGO_VOLUME,
   DEMO_PRICE_DATA
-} from 'spec/Chart'
+} from '@/spec/Chart'
 
 const DEMO_DATA = {
   interval: '1h',

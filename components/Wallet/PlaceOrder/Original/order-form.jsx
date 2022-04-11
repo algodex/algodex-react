@@ -19,10 +19,10 @@ export const OrderForm = ({
   handleOptionsChange,
   newOrderSizeFilter,
   setNewOrderSizeFilter,
-  orderType
+  orderType,
+  microAlgo
 }) => {
   const { t } = useTranslation('place-order')
-
   if (!enableOrder[order.type]) {
     // @todo: make this better, this is a placeholder
     return (
@@ -30,6 +30,15 @@ export const OrderForm = ({
         {t('insufficient-balance')}
       </BodyCopy>
     )
+  }
+
+  const isErrorMsgVisible = () => {
+    if (order.price === '0.00' || order.price === '') {
+      return false
+    }
+    if (order.price < microAlgo) {
+      return true
+    }
   }
 
   return (
@@ -52,6 +61,8 @@ export const OrderForm = ({
           min="0"
           step="0.000001"
           inputMode="decimal"
+          hasError={isErrorMsgVisible()}
+          errorMessage={`Price cannot be less than ${microAlgo}`}
         />
         <OrderInput
           type="number"
@@ -122,5 +133,6 @@ OrderForm.propTypes = {
   handleOptionsChange: PropTypes.func,
   enableOrder: PropTypes.object,
   newOrderSizeFilter: PropTypes.number,
-  setNewOrderSizeFilter: PropTypes.func
+  setNewOrderSizeFilter: PropTypes.func,
+  microAlgo: PropTypes.number
 }

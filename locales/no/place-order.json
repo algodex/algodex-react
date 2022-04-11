@@ -4,6 +4,7 @@
     "sell": "SELGE",
     "available-balance": "TILGJENGELIG BALANSE",
     "limit": "GRENSE",
+    "market": "marked",
     "price": "PRIS",
     "amount": "BELØP",
     "total": "TOTAL",
@@ -24,5 +25,6 @@
     "max-spend-explanation": "Total saldo inkluderer {{amount}} algoer som må oppbevares i lommeboken for å tillate handler",
     "order-size-filtering": "Filtrering av ordrestørrelse",
     "less-lag": "Mindre etterslep",
-    "better-execution": "Bedre utførelse"
+    "better-execution": "Bedre utførelse",
+    "fund-wallet":"Vennligst finansier lommeboken din med mer ALGO før du legger inn bestillinger!"
 }

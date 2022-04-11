@@ -5,13 +5,13 @@ import { Fragment, useCallback } from 'react'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import SvgImage from '@/components/SvgImage'
-import { convertFromBaseUnits } from '@/services/convert'
-import { floatToFixed } from '@/services/display'
+import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withAssetPriceQuery } from '@/hooks/withAlgodex'
+import { withAssetPriceQuery } from '@algodex/algodex-hooks'
 import Spinner from '@/components/Spinner'
 
 const Container = styled.div`
@@ -22,6 +22,7 @@ const Container = styled.div`
 const InfoContainer = styled.div`
   padding: 4rem;
   max-width: 40rem;
+  position: absolute;
 `
 
 const ButtonText = styled.button`

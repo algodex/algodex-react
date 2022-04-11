@@ -1,14 +1,20 @@
+import React from 'react'
+import Table, {
+  AssetNameCell,
+  DefaultCell,
+  ExpandTradeDetail,
+  OrderTypeCell
+} from '@/components/Table'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import useTranslation from 'next-translate/useTranslation'
-import styled from '@emotion/styled'
-import toast from 'react-hot-toast'
-import PropTypes from 'prop-types'
 
 import { BrightGraySpan } from '@/components/Typography'
-import Table, { DefaultCell, OrderTypeCell, AssetNameCell } from '@/components/Table'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
-import useUserStore from '@/store/use-user-state'
 import OrderService from '@/services/order'
+import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import toast from 'react-hot-toast'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
+import { withWalletOrdersQuery } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -116,7 +122,10 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: t('date'),
         accessor: 'date',
-        Cell: DefaultCell
+        minWidth: 160,
+        width: 160,
+        maxWidth: 160,
+        Cell: ExpandTradeDetail
       },
       {
         Header: t('pair'),

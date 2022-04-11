@@ -1,26 +1,23 @@
 import { useState, useEffect } from 'react'
 import { addListener, removeListener } from 'resize-detector'
-import theme from '../theme/index'
+import theme from '@/theme'
 import moment from 'moment'
-
+const UP_COLOR = theme.palette.green[500]
+const DOWN_COLOR = theme.palette.red[500]
 const LINE_COLOR = theme.palette.gray[800]
 const BACKGROUND_COLOR = theme.palette.gray[900]
 const BORDER_COLOR = theme.palette.gray[500]
 const TEXT_COLOR = theme.palette.gray[300]
 
-const TOP_COLOR = '#248350'
-const TOP_LINE_COLOR = theme.palette.green[500]
-const BOTTOM_COLOR = 'rgba(56, 161, 105, 0.17)'
-const LINE_WIDTH = 2
-
-export default function useAreaChart(containerRef, priceData, autoScaleProvider) {
-  const [areaChart, setAreaChart] = useState()
+export default function useCandleChart(containerRef, volumeData, priceData, autoScaleProvider) {
+  const [candleChart, setCandleChart] = useState()
 
   useEffect(() => {
     const chartContainer = containerRef?.current
 
     const initializeChart = async () => {
       const { createChart, CrosshairMode } = await import('lightweight-charts')
+
       const chart = createChart(chartContainer, {
         localization: {
           timeFormatter: (unixTime) => {
@@ -64,69 +61,89 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
         }
       })
 
-      const areaSeries = chart.addAreaSeries({
-        topColor: TOP_COLOR,
-        bottomColor: BOTTOM_COLOR,
-        lineColor: TOP_LINE_COLOR,
-        lineWidth: LINE_WIDTH
+      let candleSeries = chart.addCandlestickSeries({
+        upColor: UP_COLOR,
+        downColor: DOWN_COLOR,
+        borderDownColor: DOWN_COLOR,
+        borderUpColor: UP_COLOR,
+        wickDownColor: DOWN_COLOR,
+        wickUpColor: UP_COLOR
       })
 
-      areaSeries.applyOptions({
+      candleSeries.applyOptions({
         priceFormat: {
           precision: 6,
           minMove: 0.000001
         }
       })
 
-      setAreaChart({
+      const volumeSeries = chart.addHistogramSeries({
+        base: 0,
+        color: UP_COLOR,
+        priceFormat: {
+          type: 'volume'
+        },
+        priceScaleId: '',
+        position: 'left',
+        mode: 2,
+        autoScale: false,
+        invertScale: true,
+        alignLabels: false,
+        scaleMargins: {
+          top: 0.9983,
+          bottom: 0
+        }
+      })
+
+      setCandleChart({
         chart,
-        areaSeries
+        candleSeries,
+        volumeSeries
       })
     }
 
     if (chartContainer) {
-      if (!areaChart) {
+      if (!candleChart) {
         initializeChart()
       } else if (chartContainer.getAttribute('data-event-resize') !== 'true') {
         // add resize listener
         addListener(chartContainer, (el) => {
           el.setAttribute('data-event-resize', 'true')
-          areaChart.chart.resize(el.offsetWidth, el.offsetHeight)
+          candleChart.chart.resize(el.offsetWidth, el.offsetHeight)
         })
 
         // cleanup
         return () => removeListener(chartContainer)
       }
     }
-  }, [areaChart, containerRef])
+  }, [candleChart, containerRef])
 
   useEffect(() => {
-    if (areaChart) {
-      const areaSeriesData = priceData?.map(({ time, close }) => ({
-        time,
-        value: close
-      }))
-      areaChart.areaSeries.setData(areaSeriesData)
+    if (candleChart) {
+      candleChart.volumeSeries.setData(volumeData)
+      candleChart.candleSeries.setData(priceData)
 
       // Scale Chart to appropriate time range
       const dataPointsToShow = 28
       const lastDataPoint = priceData.length - 1
-      areaChart.chart
+      candleChart.chart
         .timeScale()
         .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
-      areaChart.areaSeries.applyOptions({
-        autoscaleInfoProvider: (original) => {
-          return autoScaleProvider(original, areaChart.chart, priceData)
-        }
-      })
+
       if (priceData.length <= dataPointsToShow) {
         // If not enough data points, scale to fit chart size
-        areaChart.chart.timeScale().fitContent()
+        candleChart.chart.timeScale().fitContent()
       }
+
+      candleChart.candleSeries.applyOptions({
+        autoscaleInfoProvider: (original) => {
+          return autoScaleProvider(original, candleChart.chart, priceData)
+        }
+      })
     }
-  }, [areaChart, containerRef, priceData])
+  }, [candleChart, containerRef, priceData, volumeData])
 
   return {
-    areaChart: areaChart?.chart
+    candleChart: candleChart?.chart
   }
 }
