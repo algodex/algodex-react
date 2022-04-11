@@ -16,14 +16,7 @@ module.exports = {
   },
   collectCoverageFrom: [
     '**/components/**/*.{js,jsx}',
-    // '**/hooks/**/*.{js,jsx}',
-    // '**/utils/**/*.{js,jsx}',
-    // '**/services/**/*.{js,jsx}',
-    '!**/components/**/index.{js,jsx}',
-    '!**/components/Input/**/*.{js,jsx}',
-    '!**/components/Layout/**/*.{js,jsx}',
     '!**/components/Pages/**/*.{js,jsx}',
-    '!**/components/Wallet/PlaceOrder/**/*.{js,jsx}',
     '!**/components/**/*.stories.{js,jsx}',
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'
@@ -37,6 +30,8 @@ module.exports = {
     '^@/store(.*)$': '<rootDir>/store$1',
     '^@/utils(.*)$': '<rootDir>/utils$1',
     '^@/theme(.*)$': '<rootDir>/theme$1',
+    '^@/spec(.*)$': '<rootDir>/spec$1',
+    '^spec(.*)$': '<rootDir>/spec$1',
     '^theme(.*)$': '<rootDir>/theme$1'
   },
   transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)']
