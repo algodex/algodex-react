@@ -8,10 +8,10 @@ module.exports = {
   coverageThreshold: {
     //TODO: Raise confidence
     global: {
-      statements: 50,
-      branches: 40,
-      functions: 50,
-      lines: 50
+      statements: 30,
+      branches: 30,
+      functions: 30,
+      lines: 30
     }
   },
   collectCoverageFrom: [
