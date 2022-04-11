@@ -3,7 +3,6 @@ module.exports = {
   setupFilesAfterEnv: ['./jest.setup.after-env.js'],
   moduleDirectories: ['node_modules', '<rootDir>'],
   testEnvironment: 'jsdom',
-  collectCoverage: true,
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   coverageThreshold: {
     //TODO: Raise confidence
