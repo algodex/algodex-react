@@ -1,6 +1,6 @@
 import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
-import { useEffect, useMemo } from 'react'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import { useEffect, useMemo } from 'react'
+// import useStore, { useStorePersisted } from 'store/use-store'
 
 import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
@@ -9,10 +9,9 @@ import { Section } from '@/components/Layout/Section'
 import SvgImage from 'components/SvgImage'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import useMyAlgo from '@/hooks/useMyAlgo'
+import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useTranslation from 'next-translate/useTranslation'
-import useWalletsQuery from '@/hooks/useWalletsQuery'
-
+import { useAlgodex } from '@algodex/algodex-hooks'
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -162,7 +161,8 @@ const WalletRow = styled.div`
   }
 `
 export function WalletView(props) {
-  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
+  const { addresses } = useAlgodex()
+  const { activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
 
   const { t } = useTranslation('wallet')
 
@@ -213,7 +213,7 @@ export function WalletView(props) {
   }
 
   const renderWallets = () => {
-    return wallets.map((wallet) => (
+    return addresses?.map((wallet) => (
       <WalletRow
         key={wallet.address}
         tabIndex={isTabbable(wallet.address)}
@@ -232,7 +232,7 @@ export function WalletView(props) {
           />
           {wallet.name}
         </LabelMd>
-        {renderBalance(wallet.balance)}
+        {renderBalance(wallet.amount)}
       </WalletRow>
     ))
   }
@@ -242,7 +242,7 @@ export function WalletView(props) {
   }
 
   const WalletButtonText =
-    wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
+    addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
 
   return (
     <Section area="topRight">
@@ -300,52 +300,40 @@ WalletView.defaultProps = {
 }
 
 function WalletConnect(props) {
-  const { connect: onWalletConnect, addresses } = useMyAlgo()
-
-  const wallets = useStorePersisted((state) => state.wallets)
-  const setWallets = useStorePersisted((state) => state.setWallets)
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
-
-  const walletAddresses = useMemo(() => {
-    if (addresses) {
-      return addresses
-    }
-    return wallets ? wallets.map((w) => w.address) : []
-  }, [addresses, wallets])
-
+  const connect = useMyAlgoConnect()
+  const { isConnected, wallet, setWallet, addresses } = useAlgodex()
+  console.log('!!!!!!!!!!!!!!!!', addresses)
   // fetch wallet balances from blockchain
-  const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
-  useEffect(() => {
-    if (walletsQuery.data?.wallets) {
-      setWallets(walletsQuery.data.wallets)
-
-      if (!isSignedIn) {
-        setIsSignedIn(true)
-      }
-
-      if (!walletAddresses.includes(activeWalletAddress)) {
-        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-      }
-    }
-  }, [
-    activeWalletAddress,
-    isSignedIn,
-    setActiveWalletAddress,
-    setIsSignedIn,
-    setWallets,
-    walletAddresses,
-    walletsQuery.data
-  ])
+  // const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
+  // useEffect(() => {
+  //   if (wallet.data?.wallets) {
+  //     setWallets(walletsQuery.data.wallets)
+  //
+  //     if (!isSignedIn) {
+  //       setIsSignedIn(true)
+  //     }
+  //
+  //     if (!walletAddresses.includes(activeWalletAddress)) {
+  //       setActiveWalletAddress(walletsQuery.data.wallets[0].address)
+  //     }
+  //   }
+  // }, [
+  //   activeWalletAddress,
+  //   isSignedIn,
+  //   setActiveWalletAddress,
+  //   setIsSignedIn,
+  //   setWallets,
+  //   walletAddresses,
+  //   walletsQuery.data
+  // ])
   return (
+    // <div>Wallet Connect {isConnected ? 'Connected' : 'Not Connected'}</div>
     <WalletView
-      wallets={wallets}
-      activeWalletAddress={activeWalletAddress}
-      isSignedIn={isSignedIn}
-      onConnectClick={onWalletConnect}
-      onSetActiveWallet={setActiveWalletAddress}
+      wallets={addresses || []}
+      activeWalletAddress={wallet?.address}
+      isSignedIn={isConnected}
+      onConnectClick={connect}
+      onSetActiveWallet={setWallet}
       {...props}
     />
   )
