@@ -43,6 +43,7 @@
     "@next/mdx": "^12.1.2",
     "@randlabs/myalgo-connect": "^1.1.2",
     "@sentry/nextjs": "^6.19.3",
+    "@walletconnect/client": "^1.7.7",
     "algosdk": "^1.15.0",
     "axios": "^0.26.1",
     "big.js": "^6.1.1",
