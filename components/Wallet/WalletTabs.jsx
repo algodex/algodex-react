@@ -1,11 +1,10 @@
-import { useStore, useStorePersisted } from '@/store/use-store'
-
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -78,18 +77,20 @@ export const WalletOrdersSection = styled.section`
 `
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
+  const { isConnected, wallet } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  // const isSignedIn = useStore((state) => state.isSignedIn)
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
   const ASSETS_PANEL = 'assets'
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const wallet = {
-    address: activeWalletAddress
-  }
+  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  // const wallet = {
+  //   address: activeWalletAddress
+  // }
 
   const renderPanel = (panelName) => {
-    if (!isSignedIn) return <div></div>
+    // if (!isSignedIn) return <div></div>
+    if (!isConnected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
         return <WalletOpenOrdersTable wallet={wallet} />

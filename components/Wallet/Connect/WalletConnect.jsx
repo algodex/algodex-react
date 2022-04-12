@@ -1,6 +1,4 @@
 import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
-// import { useEffect, useMemo } from 'react'
-// import useStore, { useStorePersisted } from 'store/use-store'
 
 import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
@@ -9,9 +7,13 @@ import { Section } from '@/components/Layout/Section'
 import SvgImage from 'components/SvgImage'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useTranslation from 'next-translate/useTranslation'
-import { useAlgodex } from '@algodex/algodex-hooks'
+
+// import { useEffect, useMemo } from 'react'
+// import useStore, { useStorePersisted } from 'store/use-store'
+
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -198,19 +200,19 @@ export function WalletView(props) {
     )
   }
 
-  const renderBalance = (bal) => {
-    const split = typeof bal === 'undefined' ? ['', ''] : bal.toFixed(6).split('.')
+  // const renderBalance = (bal) => {
+  //   const split = bal.toFixed(6).split('.')
 
-    return (
-      <Balance>
-        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-        <LabelMd fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </LabelMd>
-      </Balance>
-    )
-  }
+  //   return (
+  //     <Balance>
+  //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
+  //       <LabelMd fontWeight="500">
+  //         {`${split[0]}.`}
+  //         <span>{split[1]}</span>
+  //       </LabelMd>
+  //     </Balance>
+  //   )
+  // }
 
   const renderWallets = () => {
     return addresses?.map((wallet) => (
@@ -232,7 +234,7 @@ export function WalletView(props) {
           />
           {wallet.name}
         </LabelMd>
-        {renderBalance(wallet.amount)}
+        {/* {renderBalance(wallet?.amount)} */}
       </WalletRow>
     ))
   }
