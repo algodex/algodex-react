@@ -9,10 +9,10 @@
   dependencies:
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@2.0.0.next.1":
-  version "2.0.0-next.1"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.1/86c8c811e6482b99b067777a8745fe5f2705d1c626c818644630592c894f67d6#4f2462a5bf190e3b531ee85c1ce3c55b934738f1"
-  integrity sha512-amcvhSvVbHfFUDSCRCW8+366DjBWrafYRbbTNCx/bzyOMWVs5IHosTUj9ZkAJYOrAwntw2jqkJ9mXogBwZ8hcA==
+"@algodex/algodex-sdk@2.0.0.next.2":
+  version "2.0.0-next.2"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.2/e711c690f13f9e0f696abb35fe7140f0077ae428a6eb28310ab6570b5d3687c5#b1f09c7ea725186ce98664e7057dfbb46248fdf9"
+  integrity sha512-zFNjxZtBLJdlWfOnQfv7YXBwgBWPHKIK8jsLWvxhqa7VYdroeUhE2Z26wgTJjuMjwLV3EdJLjWmBCh+yZeUtGQ==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"
