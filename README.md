@@ -5,11 +5,8 @@
 
 [![CI](https://github.com/algodex/algodex-react/actions/workflows/ci.yml/badge.svg)](https://github.com/algodex/algodex-react/actions/workflows/ci.yml)
 [![Sauce Test Status](https://app.saucelabs.com/buildstatus/algodex?auth=a575d8742c484fe2f6006e9bf6c1022c)](https://app.saucelabs.com/u/algodex)
-[![unit-branches](./assets/badge-branches.svg)](./components)
-[![unit-functions](./assets/badge-functions.svg)](./components)
-[![unit-lines](./assets/badge-lines.svg)](./components)
-[![unit-statements](./assets/badge-statements.svg)](./components)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/f9008846c3425fe77dc7/maintainability)](https://codeclimate.com/repos/624385d6658c406f70000ff2/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f9008846c3425fe77dc7/test_coverage)](https://codeclimate.com/repos/624385d6658c406f70000ff2/test_coverage)
 
 [![Sauce Test Status](https://app.saucelabs.com/browser-matrix/algodex.svg?auth=a575d8742c484fe2f6006e9bf6c1022c)](https://app.saucelabs.com/u/algodex)
 
