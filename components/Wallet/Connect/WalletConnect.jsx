@@ -200,19 +200,19 @@ export function WalletView(props) {
     )
   }
 
-  const renderBalance = (bal) => {
-    const split = bal.toFixed(6).split('.')
+  // const renderBalance = (bal) => {
+  //   const split = bal.toFixed(6).split('.')
 
-    return (
-      <Balance>
-        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-        <LabelMd fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </LabelMd>
-      </Balance>
-    )
-  }
+  //   return (
+  //     <Balance>
+  //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
+  //       <LabelMd fontWeight="500">
+  //         {`${split[0]}.`}
+  //         <span>{split[1]}</span>
+  //       </LabelMd>
+  //     </Balance>
+  //   )
+  // }
 
   const renderWallets = () => {
     return addresses?.map((wallet) => (
@@ -224,7 +224,6 @@ export function WalletView(props) {
         onClick={() => handleWalletClick(wallet.address)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
-        {console.log(wallet, 'wallet')}
         <LabelMd fontWeight="500" title={wallet.address}>
           <Icon
             color="gray"
