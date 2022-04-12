@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@algodex/algodex-sdk@^1.1.16":
-  version "1.1.16"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.1.16/828631a725c04fa6e5d2a5ac3707e7d279cf2825048555d8d6aea9e6fdb166a3#83b473707f822341fac45b2224ffb00dec68aa07"
-  integrity sha512-7PhjVRJA6X6WvxhqqeHlRvk+lQDETpKzhFNy+8uRujHqAx02E15RQ778bHor/TnRIDdBtHFSb3JYzmGoc0MnDw==
+"@algodex/algodex-sdk@^1.1.17":
+  version "1.1.17"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.1.17/807b6f766773360cdc4b68277206fa6304e9d47be640ea58f6aefc8bff811f1a#6f7ec459d56a6b2ac7a313469186e524fb98e765"
+  integrity sha512-8Vs0tv80smDIAztT35bCUkGFubg9zZ0KHQbhVlfwWQuaHA4NTS1JxogmVUm2xXhISOWubMUW7EykQMn/ePc37g==
   dependencies:
     "@json-rpc-tools/utils" "^1.7.6"
     "@randlabs/myalgo-connect" "^1.0.1"
