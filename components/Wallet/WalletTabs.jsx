@@ -1,5 +1,3 @@
-import { useStore, useStorePersisted } from '@/store/use-store'
-
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
