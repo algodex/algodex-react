@@ -1,6 +1,6 @@
 import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
 import { useMemo, useState } from 'react'
-
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import AdvancedOptions from './Form/AdvancedOptions'
 import { default as AmountRange } from 'components/Input/Slider'
 import Big from 'big.js'
@@ -252,13 +252,34 @@ const DEFAULT_ORDER = {
 export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
   const { t } = useTranslation('place-order')
   const [order, setOrder] = useState(DEFAULT_ORDER)
-
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (typeof onSubmit !== 'undefined' && onSubmit instanceof Function) {
+      await onSubmit(
+        {
+          ...order,
+          asset
+        },
+        {
+          wallet: {
+            ...wallet,
+            connector: {
+              ...wallet.connector,
+              connected: true
+            }
+          }
+        }
+      )
+    } else {
+      console.log(`Handling PlaceOrderForm Submit`, e)
+    }
+  }
   const hasBalance = useMemo(() => {
     const { id } = asset
     const { assets } = wallet
-    const hasAlgo = has(wallet, 'balance') && wallet.balance > 0
+    const hasAlgo = has(wallet, 'amount') && wallet?.amount > 0
 
-    return order.type === 'buy' ? hasAlgo : has(assets, `${id}.balance`) && assets[id].balance > 0
+    return order.type === 'buy' ? hasAlgo : has(assets, `${id}.amount`) && assets[id].amount > 0
   }, [asset, wallet, order])
 
   const buttonProps = {
@@ -283,7 +304,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
             </HeaderCaps>
           </Header>
         )}
-        <Form onSubmit={onSubmit} autocomplete="off">
+        <Form onSubmit={handleSubmit} autocomplete="off">
           <ToggleWrapper>
             <ToggleInput
               type="radio"
@@ -324,7 +345,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                   </LabelMd>
                   <IconTextContainer>
                     <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {wallet.balance}
+                      {fromBaseUnits(wallet?.amount || 0)}
                     </LabelMd>
                     <Icon use="algoLogo" size={0.625} />
                   </IconTextContainer>
@@ -335,7 +356,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                   </LabelMd>
                   <IconTextContainer>
                     <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {wallet.balance}
+                      {fromBaseUnits(wallet?.amount || 0)}
                     </LabelMd>
                     <Icon use="algoLogo" size={0.625} />
                   </IconTextContainer>
@@ -350,7 +371,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                   >
                     &nbsp;*
                     {t('max-spend-explanation', {
-                      // amount: new Big(wallet.balance).minus(new Big(wallet.balance)).round(6).toString()
+                      // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
                     })}
                   </LabelSm>
                 </BalanceRow>
@@ -361,7 +382,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 ALGO
               </LabelMd>
               <LabelMd color="gray.300" fontWeight="500">
-                {wallet.balance}
+                {fromBaseUnits(wallet?.amount || 0)}
               </LabelMd>
             </BalanceRow>
             <BalanceRow>
@@ -369,9 +390,9 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
                 {asset.name || asset.id}
               </LabelMd>
-              <LabelMd color="gray.300" fontWeight="500">
-                {hasBalance && wallet.assets[asset.id]?.balance}
-              </LabelMd>
+              {/*<LabelMd color="gray.300" fontWeight="500">*/}
+              {/*  {hasBalance && wallet.assets[asset.id]?.amount}*/}
+              {/*</LabelMd>*/}
             </BalanceRow>
           </AvailableBalance>
 
@@ -476,8 +497,9 @@ PlaceOrderForm.propTypes = {
    * Wallet to execute Orders from
    */
   wallet: PropTypes.shape({
-    balance: PropTypes.number.isRequired,
-    assets: PropTypes.objectOf(PropTypes.shape({ balance: PropTypes.number }))
+    amount: PropTypes.number.isRequired,
+    assets: PropTypes.objectOf(PropTypes.shape({ amount: PropTypes.number })),
+    connector: PropTypes.object
   }),
   /**
    * Submit Handler

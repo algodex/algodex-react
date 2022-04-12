@@ -199,7 +199,7 @@ export function WalletView(props) {
   }
 
   const renderBalance = (bal) => {
-    const split = bal.toFixed(6).split('.')
+    const split = typeof bal === 'undefined' ? ['', ''] : bal.toFixed(6).split('.')
 
     return (
       <Balance>

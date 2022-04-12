@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-
+import React, { useEffect, useRef, useState } from 'react'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+// import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
@@ -14,6 +15,26 @@ import styled from '@emotion/styled'
 import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+
+import { BodyCopy, HeaderCaps } from '@/components/Typography'
+
+// Offline PlaceOrder Container
+export const Container = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.background.dark};
+  overflow: hidden scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+// Offline PlaceOrder Header
+export const Header = styled.header`
+  padding: 1.125rem;
+`
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -246,6 +267,8 @@ function useMobileDetect() {
  */
 function MainLayout({ asset, children }) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const { wallet, algodex, isConnected, placeOrder } = useAlgodex()
+  console.log(`DEX: ${isConnected}`, algodex)
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const isMobile = useMobileDetect()
@@ -283,7 +306,19 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder asset={asset} />
+          {isConnected && <PlaceOrder asset={asset} wallet={wallet} onSubmit={placeOrder} />}
+          {!isConnected && (
+            <Container data-testid="place-order">
+              <Header>
+                <HeaderCaps color="gray.500" mb={1}>
+                  {t('place-order')}
+                </HeaderCaps>
+              </Header>
+              <BodyCopy data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
+                {t('not-signed-in')}
+              </BodyCopy>
+            </Container>
+          )}
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection>
