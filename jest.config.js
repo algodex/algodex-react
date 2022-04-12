@@ -8,7 +8,7 @@ module.exports = {
     //TODO: Raise confidence
     global: {
       statements: 30,
-      branches: 30,
+      branches: 25,
       functions: 30,
       lines: 30
     }
