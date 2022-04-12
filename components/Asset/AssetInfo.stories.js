@@ -4,7 +4,7 @@ import generateAsset, { Example } from '../../spec/Asset'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import styled from '@emotion/styled'
 import { useQueryClient } from 'react-query'
-import { withExplorerAssetInfo } from '@/hooks/withAlgoExplorer'
+import { withExplorerAssetInfo } from '@algodex/algodex-hooks'
 const Container = styled.div`
   background-color: ${({ theme }) => theme.palette.gray[200]};
   display: flex;

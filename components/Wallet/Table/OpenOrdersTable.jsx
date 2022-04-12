@@ -1,3 +1,4 @@
+import React from 'react'
 import Table, {
   AssetNameCell,
   DefaultCell,
@@ -13,7 +14,7 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
+import { withWalletOrdersQuery } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -52,7 +53,6 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // console.log(_orders, 'orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
 
   useEffect(() => {

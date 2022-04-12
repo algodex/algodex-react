@@ -8,7 +8,7 @@ import TextInput from './TextInput'
 import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import useDebounce from 'hooks/useDebounce'
+import useDebounce from '@/hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`

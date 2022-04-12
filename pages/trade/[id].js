@@ -5,13 +5,13 @@ import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import useUserStore from '@/store/use-user-state'
 
 import Spinner from '@/components/Spinner'
 import Layout from '@/components/Layout/OriginalLayout'
 import { useRouter } from 'next/router'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import { useAssetPriceQuery } from '@algodex/algodex-hooks'
+import AlgodexApi from '@algodex/algodex-sdk'
 
 /**
  * Fetch Traded Asset Paths
@@ -27,6 +27,22 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
+const properties = {
+  config: {
+    algod: {
+      uri: 'https://testnet.algoexplorerapi.io',
+      token: ''
+    },
+    indexer: {
+      uri: 'https://algoindexer.testnet.algoexplorerapi.io',
+      token: ''
+    },
+    dexd: {
+      uri: 'https://testnet.algodex.com/algodex-backend',
+      token: ''
+    }
+  }
+}
 /**
  * Get Explorer Asset Info
  *
@@ -36,9 +52,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
-
+  let api = new AlgodexApi(properties)
   try {
-    staticExplorerAsset = await fetchExplorerAssetInfo(id)
+    staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -63,6 +79,10 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.price_info = staticAssetPrice
   }
 
+  if (typeof staticExplorerAsset.name === 'undefined') {
+    staticExplorerAsset.name = ''
+  }
+
   return {
     props: { staticExplorerAsset }
   }
@@ -83,6 +103,7 @@ export async function getStaticProps({ params: { id } }) {
 function TradePage({ staticExplorerAsset }) {
   // eslint-disable-next-line no-undef
   console.debug(`TradePage(`, staticExplorerAsset, `)`)
+
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)

@@ -33,12 +33,12 @@ import { aggregateOrders } from './helpers'
 import { convertFromAsaUnits } from '@/services/convert'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
-import { floatToFixed } from '@/services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import toast from 'react-hot-toast'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import { useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
 
 const DEFAULT_ORDER = {
   type: 'buy',

@@ -14,13 +14,13 @@ import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import { flatten } from 'lodash'
-import { floatToFixed } from '@/services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withSearchResultsQuery } from '@/hooks/withAlgodex'
+import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 
 /**
  * Map a Query Result to a Search Result

@@ -1,5 +1,5 @@
 import algodex from '@algodex/algodex-sdk'
-import { convertFromBaseUnits } from './convert'
+import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { getAlgodexEnvironment } from './environment'
 import { truncateAddress } from './display'
 

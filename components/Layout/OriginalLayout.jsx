@@ -161,7 +161,6 @@ const Main = styled.main`
   grid-template-rows: 1fr;
   height: 100%;
 
-
   @media (min-width: 996px) {
     height: 100%;
     min-height: 900px;
@@ -199,8 +198,6 @@ const Main = styled.main`
       'chart chart book trade'
       'orders orders history trade';
   }
-
-}
 `
 
 const MobileMenu = styled.nav`
