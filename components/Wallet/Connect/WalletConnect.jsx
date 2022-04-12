@@ -1,6 +1,4 @@
 import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
-// import { useEffect, useMemo } from 'react'
-// import useStore, { useStorePersisted } from 'store/use-store'
 
 import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
@@ -9,9 +7,13 @@ import { Section } from '@/components/Layout/Section'
 import SvgImage from 'components/SvgImage'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useTranslation from 'next-translate/useTranslation'
-import { useAlgodex } from '@algodex/algodex-hooks'
+
+// import { useEffect, useMemo } from 'react'
+// import useStore, { useStorePersisted } from 'store/use-store'
+
 const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -222,6 +224,7 @@ export function WalletView(props) {
         onClick={() => handleWalletClick(wallet.address)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
+        {console.log(wallet, 'wallet')}
         <LabelMd fontWeight="500" title={wallet.address}>
           <Icon
             color="gray"
@@ -232,7 +235,7 @@ export function WalletView(props) {
           />
           {wallet.name}
         </LabelMd>
-        {renderBalance(wallet.amount)}
+        {/* {renderBalance(wallet?.amount)} */}
       </WalletRow>
     ))
   }
