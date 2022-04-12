@@ -89,6 +89,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
   // }
 
   const renderPanel = (panelName) => {
+    // if (!isSignedIn) return <div></div>
     if (!isConnected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
