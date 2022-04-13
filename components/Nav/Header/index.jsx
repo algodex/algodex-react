@@ -34,7 +34,8 @@ export function Header() {
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
-  const { addresses } = useAlgodex()
+  const { addresses, wallet } = useAlgodex()
+  console.log(addresses, wallet, 'addresses')
 
   /**
    * Route to other network
@@ -120,8 +121,8 @@ export function Header() {
           className="font-semibold hover:font-bold text-white border-white hover:border-white"
           variant="outlined"
         >
-          {activeWalletAddress
-            ? `${truncatedWalletAddress(activeWalletAddress, 5)}`
+          {addresses && addresses[0].address
+            ? `${truncatedWalletAddress(addresses[0].address, 5)}`
             : 'CONNECT A WALLET'}
         </Button>
         {openWalletConnectDropdown && (

@@ -6,11 +6,11 @@ import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-// import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgo from 'hooks/useMyAlgo'
 import useStore from 'store/use-store'
 import { useStorePersisted } from 'store/use-store'
-import { useWalletsQuery } from '@algodex/algodex-hooks'
+import useWalletsQuery from 'hooks/useWalletsQuery'
 
 const Container = styled.div`
   position: absolute;
@@ -26,50 +26,19 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-  const setWallets = useStorePersisted((state) => state.setWallets)
-  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const wallets = useStorePersisted((state) => state.wallets)
-  const { connect, addresses } = useMyAlgo()
-  // const { addresses, wallet, isConnected } = useAlgodex()
-
-  const walletAddresses = useMemo(() => {
-    if (addresses) {
-      return addresses
-    }
-    return wallets ? wallets.map((w) => w.address) : []
-  }, [addresses, wallets])
-
-  // fetch wallet balances from blockchain
-  const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
-  useEffect(() => {
-    if (walletsQuery.data?.wallets) {
-      setWallets(walletsQuery.data.wallets)
-
-      if (!isSignedIn) {
-        setIsSignedIn(true)
-      }
-
-      if (!walletAddresses.includes(activeWalletAddress)) {
-        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-      }
-    }
-  }, [
-    activeWalletAddress,
-    isSignedIn,
-    setActiveWalletAddress,
-    setIsSignedIn,
-    setWallets,
-    walletAddresses,
-    walletsQuery.data
-  ])
+  //   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
+  //   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
+  //   const setWallets = useStorePersisted((state) => state.setWallets)
+  //   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
+  //   const isSignedIn = useStore((state) => state.isSignedIn)
+  //   const wallets = useStorePersisted((state) => state.wallets)
+  //   const { connect, addresses } = useMyAlgo()
+  const { addresses, wallet, isConnected } = useAlgodex()
 
   const connectWallet = (type) => {
     switch (type) {
       case 'myalgowallet':
-        connect()
+        // connect()
         break
       case 'algomobilewallet':
         // Connect Algorand Mobile Wallet
@@ -82,12 +51,12 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const disconnectWalletFn = (address, type) => {
     switch (type) {
       case 'myalgowallet':
-        setIsSignedIn(false)
-        setActiveWalletAddress('')
-        setWallets([])
+        //   setIsSignedIn(false)
+        //   setActiveWalletAddress('')
+        //   setWallets([])
         return 'myalgowallet'
       case 'algomobilewallet':
-        console.log('algomobilewallet')
+        //   console.log('algomobilewallet')
         return 'algomobilewallet'
       default:
         break
@@ -95,14 +64,16 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   }
 
   const sortedWalletsList = useMemo(() => {
-    const activeWallet = find(wallets, (o) => o.address === activeWalletAddress)
-    const inactiveWallet = filter(wallets, (o) => o.address !== activeWalletAddress)
-    console.log(activeWallet, inactiveWallet, 'hey')
-    return {
-      activeWallet,
-      inactiveWallet
+    if (addresses) {
+      const activeWallet = find(addresses, (o) => o.address === wallet?.address)
+      const inactiveWallet = filter(addresses, (o) => o.address !== wallet?.address)
+      console.log(activeWallet, inactiveWallet, 'hey')
+      return {
+        activeWallet,
+        inactiveWallet
+      }
     }
-  }, [activeWalletAddress, wallets])
+  }, [addresses, wallet])
 
   return (
     <Container className="">
@@ -111,7 +82,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
         <DropdownBody
           connectWallet={connectWallet}
           disconnectWalletFn={disconnectWalletFn}
-          activeWalletAddress={activeWalletAddress}
+          activeWalletAddress={wallet?.address}
           sortedWalletsList={sortedWalletsList}
         />
         <DropdownFooter />
