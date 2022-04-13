@@ -1,4 +1,3 @@
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import AssetInfo from '@/components/Asset/Asset'
@@ -18,7 +17,8 @@ import AlgodexApi from '@algodex/algodex-sdk'
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  const assets = await fetchAssets()
+  let api = new AlgodexApi(properties)
+  const assets = await api.http.dexd.fetchAssets()
   const paths = assets
     .filter((asset) => asset.isTraded)
     .map((asset) => ({
@@ -65,7 +65,7 @@ export async function getStaticProps({ params: { id } }) {
   }
 
   try {
-    staticAssetPrice = await fetchAssetPrice(id)
+    staticAssetPrice = await api.http.dexd.fetchAssetPrice(id)
   } catch (error) {
     if (typeof staticAssetPrice.isTraded === 'undefined') {
       staticAssetPrice = {
