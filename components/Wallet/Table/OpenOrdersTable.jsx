@@ -7,7 +7,7 @@ import Table, {
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BrightGraySpan } from '@/components/Typography'
-import OrderService from '@/services/order'
+// import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from '@emotion/styled'
@@ -85,11 +85,22 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
-        const cancelOrderPromise = OrderService.closeOrder(
-          escrowAddress,
-          ownerAddress,
-          orderBookEntry,
-          version
+        // const cancelOrderPromise = OrderService.closeOrder(
+        //   escrowAddress,
+        //   ownerAddress,
+        //   orderBookEntry,
+        //   version
+        // )
+        const cancelOrderPromise = new Promise((resolve) =>
+          resolve({
+            escrowAddress,
+            ownerAddress,
+            assetLimitPriceN,
+            assetLimitPriceD,
+            assetId,
+            version,
+            orderBookEntry
+          })
         )
 
         toast.promise(cancelOrderPromise, {
