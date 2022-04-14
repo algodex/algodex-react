@@ -2,17 +2,26 @@ import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 // import { useWalletConnect } from '@/hooks/useWalletConnect'
 import { useState } from 'react'
 
-const WalletsOptions = ({ handleWalletConnect, isRenderingList }) => {
+const WalletsOptions = () => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   const connect = useMyAlgoConnect()
+  const { wallet, addresses } = useAlgodex()
+  console.log(addresses, 'addresses here')
+  // const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect()
   // const peraWallet = useWalletConnect()
+
+  const WALLETS_CONNECT_MAP = {
+    'my-algo-wallet': connect,
+    'pera-wallet': () => console.log('Connect Pera Wallet')
+  }
   return (
     <>
-      {isRenderingList || isConnectingAddress ? (
+      {!wallet?.address || isConnectingAddress ? (
         <div
           className="text-xs text-white rounded p-2"
           style={{
@@ -30,7 +39,7 @@ const WalletsOptions = ({ handleWalletConnect, isRenderingList }) => {
               role="button"
               tabIndex="0"
               className="cursor-pointer flex items-center mb-2"
-              onClick={() => handleWalletConnect('algomobilewallet')}
+              onClick={() => WALLETS_CONNECT_MAP['pera-wallet']()}
               onKeyPress={() => console.log('key pressed')}
             >
               <Image
@@ -45,7 +54,7 @@ const WalletsOptions = ({ handleWalletConnect, isRenderingList }) => {
               className="cursor-pointer flex items-center mb-2"
               role="button"
               tabIndex="0"
-              onClick={() => connect()}
+              onClick={() => WALLETS_CONNECT_MAP['my-algo-wallet']()}
               onKeyPress={() => console.log('key pressed')}
             >
               <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />

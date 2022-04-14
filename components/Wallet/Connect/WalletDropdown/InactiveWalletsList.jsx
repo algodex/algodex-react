@@ -21,6 +21,11 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
     !isWalletActive(addr) && setActiveWalletAddress(addr)
   }
 
+  const WALLETS_DISCONNECT_MAP = {
+    'my-algo-wallet': () => console.log('Disconnect Pera Wallet'),
+    'pera-wallet': () => console.log('Disconnect Pera Wallet')
+  }
+
   return (
     <div
       className="mt-2 p-2 text-xs rounded text-white"
@@ -60,7 +65,7 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
                     backgroundColor: theme.colors.gray['800']
                   }}
                   // onClick={() => handleDisconnectFn(address, type)}
-                  onClick={() => disconnectWalletFn(address, type)}
+                  onClick={() => WALLETS_DISCONNECT_MAP[type]()}
                 >
                   DISCONNECT
                 </Button>

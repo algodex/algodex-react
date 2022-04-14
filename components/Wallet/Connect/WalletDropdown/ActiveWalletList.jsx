@@ -11,6 +11,10 @@ import useUserStore from 'store/use-user-state'
 const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { address, type } = wallet
+  const WALLETS_DISCONNECT_MAP = {
+    'my-algo-wallet': () => console.log('Disconnect Pera Wallet'),
+    'pera-wallet': () => console.log('Disconnect Pera Wallet')
+  }
   return (
     <div>
       <p className="text-white font-medium mb-2 text-xs">ACTIVE WALLET</p>
@@ -39,7 +43,7 @@ const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
               style={{
                 backgroundColor: theme.colors.gray['700']
               }}
-              onClick={() => disconnectWalletFn(address, type)}
+              onClick={() => WALLETS_DISCONNECT_MAP[type]()}
             >
               DISCONNECT
             </Button>

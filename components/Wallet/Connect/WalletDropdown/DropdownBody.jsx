@@ -17,12 +17,7 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {!activeWalletAddress && (
-        <WalletOptionsList
-          isRenderingList={!activeWalletAddress}
-          handleWalletConnect={connectWallet}
-        />
-      )}
+      {!activeWalletAddress && <WalletOptionsList />}
       {activeWalletAddress && (
         <>
           <ActiveWalletList
@@ -33,10 +28,7 @@ const DropdownBody = ({
             walletsList={sortedWalletsList?.inactiveWallet}
             disconnectWalletFn={disconnectWalletFn}
           />
-          <WalletOptionsList
-            isRenderingList={!activeWalletAddress}
-            handleWalletConnect={connectWallet}
-          />
+          <WalletOptionsList />
         </>
       )}
     </div>
