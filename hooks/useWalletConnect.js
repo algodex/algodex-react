@@ -69,7 +69,6 @@ export function useWalletConnect() {
         bridge: 'https://bridge.walletconnect.org', // Required
         qrcodeModal: QRCodeModal
       })
-      console.log(walletConnect.current, 'all here')
       walletConnect.current.connected = false
     }
     initWalletConnect()
@@ -121,9 +120,10 @@ export function useWalletConnect() {
       walletConnect.current.on('disconnect', handleDisconnect)
     }
     return () => {
-      walletConnect.current.off('connect')
-      walletConnect.current.off('session_update')
-      walletConnect.current.off('disconnect')
+      console.log(walletConnect.current, 'curret value')
+      // walletConnect.current.off('connect')
+      // walletConnect.current.off('session_update')
+      // walletConnect.current.off('disconnect')
     }
   }, [walletConnect.current])
   return { connect, disconnect }

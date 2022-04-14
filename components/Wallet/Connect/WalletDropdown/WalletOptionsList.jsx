@@ -6,13 +6,13 @@ import { useWalletConnect } from '@/hooks/useWalletConnect'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
   const connect = useMyAlgoConnect()
-  // const { connect: peraConnect } = useWalletConnect()
+  const { connect: peraConnect } = useWalletConnect()
   // const peraWallet = useWalletConnect()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': connect,
-    // 'pera-wallet': peraConnect
-    'pera-wallet': () => console.log('Hello')
+    'pera-wallet': peraConnect
+    // 'pera-wallet': () => console.log('Hello')
   }
   return (
     <>

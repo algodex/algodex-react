@@ -7,13 +7,16 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 import useUserStore from 'store/use-user-state'
+import { useWalletConnect } from '@/hooks/useWalletConnect'
 
-const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
+const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const { disconnect: peraDisconnect } = useWalletConnect()
+
   const { address, type } = wallet
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': () => console.log('Disconnect Pera Wallet'),
-    'pera-wallet': () => console.log('Disconnect Pera Wallet')
+    'wallet-connect': peraDisconnect
   }
   return (
     <div>
@@ -69,16 +72,14 @@ const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
 }
 
 ActiveWalletList.propTypes = {
-  wallet: PropTypes.object,
-  disconnectWalletFn: PropTypes.func
+  wallet: PropTypes.object
 }
 
 ActiveWalletList.defaultProps = {
   wallet: {
     address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk',
     type: 'myalgowallet'
-  },
-  disconnectWalletFn: () => console.log('Handle Disconnect function')
+  }
 }
 
 export default ActiveWalletList
