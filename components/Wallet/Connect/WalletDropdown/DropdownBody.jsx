@@ -1,15 +1,13 @@
 import ActiveWalletList from './ActiveWalletList'
+import Button from '@mui/material/Button'
 import InactiveWalletsList from './InactiveWalletsList'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import theme from 'theme'
+import { useState } from 'react'
 
-const DropdownBody = ({
-  connectWallet,
-  disconnectWalletFn,
-  activeWalletAddress,
-  sortedWalletsList
-}) => {
+const DropdownBody = ({ activeWalletAddress, sortedWalletsList }) => {
+  const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   return (
     <div
       className="p-2"
@@ -17,18 +15,26 @@ const DropdownBody = ({
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {!activeWalletAddress && <WalletOptionsList />}
-      {activeWalletAddress && (
+      {(!activeWalletAddress || isConnectingAddress) && (
+        <WalletOptionsList
+          isConnectingAddress={isConnectingAddress}
+          setIsConnectingAddress={setIsConnectingAddress}
+        />
+      )}
+      {activeWalletAddress && !isConnectingAddress && (
         <>
-          <ActiveWalletList
-            wallet={sortedWalletsList?.activeWallet}
-            disconnectWalletFn={disconnectWalletFn}
-          />
-          <InactiveWalletsList
-            walletsList={sortedWalletsList?.inactiveWallet}
-            disconnectWalletFn={disconnectWalletFn}
-          />
-          <WalletOptionsList />
+          <ActiveWalletList wallet={sortedWalletsList?.activeWallet} />
+          <InactiveWalletsList walletsList={sortedWalletsList?.inactiveWallet} />
+          <Button
+            className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+            variant="contained"
+            style={{
+              backgroundColor: theme.colors.gray['700']
+            }}
+            onClick={() => setIsConnectingAddress(!isConnectingAddress)}
+          >
+            CONNECT ANOTHER WALLET
+          </Button>
         </>
       )}
     </div>
@@ -36,25 +42,11 @@ const DropdownBody = ({
 }
 
 DropdownBody.propTypes = {
-  // connectMyAlgoWallet: PropTypes.func,
-  // connectAlgorandMobileWallet: PropTypes.func,
-  // closeFn: PropTypes.func,
-  // activeWalletAddress: PropTypes.string,
-  // allAddresses: PropTypes.any,
-  // disconnectAlgorandWallet: PropTypes.func,
-  // setActiveWalletAddress: PropTypes.func,
-  // activeNetwork: PropTypes.string,
-  // handleDisconnectFn: PropTypes.func
-
-  connectWallet: PropTypes.func,
-  disconnectWalletFn: PropTypes.func,
   activeWalletAddress: PropTypes.string,
   sortedWalletsList: PropTypes.object
 }
 
 DropdownBody.defaultProps = {
-  connectWallet: () => console.log('Hello Connect'),
-  disconnectWalletFn: () => console.log('Hello Connect'),
   activeWalletAddress: ''
 }
 
