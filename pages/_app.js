@@ -19,7 +19,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
 import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
-import useStore from '@/store/use-store'
 import useUserStore from '@/store/use-user-state'
 import AlgodexApi from '@algodex/algodex-sdk'
 import { Provider } from '@algodex/algodex-hooks'
@@ -252,7 +251,6 @@ function Algodex(props) {
   // Lift stores and cache for tests
   if (typeof window !== 'undefined' && window.Cypress) {
     window.userStore = useUserStore
-    window.store = useStore
     window.queryClient = queryClient
   }
   return (

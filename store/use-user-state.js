@@ -1,6 +1,26 @@
 import _ from 'lodash'
-import { createStore } from './use-store'
 import { getActiveNetwork } from '../services/environment'
+import { devtools, persist } from 'zustand/middleware'
+
+import create from 'zustand'
+import produce from 'immer'
+
+export const immer = (config) => (set, get, api) =>
+  config(
+    (partial, replace) => {
+      const nextState = typeof partial === 'function' ? produce(partial) : partial
+      return set(nextState, replace)
+    },
+    get,
+    api
+  )
+function withDevTools(fn) {
+  return process.env.NODE_ENV !== 'test' ? devtools(fn) : fn
+}
+export const createStore = ({ config, options, localstorage = false, name = 'Algodex' }) =>
+  localstorage
+    ? create(withDevTools(persist(immer(config), options), { name }))
+    : create(withDevTools(immer(config), { name }))
 
 const userState = (set, get) => ({
   // Controls showing of Asset Info or Chart

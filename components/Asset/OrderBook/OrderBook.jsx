@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
 import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
-import { withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 import Big from 'big.js'
 import { Fragment } from 'react'
@@ -15,7 +15,6 @@ import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 
 const FirstOrderContainer = styled.div`
@@ -129,8 +128,8 @@ const gridStyles = `
 const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem 0.75rem;
+  ${gridStyles}
 `
 
 const BookRow = styled.div`
@@ -298,8 +297,8 @@ export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
-  const setOrder = useStore((state) => state.setOrder)
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  const { setOrder, isConnected } = useAlgodex()
+  const isSignedIn = isConnected
 
   const dispatcher = useEventDispatch()
 
