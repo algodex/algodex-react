@@ -1,4 +1,4 @@
-import { color, fontSize } from 'styled-system'
+// import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
 import { ReactSVG } from 'react-svg'
@@ -78,8 +78,8 @@ export const NavTextLg = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -126,8 +126,8 @@ export const NavTextSm = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme, isActive }) => (isActive ? theme.palette.gray[100] : theme.palette.gray[500])};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -172,8 +172,8 @@ export const NavIcon = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -231,7 +231,7 @@ export const MenuButton = styled.button`
   padding: 0.5rem 1rem;
   transition: color 0.1s ease-in;
   cursor: pointer;
-  ${fontSize}
+  font-size: ${(fontSize) => fontSize}
 
   &:hover {
     color: ${({ theme }) => theme.palette.gray[100]};
