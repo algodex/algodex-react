@@ -2,10 +2,14 @@ import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
+import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
+// import { useWalletConnect } from '@/hooks/useWalletConnect'
 import { useState } from 'react'
 
 const WalletsOptions = ({ handleWalletConnect, isRenderingList }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+  const connect = useMyAlgoConnect()
+  // const peraWallet = useWalletConnect()
   return (
     <>
       {isRenderingList || isConnectingAddress ? (
@@ -41,7 +45,7 @@ const WalletsOptions = ({ handleWalletConnect, isRenderingList }) => {
               className="cursor-pointer flex items-center mb-2"
               role="button"
               tabIndex="0"
-              onClick={() => handleWalletConnect('myalgowallet')}
+              onClick={() => connect()}
               onKeyPress={() => console.log('key pressed')}
             >
               <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
