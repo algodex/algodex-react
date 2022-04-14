@@ -12,7 +12,7 @@ const ERROR = {
  */
 export function useMyAlgoConnect() {
   // State Setter
-  const { setAddresses, setWallet, wallet } = useAlgodex()
+  const { setAddresses } = useAlgodex()
 
   // Instance reference
   const myAlgoWallet = useRef()
@@ -35,12 +35,9 @@ export function useMyAlgoConnect() {
         acct.connector.connected = true
         return acct
       })
-
-      console.log('MYALGO ADDRESES', accounts, _addresses)
+      console.debug('Setting Address form myAlgoConnect', _addresses)
+      // Set Addresses
       setAddresses(_addresses, { validate: false, merge: true })
-      if (typeof wallet === 'undefined' || typeof wallet.address === 'undefined') {
-        setWallet(_addresses[0], { merge: true, validate: false })
-      }
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
     }
@@ -50,9 +47,12 @@ export function useMyAlgoConnect() {
     const initMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
       // because it uses the window object
-      myAlgoWallet.current = (
-        await import('@algodex/algodex-sdk/lib/wallet/connectors/MyAlgoConnect')
-      ).default
+      const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+      MyAlgoConnect.prototype.sign = await import(
+        '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+      )
+      myAlgoWallet.current = new MyAlgoConnect()
+      myAlgoWallet.current.connected = false
     }
 
     initMyAlgoWallet()
