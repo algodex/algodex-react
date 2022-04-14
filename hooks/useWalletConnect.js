@@ -69,7 +69,7 @@ export function useWalletConnect() {
         bridge: 'https://bridge.walletconnect.org', // Required
         qrcodeModal: QRCodeModal
       })
-
+      console.log(walletConnect.current, 'all here')
       walletConnect.current.connected = false
     }
     initWalletConnect()

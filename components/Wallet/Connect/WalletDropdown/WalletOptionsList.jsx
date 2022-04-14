@@ -2,16 +2,17 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
-// import { useWalletConnect } from '@/hooks/useWalletConnect'
+import { useWalletConnect } from '@/hooks/useWalletConnect'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
   const connect = useMyAlgoConnect()
-  // const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect()
+  // const { connect: peraConnect } = useWalletConnect()
   // const peraWallet = useWalletConnect()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': connect,
-    'pera-wallet': () => console.log('Connect Pera Wallet')
+    // 'pera-wallet': peraConnect
+    'pera-wallet': () => console.log('Hello')
   }
   return (
     <>
