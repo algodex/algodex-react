@@ -221,7 +221,7 @@ export function WalletView(props) {
         tabIndex={isTabbable(wallet.address)}
         role="button"
         isActive={isWalletActive(wallet.address)}
-        onClick={() => handleWalletClick(wallet.address)}
+        onClick={() => handleWalletClick(wallet)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <LabelMd fontWeight="500" title={wallet.address}>
@@ -304,7 +304,7 @@ WalletView.defaultProps = {
 function WalletConnect(props) {
   const connect = useMyAlgoConnect()
   const { isConnected, wallet, setWallet, addresses } = useAlgodex()
-  console.log('!!!!!!!!!!!!!!!!', addresses)
+  // console.log('!!!!!!!!!!!!!!!!', addresses)
   // fetch wallet balances from blockchain
   // const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
   // useEffect(() => {
