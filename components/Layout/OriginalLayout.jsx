@@ -229,9 +229,6 @@ const MobileMenuButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
-  min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
-  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
 `
 
@@ -339,38 +336,22 @@ function MainLayout({ asset, children }) {
         <MobileMenu>
           <ul>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-CHART').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.CHART)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-BOOK').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.BOOK)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-TRADE').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.TRADE)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-ORDERS').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.ORDERS)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
@@ -383,11 +364,7 @@ function MainLayout({ asset, children }) {
             </li>
             */}
             <li>
-              <MobileMenuButton
-                type="button"
-                characterLength={t('mobilefooter-WALLET').length}
-                onClick={() => setActiveMobile(TABS.WALLET)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>

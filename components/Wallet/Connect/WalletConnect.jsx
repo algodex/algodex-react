@@ -291,7 +291,7 @@ export function WalletView(props) {
 
 WalletView.propTypes = {
   wallets: PropTypes.array.isRequired,
-  activeWalletAddress: PropTypes.string.isRequired,
+  activeWalletAddress: PropTypes.string,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
   onSetActiveWallet: PropTypes.func.isRequired,
