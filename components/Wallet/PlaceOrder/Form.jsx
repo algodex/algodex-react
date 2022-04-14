@@ -1,174 +1,36 @@
-import { BodyCopy, BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from 'components/Typography'
-import { useMemo, useState } from 'react'
-import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+// import { BodyCopy, Typography, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
+import Tabs from '@/components/Tabs'
+import Tab from '@/components/Tab'
+import { useCallback, useMemo, useState } from 'react'
 import AdvancedOptions from './Form/AdvancedOptions'
-import { default as AmountRange } from 'components/Input/Slider'
-import Big from 'big.js'
-import Button from '../../Button'
-import CurrencyInput from '../../Input/CurrencyInput'
-import Icon from 'components/Icon'
+import Slider from '@/components/Input/Slider'
+import Icon from '@/components/Icon/Icon'
 import { Info } from 'react-feather'
+import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
+import OutlinedInput from '@/components/Input/OutlinedInput'
+import { default as MaterialBox } from '@mui/material/Box'
+import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
-import { Section } from '@/components/Layout/Section'
-import Tooltip from 'components/Tooltip'
-import { has } from 'lodash'
+import { TabsUnstyled } from '@mui/base'
+import Tooltip from '@/components/Tooltip'
+// import { has } from 'lodash'
 import { lighten } from 'polished'
+import theme from '../../../theme'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+import Typography from '@mui/material/Typography'
+import { ButtonGroup } from '@mui/material'
 
-const _Tab = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.palette.gray[100]};
-  padding: 1rem 0;
-  transition: all 0.1s ease-in;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  font-weight: 600;
-  line-height: 1.25;
-
-  border-bottom: ${({ isActive, theme }) =>
-    isActive ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
-
-  &:hover {
-    color: ${({ theme }) => theme.palette.gray[100]};
-  }
-
-  &:active {
-    color: ${({ theme }) => theme.palette.gray[100]};
-  }
-
-  @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) =>
-      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
-  }
-`
-
-const _Tabs = styled.div`
-  display: flex;
-  padding: 0 1.125rem;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.gray[700]};
-
-  & > * {
-    margin: 0 1rem;
-  }
-
-  justify-content: space-between;
-  @media (min-width: 996px) {
-    justify-content: flex-start;
-    & > * {
-      margin-left: 0;
-      margin-right: 6rem;
-    }
-  }
-`
-
-const Container = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.palette.background.dark};
-  overflow: hidden scroll;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`
-
-const Header = styled.header`
-  padding: 1.125rem;
-`
 const IconTextContainer = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.palette.gray['300']};
+  color: ${({ theme }) => theme.colors.gray['300']};
 `
 
 const AvailableBalance = styled.div`
   margin-bottom: 1.25rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.gray['700']};
-`
-
-const Form = styled.form`
-  flex: 1 1 0%;
-  padding: 0 1.125rem 1.125rem;
-`
-
-const ToggleWrapper = styled.div`
-  display: flex;
-  padding: 0 0 1.5rem;
-`
-
-const ToggleInput = styled.input`
-  opacity: 0;
-  position: absolute;
-`
-
-const ToggleBtn = styled(Button)`
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  line-height: 1.25;
-  background-color: ${({ theme }) => theme.palette.gray['700']};
-
-  &:hover {
-    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
-  }
-  label {
-    cursor: pointer;
-    width: 100%;
-  }
-  && {
-    ${ToggleInput}:focus + & {
-      z-index: 1;
-      border-radius: 3px;
-    }
-  }
-`
-
-const BuyButton = styled(ToggleBtn)`
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-
-  && {
-    ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.palette.green['500']};
-    }
-
-    ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.palette.green['500'])};
-    }
-
-    ${ToggleInput}:focus + & {
-      box-shadow: 0 0 0 0.2rem #4b9064;
-    }
-  }
-`
-
-const SellButton = styled(ToggleBtn)`
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-
-  && {
-    ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.palette.red['500']};
-    }
-
-    ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.palette.red['500'])};
-    }
-
-    ${ToggleInput}:focus + & {
-      box-shadow: 0 0 0 0.2rem #b23639;
-    }
-  }
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
 `
 
 const BalanceRow = styled.div`
@@ -176,35 +38,6 @@ const BalanceRow = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.25rem;
-`
-
-const Tab = styled(_Tab)`
-  font-size: 0.875rem;
-  padding: 0.625rem 0;
-  letter-spacing: 0.12rem;
-  border-bottom-width: 4px;
-`
-
-const Tabs = styled(_Tabs)`
-  padding: 0;
-  margin-bottom: 1rem;
-
-  ${Tab} {
-    border-bottom-color: ${({ orderType, theme }) =>
-      orderType === 'sell' ? theme.palette.red['500'] : theme.palette.green['500']};
-  }
-`
-
-const LimitOrder = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-`
-
-const SubmitButton = styled(Button)`
-  &:focus {
-    box-shadow: 0 0 0 0.2rem ${({ orderType }) => (orderType === 'sell' ? '#b23639' : '#4b9064')};
-  }
 `
 
 const IconButton = styled.button`
@@ -218,17 +51,18 @@ const IconButton = styled.button`
 
   svg {
     height: 15px;
-    fill: ${({ theme }) => theme.palette.gray[500]};
-    color: ${({ theme }) => theme.palette.gray[900]};
+    fill: ${({ theme }) => theme.colors.gray[500]};
+    color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
-const DEFAULT_ORDER = {
-  type: 'buy',
-  price: 0,
-  amount: 0,
-  total: 0,
-  execution: 'both'
-}
+
+// const DEFAULT_ORDER = {
+//   type: 'buy',
+//   price: 0,
+//   amount: 0,
+//   total: 0,
+//   execution: 'both'
+// }
 
 /**
  * # 📝 Place Order Form
@@ -249,234 +83,355 @@ const DEFAULT_ORDER = {
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
+export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, components: { Box } }) {
+  // console.log(`PlaceOrderForm(`, arguments[0], `)`)
   const { t } = useTranslation('place-order')
-  const [order, setOrder] = useState(DEFAULT_ORDER)
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (typeof onSubmit !== 'undefined' && onSubmit instanceof Function) {
-      await onSubmit(
-        {
+  const [order, setOrder] = useState({
+    type: 'buy',
+    price: 0,
+    amount: 0,
+    total: 0,
+    execution: 'both'
+  })
+  // console.log(order)
+  // useEffect(() => {
+  //   setOrder({
+  //     ...DEFAULT_ORDER,
+  //     asset
+  //   })
+  // }, [asset, setOrder])
+  // const hasBalance = useMemo(() => {
+  //   const { id } = asset
+  //   const { assets } = wallet
+  //   const hasAlgo = has(wallet, 'balance') && wallet.amount > 0
+  //
+  //   return order.type === 'buy' ? hasAlgo : has(assets, `${id}.balance`) && assets[id].balance > 0
+  // }, [asset, wallet, order])
+
+  const buttonProps = useMemo(
+    () => ({
+      buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
+      sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
+    }),
+    [asset]
+  )
+  // const getMaxAmount = useCallback(() => {
+  //   if (order.type === 'sell') {
+  //     return wallet.assets[asset.id].balance || 0
+  //   }
+  //   if (order.type === 'buy') {
+  //     return wallet.amount || 0
+  //   }
+  // }, [wallet, asset])
+
+  const fixPrecision = useCallback(
+    (e, key) => {
+      const value = e.target.value
+      switch (key) {
+        case 'price':
+          return parseFloat(value).toFixed(6)
+        case 'amount':
+          return parseFloat(value).toFixed(asset.decimals)
+        case 'total':
+          return parseFloat(value).toFixed(asset.decimals)
+        default:
+          return value
+      }
+    },
+    [order]
+  )
+
+  const handleChange = useCallback(
+    (e, field) => {
+      const key = field || e.target.name
+      // console.log(key, e)
+      if (order[key] !== e.target.value) {
+        setOrder({
           ...order,
-          asset
-        },
-        {
-          wallet: {
-            ...wallet,
-            connector: {
-              ...wallet.connector,
-              connected: true
-            }
-          }
-        }
-      )
-    } else {
-      console.log(`Handling PlaceOrderForm Submit`, e)
-    }
-  }
-  const hasBalance = useMemo(() => {
-    const { id } = asset
-    const { assets } = wallet
-    const hasAlgo = has(wallet, 'amount') && wallet?.amount > 0
-
-    return order.type === 'buy' ? hasAlgo : has(assets, `${id}.amount`) && assets[id].amount > 0
-  }, [asset, wallet, order])
-
-  const buttonProps = {
-    buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
-    sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
-  }
-
-  const handleChange = (e, field) => {
-    setOrder({
-      ...order,
-      [field || e.target.name]: e.target.value
-    })
-  }
+          [key]: fixPrecision(e, key)
+        })
+      }
+    },
+    [setOrder, order]
+  )
 
   return (
-    <Section area="bottomRight">
-      <Container data-testid="place-order">
-        {showTitle && (
-          <Header>
-            <HeaderCaps color="gray.500" mb={1}>
-              {t('place-order')}
-            </HeaderCaps>
-          </Header>
-        )}
-        <Form onSubmit={handleSubmit} autocomplete="off">
-          <ToggleWrapper>
-            <ToggleInput
-              type="radio"
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '1.25rem'
+      }}
+      data-testid="place-order"
+    >
+      {showTitle && (
+        <header className="pb-5">
+          <Typography variant="headerCaps" color="gray.500" mb={1}>
+            {t('place-order')}
+          </Typography>
+        </header>
+      )}
+      <form onSubmit={onSubmit} autoComplete="off">
+        <div className="w-full">
+          <ButtonGroup fullWidth variant="contained">
+            <MaterialButton
+              disableElevation={order.type === 'buy'}
+              disableRipple={true}
+              variant="contained"
+              color={order.type === 'buy' ? 'primary' : 'secondary'}
+              fullWidth
+              sx={{
+                borderTopLeftRadius: '7px',
+                borderBottomLeftRadius: '7px',
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+                '&:hover': {
+                  backgroundColor:
+                    order.type === 'buy'
+                      ? lighten(0.05, theme.colors.green['500'])
+                      : lighten(0.05, theme.colors.gray['700'])
+                }
+              }}
+              onClick={handleChange}
               name="type"
-              id="type-buy"
               value="buy"
-              checked={order.type === 'buy'}
-              onChange={(e) => handleChange(e, 'type')}
-            />
-            <BuyButton>
-              <label htmlFor="type-buy">{t('buy')}</label>
-            </BuyButton>
-            <ToggleInput
-              type="radio"
+            >
+              {t('buy')}
+            </MaterialButton>
+            <MaterialButton
+              disableRipple={true}
+              disableElevation={order.type === 'sell'}
+              variant="contained"
+              color={order.type === 'sell' ? 'error' : 'secondary'}
+              fullWidth
+              sx={{
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                borderTopRightRadius: 7,
+                borderBottomRightRadius: 7,
+                '&:hover': {
+                  backgroundColor:
+                    order.type === 'sell'
+                      ? lighten(0.05, theme.colors.red['500'])
+                      : lighten(0.05, theme.colors.gray['700'])
+                }
+              }}
+              onClick={handleChange}
               name="type"
-              id="type-sell"
               value="sell"
-              checked={order.type === 'sell'}
-              onChange={(e) => handleChange(e, 'type')}
-            />
-            <SellButton>
-              <label htmlFor="type-sell">{t('sell')}</label>
-            </SellButton>
-          </ToggleWrapper>
-          <AvailableBalance>
-            <IconTextContainer style={{ marginBottom: '10px' }}>
-              <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
-              <Tooltip
-                renderButton={(setTriggerRef) => (
-                  <IconButton ref={setTriggerRef} type="button">
-                    <Info />
-                  </IconButton>
-                )}
-              >
-                <BalanceRow>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {t('orders:available')}:
-                  </LabelMd>
-                  <IconTextContainer>
-                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {fromBaseUnits(wallet?.amount || 0)}
-                    </LabelMd>
-                    <Icon use="algoLogo" size={0.625} />
-                  </IconTextContainer>
-                </BalanceRow>
-                <BalanceRow>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {t('total')}:
-                  </LabelMd>
-                  <IconTextContainer>
-                    <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                      {fromBaseUnits(wallet?.amount || 0)}
-                    </LabelMd>
-                    <Icon use="algoLogo" size={0.625} />
-                  </IconTextContainer>
-                </BalanceRow>
-                <BalanceRow>
-                  <LabelSm
-                    color="gray.300"
-                    fontWeight="400"
-                    textTransform="initial"
-                    lineHeight="0.9rem"
-                    letterSpacing="0.1em"
-                  >
-                    &nbsp;*
-                    {t('max-spend-explanation', {
-                      // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
-                    })}
-                  </LabelSm>
-                </BalanceRow>
-              </Tooltip>
-            </IconTextContainer>
-            <BalanceRow>
-              <LabelMd color="gray.400" fontWeight="500">
-                ALGO
-              </LabelMd>
-              <LabelMd color="gray.300" fontWeight="500">
-                {fromBaseUnits(wallet?.amount || 0)}
-              </LabelMd>
-            </BalanceRow>
-            <BalanceRow>
-              <LabelMd color="gray.400" fontWeight="500">
-                <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
-                {asset.name || asset.id}
-              </LabelMd>
-              {/*<LabelMd color="gray.300" fontWeight="500">*/}
-              {/*  {hasBalance && wallet.assets[asset.id]?.amount}*/}
-              {/*</LabelMd>*/}
-            </BalanceRow>
-          </AvailableBalance>
+            >
+              {t('sell')}
+            </MaterialButton>
+          </ButtonGroup>
+        </div>
 
-          <Tabs orderType={order.type}>
-            <Tab isActive>{t('limit')}</Tab>
+        <AvailableBalance>
+          <IconTextContainer style={{ marginBottom: '10px' }}>
+            <Typography variant="bodyCopyTiny" color="gray.500">
+              {t('available-balance')}
+            </Typography>
+            <Tooltip
+              renderButton={(setTriggerRef) => (
+                <IconButton ref={setTriggerRef} type="button">
+                  <Info />
+                </IconButton>
+              )}
+            >
+              <section className="flex items-center justify-between mb-1">
+                <Typography variant="labelMdSpaced" color="gray.300">
+                  {t('orders:available')}:
+                </Typography>
+                <IconTextContainer>
+                  <Typography variant="labelMdSpaced" color="gray.300">
+                    {wallet.amount}
+                  </Typography>
+                  <Icon use="algoLogo" size={0.625} />
+                </IconTextContainer>
+              </section>
+              <BalanceRow>
+                <Typography variant="labelMdSpaced" color="gray.300">
+                  {t('total')}:
+                </Typography>
+                <IconTextContainer>
+                  <Typography variant="labelMdSpaced" color="gray.300">
+                    {wallet.amount}
+                  </Typography>
+                  <Icon use="algoLogo" size={0.625} />
+                </IconTextContainer>
+              </BalanceRow>
+              <BalanceRow>
+                <Typography
+                  variant="labelSmForm"
+                  component="span"
+                  color="gray.300"
+                  textTransform="initial"
+                >
+                  &nbsp;*
+                  {t('max-spend-explanation', {
+                    // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
+                  })}
+                </Typography>
+              </BalanceRow>
+            </Tooltip>
+          </IconTextContainer>
+          <BalanceRow>
+            <Typography variant="labelMdLight" color="gray.400">
+              ALGO
+            </Typography>
+            <Typography variant="labelMdLight" color="gray.300">
+              {wallet.amount}
+            </Typography>
+          </BalanceRow>
+          <BalanceRow>
+            <Typography variant="labelMdLight" color="gray.400">
+              <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
+              {asset.name || asset.id}
+            </Typography>
+            <Typography variant="labelMdLight" color="gray.300">
+              {/*{hasBalance && wallet?.assets[asset.id]?.balance}*/}
+            </Typography>
+          </BalanceRow>
+        </AvailableBalance>
+
+        <TabsUnstyled sx={{ width: '100%' }}>
+          <Tabs
+            style={{ marginBottom: '16px' }}
+            textColor="primary"
+            onChange={handleChange}
+            aria-label="secondary tabs example"
+          >
+            <Tab label={t('limit')} />
           </Tabs>
-          {!hasBalance && (
-            <BodyCopy color="gray.500" textAlign="center" m={32}>
-              {t('insufficient-balance')}
-            </BodyCopy>
-          )}
-          {hasBalance && (
-            <LimitOrder>
-              <CurrencyInput
-                name="price"
-                type="number"
-                pattern="\d*"
-                label={t('price')}
-                currency="ALGO"
-                value={order.price}
-                onChange={handleChange}
-                autocomplete="false"
-                min="0"
-                step="0.000001"
-                inputMode="decimal"
-              />
-              <CurrencyInput
-                type="number"
-                pattern="\d*"
-                name="amount"
-                label={t('amount')}
-                currency={asset.name}
-                value={order.amount}
-                onChange={handleChange}
-                autocomplete="false"
-                min="0"
-                step={new Big(10).pow(-1 * asset.decimals).toString()}
-                inputMode="decimal"
-              />
-              <AmountRange
-                // txnFee={txnFee}
-                onChange={(e) => handleChange(e, 'type')}
-                value={order.amount}
-                marks={true}
-                step={10}
-                min={0}
-                max={100}
-              />
-              <CurrencyInput
-                name="total"
-                type="number"
-                label={t('total')}
-                asset="ALGO"
-                decimals={6}
-                value={order.amount * order.price}
-                readOnly
-                disabled
-              />
-              {/* <TxnFeeContainer>
-                <BodyCopyTiny color="gray.500" textTransform="none">
+        </TabsUnstyled>
+        {/*{!hasBalance && (*/}
+        {/*  <Typography variant="bodyCopy" color="gray.500" textAlign="center" m={32}>*/}
+        {/*    {t('insufficient-balance')}*/}
+        {/*  </Typography>*/}
+        {/*)}*/}
+        {/*{hasBalance && (*/}
+        <MaterialBox className="flex flex-col mb-4">
+          <OutlinedInput
+            sx={{
+              backgroundColor: theme.colors.gray['900'],
+              border: 2,
+              borderColor: theme.colors.gray['700'],
+              marginBottom: '1rem'
+            }}
+            inputProps={{
+              name: 'price',
+              type: 'number',
+              // pattern: 'd*',
+              autocomplete: false,
+              min: 0,
+              step: 0.000001,
+              inputMode: 'decimal'
+            }}
+            name="price"
+            type="number"
+            pattern="\d*"
+            value={order.price}
+            onChange={(e) => handleChange(e)}
+            startAdornment={
+              <MUIInputAdornment position="start">
+                <span className="text-sm font-bold text-gray-500">{t('price')}</span>
+              </MUIInputAdornment>
+            }
+            endAdornment={
+              <MUIInputAdornment position="end">
+                <span className="text-sm font-bold text-gray-500">ALGO</span>
+              </MUIInputAdornment>
+            }
+          />
+          <OutlinedInput
+            id="amount"
+            type="number"
+            pattern="\d*"
+            name="amount"
+            sx={{
+              backgroundColor: theme.colors.gray['900'],
+              border: 2,
+              borderColor: theme.colors.gray['700'],
+              marginBottom: '1rem'
+            }}
+            value={order.amount}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+            // step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
+            startAdornment={
+              <MUIInputAdornment position="start">
+                <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
+              </MUIInputAdornment>
+            }
+            endAdornment={
+              <MUIInputAdornment position="end">
+                <span className="text-sm font-bold text-gray-500">{asset.name}</span>
+              </MUIInputAdornment>
+            }
+          />
+          <Slider
+            sx={{
+              margin: '0px 0.5rem',
+              width: '95%'
+            }}
+            // txnFee={txnFee}
+            onChange={(e) => handleChange(e)}
+            name="amount"
+            value={order.amount}
+            marks={true}
+            step={10}
+            min={0}
+            max={100}
+          />
+          <OutlinedInput
+            id="total"
+            name="total"
+            type="text"
+            value={order.amount * order.price}
+            readOnly
+            disabled
+            startAdornment={
+              <MUIInputAdornment position="start">
+                <span className="text-sm font-bold text-gray-500">{t('total')}</span>
+              </MUIInputAdornment>
+            }
+            endAdornment={
+              <MUIInputAdornment position="end">
+                <span className="text-sm font-bold text-gray-500">ALGO</span>
+              </MUIInputAdornment>
+            }
+          />
+          {/* <TxnFeeContainer>
+                <Typography color="gray.500" textTransform="none">
                   Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
                   {txnFee.toFixed(3)}
-                </BodyCopyTiny>
+                </Typography>
               </TxnFeeContainer> */}
-              <AdvancedOptions
-                order={order}
-                // onChange={handleOptionsChange}
-                allowTaker={typeof asset !== 'undefined'}
-              />
-            </LimitOrder>
-          )}
-          <SubmitButton
-            type="submit"
-            variant={buttonProps[order.type].variant}
-            size="large"
-            block
-            orderType={order.type}
-            disabled={order.valid}
-          >
-            {buttonProps[order.type].text}
-          </SubmitButton>
-        </Form>
-      </Container>
-    </Section>
+          <AdvancedOptions
+            order={order}
+            // onChange={handleOptionsChange}
+            allowTaker={typeof asset !== 'undefined'}
+          />
+        </MaterialBox>
+        {/*)}*/}
+        <MaterialButton
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
+            '&:hover': {
+              backgroundColor:
+                order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
+            }
+          }}
+          disabled={order.valid}
+        >
+          {buttonProps[order.type || 'buy']?.text}
+        </MaterialButton>
+      </form>
+    </Box>
   )
 }
 
@@ -488,6 +443,7 @@ PlaceOrderForm.propTypes = {
   /**
    * Asset for the Order
    */
+  components: PropTypes.object,
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
@@ -507,6 +463,9 @@ PlaceOrderForm.propTypes = {
   onSubmit: PropTypes.func
 }
 PlaceOrderForm.defaultProps = {
-  showTitle: true
+  showTitle: true,
+  components: {
+    Box: MaterialBox
+  }
 }
 export default PlaceOrderForm
