@@ -102,7 +102,7 @@ export async function getStaticProps({ params: { id } }) {
  */
 function TradePage({ staticExplorerAsset }) {
   // eslint-disable-next-line no-undef
-  console.debug(`TradePage(`, staticExplorerAsset, `)`)
+  // console.debug(`TradePage(`, staticExplorerAsset, `)`)
 
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
@@ -142,7 +142,6 @@ function TradePage({ staticExplorerAsset }) {
   }, [asset, setAsset, staticExplorerAsset])
 
   const isTraded = useMemo(() => {
-    console.log(asset, data)
     return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
   }, [asset, data])
 
