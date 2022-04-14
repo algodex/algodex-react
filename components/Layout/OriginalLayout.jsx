@@ -16,8 +16,8 @@ import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
-import { BodyCopy, HeaderCaps } from '@/components/Typography'
-
+// import { Typography, Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 // Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -307,13 +307,13 @@ function MainLayout({ asset, children }) {
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>
-                <HeaderCaps color="gray.500" mb={1}>
+                <Typography color="gray.500" mb={1}>
                   Place Order
-                </HeaderCaps>
+                </Typography>
               </Header>
-              <BodyCopy data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
+              <Typography data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
                 Not signed in
-              </BodyCopy>
+              </Typography>
             </Container>
           )}
         </PlaceOrderSection>

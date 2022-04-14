@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
-import { BrightGraySpan } from '@/components/Typography'
+// import { Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 import Fade from '@mui/material/Fade'
 import Icon from '@/components/Icon'
 import InfoFlyover from './InfoFlyover'
@@ -109,9 +110,9 @@ const Container = styled.div`
 
 export function DefaultCell({ value }) {
   return (
-    <BrightGraySpan className="cursor-default" title={value} data-testid="default-cell">
+    <Typography className="cursor-default" title={value} data-testid="default-cell">
       {value}
-    </BrightGraySpan>
+    </Typography>
   )
 }
 DefaultCell.propTypes = { value: PropTypes.any }

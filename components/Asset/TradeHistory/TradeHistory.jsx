@@ -1,5 +1,5 @@
-import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
-
+// import { Typography, Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import Big from 'big.js'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
@@ -92,7 +92,7 @@ const TradesRow = styled.div`
   }
 `
 
-const PriceHeaderText = styled(BodyCopyTiny)`
+const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   margin: 0;
@@ -141,15 +141,15 @@ export function TradeHistory({ asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-            <BodyCopyTiny
+            <Typography
               fontFamily="'Roboto Mono', monospace"
               color={getColor(row.type)}
               title={row.price}
               m={0}
             >
               {floatToFixed(row.price)}
-            </BodyCopyTiny>
-            <BodyCopyTiny
+            </Typography>
+            <Typography
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -157,8 +157,8 @@ export function TradeHistory({ asset, orders: tradesData }) {
               m={0}
             >
               {amount.toFixed(Math.min(3, asset.decimals))}
-            </BodyCopyTiny>
-            <BodyCopyTiny
+            </Typography>
+            <Typography
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -166,7 +166,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               m={0}
             >
               {dayjs(row.timestamp).format('HH:mm:ss')}
-            </BodyCopyTiny>
+            </Typography>
           </TradesRow>
         )
       })
@@ -175,27 +175,27 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <HeaderCaps color="gray.500" mb={1}>
+        <Typography color="gray.500" mb={1}>
           {t('trade-history')}
-        </HeaderCaps>
+        </Typography>
         <br />
         <Header>
           <PriceHeader />
-          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+          <Typography color="gray.500" textAlign="right" m={0}>
             {t('amount')}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+          </Typography>
+          <Typography color="gray.500" textAlign="right" m={0}>
             {t('time')}
-          </BodyCopyTiny>
+          </Typography>
         </Header>
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
+              <Typography color="gray.600" textAlign="center" m={4}>
                 {t('no-trades-completed')}
-              </BodyCopyTiny>
+              </Typography>
             )}
           </TradesWrapper>
         </Trades>

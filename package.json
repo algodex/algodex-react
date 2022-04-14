@@ -39,6 +39,7 @@
     "@mdi/js": "^6.6.96",
     "@mdi/react": "^1.5.0",
     "@mdx-js/loader": "^2.1.0",
+    "@mui/base": "^5.0.0-alpha.76",
     "@mui/material": "^5.5.3",
     "@next/mdx": "^12.1.2",
     "@randlabs/myalgo-connect": "^1.1.2",
@@ -71,7 +72,6 @@
     "react-svg": "^14.1.16",
     "react-table": "^7.7.0",
     "resize-detector": "^0.3.0",
-    "styled-system": "^5.1.5",
     "stylis": "^4.0.13",
     "translate": "^1.4.1",
     "zustand": "^3.7.1"

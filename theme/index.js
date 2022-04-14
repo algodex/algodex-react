@@ -73,7 +73,7 @@ const fontFamilies = {
 
 const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]
 
-const breakpoints = ['40em', '48em']
+// const breakpoints = ['40em', '48em']
 
 const textStyles = {
   title: {
@@ -257,5 +257,5 @@ const theme = createTheme({
   }
 })
 
-theme.breakpoints = breakpoints
+// theme.breakpoints = breakpoints
 export default theme

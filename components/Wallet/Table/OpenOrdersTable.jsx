@@ -6,8 +6,9 @@ import Table, {
 } from '@/components/Table'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { BrightGraySpan } from '@/components/Typography'
+// import { Typography } from '@/components/Typography'
 // import OrderService from '@/services/order'
+import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from '@emotion/styled'
@@ -120,9 +121,9 @@ export function OpenOrdersTable({ orders: _orders }) {
       }
 
       return (
-        <BrightGraySpan data-testid="cancel-order-button">
+        <Typography data-testid="cancel-order-button">
           <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
-        </BrightGraySpan>
+        </Typography>
       )
     },
     [t, openOrdersData]
