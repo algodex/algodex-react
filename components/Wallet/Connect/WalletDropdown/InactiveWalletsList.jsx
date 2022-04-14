@@ -1,29 +1,36 @@
 import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { find } from 'lodash'
 import theme from 'theme'
-import { useStorePersisted } from 'store/use-store'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import useUserStore from 'store/use-user-state'
+import { useWalletConnect } from '@/hooks/useWalletConnect'
 
-const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
+const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
+  const { wallet, setWallet, addresses } = useAlgodex()
+  const { disconnect: peraDisconnect } = useWalletConnect()
+
   const isWalletActive = (addr) => {
-    return activeWalletAddress === addr
+    return wallet.address === addr
   }
 
   const switchWalletAddress = (addr) => {
-    !isWalletActive(addr) && setActiveWalletAddress(addr)
+    if (!isWalletActive(addr)) {
+      const _wallet = find(addresses, (o) => o.address === addr)
+      setWallet(_wallet, { validate: false, merge: true })
+    }
   }
 
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': () => console.log('Disconnect Pera Wallet'),
-    'pera-wallet': () => console.log('Disconnect Pera Wallet')
+    'wallet-connect': peraDisconnect
   }
 
   return (
@@ -43,10 +50,12 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
             <div className="mt-4" key={idx}>
               <div className="flex justify-between items-center">
                 <div
+                  onKeyDown={() => switchWalletAddress(address)}
+                  onClick={() => switchWalletAddress(address)}
                   role="button"
                   tabIndex="0"
-                  onClick={() => switchWalletAddress(address)}
-                  className="flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
+                  title="Set as active"
+                  className="cursor-pointer flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
                 >
                   <p>{truncatedWalletAddress(address, 11)}</p>
                   <Icon
@@ -64,7 +73,6 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
                   style={{
                     backgroundColor: theme.colors.gray['800']
                   }}
-                  // onClick={() => handleDisconnectFn(address, type)}
                   onClick={() => WALLETS_DISCONNECT_MAP[type]()}
                 >
                   DISCONNECT
@@ -96,23 +104,11 @@ const InactiveWalletsList = ({ walletsList, disconnectWalletFn }) => {
 }
 
 InactiveWalletsList.propTypes = {
-  walletsList: PropTypes.array,
-  disconnectWalletFn: PropTypes.func
+  walletsList: PropTypes.array
 }
 
 InactiveWalletsList.defaultProps = {
-  // walletsList: [
-  //   {
-  //     address: '5Keh5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPLpimsPk0Pza1lQ',
-  //     type: 'algomobilewallet'
-  //   },
-  //   {
-  //     address: '9Welv5B8UVJjHW5aZcUi6DEsrk1LCBPc8C9MH8EJrZ7RPMqocRZ9iZh2Dz',
-  //     type: 'myalgowallet'
-  //   }
-  // ],
-  walletsList: [],
-  disconnectWalletFn: () => console.log('Wallet click')
+  walletsList: []
 }
 
 export default InactiveWalletsList
