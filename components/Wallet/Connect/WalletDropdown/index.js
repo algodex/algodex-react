@@ -1,5 +1,4 @@
 import { filter, find } from 'lodash'
-import { useEffect, useMemo } from 'react'
 
 import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
@@ -7,10 +6,7 @@ import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import useMyAlgo from 'hooks/useMyAlgo'
-import useStore from 'store/use-store'
-import { useStorePersisted } from 'store/use-store'
-import useWalletsQuery from 'hooks/useWalletsQuery'
+import { useMemo } from 'react'
 
 const Container = styled.div`
   position: absolute;
@@ -26,42 +22,7 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  //   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  //   const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-  //   const setWallets = useStorePersisted((state) => state.setWallets)
-  //   const setIsSignedIn = useStore((state) => state.setIsSignedIn)
-  //   const isSignedIn = useStore((state) => state.isSignedIn)
-  //   const wallets = useStorePersisted((state) => state.wallets)
-  //   const { connect, addresses } = useMyAlgo()
-  const { addresses, wallet, isConnected } = useAlgodex()
-
-  const connectWallet = (type) => {
-    switch (type) {
-      case 'myalgowallet':
-        // connect()
-        break
-      case 'algomobilewallet':
-        // Connect Algorand Mobile Wallet
-        break
-      default:
-        break
-    }
-  }
-
-  const disconnectWalletFn = (address, type) => {
-    switch (type) {
-      case 'myalgowallet':
-        //   setIsSignedIn(false)
-        //   setActiveWalletAddress('')
-        //   setWallets([])
-        return 'myalgowallet'
-      case 'algomobilewallet':
-        //   console.log('algomobilewallet')
-        return 'algomobilewallet'
-      default:
-        break
-    }
-  }
+  const { addresses, wallet } = useAlgodex()
 
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
@@ -79,12 +40,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     <Container className="">
       <div className="flex flex-col justify-between">
         <DropdownHeader closeFn={closeDropdown} />
-        <DropdownBody
-          connectWallet={connectWallet}
-          disconnectWalletFn={disconnectWalletFn}
-          activeWalletAddress={wallet?.address}
-          sortedWalletsList={sortedWalletsList}
-        />
+        <DropdownBody activeWalletAddress={wallet?.address} sortedWalletsList={sortedWalletsList} />
         <DropdownFooter />
       </div>
     </Container>

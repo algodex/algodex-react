@@ -1,7 +1,6 @@
 import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
 
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'

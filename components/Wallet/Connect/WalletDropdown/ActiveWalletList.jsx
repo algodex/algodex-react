@@ -12,7 +12,6 @@ import { useWalletConnect } from '@/hooks/useWalletConnect'
 const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { disconnect: peraDisconnect } = useWalletConnect()
-
   const { address, type } = wallet
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': () => console.log('Disconnect Pera Wallet'),
