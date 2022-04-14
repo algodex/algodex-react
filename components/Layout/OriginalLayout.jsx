@@ -263,9 +263,9 @@ function useMobileDetect() {
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet, algodex, isConnected, placeOrder } = useAlgodex()
-  console.log(`DEX: ${isConnected}`, algodex)
+  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const { wallet, isConnected, placeOrder } = useAlgodex()
+  // console.log(`DEX: ${isConnected}`, algodex)
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const isMobile = useMobileDetect()
@@ -308,11 +308,11 @@ function MainLayout({ asset, children }) {
             <Container data-testid="place-order">
               <Header>
                 <HeaderCaps color="gray.500" mb={1}>
-                  {t('place-order')}
+                  Place Order
                 </HeaderCaps>
               </Header>
               <BodyCopy data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
-                {t('not-signed-in')}
+                Not signed in
               </BodyCopy>
             </Container>
           )}

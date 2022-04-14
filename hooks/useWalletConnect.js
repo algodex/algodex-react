@@ -61,11 +61,16 @@ export function useWalletConnect() {
   }
   useEffect(() => {
     const initWalletConnect = async () => {
-      const WalletConnect = await import('@algodex/algodex-sdk/lib/wallet/connectors/WalletConnect')
-      walletConnect.current = window.temp = new WalletConnect({
+      const WalletConnect = (await import('@walletconnect/client')).default
+      WalletConnect.prototype.sign = (
+        await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
+      ).default
+      walletConnect.current = new WalletConnect({
         bridge: 'https://bridge.walletconnect.org', // Required
         qrcodeModal: QRCodeModal
       })
+
+      walletConnect.current.connected = false
     }
     initWalletConnect()
   }, [])
