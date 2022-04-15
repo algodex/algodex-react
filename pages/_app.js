@@ -58,152 +58,11 @@ function makeApi() {
 }
 
 const styles = css`
-  html,
+  #__next,
   body,
-  div,
-  span,
-  applet,
-  object,
-  iframe,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  blockquote,
-  pre,
-  a,
-  abbr,
-  acronym,
-  address,
-  big,
-  cite,
-  code,
-  del,
-  dfn,
-  em,
-  img,
-  ins,
-  kbd,
-  q,
-  s,
-  samp,
-  small,
-  strike,
-  strong,
-  sub,
-  sup,
-  tt,
-  var,
-  b,
-  u,
-  i,
-  center,
-  dl,
-  dt,
-  dd,
-  ol,
-  ul,
-  li,
-  fieldset,
-  form,
-  label,
-  legend,
-  table,
-  caption,
-  tbody,
-  tfoot,
-  thead,
-  tr,
-  th,
-  td,
-  article,
-  aside,
-  canvas,
-  details,
-  embed,
-  figure,
-  figcaption,
-  footer,
-  header,
-  hgroup,
-  menu,
-  nav,
-  output,
-  ruby,
-  section,
-  summary,
-  time,
-  mark,
-  audio,
-  video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-  }
-  /* HTML5 display-role reset for older browsers */
-  article,
-  aside,
-  details,
-  figcaption,
-  figure,
-  footer,
-  header,
-  hgroup,
-  menu,
-  nav,
-  section {
-    display: block;
-  }
-  body {
-    line-height: 1;
-  }
-  ol,
-  ul {
-    list-style: none;
-  }
-  blockquote,
-  q {
-    quotes: none;
-  }
-  blockquote:before,
-  blockquote:after,
-  q:before,
-  q:after {
-    content: '';
-    content: none;
-  }
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-  #__next {
+  html {
     height: 100%;
   }
-  html,
-  body {
-    height: 100%;
-    box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-      Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background: ${theme.palette.background.dark};
-    color: ${theme.palette.gray['400']};
-  }
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
@@ -220,16 +79,6 @@ const styles = css`
   }
   ::-webkit-scrollbar-corner {
     background: ${theme.palette.gray[700]};
-  }
-
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  button {
-    background-color: transparent;
-    border: none;
   }
 `
 
@@ -255,8 +104,6 @@ function Algodex(props) {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <CssBaseline />
-      <Global styles={styles} />
       <Hydrate state={pageProps.dehydratedState}>
         <EventEmitter>
           <CacheProvider value={emotionCache}>
@@ -264,6 +111,8 @@ function Algodex(props) {
               <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
             <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Global styles={styles} />
               <Provider dex={makeApi()}>
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <Toaster />
