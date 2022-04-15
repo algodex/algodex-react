@@ -120,10 +120,11 @@ export function useWalletConnect() {
       walletConnect.current.on('disconnect', handleDisconnect)
     }
     return () => {
-      console.log(walletConnect.current, 'curret value')
-      // walletConnect.current.off('connect')
-      // walletConnect.current.off('session_update')
-      // walletConnect.current.off('disconnect')
+      if (typeof walletConnect.current !== 'undefined') {
+        walletConnect.current.off('connect')
+        walletConnect.current.off('session_update')
+        walletConnect.current.off('disconnect')
+      }
     }
   }, [walletConnect.current])
   return { connect, disconnect }
