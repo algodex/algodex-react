@@ -1,7 +1,7 @@
 // import { BodyCopy, Typography, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
 import Tabs from '@/components/Tabs'
 import Tab from '@/components/Tab'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import AdvancedOptions from './Form/AdvancedOptions'
 import Slider from '@/components/Input/Slider'
 import Icon from '@/components/Icon/Icon'
@@ -11,7 +11,7 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import { default as MaterialBox } from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
-import { TabsUnstyled } from '@mui/base'
+// import { TabsUnstyled } from '@mui/base'
 import Tooltip from '@/components/Tooltip'
 // import { has } from 'lodash'
 import { lighten } from 'polished'
@@ -20,7 +20,8 @@ import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import Typography from '@mui/material/Typography'
 import { ButtonGroup } from '@mui/material'
-
+import { useAlgodex } from '@algodex/algodex-hooks'
+// import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 const IconTextContainer = styled.div`
   display: flex;
   align-items: center;
@@ -83,16 +84,35 @@ const IconButton = styled.button`
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, components: { Box } }) {
+export function PlaceOrderForm({
+  showTitle = true,
+  asset,
+  // wallet,
+  onSubmit,
+  components: { Box }
+}) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
+  const { order, setOrder, isConnected } = useAlgodex()
+  // console.log(`useAlgodex(`, { order, setOrder, isConnected, wallet }, `)`)
   const { t } = useTranslation('place-order')
-  const [order, setOrder] = useState({
-    type: 'buy',
-    price: 0,
-    amount: 0,
-    total: 0,
-    execution: 'both'
-  })
+  useEffect(() => {
+    if (typeof order === 'undefined') {
+      setOrder({
+        type: 'buy',
+        price: 0,
+        amount: 0,
+        total: 0,
+        execution: 'both'
+      })
+    }
+  }, [order])
+  // const [order, setOrder] = useState({
+  //   type: 'buy',
+  //   price: 0,
+  //   amount: 0,
+  //   total: 0,
+  //   execution: 'both'
+  // })
   // console.log(order)
   // useEffect(() => {
   //   setOrder({
@@ -155,6 +175,22 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, comp
     [setOrder, order]
   )
 
+  // const orderSliderSteps = useMemo(() => {
+  //   const difference = asset.decimals - 6
+  //   const lowestStep = 0.00001
+  //
+  //   if (difference > 0) {
+  //     return lowestStep * (difference * 10)
+  //   } else {
+  //     return wallet.amount/50
+  //   }
+  //
+  // }, [asset, wallet])
+  //
+  // const orderSliderMax = useMemo(() => {
+  //   return typeof wallet?.amount !== 'undefined' ? fromBaseUnits(wallet.amount) : 0
+  // }, [wallet, asset, orderSliderSteps])
+
   return (
     <Box
       sx={{
@@ -172,14 +208,14 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, comp
           </Typography>
         </header>
       )}
-      <form onSubmit={onSubmit} autoComplete="off">
-        <div className="w-full">
+      {typeof order !== 'undefined' && isConnected && (
+        <form onSubmit={onSubmit} autoComplete="off">
           <ButtonGroup fullWidth variant="contained">
             <MaterialButton
               disableElevation={order.type === 'buy'}
               disableRipple={true}
               variant="contained"
-              color={order.type === 'buy' ? 'primary' : 'secondary'}
+              color="buy"
               fullWidth
               sx={{
                 borderTopLeftRadius: '7px',
@@ -203,7 +239,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, comp
               disableRipple={true}
               disableElevation={order.type === 'sell'}
               variant="contained"
-              color={order.type === 'sell' ? 'error' : 'secondary'}
+              color="sell"
               fullWidth
               sx={{
                 borderTopLeftRadius: 0,
@@ -224,213 +260,215 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit, comp
               {t('sell')}
             </MaterialButton>
           </ButtonGroup>
-        </div>
 
-        <AvailableBalance>
-          <IconTextContainer style={{ marginBottom: '10px' }}>
-            <Typography variant="bodyCopyTiny" color="gray.500">
-              {t('available-balance')}
-            </Typography>
-            <Tooltip
-              renderButton={(setTriggerRef) => (
-                <IconButton ref={setTriggerRef} type="button">
-                  <Info />
-                </IconButton>
-              )}
-            >
-              <section className="flex items-center justify-between mb-1">
-                <Typography variant="labelMdSpaced" color="gray.300">
-                  {t('orders:available')}:
-                </Typography>
-                <IconTextContainer>
+          <AvailableBalance>
+            <IconTextContainer style={{ marginBottom: '10px' }}>
+              <Typography variant="bodyCopyTiny" color="gray.500">
+                {t('available-balance')}
+              </Typography>
+              <Tooltip
+                renderButton={(setTriggerRef) => (
+                  <IconButton ref={setTriggerRef} type="button">
+                    <Info />
+                  </IconButton>
+                )}
+              >
+                <section className="flex items-center justify-between mb-1">
                   <Typography variant="labelMdSpaced" color="gray.300">
-                    {wallet.amount}
+                    {t('orders:available')}:
                   </Typography>
-                  <Icon use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </section>
-              <BalanceRow>
-                <Typography variant="labelMdSpaced" color="gray.300">
-                  {t('total')}:
-                </Typography>
-                <IconTextContainer>
+                  <IconTextContainer>
+                    <Typography variant="labelMdSpaced" color="gray.300">
+                      {/*{fromBaseUnits(wallet.amount)}*/}
+                    </Typography>
+                    <Icon use="algoLogo" size={0.625} />
+                  </IconTextContainer>
+                </section>
+                <BalanceRow>
                   <Typography variant="labelMdSpaced" color="gray.300">
-                    {wallet.amount}
+                    {t('total')}:
                   </Typography>
-                  <Icon use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
-                <Typography
-                  variant="labelSmForm"
-                  component="span"
-                  color="gray.300"
-                  textTransform="initial"
-                >
-                  &nbsp;*
-                  {t('max-spend-explanation', {
-                    // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
-                  })}
-                </Typography>
-              </BalanceRow>
-            </Tooltip>
-          </IconTextContainer>
-          <BalanceRow>
-            <Typography variant="labelMdLight" color="gray.400">
-              ALGO
-            </Typography>
-            <Typography variant="labelMdLight" color="gray.300">
-              {wallet.amount}
-            </Typography>
-          </BalanceRow>
-          <BalanceRow>
-            <Typography variant="labelMdLight" color="gray.400">
-              <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
-              {asset.name || asset.id}
-            </Typography>
-            <Typography variant="labelMdLight" color="gray.300">
-              {/*{hasBalance && wallet?.assets[asset.id]?.balance}*/}
-            </Typography>
-          </BalanceRow>
-        </AvailableBalance>
+                  <IconTextContainer>
+                    <Typography variant="labelMdSpaced" color="gray.300">
+                      {/*{fromBaseUnits(wallet.amount)}*/}
+                    </Typography>
+                    <Icon use="algoLogo" size={0.625} />
+                  </IconTextContainer>
+                </BalanceRow>
+                <BalanceRow>
+                  <Typography
+                    variant="labelSmForm"
+                    component="span"
+                    color="gray.300"
+                    textTransform="initial"
+                  >
+                    &nbsp;*
+                    {t('max-spend-explanation', {
+                      // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
+                    })}
+                  </Typography>
+                </BalanceRow>
+              </Tooltip>
+            </IconTextContainer>
+            <BalanceRow>
+              <Typography variant="labelMdLight" color="gray.400">
+                ALGO
+              </Typography>
+              <Typography variant="labelMdLight" color="gray.300">
+                {/*{fromBaseUnits(wallet.amount)}*/}
+              </Typography>
+            </BalanceRow>
+            <BalanceRow>
+              <Typography variant="labelMdLight" color="gray.400">
+                <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
+                {asset.name || asset.id}
+              </Typography>
+              <Typography variant="labelMdLight" color="gray.300">
+                {/*{hasBalance && wallet?.assets[asset.id]?.balance}*/}
+              </Typography>
+            </BalanceRow>
+          </AvailableBalance>
 
-        <TabsUnstyled sx={{ width: '100%' }}>
+          {/*<TabsUnstyled sx={{ width: '100%' }} >*/}
           <Tabs
-            style={{ marginBottom: '16px' }}
+            sx={{ marginBottom: '16px' }}
             textColor="primary"
             onChange={handleChange}
             aria-label="secondary tabs example"
+            value={order.execution === 'market' ? 1 : 0}
           >
-            <Tab label={t('limit')} />
+            <Tab label={t('limit')} index={0} />
+            <Tab label={t('market')} index={1} />
           </Tabs>
-        </TabsUnstyled>
-        {/*{!hasBalance && (*/}
-        {/*  <Typography variant="bodyCopy" color="gray.500" textAlign="center" m={32}>*/}
-        {/*    {t('insufficient-balance')}*/}
-        {/*  </Typography>*/}
-        {/*)}*/}
-        {/*{hasBalance && (*/}
-        <MaterialBox className="flex flex-col mb-4">
-          <OutlinedInput
-            sx={{
-              backgroundColor: theme.colors.gray['900'],
-              border: 2,
-              borderColor: theme.colors.gray['700'],
-              marginBottom: '1rem'
-            }}
-            inputProps={{
-              name: 'price',
-              type: 'number',
-              // pattern: 'd*',
-              autocomplete: false,
-              min: 0,
-              step: 0.000001,
-              inputMode: 'decimal'
-            }}
-            name="price"
-            type="number"
-            pattern="\d*"
-            value={order.price}
-            onChange={(e) => handleChange(e)}
-            startAdornment={
-              <MUIInputAdornment position="start">
-                <span className="text-sm font-bold text-gray-500">{t('price')}</span>
-              </MUIInputAdornment>
-            }
-            endAdornment={
-              <MUIInputAdornment position="end">
-                <span className="text-sm font-bold text-gray-500">ALGO</span>
-              </MUIInputAdornment>
-            }
-          />
-          <OutlinedInput
-            id="amount"
-            type="number"
-            pattern="\d*"
-            name="amount"
-            sx={{
-              backgroundColor: theme.colors.gray['900'],
-              border: 2,
-              borderColor: theme.colors.gray['700'],
-              marginBottom: '1rem'
-            }}
-            value={order.amount}
-            onChange={handleChange}
-            autocomplete="false"
-            min="0"
-            // step={new Big(10).pow(-1 * asset.decimals).toString()}
-            inputMode="decimal"
-            startAdornment={
-              <MUIInputAdornment position="start">
-                <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
-              </MUIInputAdornment>
-            }
-            endAdornment={
-              <MUIInputAdornment position="end">
-                <span className="text-sm font-bold text-gray-500">{asset.name}</span>
-              </MUIInputAdornment>
-            }
-          />
-          <Slider
-            sx={{
-              margin: '0px 0.5rem',
-              width: '95%'
-            }}
-            // txnFee={txnFee}
-            onChange={(e) => handleChange(e)}
-            name="amount"
-            value={order.amount}
-            marks={true}
-            step={10}
-            min={0}
-            max={100}
-          />
-          <OutlinedInput
-            id="total"
-            name="total"
-            type="text"
-            value={order.amount * order.price}
-            readOnly
-            disabled
-            startAdornment={
-              <MUIInputAdornment position="start">
-                <span className="text-sm font-bold text-gray-500">{t('total')}</span>
-              </MUIInputAdornment>
-            }
-            endAdornment={
-              <MUIInputAdornment position="end">
-                <span className="text-sm font-bold text-gray-500">ALGO</span>
-              </MUIInputAdornment>
-            }
-          />
-          {/* <TxnFeeContainer>
+          {/*</TabsUnstyled>*/}
+          {/*{!hasBalance && (*/}
+          {/*  <Typography variant="bodyCopy" color="gray.500" textAlign="center" m={32}>*/}
+          {/*    {t('insufficient-balance')}*/}
+          {/*  </Typography>*/}
+          {/*)}*/}
+          {/*{hasBalance && (*/}
+          <MaterialBox className="flex flex-col mb-4">
+            <OutlinedInput
+              sx={{
+                backgroundColor: theme.palette.gray['900'],
+                border: 2,
+                borderColor: theme.palette.gray['700'],
+                marginBottom: '1rem'
+              }}
+              inputProps={{
+                name: 'price',
+                type: 'number',
+                // pattern: 'd*',
+                autocomplete: false,
+                min: 0,
+                step: 0.000001,
+                inputMode: 'decimal'
+              }}
+              name="price"
+              type="number"
+              pattern="\d*"
+              value={order.price}
+              onChange={(e) => handleChange(e)}
+              startAdornment={
+                <MUIInputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('price')}</span>
+                </MUIInputAdornment>
+              }
+              endAdornment={
+                <MUIInputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">ALGO</span>
+                </MUIInputAdornment>
+              }
+            />
+            <OutlinedInput
+              id="amount"
+              type="number"
+              pattern="\d*"
+              name="amount"
+              sx={{
+                backgroundColor: theme.colors.gray['900'],
+                border: 2,
+                borderColor: theme.colors.gray['700'],
+                marginBottom: '1rem'
+              }}
+              value={order.amount}
+              onChange={handleChange}
+              autocomplete="false"
+              min="0"
+              // step={new Big(10).pow(-1 * asset.decimals).toString()}
+              inputMode="decimal"
+              startAdornment={
+                <MUIInputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
+                </MUIInputAdornment>
+              }
+              endAdornment={
+                <MUIInputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">{asset.name}</span>
+                </MUIInputAdornment>
+              }
+            />
+            <Slider
+              sx={{
+                margin: '0px 0.5rem',
+                width: '95%'
+              }}
+              // txnFee={txnFee}
+              onChange={(e) => handleChange(e)}
+              name="amount"
+              value={order.amount}
+              marks={true}
+              step={10}
+              min={0}
+              max={100}
+            />
+            <OutlinedInput
+              id="total"
+              name="total"
+              type="text"
+              value={order.amount * order.price}
+              readOnly
+              disabled
+              startAdornment={
+                <MUIInputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('total')}</span>
+                </MUIInputAdornment>
+              }
+              endAdornment={
+                <MUIInputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">ALGO</span>
+                </MUIInputAdornment>
+              }
+            />
+            {/* <TxnFeeContainer>
                 <Typography color="gray.500" textTransform="none">
                   Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
                   {txnFee.toFixed(3)}
                 </Typography>
               </TxnFeeContainer> */}
-          <AdvancedOptions
-            order={order}
-            // onChange={handleOptionsChange}
-            allowTaker={typeof asset !== 'undefined'}
-          />
-        </MaterialBox>
-        {/*)}*/}
-        <MaterialButton
-          type="submit"
-          variant="contained"
-          sx={{
-            backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
-            '&:hover': {
-              backgroundColor:
-                order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
-            }
-          }}
-          disabled={order.valid}
-        >
-          {buttonProps[order.type || 'buy']?.text}
-        </MaterialButton>
-      </form>
+            <AdvancedOptions
+              order={order}
+              // onChange={handleOptionsChange}
+              allowTaker={typeof asset !== 'undefined'}
+            />
+          </MaterialBox>
+          {/*)}*/}
+          <MaterialButton
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
+              '&:hover': {
+                backgroundColor:
+                  order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
+              }
+            }}
+            disabled={order.valid}
+          >
+            {buttonProps[order.type || 'buy']?.text}
+          </MaterialButton>
+        </form>
+      )}
     </Box>
   )
 }
@@ -454,7 +492,7 @@ PlaceOrderForm.propTypes = {
    */
   wallet: PropTypes.shape({
     amount: PropTypes.number.isRequired,
-    assets: PropTypes.objectOf(PropTypes.shape({ amount: PropTypes.number })),
+    assets: PropTypes.arrayOf(PropTypes.shape({ amount: PropTypes.number })),
     connector: PropTypes.object
   }),
   /**

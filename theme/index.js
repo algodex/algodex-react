@@ -245,6 +245,18 @@ const theme = {
       dark: colors.gray['100'],
       contrastText: 'white'
     },
+    buy: {
+      main: colors.green['600'],
+      light: colors.green['400'],
+      dark: colors.green['900'],
+      contrastText: 'white'
+    },
+    sell: {
+      main: colors.red['600'],
+      light: colors.red['400'],
+      dark: colors.red['900'],
+      contrastText: 'white'
+    },
     background: {
       paper: colors.gray['800'],
       default: colors.gray['800']
