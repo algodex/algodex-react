@@ -23,15 +23,13 @@ const SortIcon = styled(Icon)`
 const Container = styled.div`
   // min-width: 600px;
   // overflow: hidden;
-
+  display: flex;
+  height: 100%;
   table {
     position: relative;
     border-spacing: 0;
     border: none;
     width: 100%;
-    @media only (min-width: 996px) {
-      min-width: unset;
-    }
 
     & ::-webkit-scrollbar {
       display: none;
@@ -43,14 +41,14 @@ const Container = styled.div`
         // cursor: pointer;
       }
 
-      &:nth-child(odd) {
+      &:nth-of-type(odd) {
         td {
           background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.01)};
         }
       }
 
-      &:nth-child(odd),
-      &:nth-child(even) {
+      &:nth-of-type(odd),
+      &:nth-of-type(even) {
         &:hover {
           td {
             background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.04)};
@@ -67,20 +65,21 @@ const Container = styled.div`
       font-size: 0.75rem;
       line-height: 1.25;
 
-      &:first-child {
+      &:first-of-type {
         padding-left: 1.125rem;
         box-sizing: border-box;
         flex: 45 0 auto;
         min-width: 45px;
         width: 45px;
       }
-      padding-right: 0.5rem;
     }
 
     thead {
       position: sticky;
       tr {
+        border: none;
         th {
+          border: none;
           position: sticky;
           top: 0;
           padding: 0.75rem 0.4rem;
@@ -91,11 +90,13 @@ const Container = styled.div`
           font-weight: 500;
           user-select: none;
           white-space: nowrap;
-          padding-right: 0.5rem;
         }
       }
     }
     tbody {
+      tr {
+        border: 0;
+      }
       position: absolute;
       width: 100%;
       height: 29.7rem;
