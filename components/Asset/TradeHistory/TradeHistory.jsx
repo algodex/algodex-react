@@ -15,7 +15,7 @@ import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 dayjs.extend(localizedFormat)
 
 const Container = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -29,14 +29,14 @@ const gridStyles = `
 `
 
 const Header = styled.header`
-  flex-shrink: 0%;
+  flex-shrink: 0;
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem 0.75rem;
+  ${gridStyles}
 `
 
 const Trades = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
   /* width */
@@ -63,7 +63,7 @@ const Trades = styled.div`
 `
 
 const TradesWrapper = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -73,11 +73,10 @@ const TradesWrapper = styled.div`
 
 const TradesRow = styled.div`
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
-
+  ${gridStyles}
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buyASA' ? 'green' : 'red'
@@ -85,14 +84,14 @@ const TradesRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
 `
 
-const PriceHeaderText = styled(Typography)`
+const PriceHeaderText = styled.div`
   display: flex;
   align-items: center;
   margin: 0;
