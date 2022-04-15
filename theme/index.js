@@ -223,20 +223,31 @@ export const buttons = {
 export const parseThemeColor = (str) => {
   return str.split('.').reduce((o, i) => o[i], colors)
 }
-
-const theme = createTheme({
+const muiTheme = createTheme()
+const theme = {
+  ...muiTheme,
   background: colors.gray['800'],
   textStyles,
   fontSizes,
   fontFamilies,
   buttons,
   palette: {
+    ...muiTheme.palette,
     primary: {
-      main: colors.gray['800']
+      main: colors.gray['800'],
+      light: colors.gray['400'],
+      dark: colors.gray['900'],
+      contrastText: 'white'
+    },
+    secondary: {
+      main: colors.gray['100'],
+      light: colors.gray['100'],
+      dark: colors.gray['100'],
+      contrastText: 'white'
     },
     background: {
-      light: colors.gray['000'],
-      dark: colors.gray['800']
+      paper: colors.gray['800'],
+      default: colors.gray['800']
     },
     focus: {
       green: '#4b9064',
@@ -255,7 +266,7 @@ const theme = createTheme({
       red: '#b23639'
     }
   }
-})
+}
 
 // theme.breakpoints = breakpoints
 export default theme
