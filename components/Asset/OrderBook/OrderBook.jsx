@@ -18,7 +18,7 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
 const FirstOrderContainer = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -28,7 +28,7 @@ const FirstOrderContainer = styled.div`
 
 const EmptyState = styled.div`
   position: relative;
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,7 +107,7 @@ FirstOrderMsg.propTypes = {
 }
 
 const Container = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
 
@@ -126,7 +126,7 @@ const gridStyles = `
 `
 
 const Header = styled.header`
-  flex-shrink: 0%;
+  flex-shrink: 0;
   display: grid;
   padding: 0 0.5rem 0.75rem;
   ${gridStyles}
@@ -134,11 +134,10 @@ const Header = styled.header`
 
 const BookRow = styled.div`
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
-
+  ${gridStyles}
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buy' ? 'green' : 'red'
@@ -146,7 +145,7 @@ const BookRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
@@ -161,29 +160,32 @@ const OrdersWrapper = styled.div`
 `
 
 const SellOrders = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
   display: flex;
   flex-direction: column-reverse;
   /* width */
+
   ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     display: none;
   }
 `
 
 const BuyOrders = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
 
   ${OrdersWrapper} {
     right: 0;
   }
+
   /* width */
+
   ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     display: none;
   }
 `
@@ -409,7 +411,7 @@ OrderBook.propTypes = {
     sell: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
         total: PropTypes.number.isRequired
       })
     ),
@@ -419,14 +421,14 @@ OrderBook.propTypes = {
     buy: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
         total: PropTypes.number.isRequired
       })
     )
   }),
-  components: {
+  components: PropTypes.shape({
     PriceDisplay: PropTypes.elementType.isRequired
-  }
+  })
 }
 
 OrderBook.defaultProps = {
