@@ -1,19 +1,23 @@
-import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
-import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
+import { copyAddress, truncatedWalletAddress } from 'components/helpers'
+import { filter, find } from 'lodash'
+import { useMemo, useState } from 'react'
 
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Button from '@mui/material/Button'
 import DropdownBody from './DropdownBody'
+import DropdownFooter from './DropdownFooter'
+import DropdownHeader from './DropdownHeader'
 import Icon from 'components/Icon/Icon'
 import MaterialIcon from '@mdi/react'
+import Modal from 'components/Modal'
 import MuiAccordion from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
+import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useState } from 'react'
 
 const Container = styled.div`
   width: 100%;
@@ -21,7 +25,7 @@ const Container = styled.div`
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
+))(() => ({
   backgroundColor: 'unset',
   position: 'unset',
   transition: 'margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
@@ -32,7 +36,7 @@ const Accordion = styled((props) => (
 
 const AccordionSummary = styled((props) => (
   <MuiAccordionSummary disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
+))(() => ({
   margin: 'unset',
   minHeight: 'unset',
   padding: 'unset',
@@ -43,16 +47,72 @@ const AccordionSummary = styled((props) => (
   }
 }))
 
+const ModalContainer = styled.div`
+  transform: translate(-50%, -50%);
+  @media (max-width: 992px) {
+    width: 90%;
+    transform: translate(-50%, -65%);
+    overflow-y: auto;
+    max-height: 100%;
+  }
+`
+
 const MobileWalletRender = () => {
   const { addresses, wallet } = useAlgodex()
   const [expanded, setExpanded] = useState(false)
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+  const [isDisconnectingWallet, setIsDisconnectingWallet] = useState(false)
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
 
+  const sortedWalletsList = useMemo(() => {
+    if (addresses) {
+      const activeWallet = find(addresses, (o) => o.address === wallet?.address)
+      const inactiveWallet = filter(addresses, (o) => o.address !== wallet?.address)
+      console.log(activeWallet, inactiveWallet, 'hey')
+      return {
+        activeWallet,
+        inactiveWallet
+      }
+    }
+  }, [addresses, wallet])
+
+  const renderWalletOptionsList = () => {
+    return (
+      <Modal data-testid="notification-modal-wrapper" isVisible={isConnectingWallet}>
+        <ModalContainer
+          className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg xs:p-4 md:p-8"
+          style={{ transform: 'translate(-50%, -50%)' }}
+        >
+          <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
+          <WalletOptionsList />
+          <DropdownFooter />
+        </ModalContainer>
+      </Modal>
+    )
+  }
+
+  const renderAddressesList = () => {
+    return (
+      <Modal data-testid="notification-modal-wrapper" isVisible={isDisconnectingWallet}>
+        <ModalContainer
+          className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg xs:p-4 md:p-8"
+          style={{ transform: 'translate(-50%, -50%)' }}
+        >
+          <DropdownHeader closeFn={() => setIsDisconnectingWallet(false)} />
+          <DropdownBody
+            activeWalletAddress={wallet?.address}
+            sortedWalletsList={sortedWalletsList}
+          />
+          <DropdownFooter />
+        </ModalContainer>
+      </Modal>
+    )
+  }
+
   const renderAssets = (assets, address) => {
-    // console.log(assets, 'assets here')
     return assets.map((asset, idx) => {
       return (
         <div
@@ -72,7 +132,6 @@ const MobileWalletRender = () => {
           <AccordionSummary
             expandIcon={
               <MaterialIcon
-                onClick={() => copyAddress(addr.address)}
                 path={mdiChevronDown}
                 title="Copy Address"
                 size={0.8}
@@ -106,87 +165,64 @@ const MobileWalletRender = () => {
               </div>
             </div>
           </AccordionSummary>
-          <AccordionDetails>
-            {/* {truncatedWalletAddress(addr.address, 4)} */}
-            {renderAssets(addr.assets, addr.address)}
-          </AccordionDetails>
+          <AccordionDetails>{renderAssets(addr.assets, addr.address)}</AccordionDetails>
         </Accordion>
       )
-      // return (
-      //   <div
-      //     key={idx}
-      //     className={`${
-      //       wallet.address !== addr.address && 'opacity-40'
-      //     } font-medium flex justify-between my-2`}
-      //   >
-      //     <div className="flex items-center">
-      //       <Icon
-      //         color="gray"
-      //         fillGradient="000"
-      //         onClick={() => copyAddress(addr.address)}
-      //         use="wallet"
-      //         size={0.75}
-      //       />
-      //       &nbsp;
-      //       <div className="text-sm text-white">{truncatedWalletAddress(addr.address, 4)}</div>
-      //     </div>
-      //     <div className="flex items-center">
-      //       <div>{addr.amount}</div>&nbsp;
-      //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-      //     </div>
-      //   </div>
-      // )
     })
   }
   return (
-    <Container className="flex justify-between flex-col px-3">
-      <div>
+    <Container>
+      <div style={{ height: '100%' }} className="flex justify-between flex-col px-3">
         <div>
-          <div className="flex flex-col justify-between">
-            <Button
-              className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-              variant="contained"
-              style={{
-                backgroundColor: theme.colors.gray['700']
-              }}
-              //   onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-            >
-              CONNECT WALLET
-            </Button>
-            <Button
-              className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-              variant="contained"
-              style={{
-                backgroundColor: theme.colors.gray['700']
-              }}
-              //   onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-            >
-              DISCONNECT A WALLET
-            </Button>
-          </div>
-        </div>
-        <div>
-          <div className="flex justify-between text-sm mt-4">
-            <p>WALLET NAME</p>
-            <p>BALANCE</p>
-          </div>
-          {(!addresses || !addresses.length) && (
-            <div>
-              <p className="text-sm text-center mt-4">
-                No wallets connected yet. <br />
-                Connect a wallet with the button above.
-              </p>
+          <div>
+            <div className="flex flex-col justify-between">
+              <Button
+                className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+                variant="contained"
+                style={{
+                  backgroundColor: theme.colors.gray['700']
+                }}
+                onClick={() => setIsConnectingWallet(true)}
+              >
+                CONNECT {addresses && addresses.length && 'ANOTHER'} WALLET
+              </Button>
+              <Button
+                className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+                variant="contained"
+                style={{
+                  backgroundColor: theme.colors.gray['700']
+                }}
+                onClick={() => setIsDisconnectingWallet(true)}
+              >
+                DISCONNECT A WALLET
+              </Button>
             </div>
-          )}
-          {addresses && addresses.length && renderWalletAddresses()}
+          </div>
+          <div>
+            <div className="flex justify-between text-sm mt-4">
+              <p>WALLET NAME</p>
+              <p>BALANCE</p>
+            </div>
+            {(!addresses || !addresses.length) && (
+              <div>
+                <p className="text-sm text-center mt-4">
+                  No wallets connected yet. <br />
+                  Connect a wallet with the button above.
+                </p>
+              </div>
+            )}
+            {addresses && addresses.length && renderWalletAddresses()}
+          </div>
+        </div>
+        <div>
+          <p className="text-sm text-center mb-4 px-4">
+            Active wallet is in white. Tap on an additional wallet to switch it to active. Tap on
+            arrow to expand list and see current holdings.
+          </p>
         </div>
       </div>
-      <div>
-        <p className="text-sm text-center mb-4 px-4">
-          Active wallet is in white. Tap on an additional wallet to switch it to active. Tap on
-          arrow to expand list and see current holdings.
-        </p>
-      </div>
+      {renderWalletOptionsList()}
+      {renderAddressesList()}
     </Container>
   )
 }
