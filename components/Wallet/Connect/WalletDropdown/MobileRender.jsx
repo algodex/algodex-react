@@ -51,7 +51,20 @@ const MobileWalletRender = () => {
     setExpanded(isExpanded ? panel : false)
   }
 
-  const renderAssets = () => {}
+  const renderAssets = (assets, address) => {
+    // console.log(assets, 'assets here')
+    return assets.map((asset, idx) => {
+      return (
+        <div
+          key={idx}
+          className={`${wallet.address !== address && 'opacity-40'} flex justify-between  my-2`}
+        >
+          <div>{asset['asset-id']}</div>
+          <div>{asset.amount}</div>
+        </div>
+      )
+    })
+  }
   const renderWalletAddresses = () => {
     return addresses.map((addr, idx) => {
       return (
@@ -59,7 +72,7 @@ const MobileWalletRender = () => {
           <AccordionSummary
             expandIcon={
               <MaterialIcon
-                // onClick={() => copyAddress(address)}
+                onClick={() => copyAddress(addr.address)}
                 path={mdiChevronDown}
                 title="Copy Address"
                 size={0.8}
@@ -93,7 +106,10 @@ const MobileWalletRender = () => {
               </div>
             </div>
           </AccordionSummary>
-          <AccordionDetails>{truncatedWalletAddress(addr.address, 4)}</AccordionDetails>
+          <AccordionDetails>
+            {/* {truncatedWalletAddress(addr.address, 4)} */}
+            {renderAssets(addr.assets, addr.address)}
+          </AccordionDetails>
         </Accordion>
       )
       // return (
