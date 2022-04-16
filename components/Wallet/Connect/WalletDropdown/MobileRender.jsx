@@ -100,14 +100,16 @@ const MobileWalletRender = () => {
     return (
       <Modal data-testid="notification-modal-wrapper" isVisible={isDisconnectingWallet}>
         <ModalContainer
-          className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg"
+          className="absolute top-2/4 left-2/4 text-white bg-gray-700 rounded-lg"
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           <DropdownHeader closeFn={() => setIsDisconnectingWallet(false)} />
-          <DropdownBody
-            activeWalletAddress={wallet?.address}
-            sortedWalletsList={sortedWalletsList}
-          />
+          <div className="bg-gray-700">
+            <DropdownBody
+              activeWalletAddress={wallet?.address}
+              sortedWalletsList={sortedWalletsList}
+            />
+          </div>
           <DropdownFooter />
         </ModalContainer>
       </Modal>
@@ -115,7 +117,7 @@ const MobileWalletRender = () => {
   }
 
   const renderAssets = (assets, address) => {
-    return assets.map((asset, idx) => {
+    return assets?.map((asset, idx) => {
       return (
         <div
           key={idx}
