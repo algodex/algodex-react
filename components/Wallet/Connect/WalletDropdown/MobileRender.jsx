@@ -12,7 +12,7 @@ import MaterialIcon from '@mdi/react'
 import Modal from 'components/Modal'
 import MuiAccordion from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
@@ -83,11 +83,13 @@ const MobileWalletRender = () => {
     return (
       <Modal data-testid="notification-modal-wrapper" isVisible={isConnectingWallet}>
         <ModalContainer
-          className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg xs:p-4 md:p-8"
+          className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
-          <WalletOptionsList />
+          <div className="px-2 py-4 bg-gray-600">
+            <WalletOptionsList />
+          </div>
           <DropdownFooter />
         </ModalContainer>
       </Modal>
@@ -98,7 +100,7 @@ const MobileWalletRender = () => {
     return (
       <Modal data-testid="notification-modal-wrapper" isVisible={isDisconnectingWallet}>
         <ModalContainer
-          className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg xs:p-4 md:p-8"
+          className="absolute top-2/4 left-2/4 text-white bg-gray-600 rounded-lg"
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           <DropdownHeader closeFn={() => setIsDisconnectingWallet(false)} />
@@ -186,16 +188,18 @@ const MobileWalletRender = () => {
               >
                 CONNECT {addresses && addresses.length && 'ANOTHER'} WALLET
               </Button>
-              <Button
-                className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-                variant="contained"
-                style={{
-                  backgroundColor: theme.colors.gray['700']
-                }}
-                onClick={() => setIsDisconnectingWallet(true)}
-              >
-                DISCONNECT A WALLET
-              </Button>
+              {addresses && addresses.length && (
+                <Button
+                  className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+                  variant="contained"
+                  style={{
+                    backgroundColor: theme.colors.gray['700']
+                  }}
+                  onClick={() => setIsDisconnectingWallet(true)}
+                >
+                  DISCONNECT A WALLET
+                </Button>
+              )}
             </div>
           </div>
           <div>
