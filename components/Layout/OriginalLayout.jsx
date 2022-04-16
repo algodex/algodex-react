@@ -279,8 +279,8 @@ function MainLayout({ asset, children }) {
     <MainWrapper>
       <Main ref={gridRef}>
         <WalletSection active={activeMobile === TABS.WALLET}>
-          {/* <Wallet /> */}
-          <MobileWallet />
+          {!isMobile && <Wallet />}
+          {isMobile && <MobileWallet />}
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
           {isConnected && <PlaceOrder asset={asset} wallet={wallet} onSubmit={placeOrder} />}
