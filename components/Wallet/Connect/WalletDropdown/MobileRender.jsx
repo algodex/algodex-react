@@ -196,9 +196,9 @@ const MobileWalletRender = () => {
                 variant="contained"
                 onClick={() => setIsConnectingWallet(true)}
               >
-                CONNECT {addresses && addresses.length && 'ANOTHER'} WALLET
+                CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
               </Button>
-              {addresses && addresses.length && (
+              {addresses && addresses.length > 0 && (
                 <Button
                   className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
                   variant="contained"
@@ -214,7 +214,7 @@ const MobileWalletRender = () => {
               <p>WALLET NAME</p>
               <p>BALANCE</p>
             </div>
-            {(!addresses || !addresses.length) && (
+            {(!addresses || !addresses.length > 0) && (
               <div>
                 <p className="text-sm text-center mt-8 font-medium text-white">
                   No wallets connected yet. <br />
@@ -222,7 +222,7 @@ const MobileWalletRender = () => {
                 </p>
               </div>
             )}
-            {addresses && addresses.length && renderWalletAddresses()}
+            {addresses && addresses.length > 0 && renderWalletAddresses()}
           </div>
         </div>
         <div>

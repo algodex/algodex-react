@@ -5,14 +5,13 @@ import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import { useWalletConnect } from '@/hooks/useWalletConnect'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
-  const connect = useMyAlgoConnect()
+  const { connect } = useMyAlgoConnect()
   const { connect: peraConnect } = useWalletConnect()
   // const peraWallet = useWalletConnect()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': connect,
-    'pera-wallet': peraConnect
-    // 'pera-wallet': () => console.log('Hello')
+    'wallet-connect': peraConnect
   }
   return (
     <>
@@ -38,7 +37,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             role="button"
             tabIndex="0"
             className="cursor-pointer flex items-center mb-2"
-            onClick={() => WALLETS_CONNECT_MAP['pera-wallet']()}
+            onClick={() => WALLETS_CONNECT_MAP['wallet-connect']()}
             onKeyPress={() => console.log('key pressed')}
           >
             <Image

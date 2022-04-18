@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import { find } from 'lodash'
 import theme from 'theme'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
 import { useWalletConnect } from '@/hooks/useWalletConnect'
 
@@ -15,6 +16,7 @@ const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { wallet, setWallet, addresses } = useAlgodex()
   const { disconnect: peraDisconnect } = useWalletConnect()
+  const { disconnect: disconnectMyAlgoWallet } = useMyAlgoConnect()
 
   const isWalletActive = (addr) => {
     return wallet.address === addr
@@ -28,7 +30,7 @@ const InactiveWalletsList = ({ walletsList }) => {
   }
 
   const WALLETS_DISCONNECT_MAP = {
-    'my-algo-wallet': () => console.log('Disconnect Pera Wallet'),
+    'my-algo-wallet': disconnectMyAlgoWallet,
     'wallet-connect': peraDisconnect
   }
 

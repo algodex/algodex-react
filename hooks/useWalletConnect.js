@@ -83,6 +83,11 @@ export function useWalletConnect() {
           algodex.addresses.filter((addr) => addr.type !== 'wallet-connect'),
           { merge: false, validate: false }
         )
+        if (algodex.addresses.length) {
+          setWallet(algodex.addresses[0], { validate: false, merge: true })
+        } else {
+          setWallet(undefined, { validate: false, merge: true })
+        }
       }
     },
     [setAddresses, algodex.addresses]
@@ -107,7 +112,7 @@ export function useWalletConnect() {
       connector: walletConnect.current,
       address: acct
     }))
-
+    console.log('connected here')
     setAddresses(_addresses, { merge: true, validate: false })
 
     QRCodeModal.close()
