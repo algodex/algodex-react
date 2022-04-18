@@ -85,8 +85,6 @@ export function useWalletConnect() {
         )
         if (algodex.addresses.length) {
           setWallet(algodex.addresses[0], { validate: false, merge: true })
-        } else {
-          setWallet(undefined, { validate: false, merge: true })
         }
       }
     },
