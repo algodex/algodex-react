@@ -7,7 +7,7 @@ import { MobileNavigation } from './header.css'
 
 jest.mock('next/dist/client/router', () => require('next-router-mock'))
 expect.extend(matchers)
-describe('Header', () => {
+describe.skip('Header', () => {
   it('should render the container', () => {
     const { queryByTestId } = render(<Header router={singletonRouter} />)
     expect(queryByTestId('header-container')).toBeVisible()
