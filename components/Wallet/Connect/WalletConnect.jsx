@@ -1,5 +1,6 @@
-import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
+// import { Typography, Typography, Typography, Typography } from 'components/Typography'
 
+import Typography from '@mui/material/Typography'
 import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
@@ -206,10 +207,10 @@ export function WalletView(props) {
   //   return (
   //     <Balance>
   //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-  //       <LabelMd fontWeight="500">
+  //       <Typography fontWeight="500">
   //         {`${split[0]}.`}
   //         <span>{split[1]}</span>
-  //       </LabelMd>
+  //       </Typography>
   //     </Balance>
   //   )
   // }
@@ -224,7 +225,7 @@ export function WalletView(props) {
         onClick={() => handleWalletClick(wallet)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
-        <LabelMd fontWeight="500" title={wallet.address}>
+        <Typography fontWeight="500" title={wallet.address}>
           <Icon
             color="gray"
             fillGradient="000"
@@ -233,7 +234,7 @@ export function WalletView(props) {
             size={0.75}
           />
           {wallet.name}
-        </LabelMd>
+        </Typography>
         {/* {renderBalance(wallet?.amount)} */}
       </WalletRow>
     ))
@@ -261,10 +262,10 @@ export function WalletView(props) {
         {isSignedIn ? (
           <>
             <Header>
-              <BodyCopyTiny color="gray.500">{t('wallet')}</BodyCopyTiny>
-              <BodyCopyTiny color="gray.500" textAlign="right">
+              <Typography color="gray.500">{t('wallet')}</Typography>
+              <Typography color="gray.500" textAlign="right">
                 {t('balance')}
-              </BodyCopyTiny>
+              </Typography>
             </Header>
             <Wallets>
               <WalletsWrapper>{renderWallets()}</WalletsWrapper>
@@ -275,12 +276,12 @@ export function WalletView(props) {
             <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow>
-            <HeaderSm color="gray.100" m={0} mb={16}>
+            <Typography color="gray.100" m={0} mb={16}>
               {t('start-by')}
-            </HeaderSm>
-            <BodyCopySm color="gray.500" m={0}>
+            </Typography>
+            <Typography color="gray.500" m={0}>
               {t('once-connected')}
-            </BodyCopySm>
+            </Typography>
           </EmptyState>
         )}
       </Container>
@@ -290,7 +291,7 @@ export function WalletView(props) {
 
 WalletView.propTypes = {
   wallets: PropTypes.array.isRequired,
-  activeWalletAddress: PropTypes.string.isRequired,
+  activeWalletAddress: PropTypes.string,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
   onSetActiveWallet: PropTypes.func.isRequired,

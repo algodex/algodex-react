@@ -1,7 +1,7 @@
 import { ArrowLeft, ExternalLink } from 'react-feather'
-import { BodyCopy, BodyCopyTiny, HeaderLg } from '@/components/Typography'
+// import { Typography, Typography, Typography } from '@/components/Typography'
 import { Fragment, useCallback } from 'react'
-
+import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import SvgImage from '@/components/SvgImage'
@@ -149,9 +149,9 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy data-testid="asset-url" as="span">
+            <Typography data-testid="asset-url" as="span">
               {asset.url}
-            </BodyCopy>
+            </Typography>
           </a>
         </AssetUrl>
       )
@@ -171,80 +171,80 @@ export function AssetInfo({ asset }) {
           </button>
         ) : null}
         <HeaderContainer>
-          <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>
+          <Typography data-testid="asset-info-asa-name" color="gray.100" mb={2}>
             {renderName()}
-          </HeaderLg>
+          </Typography>
           {renderLink()}
         </HeaderContainer>
         <InfoList>
           <InfoItem>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography as="dt" color="gray.500">
               {t('description')}
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
               data-testid="asset-info-desc"
               as="dd"
               fontFamily={theme.fontFamilies.heading}
               fontWeight="400"
             >
               {description}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography as="dt" color="gray.500">
               {t('circulating-supply')}
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
               data-testid="asset-info-circ-supply"
               as="dd"
               fontFamily={theme.fontFamilies.monospace}
               fontSize="1.25rem"
             >
               {asset.circulating || 'NA'}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography as="dt" color="gray.500">
               {t('total-supply')}
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
               data-testid="asset-info-total-supply"
               as="dd"
               fontFamily={theme.fontFamilies.monospace}
               fontSize="1.25rem"
             >
               {asset.total}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography as="dt" color="gray.500">
               ASA ID
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
               data-testid="asset-info-asa-id"
               as="dd"
               fontFamily={theme.fontFamilies.monospace}
               fontSize="1.25rem"
             >
               {asset.id}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           {/*<InfoItem>*/}
-          {/*  <BodyCopyTiny as="dt" color="gray.500">*/}
+          {/*  <Typography as="dt" color="gray.500">*/}
           {/*    {t('total-transactions')}*/}
-          {/*  </BodyCopyTiny>*/}
-          {/*  <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
+          {/*  </Typography>*/}
+          {/*  <Typography as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
           {/*    {asset.txns}*/}
-          {/*  </BodyCopy>*/}
+          {/*  </Typography>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
           {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
-                <BodyCopyTiny as="dt" color="gray.500">
+                <Typography as="dt" color="gray.500">
                   Price
-                </BodyCopyTiny>
-                <BodyCopy
+                </Typography>
+                <Typography
                   data-testid="asset-info-price"
                   as="dd"
                   fontFamily={theme.fontFamilies.monospace}
@@ -256,20 +256,20 @@ export function AssetInfo({ asset }) {
                       : asset?.price_info.price
                   )}{' '}
                   ALGO
-                </BodyCopy>
+                </Typography>
               </InfoItem>
               <InfoItem>
-                <BodyCopyTiny as="dt" color="gray.500">
+                <Typography as="dt" color="gray.500">
                   Change
-                </BodyCopyTiny>
-                <BodyCopy
+                </Typography>
+                <Typography
                   data-testid="asset-info-pct-change"
                   as="dd"
                   fontFamily={theme.fontFamilies.monospace}
                   fontSize="1.25rem"
                 >
                   {asset?.price_info.price24Change}%
-                </BodyCopy>
+                </Typography>
               </InfoItem>
             </Fragment>
           ) : null}

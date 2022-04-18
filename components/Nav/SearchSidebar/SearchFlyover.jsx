@@ -1,6 +1,6 @@
-import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/Typography'
+// import { Typography, Typography, Typography } from 'components/Typography'
 import { lighten, rgba } from 'polished'
-
+import Typography from '@mui/material/Typography'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import SvgImage from 'components/SvgImage'
@@ -71,12 +71,12 @@ export function SearchFlyover(props) {
 
     return (
       <InfoItem halfWidth>
-        <BodyCopyTiny as="dt" color="gray.500">
+        <Typography as="dt" color="gray.500">
           {t('24-hr-change')}
-        </BodyCopyTiny>
-        <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem" color={color}>
+        </Typography>
+        <Typography as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem" color={color}>
           {display}
-        </BodyCopy>
+        </Typography>
       </InfoItem>
     )
   }
@@ -86,39 +86,39 @@ export function SearchFlyover(props) {
       {row && (
         <>
           <HeaderContainer>
-            <HeaderSm color="gray.100" mb={3} data-testid="flyover-asa-name">
+            <Typography color="gray.100" mb={3} data-testid="flyover-asa-name">
               {renderName()}
-            </HeaderSm>
+            </Typography>
           </HeaderContainer>
           <InfoList>
             <InfoItem>
-              <BodyCopyTiny as="dt" color="gray.500">
+              <Typography as="dt" color="gray.500">
                 ASA ID
-              </BodyCopyTiny>
-              <BodyCopy
+              </Typography>
+              <Typography
                 data-testid="flyover-asa-id"
                 as="dd"
                 fontFamily="'Roboto Mono', monospace"
                 fontSize="1.125rem"
               >
                 {row.id}
-              </BodyCopy>
+              </Typography>
             </InfoItem>
 
             {row.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500" className="flex items-center">
+                  <Typography as="dt" color="gray.500" className="flex items-center">
                     {t('price')} <Algos use="algoLogo" size={0.625} />
-                  </BodyCopyTiny>
-                  <BodyCopy
+                  </Typography>
+                  <Typography
                     data-testid="flyover-asa-price"
                     as="dd"
                     fontFamily="'Roboto Mono', monospace"
                     fontSize="1.125rem"
                   >
                     {row.price}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
                 {renderChange()}
               </>
@@ -127,30 +127,30 @@ export function SearchFlyover(props) {
             {row.hasBeenOrdered && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography as="dt" color="gray.500">
                     {t('liquidity')} (Algos)
-                  </BodyCopyTiny>
-                  <BodyCopy
+                  </Typography>
+                  <Typography
                     data-testid="flyover-algo-liquidity"
                     as="dd"
                     fontFamily="'Roboto Mono', monospace"
                     fontSize="1.125rem"
                   >
                     {row.liquidityAlgo}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography as="dt" color="gray.500">
                     {`${t('liquidity')} (${row.name})`}
-                  </BodyCopyTiny>
-                  <BodyCopy
+                  </Typography>
+                  <Typography
                     data-testid="flyover-asa-liqidity"
                     as="dd"
                     fontFamily="'Roboto Mono', monospace"
                     fontSize="1.125rem"
                   >
                     {row.liquidityAsa}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
               </>
             )}

@@ -1,4 +1,5 @@
-import { BrightGraySpan } from '@/components/Typography'
+// import { Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
@@ -36,7 +37,7 @@ export const AssetNameCell = ({ value, row }) => {
   return (
     <Link href={`/trade/${assetId}`}>
       <button className="cursor-pointer text-left whitespace-normal" onClick={onClick}>
-        <BrightGraySpan>{value}</BrightGraySpan>
+        <Typography>{value}</Typography>
       </button>
     </Link>
   )

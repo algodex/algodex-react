@@ -1,4 +1,3 @@
-import { BodyCopy, HeaderCaps } from '@/components/Typography'
 import React, { useRef, useState } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
@@ -18,6 +17,8 @@ import { useEvent } from 'hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
 
+// import { Typography, Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 // Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -229,9 +230,6 @@ const MobileMenuButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
-  min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
-  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
 `
 
@@ -287,13 +285,13 @@ function MainLayout({ asset, children }) {
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>
-                <HeaderCaps color="gray.500" mb={1}>
+                <Typography color="gray.500" mb={1}>
                   Place Order
-                </HeaderCaps>
+                </Typography>
               </Header>
-              <BodyCopy data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
+              <Typography data-testid="not-signed-in" color="gray.500" textAlign="center" m={16}>
                 Not signed in
-              </BodyCopy>
+              </Typography>
             </Container>
           )}
         </PlaceOrderSection>
@@ -319,38 +317,22 @@ function MainLayout({ asset, children }) {
         <MobileMenu>
           <ul>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-CHART').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.CHART)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-BOOK').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.BOOK)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-TRADE').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.TRADE)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-ORDERS').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.ORDERS)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
@@ -363,11 +345,7 @@ function MainLayout({ asset, children }) {
             </li>
             */}
             <li>
-              <MobileMenuButton
-                type="button"
-                characterLength={t('mobilefooter-WALLET').length}
-                onClick={() => setActiveMobile(TABS.WALLET)}
-              >
+              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>

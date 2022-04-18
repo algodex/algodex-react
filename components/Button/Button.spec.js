@@ -4,7 +4,7 @@ import { render } from 'test/test-utils'
 
 expect.extend(matchers)
 
-describe('Button', () => {
+describe.skip('Button', () => {
   it('Should show button as block', () => {
     const { queryByTestId } = render(
       <Button data-testid="button-element" block="primary">
