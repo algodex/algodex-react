@@ -93,3 +93,4 @@ How to add additional languages:
 3. JSON files are separated by section mostly
 4. Change the text to language of choice per json file, key names must stay the same
 5. In components/header/index.jsx, update localeToFlags with the appropriate locale key to flag country code. Country codes will display flags according to the react-country-flag library
+
