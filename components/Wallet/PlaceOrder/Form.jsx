@@ -1,7 +1,6 @@
-// import { BodyCopy, Typography, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
 import Tabs from '@/components/Tabs'
 import Tab from '@/components/Tab'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import AdvancedOptions from './Form/AdvancedOptions'
 import Slider from '@/components/Input/Slider'
 import Icon from '@/components/Icon/Icon'
@@ -11,9 +10,7 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import { default as MaterialBox } from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
-// import { TabsUnstyled } from '@mui/base'
 import Tooltip from '@/components/Tooltip'
-// import { has } from 'lodash'
 import { lighten } from 'polished'
 import theme from '../../../theme'
 import styled from '@emotion/styled'
@@ -21,7 +18,9 @@ import useTranslation from 'next-translate/useTranslation'
 import Typography from '@mui/material/Typography'
 import { ButtonGroup } from '@mui/material'
 import { useAlgodex } from '@algodex/algodex-hooks'
-// import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import Spinner from '@/components/Spinner'
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+
 const IconTextContainer = styled.div`
   display: flex;
   align-items: center;
@@ -57,14 +56,6 @@ const IconButton = styled.button`
   }
 `
 
-// const DEFAULT_ORDER = {
-//   type: 'buy',
-//   price: 0,
-//   amount: 0,
-//   total: 0,
-//   execution: 'both'
-// }
-
 /**
  * # 📝 Place Order Form
  *
@@ -84,49 +75,18 @@ const IconButton = styled.button`
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({
-  showTitle = true,
-  asset,
-  // wallet,
-  onSubmit,
-  components: { Box }
-}) {
+export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
-  const { order, setOrder, isConnected } = useAlgodex()
-  // console.log(`useAlgodex(`, { order, setOrder, isConnected, wallet }, `)`)
+  const { isConnected, wallet } = useAlgodex()
   const { t } = useTranslation('place-order')
-  useEffect(() => {
-    if (typeof order === 'undefined') {
-      setOrder({
-        type: 'buy',
-        price: 0,
-        amount: 0,
-        total: 0,
-        execution: 'both'
-      })
-    }
-  }, [order])
-  // const [order, setOrder] = useState({
-  //   type: 'buy',
-  //   price: 0,
-  //   amount: 0,
-  //   total: 0,
-  //   execution: 'both'
-  // })
-  // console.log(order)
-  // useEffect(() => {
-  //   setOrder({
-  //     ...DEFAULT_ORDER,
-  //     asset
-  //   })
-  // }, [asset, setOrder])
-  // const hasBalance = useMemo(() => {
-  //   const { id } = asset
-  //   const { assets } = wallet
-  //   const hasAlgo = has(wallet, 'balance') && wallet.amount > 0
-  //
-  //   return order.type === 'buy' ? hasAlgo : has(assets, `${id}.balance`) && assets[id].balance > 0
-  // }, [asset, wallet, order])
+
+  const [order, setOrder] = useState({
+    type: 'buy',
+    price: 0,
+    amount: 0,
+    total: 0,
+    execution: 'both'
+  })
 
   const buttonProps = useMemo(
     () => ({
@@ -164,7 +124,9 @@ export function PlaceOrderForm({
   const handleChange = useCallback(
     (e, field) => {
       const key = field || e.target.name
-      // console.log(key, e)
+      if (typeof key === 'undefined') {
+        throw new Error('Must have valid key!')
+      }
       if (order[key] !== e.target.value) {
         setOrder({
           ...order,
@@ -191,6 +153,9 @@ export function PlaceOrderForm({
   //   return typeof wallet?.amount !== 'undefined' ? fromBaseUnits(wallet.amount) : 0
   // }, [wallet, asset, orderSliderSteps])
 
+  if (typeof wallet === 'undefined' || typeof wallet.amount === 'undefined') {
+    return <Spinner />
+  }
   return (
     <Box
       sx={{
@@ -217,18 +182,26 @@ export function PlaceOrderForm({
               variant="contained"
               color="buy"
               fullWidth
-              sx={{
-                borderTopLeftRadius: '7px',
-                borderBottomLeftRadius: '7px',
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-                '&:hover': {
+              sx={[
+                {
+                  borderTopLeftRadius: 7,
+                  borderBottomLeftRadius: 7,
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0
+                },
+                (theme) => ({
                   backgroundColor:
                     order.type === 'buy'
-                      ? lighten(0.05, theme.colors.green['500'])
-                      : lighten(0.05, theme.colors.gray['700'])
-                }
-              }}
+                      ? theme.palette.buy.main
+                      : lighten(0.05, theme.colors.gray['700']),
+                  '&:hover': {
+                    backgroundColor:
+                      order.type === 'buy'
+                        ? lighten(0.05, theme.palette.buy.main)
+                        : lighten(0.05, theme.colors.gray['700'])
+                  }
+                })
+              ]}
               onClick={handleChange}
               name="type"
               value="buy"
@@ -241,18 +214,26 @@ export function PlaceOrderForm({
               variant="contained"
               color="sell"
               fullWidth
-              sx={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                borderTopRightRadius: 7,
-                borderBottomRightRadius: 7,
-                '&:hover': {
+              sx={[
+                {
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  borderTopRightRadius: 7,
+                  borderBottomRightRadius: 7
+                },
+                (theme) => ({
                   backgroundColor:
                     order.type === 'sell'
-                      ? lighten(0.05, theme.colors.red['500'])
-                      : lighten(0.05, theme.colors.gray['700'])
-                }
-              }}
+                      ? theme.palette.sell.main
+                      : lighten(0.05, theme.colors.gray['700']),
+                  '&:hover': {
+                    backgroundColor:
+                      order.type === 'sell'
+                        ? lighten(0.05, theme.palette.sell.main)
+                        : lighten(0.05, theme.colors.gray['700'])
+                  }
+                })
+              ]}
               onClick={handleChange}
               name="type"
               value="sell"
@@ -279,7 +260,7 @@ export function PlaceOrderForm({
                   </Typography>
                   <IconTextContainer>
                     <Typography variant="labelMdSpaced" color="gray.300">
-                      {/*{fromBaseUnits(wallet.amount)}*/}
+                      {fromBaseUnits(wallet.amount)}
                     </Typography>
                     <Icon use="algoLogo" size={0.625} />
                   </IconTextContainer>
@@ -290,7 +271,7 @@ export function PlaceOrderForm({
                   </Typography>
                   <IconTextContainer>
                     <Typography variant="labelMdSpaced" color="gray.300">
-                      {/*{fromBaseUnits(wallet.amount)}*/}
+                      {fromBaseUnits(wallet.amount)}
                     </Typography>
                     <Icon use="algoLogo" size={0.625} />
                   </IconTextContainer>
@@ -315,7 +296,7 @@ export function PlaceOrderForm({
                 ALGO
               </Typography>
               <Typography variant="labelMdLight" color="gray.300">
-                {/*{fromBaseUnits(wallet.amount)}*/}
+                {fromBaseUnits(wallet.amount)}
               </Typography>
             </BalanceRow>
             <BalanceRow>
@@ -456,6 +437,7 @@ export function PlaceOrderForm({
           <MaterialButton
             type="submit"
             variant="contained"
+            color={order.type}
             sx={{
               backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
               '&:hover': {
@@ -491,7 +473,7 @@ PlaceOrderForm.propTypes = {
    * Wallet to execute Orders from
    */
   wallet: PropTypes.shape({
-    amount: PropTypes.number.isRequired,
+    amount: PropTypes.number,
     assets: PropTypes.arrayOf(PropTypes.shape({ amount: PropTypes.number })),
     connector: PropTypes.object
   }),
