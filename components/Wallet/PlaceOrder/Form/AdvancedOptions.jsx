@@ -109,12 +109,12 @@ export const OptionsButton = styled(Button)`
     background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
   }
 
-  &:nth-child(2) {
+  &:nth-of-type(2) {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
   }
 
-  &:last-child {
+  &:last-of-type {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     margin-right: 0;
