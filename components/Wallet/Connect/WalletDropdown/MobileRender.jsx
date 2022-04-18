@@ -16,7 +16,6 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import WalletOptionsList from './WalletOptionsList'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
-import theme from 'theme'
 import { useAlgodex } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
