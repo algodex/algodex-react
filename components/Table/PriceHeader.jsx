@@ -1,9 +1,10 @@
-import { BodyCopyTiny } from 'components/Typography'
+// import { Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import Icon from 'components/Icon'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
-export const PriceHeaderText = styled(BodyCopyTiny)`
+export const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   margin: 0;

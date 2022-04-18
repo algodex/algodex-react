@@ -1,5 +1,5 @@
-import { BodyCopyTiny, LabelSm } from 'components/Typography'
-
+// import { Typography, Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import Button from '../../../Button'
 import { ChevronDown } from 'react-feather'
 import Icon from 'components/Icon'
@@ -109,12 +109,12 @@ export const OptionsButton = styled(Button)`
     background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
   }
 
-  &:nth-child(2) {
+  &:nth-of-type(2) {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
   }
 
-  &:last-child {
+  &:last-of-type {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     margin-right: 0;
@@ -207,7 +207,7 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
         onKeyDown={handleKeyDown}
         tabIndex="0"
       >
-        <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>
+        <Typography color="gray.500">{t('advanced-options')}</Typography>
         <ArrowContainer>
           <ChevronDown />
         </ArrowContainer>
@@ -253,9 +253,9 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 {t('taker-only')}
               </OptionsButton>
             </OptionsWrapper>
-            <BodyCopyTiny color="gray.500" textTransform="none">
+            <Typography color="gray.500" textTransform="none">
               {renderMessage()}
-            </BodyCopyTiny>
+            </Typography>
 
             <div className="flex flex-row justify-between mt-5 align-middle">
               {/* <span className="text-sm font-semibold py-1">{t("order-size-filtering")}:</span> */}

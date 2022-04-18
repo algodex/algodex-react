@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
-import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
-import { withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
-
+// import { Typography, Typography, Typography, Typography } from '@/components/Typography'
+import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
+import Typography from '@mui/material/Typography'
 import Big from 'big.js'
 import { Fragment } from 'react'
 import PropTypes from 'prop-types'
@@ -15,11 +15,10 @@ import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 
 const FirstOrderContainer = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -29,7 +28,7 @@ const FirstOrderContainer = styled.div`
 
 const EmptyState = styled.div`
   position: relative;
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,15 +70,15 @@ export function FirstOrderMsg(props) {
   const renderMessage = () => {
     if (isSignedIn) {
       return (
-        <BodyCopySm color="gray.500" m={0}>
+        <Typography color="gray.500" m={0}>
           Place a maker buy/sell order to add liquidity for this trading&nbsp;pair
-        </BodyCopySm>
+        </Typography>
       )
     }
     return (
-      <BodyCopySm color="gray.500" m={0}>
+      <Typography color="gray.500" m={0}>
         Connect your wallet and place an order to add liquidity for this trading&nbsp;pair
-      </BodyCopySm>
+      </Typography>
     )
   }
 
@@ -91,11 +90,11 @@ export function FirstOrderMsg(props) {
             <SvgImage use="walletArrow" h={4} color="gray.600" />
           </Arrow>
         )}
-        <HeaderSm color="gray.100" m={0} mb={16}>
+        <Typography color="gray.100" m={0} mb={16}>
           Place the first limit order for {asset.name}
           {` `}
           <PairSlash>{`/`}</PairSlash>ALGO
-        </HeaderSm>
+        </Typography>
         {renderMessage()}
       </EmptyState>
     </FirstOrderContainer>
@@ -108,7 +107,7 @@ FirstOrderMsg.propTypes = {
 }
 
 const Container = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
 
@@ -127,19 +126,18 @@ const gridStyles = `
 `
 
 const Header = styled.header`
-  flex-shrink: 0%;
+  flex-shrink: 0;
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem 0.75rem;
+  ${gridStyles}
 `
 
 const BookRow = styled.div`
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
-
+  ${gridStyles}
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buy' ? 'green' : 'red'
@@ -147,7 +145,7 @@ const BookRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
@@ -162,29 +160,32 @@ const OrdersWrapper = styled.div`
 `
 
 const SellOrders = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
   display: flex;
   flex-direction: column-reverse;
   /* width */
+
   ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     display: none;
   }
 `
 
 const BuyOrders = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
 
   ${OrdersWrapper} {
     right: 0;
   }
+
   /* width */
+
   ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     display: none;
   }
 `
@@ -224,9 +225,9 @@ export function OrderBookPrice({ asset }) {
     return (
       <Fragment>
         --
-        <BodyCopySm data-testid="no-price-info" as="span">
+        <Typography data-testid="no-price-info" as="span">
           0.00%
-        </BodyCopySm>
+        </Typography>
       </Fragment>
     )
   }
@@ -235,11 +236,11 @@ export function OrderBookPrice({ asset }) {
     return (
       <Fragment>
         {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
-        <BodyCopySm data-testid="has-price-info" as="span">
+        <Typography data-testid="has-price-info" as="span">
           {(asset?.price_info?.price24Change &&
             `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
             '0.00%'}
-        </BodyCopySm>
+        </Typography>
       </Fragment>
     )
   }
@@ -298,8 +299,8 @@ export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
-  const setOrder = useStore((state) => state.setOrder)
-  const isSignedIn = useStore((state) => state.isSignedIn)
+  const { setOrder, isConnected } = useAlgodex()
+  const isSignedIn = isConnected
 
   const dispatcher = useEventDispatch()
 
@@ -327,15 +328,15 @@ export function OrderBook({ asset, orders, components }) {
           type={type}
           data-testid={`order-book-${type}-row`}
         >
-          <BodyCopyTiny
+          <Typography
             fontFamily="'Roboto Mono', monospace"
             color={`${color}.500`}
             title={row.price}
             m={0}
           >
             {row.price}
-          </BodyCopyTiny>
-          <BodyCopyTiny
+          </Typography>
+          <Typography
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -343,8 +344,8 @@ export function OrderBook({ asset, orders, components }) {
             m={0}
           >
             {amount.toFixed(Math.min(3, decimals))}
-          </BodyCopyTiny>
-          <BodyCopyTiny
+          </Typography>
+          <Typography
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -352,7 +353,7 @@ export function OrderBook({ asset, orders, components }) {
             m={0}
           >
             {total.toFixed(Math.min(3, decimals))}
-          </BodyCopyTiny>
+          </Typography>
         </BookRow>
       )
     })
@@ -365,18 +366,18 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <HeaderCaps color="gray.500" mb={1}>
+        <Typography color="gray.500" mb={1}>
           {t('order-book')}
-        </HeaderCaps>
+        </Typography>
         <br></br>
         <Header>
           <TablePriceHeader />
-          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+          <Typography color="gray.500" textAlign="right" m={0}>
             {t('amount')}
-          </BodyCopyTiny>
-          <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+          </Typography>
+          <Typography color="gray.500" textAlign="right" m={0}>
             {t('total')}
-          </BodyCopyTiny>
+          </Typography>
         </Header>
 
         <SellOrders>
@@ -410,7 +411,7 @@ OrderBook.propTypes = {
     sell: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
         total: PropTypes.number.isRequired
       })
     ),
@@ -420,14 +421,14 @@ OrderBook.propTypes = {
     buy: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
         total: PropTypes.number.isRequired
       })
     )
   }),
-  components: {
+  components: PropTypes.shape({
     PriceDisplay: PropTypes.elementType.isRequired
-  }
+  })
 }
 
 OrderBook.defaultProps = {

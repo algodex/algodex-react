@@ -73,7 +73,7 @@ const fontFamilies = {
 
 const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]
 
-const breakpoints = ['40em', '48em']
+// const breakpoints = ['40em', '48em']
 
 const textStyles = {
   title: {
@@ -223,20 +223,43 @@ export const buttons = {
 export const parseThemeColor = (str) => {
   return str.split('.').reduce((o, i) => o[i], colors)
 }
-
-const theme = createTheme({
+const muiTheme = createTheme()
+const theme = {
+  ...muiTheme,
   background: colors.gray['800'],
   textStyles,
   fontSizes,
   fontFamilies,
   buttons,
   palette: {
+    ...muiTheme.palette,
     primary: {
-      main: colors.gray['800']
+      main: colors.gray['800'],
+      light: colors.gray['400'],
+      dark: colors.gray['900'],
+      contrastText: 'white'
+    },
+    secondary: {
+      main: colors.gray['100'],
+      light: colors.gray['100'],
+      dark: colors.gray['100'],
+      contrastText: 'white'
+    },
+    buy: {
+      main: colors.green['600'],
+      light: colors.green['400'],
+      dark: colors.green['900'],
+      contrastText: 'white'
+    },
+    sell: {
+      main: colors.red['600'],
+      light: colors.red['400'],
+      dark: colors.red['900'],
+      contrastText: 'white'
     },
     background: {
-      light: colors.gray['000'],
-      dark: colors.gray['800']
+      paper: colors.gray['800'],
+      default: colors.gray['800']
     },
     focus: {
       green: '#4b9064',
@@ -255,7 +278,7 @@ const theme = createTheme({
       red: '#b23639'
     }
   }
-})
+}
 
-theme.breakpoints = breakpoints
+// theme.breakpoints = breakpoints
 export default theme
