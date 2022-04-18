@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+
 import { useAlgodex } from '@algodex/algodex-hooks'
 
 const ERROR = {
@@ -12,7 +13,7 @@ const ERROR = {
  */
 export function useMyAlgoConnect() {
   // State Setter
-  const { setAddresses } = useAlgodex()
+  const { setAddresses, algodex, setWallet } = useAlgodex()
 
   // Instance reference
   const myAlgoWallet = useRef()
@@ -43,6 +44,16 @@ export function useMyAlgoConnect() {
     }
   }
 
+  const disconnect = () => {
+    setAddresses(
+      algodex.addresses.filter((addr) => addr.type !== 'my-algo-wallet'),
+      { merge: false, validate: false }
+    )
+    if (algodex.addresses.length) {
+      setWallet(algodex.addresses[0], { validate: false, merge: true })
+    }
+  }
+
   useEffect(() => {
     const initMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
@@ -58,5 +69,5 @@ export function useMyAlgoConnect() {
     initMyAlgoWallet()
   }, [])
 
-  return connect
+  return { connect, disconnect }
 }

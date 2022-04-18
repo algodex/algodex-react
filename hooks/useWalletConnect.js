@@ -69,7 +69,6 @@ export function useWalletConnect() {
         bridge: 'https://bridge.walletconnect.org', // Required
         qrcodeModal: QRCodeModal
       })
-
       walletConnect.current.connected = false
     }
     initWalletConnect()
@@ -84,6 +83,9 @@ export function useWalletConnect() {
           algodex.addresses.filter((addr) => addr.type !== 'wallet-connect'),
           { merge: false, validate: false }
         )
+        if (algodex.addresses.length) {
+          setWallet(algodex.addresses[0], { validate: false, merge: true })
+        }
       }
     },
     [setAddresses, algodex.addresses]
@@ -108,7 +110,7 @@ export function useWalletConnect() {
       connector: walletConnect.current,
       address: acct
     }))
-
+    console.log('connected here')
     setAddresses(_addresses, { merge: true, validate: false })
 
     QRCodeModal.close()
@@ -121,9 +123,11 @@ export function useWalletConnect() {
       walletConnect.current.on('disconnect', handleDisconnect)
     }
     return () => {
-      walletConnect.current.off('connect')
-      walletConnect.current.off('session_update')
-      walletConnect.current.off('disconnect')
+      if (typeof walletConnect.current !== 'undefined') {
+        walletConnect.current.off('connect')
+        walletConnect.current.off('session_update')
+        walletConnect.current.off('disconnect')
+      }
     }
   }, [walletConnect.current])
   return { connect, disconnect }

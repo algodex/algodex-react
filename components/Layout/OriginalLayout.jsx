@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { BodyCopy, HeaderCaps } from '@/components/Typography'
+import React, { useRef, useState } from 'react'
+
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
+import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 // import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
@@ -10,13 +12,11 @@ import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
-import useDebounce from '@/hooks/useDebounce'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
-
-import { BodyCopy, HeaderCaps } from '@/components/Typography'
 
 // Offline PlaceOrder Container
 export const Container = styled.div`
@@ -236,27 +236,6 @@ const MobileMenuButton = styled(Button)`
 `
 
 /**
- * Detect Mobile
- * @returns {unknown}
- */
-function useMobileDetect() {
-  const [isMobile, setIsMobile] = useState(undefined)
-  const debounceIsMobile = useDebounce(isMobile, 500)
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(detectMobileDisplay())
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [debounceIsMobile])
-
-  return isMobile
-}
-/**
  * @param asset
  * @param children
  * @returns {JSX.Element}
@@ -300,7 +279,8 @@ function MainLayout({ asset, children }) {
     <MainWrapper>
       <Main ref={gridRef}>
         <WalletSection active={activeMobile === TABS.WALLET}>
-          <Wallet />
+          {!isMobile && <Wallet />}
+          {isMobile && <MobileWallet />}
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
           {isConnected && <PlaceOrder asset={asset} wallet={wallet} onSubmit={placeOrder} />}
