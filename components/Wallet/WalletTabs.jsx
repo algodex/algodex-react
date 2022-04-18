@@ -79,14 +79,9 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const { isConnected, wallet } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-  // const isSignedIn = useStore((state) => state.isSignedIn)
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
   const ASSETS_PANEL = 'assets'
-  // const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  // const wallet = {
-  //   address: activeWalletAddress
-  // }
 
   const renderPanel = (panelName) => {
     // if (!isSignedIn) return <div></div>

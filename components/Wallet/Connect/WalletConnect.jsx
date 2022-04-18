@@ -303,7 +303,7 @@ WalletView.defaultProps = {
 }
 
 function WalletConnect(props) {
-  const connect = useMyAlgoConnect()
+  const { connect } = useMyAlgoConnect()
   const { isConnected, wallet, setWallet, addresses } = useAlgodex()
   // console.log('!!!!!!!!!!!!!!!!', addresses)
   // fetch wallet balances from blockchain
