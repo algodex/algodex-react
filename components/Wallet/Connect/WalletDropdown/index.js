@@ -28,7 +28,6 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
       const inactiveWallet = filter(addresses, (o) => o.address !== wallet?.address)
-      console.log(activeWallet, inactiveWallet, 'hey')
       return {
         activeWallet,
         inactiveWallet

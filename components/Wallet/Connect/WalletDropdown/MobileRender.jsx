@@ -71,7 +71,6 @@ const MobileWalletRender = () => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
       const inactiveWallet = filter(addresses, (o) => o.address !== wallet?.address)
-      console.log(activeWallet, inactiveWallet, 'hey')
       return {
         activeWallet,
         inactiveWallet
@@ -81,7 +80,13 @@ const MobileWalletRender = () => {
 
   const renderWalletOptionsList = () => {
     return (
-      <Modal data-testid="notification-modal-wrapper" isVisible={isConnectingWallet}>
+      <Modal
+        onClick={() => {
+          setIsConnectingWallet(false)
+        }}
+        data-testid="notification-modal-wrapper"
+        isVisible={isConnectingWallet}
+      >
         <ModalContainer
           className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
           style={{ transform: 'translate(-50%, -50%)' }}
@@ -98,7 +103,13 @@ const MobileWalletRender = () => {
 
   const renderAddressesList = () => {
     return (
-      <Modal data-testid="notification-modal-wrapper" isVisible={isDisconnectingWallet}>
+      <Modal
+        onClick={() => {
+          setIsDisconnectingWallet(false)
+        }}
+        data-testid="notification-modal-wrapper"
+        isVisible={isDisconnectingWallet}
+      >
         <ModalContainer
           className="absolute top-2/4 left-2/4 text-white bg-gray-700 rounded-lg"
           style={{ transform: 'translate(-50%, -50%)' }}
@@ -174,6 +185,7 @@ const MobileWalletRender = () => {
       )
     })
   }
+
   return (
     <Container>
       <div style={{ height: '100%' }} className="flex justify-between flex-col px-3">
@@ -181,22 +193,16 @@ const MobileWalletRender = () => {
           <div>
             <div className="flex flex-col justify-between">
               <Button
-                className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+                className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
                 variant="contained"
-                style={{
-                  backgroundColor: theme.colors.gray['700']
-                }}
                 onClick={() => setIsConnectingWallet(true)}
               >
                 CONNECT {addresses && addresses.length && 'ANOTHER'} WALLET
               </Button>
               {addresses && addresses.length && (
                 <Button
-                  className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
+                  className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
                   variant="contained"
-                  style={{
-                    backgroundColor: theme.colors.gray['700']
-                  }}
                   onClick={() => setIsDisconnectingWallet(true)}
                 >
                   DISCONNECT A WALLET
@@ -211,7 +217,7 @@ const MobileWalletRender = () => {
             </div>
             {(!addresses || !addresses.length) && (
               <div>
-                <p className="text-sm text-center mt-4">
+                <p className="text-sm text-center mt-8 font-medium text-white">
                   No wallets connected yet. <br />
                   Connect a wallet with the button above.
                 </p>
