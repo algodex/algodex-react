@@ -328,12 +328,7 @@ export function OrderBook({ asset, orders, components }) {
           type={type}
           data-testid={`order-book-${type}-row`}
         >
-          <Typography
-            fontFamily="'Roboto Mono', monospace"
-            color={`${color}.500`}
-            title={row.price}
-            m={0}
-          >
+          <Typography variant="price" color={`${color}.500`}>
             {row.price}
           </Typography>
           <Typography
