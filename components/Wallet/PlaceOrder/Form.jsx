@@ -1,9 +1,9 @@
 import AdvancedOptions from './Form/AdvancedOptions'
 import Slider from '@/components/Input/Slider'
-import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
+import InputAdornment from '@mui/material/InputAdornment'
 import OutlinedInput from '@/components/Input/OutlinedInput'
-import { default as MaterialBox } from '@mui/material/Box'
-import { default as MaterialButton } from '@mui/material/Button'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import PropTypes from 'prop-types'
 import { lighten } from 'polished'
 import theme from '../../../theme'
@@ -83,7 +83,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <BuySellToggle order={order} onChange={handleChange} />
             <AvailableBalance wallet={wallet} asset={asset} />
             <ExecutionToggle onChange={handleChange} order={order} />
-            <MaterialBox className="flex flex-col mb-4">
+            <Box className="flex flex-col mb-4">
               <OutlinedInput
                 sx={{
                   backgroundColor: theme.palette.gray['900'],
@@ -106,14 +106,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 value={order.price}
                 onChange={(e) => handleChange(e)}
                 startAdornment={
-                  <MUIInputAdornment position="start">
+                  <InputAdornment position="start">
                     <span className="text-sm font-bold text-gray-500">{t('price')}</span>
-                  </MUIInputAdornment>
+                  </InputAdornment>
                 }
                 endAdornment={
-                  <MUIInputAdornment position="end">
+                  <InputAdornment position="end">
                     <span className="text-sm font-bold text-gray-500">ALGO</span>
-                  </MUIInputAdornment>
+                  </InputAdornment>
                 }
               />
               <OutlinedInput
@@ -134,14 +134,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 // step={new Big(10).pow(-1 * asset.decimals).toString()}
                 inputMode="decimal"
                 startAdornment={
-                  <MUIInputAdornment position="start">
+                  <InputAdornment position="start">
                     <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
-                  </MUIInputAdornment>
+                  </InputAdornment>
                 }
                 endAdornment={
-                  <MUIInputAdornment position="end">
+                  <InputAdornment position="end">
                     <span className="text-sm font-bold text-gray-500">{asset.name}</span>
-                  </MUIInputAdornment>
+                  </InputAdornment>
                 }
               />
               <Slider
@@ -166,14 +166,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 readOnly
                 disabled
                 startAdornment={
-                  <MUIInputAdornment position="start">
+                  <InputAdornment position="start">
                     <span className="text-sm font-bold text-gray-500">{t('total')}</span>
-                  </MUIInputAdornment>
+                  </InputAdornment>
                 }
                 endAdornment={
-                  <MUIInputAdornment position="end">
+                  <InputAdornment position="end">
                     <span className="text-sm font-bold text-gray-500">ALGO</span>
-                  </MUIInputAdornment>
+                  </InputAdornment>
                 }
               />
               {/* <TxnFeeContainer>
@@ -187,9 +187,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 onChange={handleChange}
                 allowTaker={typeof asset !== 'undefined'}
               />
-            </MaterialBox>
+            </Box>
             {/*)}*/}
-            <MaterialButton
+            <Button
               type="submit"
               variant="contained"
               color={order.type}
@@ -203,7 +203,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               disabled={order.valid}
             >
               {buttonProps[order.type || 'buy']?.text}
-            </MaterialButton>
+            </Button>
           </form>
         ))}
     </Box>
@@ -240,7 +240,7 @@ PlaceOrderForm.propTypes = {
 PlaceOrderForm.defaultProps = {
   showTitle: true,
   components: {
-    Box: MaterialBox
+    Box
   }
 }
 export default PlaceOrderForm
