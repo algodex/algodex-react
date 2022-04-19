@@ -1,5 +1,3 @@
-import Tabs from '@/components/Tabs'
-import Tab from '@/components/Tab'
 import AdvancedOptions from './Form/AdvancedOptions'
 import Slider from '@/components/Input/Slider'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
@@ -11,11 +9,12 @@ import { lighten } from 'polished'
 import theme from '../../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import Typography from '@mui/material/Typography'
-import { useAlgodex } from '@algodex/algodex-hooks'
 import Spinner from '@/components/Spinner'
 import AvailableBalance from './Form/AvailableBalance'
 import BuySellToggle from './Form/BuySellToggle'
 import usePlaceOrder from '@/components/Wallet/PlaceOrder/usePlaceOrder'
+import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
+import { useCallback } from 'react'
 /**
  * # 📝 Place Order Form
  *
@@ -37,9 +36,28 @@ import usePlaceOrder from '@/components/Wallet/PlaceOrder/usePlaceOrder'
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
-  const { wallet } = useAlgodex()
-  const { order, handleChange, buttonProps } = usePlaceOrder({ asset })
+
+  const { wallet, order, handleChange, buttonProps, placeOrder } = usePlaceOrder({ asset })
   const { t } = useTranslation('place-order')
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (typeof onSubmit === 'function') {
+        onSubmit({
+          ...order,
+          wallet,
+          asset
+        })
+      } else {
+        placeOrder({
+          ...order,
+          wallet,
+          asset
+        })
+      }
+    },
+    [onSubmit, asset, order]
+  )
   return (
     <Box
       sx={{
@@ -61,19 +79,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         (typeof wallet.amount === 'undefined' ? (
           <Spinner />
         ) : (
-          <form onSubmit={onSubmit} autoComplete="off">
+          <form onSubmit={handleSubmit} autoComplete="off">
             <BuySellToggle order={order} onChange={handleChange} />
             <AvailableBalance wallet={wallet} asset={asset} />
-            <Tabs
-              sx={{ marginBottom: '16px' }}
-              textColor="primary"
-              onChange={handleChange}
-              aria-label="secondary tabs example"
-              value={order.execution === 'market' ? 1 : 0}
-            >
-              <Tab label={t('limit')} index={0} />
-              <Tab label={t('market')} index={1} />
-            </Tabs>
+            <ExecutionToggle onChange={handleChange} order={order} />
             <MaterialBox className="flex flex-col mb-4">
               <OutlinedInput
                 sx={{
@@ -175,7 +184,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               </TxnFeeContainer> */}
               <AdvancedOptions
                 order={order}
-                // onChange={handleOptionsChange}
+                onChange={handleChange}
                 allowTaker={typeof asset !== 'undefined'}
               />
             </MaterialBox>

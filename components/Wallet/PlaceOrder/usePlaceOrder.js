@@ -1,9 +1,10 @@
 import useTranslation from 'next-translate/useTranslation'
 import { useCallback, useMemo, useState } from 'react'
+import { useAlgodex } from '@algodex/algodex-hooks'
 
 function usePlaceOrder({ asset }) {
   const { t } = useTranslation('place-order')
-
+  const { wallet, placeOrder } = useAlgodex()
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -21,8 +22,7 @@ function usePlaceOrder({ asset }) {
   )
 
   const fixPrecision = useCallback(
-    (e, key) => {
-      const value = e.target.value
+    (key, value) => {
       switch (key) {
         case 'price':
           return parseFloat(value).toFixed(6)
@@ -38,22 +38,26 @@ function usePlaceOrder({ asset }) {
   )
 
   const handleChange = useCallback(
-    (e, field) => {
-      const key = field || e.target.name
+    (e, _key, _value) => {
+      const key = _key || e.target.name
+      const value = _value || e.target.value
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }
-      if (order[key] !== e.target.value) {
+      if (typeof value === 'undefined') {
+        throw new Error('Must have a valid value!')
+      }
+      if (order[key] !== value) {
         setOrder({
           ...order,
-          [key]: fixPrecision(e, key)
+          [key]: value
         })
       }
     },
     [setOrder, order]
   )
 
-  return { order, setOrder, handleChange, fixPrecision, buttonProps }
+  return { wallet, order, setOrder, handleChange, fixPrecision, buttonProps, placeOrder }
 }
 
 export default usePlaceOrder
