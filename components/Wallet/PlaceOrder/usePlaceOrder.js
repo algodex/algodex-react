@@ -1,10 +1,10 @@
 import useTranslation from 'next-translate/useTranslation'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAlgodex } from '@algodex/algodex-hooks'
 
 function usePlaceOrder({ asset }) {
   const { t } = useTranslation('place-order')
-  const { wallet, placeOrder } = useAlgodex()
+  const { wallet, placeOrder, algodex } = useAlgodex()
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -56,6 +56,12 @@ function usePlaceOrder({ asset }) {
     },
     [setOrder, order]
   )
+  function handleEvent(payload) {
+    console.log('Wow!', payload)
+  }
+  useEffect(() => {
+    algodex.on('wallet', handleEvent)
+  }, [])
 
   return { wallet, order, setOrder, handleChange, fixPrecision, buttonProps, placeOrder }
 }
