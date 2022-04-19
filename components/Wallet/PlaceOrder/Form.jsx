@@ -12,9 +12,16 @@ import Typography from '@mui/material/Typography'
 import Spinner from '@/components/Spinner'
 import AvailableBalance from './Form/AvailableBalance'
 import BuySellToggle from './Form/BuySellToggle'
-import usePlaceOrder from '@/components/Wallet/PlaceOrder/usePlaceOrder'
 import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAlgodex } from '@algodex/algodex-hooks'
+
+// function _minDecimalValue(decimals) {
+//   if (typeof decimals !== 'number') {
+//     throw new Error('Must be a valid decimals!')
+//   }
+//   return parseFloat(`0.${new Array(decimals).join('0')}1`)
+// }
 /**
  * # 📝 Place Order Form
  *
@@ -36,9 +43,52 @@ import { useCallback } from 'react'
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
-
-  const { wallet, order, handleChange, buttonProps, placeOrder } = usePlaceOrder({ asset })
   const { t } = useTranslation('place-order')
+  const { wallet, placeOrder } = useAlgodex()
+  const buttonProps = useMemo(
+    () => ({
+      buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
+      sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
+    }),
+    [asset]
+  )
+  // const [steps, setSteps] = useState(0.000001)
+  const [order, setOrder] = useState({
+    type: 'buy',
+    price: 0,
+    amount: 0,
+    total: 0,
+    execution: 'both'
+  })
+  const [sliderPercent, setSliderPercent] = useState(0)
+  useEffect(() => {
+    const _amount = wallet.amount * (sliderPercent / 100)
+    if (order.amount !== _amount.toFixed(asset.decimals)) {
+      setOrder({
+        ...order,
+        amount: _amount.toFixed(asset.decimals)
+      })
+    }
+  }, [order, asset, sliderPercent])
+  const handleChange = useCallback(
+    (e, _key, _value) => {
+      const key = _key || e.target.name
+      const value = _value || e.target.value
+      if (typeof key === 'undefined') {
+        throw new Error('Must have valid key!')
+      }
+      if (typeof value === 'undefined') {
+        throw new Error('Must have a valid value!')
+      }
+      if (order[key] !== value) {
+        setOrder({
+          ...order,
+          [key]: value
+        })
+      }
+    },
+    [setOrder, order]
+  )
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
@@ -103,7 +153,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 name="price"
                 type="number"
                 pattern="\d*"
-                value={order.price}
+                disabled={order.execution === 'market'}
+                value={order.execution === 'market' ? 123 : order.price}
                 onChange={(e) => handleChange(e)}
                 startAdornment={
                   <InputAdornment position="start">
@@ -149,14 +200,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                   margin: '0px 0.5rem',
                   width: '95%'
                 }}
+                defaultValue={0.0}
                 // txnFee={txnFee}
-                onChange={(e) => handleChange(e)}
+                onChange={(e, value) => setSliderPercent(value)}
                 name="amount"
-                value={order.amount}
-                marks={true}
-                step={10}
-                min={0}
-                max={100}
+                value={sliderPercent}
+                step={0.000001}
+                min={0.0}
+                max={100.0}
               />
               <OutlinedInput
                 id="total"
