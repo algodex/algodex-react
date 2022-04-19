@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
 import { lighten } from 'polished'
 
 const colors = {
@@ -231,6 +231,18 @@ const theme = {
   fontSizes,
   fontFamilies,
   buttons,
+  typography: {
+    ...muiTheme.typography,
+    price: {
+      fontFamily: fontFamilies.monospace,
+      fontWeight: 400,
+      fontSize: '0.625rem',
+      lineHeight: '1rem',
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase'
+    }
+  },
+
   palette: {
     ...muiTheme.palette,
     primary: {
