@@ -236,7 +236,12 @@ const theme = {
     price: {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,
-      fontSize: '0.625rem',
+      [muiTheme.breakpoints.up('xs')]: {
+        fontSize: '0.1rem'
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        fontSize: '0.625rem'
+      },
       lineHeight: '1rem',
       letterSpacing: '0.04em',
       textTransform: 'uppercase'
