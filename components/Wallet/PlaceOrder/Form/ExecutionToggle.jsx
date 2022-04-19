@@ -5,8 +5,6 @@ import useTranslation from 'next-translate/useTranslation'
 
 function ExecutionToggle({ order, onChange }) {
   const { t } = useTranslation('place-order')
-  console.log(order)
-
   return (
     <Tabs
       sx={{ marginBottom: '16px' }}
