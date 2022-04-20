@@ -5,7 +5,7 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import PropTypes from 'prop-types'
-import { lighten } from 'polished'
+import { lighten, darken } from 'polished'
 import theme from '../../../theme'
 import useTranslation from 'next-translate/useTranslation'
 import Typography from '@mui/material/Typography'
@@ -14,8 +14,10 @@ import AvailableBalance from './Form/AvailableBalance'
 import BuySellToggle from './Form/BuySellToggle'
 import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import toast from 'react-hot-toast'
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -45,7 +47,23 @@ import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
   const { t } = useTranslation('place-order')
-  const { wallet, placeOrder } = useAlgodex()
+  const { wallet, placeOrder, http } = useAlgodex()
+  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+  const [sellOrders, setSellOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
+  console.debug(sellOrders, buyOrders)
+  useEffect(() => {
+    setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  }, [orderBook, setSellOrders, setBuyOrders, asset])
+
   const buttonProps = useMemo(
     () => ({
       buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
@@ -53,7 +71,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }),
     [asset]
   )
-  // const [steps, setSteps] = useState(0.000001)
+
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -61,55 +79,106 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     total: 0,
     execution: 'both'
   })
+
   const assetBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
-        res = filter[0].amount
+        res = fromBaseUnits(filter[0].amount, asset.decimals)
       }
     }
 
     return res
   }, [wallet, asset])
-  const [sliderPercent, setSliderPercent] = useState(0)
 
-  useEffect(() => {
-    let _amount = 0
-    let _total = 0
-    let _price = isNaN(parseFloat(order.price)) ? 0 : parseFloat(order.price)
+  const algoBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
+      res = fromBaseUnits(wallet.amount)
+    }
+    return res
+  }, [wallet])
+
+  // Calculate Slider Percentage
+  const sliderPercent = useMemo(() => {
     if (order.type === 'sell') {
-      _amount = fromBaseUnits(assetBalance, asset.decimals) * (sliderPercent / 100)
-      _total = fromBaseUnits(wallet.amount) * _amount
-    } else {
-      _amount = fromBaseUnits(assetBalance, asset.decimals) * (sliderPercent / 100)
-      _total = fromBaseUnits(wallet.amount) * _amount
+      return (order.amount / assetBalance) * 100
     }
-    if (parseFloat(_price.toFixed(6)) !== _price) {
-      // console.log('over', _price, parseFloat(_price.toFixed(6)))
-      _price = parseFloat(_price.toFixed(6))
+    if (order.type === 'buy') {
+      return (order.total / algoBalance) * 100
     }
-    if (order.amount !== _amount.toFixed(asset.decimals) || _price !== order.price) {
-      // console.log(order.price, parseFloat(order.price).toFixed(6))
+
+    return 0
+  }, [order, algoBalance, assetBalance])
+
+  const hasBalance = useMemo(() => {
+    if (order.type === 'sell') {
+      return assetBalance > 0
+    }
+    if (order.type === 'buy') {
+      return algoBalance > 0
+    }
+
+    return false
+  }, [order])
+  // useEffect(() => {
+  //   if (order.type === 'sell') {
+  //   }
+  //   if (order.amount !== (order.amount * sliderPercent) / 100) {
+  //   }
+  // }, [setOrder, sliderPercent])
+
+  // Fix Precision
+  useEffect(() => {
+    let _fixedPrice = parseFloat(order.price.toFixed(6))
+    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals))
+    let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
+    if (order.type === 'buy' && _total >= algoBalance) {
+      _fixedAmount = algoBalance / _fixedPrice
+    }
+    if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+      _fixedAmount = assetBalance
+    }
+    if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
       setOrder({
         ...order,
-        price: _price,
-        amount: _amount.toFixed(asset.decimals),
-        total: _total.toFixed(6)
+        price: _fixedPrice !== order.price ? _fixedPrice : order.price,
+        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+        total: _total !== order.total ? _total : order.total
       })
     }
-  }, [order, asset, sliderPercent])
+  }, [order, asset])
 
+  const handleSlider = useCallback(
+    (e, value) => {
+      let _balance = order.type === 'sell' ? assetBalance : algoBalance
+      let _percent = (value / 100) * _balance
+      const _amount = order.type === 'sell' ? _percent : _percent / order.price
+
+      if (order.amount !== _amount) {
+        setOrder({
+          ...order,
+          amount: _amount
+        })
+      }
+    },
+    [order]
+  )
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
-      const value = _value || e.target.value
-      console.log(key, value)
+      let value = _value || e.target.value
+
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }
       if (typeof value === 'undefined') {
         throw new Error('Must have a valid value!')
+      }
+
+      if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
+        value = parseFloat(value)
       }
       if (order[key] !== value) {
         setOrder({
@@ -123,22 +192,47 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
+      let orderPromise
       if (typeof onSubmit === 'function') {
-        onSubmit({
+        orderPromise = onSubmit({
           ...order,
           wallet,
           asset
         })
       } else {
-        placeOrder({
+        orderPromise = placeOrder({
           ...order,
           wallet,
           asset
         })
       }
+      // TODO add events
+      toast.promise(orderPromise, {
+        loading: t('awaiting-confirmation'),
+        success: t('order-success'),
+        error: (err) => {
+          if (/PopupOpenError|blocked/.test(err)) {
+            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+          }
+
+          if (/Operation cancelled/i.test(err)) {
+            return t('order-cancelled')
+          }
+
+          return t('error-placing-order')
+        }
+      })
     },
     [onSubmit, asset, order]
   )
+  if (
+    typeof wallet === 'undefined' ||
+    typeof wallet.amount === 'undefined' ||
+    isLoading ||
+    isError
+  ) {
+    return <Spinner />
+  }
   return (
     <Box
       sx={{
@@ -156,138 +250,138 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           </Typography>
         </header>
       )}
-      {typeof wallet === 'undefined' ||
-        (typeof wallet.amount === 'undefined' ? (
-          <Spinner />
-        ) : (
-          <form onSubmit={handleSubmit} autoComplete="off">
-            <BuySellToggle order={order} onChange={handleChange} />
-            <AvailableBalance wallet={wallet} asset={asset} />
-            <ExecutionToggle onChange={handleChange} order={order} />
-            <Box className="flex flex-col mb-4">
-              <OutlinedInput
-                sx={{
-                  backgroundColor: theme.palette.gray['900'],
-                  border: 2,
-                  borderColor: theme.palette.gray['700'],
-                  marginBottom: '1rem'
-                }}
-                inputProps={{
-                  name: 'price',
-                  type: 'number',
-                  // pattern: 'd*',
-                  autocomplete: false,
-                  min: 0,
-                  step: 0.000001,
-                  inputMode: 'decimal'
-                }}
-                name="price"
-                type="number"
-                pattern="\d*"
-                disabled={order.execution === 'market'}
-                value={order.execution === 'market' ? 123 : order.price}
-                onChange={handleChange}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <span className="text-sm font-bold text-gray-500">{t('price')}</span>
-                  </InputAdornment>
-                }
-                endAdornment={
-                  <InputAdornment position="end">
-                    <span className="text-sm font-bold text-gray-500">ALGO</span>
-                  </InputAdornment>
-                }
-              />
-              <OutlinedInput
-                id="amount"
-                type="number"
-                pattern="\d*"
-                name="amount"
-                sx={{
-                  backgroundColor: theme.colors.gray['900'],
-                  border: 2,
-                  borderColor: theme.colors.gray['700'],
-                  marginBottom: '1rem'
-                }}
-                value={order.amount}
-                onChange={handleChange}
-                autocomplete="false"
-                min="0"
-                // step={new Big(10).pow(-1 * asset.decimals).toString()}
-                inputMode="decimal"
-                startAdornment={
-                  <InputAdornment position="start">
-                    <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
-                  </InputAdornment>
-                }
-                endAdornment={
-                  <InputAdornment position="end">
-                    <span className="text-sm font-bold text-gray-500">{asset.name}</span>
-                  </InputAdornment>
-                }
-              />
-              <Slider
-                sx={{
-                  margin: '0px 0.5rem',
-                  width: '95%'
-                }}
-                defaultValue={0.0}
-                // txnFee={txnFee}
-                onChange={(e, value) => setSliderPercent(value)}
-                name="amount"
-                value={sliderPercent}
-                step={0.000001}
-                min={0.0}
-                max={100.0}
-              />
-              <OutlinedInput
-                id="total"
-                name="total"
-                type="text"
-                value={order.total}
-                readOnly
-                disabled
-                startAdornment={
-                  <InputAdornment position="start">
-                    <span className="text-sm font-bold text-gray-500">{t('total')}</span>
-                  </InputAdornment>
-                }
-                endAdornment={
-                  <InputAdornment position="end">
-                    <span className="text-sm font-bold text-gray-500">ALGO</span>
-                  </InputAdornment>
-                }
-              />
-              {/* <TxnFeeContainer>
-                <Typography color="gray.500" textTransform="none">
-                  Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
-                  {txnFee.toFixed(3)}
-                </Typography>
-              </TxnFeeContainer> */}
-              <AdvancedOptions
-                order={order}
-                onChange={handleChange}
-                allowTaker={typeof asset !== 'undefined'}
-              />
-            </Box>
-            {/*)}*/}
-            <Button
-              type="submit"
-              variant="contained"
-              color={order.type}
+      <form onSubmit={handleSubmit} autoComplete="off">
+        <BuySellToggle order={order} onChange={handleChange} />
+        <AvailableBalance wallet={wallet} asset={asset} />
+        <ExecutionToggle onChange={handleChange} order={order} />
+        {!hasBalance && (
+          <Typography color="gray.500" textAlign="center" m={10}>
+            {t('insufficient-balance')}
+          </Typography>
+        )}
+        {hasBalance && (
+          <Box className="flex flex-col mb-4">
+            <OutlinedInput
               sx={{
-                backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
-                '&:hover': {
-                  backgroundColor:
-                    order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
-                }
+                backgroundColor: theme.palette.gray['900'],
+                border: 2,
+                borderColor: theme.palette.gray['700'],
+                marginBottom: '1rem'
               }}
-              disabled={order.valid}
-            >
-              {buttonProps[order.type || 'buy']?.text}
-            </Button>
-          </form>
-        ))}
+              inputProps={{
+                name: 'price',
+                type: 'number',
+                // pattern: 'd*',
+                autocomplete: false,
+                min: 0,
+                step: 0.000001,
+                inputMode: 'decimal'
+              }}
+              name="price"
+              type="number"
+              pattern="\d*"
+              disabled={order.execution === 'market'}
+              value={order.execution === 'market' ? 123 : order.price}
+              onChange={handleChange}
+              startAdornment={
+                <InputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('price')}</span>
+                </InputAdornment>
+              }
+              endAdornment={
+                <InputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">ALGO</span>
+                </InputAdornment>
+              }
+            />
+            <OutlinedInput
+              id="amount"
+              type="number"
+              pattern="\d*"
+              name="amount"
+              sx={{
+                backgroundColor: theme.colors.gray['900'],
+                border: 2,
+                borderColor: theme.colors.gray['700'],
+                marginBottom: '1rem'
+              }}
+              value={order.amount}
+              onChange={handleChange}
+              autocomplete="false"
+              min="0"
+              // step={new Big(10).pow(-1 * asset.decimals).toString()}
+              inputMode="decimal"
+              startAdornment={
+                <InputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
+                </InputAdornment>
+              }
+              endAdornment={
+                <InputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">{asset.name}</span>
+                </InputAdornment>
+              }
+            />
+            <Slider
+              sx={{
+                margin: '0px 0.5rem',
+                width: '95%'
+              }}
+              defaultValue={0.0}
+              // txnFee={txnFee}
+              onChange={handleSlider}
+              name="amount"
+              value={sliderPercent}
+              step={0.000001}
+              min={0.0}
+              max={100.0}
+            />
+            <OutlinedInput
+              id="total"
+              name="total"
+              type="text"
+              value={order.total}
+              readOnly
+              disabled
+              startAdornment={
+                <InputAdornment position="start">
+                  <span className="text-sm font-bold text-gray-500">{t('total')}</span>
+                </InputAdornment>
+              }
+              endAdornment={
+                <InputAdornment position="end">
+                  <span className="text-sm font-bold text-gray-500">ALGO</span>
+                </InputAdornment>
+              }
+            />
+            <AdvancedOptions
+              order={order}
+              onChange={handleChange}
+              allowTaker={typeof asset !== 'undefined'}
+            />
+          </Box>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color={order.type}
+          fullWidth
+          sx={{
+            backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
+            '&:hover': {
+              backgroundColor:
+                order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
+            },
+            '&:disabled': {
+              backgroundColor:
+                order.type === 'sell' ? darken(0.05, '#b23639') : darken(0.05, '#4b9064')
+            }
+          }}
+          disabled={!hasBalance}
+        >
+          {buttonProps[order.type || 'buy']?.text}
+        </Button>
+      </form>
     </Box>
   )
 }
