@@ -15,6 +15,7 @@ import BuySellToggle from './Form/BuySellToggle'
 import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -60,20 +61,50 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     total: 0,
     execution: 'both'
   })
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = filter[0].amount
+      }
+    }
+
+    return res
+  }, [wallet, asset])
   const [sliderPercent, setSliderPercent] = useState(0)
+
   useEffect(() => {
-    const _amount = wallet.amount * (sliderPercent / 100)
-    if (order.amount !== _amount.toFixed(asset.decimals)) {
+    let _amount = 0
+    let _total = 0
+    let _price = isNaN(parseFloat(order.price)) ? 0 : parseFloat(order.price)
+    if (order.type === 'sell') {
+      _amount = fromBaseUnits(assetBalance, asset.decimals) * (sliderPercent / 100)
+      _total = fromBaseUnits(wallet.amount) * _amount
+    } else {
+      _amount = fromBaseUnits(assetBalance, asset.decimals) * (sliderPercent / 100)
+      _total = fromBaseUnits(wallet.amount) * _amount
+    }
+    if (parseFloat(_price.toFixed(6)) !== _price) {
+      // console.log('over', _price, parseFloat(_price.toFixed(6)))
+      _price = parseFloat(_price.toFixed(6))
+    }
+    if (order.amount !== _amount.toFixed(asset.decimals) || _price !== order.price) {
+      // console.log(order.price, parseFloat(order.price).toFixed(6))
       setOrder({
         ...order,
-        amount: _amount.toFixed(asset.decimals)
+        price: _price,
+        amount: _amount.toFixed(asset.decimals),
+        total: _total.toFixed(6)
       })
     }
   }, [order, asset, sliderPercent])
+
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
       const value = _value || e.target.value
+      console.log(key, value)
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }
@@ -155,7 +186,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 pattern="\d*"
                 disabled={order.execution === 'market'}
                 value={order.execution === 'market' ? 123 : order.price}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 startAdornment={
                   <InputAdornment position="start">
                     <span className="text-sm font-bold text-gray-500">{t('price')}</span>
@@ -213,7 +244,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 id="total"
                 name="total"
                 type="text"
-                value={order.amount * order.price}
+                value={order.total}
                 readOnly
                 disabled
                 startAdornment={
