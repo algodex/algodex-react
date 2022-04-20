@@ -131,8 +131,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   // Fix Precision
   useEffect(() => {
-    let _fixedPrice = parseFloat(order.price.toFixed(6))
-    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals))
+    let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
+    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
     if (order.type === 'buy' && _total >= algoBalance) {
       _fixedAmount = algoBalance / _fixedPrice
@@ -152,9 +152,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const handleSlider = useCallback(
     (e, value) => {
+      let _price = order.price || 0
       let _balance = order.type === 'sell' ? assetBalance : algoBalance
       let _percent = (value / 100) * _balance
-      const _amount = order.type === 'sell' ? _percent : _percent / order.price
+      const _amount = order.type === 'sell' ? _percent : _percent / _price
 
       if (order.amount !== _amount) {
         setOrder({
