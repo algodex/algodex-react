@@ -50,7 +50,7 @@ const DEFAULT_DATA = {
   mode: 'candle'
 }
 
-describe.skip('Chart', () => {
+describe('Chart', () => {
   describe('if no price data is passed', () => {
     it('should display the trading pair as LAMP/ALGO', (done) => {
       const { getByTestId } = render(<Chart {...DEFAULT_DATA} />)
