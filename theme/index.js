@@ -66,12 +66,12 @@ const colors = {
 }
 
 const fontFamilies = {
-  heading: `'Alliance No.1', Inter, sans-serif`,
-  body: 'Inter, sans-serif',
+  heading: `'Inter', 'Alliance No.1', sans-serif`,
+  body: `'Inter', 'Alliance No.1'`,
   monospace: `'Roboto Mono', monospace`
 }
 
-// const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]
+const fontSizes = [10, 12, 14, 16, 20, 24, 32, 34, 40, 48, 60, 64, 96]
 
 // const breakpoints = ['40em', '48em']
 
@@ -231,6 +231,96 @@ const theme = {
   buttons,
   typography: {
     ...muiTheme.typography,
+    h1: {
+      fontFamily: fontFamilies.heading,
+      fontSize: fontSizes[12],
+      [muiTheme.breakpoints.up('xs')]: {
+        // fontSize: '0.1rem'
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        // fontSize: '0.625rem'
+      },
+      fontWeight: 700,
+      lineHeight: '0.9',
+      letterSpacing: '-0.04em'
+    },
+    h2: {
+      fontFamily: fontFamilies.heading,
+      fontSize: fontSizes[10],
+      fontWeight: 700,
+      lineHeight: ['2rem', '2.25rem', '2.5rem'],
+      letterSpacing: '-0.03em'
+    },
+    h3: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[8],
+      fontWeight: 700,
+      lineHeight: '1.25rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.025em'
+    },
+    h4: {
+      fontFamily: fontFamilies.heading,
+      fontSize: fontSizes[6],
+      fontWeight: 700,
+      lineHeight: ['1.75rem', '1.75rem', '2rem'],
+      letterSpacing: '-0.02em'
+    },
+    h5: {
+      fontFamily: fontFamilies.heading,
+      fontWeight: 400,
+      fontSize: fontSizes[5],
+      lineHeight: 1.334,
+      letterSpacing: '0em'
+    },
+    h6: {
+      fontFamily: fontFamilies.heading,
+      fontWeight: 500,
+      fontSize: fontSizes[4],
+      lineHeight: 1.6,
+      letterSpacing: '0.0075em'
+    },
+    subtitle1: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 400,
+      fontSize: fontSizes[3],
+      lineHeight: 1.75,
+      letterSpacing: '0.00938em'
+    },
+    subtitle2: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 500,
+      fontSize: fontSizes[2],
+      lineHeight: 1.57,
+      letterSpacing: '0.00714em'
+    },
+    body1: {
+      fontFamily: 'Inter',
+      fontSize: fontSizes[3],
+      lineHeight: '0.9',
+      letterSpacing: '-0.04em'
+    },
+    body2: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[2],
+      fontWeight: 500,
+      lineHeight: '1.5rem'
+    },
+    caption: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 1.66,
+      letterSpacing: '0.03333em'
+    },
+    overline: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 2.66,
+      letterSpacing: '0.08333em',
+      textTransform: 'uppercase'
+    },
     price: {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,

@@ -1,7 +1,9 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-import theme from '../theme/index'
-import createEmotionServer from '@emotion/server/create-instance'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
+
 import createEmotionCache from '@/utils/createEmotionCache'
+import createEmotionServer from '@emotion/server/create-instance'
+import theme from '../theme/index'
+
 const APP_NAME = 'Algodex'
 const APP_DESCRIPTION = 'Decentralized Exchange'
 
@@ -23,7 +25,13 @@ export default class NextHTMLDocument extends Document {
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content={theme.palette.primary.main} />
-          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+          {/* <link rel="stylesheet" href="https://rsms.me/inter/inter.css" /> */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+          />
           <link rel="stylesheet" href="/fonts/style.css" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="icon" href="/favicon.ico" />

@@ -1,10 +1,12 @@
 import { ArrowLeft, ExternalLink } from 'react-feather'
 // import { Typography, Typography, Typography } from '@/components/Typography'
 import { Fragment, useCallback } from 'react'
-import Typography from '@mui/material/Typography'
+
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import Spinner from '@/components/Spinner'
 import SvgImage from '@/components/SvgImage'
+import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import styled from '@emotion/styled'
@@ -12,7 +14,6 @@ import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@algodex/algodex-hooks'
-import Spinner from '@/components/Spinner'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -259,9 +260,7 @@ export function AssetInfo({ asset }) {
                 </Typography>
               </InfoItem>
               <InfoItem>
-                <Typography as="dt" color="gray.500">
-                  Change
-                </Typography>
+                <Typography color="gray.500">Change</Typography>
                 <Typography
                   data-testid="asset-info-pct-change"
                   as="dd"
