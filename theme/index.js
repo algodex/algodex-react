@@ -268,7 +268,7 @@ const theme = {
     },
     h5: {
       fontFamily: fontFamilies.heading,
-      fontWeight: 400,
+      fontWeight: 600,
       fontSize: fontSizes[5],
       lineHeight: 1.334,
       letterSpacing: '0em'
@@ -302,7 +302,7 @@ const theme = {
     },
     body2: {
       fontFamily: fontFamilies.body,
-      fontSize: fontSizes[2],
+      fontSize: fontSizes[1],
       fontWeight: 500,
       lineHeight: '1.5rem'
     },
