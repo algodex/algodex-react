@@ -72,7 +72,7 @@ export function SearchFlyover(props) {
 
     return (
       <InfoItem halfWidth>
-        <Typography variant="body2" color="gray.500">
+        <Typography variant="body2AllCaps" color="gray.500">
           {t('24-hr-change')}
         </Typography>
         <Typography
@@ -98,7 +98,7 @@ export function SearchFlyover(props) {
           </HeaderContainer>
           <InfoList>
             <InfoItem>
-              <Typography variant="body2" color="gray.500">
+              <Typography variant="body2AllCaps" color="gray.500">
                 ASA ID
               </Typography>
               <Typography
@@ -114,7 +114,7 @@ export function SearchFlyover(props) {
             {row.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
-                  <Typography variant="body2" color="gray.500" className="flex items-center">
+                  <Typography variant="body2AllCaps" color="gray.500" className="flex items-center">
                     {t('price')} <Algos use="algoLogo" size={0.625} />
                   </Typography>
                   <Typography
@@ -133,7 +133,7 @@ export function SearchFlyover(props) {
             {row.hasBeenOrdered && (
               <>
                 <InfoItem halfWidth>
-                  <Typography variant="body2" color="gray.500">
+                  <Typography variant="body2AllCaps" color="gray.500">
                     {t('liquidity')} (Algos)
                   </Typography>
                   <Typography
@@ -146,7 +146,7 @@ export function SearchFlyover(props) {
                   </Typography>
                 </InfoItem>
                 <InfoItem halfWidth>
-                  <Typography variant="body2" color="gray.500">
+                  <Typography variant="body2AllCaps" color="gray.500">
                     {`${t('liquidity')} (${row.name})`}
                   </Typography>
                   <Typography

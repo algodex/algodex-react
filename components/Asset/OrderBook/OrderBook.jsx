@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
-import Typography from '@mui/material/Typography'
+
 import Big from 'big.js'
 import { Fragment } from 'react'
 import PropTypes from 'prop-types'
@@ -9,6 +9,7 @@ import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
+import Typography from '@mui/material/Typography'
 import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
@@ -128,12 +129,13 @@ const gridStyles = `
 const Header = styled.header`
   flex-shrink: 0;
   display: grid;
-  padding: 0 0.5rem 0.75rem;
+  padding: 0 0.5rem 0rem;
   ${gridStyles}
 `
 
 const BookRow = styled.div`
   display: grid;
+  align-items: center;
   padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
@@ -332,6 +334,7 @@ export function OrderBook({ asset, orders, components }) {
             {row.price}
           </Typography>
           <Typography
+            variant="body2AllCaps"
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -341,6 +344,7 @@ export function OrderBook({ asset, orders, components }) {
             {amount.toFixed(Math.min(3, decimals))}
           </Typography>
           <Typography
+            variant="body2AllCaps"
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -361,16 +365,15 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Typography color="gray.500" mb={1}>
+        <Typography variant="subtitleAllCap" color="gray.500" mb={1}>
           {t('order-book')}
         </Typography>
-        <br></br>
         <Header>
           <TablePriceHeader />
-          <Typography color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body2AllCaps" color="gray.500" textAlign="right" m={0}>
             {t('amount')}
           </Typography>
-          <Typography color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body2AllCaps" color="gray.500" textAlign="right" m={0}>
             {t('total')}
           </Typography>
         </Header>

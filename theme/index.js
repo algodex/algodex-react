@@ -71,7 +71,21 @@ const fontFamilies = {
   monospace: `'Roboto Mono', monospace`
 }
 
-const fontSizes = [10, 12, 14, 16, 20, 24, 32, 34, 40, 48, 60, 64, 96]
+const fontSizes = [
+  '10px',
+  '12px',
+  '14px',
+  '16px',
+  '20px',
+  '24px',
+  '32px',
+  '34px',
+  '40px',
+  '48px',
+  '60px',
+  '64px',
+  '96px'
+]
 
 // const breakpoints = ['40em', '48em']
 
@@ -282,10 +296,18 @@ const theme = {
     },
     subtitle1: {
       fontFamily: fontFamilies.body,
-      fontWeight: 400,
+      fontWeight: 700,
       fontSize: fontSizes[3],
       lineHeight: 1.75,
       letterSpacing: '0.00938em'
+    },
+    subtitleAllCap: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[3],
+      lineHeight: 1.75,
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase'
     },
     subtitle2: {
       fontFamily: fontFamilies.body,
@@ -305,6 +327,14 @@ const theme = {
       fontSize: fontSizes[1],
       fontWeight: 500,
       lineHeight: '1.5rem'
+    },
+    body2AllCaps: {
+      fontFamily: fontFamilies.body,
+      fontSize: '10px',
+      fontWeight: 400,
+      lineHeight: '1.5rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.03em'
     },
     caption: {
       fontFamily: fontFamilies.body,
