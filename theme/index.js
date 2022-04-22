@@ -433,19 +433,6 @@ const theme = {
       paper: colors.gray['800'],
       default: colors.gray['800']
     },
-    'primary-button': {
-      main: colors.green['500'],
-      light: colors.green['400'],
-      dark: colors.green['900'],
-      contrastText: '#ffffff'
-      // contrastText: lighten(0.05, colors.green['500'])
-    },
-    'default-button': {
-      main: colors.green['500'],
-      light: colors.green['400'],
-      dark: colors.green['900'],
-      contrastText: lighten(0.05, colors.green['500'])
-    },
     // TODO: Remove focus
     focus: {
       green: '#4b9064',
