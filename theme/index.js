@@ -285,7 +285,7 @@ const theme = {
       fontWeight: 600,
       fontSize: fontSizes[5],
       lineHeight: 1.334,
-      letterSpacing: '0em'
+      letterSpacing: '-0.02em'
     },
     h6: {
       fontFamily: fontFamilies.heading,
@@ -365,7 +365,44 @@ const theme = {
       textTransform: 'uppercase'
     }
   },
-
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'primary' },
+          style: {
+            color: colors.gray['000'],
+            border: '1px solid transparent',
+            backgroundColor: colors.green['500'],
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.green['500'])
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
+          props: { variant: 'default' },
+          style: {
+            color: colors.gray['000'],
+            border: '1px solid transparent',
+            backgroundColor: colors.gray['600'],
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.gray['600'])
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        }
+      ]
+    }
+  },
   palette: {
     ...muiTheme.palette,
     primary: {
@@ -395,6 +432,19 @@ const theme = {
     background: {
       paper: colors.gray['800'],
       default: colors.gray['800']
+    },
+    'primary-button': {
+      main: colors.green['500'],
+      light: colors.green['400'],
+      dark: colors.green['900'],
+      contrastText: '#ffffff'
+      // contrastText: lighten(0.05, colors.green['500'])
+    },
+    'default-button': {
+      main: colors.green['500'],
+      light: colors.green['400'],
+      dark: colors.green['900'],
+      contrastText: lighten(0.05, colors.green['500'])
     },
     // TODO: Remove focus
     focus: {
