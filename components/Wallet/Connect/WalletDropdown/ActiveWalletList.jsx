@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import theme from 'theme'
 import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
@@ -24,7 +25,9 @@ const ActiveWalletList = ({ wallet }) => {
     <div>
       {typeof address !== 'undefined' ? (
         <div>
-          <p className="text-white font-medium mb-2 text-xs">ACTIVE WALLET</p>
+          <Typography variant="body2AllCapsBold" color="gray.000" className="mb-3">
+            ACTIVE WALLET
+          </Typography>
           <div className="text-white">
             <div
               className="p-2 text-xs rounded shadow"

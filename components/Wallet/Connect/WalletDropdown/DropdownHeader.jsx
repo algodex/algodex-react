@@ -1,11 +1,14 @@
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
+import Typography from '@mui/material/Typography'
 import { mdiClose } from '@mdi/js'
 
 const DropdownHeader = ({ closeFn }) => {
   return (
     <div className="flex justify-between items-center p-4">
-      <p className="text-sm text-white font-bold">Your Wallets</p>
+      <Typography variant="subtitle1" color="gray.100">
+        Your Wallets
+      </Typography>
       <Icon
         onClick={closeFn}
         path={mdiClose}

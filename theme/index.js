@@ -325,15 +325,38 @@ const theme = {
     body2: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
-      fontWeight: 500,
+      fontWeight: 400,
       lineHeight: '1.5rem'
+    },
+    body2RegularBold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      letterSpacing: '0.03em'
     },
     body2AllCaps: {
       fontFamily: fontFamilies.body,
-      fontSize: '10px',
+      fontSize: fontSizes[1],
       fontWeight: 400,
       lineHeight: '1.5rem',
       textTransform: 'uppercase',
+      letterSpacing: '0.03em'
+    },
+    body2AllCapsBold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.03em'
+    },
+    body2BoldUnderline: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      textDecoration: 'underline',
       letterSpacing: '0.03em'
     },
     caption: {

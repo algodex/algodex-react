@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import Typography from '@mui/material/Typography'
 import theme from 'theme'
 import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import { useWalletConnect } from '@/hooks/useWalletConnect'
@@ -22,7 +23,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
         }}
       >
         <div className="flex justify-between">
-          <p className="font-semibold">CONNECT A WALLET</p>
+          <Typography variant="body2AllCapsBold">CONNECT A WALLET</Typography>
           {isConnectingAddress && (
             <button
               className="cursor-pointer font-medium text-white"
@@ -46,7 +47,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
               width={25}
               height={25}
             />
-            <p className="ml-2 font-medium underline">Algorand Mobile Wallet</p>
+            <Typography className="ml-2" variant="body2BoldUnderline">
+              Algorand Mobile Wallet
+            </Typography>
           </div>
           <div
             className="cursor-pointer flex items-center mb-2"
@@ -56,7 +59,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             onKeyPress={() => console.log('key pressed')}
           >
             <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
-            <p className="ml-2 font-medium underline">My Algo Wallet</p>
+            <Typography className="ml-2" variant="body2BoldUnderline">
+              My Algo Wallet
+            </Typography>
           </div>
         </div>
       </div>

@@ -4,11 +4,23 @@ import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useMemo } from 'react'
 
+const styleReset = css`
+  margin: 0;
+  padding: 0;
+  // border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+`
 const Container = styled.div`
+  p {
+    ${styleReset}
+  }
   position: absolute;
   min-height: 16rem;
   background-color: ${({ theme }) => theme.colors.gray[700]};
