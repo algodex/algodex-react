@@ -97,7 +97,8 @@ const Container = styled.div`
     tbody {
       position: absolute;
       width: 100%;
-      height: 29.7rem;
+      ${({ optionalGridInfo }) => console.log(optionalGridInfo, 'change of option')}
+      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 126}px`};
       overflow-y: scroll;
       @media (max-width: 996px) {
         height: ${({ optionalGridInfo }) =>
