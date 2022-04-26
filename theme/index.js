@@ -270,7 +270,6 @@ const theme = {
       fontSize: fontSizes[8],
       fontWeight: 700,
       lineHeight: '1.25rem',
-      textTransform: 'uppercase',
       letterSpacing: '0.025em'
     },
     h4: {
@@ -315,6 +314,12 @@ const theme = {
       fontSize: fontSizes[2],
       lineHeight: 1.57,
       letterSpacing: '0.00714em'
+    },
+    subtitle3: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 500,
+      fontSize: fontSizes[3],
+      lineHeight: 1.57
     },
     body1: {
       fontFamily: 'Inter',
