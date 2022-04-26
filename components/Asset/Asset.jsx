@@ -28,22 +28,6 @@ const InfoContainer = styled.div`
   position: absolute;
 `
 
-const ButtonText = styled.button`
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  display: flex;
-  align-content: center;
-  cursor: pointer;
-  color: ${({ theme }) => theme.palette.gray[400]};
-  padding: 5px 0;
-
-  div {
-    line-height: 24px;
-    margin-left: 5px;
-  }
-`
-
 const HeaderContainer = styled.div`
   padding-bottom: 2rem;
   margin-top: 1rem;
