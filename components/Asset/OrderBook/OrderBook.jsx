@@ -111,10 +111,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.palette.background.dark};
-  // padding: 0.3rem;
 
   @media (min-width: 996px) {
-    // padding: 0.75rem 0.625rem 1rem;
     overflow: hidden;
   }
 `
@@ -127,13 +125,12 @@ const gridStyles = `
 const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
-  ${gridStyles}// padding: 0 0.5rem 0.75rem;
+  ${gridStyles}
 `
 
 const BookRow = styled.div`
   display: grid;
   ${gridStyles}
-  // padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
 
@@ -215,7 +212,6 @@ const Price = styled.div`
  * @constructor
  */
 export function OrderBookPrice({ asset }) {
-  // console.log(`OrderBookPrice(`, arguments[0], `)`)
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
