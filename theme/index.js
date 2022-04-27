@@ -1,6 +1,10 @@
 import { createTheme } from '@mui/material/styles'
 import { lighten } from 'polished'
 
+/**
+ * Design System Name: Lucid 0.0.1
+ */
+
 const colors = {
   white: '#FFFFFF',
   blue: {
@@ -260,14 +264,14 @@ const theme = {
     },
     h2: {
       fontFamily: fontFamilies.heading,
-      fontSize: fontSizes[10],
+      fontSize: fontSizes[8],
       fontWeight: 700,
       lineHeight: ['2rem', '2.25rem', '2.5rem'],
       letterSpacing: '-0.03em'
     },
     h3: {
       fontFamily: fontFamilies.body,
-      fontSize: fontSizes[8],
+      fontSize: fontSizes[7],
       fontWeight: 700,
       lineHeight: '1.25rem',
       letterSpacing: '0.025em'
@@ -281,7 +285,7 @@ const theme = {
     },
     h5: {
       fontFamily: fontFamilies.heading,
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: fontSizes[5],
       lineHeight: 1.334,
       letterSpacing: '-0.02em'
@@ -293,14 +297,30 @@ const theme = {
       lineHeight: 1.6,
       letterSpacing: '0.0075em'
     },
-    subtitle1: {
+    // Subtitles
+    subtitle: {
       fontFamily: fontFamilies.body,
       fontWeight: 700,
       fontSize: fontSizes[3],
       lineHeight: 1.75,
       letterSpacing: '0.00938em'
     },
-    subtitleAllCap: {
+    subtitle_tiny: {},
+    subtitle_small: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 500,
+      fontSize: fontSizes[2],
+      lineHeight: 1.57,
+      letterSpacing: '0.00714em'
+    },
+    subtitle_medium: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 500,
+      fontSize: fontSizes[3],
+      lineHeight: 1.57
+    },
+    subtitle_large: {},
+    subtitle_medium_cap: {
       fontFamily: fontFamilies.body,
       fontWeight: 700,
       fontSize: fontSizes[3],
@@ -308,47 +328,48 @@ const theme = {
       letterSpacing: '0.1em',
       textTransform: 'uppercase'
     },
-    subtitle2: {
-      fontFamily: fontFamilies.body,
-      fontWeight: 500,
-      fontSize: fontSizes[2],
-      lineHeight: 1.57,
-      letterSpacing: '0.00714em'
-    },
-    subtitle3: {
-      fontFamily: fontFamilies.body,
-      fontWeight: 500,
-      fontSize: fontSizes[3],
-      lineHeight: 1.57
-    },
-    body1: {
+
+    // Body
+    body: {
       fontFamily: 'Inter',
       fontSize: fontSizes[3],
       lineHeight: '0.9',
       letterSpacing: '-0.04em'
     },
-    body2: {
+    body_tiny: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 400,
+      lineHeight: '1.5rem',
+      letterSpacing: '0.03em'
+    },
+    body_tiny_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      letterSpacing: '0.03em'
+    },
+    body_tiny_cap: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 400,
+      textTransform: 'uppercase'
+    },
+    body_small: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
       fontWeight: 400,
       lineHeight: '1.5rem'
     },
-    body2RegularBold: {
+    body_small_bold: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
       fontWeight: 700,
       lineHeight: '1.5rem',
       letterSpacing: '0.03em'
     },
-    body2AllCaps: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[1],
-      fontWeight: 400,
-      lineHeight: '1.5rem',
-      textTransform: 'uppercase',
-      letterSpacing: '0.03em'
-    },
-    body2AllCapsBold: {
+    body_small_cap_bold: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
       fontWeight: 700,
@@ -356,14 +377,11 @@ const theme = {
       textTransform: 'uppercase',
       letterSpacing: '0.03em'
     },
-    body2BoldUnderline: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[1],
-      fontWeight: 700,
-      lineHeight: '1.5rem',
-      textDecoration: 'underline',
-      letterSpacing: '0.03em'
-    },
+    body_medium: {},
+    body_large: {},
+    body_caps_medium: {},
+
+    // Caption
     caption: {
       fontFamily: fontFamilies.body,
       fontWeight: 400,
@@ -371,6 +389,8 @@ const theme = {
       lineHeight: 1.66,
       letterSpacing: '0.03333em'
     },
+
+    // Overline
     overline: {
       fontFamily: fontFamilies.body,
       fontWeight: 400,
@@ -379,6 +399,21 @@ const theme = {
       letterSpacing: '0.08333em',
       textTransform: 'uppercase'
     },
+
+    // Labels
+    label_regular: {},
+    label_tiny: {},
+    label_medium: {},
+    label_large: {},
+    label_caps: {},
+
+    // Button
+    button_regular: {},
+    button_tiny: {},
+    button_medium: {},
+    button_large: {},
+    button_caps: {},
+
     price: {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,

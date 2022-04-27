@@ -6,7 +6,7 @@ import { mdiClose } from '@mdi/js'
 const DropdownHeader = ({ closeFn }) => {
   return (
     <div className="flex justify-between items-center p-4">
-      <Typography variant="subtitle1" color="gray.100">
+      <Typography variant="subtitle" color="gray.100">
         Your Wallets
       </Typography>
       <Icon

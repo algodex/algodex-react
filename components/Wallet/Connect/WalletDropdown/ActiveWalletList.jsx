@@ -25,7 +25,7 @@ const ActiveWalletList = ({ wallet }) => {
     <div>
       {typeof address !== 'undefined' ? (
         <div>
-          <Typography variant="body2AllCapsBold" color="gray.000" className="mb-3">
+          <Typography variant="body_small_cap_bold" color="gray.000" className="mb-3">
             ACTIVE WALLET
           </Typography>
           <div className="text-white">

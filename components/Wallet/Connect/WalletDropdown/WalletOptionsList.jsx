@@ -23,7 +23,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
         }}
       >
         <div className="flex justify-between">
-          <Typography variant="body2AllCapsBold">CONNECT A WALLET</Typography>
+          <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
           {isConnectingAddress && (
             <button
               className="cursor-pointer font-medium text-white"
@@ -47,7 +47,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
               width={25}
               height={25}
             />
-            <Typography className="ml-2" variant="body2BoldUnderline">
+            <Typography className="underline ml-2" variant="body_small_bold">
               Algorand Mobile Wallet
             </Typography>
           </div>
@@ -59,7 +59,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             onKeyPress={() => console.log('key pressed')}
           >
             <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
-            <Typography className="ml-2" variant="body2BoldUnderline">
+            <Typography className="underline ml-2" variant="body_small_bold">
               My Algo Wallet
             </Typography>
           </div>

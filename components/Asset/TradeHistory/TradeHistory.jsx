@@ -105,7 +105,7 @@ const PriceHeaderText = styled(Typography)`
 const PriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText variant="body2AllCaps">
+    <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
@@ -144,7 +144,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               {floatToFixed(row.price)}
             </Typography>
             <Typography
-              variant="body2AllCaps"
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -154,7 +154,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               {amount.toFixed(Math.min(3, asset.decimals))}
             </Typography>
             <Typography
-              variant="body2AllCaps"
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -171,15 +171,15 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <Typography variant="subtitleAllCap" color="gray.500" mb={1}>
+        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
           {t('trade-history')}
         </Typography>
         <Header>
           <PriceHeader />
-          <Typography variant="body2AllCaps" color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
             {t('amount')}
           </Typography>
-          <Typography variant="body2AllCaps" color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
             {t('time')}
           </Typography>
         </Header>
@@ -188,7 +188,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <Typography variant="body2AllCaps" color="gray.600" textAlign="center" m={4}>
+              <Typography variant="body_tiny" color="gray.600" textAlign="center" m={4}>
                 {t('no-trades-completed')}
               </Typography>
             )}

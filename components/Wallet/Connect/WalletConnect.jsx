@@ -280,7 +280,7 @@ export function WalletView(props) {
             <Typography variant="h5" color="gray.100" m={0} mb={4}>
               {t('start-by')}
             </Typography>
-            <Typography variant="subtitle2" color="gray.500" m={0}>
+            <Typography variant="subtitle_small" color="gray.500" m={0}>
               {t('once-connected')}
             </Typography>
           </EmptyState>

@@ -43,7 +43,7 @@ const InactiveWalletsList = ({ walletsList }) => {
       }}
     >
       <div>
-        <Typography variant="body2AllCapsBold" color="gray.000" className="mb-1.5">
+        <Typography variant="body_small_cap_bold" color="gray.000" className="mb-1.5">
           SWITCH WALLETS
         </Typography>
         <p>Click on address to switch active wallets</p>

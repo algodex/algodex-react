@@ -18,7 +18,7 @@ export const PriceHeaderText = styled(Typography)`
 export const TablePriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText variant="body2AllCaps" data-testid="header-item">
+    <PriceHeaderText variant="body_tiny_cap" data-testid="header-item">
       {t('price')}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>

@@ -118,7 +118,7 @@ export function AssetInfo({ asset }) {
       return (
         <AssetUrl>
           <Link href={asset.url} target="_blank" rel="noreferrer" color="gray.100">
-            <Typography variant="subtitle3" data-testid="asset-url">
+            <Typography variant="subtitle_medium" data-testid="asset-url">
               {asset.url}
             </Typography>
           </Link>
@@ -150,7 +150,7 @@ export function AssetInfo({ asset }) {
         </HeaderContainer>
         <InfoList>
           <InfoItem>
-            <Typography variant="body2AllCaps" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               {t('description')}
             </Typography>
             <Typography variant="h6" color="gray.400" data-testid="asset-info-desc">
@@ -158,7 +158,7 @@ export function AssetInfo({ asset }) {
             </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <Typography variant="body2AllCaps" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               {t('circulating-supply')}
             </Typography>
             <Typography data-testid="asset-info-circ-supply" variant="h6" color="gray.400">
@@ -166,7 +166,7 @@ export function AssetInfo({ asset }) {
             </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <Typography variant="body2AllCaps" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               {t('total-supply')}
             </Typography>
             <Typography data-testid="asset-info-total-supply" variant="h6" color="gray.400">
@@ -174,7 +174,7 @@ export function AssetInfo({ asset }) {
             </Typography>
           </InfoItem>
           <InfoItem>
-            <Typography variant="body2AllCaps" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               ASA ID
             </Typography>
             <Typography
@@ -198,7 +198,7 @@ export function AssetInfo({ asset }) {
           {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
-                <Typography variant="body2AllCaps" color="gray.500">
+                <Typography variant="body_tiny_cap" color="gray.500">
                   Price
                 </Typography>
                 <Typography
@@ -216,7 +216,7 @@ export function AssetInfo({ asset }) {
                 </Typography>
               </InfoItem>
               <InfoItem>
-                <Typography variant="body2AllCaps" color="gray.500">
+                <Typography variant="body_tiny_cap" color="gray.500">
                   Change
                 </Typography>
                 <Typography

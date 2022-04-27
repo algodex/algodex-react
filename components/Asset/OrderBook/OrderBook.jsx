@@ -334,7 +334,7 @@ export function OrderBook({ asset, orders, components }) {
             {row.price}
           </Typography>
           <Typography
-            variant="body2AllCaps"
+            variant="body_tiny"
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -344,7 +344,7 @@ export function OrderBook({ asset, orders, components }) {
             {amount.toFixed(Math.min(3, decimals))}
           </Typography>
           <Typography
-            variant="body2AllCaps"
+            variant="body_tiny"
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -365,15 +365,15 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Typography variant="subtitleAllCap" color="gray.500" mb={1}>
+        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
           {t('order-book')}
         </Typography>
         <Header>
           <TablePriceHeader />
-          <Typography variant="body2AllCaps" color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
             {t('amount')}
           </Typography>
-          <Typography variant="body2AllCaps" color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
             {t('total')}
           </Typography>
         </Header>
