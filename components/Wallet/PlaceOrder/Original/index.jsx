@@ -1,13 +1,14 @@
-import PlaceOrderView from './view'
-import useStore, { useStorePersisted } from 'store/use-store'
-import PropTypes from 'prop-types'
-import { useAssetOrdersQuery } from '@/hooks/useAlgodex'
-import Spinner from '@/components/Spinner'
-import Error from '@/components/ServiceError'
-import { useMemo } from 'react'
 import { BodyCopy, HeaderCaps } from '@/components/Typography'
+import { Container, Header } from './place-order.css'
+import useStore, { useStorePersisted } from 'store/use-store'
+
+import Error from '@/components/ServiceError'
+import PlaceOrderView from './view'
+import PropTypes from 'prop-types'
+import Spinner from '@/components/Spinner'
+import { useAssetOrdersQuery } from '@/hooks/useAlgodex'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { Header, Container } from './place-order.css'
 function PlaceOrder({ asset }) {
   const { t } = useTranslation('place-order')
   const wallets = useStorePersisted((state) => state.wallets)
