@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types'
-import Typography from '@mui/material/Typography'
-import Tooltip from '@/components/Tooltip'
-import { Info } from 'react-feather'
-import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import Icon from '@/components/Icon'
+import { Info } from 'react-feather'
+import PropTypes from 'prop-types'
+import Tooltip from '@/components/Tooltip'
+import Typography from '@mui/material/Typography'
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -47,7 +47,7 @@ function AvailableBalance({ wallet, asset }) {
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
-        <Typography variant="bodyCopyTiny" color="gray.500">
+        <Typography variant="body_tiny_cap" color="gray.500">
           {t('available-balance')}
         </Typography>
         <Tooltip

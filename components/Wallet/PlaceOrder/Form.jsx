@@ -1,21 +1,22 @@
-import Tabs from '@/components/Tabs'
-import Tab from '@/components/Tab'
 import { useCallback, useMemo, useState } from 'react'
+
 import AdvancedOptions from './Form/AdvancedOptions'
-import Slider from '@/components/Input/Slider'
+import AvailableBalance from './Form/AvailableBalance'
+import { ButtonGroup } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
-import OutlinedInput from '@/components/Input/OutlinedInput'
 import { default as MaterialBox } from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
+import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
+import Slider from '@/components/Input/Slider'
+import Spinner from '@/components/Spinner'
+import Tab from '@/components/Tab'
+import Tabs from '@/components/Tabs'
+import Typography from '@mui/material/Typography'
 import { lighten } from 'polished'
 import theme from '../../../theme'
-import useTranslation from 'next-translate/useTranslation'
-import Typography from '@mui/material/Typography'
-import { ButtonGroup } from '@mui/material'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import Spinner from '@/components/Spinner'
-import AvailableBalance from './Form/AvailableBalance'
+import useTranslation from 'next-translate/useTranslation'
 
 /**
  * # 📝 Place Order Form
@@ -129,7 +130,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     >
       {showTitle && (
         <header className="pb-5">
-          <Typography variant="headerCaps" color="gray.500" mb={1}>
+          <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
             {t('place-order')}
           </Typography>
         </header>

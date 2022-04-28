@@ -362,6 +362,12 @@ const theme = {
       fontWeight: 400,
       lineHeight: '1.5rem'
     },
+    body_small_medium: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 500,
+      lineHeight: '1.5rem'
+    },
     body_small_bold: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
