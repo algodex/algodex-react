@@ -197,11 +197,10 @@ const Price = styled.div`
   margin: 0;
 
   svg {
-    margin-right: 0.5rem;
+    // margin-right: 0.5rem;
   }
 
   span {
-    margin-top: 0.125rem;
     margin-left: 0.75rem;
   }
 `
@@ -229,9 +228,9 @@ export function OrderBookPrice({ asset }) {
   return (
     <Price color={color} data-testid="order-book-price">
       {!isUndefined(asset.price_info) && isDecrease ? (
-        <ArrowDown data-testid="arrow-down" />
+        <ArrowDown className="mr-2" data-testid="arrow-down" />
       ) : (
-        <ArrowUp data-testid="arrow-up" />
+        <ArrowUp className="mr-2" data-testid="arrow-up" />
       )}
       {isUndefined(asset.price_info) ? <NoPriceInfo /> : <PriceInfo asset={asset} />}
     </Price>
