@@ -13,11 +13,13 @@ export function OrderBookPriceInfo({ algoPrice, asset }) {
   return (
     <>
       <HeaderSmInter color="white">{asaValue}</HeaderSmInter>
-      <BodyCopy data-testid="has-price-info" as="span">
-        {(asset?.price_info?.price24Change &&
-          `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-          '0.00%'}
-      </BodyCopy>
+      {asset && asset.price_info && (
+        <BodyCopy data-testid="price-info" as="span">
+          {(asset?.price_info?.price24Change &&
+            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
+            '0.00%'}
+        </BodyCopy>
+      )}
       <div className="flex items-center ml-4 text-gray-500">
         <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
         <LabelLg as="p">${formatUSDPrice(algoPrice * asaValue)}</LabelLg>
