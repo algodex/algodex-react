@@ -1,11 +1,11 @@
 // import { Typography, Typography, Typography, Typography } from 'components/Typography'
 
-import Typography from '@mui/material/Typography'
 import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import SvgImage from 'components/SvgImage'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
@@ -170,7 +170,7 @@ export function WalletView(props) {
   const { t } = useTranslation('wallet')
 
   const getButtonVariant = () => {
-    return isSignedIn ? 'secondary' : 'primary'
+    return isSignedIn ? 'default' : 'primary'
   }
 
   const isWalletActive = (addr) => {
@@ -252,6 +252,7 @@ export function WalletView(props) {
       <Container>
         <ButtonContainer>
           <Button
+            // color="primary-button"
             variant={getButtonVariant()}
             onClick={getButtonState}
             data-testid="connect-wallet-btn"
@@ -272,14 +273,14 @@ export function WalletView(props) {
             </Wallets>
           </>
         ) : (
-          <EmptyState>
+          <EmptyState p={3}>
             <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow>
-            <Typography color="gray.100" m={0} mb={16}>
+            <Typography variant="h5" color="gray.100" m={0} mb={4}>
               {t('start-by')}
             </Typography>
-            <Typography color="gray.500" m={0}>
+            <Typography variant="subtitle_small" color="gray.500" m={0}>
               {t('once-connected')}
             </Typography>
           </EmptyState>
