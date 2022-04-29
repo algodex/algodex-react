@@ -45,6 +45,11 @@ export function Header() {
     }
   }
 
+  const MAILBOX_URL =
+    activeNetwork === 'testnet'
+      ? 'https://mailbox-testnet.algodex.com/'
+      : 'https://mailbox.algodex.com/'
+
   return (
     <Container className="flex" data-testid="header-container">
       <Link href="/trade">
@@ -90,6 +95,9 @@ export function Header() {
         <NavActiveLink href="/support" matches={/^\/support/}>
           <NavTextLg>{t('header-support')}</NavTextLg>
         </NavActiveLink>
+        <NavActiveLink href={MAILBOX_URL}>
+          <NavTextLg>{t('header-mailbox')}</NavTextLg>
+        </NavActiveLink>
         {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
         {/*</a>*/}
@@ -127,6 +135,9 @@ export function Header() {
           </a>
           <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
+          </a>
+          <a target="_blank" href={MAILBOX_URL} rel="noreferrer">
+            <NavTextSm>Mailbox</NavTextSm>
           </a>
           {/*
           <ActiveLink href="/wallet">
