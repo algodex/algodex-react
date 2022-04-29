@@ -58,34 +58,29 @@ function AvailableBalance({ wallet, asset }) {
           )}
         >
           <section className="flex items-center justify-between mb-1">
-            <Typography variant="labelMdSpaced" color="gray.300">
+            <Typography variant="body_small_cap_medium" color="gray.300">
               {t('orders:available')}:
             </Typography>
             <IconTextContainer>
-              <Typography variant="labelMdSpaced" color="gray.300">
+              <Typography variant="body_small_cap_medium" color="gray.300">
                 {fromBaseUnits(wallet.amount)}
               </Typography>
-              <Icon use="algoLogo" size={0.625} />
+              <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
           </section>
           <BalanceRow>
-            <Typography variant="labelMdSpaced" color="gray.300">
+            <Typography variant="body_small_cap_medium" color="gray.300">
               {t('total')}:
             </Typography>
             <IconTextContainer>
-              <Typography variant="labelMdSpaced" color="gray.300">
+              <Typography variant="body_small_cap_medium" color="gray.300">
                 {fromBaseUnits(wallet.amount)}
               </Typography>
-              <Icon use="algoLogo" size={0.625} />
+              <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
           </BalanceRow>
           <BalanceRow>
-            <Typography
-              variant="labelSmForm"
-              component="span"
-              color="gray.300"
-              textTransform="initial"
-            >
+            <Typography variant="body_small" color="gray.300">
               &nbsp;*
               {t('max-spend-explanation', {
                 // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
@@ -95,7 +90,7 @@ function AvailableBalance({ wallet, asset }) {
         </Tooltip>
       </IconTextContainer>
       <BalanceRow>
-        <Typography variant="labelMdLight" color="gray.400">
+        <Typography variant="body_small_cap_medium" color="gray.400">
           ALGO
         </Typography>
         <Typography variant="labelMdLight" color="gray.300">
@@ -103,7 +98,7 @@ function AvailableBalance({ wallet, asset }) {
         </Typography>
       </BalanceRow>
       <BalanceRow>
-        <Typography variant="labelMdLight" color="gray.400">
+        <Typography variant="body_small_cap_medium" color="gray.400">
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
         </Typography>

@@ -137,33 +137,35 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       )}
       {typeof order !== 'undefined' && isConnected && (
         <form onSubmit={onSubmit} autoComplete="off">
-          <ButtonGroup fullWidth variant="contained">
+          <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
               disableElevation={order.type === 'buy'}
               disableRipple={true}
-              variant="contained"
+              variant={order.type === 'buy' ? 'primary' : 'default'}
               color="buy"
               fullWidth
-              sx={[
-                {
-                  borderTopLeftRadius: 7,
-                  borderBottomLeftRadius: 7,
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0
-                },
-                (theme) => ({
-                  backgroundColor:
-                    order.type === 'buy'
-                      ? theme.palette.buy.main
-                      : lighten(0.05, theme.colors.gray['700']),
-                  '&:hover': {
-                    backgroundColor:
-                      order.type === 'buy'
-                        ? lighten(0.05, theme.palette.buy.main)
-                        : lighten(0.05, theme.colors.gray['700'])
-                  }
-                })
-              ]}
+              sx={
+                [
+                  // {
+                  //   borderTopLeftRadius: 7,
+                  //   borderBottomLeftRadius: 7,
+                  //   borderTopRightRadius: 0,
+                  //   borderBottomRightRadius: 0
+                  // },
+                  // (theme) => ({
+                  //   backgroundColor:
+                  //     order.type === 'buy'
+                  //       ? theme.palette.buy.main
+                  //       : lighten(0.05, theme.colors.gray['700']),
+                  //   '&:hover': {
+                  //     backgroundColor:
+                  //       order.type === 'buy'
+                  //         ? lighten(0.05, theme.palette.buy.main)
+                  //         : lighten(0.05, theme.colors.gray['700'])
+                  //   }
+                  // })
+                ]
+              }
               onClick={handleChange}
               name="type"
               value="buy"
@@ -173,29 +175,31 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <MaterialButton
               disableRipple={true}
               disableElevation={order.type === 'sell'}
-              variant="contained"
+              variant={order.type === 'sell' ? 'sell' : 'default'}
               color="sell"
               fullWidth
-              sx={[
-                {
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  borderTopRightRadius: 7,
-                  borderBottomRightRadius: 7
-                },
-                (theme) => ({
-                  backgroundColor:
-                    order.type === 'sell'
-                      ? theme.palette.sell.main
-                      : lighten(0.05, theme.colors.gray['700']),
-                  '&:hover': {
-                    backgroundColor:
-                      order.type === 'sell'
-                        ? lighten(0.05, theme.palette.sell.main)
-                        : lighten(0.05, theme.colors.gray['700'])
-                  }
-                })
-              ]}
+              sx={
+                [
+                  // {
+                  //   borderTopLeftRadius: 0,
+                  //   borderBottomLeftRadius: 0,
+                  //   borderTopRightRadius: 7,
+                  //   borderBottomRightRadius: 7
+                  // },
+                  // (theme) => ({
+                  //   backgroundColor:
+                  //     order.type === 'sell'
+                  //       ? theme.palette.sell.main
+                  //       : lighten(0.05, theme.colors.gray['700']),
+                  //   '&:hover': {
+                  //     backgroundColor:
+                  //       order.type === 'sell'
+                  //         ? lighten(0.05, theme.palette.sell.main)
+                  //         : lighten(0.05, theme.colors.gray['700'])
+                  //   }
+                  // })
+                ]
+              }
               onClick={handleChange}
               name="type"
               value="sell"
