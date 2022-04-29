@@ -69,14 +69,8 @@ describe('Order Book', () => {
     expect(queryByTestId(BUY_ROW)).not.toBeNull()
   })
 
-  it('should show price', () => {
-    // Should show the actual price
-    const { queryByTestId } = render(<OrderBookPriceView asset={baseAssetData} />)
-    expect(queryByTestId('has-price-info')).not.toBeNull()
-  })
-
-  it('should not show price', () => {
-    const { queryByTestId } = render(<OrderBookPriceView asset={{}} />)
+  it('should render empty price info', () => {
+    const { queryByTestId } = render(<OrderBookPriceView />)
     expect(queryByTestId('no-price-info')).not.toBeNull()
     expect(queryByTestId('has-price-info')).toBeNull()
   })

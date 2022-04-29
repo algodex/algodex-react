@@ -29,10 +29,6 @@ export const MobileNavContainer = styled.div`
   align-items: center;
   height: 30%;
   margin: auto;
-
-  @media (min-width: 768px) {
-    height: 15%;
-  }
 `
 
 export const MobileNavigation = styled.nav`
