@@ -1,7 +1,9 @@
 import { useAlgorandPriceQuery, useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
-import withQuery from '@/hooks/withQuery'
-import Spinner from '@/components/Spinner'
+
 import ServiceError from '@/components/ServiceError'
+import Spinner from '@/components/Spinner'
+import withQuery from '@/hooks/withQuery'
+
 const components = {
   Loading: Spinner,
   ServiceError

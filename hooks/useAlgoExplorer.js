@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import { fetchExplorerAssetInfo, fetchAlgorandPrice } from 'services/algoexplorer'
+import { fetchAlgorandPrice, fetchExplorerAssetInfo } from 'services/algoexplorer'
+
 import { routeQueryError } from './useAlgodex'
 import { useEffect } from 'react'
+import { useQuery } from 'react-query'
+import { useRouter } from 'next/router'
 
 const refetchInterval = 3000
 

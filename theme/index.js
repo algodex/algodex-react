@@ -100,6 +100,14 @@ const textStyles = {
     lineHeight: ['1.75rem', '1.75rem', '2rem'],
     letterSpacing: '-0.02em'
   },
+  headerSmInter: {
+    as: 'h3',
+    fontFamily: fontFamilies.body,
+    fontSize: [fontSizes[5], fontSizes[4], fontSizes[5]],
+    fontWeight: 700,
+    lineHeight: ['1.75rem', '1.75rem', '2rem'],
+    letterSpacing: '-0.02em'
+  },
   headerCaps: {
     as: 'h3',
     fontFamily: fontFamilies.body,

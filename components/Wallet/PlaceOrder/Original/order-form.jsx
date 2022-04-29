@@ -1,12 +1,37 @@
+import { BodyCopy, BodyCopyTiny } from '@/components/Typography'
+
 import AmountRange from './amount-range'
 import Big from 'big.js'
-import { BodyCopy } from '@/components/Typography'
 import { LimitOrder } from './place-order.css'
 import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import React from 'react'
+import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import useTranslation from 'next-translate/useTranslation'
+
+/**
+ *
+ * Render USD Price for an input component
+ * @param {*} { value, id }
+ * @return {*}
+ */
+export const USDInputPrice = ({ value, id }) => {
+  return (
+    <div className="flex justify-between items-center mx-4 mb-4 font-medium">
+      <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
+      <BodyCopyTiny>
+        <USDPrice priceToConvert={value} />
+        <span className="ml-4 mr-3">USD</span>
+      </BodyCopyTiny>
+    </div>
+  )
+}
+
+USDInputPrice.propTypes = {
+  value: PropTypes.number,
+  id: PropTypes.string
+}
 
 export const OrderForm = ({
   order,
@@ -55,7 +80,6 @@ export const OrderForm = ({
           disabled={orderType === 'market'}
           orderType={order.type}
           value={order.price}
-          usdEquivalent={order.price}
           onChange={handleChange}
           autocomplete="false"
           min="0"
@@ -64,6 +88,8 @@ export const OrderForm = ({
           hasError={isErrorMsgVisible()}
           errorMessage={`Price cannot be less than ${microAlgo}`}
         />
+        <USDInputPrice value={order.price} id="price" />
+
         <OrderInput
           type="number"
           pattern="\d*"
@@ -98,10 +124,11 @@ export const OrderForm = ({
           decimals={6}
           orderType={order.type}
           value={order.total}
-          usdEquivalent={order.total}
+          // usdEquivalent={order.total}
           readOnly
           disabled
         />
+        <USDInputPrice value={order.total} id="total" />
         {/* <TxnFeeContainer>
           <BodyCopyTiny color="gray.500" textTransform="none">
             Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

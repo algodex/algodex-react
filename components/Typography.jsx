@@ -1,22 +1,24 @@
-import styled from '@emotion/styled'
-import theme from '../theme/index'
 import {
-  space,
+  color,
   fontFamily,
   fontSize,
   fontWeight,
-  lineHeight,
   letterSpacing,
-  textAlign,
-  color,
-  system
+  lineHeight,
+  space,
+  system,
+  textAlign
 } from 'styled-system'
+
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import theme from '../theme/index'
 
 const {
   title,
   headerLg,
   headerSm,
+  headerSmInter,
   headerCaps,
   subtitle,
   bodyCopyLg,
@@ -66,6 +68,14 @@ export const HeaderSm = (props) => (
   </BaseComponent>
 )
 HeaderSm.propTypes = { children }
+
+export const HeaderSmInter = (props) => (
+  <BaseComponent {...headerSmInter} {...props}>
+    {props.children}
+  </BaseComponent>
+)
+HeaderSmInter.propTypes = { children }
+
 export const HeaderCaps = (props) => (
   <BaseComponent {...headerCaps} {...props}>
     {props.children}
