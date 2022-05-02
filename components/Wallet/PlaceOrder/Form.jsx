@@ -6,6 +6,7 @@ import { ButtonGroup } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialBox } from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
+import OrderForm from './OrderForm'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import Slider from '@/components/Input/Slider'
@@ -40,8 +41,6 @@ import useTranslation from 'next-translate/useTranslation'
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
   const { isConnected, wallet } = useAlgodex()
-  const { t } = useTranslation('place-order')
-
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -49,6 +48,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     total: 0,
     execution: 'both'
   })
+  const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
+  const { t } = useTranslation('place-order')
 
   const buttonProps = useMemo(
     () => ({
@@ -144,28 +145,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'buy' ? 'primary' : 'default'}
               color="buy"
               fullWidth
-              sx={
-                [
-                  // {
-                  //   borderTopLeftRadius: 7,
-                  //   borderBottomLeftRadius: 7,
-                  //   borderTopRightRadius: 0,
-                  //   borderBottomRightRadius: 0
-                  // },
-                  // (theme) => ({
-                  //   backgroundColor:
-                  //     order.type === 'buy'
-                  //       ? theme.palette.buy.main
-                  //       : lighten(0.05, theme.colors.gray['700']),
-                  //   '&:hover': {
-                  //     backgroundColor:
-                  //       order.type === 'buy'
-                  //         ? lighten(0.05, theme.palette.buy.main)
-                  //         : lighten(0.05, theme.colors.gray['700'])
-                  //   }
-                  // })
-                ]
-              }
               onClick={handleChange}
               name="type"
               value="buy"
@@ -178,28 +157,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'sell' ? 'sell' : 'default'}
               color="sell"
               fullWidth
-              sx={
-                [
-                  // {
-                  //   borderTopLeftRadius: 0,
-                  //   borderBottomLeftRadius: 0,
-                  //   borderTopRightRadius: 7,
-                  //   borderBottomRightRadius: 7
-                  // },
-                  // (theme) => ({
-                  //   backgroundColor:
-                  //     order.type === 'sell'
-                  //       ? theme.palette.sell.main
-                  //       : lighten(0.05, theme.colors.gray['700']),
-                  //   '&:hover': {
-                  //     backgroundColor:
-                  //       order.type === 'sell'
-                  //         ? lighten(0.05, theme.palette.sell.main)
-                  //         : lighten(0.05, theme.colors.gray['700'])
-                  //   }
-                  // })
-                ]
-              }
               onClick={handleChange}
               name="type"
               value="sell"
@@ -280,12 +237,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
-            onChange={handleChange}
-            aria-label="secondary tabs example"
-            value={order.execution === 'market' ? 1 : 0}
+            onChange={(e, value) => {
+              setTabSwitch(value)
+            }}
+            aria-label=""
+            value={tabSwitch}
           >
-            <Tab label={t('limit')} index={0} />
-            <Tab label={t('market')} index={1} />
+            <Tab label={t('limit')} />
+            <Tab label={t('market')} />
           </Tabs>
           {/*</TabsUnstyled>*/}
           {/*{!hasBalance && (*/}
@@ -294,123 +253,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           {/*  </Typography>*/}
           {/*)}*/}
           {/*{hasBalance && (*/}
-          <MaterialBox className="flex flex-col mb-4">
-            <OutlinedInput
-              sx={{
-                backgroundColor: theme.palette.gray['900'],
-                border: 2,
-                borderColor: theme.palette.gray['700'],
-                marginBottom: '1rem'
-              }}
-              inputProps={{
-                name: 'price',
-                type: 'number',
-                // pattern: 'd*',
-                autocomplete: false,
-                min: 0,
-                step: 0.000001,
-                inputMode: 'decimal'
-              }}
-              name="price"
-              type="number"
-              pattern="\d*"
-              value={order.price}
-              onChange={(e) => handleChange(e)}
-              startAdornment={
-                <MUIInputAdornment position="start">
-                  <span className="text-sm font-bold text-gray-500">{t('price')}</span>
-                </MUIInputAdornment>
-              }
-              endAdornment={
-                <MUIInputAdornment position="end">
-                  <span className="text-sm font-bold text-gray-500">ALGO</span>
-                </MUIInputAdornment>
-              }
-            />
-            <OutlinedInput
-              id="amount"
-              type="number"
-              pattern="\d*"
-              name="amount"
-              sx={{
-                backgroundColor: theme.colors.gray['900'],
-                border: 2,
-                borderColor: theme.colors.gray['700'],
-                marginBottom: '1rem'
-              }}
-              value={order.amount}
-              onChange={handleChange}
-              autocomplete="false"
-              min="0"
-              // step={new Big(10).pow(-1 * asset.decimals).toString()}
-              inputMode="decimal"
-              startAdornment={
-                <MUIInputAdornment position="start">
-                  <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
-                </MUIInputAdornment>
-              }
-              endAdornment={
-                <MUIInputAdornment position="end">
-                  <span className="text-sm font-bold text-gray-500">{asset.name}</span>
-                </MUIInputAdornment>
-              }
-            />
-            <Slider
-              sx={{
-                margin: '0px 0.5rem',
-                width: '95%'
-              }}
-              // txnFee={txnFee}
-              onChange={(e) => handleChange(e)}
-              name="amount"
-              value={order.amount}
-              marks={true}
-              step={10}
-              min={0}
-              max={100}
-            />
-            <OutlinedInput
-              id="total"
-              name="total"
-              type="text"
-              value={order.amount * order.price}
-              readOnly
-              disabled
-              startAdornment={
-                <MUIInputAdornment position="start">
-                  <span className="text-sm font-bold text-gray-500">{t('total')}</span>
-                </MUIInputAdornment>
-              }
-              endAdornment={
-                <MUIInputAdornment position="end">
-                  <span className="text-sm font-bold text-gray-500">ALGO</span>
-                </MUIInputAdornment>
-              }
-            />
-            {/* <TxnFeeContainer>
-                <Typography color="gray.500" textTransform="none">
-                  Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
-                  {txnFee.toFixed(3)}
-                </Typography>
-              </TxnFeeContainer> */}
-            <AdvancedOptions
-              order={order}
-              // onChange={handleOptionsChange}
-              allowTaker={typeof asset !== 'undefined'}
-            />
-          </MaterialBox>
+
           {/*)}*/}
+          <OrderForm handleChange={handleChange} order={order} asset={asset} />
           <MaterialButton
             type="submit"
-            variant="contained"
+            variant="primary"
+            fullWidth
             color={order.type}
-            sx={{
-              backgroundColor: order.type === 'sell' ? '#b23639' : '#4b9064',
-              '&:hover': {
-                backgroundColor:
-                  order.type === 'sell' ? lighten(0.05, '#b23639') : lighten(0.05, '#4b9064')
-              }
-            }}
             disabled={order.valid}
           >
             {buttonProps[order.type || 'buy']?.text}
