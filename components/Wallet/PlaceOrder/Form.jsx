@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
+import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
-import { default as MaterialBox } from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
 import { OrderForm } from './OrderForm'
 import OutlinedInput from '@/components/Input/OutlinedInput'
@@ -14,10 +15,10 @@ import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import Typography from '@mui/material/Typography'
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import theme from '../../../theme'
-import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
@@ -27,6 +28,12 @@ export const Form = styled.form`
   }
 `
 
+// function _minDecimalValue(decimals) {
+//   if (typeof decimals !== 'number') {
+//     throw new Error('Must be a valid decimals!')
+//   }
+//   return parseFloat(`0.${new Array(decimals).join('0')}1`)
+// }
 /**
  * # 📝 Place Order Form
  *
@@ -48,16 +55,24 @@ export const Form = styled.form`
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   // console.log(`PlaceOrderForm(`, arguments[0], `)`)
-  const { isConnected, wallet } = useAlgodex()
-  const [order, setOrder] = useState({
-    type: 'buy',
-    price: 0,
-    amount: 0,
-    total: 0,
-    execution: 'both'
-  })
-  const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
+  // const { isConnected, wallet } = useAlgodex()
   const { t } = useTranslation('place-order')
+  const { wallet, placeOrder, http, isConnected } = useAlgodex()
+  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+  const [sellOrders, setSellOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
+  console.debug(sellOrders, buyOrders)
+  useEffect(() => {
+    setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const buttonProps = useMemo(
     () => ({
@@ -66,65 +81,168 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }),
     [asset]
   )
-  // const getMaxAmount = useCallback(() => {
-  //   if (order.type === 'sell') {
-  //     return wallet.assets[asset.id].balance || 0
-  //   }
-  //   if (order.type === 'buy') {
-  //     return wallet.amount || 0
-  //   }
-  // }, [wallet, asset])
 
-  const fixPrecision = useCallback(
-    (e, key) => {
-      const value = e.target.value
-      switch (key) {
-        case 'price':
-          return parseFloat(value).toFixed(6)
-        case 'amount':
-          return parseFloat(value).toFixed(asset.decimals)
-        case 'total':
-          return parseFloat(value).toFixed(asset.decimals)
-        default:
-          return value
+  const [order, setOrder] = useState({
+    type: 'buy',
+    price: 0,
+    amount: 0,
+    total: 0,
+    execution: 'both'
+  })
+  const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
+
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = fromBaseUnits(filter[0].amount, asset.decimals)
+      }
+    }
+
+    return res
+  }, [wallet, asset])
+
+  const algoBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
+      res = fromBaseUnits(wallet.amount)
+    }
+    return res
+  }, [wallet])
+
+  // Calculate Slider Percentage
+  const sliderPercent = useMemo(() => {
+    if (order.type === 'sell') {
+      return (order.amount / assetBalance) * 100
+    }
+    if (order.type === 'buy') {
+      return (order.total / algoBalance) * 100
+    }
+
+    return 0
+  }, [order, algoBalance, assetBalance])
+
+  const hasBalance = useMemo(() => {
+    if (order.type === 'sell') {
+      return assetBalance > 0
+    }
+    if (order.type === 'buy') {
+      return algoBalance > 0
+    }
+
+    return false
+  }, [order])
+  // useEffect(() => {
+  //   if (order.type === 'sell') {
+  //   }
+  //   if (order.amount !== (order.amount * sliderPercent) / 100) {
+  //   }
+  // }, [setOrder, sliderPercent])
+
+  // Fix Precision
+  useEffect(() => {
+    let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
+    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
+    let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
+    if (order.type === 'buy' && _total >= algoBalance) {
+      _fixedAmount = algoBalance / _fixedPrice
+    }
+    if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+      _fixedAmount = assetBalance
+    }
+    if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
+      setOrder({
+        ...order,
+        price: _fixedPrice !== order.price ? _fixedPrice : order.price,
+        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+        total: _total !== order.total ? _total : order.total
+      })
+    }
+  }, [order, asset])
+
+  const handleSlider = useCallback(
+    (e, value) => {
+      let _price = order.price || 0
+      let _balance = order.type === 'sell' ? assetBalance : algoBalance
+      let _percent = (value / 100) * _balance
+      const _amount = order.type === 'sell' ? _percent : _percent / _price
+
+      if (order.amount !== _amount) {
+        setOrder({
+          ...order,
+          amount: _amount
+        })
       }
     },
     [order]
   )
-
   const handleChange = useCallback(
-    (e, field) => {
-      const key = field || e.target.name
+    (e, _key, _value) => {
+      const key = _key || e.target.name
+      let value = _value || e.target.value
+
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }
-      if (order[key] !== e.target.value) {
+      if (typeof value === 'undefined') {
+        throw new Error('Must have a valid value!')
+      }
+
+      if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
+        value = parseFloat(value)
+      }
+      if (order[key] !== value) {
         setOrder({
           ...order,
-          [key]: fixPrecision(e, key)
+          [key]: value
         })
       }
     },
     [setOrder, order]
   )
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      let orderPromise
+      if (typeof onSubmit === 'function') {
+        orderPromise = onSubmit({
+          ...order,
+          wallet,
+          asset
+        })
+      } else {
+        orderPromise = placeOrder({
+          ...order,
+          wallet,
+          asset
+        })
+      }
+      // TODO add events
+      toast.promise(orderPromise, {
+        loading: t('awaiting-confirmation'),
+        success: t('order-success'),
+        error: (err) => {
+          if (/PopupOpenError|blocked/.test(err)) {
+            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+          }
 
-  // const orderSliderSteps = useMemo(() => {
-  //   const difference = asset.decimals - 6
-  //   const lowestStep = 0.00001
-  //
-  //   if (difference > 0) {
-  //     return lowestStep * (difference * 10)
-  //   } else {
-  //     return wallet.amount/50
-  //   }
-  //
-  // }, [asset, wallet])
-  //
-  // const orderSliderMax = useMemo(() => {
-  //   return typeof wallet?.amount !== 'undefined' ? fromBaseUnits(wallet.amount) : 0
-  // }, [wallet, asset, orderSliderSteps])
+          if (/Operation cancelled/i.test(err)) {
+            return t('order-cancelled')
+          }
 
-  if (typeof wallet === 'undefined' || typeof wallet.amount === 'undefined') {
+          return t('error-placing-order')
+        }
+      })
+    },
+    [onSubmit, asset, order]
+  )
+  if (
+    typeof wallet === 'undefined' ||
+    typeof wallet.amount === 'undefined' ||
+    isLoading ||
+    isError
+  ) {
     return <Spinner />
   }
   return (
@@ -309,7 +427,7 @@ PlaceOrderForm.propTypes = {
 PlaceOrderForm.defaultProps = {
   showTitle: true,
   components: {
-    Box: MaterialBox
+    Box
   }
 }
 export default PlaceOrderForm

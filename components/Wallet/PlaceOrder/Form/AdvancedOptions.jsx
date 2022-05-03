@@ -180,8 +180,8 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
 
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const handleChange = (e) => {
-    onChange(e)
+  const handleChange = (e, key, value) => {
+    onChange(e, key, value)
   }
 
   const handleKeyDown = (e) => {
@@ -261,9 +261,9 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 id="order-both"
                 value="both"
                 checked={order.execution === 'both'}
-                onChange={handleChange}
-              /> */}
-              {/* <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
+                onChange={(e) => handleChange(e, 'execution', 'both')}
+              />
+              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
                 {t('maker-taker')}
               </OptionsButton> */}
 
@@ -274,7 +274,7 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                     id="order-maker"
                     value="maker"
                     checked={order.execution === 'maker'}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e, 'execution', 'maker')}
                   />
                   <OptionsButton as="label" htmlFor="order-maker" size="small" type={order.type}>
                     Maker Only
@@ -287,7 +287,7 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 id="order-taker"
                 value="taker"
                 checked={order.execution === 'taker'}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e, 'execution', 'taker')}
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
                 {t('taker-only')}

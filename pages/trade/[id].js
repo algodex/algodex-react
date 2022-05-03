@@ -11,13 +11,14 @@ import Layout from '@/components/Layout/OriginalLayout'
 import { useRouter } from 'next/router'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 import AlgodexApi from '@algodex/algodex-sdk'
+import config from '@/config.json'
 
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  let api = new AlgodexApi(properties)
+  let api = new AlgodexApi(config)
   const assets = await api.http.dexd.fetchAssets()
   const paths = assets
     .filter((asset) => asset.isTraded)
@@ -27,22 +28,6 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
-const properties = {
-  config: {
-    algod: {
-      uri: 'https://testnet.algoexplorerapi.io',
-      token: ''
-    },
-    indexer: {
-      uri: 'https://algoindexer.testnet.algoexplorerapi.io',
-      token: ''
-    },
-    dexd: {
-      uri: 'https://testnet.algodex.com/algodex-backend',
-      token: ''
-    }
-  }
-}
 /**
  * Get Explorer Asset Info
  *
@@ -52,7 +37,7 @@ const properties = {
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
-  let api = new AlgodexApi(properties)
+  let api = new AlgodexApi(config)
   try {
     staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
   } catch ({ response: { status } }) {
