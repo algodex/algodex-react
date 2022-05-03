@@ -1,13 +1,18 @@
-// import { Typography, Typography } from 'components/Typography'
-import Typography from '@mui/material/Typography'
 import Button from '../../../Button'
+import { ButtonGroup } from '@mui/material'
 import { ChevronDown } from 'react-feather'
 import Icon from 'components/Icon'
+import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
+import { default as MaterialBox } from '@mui/material/Box'
 // import InfoButton from 'components/info-button'
+import { default as MaterialButton } from '@mui/material/Button'
 import OrderSizeFilter from 'components/Input/Slider'
+import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
+import Typography from '@mui/material/Typography'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
+import theme from 'theme'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -18,7 +23,7 @@ export const ExpandToggle = styled.div`
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  border-radius: 3px;
+  // border-radius: 3px;
   padding: 0.25rem 0.25rem;
   position: relative;
   left: -0.25rem;
@@ -54,8 +59,8 @@ export const Container = styled.div`
     &:focus {
       outline: 0;
       box-shadow: ${({ theme, type }) => {
-        const color = type === 'buy' ? 'green' : 'red'
-        return `0 0 0 0.2rem ${theme.palette.focus[color]}`
+        // const color = type === 'buy' ? 'green' : 'red'
+        // return `0 0 0 0.2rem ${theme.palette.focus[color]}`
       }};
     }
   }
@@ -83,7 +88,7 @@ export const ExpandContent = styled.div`
 export const OptionsWrapper = styled.div`
   display: flex;
   width: 100%;
-  padding: 1rem 0;
+  // padding: 1rem 0;
 `
 
 export const OptionsInput = styled.input`
@@ -170,7 +175,8 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
   const router = useRouter()
-  const showMakerOnly = router && router.query.showMakerOnly === 'true'
+  // const showMakerOnly = router && router.query.showMakerOnly === 'true'
+  const showMakerOnly = true
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -207,7 +213,9 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
         onKeyDown={handleKeyDown}
         tabIndex="0"
       >
-        <Typography color="gray.500">{t('advanced-options')}</Typography>
+        <Typography variant="body_tiny_cap_bold" color="gray.500">
+          {t('advanced-options')}
+        </Typography>
         <ArrowContainer>
           <ChevronDown />
         </ArrowContainer>
@@ -216,18 +224,50 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
         <ExpandContentWrapper>
           <ExpandContent>
             <OptionsWrapper>
-              <OptionsInput
+              <ButtonGroup variant="contained" size="small" fullWidth>
+                <MaterialButton
+                  disableElevation={order.type === 'buy'}
+                  disableRipple={true}
+                  // variant={order.type === 'buy' ? 'primary' : 'default'}
+                  // variant="contained"
+                  color="buy"
+                  className="px-2"
+                  onClick={handleChange}
+                  name="type"
+                  value="buy"
+                >
+                  <Typography variant="body_small_medium">{t('maker-taker')}</Typography>
+                </MaterialButton>
+                {showMakerOnly && (
+                  <>
+                    <MaterialButton
+                      disableRipple={true}
+                      disableElevation={order.type === 'sell'}
+                      // variant={order.type === 'sell' ? 'sell' : 'default'}
+                      // variant="contained"
+                      color="sell"
+                      className="py-2"
+                      onClick={handleChange}
+                      name="type"
+                      value="sell"
+                    >
+                      <Typography variant="body_small_medium">{t('taker-only')}</Typography>
+                    </MaterialButton>
+                  </>
+                )}
+              </ButtonGroup>
+              {/* <OptionsInput
                 type="checkbox"
                 id="order-both"
                 value="both"
                 checked={order.execution === 'both'}
                 onChange={handleChange}
-              />
-              <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
+              /> */}
+              {/* <OptionsButton as="label" htmlFor="order-both" size="small" type={order.type}>
                 {t('maker-taker')}
-              </OptionsButton>
+              </OptionsButton> */}
 
-              {showMakerOnly && (
+              {/* {showMakerOnly && (
                 <>
                   <OptionsInput
                     type="checkbox"
@@ -240,8 +280,8 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                     Maker Only
                   </OptionsButton>
                 </>
-              )}
-              <OptionsInput
+              )} */}
+              {/* <OptionsInput
                 type="checkbox"
                 disabled={!allowTaker}
                 id="order-taker"
@@ -251,16 +291,22 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
               />
               <OptionsButton as="label" htmlFor="order-taker" size="small" type={order.type}>
                 {t('taker-only')}
-              </OptionsButton>
+              </OptionsButton> */}
             </OptionsWrapper>
-            <Typography color="gray.500" textTransform="none">
+            <Typography variant="body_small_medium" color="gray.500" className="mt-2">
               {renderMessage()}
             </Typography>
 
             <div className="flex flex-row justify-between mt-5 align-middle">
               {/* <span className="text-sm font-semibold py-1">{t("order-size-filtering")}:</span> */}
-              <span className="text-sm font-semibold py-1">Order Size Filtering:</span>
-              <div className="relative">
+              <Typography
+                variant="body_tiny"
+                color="gray.400"
+                className="text-sm font-semibold py-1"
+              >
+                Order Size Filtering:
+              </Typography>
+              {/* <div className="relative">
                 <label className="absolute right-2 top-1">
                   <input
                     className="bg-gray-900 h-7 w-14 rounded-sm border-2 border-gray-700 pr-5 text-right appearance-none"
@@ -277,19 +323,62 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
 
                   <Icon use="algoLogo" size={0.625} />
                 </label>
-              </div>
+              </div> */}
+              <OutlinedInput
+                sx={{
+                  backgroundColor: theme.palette.gray['900'],
+                  border: 2,
+                  borderColor: theme.palette.gray['700'],
+                  marginBottom: '1rem',
+                  paddingRight: '0.5rem',
+                  margin: '0'
+                }}
+                className="h-7 w-16 rtl"
+                inputProps={{
+                  name: 'price',
+                  type: 'number',
+                  // pattern: 'd*',
+                  autocomplete: false,
+                  min: 0,
+                  step: 0.000001,
+                  inputMode: 'decimal'
+                }}
+                name="price"
+                type="number"
+                pattern="\d*"
+                value={order.price}
+                onChange={(e) => handleChange(e)}
+                endAdornment={
+                  <MUIInputAdornment position="end">
+                    <Icon color="gray" fillGradient="500" use="algoLogo" size={0.625} />
+                  </MUIInputAdornment>
+                }
+              />
             </div>
             {/* <span className="text-xs"><InfoButton className="inline fill-current text-gray-500 " size={12} /> See FAQ</span> */}
 
-            <div className="pt-5 flex justify-between text-gray-500 text-sm">
-              <span className="block align-middle">
-                0<Icon use="algoLogo" size={0.625} className="ml-1" />
-              </span>
-              <span className="block align-middle">
-                100
-                <Icon use="algoLogo" size={0.625} className="ml-1" />
-              </span>
-            </div>
+            <MaterialBox className="pt-5 flex justify-between text-gray-500 text-sm">
+              <MaterialBox className="flex items-center">
+                <Typography>0</Typography>
+                <Icon
+                  use="algoLogo"
+                  color="gray"
+                  fillGradient="500"
+                  size={0.625}
+                  className="ml-1"
+                />
+              </MaterialBox>
+              <MaterialBox className="flex items-center">
+                <Typography>100</Typography>
+                <Icon
+                  use="algoLogo"
+                  color="gray"
+                  fillGradient="500"
+                  size={0.625}
+                  className="ml-1"
+                />
+              </MaterialBox>
+            </MaterialBox>
             <OrderSizeFilter
               order={order}
               value={newOrderSizeFilter}

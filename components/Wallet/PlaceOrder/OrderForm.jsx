@@ -131,6 +131,9 @@ export const OrderForm = ({
         value={order.amount * order.price}
         readOnly
         disabled
+        sx={{
+          backgroundColor: theme.colors.gray['700']
+        }}
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('total')}</span>

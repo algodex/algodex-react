@@ -15,9 +15,17 @@ import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import Typography from '@mui/material/Typography'
 import { lighten } from 'polished'
+import styled from '@emotion/styled'
 import theme from '../../../theme'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
+
+export const Form = styled.form`
+  ::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+`
 
 /**
  * # 📝 Place Order Form
@@ -137,7 +145,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         </header>
       )}
       {typeof order !== 'undefined' && isConnected && (
-        <form onSubmit={onSubmit} autoComplete="off">
+        <Form onSubmit={onSubmit} autoComplete="off" className="overflow-x-scroll">
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
               disableElevation={order.type === 'buy'}
@@ -265,7 +273,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           >
             {buttonProps[order.type || 'buy']?.text}
           </MaterialButton>
-        </form>
+        </Form>
       )}
     </Box>
   )

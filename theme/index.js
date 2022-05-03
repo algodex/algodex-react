@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles'
 import { lighten } from 'polished'
-
+import { experimental_sx as sx } from '@mui/material/styles'
 /**
  * Design System Name: Lucid 0.0.1
  */
@@ -350,6 +350,14 @@ const theme = {
       lineHeight: '1.5rem',
       letterSpacing: '0.03em'
     },
+    body_tiny_cap_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      lineHeight: '1.5rem',
+      letterSpacing: '0.03em'
+    },
     body_tiny_cap: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[0],
@@ -365,8 +373,7 @@ const theme = {
     body_small_medium: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
-      fontWeight: 500,
-      lineHeight: '1.5rem'
+      fontWeight: 500
     },
     body_small_cap_medium: {
       fontFamily: fontFamilies.body,
@@ -443,6 +450,23 @@ const theme = {
     }
   },
   components: {
+    MuiButtonGroup: {
+      styleOverrides: ({ ownerState }) => ({
+        ...(ownerState.variant === 'contained' &&
+          ownerState.size === 'small' && {
+            root: {
+              height: '2rem'
+            }
+          })
+      })
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: sx({
+          lineHeight: '1rem'
+        })
+      }
+    },
     MuiButton: {
       variants: [
         {
@@ -493,7 +517,12 @@ const theme = {
             letterSpacing: '0.05em'
           }
         }
-      ]
+      ],
+      styleOverrides: ({ ownerState }) => ({
+        ...(ownerState.size === 'small' && {
+          height: '2rem'
+        })
+      })
     }
   },
   palette: {
@@ -511,13 +540,13 @@ const theme = {
       contrastText: 'white'
     },
     buy: {
-      main: colors.green['600'],
+      main: colors.green['500'],
       light: colors.green['400'],
       dark: colors.green['900'],
       contrastText: 'white'
     },
     sell: {
-      main: colors.red['600'],
+      main: colors.red['500'],
       light: colors.red['400'],
       dark: colors.red['900'],
       contrastText: 'white'

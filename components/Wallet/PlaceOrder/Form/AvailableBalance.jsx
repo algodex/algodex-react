@@ -93,7 +93,7 @@ function AvailableBalance({ wallet, asset }) {
         <Typography variant="body_small_cap_medium" color="gray.400">
           ALGO
         </Typography>
-        <Typography variant="labelMdLight" color="gray.300">
+        <Typography variant="body_small_medium" color="gray.300">
           {fromBaseUnits(wallet.amount)}
         </Typography>
       </BalanceRow>
@@ -102,7 +102,7 @@ function AvailableBalance({ wallet, asset }) {
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
         </Typography>
-        <Typography variant="labelMdLight" color="gray.300">
+        <Typography variant="body_small_medium" color="gray.300">
           {/*{hasBalance && wallet?.assets[asset.id]?.balance}*/}
         </Typography>
       </BalanceRow>
