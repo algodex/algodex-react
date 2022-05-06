@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 export const OutlinedInput = styled(MUIOutlinedInput)(({ theme }) => ({
   '.MuiOutlinedInput-input': {
     color: theme.colors.gray['000'],
-    marginRight: '0.5rem',
+    // marginRight: '0.5rem',
     textAlign: 'right'
   },
 

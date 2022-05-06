@@ -450,16 +450,6 @@ const theme = {
     }
   },
   components: {
-    MuiButtonGroup: {
-      styleOverrides: ({ ownerState }) => ({
-        ...(ownerState.variant === 'contained' &&
-          ownerState.size === 'small' && {
-            root: {
-              height: '2rem'
-            }
-          })
-      })
-    },
     MuiTypography: {
       styleOverrides: {
         root: sx({

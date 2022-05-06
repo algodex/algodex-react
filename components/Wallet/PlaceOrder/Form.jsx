@@ -89,14 +89,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // ).toString()
   const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
 
-  // const {
-  //   data: minBalance,
-  //   minBalance: secBalance,
-  //   isLoading: isWalletBalanceLoading,
-  //   isError: isWalletBalanceError
-  // } = useWalletMinBalanceQuery({
-  //   wallet: wallet.address
-  // })
+  const {
+    data: minBalance,
+    isLoading: isWalletBalanceLoading,
+    isError: isWalletBalanceError
+  } = useWalletMinBalanceQuery({
+    wallet: wallet.address
+  })
   const orderBook = useMemo(
     () => ({
       buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
@@ -243,7 +242,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     (e, _key, _value) => {
       const key = _key || e.target.name
       let value = _value || e.target.value
-
+      console.log(key)
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }

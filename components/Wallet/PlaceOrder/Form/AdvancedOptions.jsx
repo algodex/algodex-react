@@ -88,7 +88,7 @@ export const ExpandContent = styled.div`
 export const OptionsWrapper = styled.div`
   display: flex;
   width: 100%;
-  // padding: 1rem 0;
+  height: 1.9rem;
 `
 
 export const OptionsInput = styled.input`
@@ -175,8 +175,7 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
   const router = useRouter()
-  // const showMakerOnly = router && router.query.showMakerOnly === 'true'
-  const showMakerOnly = true
+  const showMakerOnly = router && router.query.showMakerOnly === 'true'
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -244,35 +243,39 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
             <OptionsWrapper>
               <ButtonGroup variant="contained" size="small" fullWidth>
                 <MaterialButton
-                  disableElevation={order.type === 'buy'}
-                  disableRipple={true}
-                  // variant={order.type === 'buy' ? 'primary' : 'default'}
-                  // variant="contained"
-                  color="buy"
+                  variant={order.execution === 'both' ? 'primary' : 'default'}
                   className="px-2"
-                  onClick={handleChange}
-                  name="type"
-                  value="buy"
+                  onClick={(e) => handleChange(e, 'execution', 'both')}
+                  name="execution"
+                  value="both"
                 >
-                  <Typography variant="body_small_medium">{t('maker-taker')}</Typography>
+                  <Typography variant="body_tiny_bold">{t('maker-taker')}</Typography>
                 </MaterialButton>
                 {showMakerOnly && (
                   <>
                     <MaterialButton
-                      disableRipple={true}
-                      disableElevation={order.type === 'sell'}
-                      // variant={order.type === 'sell' ? 'sell' : 'default'}
-                      // variant="contained"
-                      color="sell"
+                      variant={order.execution === 'maker' ? 'sell' : 'default'}
+                      size="small"
                       className="py-2"
-                      onClick={handleChange}
-                      name="type"
-                      value="sell"
+                      onClick={(e) => handleChange(e, 'execution', 'maker')}
+                      name="execution"
+                      value="maker"
                     >
-                      <Typography variant="body_small_medium">{t('taker-only')}</Typography>
+                      <Typography variant="body_tiny_bold">Maker Only</Typography>
                     </MaterialButton>
                   </>
                 )}
+                <MaterialButton
+                  disableRipple={true}
+                  variant={order.execution === 'taker' ? 'sell' : 'default'}
+                  size="small"
+                  className="py-2"
+                  onClick={(e) => handleChange(e, 'execution', 'taker')}
+                  name="execution"
+                  value="taker"
+                >
+                  <Typography variant="body_tiny_bold">{t('taker-only')}</Typography>
+                </MaterialButton>
               </ButtonGroup>
               {/* <OptionsInput
                 type="checkbox"
@@ -347,15 +350,14 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                   backgroundColor: theme.palette.gray['900'],
                   border: 2,
                   borderColor: theme.palette.gray['700'],
-                  marginBottom: '1rem',
-                  paddingRight: '0.5rem',
-                  margin: '0'
+                  m: '0px',
+                  pl: '0px'
                 }}
-                className="h-7 w-16 rtl"
+                classes={{ input: 'pl-0' }}
+                className="h-7 w-16 pr-1 rtl"
                 inputProps={{
-                  name: 'price',
+                  name: 'Order Filter',
                   type: 'number',
-                  // pattern: 'd*',
                   autocomplete: false,
                   min: 0,
                   step: 0.000001,
@@ -363,12 +365,11 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 }}
                 name="price"
                 type="number"
-                pattern="\d*"
-                value={order.price}
-                onChange={(e) => handleChange(e)}
+                value={newOrderSizeFilter}
+                onChange={(e) => setNewOrderSizeFilter(e.target.value)}
                 endAdornment={
                   <MUIInputAdornment position="end">
-                    <Icon color="gray" fillGradient="500" use="algoLogo" size={0.625} />
+                    <Icon color="gray" fillGradient="400" use="algoLogo" size={0.625} />
                   </MUIInputAdornment>
                 }
               />
@@ -397,7 +398,11 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 />
               </MaterialBox>
             </MaterialBox>
-            <MaterialBox>
+            <MaterialBox
+              sx={{
+                margin: '0 0.9rem'
+              }}
+            >
               <OrderSizeFilter
                 order={order}
                 type="line-marks"

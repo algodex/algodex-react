@@ -172,7 +172,7 @@ export const OrderForm = ({
       {order.execution !== 'limit' && (
         <AdvancedOptions
           order={order}
-          // onChange={handleOptionsChange}
+          onChange={handleChange}
           allowTaker={typeof asset !== 'undefined'}
         />
       )}
