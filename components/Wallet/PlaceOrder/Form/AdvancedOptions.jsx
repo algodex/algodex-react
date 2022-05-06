@@ -206,6 +206,24 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
     }
   }
 
+  const marks = [
+    {
+      value: 0
+    },
+    {
+      value: 25
+    },
+    {
+      value: 50
+    },
+    {
+      value: 75
+    },
+    {
+      value: 100
+    }
+  ]
+
   return (
     <Container isExpanded={isExpanded} type={order.type}>
       <ExpandToggle
@@ -379,15 +397,18 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 />
               </MaterialBox>
             </MaterialBox>
-            <OrderSizeFilter
-              order={order}
-              value={newOrderSizeFilter}
-              onChange={(e) => setNewOrderSizeFilter(e.target.value)}
-              marks={true}
-              step={10}
-              min={0}
-              max={100}
-            />
+            <MaterialBox>
+              <OrderSizeFilter
+                order={order}
+                type="line-marks"
+                value={newOrderSizeFilter}
+                onChange={(e) => setNewOrderSizeFilter(e.target.value)}
+                marks={marks}
+                step={null}
+                max={100}
+              />
+            </MaterialBox>
+
             <div className="flex justify-between text-gray-500 text-sm">
               <span className="block">Better Execution</span>
               <span className="block">Less Lag</span>

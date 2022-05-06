@@ -18,6 +18,8 @@ import useTranslation from 'next-translate/useTranslation'
 export const OrderForm = ({
   order,
   handleChange,
+  sliderPercent,
+  updateAmount,
   asset
   //   maxSpendableAlgo,
   //   asaBalance,
@@ -48,6 +50,29 @@ export const OrderForm = ({
   //     }
   //   }
 
+  const marks = [
+    {
+      value: 0,
+      label: '0%'
+    },
+    {
+      value: 25,
+      label: '25%'
+    },
+    {
+      value: 50,
+      label: '50%'
+    },
+    {
+      value: 75,
+      label: '75%'
+    },
+    {
+      value: 100,
+      label: '100%'
+    }
+  ]
+
   return (
     <MaterialBox className="flex flex-col mb-4">
       <OutlinedInput
@@ -57,20 +82,12 @@ export const OrderForm = ({
           borderColor: theme.palette.gray['700'],
           marginBottom: '1rem'
         }}
-        inputProps={{
-          name: 'price',
-          type: 'number',
-          // pattern: 'd*',
-          autocomplete: false,
-          min: 0,
-          step: 0.000001,
-          inputMode: 'decimal'
-        }}
         name="price"
+        min="0.00"
         type="number"
         pattern="\d*"
         value={order.price}
-        onChange={(e) => handleChange(e)}
+        onChange={handleChange}
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('price')}</span>
@@ -96,9 +113,9 @@ export const OrderForm = ({
         value={order.amount}
         onChange={handleChange}
         autocomplete="false"
-        min="0"
+        step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}
-        inputMode="decimal"
+        // inputMode="decimal"
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
@@ -113,22 +130,23 @@ export const OrderForm = ({
       <Slider
         sx={{
           margin: '0px 0.5rem',
-          width: '95%'
+          width: '90%'
         }}
+        disabled={order.price == 0 ? true : false}
         // txnFee={txnFee}
-        onChange={(e) => handleChange(e)}
+        onChange={updateAmount}
         name="amount"
-        value={order.amount}
-        marks={true}
-        step={10}
-        min={0}
+        value={sliderPercent || 0}
+        defaultValue={0}
+        marks={marks}
+        step={null}
         max={100}
       />
       <OutlinedInput
         id="total"
         name="total"
         type="text"
-        value={order.amount * order.price}
+        value={order.amount * order.price || 0}
         readOnly
         disabled
         sx={{
@@ -151,11 +169,13 @@ export const OrderForm = ({
           {txnFee.toFixed(3)}
         </Typography>
       </TxnFeeContainer> */}
-      <AdvancedOptions
-        order={order}
-        // onChange={handleOptionsChange}
-        allowTaker={typeof asset !== 'undefined'}
-      />
+      {order.execution !== 'limit' && (
+        <AdvancedOptions
+          order={order}
+          // onChange={handleOptionsChange}
+          allowTaker={typeof asset !== 'undefined'}
+        />
+      )}
     </MaterialBox>
   )
 }
@@ -164,7 +184,9 @@ OrderForm.propTypes = {
   //   orderType: PropTypes.string.isRequired,
   order: PropTypes.object.isRequired,
   asset: PropTypes.object.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
+  updateAmount: PropTypes.func.isRequired,
+  sliderPercent: PropTypes.number
   //   maxSpendableAlgo: PropTypes.number.isRequired,
   //   asaBalance: PropTypes.number.isRequired,
   //   handleRangeChange: PropTypes.func,
@@ -174,3 +196,22 @@ OrderForm.propTypes = {
   //   setNewOrderSizeFilter: PropTypes.func,
   //   microAlgo: PropTypes.number
 }
+// import Slider from '@/components/Input/Slider'
+// import InputAdornment from '@mui/material/InputAdornment'
+// import OutlinedInput from '@/components/Input/OutlinedInput'
+// import Box from '@mui/material/Box'
+// import Button from '@mui/material/Button'
+// import PropTypes from 'prop-types'
+// import { lighten, darken } from 'polished'
+// import theme from '../../../theme'
+// import useTranslation from 'next-translate/useTranslation'
+// import Typography from '@mui/material/Typography'
+// import Spinner from '@/components/Spinner'
+// import AvailableBalance from './Form/AvailableBalance'
+// import BuySellToggle from './Form/BuySellToggle'
+// import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
+// import { useCallback, useEffect, useMemo, useState } from 'react'
+// import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+// import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+// import detectMobileDisplay from '@/utils/detectMobileDisplay'
+// import toast from 'react-hot-toast'

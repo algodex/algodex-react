@@ -1,8 +1,9 @@
-import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, useAssetOrdersQuery, useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
+import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
@@ -19,6 +20,7 @@ import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import theme from '../../../theme'
+import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
@@ -27,6 +29,15 @@ export const Form = styled.form`
     display: none;
   }
 `
+
+export const convertToAsaUnits = (toConvert, decimals) => {
+  if (!toConvert) {
+    return 0
+  }
+  const multiplier = new Big(10).pow(6 - decimals)
+  const algoUnits = new Big(toConvert)
+  return algoUnits.times(multiplier).toNumber()
+}
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -54,11 +65,38 @@ export const Form = styled.form`
  * @constructor
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
-  // console.log(`PlaceOrderForm(`, arguments[0], `)`)
-  // const { isConnected, wallet } = useAlgodex()
   const { t } = useTranslation('place-order')
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+  const [order, setOrder] = useState({
+    type: 'buy',
+    price: '',
+    amount: '',
+    total: 0,
+    execution: 'both'
+  })
+
+  // console.log(wallet, asset, 'both here')
+  const algoBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
+      res = fromBaseUnits(wallet.amount)
+    }
+    return res
+  }, [wallet])
+  // const asaBalance = new Big(
+  //   convertToAsaUnits(wallet?.assets?.[asset.id]?.amount, asset.decimals)
+  // ).toString()
+  const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
+
+  // const {
+  //   data: minBalance,
+  //   minBalance: secBalance,
+  //   isLoading: isWalletBalanceLoading,
+  //   isError: isWalletBalanceError
+  // } = useWalletMinBalanceQuery({
+  //   wallet: wallet.address
+  // })
   const orderBook = useMemo(
     () => ({
       buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
@@ -68,11 +106,26 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
-  console.debug(sellOrders, buyOrders)
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
   }, [orderBook, setSellOrders, setBuyOrders, asset])
+
+  // useEffect(() => {
+  //   if (!isWalletBalanceLoading && !isWalletBalanceError) {
+  //     console.log(
+  //       minBalance,
+  //       isWalletBalanceLoading,
+  //       isWalletBalanceError,
+  //       secBalance,
+  //       'sec balance'
+  //     )
+  //     // const total = new Big(algoBalance)
+  //     // const min = new Big(minBalance).div(1000000)
+  //     // const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
+  //     // setMaxSpendableAlgo(Math.max(0, max))
+  //   }
+  // }, [minBalance, algoBalance, isWalletBalanceLoading, isWalletBalanceError])
 
   const buttonProps = useMemo(
     () => ({
@@ -81,15 +134,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }),
     [asset]
   )
-
-  const [order, setOrder] = useState({
-    type: 'buy',
-    price: 0,
-    amount: 0,
-    total: 0,
-    execution: 'both'
-  })
-  const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
 
   const assetBalance = useMemo(() => {
     let res = 0
@@ -103,13 +147,29 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet, asset])
 
-  const algoBalance = useMemo(() => {
-    let res = 0
-    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-      res = fromBaseUnits(wallet.amount)
-    }
-    return res
-  }, [wallet])
+  const updateAmount = useCallback(
+    (e) => {
+      if (order.type === 'buy' && order.price === 0) {
+        // setOrder({
+        //   ...order,
+        //   amount: new Big(e.target.value)
+        //     .div(100)
+        //     .times(algoBalance)
+        //     .div(asset.price_info.price)
+        //     .toString()
+        // })
+      }
+      setOrder({
+        ...order,
+        amount: new Big(e.target.value)
+          .div(100)
+          .times(algoBalance)
+          .div(asset.price_info.price)
+          .toString()
+      })
+    },
+    [algoBalance, asset.price_info.price]
+  )
 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
@@ -123,16 +183,16 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return 0
   }, [order, algoBalance, assetBalance])
 
-  const hasBalance = useMemo(() => {
-    if (order.type === 'sell') {
-      return assetBalance > 0
-    }
-    if (order.type === 'buy') {
-      return algoBalance > 0
-    }
+  // const hasBalance = useMemo(() => {
+  //   if (order.type === 'sell') {
+  //     return assetBalance > 0
+  //   }
+  //   if (order.type === 'buy') {
+  //     return algoBalance > 0
+  //   }
 
-    return false
-  }, [order])
+  //   return false
+  // }, [order])
   // useEffect(() => {
   //   if (order.type === 'sell') {
   //   }
@@ -142,22 +202,24 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   // Fix Precision
   useEffect(() => {
-    let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
-    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
-    let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
-    if (order.type === 'buy' && _total >= algoBalance) {
-      _fixedAmount = algoBalance / _fixedPrice
-    }
-    if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-      _fixedAmount = assetBalance
-    }
-    if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
-      setOrder({
-        ...order,
-        price: _fixedPrice !== order.price ? _fixedPrice : order.price,
-        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-        total: _total !== order.total ? _total : order.total
-      })
+    if (order.price && order.amount) {
+      let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
+      let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
+      let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
+      if (order.type === 'buy' && _total >= algoBalance) {
+        // _fixedAmount = algoBalance / _fixedPrice
+      }
+      if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+        // _fixedAmount = assetBalance
+      }
+      if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
+        setOrder({
+          ...order,
+          price: _fixedPrice !== order.price ? _fixedPrice : order.price,
+          // amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+          total: _total !== order.total ? _total : order.total
+        })
+      }
     }
   }, [order, asset])
 
@@ -359,7 +421,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           {/*  </BalanceRow>*/}
           {/*</AvailableBalance>*/}
 
-          {/*<TabsUnstyled sx={{ width: '100%' }} >*/}
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
@@ -381,7 +442,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           {/*{hasBalance && (*/}
 
           {/*)}*/}
-          <OrderForm handleChange={handleChange} order={order} asset={asset} />
+          <OrderForm
+            handleChange={handleChange}
+            updateAmount={updateAmount}
+            sliderPercent={sliderPercent}
+            order={order}
+            asset={asset}
+          />
           <MaterialButton
             type="submit"
             variant="primary"

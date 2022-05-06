@@ -32,7 +32,7 @@ export const OutlinedInput = styled(MUIOutlinedInput)(({ theme }) => ({
 OutlinedInput.defaultProps = {
   size: 'small',
   placeholder: '0.00',
-  className: 'text-sm font-bold',
+  className: 'text-base font-normal',
   fullWidth: true
 }
 
