@@ -132,7 +132,7 @@ AvailableBalance.propTypes = {
     amount: PropTypes.number.isRequired,
     assets: PropTypes.arrayOf(
       PropTypes.shape({
-        balance: PropTypes.number.isRequired
+        amount: PropTypes.number.isRequired
       })
     )
   })

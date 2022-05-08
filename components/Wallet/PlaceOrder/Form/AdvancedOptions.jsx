@@ -358,7 +358,7 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
                 inputProps={{
                   name: 'Order Filter',
                   type: 'number',
-                  autocomplete: false,
+                  autoComplete: false,
                   min: 0,
                   step: 0.000001,
                   inputMode: 'decimal'

@@ -18,6 +18,7 @@ import Tabs from '@/components/Tabs'
 import Typography from '@mui/material/Typography'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { lighten } from 'polished'
+import { roundValue } from '@/components/helpers'
 import styled from '@emotion/styled'
 import theme from '../../../theme'
 import toast from 'react-hot-toast'
@@ -70,8 +71,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
   const [order, setOrder] = useState({
     type: 'buy',
-    price: '',
-    amount: '',
+    price: 0,
+    amount: 0,
     total: 0,
     execution: 'both'
   })
@@ -181,7 +182,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
     return 0
   }, [order, algoBalance, assetBalance])
-
+  const MICROALGO = 0.000001
   // const hasBalance = useMemo(() => {
   //   if (order.type === 'sell') {
   //     return assetBalance > 0
@@ -200,27 +201,27 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // }, [setOrder, sliderPercent])
 
   // Fix Precision
-  useEffect(() => {
-    if (order.price && order.amount) {
-      let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
-      let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
-      let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
-      if (order.type === 'buy' && _total >= algoBalance) {
-        // _fixedAmount = algoBalance / _fixedPrice
-      }
-      if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-        // _fixedAmount = assetBalance
-      }
-      if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
-        setOrder({
-          ...order,
-          price: _fixedPrice !== order.price ? _fixedPrice : order.price,
-          // amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-          total: _total !== order.total ? _total : order.total
-        })
-      }
-    }
-  }, [order, asset])
+  // useEffect(() => {
+  //   let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
+  //   let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
+  //   let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6)) || 0
+  //   if (order.type === 'buy' && _total >= algoBalance && _fixedPrice > 0) {
+  //     _fixedAmount = algoBalance / _fixedPrice
+  //   }
+  //   if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+  //     _fixedAmount = assetBalance
+  //   }
+  //   if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
+  //     return {
+  //       price: _fixedPrice !== order.price ? _fixedPrice : order.price,
+  //       amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+  //       total:
+  //         _total !== order.total
+  //           ? parseFloat(_total).toFixed(6)
+  //           : parseFloat(order.total).toFixed(6)
+  //     }
+  //   }
+  // }, [order, asset])
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -238,30 +239,55 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [order]
   )
-  const handleChange = useCallback(
-    (e, _key, _value) => {
-      const key = _key || e.target.name
-      let value = _value || e.target.value
-      console.log(key)
-      if (typeof key === 'undefined') {
-        throw new Error('Must have valid key!')
+  const handleChange = (e, _key, _value) => {
+    const key = _key || e.target.name
+    let value = _value || e.target.value
+    if (typeof key === 'undefined') {
+      throw new Error('Must have valid key!')
+    }
+    if (typeof value === 'undefined') {
+      throw new Error('Must have a valid value!')
+    }
+    if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
+      value = parseFloat(value)
+    }
+    if (key === 'price') {
+      let _fixedPrice = parseFloat(value.toFixed(6)) || 0
+      setOrder({
+        ...order,
+        price: _fixedPrice !== order.price ? _fixedPrice : order.price
+      })
+    } else if (key === 'amount') {
+      let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
+      let _total = parseFloat((order.price * _fixedAmount).toFixed(6)) || 0
+      if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
+        _fixedAmount = algoBalance / order.price
       }
-      if (typeof value === 'undefined') {
-        throw new Error('Must have a valid value!')
+      if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+        _fixedAmount = assetBalance
       }
+      setOrder({
+        ...order,
+        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+        total:
+          _total !== order.total
+            ? parseFloat(_total).toFixed(6)
+            : parseFloat(order.total).toFixed(6)
+      })
+    } else {
+      setOrder({
+        ...order,
+        [key]: value
+      })
+    }
 
-      if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
-        value = parseFloat(value)
-      }
-      if (order[key] !== value) {
-        setOrder({
-          ...order,
-          [key]: value
-        })
-      }
-    },
-    [setOrder, order]
-  )
+    // if (order[key] !== value) {
+    //   setOrder({
+    //     ...order,
+    //     [key]: value
+    //   })
+    // }
+  }
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
@@ -324,7 +350,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         </header>
       )}
       {typeof order !== 'undefined' && isConnected && (
-        <Form onSubmit={onSubmit} autoComplete="off" className="overflow-x-scroll">
+        <Form onSubmit={onSubmit} className="overflow-x-scroll">
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
               disableElevation={order.type === 'buy'}
@@ -447,6 +473,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             sliderPercent={sliderPercent}
             order={order}
             asset={asset}
+            microAlgo={MICROALGO}
           />
           <MaterialButton
             type="submit"
