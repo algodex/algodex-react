@@ -12,7 +12,7 @@ const ASA_PRICE = 'asset-info-price'
 const ASA_PCT_CHANGE = 'asset-info-pct-change'
 const ASA_URL = 'asset-url'
 const BACK_BTN = 'asset-info-back-btn'
-
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 describe('Asset Info', () => {
   it('should show asset name', () => {
     const { queryByTestId } = render(<AssetInfo asset={asset} />)
