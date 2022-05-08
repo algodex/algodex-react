@@ -1,9 +1,10 @@
 // import { Typography, Typography, Typography } from 'components/Typography'
 import { lighten, rgba } from 'polished'
-import Typography from '@mui/material/Typography'
+
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import SvgImage from 'components/SvgImage'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -27,7 +28,7 @@ const HeaderContainer = styled.div`
   }
 `
 
-const InfoList = styled.dl`
+const InfoList = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
@@ -36,7 +37,7 @@ const InfoItem = styled.div`
   flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
 
   &:not(:last-child) {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.1rem;
   }
 `
 
@@ -71,10 +72,15 @@ export function SearchFlyover(props) {
 
     return (
       <InfoItem halfWidth>
-        <Typography as="dt" color="gray.500">
+        <Typography variant="body_tiny_cap" color="gray.500">
           {t('24-hr-change')}
         </Typography>
-        <Typography as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem" color={color}>
+        <Typography
+          variant="h6"
+          fontFamily="'Roboto Mono', monospace"
+          fontSize="1.125rem"
+          color={color}
+        >
           {display}
         </Typography>
       </InfoItem>
@@ -86,20 +92,20 @@ export function SearchFlyover(props) {
       {row && (
         <>
           <HeaderContainer>
-            <Typography color="gray.100" mb={3} data-testid="flyover-asa-name">
+            <Typography variant="h5" color="gray.100" mb={3} data-testid="flyover-asa-name">
               {renderName()}
             </Typography>
           </HeaderContainer>
           <InfoList>
             <InfoItem>
-              <Typography as="dt" color="gray.500">
+              <Typography variant="body_tiny_cap" color="gray.500">
                 ASA ID
               </Typography>
               <Typography
+                variant="h6"
+                color="gray.400"
                 data-testid="flyover-asa-id"
-                as="dd"
                 fontFamily="'Roboto Mono', monospace"
-                fontSize="1.125rem"
               >
                 {row.id}
               </Typography>
@@ -108,14 +114,18 @@ export function SearchFlyover(props) {
             {row.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
-                  <Typography as="dt" color="gray.500" className="flex items-center">
+                  <Typography
+                    variant="body_tiny_cap"
+                    color="gray.500"
+                    className="flex items-center"
+                  >
                     {t('price')} <Algos use="algoLogo" size={0.625} />
                   </Typography>
                   <Typography
+                    variant="h6"
+                    color="gray.400"
                     data-testid="flyover-asa-price"
-                    as="dd"
                     fontFamily="'Roboto Mono', monospace"
-                    fontSize="1.125rem"
                   >
                     {row.price}
                   </Typography>
@@ -127,27 +137,27 @@ export function SearchFlyover(props) {
             {row.hasBeenOrdered && (
               <>
                 <InfoItem halfWidth>
-                  <Typography as="dt" color="gray.500">
+                  <Typography variant="body_tiny_cap" color="gray.500">
                     {t('liquidity')} (Algos)
                   </Typography>
                   <Typography
+                    variant="h6"
+                    color="gray.400"
                     data-testid="flyover-algo-liquidity"
-                    as="dd"
                     fontFamily="'Roboto Mono', monospace"
-                    fontSize="1.125rem"
                   >
                     {row.liquidityAlgo}
                   </Typography>
                 </InfoItem>
                 <InfoItem halfWidth>
-                  <Typography as="dt" color="gray.500">
+                  <Typography variant="body_tiny_cap" color="gray.500">
                     {`${t('liquidity')} (${row.name})`}
                   </Typography>
                   <Typography
+                    variant="h6"
+                    color="gray.400"
                     data-testid="flyover-asa-liqidity"
-                    as="dd"
                     fontFamily="'Roboto Mono', monospace"
-                    fontSize="1.125rem"
                   >
                     {row.liquidityAsa}
                   </Typography>

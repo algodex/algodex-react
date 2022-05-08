@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import { find } from 'lodash'
 import theme from 'theme'
 import { useAlgodex } from '@algodex/algodex-hooks'
@@ -42,7 +43,9 @@ const InactiveWalletsList = ({ walletsList }) => {
       }}
     >
       <div>
-        <p className="font-bold text-xs mb-1.5">SWITCH WALLETS</p>
+        <Typography variant="body_small_cap_bold" color="gray.000" className="mb-1.5">
+          SWITCH WALLETS
+        </Typography>
         <p>Click on address to switch active wallets</p>
       </div>
       <div>

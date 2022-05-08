@@ -133,7 +133,6 @@ export const LanguagesContainer = styled.ul`
       position: absolute;
       display: block;
       top: 20px;
-      width: 100px;
     }
   }
 `
@@ -143,12 +142,24 @@ export const LanguageDropDown = styled.ul`
   display: none;
   max-height: 500px;
   overflow: scroll;
+  right: 2rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 `
 
 export const LanguageItem = styled.li`
   display: block;
   height: 50px;
-
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
   span {
     line-height: 50px;
   }
