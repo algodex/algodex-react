@@ -11,7 +11,7 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Slider from '@/components/Input/Slider'
-import Typography from '@mui/material/Typography'
+// import Typography from '@mui/material/Typography'
 import theme from '../../../theme'
 import useTranslation from 'next-translate/useTranslation'
 

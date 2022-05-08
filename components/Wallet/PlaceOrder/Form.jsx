@@ -1,26 +1,26 @@
-import { useAlgodex, useAssetOrdersQuery, useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import AdvancedOptions from './Form/AdvancedOptions'
+// import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
 import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
-import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
+// import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialButton } from '@mui/material/Button'
 import { OrderForm } from './OrderForm'
-import OutlinedInput from '@/components/Input/OutlinedInput'
+// import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
-import Slider from '@/components/Input/Slider'
+// import Slider from '@/components/Input/Slider'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import Typography from '@mui/material/Typography'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
-import { lighten } from 'polished'
+// import { lighten } from 'polished'
 import styled from '@emotion/styled'
-import theme from '../../../theme'
-import toast from 'react-hot-toast'
+// import theme from '../../../theme'
+// import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
@@ -66,8 +66,9 @@ export const convertToAsaUnits = (toConvert, decimals) => {
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  const { wallet, placeOrder, http, isConnected } = useAlgodex()
+  const { wallet, placeOrder, isConnected } = useAlgodex()
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+  console.log(placeOrder, assetOrders)
   const [order, setOrder] = useState({
     type: 'buy',
     price: '',
@@ -89,26 +90,26 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // ).toString()
   const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
 
-  const {
-    data: minBalance,
-    isLoading: isWalletBalanceLoading,
-    isError: isWalletBalanceError
-  } = useWalletMinBalanceQuery({
-    wallet: wallet.address
-  })
-  const orderBook = useMemo(
-    () => ({
-      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
-      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
-    }),
-    [assetOrders]
-  )
-  const [sellOrders, setSellOrders] = useState()
-  const [buyOrders, setBuyOrders] = useState()
-  useEffect(() => {
-    setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
-    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  }, [orderBook, setSellOrders, setBuyOrders, asset])
+  // const {
+  //   data: minBalance,
+  //   isLoading: isWalletBalanceLoading,
+  //   isError: isWalletBalanceError
+  // } = useWalletMinBalanceQuery({
+  //   wallet: wallet.address
+  // })
+  // const orderBook = useMemo(
+  //   () => ({
+  //     buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+  //     sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+  //   }),
+  //   [assetOrders]
+  // )
+  // const [sellOrders, setSellOrders] = useState()
+  // const [buyOrders, setBuyOrders] = useState()
+  // useEffect(() => {
+  //   setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+  //   setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  // }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   // useEffect(() => {
   //   if (!isWalletBalanceLoading && !isWalletBalanceError) {
@@ -222,22 +223,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
   }, [order, asset])
 
-  const handleSlider = useCallback(
-    (e, value) => {
-      let _price = order.price || 0
-      let _balance = order.type === 'sell' ? assetBalance : algoBalance
-      let _percent = (value / 100) * _balance
-      const _amount = order.type === 'sell' ? _percent : _percent / _price
-
-      if (order.amount !== _amount) {
-        setOrder({
-          ...order,
-          amount: _amount
-        })
-      }
-    },
-    [order]
-  )
+  // const handleSlider = useCallback(
+  //   (e, value) => {
+  //     let _price = order.price || 0
+  //     let _balance = order.type === 'sell' ? assetBalance : algoBalance
+  //     let _percent = (value / 100) * _balance
+  //     const _amount = order.type === 'sell' ? _percent : _percent / _price
+  //
+  //     if (order.amount !== _amount) {
+  //       setOrder({
+  //         ...order,
+  //         amount: _amount
+  //       })
+  //     }
+  //   },
+  //   [order]
+  // )
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
@@ -262,42 +263,42 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [setOrder, order]
   )
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      let orderPromise
-      if (typeof onSubmit === 'function') {
-        orderPromise = onSubmit({
-          ...order,
-          wallet,
-          asset
-        })
-      } else {
-        orderPromise = placeOrder({
-          ...order,
-          wallet,
-          asset
-        })
-      }
-      // TODO add events
-      toast.promise(orderPromise, {
-        loading: t('awaiting-confirmation'),
-        success: t('order-success'),
-        error: (err) => {
-          if (/PopupOpenError|blocked/.test(err)) {
-            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-          }
-
-          if (/Operation cancelled/i.test(err)) {
-            return t('order-cancelled')
-          }
-
-          return t('error-placing-order')
-        }
-      })
-    },
-    [onSubmit, asset, order]
-  )
+  // const handleSubmit = useCallback(
+  //   (e) => {
+  //     e.preventDefault()
+  //     let orderPromise
+  //     if (typeof onSubmit === 'function') {
+  //       orderPromise = onSubmit({
+  //         ...order,
+  //         wallet,
+  //         asset
+  //       })
+  //     } else {
+  //       orderPromise = placeOrder({
+  //         ...order,
+  //         wallet,
+  //         asset
+  //       })
+  //     }
+  //     // TODO add events
+  //     toast.promise(orderPromise, {
+  //       loading: t('awaiting-confirmation'),
+  //       success: t('order-success'),
+  //       error: (err) => {
+  //         if (/PopupOpenError|blocked/.test(err)) {
+  //           return t('disable-popup')
+  //         }
+  //
+  //         if (/Operation cancelled/i.test(err)) {
+  //           return t('order-cancelled')
+  //         }
+  //
+  //         return t('error-placing-order')
+  //       }
+  //     })
+  //   },
+  //   [onSubmit, asset, order]
+  // )
   if (
     typeof wallet === 'undefined' ||
     typeof wallet.amount === 'undefined' ||
@@ -475,7 +476,10 @@ PlaceOrderForm.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
-    name: PropTypes.string
+    name: PropTypes.string,
+    price_info: PropTypes.shape({
+      price: PropTypes.number.isRequired
+    })
   }).isRequired,
   /**
    * Wallet to execute Orders from
