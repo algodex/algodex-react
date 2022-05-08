@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
-import { useAlgodex } from '@algodex/algodex-hooks'
-
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
@@ -12,12 +10,8 @@ const ERROR = {
  * Use Wallet Connect query
  * @return {object}
  */
-export function useWalletConnect() {
-  /**
-   * State Setter
-   */
-  const { setAddresses, algodex, setWallet } = useAlgodex()
-
+export default function useWalletConnect(onConnect, onDisconnect) {
+  const [addresses, setAddresses] = useState([])
   /**
    * Instance referenc
    */
@@ -47,14 +41,12 @@ export function useWalletConnect() {
           connector: walletConnect.current
         }
       })
-      setAddresses(_addresses, { validate: false, merge: true, throws: false })
-      setWallet(_addresses[0], { validate: false, merge: true })
+      setAddresses(_addresses)
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
     }
   }
   const disconnect = () => {
-    console.log('hello', walletConnect.current)
     if (walletConnect.current.connected) {
       walletConnect.current.killSession()
     }
@@ -78,17 +70,9 @@ export function useWalletConnect() {
     (err) => {
       console.log('DISCONNECTED')
       if (err) throw err
-      if (typeof algodex !== 'undefined' && Array.isArray(algodex.addresses)) {
-        setAddresses(
-          algodex.addresses.filter((addr) => addr.type !== 'wallet-connect'),
-          { merge: false, validate: false }
-        )
-        if (algodex.addresses.length) {
-          setWallet(algodex.addresses[0], { validate: false, merge: true })
-        }
-      }
+      onDisconnect(addresses)
     },
-    [setAddresses, algodex.addresses]
+    [onDisconnect]
   )
 
   const handleConnected = (err, payload) => {
@@ -111,8 +95,7 @@ export function useWalletConnect() {
       address: acct
     }))
     console.log('connected here')
-    setAddresses(_addresses, { merge: true, validate: false })
-
+    onConnect(_addresses)
     QRCodeModal.close()
   }
   useEffect(() => {

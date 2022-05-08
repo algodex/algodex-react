@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import useWallets from '@/hooks/useWallets'
 
 const Tab = styled.div`
   display: flex;
@@ -77,15 +78,16 @@ export const WalletOrdersSection = styled.section`
 `
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
-  const { isConnected, wallet } = useAlgodex()
+  const { addresses } = useWallets()
+  const { wallet } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
   const ASSETS_PANEL = 'assets'
-
+  // console.log(addresses, wallet)
   const renderPanel = (panelName) => {
     // if (!isSignedIn) return <div></div>
-    if (!isConnected) return <div></div>
+    if (!addresses.length > 0) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
         return <WalletOpenOrdersTable wallet={wallet} />

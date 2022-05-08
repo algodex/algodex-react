@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react'
 
-import { useAlgodex } from '@algodex/algodex-hooks'
-
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
@@ -11,10 +9,7 @@ const ERROR = {
  * useMyAlgoConnect
  * @return {WalletEffect}
  */
-export function useMyAlgoConnect() {
-  // State Setter
-  const { setAddresses, algodex, setWallet } = useAlgodex()
-
+export default function useMyAlgoConnect(onConnect, onDisconnect) {
   // Instance reference
   const myAlgoWallet = useRef()
 
@@ -38,19 +33,9 @@ export function useMyAlgoConnect() {
       })
       console.debug('Setting Address form myAlgoConnect', _addresses)
       // Set Addresses
-      setAddresses(_addresses, { validate: false, merge: true })
+      onConnect(_addresses)
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
-    }
-  }
-
-  const disconnect = () => {
-    setAddresses(
-      algodex.addresses.filter((addr) => addr.type !== 'my-algo-wallet'),
-      { merge: false, validate: false }
-    )
-    if (algodex.addresses.length) {
-      setWallet(algodex.addresses[0], { validate: false, merge: true })
     }
   }
 
@@ -69,5 +54,5 @@ export function useMyAlgoConnect() {
     initMyAlgoWallet()
   }, [])
 
-  return { connect, disconnect }
+  return { connect, disconnect: onDisconnect }
 }
