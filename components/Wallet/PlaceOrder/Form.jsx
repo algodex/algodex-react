@@ -69,7 +69,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { t } = useTranslation('place-order')
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
-  const currentPrice = new Big(asset.price_info.price || 0).toString()
+  const currentPrice = new Big(asset.price_info.price || 0).toNumber()
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -151,30 +151,23 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const updateAmount = useCallback(
     (e) => {
-      let sec = new Big(e.target.value)
-        .div(100)
-        .times(algoBalance)
-        .div(asset.price_info.price)
-        .toNumber()
-      console.log(sec, asset, order.price, e.target.value, 'updated again 00')
-
       if (order.type === 'buy' && order.price === 0) {
         setOrder({
           ...order,
-          price: currentPrice,
-          amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
+          price: currentPrice
         })
+        handleChange(
+          e,
+          'amount',
+          new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
+        )
         return
       }
       const newAmount =
         order.type === 'buy'
           ? new Big(e.target.value).div(100).times(algoBalance).div(order.price).toNumber()
           : new Big(e.target.value).div(100).times(0.5).toString()
-      console.log(newAmount, 'hello here again')
-      setOrder({
-        ...order,
-        amount: newAmount
-      })
+      handleChange(e, 'amount', newAmount)
     },
     [algoBalance, asset.price_info.price]
   )
@@ -292,52 +285,55 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   },
   //   [order]
   // )
-  const handleChange = (e, _key, _value) => {
-    const key = _key || e.target.name
-    let value = _value || e.target.value
-    if (typeof key === 'undefined') {
-      throw new Error('Must have valid key!')
-    }
-    if (typeof value === 'undefined') {
-      throw new Error('Must have a valid value!')
-    }
-    if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
-      value = parseFloat(value)
-    }
-    if (key === 'price') {
-      let _fixedPrice = parseFloat(value.toFixed(6)) || 0
-      setOrder({
-        ...order,
-        price: _fixedPrice !== order.price ? _fixedPrice : order.price
-      })
-    } else if (key === 'amount') {
-      let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
-      let _total = parseFloat(order.price * _fixedAmount).toFixed(6) || 0
-      if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
-        _fixedAmount = algoBalance / order.price
+  const handleChange = useCallback(
+    (e, _key, _value) => {
+      const key = _key || e.target.name
+      let value = _value || e.target.value
+      if (typeof key === 'undefined') {
+        throw new Error('Must have valid key!')
       }
-      if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-        _fixedAmount = assetBalance
+      if (typeof value === 'undefined') {
+        throw new Error('Must have a valid value!')
       }
-      setOrder({
-        ...order,
-        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-        total: _total !== order.total ? _total : order.total
-      })
-    } else {
-      setOrder({
-        ...order,
-        [key]: value
-      })
-    }
+      if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
+        value = parseFloat(value)
+      }
+      if (key === 'price') {
+        let _fixedPrice = parseFloat(value.toFixed(6)) || 0
+        setOrder({
+          ...order,
+          price: _fixedPrice !== order.price ? _fixedPrice : order.price
+        })
+      } else if (key === 'amount') {
+        let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
+        let _total = parseFloat(order.price * _fixedAmount).toFixed(6) || 0
+        if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
+          _fixedAmount = algoBalance / order.price
+        }
+        if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+          _fixedAmount = assetBalance
+        }
+        setOrder({
+          ...order,
+          amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+          total: _total !== order.total ? _total : order.total
+        })
+      } else {
+        setOrder({
+          ...order,
+          [key]: value
+        })
+      }
 
-    // if (order[key] !== value) {
-    //   setOrder({
-    //     ...order,
-    //     [key]: value
-    //   })
-    // }
-  }
+      // if (order[key] !== value) {
+      //   setOrder({
+      //     ...order,
+      //     [key]: value
+      //   })
+      // }
+    },
+    [order]
+  )
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
