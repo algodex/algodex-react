@@ -27,9 +27,11 @@ export default {
 
 const Template = (args) => <Component {...args} />
 
-export const Header = Template.bind({})
+const Header = Template.bind({})
 
 Header.args = {
   variant: 'large',
   fontSize: 2
 }
+
+// export Header
