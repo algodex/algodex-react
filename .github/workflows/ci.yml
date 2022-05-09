@@ -60,6 +60,8 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
       - name: Run Cypress
         run: yarn test-cypress
+        env:
+          WAIT_ON_TIMEOUT: 600000
   chromatic-deployment:
     name: Storybook
     runs-on: ubuntu-latest
