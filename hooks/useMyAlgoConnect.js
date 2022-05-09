@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { assignGroups, groupBy } from '@algodex/algodex-sdk/lib/functions/base'
+import algosdk from 'algosdk'
 
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
@@ -17,6 +19,69 @@ export function useMyAlgoConnect() {
 
   // Instance reference
   const myAlgoWallet = useRef()
+
+  /**
+   * MyAlgoConnect Signer
+   *
+   * @todo move to SDK
+   * @param outerTxns
+   * @return {Promise<*>}
+   */
+  async function signer(outerTxns) {
+    console.debug('inside signMyAlgoTransactions transactions')
+    const groups = groupBy(outerTxns, 'groupNum')
+
+    const numberOfGroups = Object.keys(groups)
+
+    const groupedGroups = numberOfGroups.map((group) => {
+      const allTxFormatted = groups[group].map((txn) => {
+        return txn.unsignedTxn
+      })
+      assignGroups(allTxFormatted)
+      return allTxFormatted
+    })
+
+    const flattenedGroups = groupedGroups.flat()
+
+    const txnsForSig = []
+
+    for (let i = 0; i < outerTxns.length; i++) {
+      outerTxns[i].unsignedTxn = flattenedGroups[i]
+      if (outerTxns[i].needsUserSig === true) {
+        txnsForSig.push(flattenedGroups[i])
+      }
+    }
+
+    const signedTxnsFromUser = await this.signTransaction(txnsForSig)
+
+    if (Array.isArray(signedTxnsFromUser)) {
+      let userSigIndex = 0
+      for (let i = 0; i < outerTxns.length; i++) {
+        if (outerTxns[i].needsUserSig) {
+          outerTxns[i].signedTxn = signedTxnsFromUser[userSigIndex].blob
+          userSigIndex++
+        }
+      }
+    } else {
+      for (let i = 0; i < outerTxns.length; i++) {
+        if (outerTxns[i].needsUserSig) {
+          outerTxns[i].signedTxn = signedTxnsFromUser.blob
+          break
+        }
+      }
+    }
+
+    for (let i = 0; i < outerTxns.length; i++) {
+      if (!outerTxns[i].needsUserSig) {
+        const signedLsig = algosdk.signLogicSigTransactionObject(
+          outerTxns[i].unsignedTxn,
+          outerTxns[i].lsig
+        )
+        outerTxns[i].signedTxn = signedLsig.blob
+      }
+    }
+    return outerTxns
+  }
 
   const connect = async () => {
     try {
@@ -59,9 +124,7 @@ export function useMyAlgoConnect() {
       // '@randlabs/myalgo-connect' is imported dynamically
       // because it uses the window object
       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-      MyAlgoConnect.prototype.sign = await import(
-        '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-      )
+      MyAlgoConnect.prototype.sign = signer
       myAlgoWallet.current = new MyAlgoConnect()
       myAlgoWallet.current.connected = false
     }

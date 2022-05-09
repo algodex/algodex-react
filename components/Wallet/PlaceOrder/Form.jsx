@@ -58,7 +58,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
-  console.debug(sellOrders, buyOrders)
+  console.debug(sellOrders?.length, buyOrders?.length)
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
@@ -201,17 +201,30 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           asset
         })
       } else {
-        orderPromise = placeOrder({
+        console.log({
           ...order,
           wallet,
-          asset
+          asset,
+          appId: order.type === 'sell' ? 22045522 : 22045503
         })
+        orderPromise = placeOrder(
+          {
+            ...order,
+            address: wallet.address,
+            wallet,
+            asset,
+            appId: order.type === 'sell' ? 22045522 : 22045503,
+            version: 6
+          },
+          { wallet }
+        )
       }
       // TODO add events
       toast.promise(orderPromise, {
         loading: t('awaiting-confirmation'),
         success: t('order-success'),
         error: (err) => {
+          console.log(err)
           if (/PopupOpenError|blocked/.test(err)) {
             return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
           }
