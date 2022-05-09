@@ -184,7 +184,7 @@ export const OrderForm = ({
         // txnFee={txnFee}
         onChange={updateAmount}
         name="amount"
-        value={sliderPercent || 0}
+        value={sliderPercent}
         defaultValue={0}
         marks={marks}
         step={null}
@@ -193,8 +193,8 @@ export const OrderForm = ({
       <OutlinedInput
         id="total"
         name="total"
-        type="text"
-        value={order.amount * order.price || 0}
+        type="number"
+        value={order.total}
         readOnly
         disabled
         sx={{

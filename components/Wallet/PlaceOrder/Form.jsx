@@ -149,6 +149,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const updateAmount = useCallback(
     (e) => {
+      let sec = new Big(e.target.value)
+        .div(100)
+        .times(algoBalance)
+        .div(asset.price_info.price)
+        .toNumber()
+      console.log(sec, e.target.value, 'again 00')
       if (order.type === 'buy' && order.price === 0) {
         // setOrder({
         //   ...order,
@@ -165,7 +171,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           .div(100)
           .times(algoBalance)
           .div(asset.price_info.price)
-          .toString()
+          .toNumber()
       })
     },
     [algoBalance, asset.price_info.price]
@@ -259,7 +265,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       })
     } else if (key === 'amount') {
       let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
-      let _total = parseFloat((order.price * _fixedAmount).toFixed(6)) || 0
+      let _total = parseFloat(order.price * _fixedAmount).toFixed(6) || 0
       if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
         _fixedAmount = algoBalance / order.price
       }
@@ -269,10 +275,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       setOrder({
         ...order,
         amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-        total:
-          _total !== order.total
-            ? parseFloat(_total).toFixed(6)
-            : parseFloat(order.total).toFixed(6)
+        total: _total !== order.total ? _total : order.total
       })
     } else {
       setOrder({
