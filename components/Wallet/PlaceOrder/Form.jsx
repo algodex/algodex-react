@@ -69,6 +69,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { t } = useTranslation('place-order')
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+  const currentPrice = new Big(asset.price_info.price || 0).toString()
+
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -154,40 +156,85 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         .times(algoBalance)
         .div(asset.price_info.price)
         .toNumber()
-      console.log(sec, e.target.value, 'again 00')
+      console.log(sec, asset, order.price, e.target.value, 'updated again 00')
+
       if (order.type === 'buy' && order.price === 0) {
-        // setOrder({
-        //   ...order,
-        //   amount: new Big(e.target.value)
-        //     .div(100)
-        //     .times(algoBalance)
-        //     .div(asset.price_info.price)
-        //     .toString()
-        // })
+        setOrder({
+          ...order,
+          price: currentPrice,
+          amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
+        })
+        return
       }
+      const newAmount =
+        order.type === 'buy'
+          ? new Big(e.target.value).div(100).times(algoBalance).div(order.price).toNumber()
+          : new Big(e.target.value).div(100).times(0.5).toString()
+      console.log(newAmount, 'hello here again')
       setOrder({
         ...order,
-        amount: new Big(e.target.value)
-          .div(100)
-          .times(algoBalance)
-          .div(asset.price_info.price)
-          .toNumber()
+        amount: newAmount
       })
     },
     [algoBalance, asset.price_info.price]
   )
 
+  // const handleChange = (e) => {
+  //   if (isBuyOrder && price === '0') {
+  //     onChange({
+  //       price: currentPrice,
+  //       amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toString()
+  //     })
+  //     return
+  //   }
+
+  //   const newAmount = isBuyOrder
+  //     ? new Big(e.target.value).div(100).times(algoBalance).div(price).toString()
+  //     : new Big(e.target.value).div(100).times(asaBalance).toString()
+
+  //   onChange({
+  //     amount: newAmount
+  //   })
+  // }
+
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell') {
       return (order.amount / assetBalance) * 100
+      // if (_asaBalance === 0) {
+      //   return 0
+      // }
+      // return new Big(order.amount).times(100).div(asaBalance).toNumber()
     }
     if (order.type === 'buy') {
-      return (order.total / algoBalance) * 100
+      // return (order.total / algoBalance) * 100
+      if (algoBalance === 0) {
+        console.log(algoBalance, 'alsogralance first')
+        return 0
+      }
+      console.log(
+        new Big(order.price).times(order.amount).times(100).div(algoBalance).toNumber(),
+        'alsogralance second'
+      )
+      return new Big(order.price).times(order.amount).times(100).div(algoBalance).toNumber()
     }
 
     return 0
   }, [order, algoBalance, assetBalance])
+
+  // const calculateValue = () => {
+  //   if (isBuyOrder) {
+  //     if (_algoBalance === 0) {
+  //       return 0
+  //     }
+  //     return new Big(price).times(amount).times(100).div(algoBalance).toNumber()
+  //   } else {
+  //     if (_asaBalance === 0) {
+  //       return 0
+  //     }
+  //     return new Big(amount).times(100).div(asaBalance).toNumber()
+  //   }
+  // }
   const MICROALGO = 0.000001
   // const hasBalance = useMemo(() => {
   //   if (order.type === 'sell') {
@@ -229,22 +276,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   }
   // }, [order, asset])
 
-  const handleSlider = useCallback(
-    (e, value) => {
-      let _price = order.price || 0
-      let _balance = order.type === 'sell' ? assetBalance : algoBalance
-      let _percent = (value / 100) * _balance
-      const _amount = order.type === 'sell' ? _percent : _percent / _price
+  // const handleSlider = useCallback(
+  //   (e, value) => {
+  //     let _price = order.price || 0
+  //     let _balance = order.type === 'sell' ? assetBalance : algoBalance
+  //     let _percent = (value / 100) * _balance
+  //     const _amount = order.type === 'sell' ? _percent : _percent / _price
 
-      if (order.amount !== _amount) {
-        setOrder({
-          ...order,
-          amount: _amount
-        })
-      }
-    },
-    [order]
-  )
+  //     if (order.amount !== _amount) {
+  //       setOrder({
+  //         ...order,
+  //         amount: _amount
+  //       })
+  //     }
+  //   },
+  //   [order]
+  // )
   const handleChange = (e, _key, _value) => {
     const key = _key || e.target.name
     let value = _value || e.target.value

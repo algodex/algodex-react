@@ -181,9 +181,7 @@ export const OrderForm = ({
           width: '90%'
         }}
         disabled={order.price == 0 ? true : false}
-        // txnFee={txnFee}
         onChange={updateAmount}
-        name="amount"
         value={sliderPercent}
         defaultValue={0}
         marks={marks}
