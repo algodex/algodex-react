@@ -1,4 +1,4 @@
-import { useAlgodex, useAssetOrdersQuery, useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import AvailableBalance from './Form/AvailableBalance'
@@ -12,9 +12,10 @@ import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import Typography from '@mui/material/Typography'
+// import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import toast from 'react-hot-toast'
+// import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
@@ -60,9 +61,9 @@ export const convertToAsaUnits = (toConvert, decimals) => {
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  const { wallet, placeOrder, http, isConnected } = useAlgodex()
-  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
-  const currentPrice = new Big(asset.price_info.price || 0).toNumber()
+  // const { wallet, placeOrder, isConnected } = useAlgodex()
+  const { wallet, isConnected } = useAlgodex()
+  const { isLoading, isError } = useAssetOrdersQuery({ asset })
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -84,27 +85,27 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // ).toString()
   const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
 
-  const {
-    data: minBalance,
-    isLoading: isWalletBalanceLoading,
-    isError: isWalletBalanceError
-  } = useWalletMinBalanceQuery({
-    wallet: wallet.address
-  })
-  const orderBook = useMemo(
-    () => ({
-      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
-      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
-    }),
-    [assetOrders]
-  )
-  const [sellOrders, setSellOrders] = useState()
-  const [buyOrders, setBuyOrders] = useState()
+  // const {
+  //   data: minBalance,
+  //   isLoading: isWalletBalanceLoading,
+  //   isError: isWalletBalanceError
+  // } = useWalletMinBalanceQuery({
+  //   wallet: wallet.address
+  // })
+  // const orderBook = useMemo(
+  //   () => ({
+  //     buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+  //     sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+  //   }),
+  //   [assetOrders]
+  // )
+  // const [sellOrders, setSellOrders] = useState()
+  // const [buyOrders, setBuyOrders] = useState()
 
-  useEffect(() => {
-    setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
-    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  }, [orderBook, setSellOrders, setBuyOrders, asset])
+  // useEffect(() => {
+  //   setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+  //   setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  // }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const buttonProps = useMemo(
     () => ({
@@ -208,42 +209,44 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [setOrder, order]
   )
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      let orderPromise
-      if (typeof onSubmit === 'function') {
-        orderPromise = onSubmit({
-          ...order,
-          wallet,
-          asset
-        })
-      } else {
-        orderPromise = placeOrder({
-          ...order,
-          wallet,
-          asset
-        })
-      }
-      // TODO add events
-      toast.promise(orderPromise, {
-        loading: t('awaiting-confirmation'),
-        success: t('order-success'),
-        error: (err) => {
-          if (/PopupOpenError|blocked/.test(err)) {
-            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-          }
 
-          if (/Operation cancelled/i.test(err)) {
-            return t('order-cancelled')
-          }
+  // const handleSubmit = useCallback(
+  //   (e) => {
+  //     e.preventDefault()
+  //     let orderPromise
+  //     if (typeof onSubmit === 'function') {
+  //       orderPromise = onSubmit({
+  //         ...order,
+  //         wallet,
+  //         asset
+  //       })
+  //     } else {
+  //       orderPromise = placeOrder({
+  //         ...order,
+  //         wallet,
+  //         asset
+  //       })
+  //     }
+  //     // TODO add events
+  //     toast.promise(orderPromise, {
+  //       loading: t('awaiting-confirmation'),
+  //       success: t('order-success'),
+  //       error: (err) => {
+  //         if (/PopupOpenError|blocked/.test(err)) {
+  //           return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+  //         }
 
-          return t('error-placing-order')
-        }
-      })
-    },
-    [onSubmit, asset, order]
-  )
+  //         if (/Operation cancelled/i.test(err)) {
+  //           return t('order-cancelled')
+  //         }
+
+  //         return t('error-placing-order')
+  //       }
+  //     })
+  //   },
+  //   [onSubmit, asset, order]
+  // )
+
   if (
     typeof wallet === 'undefined' ||
     typeof wallet.amount === 'undefined' ||
@@ -298,74 +301,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             </MaterialButton>
           </ButtonGroup>
           <AvailableBalance wallet={wallet} asset={asset} />
-          {/*<AvailableBalance>*/}
-          {/*  <IconTextContainer style={{ marginBottom: '10px' }}>*/}
-          {/*    <Typography variant="bodyCopyTiny" color="gray.500">*/}
-          {/*      {t('available-balance')}*/}
-          {/*    </Typography>*/}
-          {/*    <Tooltip*/}
-          {/*      renderButton={(setTriggerRef) => (*/}
-          {/*        <IconButton ref={setTriggerRef} type="button">*/}
-          {/*          <Info />*/}
-          {/*        </IconButton>*/}
-          {/*      )}*/}
-          {/*    >*/}
-          {/*      <section className="flex items-center justify-between mb-1">*/}
-          {/*        <Typography variant="labelMdSpaced" color="gray.300">*/}
-          {/*          {t('orders:available')}:*/}
-          {/*        </Typography>*/}
-          {/*        <IconTextContainer>*/}
-          {/*          <Typography variant="labelMdSpaced" color="gray.300">*/}
-          {/*            {fromBaseUnits(wallet.amount)}*/}
-          {/*          </Typography>*/}
-          {/*          <Icon use="algoLogo" size={0.625} />*/}
-          {/*        </IconTextContainer>*/}
-          {/*      </section>*/}
-          {/*      <BalanceRow>*/}
-          {/*        <Typography variant="labelMdSpaced" color="gray.300">*/}
-          {/*          {t('total')}:*/}
-          {/*        </Typography>*/}
-          {/*        <IconTextContainer>*/}
-          {/*          <Typography variant="labelMdSpaced" color="gray.300">*/}
-          {/*            {fromBaseUnits(wallet.amount)}*/}
-          {/*          </Typography>*/}
-          {/*          <Icon use="algoLogo" size={0.625} />*/}
-          {/*        </IconTextContainer>*/}
-          {/*      </BalanceRow>*/}
-          {/*      <BalanceRow>*/}
-          {/*        <Typography*/}
-          {/*          variant="labelSmForm"*/}
-          {/*          component="span"*/}
-          {/*          color="gray.300"*/}
-          {/*          textTransform="initial"*/}
-          {/*        >*/}
-          {/*          &nbsp;**/}
-          {/*          {t('max-spend-explanation', {*/}
-          {/*            // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()*/}
-          {/*          })}*/}
-          {/*        </Typography>*/}
-          {/*      </BalanceRow>*/}
-          {/*    </Tooltip>*/}
-          {/*  </IconTextContainer>*/}
-          {/*  <BalanceRow>*/}
-          {/*    <Typography variant="labelMdLight" color="gray.400">*/}
-          {/*      ALGO*/}
-          {/*    </Typography>*/}
-          {/*    <Typography variant="labelMdLight" color="gray.300">*/}
-          {/*      {fromBaseUnits(wallet.amount)}*/}
-          {/*    </Typography>*/}
-          {/*  </BalanceRow>*/}
-          {/*  <BalanceRow>*/}
-          {/*    <Typography variant="labelMdLight" color="gray.400">*/}
-          {/*      <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />*/}
-          {/*      {asset.name || asset.id}*/}
-          {/*    </Typography>*/}
-          {/*    <Typography variant="labelMdLight" color="gray.300">*/}
-          {/*      /!*{hasBalance && wallet?.assets[asset.id]?.balance}*!/*/}
-          {/*    </Typography>*/}
-          {/*  </BalanceRow>*/}
-          {/*</AvailableBalance>*/}
-
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
@@ -379,22 +314,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <Tab label={t('market')} />
           </Tabs>
           {/*</TabsUnstyled>*/}
-          {/*{!hasBalance && (*/}
-          {/*  <Typography variant="bodyCopy" color="gray.500" textAlign="center" m={32}>*/}
-          {/*    {t('insufficient-balance')}*/}
-          {/*  </Typography>*/}
-          {/*)}*/}
-          {/*{hasBalance && (*/}
+          {!hasBalance && (
+            <Typography color="gray.500" textAlign="center" m={32}>
+              {t('insufficient-balance')}
+            </Typography>
+          )}
+          {hasBalance && (
+            <OrderForm
+              handleChange={handleChange}
+              updateAmount={handleSlider}
+              sliderPercent={sliderPercent}
+              order={order}
+              asset={asset}
+              microAlgo={MICROALGO}
+            />
+          )}
 
-          {/*)}*/}
-          <OrderForm
-            handleChange={handleChange}
-            updateAmount={handleSlider}
-            sliderPercent={sliderPercent}
-            order={order}
-            asset={asset}
-            microAlgo={MICROALGO}
-          />
           <MaterialButton
             type="submit"
             variant="primary"

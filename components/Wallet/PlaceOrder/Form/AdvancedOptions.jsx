@@ -58,10 +58,6 @@ export const Container = styled.div`
   ${ExpandToggle} {
     &:focus {
       outline: 0;
-      box-shadow: ${({ theme, type }) => {
-        // const color = type === 'buy' ? 'green' : 'red'
-        // return `0 0 0 0.2rem ${theme.palette.focus[color]}`
-      }};
     }
   }
 
@@ -170,7 +166,7 @@ export const OptionsButton = styled(Button)`
  * @returns {JSX.Element}
  * @constructor
  */
-export function AdvancedOptions({ order, onChange, allowTaker }) {
+export function AdvancedOptions({ order, onChange }) {
   const { t } = useTranslation('place-order')
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
@@ -429,12 +425,9 @@ export function AdvancedOptions({ order, onChange, allowTaker }) {
 
 AdvancedOptions.propTypes = {
   order: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
-  allowTaker: PropTypes.bool
+  onChange: PropTypes.func
 }
 
-AdvancedOptions.defaultProps = {
-  allowTaker: true
-}
+AdvancedOptions.defaultProps = {}
 
 export default AdvancedOptions
