@@ -180,10 +180,10 @@ export const OrderForm = ({
           margin: '0px 0.5rem',
           width: '90%'
         }}
+        defaultValue={0.0}
         disabled={order.price == 0 ? true : false}
         onChange={updateAmount}
         value={sliderPercent}
-        defaultValue={0}
         marks={marks}
         step={null}
         max={100}

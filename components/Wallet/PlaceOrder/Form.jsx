@@ -151,11 +151,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const updateAmount = useCallback(
     (e) => {
+      let sec = new Big(e.target.value)
+        .div(100)
+        .times(algoBalance)
+        .div(asset.price_info.price)
+        .toNumber()
+      console.log(sec, asset, order.price, e.target.value, 'updated again 00')
+
       if (order.type === 'buy' && order.price === 0) {
-        setOrder({
-          ...order,
-          price: currentPrice
-        })
+        // setOrder({
+        //   ...order,
+        //   price: currentPrice
+        // })
+        // handleChange(e, {
+        //   price: currentPrice,
+        //   amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
+        // })
         handleChange(
           e,
           'amount',
@@ -167,6 +178,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         order.type === 'buy'
           ? new Big(e.target.value).div(100).times(algoBalance).div(order.price).toNumber()
           : new Big(e.target.value).div(100).times(0.5).toString()
+      console.log(newAmount, 'hello here again')
+      // handleChange(e, {
+      //   amount: newAmount
+      // })
+      // setOrder({
+      //   amount: newAmount
+      // })
       handleChange(e, 'amount', newAmount)
     },
     [algoBalance, asset.price_info.price]
@@ -194,26 +212,21 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell') {
       return (order.amount / assetBalance) * 100
-      // if (_asaBalance === 0) {
-      //   return 0
-      // }
-      // return new Big(order.amount).times(100).div(asaBalance).toNumber()
     }
     if (order.type === 'buy') {
-      // return (order.total / algoBalance) * 100
-      if (algoBalance === 0) {
-        console.log(algoBalance, 'alsogralance first')
-        return 0
-      }
-      console.log(
-        new Big(order.price).times(order.amount).times(100).div(algoBalance).toNumber(),
-        'alsogralance second'
-      )
-      return new Big(order.price).times(order.amount).times(100).div(algoBalance).toNumber()
+      return (order.total / algoBalance) * 100
     }
-
     return 0
   }, [order, algoBalance, assetBalance])
+  // const hasBalance = useMemo(() => {
+  //   if (order.type === 'sell') {
+  //     return assetBalance > 0
+  //   }
+  //   if (order.type === 'buy') {
+  //     return algoBalance > 0
+  //   }
+  //   return false
+  // }, [order])
 
   // const calculateValue = () => {
   //   if (isBuyOrder) {
@@ -269,26 +282,98 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   }
   // }, [order, asset])
 
-  // const handleSlider = useCallback(
-  //   (e, value) => {
-  //     let _price = order.price || 0
-  //     let _balance = order.type === 'sell' ? assetBalance : algoBalance
-  //     let _percent = (value / 100) * _balance
-  //     const _amount = order.type === 'sell' ? _percent : _percent / _price
+  const handleSlider = useCallback(
+    (e, value) => {
+      let _price = order.price || 0
+      let _balance = order.type === 'sell' ? assetBalance : algoBalance
+      let _percent = (value / 100) * _balance
+      const _amount = order.type === 'sell' ? _percent : _percent / _price
 
-  //     if (order.amount !== _amount) {
+      if (order.amount !== _amount) {
+        setOrder({
+          ...order,
+          amount: _amount
+        })
+      }
+    },
+    [order]
+  )
+  // const handleChange = useCallback(
+  //   (e, _key, _value) => {
+  //     const key = _key || e.target.name
+  //     let value = _value || e.target.value
+  //     if (typeof key === 'undefined') {
+  //       throw new Error('Must have valid key!')
+  //     }
+  //     if (typeof value === 'undefined') {
+  //       throw new Error('Must have a valid value!')
+  //     }
+  //     if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
+  //       value = parseFloat(value)
+  //     }
+  //     if (key === 'price') {
+  //       let _fixedPrice = parseFloat(value.toFixed(6)) || 0
   //       setOrder({
   //         ...order,
-  //         amount: _amount
+  //         price: _fixedPrice !== order.price ? _fixedPrice : order.price
+  //       })
+  //     } else if (key === 'amount') {
+  //       let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
+  //       let _total = parseFloat(order.price * _fixedAmount).toFixed(6) || 0
+  //       if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
+  //         _fixedAmount = algoBalance / order.price
+  //       }
+  //       if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+  //         _fixedAmount = assetBalance
+  //       }
+  //       setOrder({
+  //         ...order,
+  //         amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+  //         total: _total !== order.total ? _total : order.total
+  //       })
+  //     } else {
+  //       setOrder({
+  //         ...order,
+  //         [key]: value
   //       })
   //     }
+
+  //     // if (order[key] !== value) {
+  //     //   setOrder({
+  //     //     ...order,
+  //     //     [key]: value
+  //     //   })
+  //     // }
   //   },
-  //   [order]
+  //   [order, asset]
   // )
+  useEffect(() => {
+    let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
+    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
+    let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
+    console.log(_fixedPrice, 'fixed price')
+    if (order.type === 'buy' && _total >= algoBalance) {
+      _fixedAmount = algoBalance / _fixedPrice
+    }
+    if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+      _fixedAmount = assetBalance
+    }
+    if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
+      setOrder({
+        ...order,
+        price: _fixedPrice !== order.price ? _fixedPrice : order.price,
+        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+        total: _total !== order.total ? _total : order.total
+      })
+    }
+  }, [order, asset])
+
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
       let value = _value || e.target.value
+
+      console.log(key, value, 'ley and value')
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }
@@ -297,42 +382,16 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       }
       if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
         value = parseFloat(value)
+        console.log(value, 'value here')
       }
-      if (key === 'price') {
-        let _fixedPrice = parseFloat(value.toFixed(6)) || 0
-        setOrder({
-          ...order,
-          price: _fixedPrice !== order.price ? _fixedPrice : order.price
-        })
-      } else if (key === 'amount') {
-        let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
-        let _total = parseFloat(order.price * _fixedAmount).toFixed(6) || 0
-        if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
-          _fixedAmount = algoBalance / order.price
-        }
-        if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-          _fixedAmount = assetBalance
-        }
-        setOrder({
-          ...order,
-          amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-          total: _total !== order.total ? _total : order.total
-        })
-      } else {
+      if (order[key] !== value) {
         setOrder({
           ...order,
           [key]: value
         })
       }
-
-      // if (order[key] !== value) {
-      //   setOrder({
-      //     ...order,
-      //     [key]: value
-      //   })
-      // }
     },
-    [order]
+    [setOrder, order]
   )
   const handleSubmit = useCallback(
     (e) => {
@@ -515,7 +574,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           {/*)}*/}
           <OrderForm
             handleChange={handleChange}
-            updateAmount={updateAmount}
+            updateAmount={handleSlider}
             sliderPercent={sliderPercent}
             order={order}
             asset={asset}
