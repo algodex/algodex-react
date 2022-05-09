@@ -28,18 +28,3 @@ export const setExplorerLink = (addr, network) => {
     ? `https://testnet.algoexplorer.io/address/${addr}`
     : `https://algoexplorer.io/address/${addr}`
 }
-
-export const roundValue = (value, decimalLimit) => {
-  if (value === '' || value.slice(-1) === '0') {
-    return value
-  }
-
-  const split = value.toString().split('.')
-  const hasDecimals = split.length > 1
-
-  if (hasDecimals && split[1].length >= decimalLimit) {
-    return parseFloat(value).toFixed(decimalLimit).toString()
-  }
-
-  return value
-}

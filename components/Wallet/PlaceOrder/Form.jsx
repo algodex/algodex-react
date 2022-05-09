@@ -1,26 +1,19 @@
 import { useAlgodex, useAssetOrdersQuery, useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
 import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
-import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialButton } from '@mui/material/Button'
 import { OrderForm } from './OrderForm'
-import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
-import Slider from '@/components/Input/Slider'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import Typography from '@mui/material/Typography'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
-import { lighten } from 'polished'
-import { roundValue } from '@/components/helpers'
 import styled from '@emotion/styled'
-import theme from '../../../theme'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -79,7 +72,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     execution: 'both'
   })
 
-  // console.log(wallet, asset, 'both here')
   const algoBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
@@ -108,26 +100,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
+
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
   }, [orderBook, setSellOrders, setBuyOrders, asset])
-
-  // useEffect(() => {
-  //   if (!isWalletBalanceLoading && !isWalletBalanceError) {
-  //     console.log(
-  //       minBalance,
-  //       isWalletBalanceLoading,
-  //       isWalletBalanceError,
-  //       secBalance,
-  //       'sec balance'
-  //     )
-  //     // const total = new Big(algoBalance)
-  //     // const min = new Big(minBalance).div(1000000)
-  //     // const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
-  //     // setMaxSpendableAlgo(Math.max(0, max))
-  //   }
-  // }, [minBalance, algoBalance, isWalletBalanceLoading, isWalletBalanceError])
 
   const buttonProps = useMemo(
     () => ({
@@ -149,65 +126,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet, asset])
 
-  const updateAmount = useCallback(
-    (e) => {
-      let sec = new Big(e.target.value)
-        .div(100)
-        .times(algoBalance)
-        .div(asset.price_info.price)
-        .toNumber()
-      console.log(sec, asset, order.price, e.target.value, 'updated again 00')
-
-      if (order.type === 'buy' && order.price === 0) {
-        // setOrder({
-        //   ...order,
-        //   price: currentPrice
-        // })
-        // handleChange(e, {
-        //   price: currentPrice,
-        //   amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
-        // })
-        handleChange(
-          e,
-          'amount',
-          new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toNumber()
-        )
-        return
-      }
-      const newAmount =
-        order.type === 'buy'
-          ? new Big(e.target.value).div(100).times(algoBalance).div(order.price).toNumber()
-          : new Big(e.target.value).div(100).times(0.5).toString()
-      console.log(newAmount, 'hello here again')
-      // handleChange(e, {
-      //   amount: newAmount
-      // })
-      // setOrder({
-      //   amount: newAmount
-      // })
-      handleChange(e, 'amount', newAmount)
-    },
-    [algoBalance, asset.price_info.price]
-  )
-
-  // const handleChange = (e) => {
-  //   if (isBuyOrder && price === '0') {
-  //     onChange({
-  //       price: currentPrice,
-  //       amount: new Big(e.target.value).div(100).times(algoBalance).div(currentPrice).toString()
-  //     })
-  //     return
-  //   }
-
-  //   const newAmount = isBuyOrder
-  //     ? new Big(e.target.value).div(100).times(algoBalance).div(price).toString()
-  //     : new Big(e.target.value).div(100).times(asaBalance).toString()
-
-  //   onChange({
-  //     amount: newAmount
-  //   })
-  // }
-
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell') {
@@ -218,69 +136,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
     return 0
   }, [order, algoBalance, assetBalance])
-  // const hasBalance = useMemo(() => {
-  //   if (order.type === 'sell') {
-  //     return assetBalance > 0
-  //   }
-  //   if (order.type === 'buy') {
-  //     return algoBalance > 0
-  //   }
-  //   return false
-  // }, [order])
+  const hasBalance = useMemo(() => {
+    if (order.type === 'sell') {
+      return assetBalance > 0
+    }
+    if (order.type === 'buy') {
+      return algoBalance > 0
+    }
+    return false
+  }, [order])
 
-  // const calculateValue = () => {
-  //   if (isBuyOrder) {
-  //     if (_algoBalance === 0) {
-  //       return 0
-  //     }
-  //     return new Big(price).times(amount).times(100).div(algoBalance).toNumber()
-  //   } else {
-  //     if (_asaBalance === 0) {
-  //       return 0
-  //     }
-  //     return new Big(amount).times(100).div(asaBalance).toNumber()
-  //   }
-  // }
   const MICROALGO = 0.000001
-  // const hasBalance = useMemo(() => {
-  //   if (order.type === 'sell') {
-  //     return assetBalance > 0
-  //   }
-  //   if (order.type === 'buy') {
-  //     return algoBalance > 0
-  //   }
-
-  //   return false
-  // }, [order])
-  // useEffect(() => {
-  //   if (order.type === 'sell') {
-  //   }
-  //   if (order.amount !== (order.amount * sliderPercent) / 100) {
-  //   }
-  // }, [setOrder, sliderPercent])
-
-  // Fix Precision
-  // useEffect(() => {
-  //   let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
-  //   let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
-  //   let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6)) || 0
-  //   if (order.type === 'buy' && _total >= algoBalance && _fixedPrice > 0) {
-  //     _fixedAmount = algoBalance / _fixedPrice
-  //   }
-  //   if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-  //     _fixedAmount = assetBalance
-  //   }
-  //   if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
-  //     return {
-  //       price: _fixedPrice !== order.price ? _fixedPrice : order.price,
-  //       amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-  //       total:
-  //         _total !== order.total
-  //           ? parseFloat(_total).toFixed(6)
-  //           : parseFloat(order.total).toFixed(6)
-  //     }
-  //   }
-  // }, [order, asset])
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -298,60 +164,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [order]
   )
-  // const handleChange = useCallback(
-  //   (e, _key, _value) => {
-  //     const key = _key || e.target.name
-  //     let value = _value || e.target.value
-  //     if (typeof key === 'undefined') {
-  //       throw new Error('Must have valid key!')
-  //     }
-  //     if (typeof value === 'undefined') {
-  //       throw new Error('Must have a valid value!')
-  //     }
-  //     if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
-  //       value = parseFloat(value)
-  //     }
-  //     if (key === 'price') {
-  //       let _fixedPrice = parseFloat(value.toFixed(6)) || 0
-  //       setOrder({
-  //         ...order,
-  //         price: _fixedPrice !== order.price ? _fixedPrice : order.price
-  //       })
-  //     } else if (key === 'amount') {
-  //       let _fixedAmount = parseFloat(value.toFixed(asset.decimals)) || 0
-  //       let _total = parseFloat(order.price * _fixedAmount).toFixed(6) || 0
-  //       if (order.type === 'buy' && _total >= algoBalance && order.price > 0) {
-  //         _fixedAmount = algoBalance / order.price
-  //       }
-  //       if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-  //         _fixedAmount = assetBalance
-  //       }
-  //       setOrder({
-  //         ...order,
-  //         amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-  //         total: _total !== order.total ? _total : order.total
-  //       })
-  //     } else {
-  //       setOrder({
-  //         ...order,
-  //         [key]: value
-  //       })
-  //     }
 
-  //     // if (order[key] !== value) {
-  //     //   setOrder({
-  //     //     ...order,
-  //     //     [key]: value
-  //     //   })
-  //     // }
-  //   },
-  //   [order, asset]
-  // )
   useEffect(() => {
     let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
     let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
-    console.log(_fixedPrice, 'fixed price')
     if (order.type === 'buy' && _total >= algoBalance) {
       _fixedAmount = algoBalance / _fixedPrice
     }
@@ -373,7 +190,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const key = _key || e.target.name
       let value = _value || e.target.value
 
-      console.log(key, value, 'ley and value')
       if (typeof key === 'undefined') {
         throw new Error('Must have valid key!')
       }
@@ -382,7 +198,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       }
       if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
         value = parseFloat(value)
-        console.log(value, 'value here')
       }
       if (order[key] !== value) {
         setOrder({

@@ -1,22 +1,17 @@
 import AdvancedOptions from './Form/AdvancedOptions'
-// import AmountRange from './amount-range'
 import Big from 'big.js'
-// import { BodyCopy } from '@/components/Typography'
-// import { LimitOrder } from './place-order.css'
 import { FormHelperText } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialBox } from '@mui/material/Box'
-// import OrderInput from './order-input'
-// import OrderOptions from './order-options'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
-import { roundValue } from '@/components/helpers'
 import theme from '../../../theme'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+
 /**
  *
  * Render USD Price for an input component
@@ -49,15 +44,6 @@ export const OrderForm = ({
   updateAmount,
   asset,
   microAlgo
-  //   maxSpendableAlgo,
-  //   asaBalance,
-  //   handleRangeChange,
-  //   enableOrder
-  //   handleOptionsChange,
-  //   newOrderSizeFilter,
-  //   setNewOrderSizeFilter,
-  //   orderType,
-  //   microAlgo
 }) => {
   const { t } = useTranslation('place-order')
   //   if (!enableOrder[order.type]) {
@@ -228,38 +214,10 @@ export const OrderForm = ({
 }
 
 OrderForm.propTypes = {
-  //   orderType: PropTypes.string.isRequired,
   order: PropTypes.object.isRequired,
   asset: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   updateAmount: PropTypes.func.isRequired,
   sliderPercent: PropTypes.number,
   microAlgo: PropTypes.number
-  //   maxSpendableAlgo: PropTypes.number.isRequired,
-  //   asaBalance: PropTypes.number.isRequired,
-  //   handleRangeChange: PropTypes.func,
-  //   handleOptionsChange: PropTypes.func,
-  //   enableOrder: PropTypes.object
-  //   newOrderSizeFilter: PropTypes.number,
-  //   setNewOrderSizeFilter: PropTypes.func,
-  //   microAlgo: PropTypes.number
 }
-// import Slider from '@/components/Input/Slider'
-// import InputAdornment from '@mui/material/InputAdornment'
-// import OutlinedInput from '@/components/Input/OutlinedInput'
-// import Box from '@mui/material/Box'
-// import Button from '@mui/material/Button'
-// import PropTypes from 'prop-types'
-// import { lighten, darken } from 'polished'
-// import theme from '../../../theme'
-// import useTranslation from 'next-translate/useTranslation'
-// import Typography from '@mui/material/Typography'
-// import Spinner from '@/components/Spinner'
-// import AvailableBalance from './Form/AvailableBalance'
-// import BuySellToggle from './Form/BuySellToggle'
-// import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
-// import { useCallback, useEffect, useMemo, useState } from 'react'
-// import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
-// import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
-// import detectMobileDisplay from '@/utils/detectMobileDisplay'
-// import toast from 'react-hot-toast'
