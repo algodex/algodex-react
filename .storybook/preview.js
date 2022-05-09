@@ -14,13 +14,33 @@ import assetsEN from '../locales/en/assets.json'
 import placeOrderEN from '../locales/en/place-order.json'
 import walletEN from '../locales/en/wallet.json'
 import chartEN from '../locales/en/chart.json'
-
+import { Provider } from '@algodex/algodex-hooks'
 const queryClient = new QueryClient()
 import * as NextImage from "next/image";
 import {INITIAL_VIEWPORTS} from '@storybook/addon-viewport';
+import AlgodexApi from "@algodex/algodex-sdk";
 
 const OriginalNextImage = NextImage.default;
-
+/**
+ *
+ * @type {APIProperties}
+ */
+const properties = {
+    config: {
+        algod: {
+            uri: 'https://testnet.algoexplorerapi.io',
+            token: ''
+        },
+        indexer: {
+            uri: 'https://algoindexer.testnet.algoexplorerapi.io',
+            token: ''
+        },
+        dexd: {
+            uri: 'https://testnet.algodex.com/algodex-backend',
+            token: ''
+        }
+    }
+}
 Object.defineProperty(NextImage, "default", {
     configurable: true,
     value: (props) => (
@@ -108,11 +128,24 @@ export const parameters = {
         Provider: RouterContext.Provider
     }
 }
+let api
+
+/**
+ *
+ * @return {AlgodexApi}
+ */
+function makeApi() {
+    if (typeof api === 'undefined') {
+        api = new AlgodexApi(properties)
+    }
+    return api
+}
 
 export const decorators = [
     jsxDecorator,
     (Story) => (
         <div>
+            <Provider dex={makeApi()}>
             <ThemeProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
                     <I18nProvider
@@ -130,6 +163,7 @@ export const decorators = [
                     </I18nProvider>
                 </QueryClientProvider>
             </ThemeProvider>
+            </Provider>
         </div>
     ),
     (Story) => (
