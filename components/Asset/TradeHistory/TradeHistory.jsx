@@ -1,9 +1,9 @@
-// import { Typography, Typography } from 'components/Typography'
-import Typography from '@mui/material/Typography'
 import Big from 'big.js'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+// import { Typography, Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -91,7 +91,7 @@ const TradesRow = styled.div`
   }
 `
 
-const PriceHeaderText = styled.div`
+const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   margin: 0;
@@ -105,7 +105,7 @@ const PriceHeaderText = styled.div`
 const PriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText>
+    <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
@@ -140,15 +140,11 @@ export function TradeHistory({ asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-            <Typography
-              fontFamily="'Roboto Mono', monospace"
-              color={getColor(row.type)}
-              title={row.price}
-              m={0}
-            >
+            <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
               {floatToFixed(row.price)}
             </Typography>
             <Typography
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -158,6 +154,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               {amount.toFixed(Math.min(3, asset.decimals))}
             </Typography>
             <Typography
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -174,16 +171,15 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <Typography color="gray.500" mb={1}>
+        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
           {t('trade-history')}
         </Typography>
-        <br />
         <Header>
           <PriceHeader />
-          <Typography color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
             {t('amount')}
           </Typography>
-          <Typography color="gray.500" textAlign="right" m={0}>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
             {t('time')}
           </Typography>
         </Header>
@@ -192,7 +188,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <Typography color="gray.600" textAlign="center" m={4}>
+              <Typography variant="body_tiny" color="gray.600" textAlign="center" m={4}>
                 {t('no-trades-completed')}
               </Typography>
             )}

@@ -119,7 +119,7 @@ function ChartSettings(props) {
           checked={i === interval}
           onChange={onChange}
         />
-        <ToggleBtn size="small">
+        <ToggleBtn variant="default" size="small">
           <label htmlFor={`time-${i}`}>{i}</label>
         </ToggleBtn>
       </Fragment>
@@ -137,7 +137,7 @@ function ChartSettings(props) {
           checked={mode === 'candle'}
           onChange={onChange}
         />
-        <ToggleBtn size="small">
+        <ToggleBtn variant="default" size="small">
           <label htmlFor="mode-candle">{t('candle')}</label>
         </ToggleBtn>
         <ToggleInput
@@ -148,7 +148,7 @@ function ChartSettings(props) {
           checked={mode === 'area'}
           onChange={onChange}
         />
-        <ToggleBtn size="small">
+        <ToggleBtn variant="default" size="small">
           <label htmlFor="mode-area">{t('area')}</label>
         </ToggleBtn>
       </ToggleWrapper>
