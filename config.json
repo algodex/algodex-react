@@ -1,9 +1,8 @@
 {
   "config": {
     "algod": {
-      "uri": "https://testnet-algorand.api.purestake.io/ps2",
-      "token": "thFPrhKtMq36Y24LHIJuRa3P6PULsVSd98atRFq0",
-      "port": 443
+      "uri": "https://node.testnet.algoexplorerapi.io",
+      "token": ""
     },
     "indexer": {
       "uri": "https://algoindexer.testnet.algoexplorerapi.io",
