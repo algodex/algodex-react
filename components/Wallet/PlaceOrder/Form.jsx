@@ -6,11 +6,11 @@ import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
 import { default as MaterialButton } from '@mui/material/Button'
-import { OrderForm } from './OrderForm'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
+import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
 // import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
@@ -62,8 +62,8 @@ export const convertToAsaUnits = (toConvert, decimals) => {
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
   // const { wallet, placeOrder, isConnected } = useAlgodex()
-  const { wallet, isConnected } = useAlgodex()
-  const { isLoading, isError } = useAssetOrdersQuery({ asset })
+  const { wallet, http, isConnected } = useAlgodex()
+  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -84,7 +84,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   convertToAsaUnits(wallet?.assets?.[asset.id]?.amount, asset.decimals)
   // ).toString()
   const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
-
+  const [marketPrice, setMarketPrice] = useState(0)
   // const {
   //   data: minBalance,
   //   isLoading: isWalletBalanceLoading,
@@ -92,20 +92,20 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // } = useWalletMinBalanceQuery({
   //   wallet: wallet.address
   // })
-  // const orderBook = useMemo(
-  //   () => ({
-  //     buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
-  //     sellOrders: assetOrders?.sellASAOrdersInEscrow || []
-  //   }),
-  //   [assetOrders]
-  // )
-  // const [sellOrders, setSellOrders] = useState()
-  // const [buyOrders, setBuyOrders] = useState()
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+  const [sellOrders, setSellOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
 
-  // useEffect(() => {
-  //   setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
-  //   setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  // }, [orderBook, setSellOrders, setBuyOrders, asset])
+  useEffect(() => {
+    setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const buttonProps = useMemo(
     () => ({
@@ -306,8 +306,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             textColor="primary"
             onChange={(e, value) => {
               setTabSwitch(value)
+              setOrder({
+                ...order,
+                execution: value === 0 ? 'both' : 'market',
+                price: order.execution === 'market' && sellOrders[sellOrders?.length - 1]?.price
+              })
             }}
-            aria-label=""
             value={tabSwitch}
           >
             <Tab label={t('limit')} />
@@ -320,9 +324,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             </Typography>
           )}
           {hasBalance && (
-            <OrderForm
+            <TradeInputs
               handleChange={handleChange}
               updateAmount={handleSlider}
+              marketPrice={marketPrice}
               sliderPercent={sliderPercent}
               order={order}
               asset={asset}
