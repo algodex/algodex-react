@@ -340,10 +340,16 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
           <MaterialButton
             type="submit"
-            variant="primary"
+            variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            color={order.type}
-            disabled={order.valid}
+            disabled={!hasBalance}
+            classes={{
+              disabled: 'text-white'
+            }}
+            sx={{
+              opacity: hasBalance ? 1 : 0.5,
+              disabled: `${!hasBalance}`
+            }}
           >
             {buttonProps[order.type || 'buy']?.text}
           </MaterialButton>
