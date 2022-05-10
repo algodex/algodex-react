@@ -43,8 +43,7 @@ export const TradeInputs = ({
   sliderPercent,
   updateAmount,
   asset,
-  microAlgo,
-  marketPrice
+  microAlgo
 }) => {
   const { t } = useTranslation('place-order')
   //   if (!enableOrder[order.type]) {
@@ -110,7 +109,7 @@ export const TradeInputs = ({
         readOnly={order.execution === 'market'}
         pattern="\d*"
         disabled={order.execution === 'market'}
-        value={order.execution === 'market' ? marketPrice : order.price}
+        value={order.price}
         onChange={handleChange}
         inputProps={{
           decimals: 6,
@@ -222,6 +221,5 @@ TradeInputs.propTypes = {
   handleChange: PropTypes.func.isRequired,
   updateAmount: PropTypes.func.isRequired,
   sliderPercent: PropTypes.number,
-  microAlgo: PropTypes.number,
-  marketPrice: PropTypes.number
+  microAlgo: PropTypes.number
 }

@@ -84,7 +84,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   convertToAsaUnits(wallet?.assets?.[asset.id]?.amount, asset.decimals)
   // ).toString()
   const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
-  const [marketPrice, setMarketPrice] = useState(0)
   // const {
   //   data: minBalance,
   //   isLoading: isWalletBalanceLoading,
@@ -100,12 +99,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [assetOrders]
   )
   const [sellOrders, setSellOrders] = useState()
-  const [buyOrders, setBuyOrders] = useState()
+  // const [buyOrders, setBuyOrders] = useState()
 
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
-    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  }, [orderBook, setSellOrders, setBuyOrders, asset])
+    // setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  }, [orderBook, setSellOrders, asset])
 
   const buttonProps = useMemo(
     () => ({
@@ -305,11 +304,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             sx={{ marginBottom: '16px' }}
             textColor="primary"
             onChange={(e, value) => {
-              setTabSwitch(value)
               setOrder({
                 ...order,
                 execution: value === 0 ? 'both' : 'market'
               })
+              setTabSwitch(value)
               handleChange(e, 'price', parseFloat(sellOrders[sellOrders?.length - 1]?.price))
             }}
             value={tabSwitch}
@@ -327,7 +326,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <TradeInputs
               handleChange={handleChange}
               updateAmount={handleSlider}
-              marketPrice={marketPrice}
               sliderPercent={sliderPercent}
               order={order}
               asset={asset}
