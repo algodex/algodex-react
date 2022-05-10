@@ -500,6 +500,9 @@ const theme = {
             '&:hover': {
               backgroundColor: lighten(0.05, colors.red['500'])
             },
+            '&:disabled': {
+              color: '#fff'
+            },
             textTransform: 'uppercase',
             fontFamily: fontFamilies.body,
             fontWeight: 600,

@@ -343,12 +343,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
             disabled={!hasBalance}
-            classes={{
-              disabled: 'text-white'
-            }}
             sx={{
-              opacity: hasBalance ? 1 : 0.5,
-              disabled: `${!hasBalance}`
+              opacity: hasBalance ? 1 : 0.5
             }}
           >
             {buttonProps[order.type || 'buy']?.text}
