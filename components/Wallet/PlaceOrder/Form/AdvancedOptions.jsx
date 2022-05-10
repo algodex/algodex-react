@@ -404,7 +404,6 @@ export function AdvancedOptions({ order, onChange }) {
                 value={newOrderSizeFilter}
                 onChange={(e) => setNewOrderSizeFilter(e.target.value)}
                 marks={marks}
-                step={null}
                 max={100}
               />
             </MaterialBox>

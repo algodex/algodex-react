@@ -210,6 +210,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
 
   const handleMarketTabSwitching = (e, tabId) => {
+    setTabSwitch(tabId)
     setOrder({
       ...order,
       price:
@@ -218,7 +219,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           : parseFloat(buyOrders[0]?.price),
       execution: tabId === 0 ? 'both' : 'market'
     })
-    setTabSwitch(tabId)
   }
 
   // const handleSubmit = useCallback(
@@ -323,7 +323,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           </Tabs>
           {/*</TabsUnstyled>*/}
           {!hasBalance && (
-            <Typography color="gray.500" textAlign="center" m={32}>
+            <Typography color="gray.500" textAlign="center" className="m-8">
               {t('insufficient-balance')}
             </Typography>
           )}
