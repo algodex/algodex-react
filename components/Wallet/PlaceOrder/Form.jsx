@@ -99,11 +99,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [assetOrders]
   )
   const [sellOrders, setSellOrders] = useState()
-  // const [buyOrders, setBuyOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
 
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
-    // setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
   }, [orderBook, setSellOrders, asset])
 
   const buttonProps = useMemo(
@@ -209,6 +209,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [setOrder, order]
   )
 
+  const handleMarketTabSwitching = (e, tabId) => {
+    setOrder({
+      ...order,
+      execution: tabId === 0 ? 'both' : 'market'
+    })
+    order.type === 'buy'
+      ? handleChange(e, 'price', parseFloat(sellOrders[sellOrders?.length - 1]?.price))
+      : handleChange(e, 'price', parseFloat(buyOrders[0]?.price))
+    setTabSwitch(tabId)
+  }
+
   // const handleSubmit = useCallback(
   //   (e) => {
   //     e.preventDefault()
@@ -303,14 +314,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
-            onChange={(e, value) => {
-              setOrder({
-                ...order,
-                execution: value === 0 ? 'both' : 'market'
-              })
-              setTabSwitch(value)
-              handleChange(e, 'price', parseFloat(sellOrders[sellOrders?.length - 1]?.price))
-            }}
+            onChange={(e, value) => handleMarketTabSwitching(e, value)}
             value={tabSwitch}
           >
             <Tab label={t('limit')} />
