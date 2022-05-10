@@ -25,22 +25,8 @@ const OriginalNextImage = NextImage.default;
  *
  * @type {APIProperties}
  */
-const properties = {
-    config: {
-        algod: {
-            uri: 'https://testnet.algoexplorerapi.io',
-            token: ''
-        },
-        indexer: {
-            uri: 'https://algoindexer.testnet.algoexplorerapi.io',
-            token: ''
-        },
-        dexd: {
-            uri: 'https://testnet.algodex.com/algodex-backend',
-            token: ''
-        }
-    }
-}
+const properties = require('../config.json')
+
 Object.defineProperty(NextImage, "default", {
     configurable: true,
     value: (props) => (
