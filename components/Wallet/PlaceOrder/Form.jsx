@@ -308,9 +308,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               setTabSwitch(value)
               setOrder({
                 ...order,
-                execution: value === 0 ? 'both' : 'market',
-                price: order.execution === 'market' && sellOrders[sellOrders?.length - 1]?.price
+                execution: value === 0 ? 'both' : 'market'
               })
+              handleChange(e, 'price', parseFloat(sellOrders[sellOrders?.length - 1]?.price))
             }}
             value={tabSwitch}
           >
