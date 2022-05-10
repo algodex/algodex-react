@@ -58,7 +58,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
-  if (typeof sellOrders !== 'undefined' && sellOrders?.length === 0) {
+  // Eslint bypass to keep rest of code available
+  if (typeof sellOrders !== 'undefined' && sellOrders?.length === -1) {
     console.debug(sellOrders?.length, buyOrders?.length)
   }
   useEffect(() => {
@@ -114,16 +115,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return 0
   }, [order, algoBalance, assetBalance])
 
-  const hasBalance = useMemo(() => {
-    if (order.type === 'sell') {
-      return assetBalance > 0
-    }
-    if (order.type === 'buy') {
-      return algoBalance > 0
-    }
-
-    return false
-  }, [order])
+  const hasBalance = order.type === 'sell' ? assetBalance > 0 : algoBalance > 0
   // useEffect(() => {
   //   if (order.type === 'sell') {
   //   }
@@ -203,12 +195,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           asset
         })
       } else {
-        console.log({
-          ...order,
-          wallet,
-          asset,
-          appId: order.type === 'sell' ? 22045522 : 22045503
-        })
+        console.log(
+          {
+            ...order,
+            address: wallet.address,
+            wallet,
+            asset,
+            appId: order.type === 'sell' ? 22045522 : 22045503,
+            version: 6
+          },
+          { wallet }
+        )
         orderPromise = placeOrder(
           {
             ...order,
