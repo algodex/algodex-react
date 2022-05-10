@@ -44,11 +44,13 @@ export function useMyAlgoConnect() {
     const flattenedGroups = groupedGroups.flat()
 
     const txnsForSig = []
-
+    function isUserSigned(outerTxn) {
+      return typeof outerTxn.lsig === 'undefined' && typeof outerTxn.senderAcct !== 'undefined'
+    }
     for (let i = 0; i < outerTxns.length; i++) {
       outerTxns[i].unsignedTxn = flattenedGroups[i]
-      if (outerTxns[i].needsUserSig === true) {
-        txnsForSig.push(flattenedGroups[i])
+      if (isUserSigned(outerTxns[i])) {
+        txnsForSig.push(flattenedGroups[i].toByte())
       }
     }
 
@@ -57,14 +59,14 @@ export function useMyAlgoConnect() {
     if (Array.isArray(signedTxnsFromUser)) {
       let userSigIndex = 0
       for (let i = 0; i < outerTxns.length; i++) {
-        if (outerTxns[i].needsUserSig) {
+        if (isUserSigned(outerTxns[i])) {
           outerTxns[i].signedTxn = signedTxnsFromUser[userSigIndex].blob
           userSigIndex++
         }
       }
     } else {
       for (let i = 0; i < outerTxns.length; i++) {
-        if (outerTxns[i].needsUserSig) {
+        if (isUserSigned(outerTxns[i])) {
           outerTxns[i].signedTxn = signedTxnsFromUser.blob
           break
         }
@@ -72,7 +74,7 @@ export function useMyAlgoConnect() {
     }
 
     for (let i = 0; i < outerTxns.length; i++) {
-      if (!outerTxns[i].needsUserSig) {
+      if (!isUserSigned(outerTxns[i])) {
         const signedLsig = algosdk.signLogicSigTransactionObject(
           outerTxns[i].unsignedTxn,
           outerTxns[i].lsig
@@ -80,7 +82,7 @@ export function useMyAlgoConnect() {
         outerTxns[i].signedTxn = signedLsig.blob
       }
     }
-    return outerTxns
+    return outerTxns.map((o) => o.signedTxn)
   }
 
   const connect = async () => {

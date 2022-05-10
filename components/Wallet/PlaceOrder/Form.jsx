@@ -58,7 +58,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
-  console.debug(sellOrders?.length, buyOrders?.length)
+  if (typeof sellOrders !== 'undefined' && sellOrders?.length === 0) {
+    console.debug(sellOrders?.length, buyOrders?.length)
+  }
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
@@ -219,6 +221,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           { wallet }
         )
       }
+
       // TODO add events
       toast.promise(orderPromise, {
         loading: t('awaiting-confirmation'),
