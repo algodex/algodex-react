@@ -1,12 +1,14 @@
 {
   "config": {
     "algod": {
-      "uri": "https://node.testnet.algoexplorerapi.io",
-      "token": ""
+      "uri": "http://ec2-18-216-194-132.us-east-2.compute.amazonaws.com",
+      "token": "11e4dcfb445a8c7e8380848747f18afcd5d84ccb395e003e5b72127ca5e9a259",
+      "port": 8080
     },
     "indexer": {
       "uri": "https://algoindexer.testnet.algoexplorerapi.io",
-      "token": ""
+      "token": "",
+      "port": 443
     },
     "dexd": {
       "uri": "https://testnet.algodex.com/algodex-backend",
