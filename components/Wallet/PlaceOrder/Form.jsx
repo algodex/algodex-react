@@ -212,11 +212,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleMarketTabSwitching = (e, tabId) => {
     setOrder({
       ...order,
+      price:
+        order.type === 'buy'
+          ? parseFloat(sellOrders[sellOrders?.length - 1]?.price)
+          : parseFloat(buyOrders[0]?.price),
       execution: tabId === 0 ? 'both' : 'market'
     })
-    order.type === 'buy'
-      ? handleChange(e, 'price', parseFloat(sellOrders[sellOrders?.length - 1]?.price))
-      : handleChange(e, 'price', parseFloat(buyOrders[0]?.price))
     setTabSwitch(tabId)
   }
 
