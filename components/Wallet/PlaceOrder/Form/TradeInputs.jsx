@@ -205,7 +205,7 @@ export const TradeInputs = ({
           {txnFee.toFixed(3)}
         </Typography>
       </TxnFeeContainer> */}
-      {order.execution !== 'limit' && (
+      {order.execution !== 'market' && (
         <AdvancedOptions
           order={order}
           onChange={handleChange}
