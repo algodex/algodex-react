@@ -1,9 +1,9 @@
 {
   "config": {
     "algod": {
-      "uri": "http://ec2-18-216-194-132.us-east-2.compute.amazonaws.com",
-      "token": "11e4dcfb445a8c7e8380848747f18afcd5d84ccb395e003e5b72127ca5e9a259",
-      "port": 8080
+      "uri": "https://testnet-algorand.api.purestake.io/ps2",
+      "token": "thFPrhKtMq36Y24LHIJuRa3P6PULsVSd98atRFq0",
+      "port": 443
     },
     "indexer": {
       "uri": "https://algoindexer.testnet.algoexplorerapi.io",
