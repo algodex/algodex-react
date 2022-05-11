@@ -6,6 +6,8 @@ import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import Icon from '@/components/Icon'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+import Big from 'big.js'
+import { useMemo } from 'react'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
@@ -44,6 +46,17 @@ const IconButton = styled.button`
 `
 function AvailableBalance({ wallet, asset }) {
   const { t } = useTranslation('place-order')
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = filter[0].amount
+      }
+    }
+
+    return res
+  }, [wallet, asset])
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
@@ -88,7 +101,7 @@ function AvailableBalance({ wallet, asset }) {
             >
               &nbsp;*
               {t('max-spend-explanation', {
-                // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
+                amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
               })}
             </Typography>
           </BalanceRow>
@@ -108,7 +121,7 @@ function AvailableBalance({ wallet, asset }) {
           {asset.name || asset.id}
         </Typography>
         <Typography variant="labelMdLight" color="gray.300">
-          {/*{hasBalance && wallet?.assets[asset.id]?.balance}*/}
+          {fromBaseUnits(assetBalance, asset.decimals)}
         </Typography>
       </BalanceRow>
     </AvailableBalanceContainer>
@@ -116,11 +129,17 @@ function AvailableBalance({ wallet, asset }) {
 }
 AvailableBalance.propTypes = {
   asset: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string,
+    decimals: PropTypes.number.isRequired
   }),
   wallet: PropTypes.shape({
-    amount: PropTypes.number.isRequired
+    amount: PropTypes.number.isRequired,
+    assets: PropTypes.arrayOf(
+      PropTypes.shape({
+        balance: PropTypes.number.isRequired
+      })
+    )
   })
 }
 export default AvailableBalance

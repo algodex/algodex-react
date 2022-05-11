@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'test/test-utils'
+import { render } from '@/test/test-utils'
 import { Chart } from './Chart'
 import {
   DEMO_VOLUME_DATA,

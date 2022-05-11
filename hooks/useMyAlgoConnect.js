@@ -105,6 +105,16 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
     }
   }
 
+  const disconnect = () => {
+    // setAddresses(
+    //   algodex.addresses.filter((addr) => addr.type !== 'my-algo-wallet'),
+    //   { merge: false, validate: false }
+    // )
+    // if (algodex.addresses.length) {
+    //   setWallet(algodex.addresses[0], { validate: false, merge: true })
+    // }
+  }
+
   useEffect(() => {
     const initMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
@@ -122,5 +132,5 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
     initMyAlgoWallet()
   }, [])
 
-  return { connect, disconnect: onDisconnect, connector: myAlgoWallet.current }
+  return { connect, disconnect, onDisconnect, connector: myAlgoWallet.current }
 }
