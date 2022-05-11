@@ -45,10 +45,17 @@ import toast from 'react-hot-toast'
  * @constructor
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
-  // console.log(`PlaceOrderForm(`, arguments[0], `)`)
   const { t } = useTranslation('place-order')
   const { wallet, placeOrder, http } = useAlgodex()
+  if (typeof wallet?.address === 'undefined') {
+    throw new TypeError('Invalid Wallet!')
+  }
+  if (typeof wallet?.assets === 'undefined') {
+    throw new TypeError('Invalid Account Info!')
+  }
+
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+
   const orderBook = useMemo(
     () => ({
       buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
@@ -239,12 +246,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [onSubmit, asset, order]
   )
-  if (
-    typeof wallet === 'undefined' ||
-    typeof wallet.amount === 'undefined' ||
-    isLoading ||
-    isError
-  ) {
+  if (typeof wallet === 'undefined' || isLoading || isError) {
     return <Spinner />
   }
   return (
