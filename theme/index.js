@@ -340,7 +340,6 @@ const theme = {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[0],
       fontWeight: 400,
-      lineHeight: '1.5rem',
       letterSpacing: '0.03em'
     },
     body_tiny_bold: {
@@ -359,8 +358,8 @@ const theme = {
     body_small: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
-      fontWeight: 400,
-      lineHeight: '1.5rem'
+      fontWeight: 500,
+      lineHeight: '1.5'
     },
     body_small_bold: {
       fontFamily: fontFamilies.body,

@@ -188,7 +188,13 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <Typography variant="body_tiny" color="gray.600" textAlign="center" m={4}>
+              <Typography
+                variant="body_tiny_cap"
+                className="flex items-center justify-center"
+                color="gray.600"
+                textAlign="center"
+                m={4}
+              >
                 {t('no-trades-completed')}
               </Typography>
             )}

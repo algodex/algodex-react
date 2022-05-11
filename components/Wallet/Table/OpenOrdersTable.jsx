@@ -6,11 +6,11 @@ import Table, {
 } from '@/components/Table'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import PropTypes from 'prop-types'
+import React from 'react'
 // import { Typography } from '@/components/Typography'
 // import OrderService from '@/services/order'
 import Typography from '@mui/material/Typography'
-import PropTypes from 'prop-types'
-import React from 'react'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
@@ -121,7 +121,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       }
 
       return (
-        <Typography data-testid="cancel-order-button">
+        <Typography variant="body_small" color="gray.000" data-testid="cancel-order-button">
           <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
         </Typography>
       )

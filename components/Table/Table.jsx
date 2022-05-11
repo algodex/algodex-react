@@ -141,7 +141,13 @@ const Container = styled.div`
 
 export function DefaultCell({ value }) {
   return (
-    <Typography className="cursor-default" title={value} data-testid="default-cell">
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={value}
+      data-testid="default-cell"
+    >
       {value}
     </Typography>
   )

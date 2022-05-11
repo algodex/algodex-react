@@ -1,8 +1,8 @@
-// import { Typography } from '@/components/Typography'
-import Typography from '@mui/material/Typography'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+// import { Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 import { mdiOpenInNew } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useCallback } from 'react'
@@ -36,9 +36,16 @@ export const AssetNameCell = ({ value, row }) => {
   }, [dispatcher])
   return (
     <Link href={`/trade/${assetId}`}>
-      <button className="cursor-pointer text-left whitespace-normal" onClick={onClick}>
-        <Typography>{value}</Typography>
-      </button>
+      {/* <button className="cursor-pointer text-left whitespace-normal"> */}
+      <Typography
+        className="cursor-pointer text-left whitespace-normal"
+        onClick={onClick}
+        variant="body_small"
+        color="gray.000"
+      >
+        {value}
+      </Typography>
+      {/* </button> */}
     </Link>
   )
 }
