@@ -244,6 +244,7 @@ function MainLayout({ asset, children }) {
   // console.log(`DEX: ${isConnected}`, algodex)
   const { t } = useTranslation('common')
   const gridRef = useRef()
+  const searchTableRef = useRef()
   const isMobile = useMobileDetect()
   const TABS = {
     CHART: 'CHART',
@@ -295,8 +296,13 @@ function MainLayout({ asset, children }) {
           )}
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
-          <AssetsSection>
-            <AssetSearch style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
+          <AssetsSection ref={searchTableRef}>
+            <AssetSearch
+              style={{ height: '6rem' }}
+              className="h-24"
+              searchTableRef={searchTableRef}
+              gridRef={gridRef}
+            />
           </AssetsSection>
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>

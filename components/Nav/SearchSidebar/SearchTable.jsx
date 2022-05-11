@@ -6,6 +6,7 @@ import {
 } from '@/components/Asset/Typography'
 import { mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import AlgoIcon from '@/components/Icon'
 import { DelistedAssets } from '@/components/DelistedAssets'
@@ -154,6 +155,8 @@ export const NavSearchTable = ({
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
+  const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
+  const searchTableRef = useRef()
   const { t } = useTranslation('assets')
   const filterByFavoritesFn = useCallback(
     (e) => {
@@ -162,6 +165,19 @@ export const NavSearchTable = ({
     },
     [setIsFilteringByFavorites, isFilteringByFavorites]
   )
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (searchTableRef?.current) {
+        const { width, height } = searchTableRef.current.getBoundingClientRect()
+        setSearchTableSize({ width, height })
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => removeEventListener('resize', handleResize)
+  }, [searchTableRef, setSearchTableSize])
 
   const toggleFavoritesFn = useCallback(
     (assetId) => {
@@ -353,12 +369,13 @@ export const NavSearchTable = ({
   })
 
   return (
-    <TableWrapper data-testid="asa-table-wrapper">
+    <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
         flyover={true}
         components={{
           Flyover: SearchFlyover
         }}
+        tableSizeOnMobile={searchTableSize}
         optionalGridInfo={gridSize}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
