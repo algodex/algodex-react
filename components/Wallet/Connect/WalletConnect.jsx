@@ -9,11 +9,8 @@ import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useTranslation from 'next-translate/useTranslation'
-
-// import { useEffect, useMemo } from 'react'
-// import useStore, { useStorePersisted } from 'store/use-store'
+import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -164,9 +161,7 @@ const WalletRow = styled.div`
   }
 `
 export function WalletView(props) {
-  const { addresses } = useAlgodex()
-  const { activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
-
+  const { addresses, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
   const { t } = useTranslation('wallet')
 
   const getButtonVariant = () => {
@@ -235,6 +230,7 @@ export function WalletView(props) {
           />
           {wallet.name}
         </Typography>
+
         {/* {renderBalance(wallet?.amount)} */}
       </WalletRow>
     ))
@@ -291,7 +287,7 @@ export function WalletView(props) {
 }
 
 WalletView.propTypes = {
-  wallets: PropTypes.array.isRequired,
+  addresses: PropTypes.array.isRequired,
   activeWalletAddress: PropTypes.string,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
@@ -303,40 +299,21 @@ WalletView.defaultProps = {
   isSignedIn: false
 }
 
+/**
+ * @todo Merge WalletView into WalletConnect
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function WalletConnect(props) {
-  const { connect } = useMyAlgoConnect()
-  const { isConnected, wallet, setWallet, addresses } = useAlgodex()
-  // console.log('!!!!!!!!!!!!!!!!', addresses)
-  // fetch wallet balances from blockchain
-  // const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
-  // useEffect(() => {
-  //   if (wallet.data?.wallets) {
-  //     setWallets(walletsQuery.data.wallets)
-  //
-  //     if (!isSignedIn) {
-  //       setIsSignedIn(true)
-  //     }
-  //
-  //     if (!walletAddresses.includes(activeWalletAddress)) {
-  //       setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-  //     }
-  //   }
-  // }, [
-  //   activeWalletAddress,
-  //   isSignedIn,
-  //   setActiveWalletAddress,
-  //   setIsSignedIn,
-  //   setWallets,
-  //   walletAddresses,
-  //   walletsQuery.data
-  // ])
+  const { addresses, myAlgoConnect } = useWallets()
+  const { wallet, setWallet } = useAlgodex()
   return (
-    // <div>Wallet Connect {isConnected ? 'Connected' : 'Not Connected'}</div>
     <WalletView
-      wallets={addresses || []}
+      addresses={addresses}
       activeWalletAddress={wallet?.address}
-      isSignedIn={isConnected}
-      onConnectClick={connect}
+      isSignedIn={addresses.length > 0}
+      onConnectClick={myAlgoConnect}
       onSetActiveWallet={setWallet}
       {...props}
     />
