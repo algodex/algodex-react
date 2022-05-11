@@ -1,5 +1,6 @@
 {
   "name": "algodex-react",
+  "description": "Algodex GUI",
   "version": "0.1.0",
   "private": true,
   "browserslist": [
@@ -29,7 +30,7 @@
   },
   "dependencies": {
     "@algodex/algodex-hooks": "1.2.1",
-    "@algodex/algodex-sdk": "2.0.0-next.4",
+    "@algodex/algodex-sdk": "2.0.0-next.5",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",

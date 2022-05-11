@@ -241,7 +241,7 @@ const MobileMenuButton = styled(Button)`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet, isConnected, placeOrder } = useAlgodex()
+  const { wallet, isConnected } = useAlgodex()
   // console.log(`DEX: ${isConnected}`, algodex)
   const { t } = useTranslation('common')
   const gridRef = useRef()
@@ -281,7 +281,7 @@ function MainLayout({ asset, children }) {
           {isMobile && <MobileWallet />}
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {isConnected && <PlaceOrder asset={asset} wallet={wallet} onSubmit={placeOrder} />}
+          {isConnected && <PlaceOrder asset={asset} wallet={wallet} />}
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>

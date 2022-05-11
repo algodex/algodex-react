@@ -19,32 +19,15 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 // Material UI
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
+// import AlgodexApi from '@algodex/algodex-sdk'
+// import { Provider } from '@algodex/algodex-hooks'
+import config from '@/config.json'
 import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
-/**
- *
- * @type {APIProperties}
- */
-const properties = {
-  config: {
-    algod: {
-      uri: 'https://testnet.algoexplorerapi.io',
-      token: ''
-    },
-    indexer: {
-      uri: 'https://algoindexer.testnet.algoexplorerapi.io',
-      token: ''
-    },
-    dexd: {
-      uri: 'https://testnet.algodex.com/algodex-backend',
-      token: ''
-    }
-  }
-}
 let api
 
 /**
@@ -53,7 +36,7 @@ let api
  */
 function makeApi() {
   if (typeof api === 'undefined') {
-    api = new AlgodexApi(properties)
+    api = new AlgodexApi(config)
   }
   return api
 }

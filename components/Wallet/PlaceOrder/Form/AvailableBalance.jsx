@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types'
-import Typography from '@mui/material/Typography'
-import Tooltip from '@/components/Tooltip'
-import { Info } from 'react-feather'
-import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import Big from 'big.js'
 import Icon from '@/components/Icon'
+import { Info } from 'react-feather'
+import PropTypes from 'prop-types'
+import Tooltip from '@/components/Tooltip'
+import Typography from '@mui/material/Typography'
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 // TODO: Move to <Grid>/<Box>
@@ -44,10 +46,21 @@ const IconButton = styled.button`
 `
 function AvailableBalance({ wallet, asset }) {
   const { t } = useTranslation('place-order')
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = filter[0].amount
+      }
+    }
+
+    return res
+  }, [wallet, asset])
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
-        <Typography variant="bodyCopyTiny" color="gray.500">
+        <Typography variant="body_tiny_cap" color="gray.500">
           {t('available-balance')}
         </Typography>
         <Tooltip
@@ -58,57 +71,52 @@ function AvailableBalance({ wallet, asset }) {
           )}
         >
           <section className="flex items-center justify-between mb-1">
-            <Typography variant="labelMdSpaced" color="gray.300">
+            <Typography variant="body_small_cap_medium" color="gray.300">
               {t('orders:available')}:
             </Typography>
             <IconTextContainer>
-              <Typography variant="labelMdSpaced" color="gray.300">
+              <Typography variant="body_small_cap_medium" color="gray.300">
                 {fromBaseUnits(wallet.amount)}
               </Typography>
-              <Icon use="algoLogo" size={0.625} />
+              <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
           </section>
           <BalanceRow>
-            <Typography variant="labelMdSpaced" color="gray.300">
+            <Typography variant="body_small_cap_medium" color="gray.300">
               {t('total')}:
             </Typography>
             <IconTextContainer>
-              <Typography variant="labelMdSpaced" color="gray.300">
+              <Typography variant="body_small_cap_medium" color="gray.300">
                 {fromBaseUnits(wallet.amount)}
               </Typography>
-              <Icon use="algoLogo" size={0.625} />
+              <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
           </BalanceRow>
           <BalanceRow>
-            <Typography
-              variant="labelSmForm"
-              component="span"
-              color="gray.300"
-              textTransform="initial"
-            >
+            <Typography variant="body_small" color="gray.300">
               &nbsp;*
               {t('max-spend-explanation', {
-                // amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
+                amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
               })}
             </Typography>
           </BalanceRow>
         </Tooltip>
       </IconTextContainer>
       <BalanceRow>
-        <Typography variant="labelMdLight" color="gray.400">
+        <Typography variant="body_small_cap_medium" color="gray.400">
           ALGO
         </Typography>
-        <Typography variant="labelMdLight" color="gray.300">
+        <Typography variant="body_small_medium" color="gray.300">
           {fromBaseUnits(wallet.amount)}
         </Typography>
       </BalanceRow>
       <BalanceRow>
-        <Typography variant="labelMdLight" color="gray.400">
+        <Typography variant="body_small_cap_medium" color="gray.400">
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
         </Typography>
-        <Typography variant="labelMdLight" color="gray.300">
-          {/*{hasBalance && wallet?.assets[asset.id]?.balance}*/}
+        <Typography variant="body_small_medium" color="gray.300">
+          {fromBaseUnits(assetBalance, asset.decimals)}
         </Typography>
       </BalanceRow>
     </AvailableBalanceContainer>
@@ -116,11 +124,17 @@ function AvailableBalance({ wallet, asset }) {
 }
 AvailableBalance.propTypes = {
   asset: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string,
+    decimals: PropTypes.number.isRequired
   }),
   wallet: PropTypes.shape({
-    amount: PropTypes.number.isRequired
+    amount: PropTypes.number.isRequired,
+    assets: PropTypes.arrayOf(
+      PropTypes.shape({
+        amount: PropTypes.number.isRequired
+      })
+    )
   })
 }
 export default AvailableBalance
