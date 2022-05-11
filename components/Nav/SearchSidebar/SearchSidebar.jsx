@@ -51,12 +51,20 @@ export const AssetsContainer = styled.div`
     height: inherit;
   }
 `
-export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, area = 'sidebar' }) {
+export function NavSearchSidebar({
+  searchTableRef,
+  gridRef,
+  algoPrice,
+  components,
+  tableProps,
+  area = 'sidebar'
+}) {
   const { NavTable } = components
   const query = useUserStore((state) => state.query)
   // const [controlledVisible, setControlledVisible] = useState(false)
   const setQuery = useUserStore((state) => state.setQuery)
   const [gridSize, setGridSize] = useState({ width: 0, height: '100%' })
+  const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
@@ -125,27 +133,16 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
         const { width, height } = gridRef.current.getBoundingClientRect()
         setGridSize({ width, height })
       }
+      if (searchTableRef?.current) {
+        const { width, height } = searchTableRef.current.getBoundingClientRect()
+        setSearchTableSize({ width, height })
+      }
     }
     window.addEventListener('resize', handleResize)
     handleResize()
 
     return () => removeEventListener('resize', handleResize)
-  }, [gridRef, setGridSize])
-
-  // useEffect(() => {
-  //   const handleTableResize = () => {
-  //     if (searchRef.current) {
-  //       const height = Math.floor(searchRef.current.getBoundingClientRect().height)
-  //       console.log(height, 'height here')
-  //       setSearchHeight(height)
-  //     }
-  //   }
-
-  //   window.addEventListener('resize', handleTableResize)
-  //   handleTableResize()
-
-  //   return () => removeEventListener('resize', handleTableResize)
-  // }, [searchRef])
+  }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
 
   return (
     <Section area={area} borderColor="red" border="dashed">
@@ -175,7 +172,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
-              gridSize={gridSize}
+              gridSize={searchTableSize}
             />
           </div>
         </AssetsContainer>
@@ -186,6 +183,7 @@ export function NavSearchSidebar({ gridRef, algoPrice, components, tableProps, a
 
 NavSearchSidebar.propTypes = {
   gridRef: PropTypes.object,
+  searchTableRef: PropTypes.object,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
     NavTable: PropTypes.node

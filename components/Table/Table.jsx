@@ -129,16 +129,20 @@ const Container = styled.div`
       }
       position: absolute;
       width: 100%;
-      height: 29.7rem;
+      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 125}px`};
       overflow-y: scroll;
       @media (max-width: 996px) {
-        height: ${({ optionalGridInfo }) =>
-          optionalGridInfo && `${optionalGridInfo.height - 180}px`};
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
+        padding-bottom: 4rem;
+      }
+      @media (max-width: 375px) {
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
+        padding-bottom: 6rem;
       }
     }
   }
 `
-
+// height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 126}px`};
 export function DefaultCell({ value }) {
   return (
     <Typography className="cursor-default" title={value} data-testid="default-cell">
@@ -173,7 +177,8 @@ function Table({
   columns,
   data,
   getRowProps,
-  optionalGridInfo
+  optionalGridInfo,
+  tableSizeOnMobile
 }) {
   const { Flyover = InfoFlyover } = components
 
@@ -220,7 +225,7 @@ function Table({
     }
   }, [onStateChange, initialState, tableState])
   return (
-    <Container optionalGridInfo={optionalGridInfo}>
+    <Container optionalGridInfo={optionalGridInfo} tableSizeOnMobile={tableSizeOnMobile}>
       <table {...getTableProps()} data-testid="data-table">
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
@@ -304,7 +309,8 @@ Table.propTypes = {
   getRowProps: PropTypes.func,
   flyover: PropTypes.bool,
   flyoverPlacement: PropTypes.string,
-  optionalGridInfo: PropTypes.object
+  optionalGridInfo: PropTypes.object,
+  tableSizeOnMobile: PropTypes.object
 }
 
 Table.defaultProps = {
@@ -315,7 +321,8 @@ Table.defaultProps = {
   getRowProps: () => {
     return {}
   },
-  optionalGridInfo: {}
+  optionalGridInfo: {},
+  tableSizeOnMobile: {}
 }
 
 export default Table
