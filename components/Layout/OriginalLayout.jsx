@@ -285,11 +285,17 @@ function MainLayout({ asset, children }) {
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>
-                <Typography color="gray.500" mb={1}>
+                <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
                   Place Order
                 </Typography>
               </Header>
-              <Typography data-testid="not-signed-in" color="gray.500" textAlign="center">
+              <Typography
+                variant="subtitle_medium"
+                className="m-4"
+                data-testid="not-signed-in"
+                color="gray.500"
+                textAlign="center"
+              >
                 Not signed in
               </Typography>
             </Container>
