@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@algodex/algodex-hooks@1.2.1":
-  version "1.2.1"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.2.1/a8d5b6a47a945f8fe215a3470474eb202c62965334595748f7f868d045282636#1d6ed3cf9237c1645658c7110da92dba17d013fb"
-  integrity sha512-uvBiD0b9zLZmHO6j55Ygqq58byKSpddgLv1bSi3SJI00HecsPoQB6wF9aFt3k29pQ/g6sIjaKs2sP2G0AKfrZw==
+"@algodex/algodex-hooks@1.3.2":
+  version "1.3.2"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.3.2/e88947f5cfd5fa36abf63e5b0a305eecbea0af97c9c91afd3113b42981fd99a5#00e76dd56d38c071f5dc797254f73a8030d9df94"
+  integrity sha512-mkJilSnjwsw2ka/YqYLFntC/JfywwhRMFyj55oEBNsd6UPEaftgeaJD5WDogGEJI6noExP6YhZKGziTlj9WMAA==
   dependencies:
     millify "^4.0.0"
 
