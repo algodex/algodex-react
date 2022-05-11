@@ -11,8 +11,8 @@ import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
-import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
-import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+// import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+// import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
@@ -232,18 +232,19 @@ export function OrderBookPrice({ asset }) {
     )
   }
 
-  function PriceInfo() {
-    return (
-      <Fragment>
-        {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
-        <Typography data-testid="has-price-info" as="span">
-          {(asset?.price_info?.price24Change &&
-            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-            '0.00%'}
-        </Typography>
-      </Fragment>
-    )
-  }
+  // function PriceInfo() {
+  //   return (
+  //     <Fragment>
+  //       {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
+  //       <Typography data-testid="has-price-info" as="span">
+  //         {(asset?.price_info?.price24Change &&
+  //           `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
+  //           '0.00%'}
+  //       </Typography>
+  //     </Fragment>
+  //   )
+  // }
+  // TODO: Remove extra component, should only have one PriceInfo Component
   return (
     <Price color={color} data-testid="order-book-price">
       {!isUndefined(asset.price_info) && isDecrease ? (
