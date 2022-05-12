@@ -50,9 +50,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   if (typeof wallet?.address === 'undefined') {
     throw new TypeError('Invalid Wallet!')
   }
-  if (typeof wallet?.assets === 'undefined') {
-    throw new TypeError('Invalid Account Info!')
-  }
+  // TODO: Handle empty asset wallets
+  // if (typeof wallet?.assets === 'undefined') {
+  //   throw new TypeError('Invalid Account Info!')
+  // }
 
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
 

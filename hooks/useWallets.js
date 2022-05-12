@@ -3,22 +3,34 @@ import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
 import { useCallback, useEffect, useState } from 'react'
 
+/**
+ *
+ * @param {Array<Wallet>} a
+ * @param {Array<Wallet>} b
+ * @return {Array<Wallet>}
+ * @private
+ */
+function _mergeAddresses(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    throw new TypeError('Must be an array of addresses!')
+  }
+  const map = new Map()
+  a.forEach((wallet) => map.set(wallet.address, wallet))
+  b.forEach((wallet) => map.set(wallet.address, { ...map.get(wallet.address), ...wallet }))
+  return Array.from(map.values())
+}
+
 function useWallets() {
   const [activeWallet, setActiveWallet] = useState()
   const [addresses, setAddresses] = useState([])
-  const { wallet, setWallet } = useAlgodex()
-
+  const { wallet, setWallet, http } = useAlgodex()
+  // TODO: Account Info Query
   // Handle any Connection
   const handleConnect = useCallback(
-    (_addresses) => {
-      setAddresses(
-        _addresses.map((a) => {
-          // Remove connector instance
-          delete a.connector
-          // Return the address
-          return a
-        })
-      )
+    async (_addresses) => {
+      const accounts = await http.indexer.fetchAccounts(_addresses)
+      console.log(accounts)
+      setAddresses(_mergeAddresses(_addresses, accounts))
     },
     [setAddresses]
   )
@@ -34,7 +46,7 @@ function useWallets() {
     handleDisconnect
   )
   // Pera Connect/Disconnect
-  const { connect: walletConnect, disconnect: walletDisconnect } = useWalletConnect(
+  const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect(
     handleConnect,
     handleDisconnect
   )
@@ -64,8 +76,8 @@ function useWallets() {
     setWallet,
     addresses,
     myAlgoConnect,
-    walletConnect,
-    walletDisconnect,
+    peraConnect,
+    peraDisconnect,
     myAlgoDisconnect
   }
 }
