@@ -2,7 +2,8 @@ import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
 import { useCallback, useEffect, useState } from 'react'
-
+import { isEqual } from 'lodash/lang'
+import events from '@algodex/algodex-sdk/lib/events'
 /**
  *
  * @param {Array<Wallet>} a
@@ -20,10 +21,29 @@ function _mergeAddresses(a, b) {
   return Array.from(map.values())
 }
 
-function useWallets() {
+function useWallets(initialState) {
+  const [wallet, setWallet] = useState(initialState)
   const [activeWallet, setActiveWallet] = useState()
   const [addresses, setAddresses] = useState([])
-  const { wallet, setWallet, http } = useAlgodex()
+  const { http } = useAlgodex()
+
+  const onEvents = useCallback(
+    (props) => {
+      const { type, wallet: _wallet } = props
+      if (type === 'change' && !isEqual(wallet, _wallet)) {
+        setWallet(_wallet)
+        setActiveWallet(_wallet.address)
+      }
+    },
+    [setWallet, wallet]
+  )
+  useEffect(() => {
+    events.on('wallet', onEvents)
+    return () => {
+      events.off('wallet', onEvents)
+    }
+  }, [onEvents])
+
   // TODO: Account Info Query
   // Handle any Connection
   const handleConnect = useCallback(

@@ -18,6 +18,7 @@ import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
+import useWallets from '@/hooks/useWallets'
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -46,7 +47,10 @@ import toast from 'react-hot-toast'
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  const { wallet, placeOrder, http } = useAlgodex()
+
+  const { wallet: initialState, placeOrder, http } = useAlgodex()
+  const { wallet } = useWallets(initialState)
+
   if (typeof wallet?.address === 'undefined') {
     throw new TypeError('Invalid Wallet!')
   }
