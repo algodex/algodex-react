@@ -18,6 +18,7 @@ import useTranslation from 'next-translate/useTranslation'
 
 // import { Typography, Typography } from '@/components/Typography'
 import Typography from '@mui/material/Typography'
+// import useWallets from '@/hooks/useWallets'
 // Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -240,7 +241,15 @@ const MobileMenuButton = styled(Button)`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet, isConnected, placeOrder } = useAlgodex()
+  const { wallet } = useAlgodex()
+  // const { addresses } = useWallets()
+  const isConnected =
+    typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
+  // console.log(addresses, wallet)
+  // const isConnected = useMemo(() => {
+  //   console.log(addresses, isConnected)
+  //   return addresses?.length > 0
+  // }, [addresses])
   // console.log(`DEX: ${isConnected}`, algodex)
   const { t } = useTranslation('common')
   const gridRef = useRef()
@@ -281,7 +290,7 @@ function MainLayout({ asset, children }) {
           {isMobile && <MobileWallet />}
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {isConnected && <PlaceOrder asset={asset} wallet={wallet} onSubmit={placeOrder} />}
+          {isConnected && <PlaceOrder asset={asset} wallet={wallet} />}
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>
