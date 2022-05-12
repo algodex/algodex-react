@@ -278,7 +278,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     >
       {showTitle && (
         <header className="pb-5">
-          <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
+          <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
             {t('place-order')}
           </Typography>
         </header>

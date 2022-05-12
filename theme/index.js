@@ -272,6 +272,12 @@ const theme = {
     h3: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[7],
+      [muiTheme.breakpoints.up('xs')]: {
+        fontSize: fontSizes[5]
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        fontSize: fontSizes[7]
+      },
       fontWeight: 700,
       lineHeight: '1.25rem',
       letterSpacing: '0.025em'
@@ -319,8 +325,14 @@ const theme = {
       fontSize: fontSizes[3],
       lineHeight: 1.57
     },
-    subtitle_large: {},
-    subtitle_medium_cap: {
+    subtitle_medium_bold: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[3],
+      lineHeight: 1.75,
+      letterSpacing: '0.1em'
+    },
+    subtitle_medium_cap_bold: {
       fontFamily: fontFamilies.body,
       fontWeight: 700,
       fontSize: fontSizes[3],
@@ -328,6 +340,7 @@ const theme = {
       letterSpacing: '0.1em',
       textTransform: 'uppercase'
     },
+    subtitle_large: {},
 
     // Body
     body: {
@@ -438,11 +451,11 @@ const theme = {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,
       [muiTheme.breakpoints.up('xs')]: {
-        fontSize: '0.1rem'
+        fontSize: fontSizes[0]
       },
-      [muiTheme.breakpoints.up('md')]: {
-        fontSize: '0.625rem'
-      },
+      // [muiTheme.breakpoints.up('md')]: {
+      //   fontSize: '0.625rem'
+      // },
       lineHeight: '1rem',
       letterSpacing: '0.04em',
       textTransform: 'uppercase'

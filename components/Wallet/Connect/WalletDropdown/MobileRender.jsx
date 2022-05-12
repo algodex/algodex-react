@@ -1,7 +1,6 @@
 import { copyAddress, truncatedWalletAddress } from 'components/helpers'
 import { filter, find } from 'lodash'
 import { useMemo, useState } from 'react'
-
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Button from '@mui/material/Button'
 import DropdownBody from './DropdownBody'
@@ -17,6 +16,7 @@ import WalletOptionsList from './WalletOptionsList'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { Typography } from '@mui/material'
 
 const Container = styled.div`
   width: 100%;

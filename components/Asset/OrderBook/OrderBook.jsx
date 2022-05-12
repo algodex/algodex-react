@@ -11,6 +11,7 @@ import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
@@ -127,14 +128,12 @@ const gridStyles = `
 const Header = styled.header`
   flex-shrink: 0;
   display: grid;
-  padding: 0 0.5rem 0rem;
   ${gridStyles}
 `
 
 const BookRow = styled.div`
   display: grid;
   align-items: center;
-  padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
   ${gridStyles}
@@ -208,7 +207,7 @@ const Price = styled.div`
   }
 
   span {
-    margin-left: 0.75rem;
+    // margin-left: 0.75rem;
   }
 `
 
@@ -364,18 +363,20 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
-          {t('order-book')}
-        </Typography>
-        <Header>
-          <TablePriceHeader />
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('amount')}
+        <Box className="p-4">
+          <Typography variant="subtitle_medium_cap_bold" color="gray.500">
+            {t('order-book')}
           </Typography>
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('total')}
-          </Typography>
-        </Header>
+          <Header className="mt-2">
+            <TablePriceHeader />
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')}
+            </Typography>
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('total')}
+            </Typography>
+          </Header>
+        </Box>
 
         <SellOrders>
           <OrdersWrapper className="p-4">{renderOrders(orders.sell, 'sell')}</OrdersWrapper>

@@ -204,12 +204,13 @@ const Main = styled.main`
 const MobileMenu = styled.nav`
   height: 50px;
   width: 100%;
-
   & > ul {
     display: flex;
     height: 100%;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 0;
   }
 
   & > ul > li {
@@ -286,7 +287,7 @@ function MainLayout({ asset, children }) {
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>
-                <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
+                <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
                   Place Order
                 </Typography>
               </Header>
@@ -329,22 +330,34 @@ function MainLayout({ asset, children }) {
         <MobileMenu>
           <ul>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.CHART)}
+              >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.BOOK)}
+              >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.TRADE)}
+              >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.ORDERS)}
+              >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
@@ -357,7 +370,10 @@ function MainLayout({ asset, children }) {
             </li>
             */}
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.WALLET)}
+              >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>

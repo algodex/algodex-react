@@ -171,7 +171,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
+        <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
           {t('trade-history')}
         </Typography>
         <Header>
