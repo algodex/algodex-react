@@ -434,7 +434,16 @@ const theme = {
     },
 
     // Labels
-    label_regular: {},
+    label_regular: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[2],
+      fontWeight: 400
+    },
+    label_regular_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[2],
+      fontWeight: 700
+    },
     label_tiny: {},
     label_medium: {},
     label_large: {},

@@ -16,7 +16,7 @@ import WalletOptionsList from './WalletOptionsList'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 
 const Container = styled.div`
   width: 100%;
@@ -91,9 +91,9 @@ const MobileWalletRender = () => {
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
-          <div className="px-2 py-4 bg-gray-600">
+          <Box className="px-2 py-4 bg-gray-600">
             <WalletOptionsList />
-          </div>
+          </Box>
           <DropdownFooter />
         </ModalContainer>
       </Modal>
@@ -114,12 +114,12 @@ const MobileWalletRender = () => {
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           <DropdownHeader closeFn={() => setIsDisconnectingWallet(false)} />
-          <div className="bg-gray-700">
+          <Box className="bg-gray-700">
             <DropdownBody
               activeWalletAddress={wallet?.address}
               sortedWalletsList={sortedWalletsList}
             />
-          </div>
+          </Box>
           <DropdownFooter />
         </ModalContainer>
       </Modal>
@@ -129,13 +129,13 @@ const MobileWalletRender = () => {
   const renderAssets = (assets, address) => {
     return assets?.map((asset, idx) => {
       return (
-        <div
+        <Box
           key={idx}
           className={`${wallet.address !== address && 'opacity-40'} flex justify-between  my-2`}
         >
-          <div>{asset['asset-id']}</div>
-          <div>{asset.amount}</div>
-        </div>
+          <Typography>{asset['asset-id']}</Typography>
+          <Typography>{asset.amount}</Typography>
+        </Box>
       )
     })
   }
@@ -156,13 +156,13 @@ const MobileWalletRender = () => {
             aria-controls={addr.address}
             id={idx}
           >
-            <div
+            <Box
               key={idx}
               className={`${
                 wallet.address !== addr.address && 'opacity-40'
               } font-medium w-full flex justify-between my-2`}
             >
-              <div className="flex items-center">
+              <Box className="flex items-center">
                 <Icon
                   color="gray"
                   fillGradient="000"
@@ -171,13 +171,15 @@ const MobileWalletRender = () => {
                   size={0.75}
                 />
                 &nbsp;
-                <div className="text-sm text-white">{truncatedWalletAddress(addr.address, 4)}</div>
-              </div>
-              <div className="flex items-center">
-                <div>{addr.amount}</div>&nbsp;
+                <Typography className="text-sm text-white">
+                  {truncatedWalletAddress(addr.address, 4)}
+                </Typography>
+              </Box>
+              <Box className="flex items-center">
+                <Typography>{addr.amount}</Typography>&nbsp;
                 <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-              </div>
-            </div>
+              </Box>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>{renderAssets(addr.assets, addr.address)}</AccordionDetails>
         </Accordion>
@@ -187,10 +189,10 @@ const MobileWalletRender = () => {
 
   return (
     <Container>
-      <div style={{ height: '100%' }} className="flex justify-between flex-col px-3">
-        <div>
-          <div>
-            <div className="flex flex-col justify-between">
+      <Box style={{ height: '100%' }} className="flex justify-between flex-col px-3">
+        <Box>
+          <Box>
+            <Box className="flex flex-col justify-between">
               <Button
                 className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
                 variant="contained"
@@ -207,31 +209,43 @@ const MobileWalletRender = () => {
                   DISCONNECT A WALLET
                 </Button>
               )}
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between text-sm mt-4">
-              <p>WALLET NAME</p>
-              <p>BALANCE</p>
-            </div>
+            </Box>
+          </Box>
+          <Box>
+            <Box className="flex justify-between text-sm mt-4">
+              <Typography variant="label_regular" color="gray.500">
+                WALLET NAME
+              </Typography>
+              <Typography variant="label_regular" color="gray.500">
+                BALANCE
+              </Typography>
+            </Box>
             {(!addresses || !addresses.length > 0) && (
-              <div>
-                <p className="text-sm text-center mt-8 font-medium text-white">
+              <Box className="flex justify-center">
+                <Typography
+                  variant="label_regular_bold"
+                  color="gray.300"
+                  className="text-center mt-8 w-9/12"
+                >
                   No wallets connected yet. <br />
                   Connect a wallet with the button above.
-                </p>
-              </div>
+                </Typography>
+              </Box>
             )}
             {addresses && addresses.length > 0 && renderWalletAddresses()}
-          </div>
-        </div>
-        <div>
-          <p className="text-sm text-center mb-4 px-4">
+          </Box>
+        </Box>
+        <Box className="flex">
+          <Typography
+            variant="body_small_medium"
+            color="gray.100"
+            className="text-center mb-4 px-4"
+          >
             Active wallet is in white. Tap on an additional wallet to switch it to active. Tap on
             arrow to expand list and see current holdings.
-          </p>
-        </div>
-      </div>
+          </Typography>
+        </Box>
+      </Box>
       {renderWalletOptionsList()}
       {renderAddressesList()}
     </Container>
