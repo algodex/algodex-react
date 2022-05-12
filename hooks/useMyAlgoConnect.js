@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-
-import { useAlgodex } from '@algodex/algodex-hooks'
+import algosdk from 'algosdk'
+import { assignGroups, groupBy } from '@algodex/algodex-sdk/lib/functions/base'
 
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
@@ -11,12 +11,73 @@ const ERROR = {
  * useMyAlgoConnect
  * @return {WalletEffect}
  */
-export function useMyAlgoConnect() {
-  // State Setter
-  const { setAddresses, algodex, setWallet } = useAlgodex()
-
+export default function useMyAlgoConnect(onConnect, onDisconnect) {
   // Instance reference
   const myAlgoWallet = useRef()
+  /**
+   * MyAlgoConnect Signer
+   *
+   * @todo move to SDK
+   * @param outerTxns
+   * @return {Promise<*>}
+   */
+  async function signer(outerTxns) {
+    console.debug('inside signMyAlgoTransactions transactions')
+    const groups = groupBy(outerTxns, 'groupNum')
+
+    const numberOfGroups = Object.keys(groups)
+
+    const groupedGroups = numberOfGroups.map((group) => {
+      const allTxFormatted = groups[group].map((txn) => {
+        return txn.unsignedTxn
+      })
+      assignGroups(allTxFormatted)
+      return allTxFormatted
+    })
+
+    const flattenedGroups = groupedGroups.flat()
+
+    const txnsForSig = []
+    function isUserSigned(outerTxn) {
+      return typeof outerTxn.lsig === 'undefined' && typeof outerTxn.senderAcct !== 'undefined'
+    }
+    for (let i = 0; i < outerTxns.length; i++) {
+      outerTxns[i].unsignedTxn = flattenedGroups[i]
+      if (isUserSigned(outerTxns[i])) {
+        txnsForSig.push(flattenedGroups[i].toByte())
+      }
+    }
+
+    const signedTxnsFromUser = await this.signTransaction(txnsForSig)
+
+    if (Array.isArray(signedTxnsFromUser)) {
+      let userSigIndex = 0
+      for (let i = 0; i < outerTxns.length; i++) {
+        if (isUserSigned(outerTxns[i])) {
+          outerTxns[i].signedTxn = signedTxnsFromUser[userSigIndex].blob
+          userSigIndex++
+        }
+      }
+    } else {
+      for (let i = 0; i < outerTxns.length; i++) {
+        if (isUserSigned(outerTxns[i])) {
+          outerTxns[i].signedTxn = signedTxnsFromUser.blob
+          break
+        }
+      }
+    }
+
+    for (let i = 0; i < outerTxns.length; i++) {
+      if (!isUserSigned(outerTxns[i])) {
+        const signedLsig = algosdk.signLogicSigTransactionObject(
+          outerTxns[i].unsignedTxn,
+          outerTxns[i].lsig
+        )
+        outerTxns[i].signedTxn = signedLsig.blob
+      }
+    }
+    return outerTxns.map((o) => o.signedTxn)
+  }
 
   const connect = async () => {
     try {
@@ -38,20 +99,20 @@ export function useMyAlgoConnect() {
       })
       console.debug('Setting Address form myAlgoConnect', _addresses)
       // Set Addresses
-      setAddresses(_addresses, { validate: false, merge: true })
+      onConnect(_addresses)
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
     }
   }
 
   const disconnect = () => {
-    setAddresses(
-      algodex.addresses.filter((addr) => addr.type !== 'my-algo-wallet'),
-      { merge: false, validate: false }
-    )
-    if (algodex.addresses.length) {
-      setWallet(algodex.addresses[0], { validate: false, merge: true })
-    }
+    // setAddresses(
+    //   algodex.addresses.filter((addr) => addr.type !== 'my-algo-wallet'),
+    //   { merge: false, validate: false }
+    // )
+    // if (algodex.addresses.length) {
+    //   setWallet(algodex.addresses[0], { validate: false, merge: true })
+    // }
   }
 
   useEffect(() => {
@@ -59,9 +120,11 @@ export function useMyAlgoConnect() {
       // '@randlabs/myalgo-connect' is imported dynamically
       // because it uses the window object
       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-      MyAlgoConnect.prototype.sign = await import(
-        '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-      )
+      MyAlgoConnect.prototype.sign = signer
+      // TODO: get signer from SDK
+      // MyAlgoConnect.prototype.sign = await import(
+      //   '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+      // )
       myAlgoWallet.current = new MyAlgoConnect()
       myAlgoWallet.current.connected = false
     }
@@ -69,5 +132,5 @@ export function useMyAlgoConnect() {
     initMyAlgoWallet()
   }, [])
 
-  return { connect, disconnect }
+  return { connect, disconnect, onDisconnect, connector: myAlgoWallet.current }
 }

@@ -1,0 +1,21 @@
+{
+  "config": {
+    "algod": {
+      "uri": "https://node.testnet.algoexplorerapi.io",
+      "token": ""
+    },
+    "indexer": {
+      "uri": "https://algoindexer.testnet.algoexplorerapi.io",
+      "token": "",
+      "port": 443
+    },
+    "dexd": {
+      "uri": "https://testnet.algodex.com/algodex-backend",
+      "token": ""
+    },
+    "tinyman": {
+      "uri": "https://testnet.analytics.tinyman.org",
+      "token": ""
+    }
+  }
+}

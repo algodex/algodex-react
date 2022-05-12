@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
 import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'

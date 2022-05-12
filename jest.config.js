@@ -9,7 +9,7 @@ module.exports = {
     global: {
       statements: 30,
       branches: 25,
-      functions: 30,
+      functions: 25,
       lines: 30
     }
   },
@@ -30,6 +30,7 @@ module.exports = {
     '^@/utils(.*)$': '<rootDir>/utils$1',
     '^@/theme(.*)$': '<rootDir>/theme$1',
     '^@/spec(.*)$': '<rootDir>/spec$1',
+    '^@/test(.*)$': '<rootDir>/test$1',
     '^theme(.*)$': '<rootDir>/theme$1'
   },
   transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)']
