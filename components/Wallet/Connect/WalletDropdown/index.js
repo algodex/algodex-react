@@ -35,7 +35,6 @@ const Container = styled.div`
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const { addresses, wallet } = useAlgodex()
-
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
