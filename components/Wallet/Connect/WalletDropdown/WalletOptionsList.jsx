@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import PropTypes from 'prop-types'
-import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
+import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
+import useWalletConnect from '@/hooks/useWalletConnect'
+import { Typography, Box } from '@mui/material'
+import Button from '@mui/material/Button'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
   const { connect } = useMyAlgoConnect()
@@ -16,25 +17,25 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
   }
   return (
     <>
-      <div
+      <Box
         className="text-xs text-white rounded p-2"
         style={{
           backgroundColor: theme.colors.gray['500']
         }}
       >
-        <div className="flex justify-between">
+        <Box className="flex justify-between">
           <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
           {isConnectingAddress && (
-            <button
+            <Button
               className="cursor-pointer font-medium text-white"
               onClick={() => setIsConnectingAddress(!isConnectingAddress)}
             >
               Go back
-            </button>
+            </Button>
           )}
-        </div>
-        <div className="mt-4 ml-4">
-          <div
+        </Box>
+        <Box className="mt-4 ml-4">
+          <Box
             role="button"
             tabIndex="0"
             className="cursor-pointer flex items-center mb-2"
@@ -50,8 +51,8 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             <Typography className="underline ml-2" variant="body_small_bold">
               Algorand Mobile Wallet
             </Typography>
-          </div>
-          <div
+          </Box>
+          <Box
             className="cursor-pointer flex items-center mb-2"
             role="button"
             tabIndex="0"
@@ -62,9 +63,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             <Typography className="underline ml-2" variant="body_small_bold">
               My Algo Wallet
             </Typography>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     </>
   )
 }

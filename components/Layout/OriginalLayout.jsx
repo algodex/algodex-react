@@ -204,12 +204,13 @@ const Main = styled.main`
 const MobileMenu = styled.nav`
   height: 50px;
   width: 100%;
-
   & > ul {
     display: flex;
     height: 100%;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 0;
   }
 
   & > ul > li {
@@ -241,10 +242,19 @@ const MobileMenuButton = styled(Button)`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet, isConnected, placeOrder } = useAlgodex()
+  const { wallet } = useAlgodex()
+  // const { addresses } = useWallets()
+  const isConnected =
+    typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
+  // console.log(addresses, wallet)
+  // const isConnected = useMemo(() => {
+  //   console.log(addresses, isConnected)
+  //   return addresses?.length > 0
+  // }, [addresses])
   // console.log(`DEX: ${isConnected}`, algodex)
   const { t } = useTranslation('common')
   const gridRef = useRef()
+  const searchTableRef = useRef()
   const isMobile = useMobileDetect()
   const TABS = {
     CHART: 'CHART',
@@ -281,23 +291,34 @@ function MainLayout({ asset, children }) {
           {isMobile && <MobileWallet />}
         </WalletSection>
         <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {isConnected && <PlaceOrder asset={asset} wallet={wallet} onSubmit={placeOrder} />}
+          {isConnected && <PlaceOrder asset={asset} wallet={wallet} />}
           {!isConnected && (
             <Container data-testid="place-order">
               <Header>
-                <Typography color="gray.500" mb={1}>
+                <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
                   Place Order
                 </Typography>
               </Header>
-              <Typography data-testid="not-signed-in" color="gray.500" textAlign="center">
+              <Typography
+                variant="subtitle_medium"
+                className="m-4"
+                data-testid="not-signed-in"
+                color="gray.500"
+                textAlign="center"
+              >
                 Not signed in
               </Typography>
             </Container>
           )}
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
-          <AssetsSection>
-            <AssetSearch style={{ height: '6rem' }} className="h-24" gridRef={gridRef} />
+          <AssetsSection ref={searchTableRef}>
+            <AssetSearch
+              style={{ height: '6rem' }}
+              className="h-24"
+              searchTableRef={searchTableRef}
+              gridRef={gridRef}
+            />
           </AssetsSection>
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
@@ -317,22 +338,34 @@ function MainLayout({ asset, children }) {
         <MobileMenu>
           <ul>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.CHART)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.CHART)}
+              >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.BOOK)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.BOOK)}
+              >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.TRADE)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.TRADE)}
+              >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.ORDERS)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.ORDERS)}
+              >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
             </li>
@@ -345,7 +378,10 @@ function MainLayout({ asset, children }) {
             </li>
             */}
             <li>
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.WALLET)}>
+              <MobileMenuButton
+                sx={{ color: 'white', fontWeight: '600' }}
+                onClick={() => setActiveMobile(TABS.WALLET)}
+              >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
             </li>

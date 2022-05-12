@@ -4,14 +4,16 @@ import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algod
 
 import Big from 'big.js'
 import { Fragment } from 'react'
+import PriceInfo from './OrderBookPriceInfo'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
-import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
-import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import Box from '@mui/material/Box'
+// import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+// import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
@@ -111,12 +113,9 @@ const Container = styled.div`
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
-
   background-color: ${({ theme }) => theme.palette.background.dark};
-  padding: 0.3rem;
 
   @media (min-width: 996px) {
-    padding: 0.75rem 0.625rem 1rem;
     overflow: hidden;
   }
 `
@@ -129,14 +128,12 @@ const gridStyles = `
 const Header = styled.header`
   flex-shrink: 0;
   display: grid;
-  padding: 0 0.5rem 0rem;
   ${gridStyles}
 `
 
 const BookRow = styled.div`
   display: grid;
   align-items: center;
-  padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
   ${gridStyles}
@@ -194,8 +191,10 @@ const BuyOrders = styled.div`
 
 const CurrentPrice = styled.div`
   padding: 1rem 0;
+  border-top: solid 3px ${({ theme }) => theme.palette.gray['700']};
+  border-bottom: solid 3px ${({ theme }) => theme.palette.gray['700']};
 `
-const Price = styled.p`
+const Price = styled.div`
   display: flex;
   align-items: center;
   font-size: 1.25rem;
@@ -204,12 +203,11 @@ const Price = styled.p`
   margin: 0;
 
   svg {
-    margin-right: 0.5rem;
+    // margin-right: 0.5rem;
   }
 
   span {
-    margin-top: 0.125rem;
-    margin-left: 0.75rem;
+    // margin-left: 0.75rem;
   }
 `
 
@@ -219,7 +217,6 @@ const Price = styled.p`
  * @constructor
  */
 export function OrderBookPrice({ asset }) {
-  // console.log(`OrderBookPrice(`, arguments[0], `)`)
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
@@ -234,29 +231,30 @@ export function OrderBookPrice({ asset }) {
     )
   }
 
-  function PriceInfo() {
-    return (
-      <Fragment>
-        {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
-        <Typography data-testid="has-price-info" as="span">
-          {(asset?.price_info?.price24Change &&
-            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-            '0.00%'}
-        </Typography>
-      </Fragment>
-    )
-  }
+  // function PriceInfo() {
+  //   return (
+  //     <Fragment>
+  //       {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
+  //       <Typography data-testid="has-price-info" as="span">
+  //         {(asset?.price_info?.price24Change &&
+  //           `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
+  //           '0.00%'}
+  //       </Typography>
+  //     </Fragment>
+  //   )
+  // }
+  // TODO: Remove extra component, should only have one PriceInfo Component
   return (
     <Price color={color} data-testid="order-book-price">
       {!isUndefined(asset.price_info) && isDecrease ? (
-        <ArrowDown data-testid="arrow-down" />
+        <ArrowDown className="mr-2" data-testid="arrow-down" />
       ) : (
-        <ArrowUp data-testid="arrow-up" />
+        <ArrowUp className="mr-2" data-testid="arrow-up" />
       )}
       {isUndefined(asset.price_info) ? (
-        <NoPriceInfo />
+        <NoPriceInfo data-testid="no-price-info" />
       ) : (
-        <PriceInfo price_info={asset.price_info} />
+        <PriceInfo asset={asset} data-testid="has-price-info" />
       )}
     </Price>
   )
@@ -365,29 +363,31 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
-          {t('order-book')}
-        </Typography>
-        <Header>
-          <TablePriceHeader />
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('amount')}
+        <Box className="p-4">
+          <Typography variant="subtitle_medium_cap_bold" color="gray.500">
+            {t('order-book')}
           </Typography>
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('total')}
-          </Typography>
-        </Header>
+          <Header className="mt-2">
+            <TablePriceHeader />
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')}
+            </Typography>
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('total')}
+            </Typography>
+          </Header>
+        </Box>
 
         <SellOrders>
-          <OrdersWrapper>{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
         </SellOrders>
 
-        <CurrentPrice>
+        <CurrentPrice className="px-4">
           <PriceDisplay asset={asset} />
         </CurrentPrice>
 
         <BuyOrders>
-          <OrdersWrapper>{renderOrders(orders.buy, 'buy')}</OrdersWrapper>
+          <OrdersWrapper className="px-4 pt-4">{renderOrders(orders.buy, 'buy')}</OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>
