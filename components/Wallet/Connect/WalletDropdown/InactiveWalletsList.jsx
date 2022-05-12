@@ -5,13 +5,13 @@ import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import { find } from 'lodash'
 import theme from 'theme'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
+import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
+import useWalletConnect from '@/hooks/useWalletConnect'
 
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
@@ -36,24 +36,24 @@ const InactiveWalletsList = ({ walletsList }) => {
   }
 
   return (
-    <div
+    <Box
       className="mt-2 p-2 text-xs rounded text-white"
       style={{
         backgroundColor: theme.colors.gray['700']
       }}
     >
-      <div>
+      <Box>
         <Typography variant="body_small_cap_bold" color="gray.000" className="mb-1.5">
           SWITCH WALLETS
         </Typography>
-        <p>Click on address to switch active wallets</p>
-      </div>
-      <div>
+        <Typography>Click on address to switch active wallets</Typography>
+      </Box>
+      <Box>
         {walletsList.map(({ address, type }, idx) => {
           return (
-            <div className="mt-4" key={idx}>
-              <div className="flex justify-between items-center">
-                <div
+            <Box className="mt-4" key={idx}>
+              <Box className="flex justify-between items-center">
+                <Box
                   onKeyDown={() => switchWalletAddress(address)}
                   onClick={() => switchWalletAddress(address)}
                   role="button"
@@ -61,7 +61,7 @@ const InactiveWalletsList = ({ walletsList }) => {
                   title="Set as active"
                   className="cursor-pointer flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
                 >
-                  <p>{truncatedWalletAddress(address, 11)}</p>
+                  <Typography>{truncatedWalletAddress(address, 11)}</Typography>
                   <Icon
                     onClick={() => copyAddress(address)}
                     path={mdiContentCopy}
@@ -70,7 +70,7 @@ const InactiveWalletsList = ({ walletsList }) => {
                     className="cursor-pointer"
                     color="#FFFFFF"
                   />
-                </div>
+                </Box>
                 <Button
                   className="rounded ml-2 text-xs font-semibold"
                   variant="contained"
@@ -81,14 +81,14 @@ const InactiveWalletsList = ({ walletsList }) => {
                 >
                   DISCONNECT
                 </Button>
-              </div>
-              <div>
+              </Box>
+              <Box>
                 <Link href={setExplorerLink(address, activeNetwork)}>
                   <a
                     target="_blank"
                     className="flex justify-end items-center text-white mr-10 mt-3 font-medium"
                   >
-                    <p>View on AlgoExplorer</p>
+                    <Typography>View on AlgoExplorer</Typography>
                     <Icon
                       path={mdiOpenInNew}
                       title="Algo explorer link"
@@ -98,12 +98,12 @@ const InactiveWalletsList = ({ walletsList }) => {
                     />
                   </a>
                 </Link>
-              </div>
-            </div>
+              </Box>
+            </Box>
           )
         })}
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 

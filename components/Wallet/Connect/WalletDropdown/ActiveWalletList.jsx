@@ -5,11 +5,11 @@ import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import theme from 'theme'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
+import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
+import useWalletConnect from '@/hooks/useWalletConnect'
 
 const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
@@ -22,22 +22,22 @@ const ActiveWalletList = ({ wallet }) => {
     'wallet-connect': peraDisconnect
   }
   return (
-    <div>
+    <Box>
       {typeof address !== 'undefined' ? (
-        <div>
+        <Box>
           <Typography variant="body_small_cap_bold" color="gray.000" className="mb-3">
             ACTIVE WALLET
           </Typography>
-          <div className="text-white">
-            <div
+          <Box className="text-white">
+            <Box
               className="p-2 text-xs rounded shadow"
               style={{
                 backgroundColor: 'rgba(113, 128, 150, 0.1)'
               }}
             >
-              <div className="flex justify-between items-center">
-                <div className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
-                  <p>{truncatedWalletAddress(address, 11)}</p>
+              <Box className="flex justify-between items-center">
+                <Box className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
+                  <Typography>{truncatedWalletAddress(address, 11)}</Typography>
                   <Icon
                     onClick={() => copyAddress(address)}
                     path={mdiContentCopy}
@@ -46,7 +46,7 @@ const ActiveWalletList = ({ wallet }) => {
                     className="cursor-pointer"
                     color="#FFFFFF"
                   />
-                </div>
+                </Box>
                 <Button
                   className="rounded ml-2 text-xs font-semibold"
                   variant="contained"
@@ -57,11 +57,11 @@ const ActiveWalletList = ({ wallet }) => {
                 >
                   DISCONNECT
                 </Button>
-              </div>
-              <div>
+              </Box>
+              <Box>
                 <Link href={setExplorerLink(address, activeNetwork)}>
                   <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-                    <p>View on AlgoExplorer</p>
+                    <Typography>View on AlgoExplorer</Typography>
                     <Icon
                       path={mdiOpenInNew}
                       title="Algo explorer link"
@@ -71,14 +71,14 @@ const ActiveWalletList = ({ wallet }) => {
                     />
                   </a>
                 </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       ) : (
-        <div></div>
+        <Box></Box>
       )}
-    </div>
+    </Box>
   )
 }
 
