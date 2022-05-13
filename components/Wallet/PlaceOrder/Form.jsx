@@ -14,9 +14,11 @@ import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
 // import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
-import styled from '@emotion/styled'
-// import toast from 'react-hot-toast'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import toast from 'react-hot-toast'
+import useWallets from '@/hooks/useWallets'
 import useTranslation from 'next-translate/useTranslation'
+import styled from '@emotion/styled'
 
 export const Form = styled.form`
   ::-webkit-scrollbar {
@@ -24,15 +26,6 @@ export const Form = styled.form`
     display: none;
   }
 `
-
-export const convertToAsaUnits = (toConvert, decimals) => {
-  if (!toConvert) {
-    return 0
-  }
-  const multiplier = new Big(10).pow(6 - decimals)
-  const algoUnits = new Big(toConvert)
-  return algoUnits.times(multiplier).toNumber()
-}
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -61,9 +54,10 @@ export const convertToAsaUnits = (toConvert, decimals) => {
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  // const { wallet, placeOrder, isConnected } = useAlgodex()
-  const { wallet, http, isConnected } = useAlgodex()
-  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+
+  const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
+  const { wallet } = useWallets(initialState)
+  const [tabSwitch, setTabSwitch] = useState(0)
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -72,7 +66,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     total: 0,
     execution: 'both'
   })
-
   const algoBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
@@ -80,17 +73,29 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
     return res
   }, [wallet])
-  // const asaBalance = new Big(
-  //   convertToAsaUnits(wallet?.assets?.[asset.id]?.amount, asset.decimals)
-  // ).toString()
-  const [tabSwitch, setTabSwitch] = useState(order.execution === 'market' ? 1 : 0)
-  // const {
-  //   data: minBalance,
-  //   isLoading: isWalletBalanceLoading,
-  //   isError: isWalletBalanceError
-  // } = useWalletMinBalanceQuery({
-  //   wallet: wallet.address
-  // })
+
+  // const assetBalance = useMemo(() => {
+  //   let res = 0
+  //   if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+  //     const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+  //     if (filter.length > 0) {
+  //       res = fromBaseUnits(filter[0].amount, asset.decimals)
+  //     }
+  //   }
+
+  //   return res
+  // }, [wallet, asset])
+
+  if (typeof wallet?.address === 'undefined') {
+    throw new TypeError('Invalid Wallet!')
+  }
+  // TODO: Handle empty asset wallets
+  // if (typeof wallet?.assets === 'undefined') {
+  //   throw new TypeError('Invalid Account Info!')
+  // }
+
+  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+
   const orderBook = useMemo(
     () => ({
       buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
@@ -100,7 +105,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
   const [sellOrders, setSellOrders] = useState()
   const [buyOrders, setBuyOrders] = useState()
-
+  // Eslint bypass to keep rest of code available
+  if (typeof sellOrders !== 'undefined' && sellOrders?.length === -1) {
+    console.debug(sellOrders?.length, buyOrders?.length)
+  }
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
@@ -208,7 +216,56 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [setOrder, order]
   )
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      let orderPromise
+      if (typeof onSubmit === 'function') {
+        orderPromise = onSubmit({
+          ...order,
+          wallet,
+          asset
+        })
+      } else {
+        console.log(
+          {
+            ...order,
+            address: wallet.address,
+            wallet,
+            asset,
+            appId: order.type === 'sell' ? 22045522 : 22045503,
+            version: 6
+          },
+          { wallet }
+        )
+        orderPromise = placeOrder(
+          {
+            ...order,
+            address: wallet.address,
+            wallet,
+            asset,
+            appId: order.type === 'sell' ? 22045522 : 22045503,
+            version: 6
+          },
+          { wallet }
+        )
+      }
 
+      // TODO add events
+      toast.promise(orderPromise, {
+        loading: t('awaiting-confirmation'),
+        success: t('order-success'),
+        error: (err) => {
+          console.log(err)
+          if (/PopupOpenError|blocked/.test(err)) {
+            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+          }
+          return t('error-placing-order')
+        }
+      })
+    },
+    [onSubmit, asset, order]
+  )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
     setOrder({
@@ -258,12 +315,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   [onSubmit, asset, order]
   // )
 
-  if (
-    typeof wallet === 'undefined' ||
-    typeof wallet.amount === 'undefined' ||
-    isLoading ||
-    isError
-  ) {
+  if (typeof wallet === 'undefined' || isLoading || isError) {
     return <Spinner />
   }
   return (
@@ -284,7 +336,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         </header>
       )}
       {typeof order !== 'undefined' && isConnected && (
-        <Form onSubmit={onSubmit} className="overflow-x-scroll">
+        <Form onSubmit={handleSubmit} className="overflow-x-scroll">
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
               disableElevation={order.type === 'buy'}
