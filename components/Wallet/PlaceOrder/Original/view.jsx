@@ -129,14 +129,8 @@ function PlaceOrderView(props) {
   )
 
   useEffect(() => {
-    // const sellOrder = aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell')
-    // const buyOrder = aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy')
-    const sellOrder = orderBook.sellOrders
-    const buyOrder = orderBook.buyOrders
-    // setSellOrders(aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
-    // setBuyOrders(aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-    setSellOrders(sellOrder)
-    setBuyOrders(buyOrder)
+    setSellOrders(aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
   }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const updateInitialState = () => {
