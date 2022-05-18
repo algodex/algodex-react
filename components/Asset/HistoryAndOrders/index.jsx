@@ -49,18 +49,6 @@ const Container = styled.div`
   flex-direction: column;
   flex: 1 1 0%;
 `
-export const WalletOrdersSection = styled.section`
-  border-top: 1px solid ${({ theme }) => theme.palette.gray['700']};
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-top: none;
-    border-right: 1px solid ${({ theme }) => theme.palette.gray['700']};
-  }
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-  @media (min-width: 996px) {
-    grid-area: orders;
-    display: flex;
-  }
-`
 function HistoryAndOrderBook({ asset, isMobile }) {
   const { t } = useTranslation('orders')
   const [selectedPanel, setSelectedPanel] = useState('order-book')
