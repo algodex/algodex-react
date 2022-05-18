@@ -29,7 +29,7 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 const HeaderWrapper = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '1rem 0.5rem 0.75rem')};
+  padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
 `
 
 const Header = styled.header`

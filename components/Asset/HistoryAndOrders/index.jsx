@@ -70,9 +70,9 @@ function HistoryAndOrderBook({ asset, isMobile }) {
   const renderPanel = (panelName) => {
     switch (panelName) {
       case ORDER_BOOK_PANEL:
-        return <OrderBook style={{ paddingTop: '-1rem' }} isMobile={isMobile} asset={asset} />
+        return <OrderBook isMobile={isMobile} asset={asset} />
       case TRADE_HISTORY_PANEL:
-        return <TradeHistory style={{ paddingTop: '-1rem' }} isMobile={isMobile} asset={asset} />
+        return <TradeHistory isMobile={isMobile} asset={asset} />
       default:
         return null
     }
