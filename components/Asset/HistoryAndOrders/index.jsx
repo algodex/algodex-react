@@ -41,7 +41,7 @@ const Tab = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: space-around;
-  border: 1px solid ${({ theme }) => theme.palette.gray[600]};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.gray[600]};
 `
 
 const Container = styled.div`
