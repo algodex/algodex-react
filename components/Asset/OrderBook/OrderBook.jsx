@@ -122,6 +122,9 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
+const HeaderWrapper = styled.div`
+  padding: ${({ isMobile }) => (isMobile ? `0 1rem` : '1rem')};
+`
 const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
@@ -276,7 +279,7 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBook({ asset, orders, components }) {
+export function OrderBook({ isMobile, asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
@@ -347,10 +350,12 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <div className="p-4">
-          <HeaderCaps color="gray.500" mb={1}>
-            {t('order-book')}
-          </HeaderCaps>
+        <HeaderWrapper isMobile>
+          {!isMobile && (
+            <HeaderCaps color="gray.500" mb={1}>
+              {t('order-book')}
+            </HeaderCaps>
+          )}
           <br></br>
           <Header>
             <TablePriceHeader />
@@ -361,7 +366,7 @@ export function OrderBook({ asset, orders, components }) {
               {t('total')}
             </BodyCopyTiny>
           </Header>
-        </div>
+        </HeaderWrapper>
 
         <SellOrders>
           <OrdersWrapper className="p-4">{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
@@ -380,6 +385,10 @@ export function OrderBook({ asset, orders, components }) {
 }
 
 OrderBook.propTypes = {
+  /**
+   * Manages mobile render
+   */
+  isMobile: PropTypes.bool,
   /**
    * Algorand Asset Information
    */
@@ -416,6 +425,7 @@ OrderBook.propTypes = {
 
 OrderBook.defaultProps = {
   orders: { sell: [], buy: [] },
+  isMobile: false,
   components: {
     PriceDisplay: DefaultOrderBookPrice
   }
