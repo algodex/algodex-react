@@ -19,6 +19,7 @@ import {
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { APPROVED_SECURITIES_LIST } from '../../../../APPROVED_ASSETS'
 import Big from 'big.js'
 import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
@@ -285,6 +286,10 @@ function PlaceOrderView(props) {
     [asset]
   )
 
+  const isNotTradable = useMemo(() => {
+    return !APPROVED_SECURITIES_LIST[asset.id]
+  }, [asset])
+
   const renderSubmit = () => {
     const buttonProps = {
       buy: { variant: 'primary', text: `${t('buy')} ${asset.name}` },
@@ -318,6 +323,7 @@ function PlaceOrderView(props) {
       isInvalid() ||
       isBalanceExceeded() ||
       isLessThanMicroAlgo() ||
+      isNotTradable ||
       status.submitting
 
     return (
@@ -343,7 +349,7 @@ function PlaceOrderView(props) {
             id="type-buy"
             value="buy"
             checked={order.type === 'buy'}
-            onChange={(e) => handleChange(e, 'type')}
+            onChange={(e) => !isNotTradable && handleChange(e, 'type')}
           />
           <BuyButton>
             <label htmlFor="type-buy">{t('buy')}</label>
@@ -353,7 +359,7 @@ function PlaceOrderView(props) {
             id="type-sell"
             value="sell"
             checked={order.type === 'sell'}
-            onChange={(e) => handleChange(e, 'type')}
+            onChange={(e) => !isNotTradable && handleChange(e, 'type')}
           />
           <SellButton>
             <label htmlFor="type-sell">{t('sell')}</label>
@@ -442,8 +448,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === LIMIT_PANEL}
             onClick={() => {
-              setOrderView(LIMIT_PANEL)
-              handleOptionsChange({ target: { value: 'both' } })
+              !isNotTradable && setOrderView(LIMIT_PANEL)
+              !isNotTradable && handleOptionsChange({ target: { value: 'both' } })
             }}
           >
             {t('limit')}
@@ -452,8 +458,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === MARKET_PANEL}
             onClick={() => {
-              setOrderView(MARKET_PANEL)
-              handleOptionsChange({ target: { value: 'market' } })
+              !isNotTradable && setOrderView(MARKET_PANEL)
+              !isNotTradable && handleOptionsChange({ target: { value: 'market' } })
             }}
           >
             {t('market')}
@@ -462,13 +468,13 @@ function PlaceOrderView(props) {
         {orderView === LIMIT_PANEL ? (
           <LimitOrder
             order={order}
-            handleChange={handleChange}
+            handleChange={!isNotTradable ? handleChange : () => {}}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={handleRangeChange}
+            handleRangeChange={!isNotTradable && handleRangeChange}
             enableOrder={enableOrder}
-            handleOptionsChange={handleOptionsChange}
+            handleOptionsChange={!isNotTradable && handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
             microAlgo={MICROALGO}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
@@ -476,11 +482,11 @@ function PlaceOrderView(props) {
         ) : (
           <MarketOrder
             order={order}
-            handleChange={handleChange}
+            handleChange={!isNotTradable ? handleChange : () => {}}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={handleRangeChange}
+            handleRangeChange={!isNotTradable && handleRangeChange}
             enableOrder={enableOrder}
           />
         )}

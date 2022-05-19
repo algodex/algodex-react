@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { APPROVED_SECURITIES_LIST } from '../../APPROVED_ASSETS'
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
 import OrderBook from '@/components/Asset/OrderBook'
@@ -34,7 +35,7 @@ const PlaceOrderSection = styled.section`
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   display: ${({ active }) => (active ? 'flex' : 'none')};
   // overflow: hidden scroll;
-
+  opacity: ${({ assetId }) => (assetId ? '0.4' : '1')};
   @media (min-width: 996px) {
     grid-area: trade;
     display: flex;
@@ -283,7 +284,10 @@ function MainLayout({ asset, children }) {
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet />
         </WalletSection>
-        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
+        <PlaceOrderSection
+          assetId={`${APPROVED_SECURITIES_LIST[asset?.id]}`}
+          active={activeMobile === TABS.TRADE}
+        >
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>

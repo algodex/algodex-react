@@ -4,7 +4,7 @@ import {
   AssetNameBlock,
   NameVerifiedWrapper
 } from '@/components/Asset/Typography'
-import { mdiCheckDecagram, mdiStar } from '@mdi/js'
+import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -122,15 +122,29 @@ const Algos = styled(AlgoIcon)`
   fill: ${({ theme }) => theme.palette.gray['500']};
 `
 
-export const AssetChangeCell = ({ value }) => {
+export const AssetChangeCell = ({ value, row }) => {
   const displayChange = () => {
     if (value === null) {
       return ''
     }
     if (value === '--') {
-      return value
+      return (
+        <span
+          style={{
+            opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+          }}
+        >
+          value
+        </span>
+      )
     }
-    return `${value}%`
+    return (
+      <span
+        style={{
+          opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+        }}
+      >{`${value}%`}</span>
+    )
   }
   return (
     <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
@@ -140,6 +154,15 @@ export const AssetChangeCell = ({ value }) => {
 }
 AssetChangeCell.propTypes = {
   value: PropTypes.any
+}
+
+const APPROVED_SECURITIES_LIST = {
+  15322902: 'LAMP',
+  48806985: 'Vote',
+  44526812: 'Garage',
+  33698417: 'L',
+  21547225: 'BTC',
+  37074699: 'USDC'
 }
 
 export const NavSearchTable = ({
@@ -158,6 +181,7 @@ export const NavSearchTable = ({
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const searchTableRef = useRef()
   const { t } = useTranslation('assets')
+
   const filterByFavoritesFn = useCallback(
     (e) => {
       e.stopPropagation()
@@ -221,9 +245,14 @@ export const NavSearchTable = ({
   }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 
   const AssetPriceCell = useCallback(
-    ({ value }) => {
+    ({ value, row }) => {
       return (
-        <AssetPrice className="cursor-pointer font-semibold">
+        <AssetPrice
+          style={{
+            opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+          }}
+          className="cursor-pointer font-semibold"
+        >
           {value}
           <br />
           <p className="text-gray-600">
@@ -235,13 +264,19 @@ export const NavSearchTable = ({
     [algoPrice]
   )
   AssetPriceCell.propTypes = {
-    value: PropTypes.any
+    value: PropTypes.any,
+    row: PropTypes.object
   }
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="cursor-pointer flex items-center">
+        <div
+          style={{
+            opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+          }}
+          className="cursor-pointer flex items-center"
+        >
           <div className="flex flex-col">
             <div className="flex items-center">
               <Icon
@@ -281,6 +316,21 @@ export const NavSearchTable = ({
                 />
               )}
             </div>
+            {APPROVED_SECURITIES_LIST[row.original?.id] && (
+              <div className="flex items-center">
+                <Icon
+                  path={mdiAlertCircleOutline}
+                  title="Verified asset"
+                  className="mt-0.5"
+                  size={0.4}
+                  color={theme.palette.gray['500']}
+                />
+                &nbsp;
+                <p style={{ fontSize: '8px', color: '#718096', fontWeight: 600 }}>
+                  Restricted Trading (USA)
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )

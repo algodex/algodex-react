@@ -1,12 +1,13 @@
 import { BodyCopy, BodyCopyTiny } from '@/components/Typography'
+import React, { useMemo } from 'react'
 
+import { APPROVED_SECURITIES_LIST } from '../../../../APPROVED_ASSETS'
 import AmountRange from './amount-range'
 import Big from 'big.js'
 import { LimitOrder } from './place-order.css'
 import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
-import React from 'react'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -65,6 +66,10 @@ export const OrderForm = ({
       return true
     }
   }
+
+  const isNotTradable = useMemo(() => {
+    return !APPROVED_SECURITIES_LIST[asset.id]
+  }, [asset])
 
   return (
     <>
@@ -137,8 +142,9 @@ export const OrderForm = ({
         </TxnFeeContainer> */}
         {orderType === 'limit' && (
           <OrderOptions
+            asset={asset}
             order={order}
-            onChange={handleOptionsChange}
+            onChange={!isNotTradable ? handleOptionsChange : () => {}}
             allowTaker={typeof asset !== 'undefined'}
             orderFilter={newOrderSizeFilter}
             setOrderFilter={setNewOrderSizeFilter}
