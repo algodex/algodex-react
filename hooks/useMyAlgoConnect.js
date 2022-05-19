@@ -1,7 +1,23 @@
 import { useEffect, useRef } from 'react'
 import algosdk from 'algosdk'
-import { assignGroups, groupBy } from '@algodex/algodex-sdk/lib/functions/base'
-
+/**
+ *
+ * @param {Array} txns
+ */
+function assignGroups(txns) {
+  const groupID = algosdk.computeGroupID(txns)
+  for (let i = 0; i < txns.length; i++) {
+    txns[i].group = groupID
+  }
+}
+const groupBy = (items, key) =>
+  items.reduce(
+    (result, item) => ({
+      ...result,
+      [item[key]]: [...(result[item[key]] || []), item]
+    }),
+    {}
+  )
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
