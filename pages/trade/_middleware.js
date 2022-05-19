@@ -1,4 +1,5 @@
 const BLOCKED_COUNTRIES = ['US', 'CA']
+
 import { NextResponse } from 'next/server'
 
 /**
