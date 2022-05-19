@@ -1,0 +1,8 @@
+export const APPROVED_SECURITIES_LIST = {
+  15322902: 'LAMP',
+  48806985: 'Vote',
+  44526812: 'Garage',
+  33698417: 'L',
+  21547225: 'BTC',
+  37074699: 'USDC'
+}
