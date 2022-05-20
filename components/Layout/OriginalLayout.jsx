@@ -8,13 +8,13 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
-import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
 import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -35,7 +35,7 @@ const PlaceOrderSection = styled.section`
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   display: ${({ active }) => (active ? 'flex' : 'none')};
   // overflow: hidden scroll;
-  opacity: ${({ assetId }) => (assetId ? '0.4' : '1')};
+  opacity: ${({ assetId }) => (assetId ? '1' : '0.4')};
   @media (min-width: 996px) {
     grid-area: trade;
     display: flex;
@@ -250,6 +250,7 @@ function MainLayout({ asset, children }) {
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const searchTableRef = useRef()
+  const isAssetTradable = useUserStore((state) => state.isAssetTradable)
   const isMobile = useMobileDetect()
   const TABS = {
     CHART: 'CHART',
@@ -284,10 +285,7 @@ function MainLayout({ asset, children }) {
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet />
         </WalletSection>
-        <PlaceOrderSection
-          assetId={!UnrestrictedAssets[asset?.id] ? true : false}
-          active={activeMobile === TABS.TRADE}
-        >
+        <PlaceOrderSection assetId={isAssetTradable} active={activeMobile === TABS.TRADE}>
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>

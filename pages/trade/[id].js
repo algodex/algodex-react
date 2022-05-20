@@ -1,17 +1,17 @@
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
+import Layout from '@/components/Layout/OriginalLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import useUserStore from '@/store/use-user-state'
-
 import Spinner from '@/components/Spinner'
-import Layout from '@/components/Layout/OriginalLayout'
-import { useRouter } from 'next/router'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import { useRouter } from 'next/router'
+import useUserStore from '@/store/use-user-state'
 
 /**
  * Fetch Traded Asset Paths
@@ -86,6 +86,7 @@ function TradePage({ staticExplorerAsset }) {
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
+  const setIsAssetTradable = useUserStore((state) => state.setIsAssetTradable)
 
   const { isFallback, query } = useRouter()
 
@@ -119,6 +120,10 @@ function TradePage({ staticExplorerAsset }) {
       setAsset(staticExplorerAsset)
     }
   }, [asset, setAsset, staticExplorerAsset])
+
+  useEffect(() => {
+    setIsAssetTradable(asset.circulating === 1 || UnrestrictedAssets[asset?.id] ? true : false)
+  }, [asset])
 
   const isTraded = useMemo(() => {
     console.log(asset, data)

@@ -18,14 +18,14 @@ import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
 import OrderSizeFilter from '../order-size-filter'
 import PropTypes from 'prop-types'
-import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker, orderFilter, setOrderFilter, asset } = props
   const { t } = useTranslation('place-order')
-
+  const isAssetTradable = useUserStore((state) => state.isAssetTradable)
   const router = useRouter()
   const showMakerOnly = router && router.query.showMakerOnly === 'true'
 
@@ -40,10 +40,6 @@ function OrderOptions(props) {
       setIsExpanded(!isExpanded)
     }
   }
-
-  const isNotTradable = useMemo(() => {
-    return !UnrestrictedAssets[asset?.id]
-  }, [asset])
 
   const renderMessage = () => {
     switch (order.execution) {
@@ -64,8 +60,8 @@ function OrderOptions(props) {
   return (
     <Container isExpanded={isExpanded} type={order.type}>
       <ExpandToggle
-        onClick={() => !isNotTradable ? setIsExpanded(!isExpanded) : () => {}}
-        onKeyDown={() => !isNotTradable ? handleKeyDown : () => {}}
+        onClick={() => isAssetTradable ? setIsExpanded(!isExpanded) : () => {}}
+        onKeyDown={() => isAssetTradable ? handleKeyDown : () => {}}
         tabIndex="0"
       >
         <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>
