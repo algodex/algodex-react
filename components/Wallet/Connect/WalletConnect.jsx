@@ -8,9 +8,9 @@ import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
+// import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -306,8 +306,9 @@ WalletView.defaultProps = {
  * @constructor
  */
 function WalletConnect(props) {
-  const { addresses, myAlgoConnect } = useWallets()
   const { wallet, setWallet } = useAlgodex()
+  const { addresses, myAlgoConnect } = useWallets(wallet)
+
   return (
     <WalletView
       addresses={addresses}

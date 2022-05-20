@@ -14,11 +14,10 @@ import AvailableBalance from './Form/AvailableBalance'
 import BuySellToggle from './Form/BuySellToggle'
 import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, useAssetOrdersQuery, useWallets } from '@algodex/algodex-hooks'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
-import useWallets from '@/hooks/useWallets'
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {

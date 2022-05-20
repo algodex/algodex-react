@@ -8,16 +8,13 @@ import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 import { find } from 'lodash'
 import theme from 'theme'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
+import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
 import useUserStore from 'store/use-user-state'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
 
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { wallet, setWallet, addresses } = useAlgodex()
-  const { disconnect: peraDisconnect } = useWalletConnect()
-  const { disconnect: disconnectMyAlgoWallet } = useMyAlgoConnect()
+  const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
 
   const isWalletActive = (addr) => {
     return wallet.address === addr
@@ -31,7 +28,7 @@ const InactiveWalletsList = ({ walletsList }) => {
   }
 
   const WALLETS_DISCONNECT_MAP = {
-    'my-algo-wallet': disconnectMyAlgoWallet,
+    'my-algo-wallet': myAlgoDisconnect,
     'wallet-connect': peraDisconnect
   }
 

@@ -2,16 +2,13 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
+import { useWallets } from '@algodex/algodex-hooks'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
-  const { connect } = useMyAlgoConnect()
-  const { connect: peraConnect } = useWalletConnect()
-  // const peraWallet = useWalletConnect()
+  const { peraConnect, myAlgoConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': connect,
+    'my-algo-wallet': myAlgoConnect,
     'wallet-connect': peraConnect
   }
   return (
