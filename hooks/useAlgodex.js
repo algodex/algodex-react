@@ -237,7 +237,6 @@ function aggregateOrders(orders, asaDecimals, type) {
     const price = new Big(convertFromAsaUnits(order.asaPrice, asaDecimals))
     const left = Math.floor(price)
     const right = price.sub(left)
-
     return right !== 0 && right.toString().length > 2 ? right.toString().length - 2 : 0
   })
 
@@ -285,6 +284,7 @@ function aggregateOrders(orders, asaDecimals, type) {
 
   return orders.sort(sortOrdersToAggregate).reduce(reduceAggregateData, []).sort(sortRowsByPrice)
 }
+
 /**
  * Use Asset Orders Query
  * @param {Object} props The props of the parent

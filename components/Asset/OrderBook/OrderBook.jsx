@@ -1,21 +1,25 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
 import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks/withAlgodex'
 
 import Big from 'big.js'
-import { Fragment } from 'react'
 import PriceInfo from './OrderBookPriceInfo'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
+import { floatToFixed } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
+import useUserState from 'store/use-user-state'
+
+// import { customAggregator } from './helpers'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0%;
@@ -63,6 +67,12 @@ const Arrow = styled.div`
 
 const PairSlash = styled.span`
   letter-spacing: 0.125rem;
+`
+
+const AggregatorSelector = styled.select`
+  background-color: ${({ theme }) => theme.palette.gray['700']};
+  border: solid 1px ${({ theme }) => theme.palette.gray['700']};
+  color: ${({ theme }) => theme.palette.gray['300']};
 `
 export function FirstOrderMsg(props) {
   const { asset, isSignedIn } = props
@@ -284,9 +294,66 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   const { t } = useTranslation('common')
   const { decimals } = asset
   const setOrder = useStore((state) => state.setOrder)
+  const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
+  const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
+  const DECIMALS_MAP = {
+    0.000001: 6,
+    0.00001: 5,
+    0.0001: 4,
+    0.001: 3,
+    0.01: 2,
+    0.1: 1
+  }
   const isSignedIn = useStore((state) => state.isSignedIn)
+  const [selectedPrecision, setSelectedPrecision] = useState(
+    DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
+  )
 
   const dispatcher = useEventDispatch()
+
+  const reduceOrders = (result, order) => {
+    const _price = floatToFixed(order.price, selectedPrecision, selectedPrecision)
+
+    const _amount = order.amount
+    const index = result.findIndex(
+      (obj) => floatToFixed(obj.price, selectedPrecision, selectedPrecision) === _price
+    )
+
+    if (index !== -1) {
+      result[index].amount += _amount
+      result[index].total += _amount * _price
+      return result
+    }
+
+    result.push({
+      price: _price,
+      amount: _amount,
+      total: _amount * _price
+    })
+    return result
+  }
+
+  const aggregatedBuyOrder = useMemo(() => {
+    if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
+    return orders.buy.reduce(reduceOrders, [])
+  }, [orders.buy, selectedPrecision])
+
+  const aggregatedSellOrder = useMemo(() => {
+    if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
+    return orders.sell.reduce(reduceOrders, [])
+  }, [orders.sell, selectedPrecision])
+
+  const onAggrSelectorChange = (e) => {
+    setCachedSelectedPrecision({
+      ...cachedSelectedPrecision,
+      [asset.id]: e.target.value
+    })
+    setSelectedPrecision(DECIMALS_MAP[e.target.value])
+  }
+
+  useEffect(() => {
+    setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
+  }, [asset])
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -352,9 +419,22 @@ export function OrderBook({ isMobile, asset, orders, components }) {
       <Container>
         <HeaderWrapper isMobile={isMobile}>
           {!isMobile && (
-            <HeaderCaps color="gray.500" mb={1}>
-              {t('order-book')}
-            </HeaderCaps>
+            <div className="flex justify-between item-center">
+              <HeaderCaps color="gray.500" mb={1}>
+                {t('order-book')}
+              </HeaderCaps>
+              <AggregatorSelector
+                onChange={onAggrSelectorChange}
+                value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
+              >
+                <option>0.000001</option>
+                <option>0.00001</option>
+                <option>0.0001</option>
+                <option>0.001</option>
+                <option>0.01</option>
+                <option>0.1</option>
+              </AggregatorSelector>
+            </div>
           )}
           <br></br>
           <Header>
@@ -369,7 +449,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
         </HeaderWrapper>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -377,7 +457,9 @@ export function OrderBook({ isMobile, asset, orders, components }) {
         </CurrentPrice>
 
         <BuyOrders>
-          <OrdersWrapper className="px-4 pt-4">{renderOrders(orders.buy, 'buy')}</OrdersWrapper>
+          <OrdersWrapper className="px-4 pt-4">
+            {renderOrders(aggregatedBuyOrder, 'buy')}
+          </OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>
