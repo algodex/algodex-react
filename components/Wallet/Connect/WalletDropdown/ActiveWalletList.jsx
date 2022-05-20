@@ -7,18 +7,15 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 import theme from 'theme'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
-
+import { useWallets } from '@algodex/algodex-hooks'
 const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  const { disconnect: disconnectMyAlgoWallet } = useMyAlgoConnect()
-  const { disconnect: peraDisconnect } = useWalletConnect()
+  const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
   const type = wallet?.type
   const WALLETS_DISCONNECT_MAP = {
-    'my-algo-wallet': disconnectMyAlgoWallet,
+    'my-algo-wallet': myAlgoDisconnect,
     'wallet-connect': peraDisconnect
   }
   return (
