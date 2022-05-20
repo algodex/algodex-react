@@ -155,7 +155,8 @@ export const AssetChangeCell = ({ value, row }) => {
   )
 }
 AssetChangeCell.propTypes = {
-  value: PropTypes.any
+  value: PropTypes.any,
+  row: PropTypes.object
 }
 
 export const NavSearchTable = ({

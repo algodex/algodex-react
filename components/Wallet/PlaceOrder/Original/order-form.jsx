@@ -1,5 +1,4 @@
 import { BodyCopy, BodyCopyTiny } from '@/components/Typography'
-import React, { useMemo } from 'react'
 
 import AmountRange from './amount-range'
 import Big from 'big.js'
@@ -7,6 +6,7 @@ import { LimitOrder } from './place-order.css'
 import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
+import React from 'react'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
