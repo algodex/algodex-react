@@ -34,8 +34,7 @@ export function middleware(request) {
     url.searchParams.get('cc') !== country
   ) {
     // Send the user to restricted
-    url.searchParams.set('cc', country)
-    url.pathname = `/restricted`
+    url.pathname = `/restricted/${country}`
     return NextResponse.redirect(url)
   }
 

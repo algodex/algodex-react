@@ -39,6 +39,10 @@ export async function getStaticProps({ params: { id } }) {
 
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
+    staticExplorerAsset.isAssetTradable =
+      staticExplorerAsset.circulating === 1 || UnrestrictedAssets[staticExplorerAsset?.id]
+        ? true
+        : false
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -86,7 +90,6 @@ function TradePage({ staticExplorerAsset }) {
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
-  const setIsAssetTradable = useUserStore((state) => state.setIsAssetTradable)
 
   const { isFallback, query } = useRouter()
 
@@ -120,10 +123,6 @@ function TradePage({ staticExplorerAsset }) {
       setAsset(staticExplorerAsset)
     }
   }, [asset, setAsset, staticExplorerAsset])
-
-  useEffect(() => {
-    setIsAssetTradable(asset.circulating === 1 || UnrestrictedAssets[asset?.id] ? true : false)
-  }, [asset, setIsAssetTradable])
 
   const isTraded = useMemo(() => {
     console.log(asset, data)

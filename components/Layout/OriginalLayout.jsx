@@ -14,7 +14,6 @@ import styled from '@emotion/styled'
 import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from '@/store/use-user-state'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -250,7 +249,6 @@ function MainLayout({ asset, children }) {
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const searchTableRef = useRef()
-  const isAssetTradable = useUserStore((state) => state.isAssetTradable)
   const isMobile = useMobileDetect()
   const TABS = {
     CHART: 'CHART',
@@ -285,7 +283,7 @@ function MainLayout({ asset, children }) {
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet />
         </WalletSection>
-        <PlaceOrderSection assetId={isAssetTradable} active={activeMobile === TABS.TRADE}>
+        <PlaceOrderSection assetId={asset.isAssetTradable} active={activeMobile === TABS.TRADE}>
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>

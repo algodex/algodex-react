@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from '@/store/use-user-state'
 
 /**
  *
@@ -49,7 +48,6 @@ export const OrderForm = ({
   microAlgo
 }) => {
   const { t } = useTranslation('place-order')
-  const isAssetTradable = useUserStore((state) => state.isAssetTradable)
 
   if (!enableOrder[order.type]) {
     // @todo: make this better, this is a placeholder
@@ -142,7 +140,7 @@ export const OrderForm = ({
           <OrderOptions
             asset={asset}
             order={order}
-            onChange={isAssetTradable ? handleOptionsChange : () => {}}
+            onChange={asset.isAssetTradable ? handleOptionsChange : () => {}}
             allowTaker={typeof asset !== 'undefined'}
             orderFilter={newOrderSizeFilter}
             setOrderFilter={setNewOrderSizeFilter}

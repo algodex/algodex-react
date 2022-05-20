@@ -49,6 +49,7 @@ export const mapToSearchResults = ({
   isTraded,
   verified,
   unitName,
+  isAssetTradable,
   formattedASALiquidity,
   formattedAlgoLiquidity
 }) => {
@@ -66,6 +67,7 @@ export const mapToSearchResults = ({
     fullName: assetName,
     verified: verified,
     hasBeenOrdered: isTraded || hasOrders,
+    isAssetTradable,
     liquidityAlgo: formattedAlgoLiquidity,
     liquidityAsa: formattedASALiquidity,
     price,
@@ -133,7 +135,7 @@ export const AssetChangeCell = ({ value, row }) => {
       return (
         <span
           style={{
-            opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
+            opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
           }}
         >
           value
@@ -143,7 +145,7 @@ export const AssetChangeCell = ({ value, row }) => {
     return (
       <span
         style={{
-          opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
+          opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
         }}
       >{`${value}%`}</span>
     )
@@ -243,7 +245,7 @@ export const NavSearchTable = ({
       return (
         <AssetPrice
           style={{
-            opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
+            opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
           }}
           className="cursor-pointer font-semibold"
         >
@@ -268,7 +270,7 @@ export const NavSearchTable = ({
         <div className="cursor-pointer flex flex-col">
           <div
             style={{
-              opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
+              opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
             }}
             className="flex flex-col"
           >
@@ -311,7 +313,7 @@ export const NavSearchTable = ({
               )}
             </div>
           </div>
-          {!UnrestrictedAssets[row.original?.id] && (
+          {!row.original.isAssetTradable && (
             <div className="flex items-center">
               <Tooltip
                 renderButton={(setTriggerRef) => (

@@ -12,6 +12,7 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import WalletService from '@/services/wallet'
 import dayjs from 'dayjs'
 import { floatToFixed } from '@/services/display'
@@ -59,7 +60,14 @@ export function useSearchResultsQuery({
     options
   )
   routeQueryError({ isError, error, router })
-
+  if (data) {
+    const { assets: _assets } = data
+    const mappedData = _assets.map((asset) => {
+      asset.isAssetTradable = UnrestrictedAssets[asset.assetId] ? true : false
+      return asset
+    })
+    data.assets = mappedData
+  }
   return { data, isError, error, ...rest }
 }
 

@@ -55,7 +55,6 @@ function PlaceOrderView(props) {
   const [buyOrders, setBuyOrders] = useState()
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
-  const isAssetTradable = useUserStore((state) => state.isAssetTradable)
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance || 0
@@ -319,7 +318,7 @@ function PlaceOrderView(props) {
       isInvalid() ||
       isBalanceExceeded() ||
       isLessThanMicroAlgo() ||
-      !isAssetTradable ||
+      !asset.isAssetTradable ||
       status.submitting
 
     return (
@@ -345,7 +344,7 @@ function PlaceOrderView(props) {
             id="type-buy"
             value="buy"
             checked={order.type === 'buy'}
-            onChange={(e) => isAssetTradable && handleChange(e, 'type')}
+            onChange={(e) => asset.isAssetTradable && handleChange(e, 'type')}
           />
           <BuyButton>
             <label htmlFor="type-buy">{t('buy')}</label>
@@ -355,7 +354,7 @@ function PlaceOrderView(props) {
             id="type-sell"
             value="sell"
             checked={order.type === 'sell'}
-            onChange={(e) => isAssetTradable && handleChange(e, 'type')}
+            onChange={(e) => asset.isAssetTradable && handleChange(e, 'type')}
           />
           <SellButton>
             <label htmlFor="type-sell">{t('sell')}</label>
@@ -444,8 +443,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === LIMIT_PANEL}
             onClick={() => {
-              isAssetTradable && setOrderView(LIMIT_PANEL)
-              isAssetTradable && handleOptionsChange({ target: { value: 'both' } })
+              asset.isAssetTradable && setOrderView(LIMIT_PANEL)
+              asset.isAssetTradable && handleOptionsChange({ target: { value: 'both' } })
             }}
           >
             {t('limit')}
@@ -454,8 +453,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === MARKET_PANEL}
             onClick={() => {
-              isAssetTradable && setOrderView(MARKET_PANEL)
-              isAssetTradable && handleOptionsChange({ target: { value: 'market' } })
+              asset.isAssetTradable && setOrderView(MARKET_PANEL)
+              asset.isAssetTradable && handleOptionsChange({ target: { value: 'market' } })
             }}
           >
             {t('market')}
@@ -464,13 +463,13 @@ function PlaceOrderView(props) {
         {orderView === LIMIT_PANEL ? (
           <LimitOrder
             order={order}
-            handleChange={isAssetTradable ? handleChange : () => {}}
+            handleChange={asset.isAssetTradable ? handleChange : () => {}}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={isAssetTradable && handleRangeChange}
+            handleRangeChange={asset.isAssetTradable && handleRangeChange}
             enableOrder={enableOrder}
-            handleOptionsChange={isAssetTradable && handleOptionsChange}
+            handleOptionsChange={asset.isAssetTradable && handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
             microAlgo={MICROALGO}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
@@ -478,11 +477,11 @@ function PlaceOrderView(props) {
         ) : (
           <MarketOrder
             order={order}
-            handleChange={isAssetTradable ? handleChange : () => {}}
+            handleChange={asset.isAssetTradable ? handleChange : () => {}}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={isAssetTradable && handleRangeChange}
+            handleRangeChange={asset.isAssetTradable && handleRangeChange}
             enableOrder={enableOrder}
           />
         )}

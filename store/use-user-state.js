@@ -3,14 +3,6 @@ import { createStore } from './use-store'
 import { getActiveNetwork } from '../services/environment'
 
 const userState = (set, get) => ({
-  /**
-   * Tradability of asset
-   *
-   * Holds a Boolean value for tradabililty of currently selected asset
-   */
-  isAssetTradable: false,
-  setIsAssetTradable: (bool) => set({ isAssetTradable: bool }),
-
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
   setShowAssetInfo: (bool) => set({ showAssetInfo: bool }),

@@ -20,12 +20,10 @@ import OrderSizeFilter from '../order-size-filter'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from '@/store/use-user-state'
 
 function OrderOptions(props) {
   const { order, onChange, allowTaker, orderFilter, setOrderFilter, asset } = props
   const { t } = useTranslation('place-order')
-  const isAssetTradable = useUserStore((state) => state.isAssetTradable)
   const router = useRouter()
   const showMakerOnly = router && router.query.showMakerOnly === 'true'
 
@@ -60,8 +58,8 @@ function OrderOptions(props) {
   return (
     <Container isExpanded={isExpanded} type={order.type}>
       <ExpandToggle
-        onClick={() => isAssetTradable ? setIsExpanded(!isExpanded) : () => {}}
-        onKeyDown={() => isAssetTradable ? handleKeyDown : () => {}}
+        onClick={() => asset.isAssetTradable ? setIsExpanded(!isExpanded) : () => {}}
+        onKeyDown={() => asset.isAssetTradable ? handleKeyDown : () => {}}
         tabIndex="0"
       >
         <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>

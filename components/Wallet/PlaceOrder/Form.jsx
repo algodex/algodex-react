@@ -62,7 +62,7 @@ const _Tabs = styled.div`
     justify-content: flex-start;
     & > * {
       margin-left: 0;
-      margin-right: 6rem;
+      // margin-right: 6rem;
     }
   }
 `
