@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
+import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
@@ -299,11 +300,12 @@ function MainLayout({ asset, children }) {
         </SearchAndChartSection>
 
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          {isMobile && activeMobile === TABS.BOOK && <OrderBook asset={asset} />}
+          {isMobile && activeMobile === TABS.BOOK && (
+            <HistoryAndOrderBook isMobile={isMobile} asset={asset} />
+          )}
           {!isMobile && <OrderBook asset={asset} />}
         </AssetOrderBookSection>
         <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-          {isMobile && activeMobile === TABS.HISTORY && <TradeHistory asset={asset} />}
           {!isMobile && <TradeHistory asset={asset} />}
         </AssetTradeHistorySection>
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>

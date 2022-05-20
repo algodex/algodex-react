@@ -3,6 +3,11 @@ import { calculateAsaBuyAmount } from 'services/convert'
 import { convertFromAsaUnits } from 'services/convert'
 import { floatToFixed } from 'services/display'
 
+export const customAggregator = (order, decimals) => {
+  console.log(order, decimals, 'both hhere')
+  return []
+}
+
 export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'
   let total = 0
