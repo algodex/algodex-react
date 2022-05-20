@@ -123,7 +123,7 @@ function TradePage({ staticExplorerAsset }) {
 
   useEffect(() => {
     setIsAssetTradable(asset.circulating === 1 || UnrestrictedAssets[asset?.id] ? true : false)
-  }, [asset])
+  }, [asset, setIsAssetTradable])
 
   const isTraded = useMemo(() => {
     console.log(asset, data)

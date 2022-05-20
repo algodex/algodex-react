@@ -337,7 +337,7 @@ export const NavSearchTable = ({
                   </p>
                   <p className="text-green-500 font-semibold text-xs">Learn more here</p>
                 </div>
-              </Tooltip>{' '}
+              </Tooltip>
             </div>
           )}
         </div>

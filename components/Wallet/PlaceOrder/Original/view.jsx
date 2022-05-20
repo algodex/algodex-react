@@ -319,7 +319,7 @@ function PlaceOrderView(props) {
       isInvalid() ||
       isBalanceExceeded() ||
       isLessThanMicroAlgo() ||
-      isAssetTradable ||
+      !isAssetTradable ||
       status.submitting
 
     return (
