@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { APPROVED_SECURITIES_LIST } from '../../APPROVED_ASSETS'
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
 import OrderBook from '@/components/Asset/OrderBook'
@@ -9,6 +8,7 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
@@ -285,7 +285,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection
-          assetId={`${APPROVED_SECURITIES_LIST[asset?.id]}`}
+          assetId={!UnrestrictedAssets[asset?.id] ? true : false}
           active={activeMobile === TABS.TRADE}
         >
           <PlaceOrder asset={asset} />

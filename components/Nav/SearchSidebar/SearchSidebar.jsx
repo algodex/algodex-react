@@ -115,27 +115,14 @@ export function NavSearchSidebar({
     !isFixed && setIsActive(false)
   }, [setIsActive])
 
-  const APPROVED_SECURITIES_LIST = {
-    15322902: 'LAMP',
-    48806985: 'Vote',
-    44526812: 'Garage',
-    33698417: 'L',
-    21547225: 'BTC',
-    37074699: 'USDC'
-  }
-
   /**
    *
    * @type {(function(*): Promise<void>)|*}
    */
   const handleAssetClick = useCallback(
     (row) => {
-      if (!APPROVED_SECURITIES_LIST[row.original?.id]) {
-        handleExternalClick()
-        push(`/trade/${row.original.id}`)
-      } else {
-        console.log('Show notification')
-      }
+      handleExternalClick()
+      push(`/trade/${row.original.id}`)
     },
     [push, handleExternalClick]
   )

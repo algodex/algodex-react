@@ -14,6 +14,8 @@ import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
+import Tooltip from 'components/Tooltip'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import { flatten } from 'lodash'
 import { floatToFixed } from '@/services/display'
 import { formatUSDPrice } from '@/components/helpers'
@@ -131,7 +133,7 @@ export const AssetChangeCell = ({ value, row }) => {
       return (
         <span
           style={{
-            opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+            opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
           }}
         >
           value
@@ -141,7 +143,7 @@ export const AssetChangeCell = ({ value, row }) => {
     return (
       <span
         style={{
-          opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+          opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
         }}
       >{`${value}%`}</span>
     )
@@ -154,15 +156,6 @@ export const AssetChangeCell = ({ value, row }) => {
 }
 AssetChangeCell.propTypes = {
   value: PropTypes.any
-}
-
-const APPROVED_SECURITIES_LIST = {
-  15322902: 'LAMP',
-  48806985: 'Vote',
-  44526812: 'Garage',
-  33698417: 'L',
-  21547225: 'BTC',
-  37074699: 'USDC'
 }
 
 export const NavSearchTable = ({
@@ -249,7 +242,7 @@ export const NavSearchTable = ({
       return (
         <AssetPrice
           style={{
-            opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
+            opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
           }}
           className="cursor-pointer font-semibold"
         >
@@ -271,13 +264,13 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div
-          style={{
-            opacity: `${!APPROVED_SECURITIES_LIST[row.original?.id] ? '1' : '0.4'}`
-          }}
-          className="cursor-pointer flex items-center"
-        >
-          <div className="flex flex-col">
+        <div className="cursor-pointer flex flex-col">
+          <div
+            style={{
+              opacity: `${UnrestrictedAssets[row.original?.id] ? '1' : '0.4'}`
+            }}
+            className="flex flex-col"
+          >
             <div className="flex items-center">
               <Icon
                 role="button"
@@ -316,22 +309,37 @@ export const NavSearchTable = ({
                 />
               )}
             </div>
-            {APPROVED_SECURITIES_LIST[row.original?.id] && (
-              <div className="flex items-center">
-                <Icon
-                  path={mdiAlertCircleOutline}
-                  title="Verified asset"
-                  className="mt-0.5"
-                  size={0.4}
-                  color={theme.palette.gray['500']}
-                />
-                &nbsp;
-                <p style={{ fontSize: '8px', color: '#718096', fontWeight: 600 }}>
-                  Restricted Trading (USA)
-                </p>
-              </div>
-            )}
           </div>
+          {!UnrestrictedAssets[row.original?.id] && (
+            <div className="flex items-center">
+              <Tooltip
+                renderButton={(setTriggerRef) => (
+                  <div className="flex items-center" ref={setTriggerRef}>
+                    <Icon
+                      path={mdiAlertCircleOutline}
+                      title="Verified asset"
+                      className="mt-0.5"
+                      size={0.4}
+                      color={theme.palette.gray['500']}
+                    />
+                    &nbsp;
+                    <p style={{ fontSize: '8px', color: '#718096', fontWeight: 600 }}>
+                      Restricted Trading (USA)
+                    </p>
+                  </div>
+                )}
+              >
+                <div>
+                  <p className="whitespace-normal text-white">
+                    Some ASAs have restricted trading in your country for legal reasons. You can
+                    view the chart and book but you will not be able to place any trades for this
+                    asset.
+                  </p>
+                  <p className="text-green-500 font-semibold text-xs">Learn more here</p>
+                </div>
+              </Tooltip>{' '}
+            </div>
+          )}
         </div>
       )
     },

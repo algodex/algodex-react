@@ -13,12 +13,12 @@ import { BodyCopyTiny, LabelSm } from '@/components/Typography'
 /* eslint-disable */
 import { useMemo, useState } from 'react'
 
-import { APPROVED_SECURITIES_LIST } from '../../../../../APPROVED_ASSETS'
 import { ChevronDown } from 'react-feather'
 import Icon from 'components/Icon'
 // import InfoButton from 'components/info-button'
 import OrderSizeFilter from '../order-size-filter'
 import PropTypes from 'prop-types'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -42,7 +42,7 @@ function OrderOptions(props) {
   }
 
   const isNotTradable = useMemo(() => {
-    return !APPROVED_SECURITIES_LIST[asset?.id]
+    return !UnrestrictedAssets[asset?.id]
   }, [asset])
 
   const renderMessage = () => {

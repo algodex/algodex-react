@@ -19,7 +19,6 @@ import {
 import { BodyCopyTiny, HeaderCaps, LabelMd, LabelSm } from '@/components/Typography'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { APPROVED_SECURITIES_LIST } from '../../../../APPROVED_ASSETS'
 import Big from 'big.js'
 import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
@@ -29,6 +28,7 @@ import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
 import { Tooltip } from '@/components/Tooltip'
 import USDPrice from '../../PriceConversion/USDPrice'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import WalletService from '@/services/wallet'
 import { aggregateOrders } from './helpers'
 import { convertFromAsaUnits } from '@/services/convert'
@@ -287,7 +287,7 @@ function PlaceOrderView(props) {
   )
 
   const isNotTradable = useMemo(() => {
-    return !APPROVED_SECURITIES_LIST[asset.id]
+    return !UnrestrictedAssets[asset.id]
   }, [asset])
 
   const renderSubmit = () => {

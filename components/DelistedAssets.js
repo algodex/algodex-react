@@ -3,6 +3,7 @@ export const DelistedAssets = [
   352620637, // ALGX
   553727907, // 11mike10
   553612041, // 11mike10
+  433100599, // 11mike10
 
   57867695, //ALGX Testnet
   52773530, //Mike Testnet

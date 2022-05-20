@@ -1,7 +1,6 @@
 import { BodyCopy, BodyCopyTiny } from '@/components/Typography'
 import React, { useMemo } from 'react'
 
-import { APPROVED_SECURITIES_LIST } from '../../../../APPROVED_ASSETS'
 import AmountRange from './amount-range'
 import Big from 'big.js'
 import { LimitOrder } from './place-order.css'
@@ -9,6 +8,7 @@ import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
+import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import useTranslation from 'next-translate/useTranslation'
 
 /**
@@ -68,7 +68,7 @@ export const OrderForm = ({
   }
 
   const isNotTradable = useMemo(() => {
-    return !APPROVED_SECURITIES_LIST[asset.id]
+    return !UnrestrictedAssets[asset.id]
   }, [asset])
 
   return (
