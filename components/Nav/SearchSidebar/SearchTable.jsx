@@ -18,6 +18,7 @@ import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 import { floatToFixed } from '@/services/display'
 import { formatUSDPrice } from '@/components/helpers'
+import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
@@ -213,9 +214,9 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    const filteredList = assets
-      .filter((asset) => !(asset.assetId in bannedAssets))
-      .sort((asset) => asset.isAssetTradable === true)
+    const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
+    const filteredList = sortBy(_acceptedAssets, (asset) => asset.isAssetTradable)
+
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
