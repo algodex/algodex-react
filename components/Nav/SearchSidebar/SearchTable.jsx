@@ -132,20 +132,12 @@ export const AssetChangeCell = ({ value, row }) => {
     }
     if (value === '--') {
       return (
-        <span
-          style={{
-            opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
-          }}
-        >
-          value
-        </span>
+        <span className={row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'}>value</span>
       )
     }
     return (
       <span
-        style={{
-          opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
-        }}
+        className={row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'}
       >{`${value}%`}</span>
     )
   }
@@ -243,10 +235,9 @@ export const NavSearchTable = ({
     ({ value, row }) => {
       return (
         <AssetPrice
-          style={{
-            opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
-          }}
-          className="cursor-pointer font-semibold"
+          className={`${
+            row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'
+          } cursor-pointer font-semibold`}
         >
           {value}
           <br />
@@ -268,10 +259,9 @@ export const NavSearchTable = ({
       return (
         <div className="cursor-pointer flex flex-col">
           <div
-            style={{
-              opacity: `${row.original.isAssetTradable ? '1' : '0.4'}`
-            }}
-            className="flex flex-col"
+            className={`${
+              row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'
+            } flex flex-col`}
           >
             <div className="flex items-center">
               <Icon
@@ -325,9 +315,7 @@ export const NavSearchTable = ({
                       color={theme.palette.gray['500']}
                     />
                     &nbsp;
-                    <p style={{ fontSize: '8px', color: '#718096', fontWeight: 600 }}>
-                      Restricted Trading (USA)
-                    </p>
+                    <p className="text-xs text-gray-600 font-medium">Restricted Trading (USA)</p>
                   </div>
                 )}
               >

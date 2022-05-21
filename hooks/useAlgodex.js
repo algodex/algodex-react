@@ -62,11 +62,14 @@ export function useSearchResultsQuery({
   routeQueryError({ isError, error, router })
   if (data) {
     const { assets: _assets } = data
-    const mappedData = _assets.map((asset) => {
-      asset.isAssetTradable = UnrestrictedAssets[asset.assetId] ? true : false
+    data.assets = _assets.map((asset) => {
+      if (router?.query?.cc === 'US' || router?.query?.cc === 'CA') {
+        asset.isAssetTradable = UnrestrictedAssets[asset.assetId] ? true : false
+      } else {
+        asset.isAssetTradable = true
+      }
       return asset
     })
-    data.assets = mappedData
   }
   return { data, isError, error, ...rest }
 }

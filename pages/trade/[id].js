@@ -33,10 +33,13 @@ export async function getStaticPaths() {
  * @param id
  * @returns {object} Response Object or Redirect Object
  */
-export async function getStaticProps({ params: { id } }) {
+export async function getStaticProps(context) {
+  const {
+    params: { id }
+  } = context
+  console.log(context, 'context')
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
-
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
     staticExplorerAsset.isAssetTradable =
@@ -92,12 +95,14 @@ function TradePage({ staticExplorerAsset }) {
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
   const { isFallback, query } = useRouter()
-
   // Use the static asset or fallback to the route id
   const [asset, setAsset] = useState(staticExplorerAsset)
 
   const [interval, setInterval] = useState('1h')
-  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const _asset =
+    typeof staticExplorerAsset !== 'undefined'
+      ? staticExplorerAsset
+      : { id: query.id, cc: query.cc }
   const { data } = useAssetPriceQuery({ asset: _asset })
 
   const onChange = useCallback(
