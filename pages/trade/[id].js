@@ -38,10 +38,7 @@ export async function getStaticProps({ params: { id } }) {
   let staticAssetPrice = {}
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
-    staticExplorerAsset.isAssetTradable =
-      staticExplorerAsset.circulating === 1 || UnrestrictedAssets[staticExplorerAsset?.id]
-        ? true
-        : false
+    staticExplorerAsset.isAssetTradable = true
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -92,15 +89,18 @@ function TradePage({ staticExplorerAsset }) {
 
   const { isFallback, query } = useRouter()
   // Use the static asset or fallback to the route id
+  if (query?.cc === 'US' || query?.cc === 'CA') {
+    staticExplorerAsset.isAssetTradable =
+      staticExplorerAsset.circulating === 1 || UnrestrictedAssets[staticExplorerAsset?.id]
+        ? true
+        : false
+  }
   const [asset, setAsset] = useState(staticExplorerAsset)
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
-  if (query?.cc !== 'US' || query?.cc !== 'CA') {
-    _asset.isAssetTradable = true
-  }
-  const { data } = useAssetPriceQuery({ asset: _asset })
 
+  const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
     (e) => {
       if (e.target.name === 'interval' && e.target.value !== interval) {
