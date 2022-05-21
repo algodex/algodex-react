@@ -132,13 +132,11 @@ export const AssetChangeCell = ({ value, row }) => {
       return ''
     }
     if (value === '--') {
-      return (
-        <span className={row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'}>value</span>
-      )
+      return value
     }
     return (
       <span
-        className={row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'}
+        className={row?.original?.isAssetTradable ? 'opacity-100' : 'opacity-40'}
       >{`${value}%`}</span>
     )
   }
