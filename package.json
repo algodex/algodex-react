@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@algodex/algodex-sdk": "^1.1.17",
+    "@algonameservice/sdk": "0.2.1",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
