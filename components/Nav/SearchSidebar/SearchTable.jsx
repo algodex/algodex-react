@@ -213,7 +213,9 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
+    const filteredList = assets
+      .filter((asset) => !(asset.assetId in bannedAssets))
+      .sort((asset) => asset.isAssetTradable === true)
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
