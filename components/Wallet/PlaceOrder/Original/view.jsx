@@ -24,6 +24,7 @@ import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
 import { LimitOrder } from './limit-order'
 import { MarketOrder } from './market-order'
+import MaterialIcon from '@mdi/react'
 import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
 import { Tooltip } from '@/components/Tooltip'
@@ -34,6 +35,8 @@ import { convertFromAsaUnits } from '@/services/convert'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import { floatToFixed } from '@/services/display'
+import { mdiAlertCircleOutline } from '@mdi/js'
+import theme from 'theme'
 import toast from 'react-hot-toast'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
@@ -492,12 +495,33 @@ function PlaceOrderView(props) {
 
   return (
     <Container data-testid="place-order">
-      <Header>
-        <HeaderCaps color="gray.500" mb={1}>
-          {t('place-order')}
-        </HeaderCaps>
-      </Header>
-      {renderForm()}
+      <div className={`${asset.isAssetTradable ? 'opacity-100' : 'opacity-40'}`}>
+        <Header>
+          <HeaderCaps color="gray.500" mb={1}>
+            {t('place-order')}
+          </HeaderCaps>
+        </Header>
+        {renderForm()}
+      </div>
+      {!asset.isAssetTradable && (
+        <div className="px-4 flex">
+          <MaterialIcon
+            path={mdiAlertCircleOutline}
+            title="Verified asset"
+            height="1.5rem"
+            width="4rem"
+            color={theme.palette.gray['500']}
+          />{' '}
+          &nbsp;
+          <div className="flex flex-col">
+            <p className="text-white text-xs font-medium">
+              This asset is not able to be traded in your country (USA) for legal reasons. You can
+              view the chart and book but will not be able to place trades for this asset.
+            </p>
+            <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p>
+          </div>
+        </div>
+      )}
     </Container>
   )
 }

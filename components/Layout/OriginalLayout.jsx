@@ -35,7 +35,6 @@ const PlaceOrderSection = styled.section`
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   display: ${({ active }) => (active ? 'flex' : 'none')};
   // overflow: hidden scroll;
-  opacity: ${({ assetId }) => (assetId ? '1' : '0.4')};
   @media (min-width: 996px) {
     grid-area: trade;
     display: flex;
@@ -284,7 +283,7 @@ function MainLayout({ asset, children }) {
         <WalletSection active={activeMobile === TABS.WALLET}>
           <Wallet />
         </WalletSection>
-        <PlaceOrderSection assetId={asset.isAssetTradable} active={activeMobile === TABS.TRADE}>
+        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
