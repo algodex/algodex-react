@@ -132,6 +132,9 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
+const HeaderWrapper = styled.div`
+  padding: ${({ isMobile }) => (isMobile ? `0 1rem` : '1rem')};
+`
 const Header = styled.header`
   flex-shrink: 0%;
   display: grid;
@@ -286,7 +289,7 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBook({ asset, orders, components }) {
+export function OrderBook({ isMobile, asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
@@ -414,24 +417,25 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <div className="p-4">
-          <div className="flex justify-between item-center">
-            <HeaderCaps color="gray.500" mb={1}>
-              {t('order-book')}
-            </HeaderCaps>
-            <AggregatorSelector
-              onChange={onAggrSelectorChange}
-              value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
-            >
-              <option>0.000001</option>
-              <option>0.00001</option>
-              <option>0.0001</option>
-              <option>0.001</option>
-              <option>0.01</option>
-              <option>0.1</option>
-            </AggregatorSelector>
-          </div>
-
+        <HeaderWrapper isMobile={isMobile}>
+          {!isMobile && (
+            <div className="flex justify-between item-center">
+              <HeaderCaps color="gray.500" mb={1}>
+                {t('order-book')}
+              </HeaderCaps>
+              <AggregatorSelector
+                onChange={onAggrSelectorChange}
+                value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
+              >
+                <option>0.000001</option>
+                <option>0.00001</option>
+                <option>0.0001</option>
+                <option>0.001</option>
+                <option>0.01</option>
+                <option>0.1</option>
+              </AggregatorSelector>
+            </div>
+          )}
           <br></br>
           <Header>
             <TablePriceHeader />
@@ -442,7 +446,7 @@ export function OrderBook({ asset, orders, components }) {
               {t('total')}
             </BodyCopyTiny>
           </Header>
-        </div>
+        </HeaderWrapper>
 
         <SellOrders>
           <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
@@ -463,6 +467,10 @@ export function OrderBook({ asset, orders, components }) {
 }
 
 OrderBook.propTypes = {
+  /**
+   * Manages mobile render
+   */
+  isMobile: PropTypes.bool,
   /**
    * Algorand Asset Information
    */
@@ -499,6 +507,7 @@ OrderBook.propTypes = {
 
 OrderBook.defaultProps = {
   orders: { sell: [], buy: [] },
+  isMobile: false,
   components: {
     PriceDisplay: DefaultOrderBookPrice
   }
