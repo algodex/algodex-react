@@ -33,11 +33,7 @@ export async function getStaticPaths() {
  * @param id
  * @returns {object} Response Object or Redirect Object
  */
-export async function getStaticProps(context) {
-  const {
-    params: { id }
-  } = context
-  console.log(context, 'context')
+export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
   try {
