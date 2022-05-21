@@ -99,10 +99,10 @@ function TradePage({ staticExplorerAsset }) {
   const [asset, setAsset] = useState(staticExplorerAsset)
 
   const [interval, setInterval] = useState('1h')
-  const _asset =
-    typeof staticExplorerAsset !== 'undefined'
-      ? staticExplorerAsset
-      : { id: query.id, cc: query.cc }
+  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  if (query?.cc !== 'US' || query?.cc !== 'CA') {
+    _asset.isAssetTradable = true
+  }
   const { data } = useAssetPriceQuery({ asset: _asset })
 
   const onChange = useCallback(
