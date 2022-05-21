@@ -215,7 +215,7 @@ export const NavSearchTable = ({
       bannedAssets[element] = element
     })
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    const filteredList = sortBy(_acceptedAssets, { isAssetTradable: true })
+    const filteredList = sortBy(_acceptedAssets, { isAssetTradable: false })
 
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
