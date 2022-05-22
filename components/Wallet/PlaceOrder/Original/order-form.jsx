@@ -139,7 +139,7 @@ export const OrderForm = ({
           <OrderOptions
             asset={asset}
             order={order}
-            onChange={asset.isGeoBlocked ? handleOptionsChange : () => {}}
+            onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
             allowTaker={typeof asset !== 'undefined'}
             orderFilter={newOrderSizeFilter}
             setOrderFilter={setNewOrderSizeFilter}
