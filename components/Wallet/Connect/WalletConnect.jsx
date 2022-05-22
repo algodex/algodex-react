@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 import useMyAlgo from 'hooks/useMyAlgo'
 import useTranslation from 'next-translate/useTranslation'
 import { useWalletsQuery } from 'hooks/useAlgodex'
+import { useAlgoNameService } from 'hooks/use-algo-name-service'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -318,9 +319,12 @@ function WalletConnect(props) {
 
   // fetch wallet balances from blockchain
   const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
+  const namedWallets = useAlgoNameService(walletsQuery?.data?.wallets)
+
+  // setWallet();
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
-      setWallets(walletsQuery.data.wallets)
+      console.log('Wallets: ', walletsQuery.data.wallets)
 
       if (!isSignedIn) {
         setIsSignedIn(true)
@@ -341,7 +345,7 @@ function WalletConnect(props) {
   ])
   return (
     <WalletView
-      wallets={wallets}
+      wallets={namedWallets}
       activeWalletAddress={activeWalletAddress}
       isSignedIn={isSignedIn}
       onConnectClick={onWalletConnect}

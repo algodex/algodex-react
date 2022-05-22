@@ -1,5 +1,6 @@
 import { ANS } from '@algonameservice/sdk'
 import algosdk from 'algosdk'
+import { useState, useEffect } from 'react'
 
 const Helper = {
   envObjs: null,
@@ -49,7 +50,7 @@ const Helper = {
     return this.envObjs
   },
   getAlgodexEnvironment: function () {
-    return process.env.NEXT_PUBLIC_ALGODEX_ENVIRONMENT || 'public_test'
+    return process.env.NEXT_PUBLIC_ALGODEX_ENVIRONMENT || 'production'
   },
 
   getEnvironment: function () {
@@ -61,44 +62,60 @@ const Helper = {
   }
 }
 
-function useAlgoNameService() {
-  const { purestakeIndexerServer, purestakeIndexerToken, purestakeClientServer } =
-    Helper.getAlgodex()
+const { purestakeIndexerServer, purestakeIndexerToken, purestakeClientServer } = Helper.getAlgodex()
 
-  const client = new algosdk.Algodv2(
-    {
-      'X-API-KEY': purestakeIndexerToken
-    },
-    purestakeClientServer,
-    ''
-  )
+const client = new algosdk.Algodv2(
+  {
+    'X-API-KEY': purestakeIndexerToken
+  },
+  purestakeClientServer,
+  ''
+)
 
-  const indexer = new algosdk.Indexer(
-    {
-      'X-API-KEY': purestakeIndexerToken
-    },
-    purestakeIndexerServer,
-    ''
-  )
+const indexer = new algosdk.Indexer(
+  {
+    'X-API-KEY': purestakeIndexerToken
+  },
+  purestakeIndexerServer,
+  ''
+)
 
-  //indexer and client must point to mainnet
-  const sdk = new ANS(client, indexer)
+console.log('Env: ', Helper.getAlgodexEnvironment())
 
-  const options = {
-    socials: false,
-    metadata: false,
-    limit: 1
-  }
-
-  sdk
-    .address('RANDGVRRYGVKI3WSDG6OGTZQ7MHDLIN5RYKJBABL46K5RQVHUFV3NY5DUE')
-    .getNames(options)
-    .then((result) => {
-      console.log('Wallet Naming: ', result)
-    })
-    .catch((err) => {
-      console.log('Wallet Naming Error: ', err)
-    })
+const options = {
+  socials: false,
+  metadata: false,
+  limit: 1
 }
 
-export default useAlgoNameService
+const sdk = new ANS(client, indexer)
+
+export const useAlgoNameService = (wallets) => {
+  const [algoWallets, setAlgoWallets] = useState([])
+
+  //indexer and client must point to mainnet
+
+  useEffect(() => {
+    if (wallets) {
+      const promises = wallets.map(() => {
+        return sdk
+          .address('RANDGVRRYGVKI3WSDG6OGTZQ7MHDLIN5RYKJBABL46K5RQVHUFV3NY5DUE')
+          .getNames(options)
+      })
+      Promise.allSettled(promises).then((values) => {
+        const dump = [...wallets]
+        values.forEach(({ status, value }, index) => {
+          if (status === 'fulfilled') {
+            dump[index] = {
+              ...dump[index],
+              name: value[0]?.name || dump[index].name
+            }
+          }
+        })
+        setAlgoWallets(dump)
+      })
+    }
+  }, [wallets])
+
+  return algoWallets
+}
