@@ -48,7 +48,6 @@ export const OrderForm = ({
   microAlgo
 }) => {
   const { t } = useTranslation('place-order')
-
   if (!enableOrder[order.type]) {
     // @todo: make this better, this is a placeholder
     return (
@@ -140,7 +139,7 @@ export const OrderForm = ({
           <OrderOptions
             asset={asset}
             order={order}
-            onChange={asset.isAssetTradable ? handleOptionsChange : () => {}}
+            onChange={asset.isGeoBlocked ? handleOptionsChange : () => {}}
             allowTaker={typeof asset !== 'undefined'}
             orderFilter={newOrderSizeFilter}
             setOrderFilter={setNewOrderSizeFilter}

@@ -49,7 +49,7 @@ export const mapToSearchResults = ({
   isTraded,
   verified,
   unitName,
-  isAssetTradable,
+  isGeoBlocked,
   formattedASALiquidity,
   formattedAlgoLiquidity
 }) => {
@@ -67,7 +67,7 @@ export const mapToSearchResults = ({
     fullName: assetName,
     verified: verified,
     hasBeenOrdered: isTraded || hasOrders,
-    isAssetTradable,
+    isGeoBlocked,
     liquidityAlgo: formattedAlgoLiquidity,
     liquidityAsa: formattedASALiquidity,
     price,
@@ -136,7 +136,7 @@ export const AssetChangeCell = ({ value, row }) => {
     }
     return (
       <span
-        className={row?.original?.isAssetTradable ? 'opacity-100' : 'opacity-40'}
+        className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-40'}
       >{`${value}%`}</span>
     )
   }
@@ -213,7 +213,7 @@ export const NavSearchTable = ({
       bannedAssets[element] = element
     })
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    const filteredList = sortBy(_acceptedAssets, { isAssetTradable: false })
+    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: false })
 
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
@@ -237,7 +237,7 @@ export const NavSearchTable = ({
       return (
         <AssetPrice
           className={`${
-            row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'
+            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-40'
           } cursor-pointer font-semibold`}
         >
           {value}
@@ -260,9 +260,7 @@ export const NavSearchTable = ({
       return (
         <div className="cursor-pointer flex flex-col">
           <div
-            className={`${
-              row.original.isAssetTradable ? 'opacity-100' : 'opacity-40'
-            } flex flex-col`}
+            className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-40'} flex flex-col`}
           >
             <div className="flex items-center">
               <Icon
@@ -302,7 +300,7 @@ export const NavSearchTable = ({
               )}
             </div>
           </div>
-          {!row.original.isAssetTradable && (
+          {!row.original.isGeoBlocked && (
             <div className="flex items-center">
               <Tooltip
                 renderButton={(setTriggerRef) => (
