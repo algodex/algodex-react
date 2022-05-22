@@ -38,7 +38,7 @@ export async function getStaticProps({ params: { id } }) {
   let staticAssetPrice = {}
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
-    staticExplorerAsset.isAssetTradable = true
+    staticExplorerAsset.isGeoBlocked = true
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -90,7 +90,7 @@ function TradePage({ staticExplorerAsset }) {
   const { isFallback, query } = useRouter()
   // Use the static asset or fallback to the route id
   if (query?.cc === 'US' || query?.cc === 'CA') {
-    staticExplorerAsset.isAssetTradable =
+    staticExplorerAsset.isGeoBlocked =
       staticExplorerAsset.circulating === 1 || UnrestrictedAssets[staticExplorerAsset?.id]
         ? true
         : false

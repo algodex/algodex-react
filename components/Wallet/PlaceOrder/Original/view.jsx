@@ -321,7 +321,7 @@ function PlaceOrderView(props) {
       isInvalid() ||
       isBalanceExceeded() ||
       isLessThanMicroAlgo() ||
-      !asset.isAssetTradable ||
+      !asset.isGeoBlocked ||
       status.submitting
 
     return (
@@ -347,7 +347,7 @@ function PlaceOrderView(props) {
             id="type-buy"
             value="buy"
             checked={order.type === 'buy'}
-            onChange={(e) => asset.isAssetTradable && handleChange(e, 'type')}
+            onChange={(e) => asset.isGeoBlocked && handleChange(e, 'type')}
           />
           <BuyButton>
             <label htmlFor="type-buy">{t('buy')}</label>
@@ -357,7 +357,7 @@ function PlaceOrderView(props) {
             id="type-sell"
             value="sell"
             checked={order.type === 'sell'}
-            onChange={(e) => asset.isAssetTradable && handleChange(e, 'type')}
+            onChange={(e) => asset.isGeoBlocked && handleChange(e, 'type')}
           />
           <SellButton>
             <label htmlFor="type-sell">{t('sell')}</label>
@@ -446,8 +446,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === LIMIT_PANEL}
             onClick={() => {
-              asset.isAssetTradable && setOrderView(LIMIT_PANEL)
-              asset.isAssetTradable && handleOptionsChange({ target: { value: 'both' } })
+              asset.isGeoBlocked && setOrderView(LIMIT_PANEL)
+              asset.isGeoBlocked && handleOptionsChange({ target: { value: 'both' } })
             }}
           >
             {t('limit')}
@@ -456,8 +456,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === MARKET_PANEL}
             onClick={() => {
-              asset.isAssetTradable && setOrderView(MARKET_PANEL)
-              asset.isAssetTradable && handleOptionsChange({ target: { value: 'market' } })
+              asset.isGeoBlocked && setOrderView(MARKET_PANEL)
+              asset.isGeoBlocked && handleOptionsChange({ target: { value: 'market' } })
             }}
           >
             {t('market')}
@@ -466,13 +466,13 @@ function PlaceOrderView(props) {
         {orderView === LIMIT_PANEL ? (
           <LimitOrder
             order={order}
-            handleChange={asset.isAssetTradable ? handleChange : () => {}}
+            handleChange={asset.isGeoBlocked ? handleChange : () => {}}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={asset.isAssetTradable && handleRangeChange}
+            handleRangeChange={asset.isGeoBlocked && handleRangeChange}
             enableOrder={enableOrder}
-            handleOptionsChange={asset.isAssetTradable && handleOptionsChange}
+            handleOptionsChange={asset.isGeoBlocked && handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
             microAlgo={MICROALGO}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
@@ -480,11 +480,11 @@ function PlaceOrderView(props) {
         ) : (
           <MarketOrder
             order={order}
-            handleChange={asset.isAssetTradable ? handleChange : () => {}}
+            handleChange={asset.isGeoBlocked ? handleChange : () => {}}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={asset.isAssetTradable && handleRangeChange}
+            handleRangeChange={asset.isGeoBlocked && handleRangeChange}
             enableOrder={enableOrder}
           />
         )}
@@ -495,7 +495,7 @@ function PlaceOrderView(props) {
 
   return (
     <Container data-testid="place-order">
-      <div className={`${asset.isAssetTradable ? 'opacity-100' : 'opacity-40'}`}>
+      <div className={`${asset.isGeoBlocked ? 'opacity-100' : 'opacity-40'}`}>
         <Header>
           <HeaderCaps color="gray.500" mb={1}>
             {t('place-order')}
@@ -503,7 +503,7 @@ function PlaceOrderView(props) {
         </Header>
         {renderForm()}
       </div>
-      {!asset.isAssetTradable && (
+      {!asset.isGeoBlocked && (
         <div className="px-4 flex">
           <MaterialIcon
             path={mdiAlertCircleOutline}

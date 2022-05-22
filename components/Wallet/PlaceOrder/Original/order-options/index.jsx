@@ -58,8 +58,8 @@ function OrderOptions(props) {
   return (
     <Container isExpanded={isExpanded} type={order.type}>
       <ExpandToggle
-        onClick={() => asset.isAssetTradable ? setIsExpanded(!isExpanded) : () => {}}
-        onKeyDown={() => asset.isAssetTradable ? handleKeyDown : () => {}}
+        onClick={() => asset.isGeoBlocked ? setIsExpanded(!isExpanded) : () => {}}
+        onKeyDown={() => asset.isGeoBlocked ? handleKeyDown : () => {}}
         tabIndex="0"
       >
         <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>

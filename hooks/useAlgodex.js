@@ -64,10 +64,10 @@ export function useSearchResultsQuery({
     const { assets: _assets } = data
     data.assets = _assets.map((asset) => {
       if (router?.query?.cc === 'US' || router?.query?.cc === 'CA') {
-        asset.isAssetTradable =
+        asset.isGeoBlocked =
           asset.circulating === 1 || UnrestrictedAssets[asset.assetId] ? true : false
       } else {
-        asset.isAssetTradable = true
+        asset.isGeoBlocked = true
       }
       return asset
     })
