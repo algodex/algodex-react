@@ -136,7 +136,7 @@ export const AssetChangeCell = ({ value, row }) => {
     }
     return (
       <span
-        className={row?.original?.isGeoBlocked ? 'opacity-400' : 'opacity-100'}
+        className={row?.original?.isGeoBlocked ? 'opacity-40' : 'opacity-100'}
       >{`${value}%`}</span>
     )
   }
