@@ -325,7 +325,7 @@ export const NavSearchTable = ({
                     view the chart and book but you will not be able to place any trades for this
                     asset.
                   </p>
-                  <p className="text-green-500 font-semibold text-xs">Learn more here</p>
+                  {/* <p className="text-green-500 font-semibold text-xs">Learn more here</p> */}
                 </div>
               </Tooltip>
             </div>

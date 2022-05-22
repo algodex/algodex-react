@@ -520,7 +520,7 @@ function PlaceOrderView(props) {
               This asset is not able to be traded in your country (${query.cc}) for legal reasons.
               You can view the chart and book but will not be able to place trades for this asset.
             </p>
-            <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p>
+            {/* <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p> */}
           </div>
         </div>
       )}
