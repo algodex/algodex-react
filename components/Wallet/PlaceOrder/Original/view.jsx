@@ -38,6 +38,7 @@ import { floatToFixed } from '@/services/display'
 import { mdiAlertCircleOutline } from '@mdi/js'
 import theme from 'theme'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
@@ -58,6 +59,7 @@ function PlaceOrderView(props) {
   const [buyOrders, setBuyOrders] = useState()
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
+  const { query } = useRouter()
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance || 0
@@ -515,8 +517,8 @@ function PlaceOrderView(props) {
           &nbsp;
           <div className="flex flex-col">
             <p className="text-white text-xs font-medium">
-              This asset is not able to be traded in your country (USA) for legal reasons. You can
-              view the chart and book but will not be able to place trades for this asset.
+              This asset is not able to be traded in your country (${query.cc}) for legal reasons.
+              You can view the chart and book but will not be able to place trades for this asset.
             </p>
             <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p>
           </div>
