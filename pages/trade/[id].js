@@ -92,7 +92,7 @@ function TradePage({ staticExplorerAsset }) {
   if (query?.cc === 'US' || query?.cc === 'CA') {
     staticExplorerAsset.isGeoBlocked =
       staticExplorerAsset.circulating !== 1 ||
-      UnrestrictedAssets[staticExplorerAsset?.id] === undefined
+      typeof UnrestrictedAssets[staticExplorerAsset?.id] === 'undefined'
         ? true
         : false
   }

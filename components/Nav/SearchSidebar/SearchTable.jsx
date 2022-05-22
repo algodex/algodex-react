@@ -127,6 +127,7 @@ const Algos = styled(AlgoIcon)`
 `
 
 export const AssetChangeCell = ({ value, row }) => {
+  console.log(row, 'row here')
   const displayChange = () => {
     if (value === null) {
       return ''
