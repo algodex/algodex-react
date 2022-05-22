@@ -313,7 +313,7 @@ function WalletConnect(props) {
     if (addresses) {
       return addresses
     }
-    return wallets ? wallets.map((w) => w.address) : []
+    return wallets & Array.isArray(wallets) ? wallets.map((w) => w.address) : []
   }, [addresses, wallets])
 
   // fetch wallet balances from blockchain
