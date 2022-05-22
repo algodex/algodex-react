@@ -415,7 +415,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     }
   }
   return (
-    <Section area="topLeft" data-testid="asset-orderbook">
+    <Section area="topLeft">
       <Container>
         <HeaderWrapper isMobile={isMobile}>
           {!isMobile && (
