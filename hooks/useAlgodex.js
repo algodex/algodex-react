@@ -64,10 +64,7 @@ export function useSearchResultsQuery({
     const { assets: _assets } = data
     data.assets = _assets.map((asset) => {
       if (router?.query?.cc === 'US' || router?.query?.cc === 'CA') {
-        asset.isGeoBlocked =
-          asset.circulating !== 1 || typeof UnrestrictedAssets[asset.assetId] === 'undefined'
-            ? true
-            : false
+        asset.isGeoBlocked = typeof UnrestrictedAssets[asset.assetId] === 'undefined' ? true : false
       } else {
         asset.isGeoBlocked = false
       }
