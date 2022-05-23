@@ -321,7 +321,6 @@ function WalletConnect(props) {
   const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
   const namedWallets = useAlgoNameService(walletsQuery?.data?.wallets)
 
-  // setWallet();
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
       if (!isSignedIn) {
