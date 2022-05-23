@@ -89,10 +89,14 @@ function TradePage({ staticExplorerAsset }) {
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
   const { isFallback, query } = useRouter()
-  // Add GeoBlocking
-  staticExplorerAsset.isGeoBlocked =
-    getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
+
   const [asset, setAsset] = useState(staticExplorerAsset)
+  //TODO: useEffect and remove this from the compilation
+  if (typeof staticExplorerAsset !== 'undefined') {
+    // Add GeoBlocking
+    staticExplorerAsset.isGeoBlocked =
+      getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
+  }
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
