@@ -66,8 +66,7 @@ export function useSearchResultsQuery({
     if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
       return {
         assets: queryData.assets.map((asset) => {
-          const isRestricted = getIsRestricted(asset.assetId)
-          console.log(getIsRestrictedCountry(router.query) && isRestricted, 'both here')
+          const isRestricted = getIsRestricted(`${asset.assetId}`)
           return {
             ...asset,
             isRestricted,
@@ -76,7 +75,7 @@ export function useSearchResultsQuery({
         })
       }
     } else {
-      return { assets: [] }
+      return queryData
     }
   }, [queryData])
   return { data, isError, error, ...rest }
