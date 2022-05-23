@@ -9,10 +9,10 @@ import {
   fetchWalletTradeHistory,
   searchAssets
 } from '@/services/algodex'
+import { getIsRestricted, getIsRestrictedCountry } from '@/utils/restrictedAssets'
 import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
-import { getIsRestrictedCountry, getIsRestricted } from '@/utils/restrictedAssets'
 import WalletService from '@/services/wallet'
 import dayjs from 'dayjs'
 import { floatToFixed } from '@/services/display'
@@ -66,7 +66,8 @@ export function useSearchResultsQuery({
     if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
       return {
         assets: queryData.assets.map((asset) => {
-          const isRestricted = getIsRestricted(asset.id)
+          const isRestricted = getIsRestricted(asset.assetId)
+          console.log(getIsRestrictedCountry(router.query) && isRestricted, 'both here')
           return {
             ...asset,
             isRestricted,
@@ -78,7 +79,6 @@ export function useSearchResultsQuery({
       return { assets: [] }
     }
   }, [queryData])
-  console.log(data)
   return { data, isError, error, ...rest }
 }
 

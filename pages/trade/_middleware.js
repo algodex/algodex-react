@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
  */
 export function middleware(request) {
   const url = new URL(request.url)
-  const country = request.geo.country || 'GB'
+  const country = request.geo.country || 'US'
 
   // Check for if this is the appropriate page
   if (

@@ -213,7 +213,7 @@ export const NavSearchTable = ({
       bannedAssets[element] = element
     })
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: false })
+    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: true })
 
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []

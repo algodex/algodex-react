@@ -11,7 +11,7 @@ const unrestrictedAssets = {
 }
 
 export function getIsRestricted(id) {
-  return !Object.keys(unrestrictedAssets).includes(id)
+  return !Object.keys(unrestrictedAssets).includes(id.toString())
 }
 
 export function getIsRestrictedCountry(query) {
