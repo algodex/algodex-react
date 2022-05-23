@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import { getIsRestricted, getIsRestrictedCountry } from '@/utils/restrictedAssets'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
@@ -7,7 +8,6 @@ import Layout from '@/components/Layout/OriginalLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
 import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import { useRouter } from 'next/router'
@@ -38,7 +38,6 @@ export async function getStaticProps({ params: { id } }) {
   let staticAssetPrice = {}
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
-    staticExplorerAsset.isGeoBlocked = false
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -47,6 +46,8 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
+
+  staticExplorerAsset.isRestricted = getIsRestricted(id)
 
   try {
     staticAssetPrice = await fetchAssetPrice(id)
@@ -88,14 +89,9 @@ function TradePage({ staticExplorerAsset }) {
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
   const { isFallback, query } = useRouter()
-  // Use the static asset or fallback to the route id
-  if (query?.cc === 'US' || query?.cc === 'CA') {
-    staticExplorerAsset.isGeoBlocked =
-      staticExplorerAsset.circulating !== 1 ||
-      typeof UnrestrictedAssets[staticExplorerAsset?.id] === 'undefined'
-        ? true
-        : false
-  }
+  // Add GeoBlocking
+  staticExplorerAsset.isGeoBlocked =
+    getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   const [asset, setAsset] = useState(staticExplorerAsset)
 
   const [interval, setInterval] = useState('1h')
