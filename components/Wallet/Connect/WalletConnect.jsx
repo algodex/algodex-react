@@ -314,7 +314,7 @@ function WalletConnect(props) {
     if (addresses) {
       return addresses
     }
-    return wallets & Array.isArray(wallets) ? wallets.map((w) => w.address) : []
+    return wallets && Array.isArray(wallets) ? wallets.map((w) => w.address) : []
   }, [addresses, wallets])
 
   // fetch wallet balances from blockchain
@@ -324,8 +324,6 @@ function WalletConnect(props) {
   // setWallet();
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
-      console.log('Wallets: ', walletsQuery.data.wallets)
-
       if (!isSignedIn) {
         setIsSignedIn(true)
       }
