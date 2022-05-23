@@ -12,7 +12,7 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
-import { UnrestrictedAssets } from '@/components/UnrestrictedAssets'
+import { getIsRestrictedCountry, getIsRestricted } from '@/utils/restrictedAssets'
 import WalletService from '@/services/wallet'
 import dayjs from 'dayjs'
 import { floatToFixed } from '@/services/display'
@@ -54,23 +54,31 @@ export function useSearchResultsQuery({
   }
 } = {}) {
   const router = useRouter()
-  const { data, isError, error, ...rest } = useQuery(
-    ['searchResults', { query }],
-    () => searchAssets(query),
-    options
-  )
+  const {
+    data: queryData,
+    isError,
+    error,
+    ...rest
+  } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
   routeQueryError({ isError, error, router })
-  if (data) {
-    const { assets: _assets } = data
-    data.assets = _assets.map((asset) => {
-      if (router?.query?.cc === 'US' || router?.query?.cc === 'CA') {
-        asset.isGeoBlocked = typeof UnrestrictedAssets[asset.assetId] === 'undefined' ? true : false
-      } else {
-        asset.isGeoBlocked = false
+
+  const data = useMemo(() => {
+    if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
+      return {
+        assets: queryData.assets.map((asset) => {
+          const isRestricted = getIsRestricted(asset.id)
+          return {
+            ...asset,
+            isRestricted,
+            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted
+          }
+        })
       }
-      return asset
-    })
-  }
+    } else {
+      return { assets: [] }
+    }
+  }, [queryData])
+  console.log(data)
   return { data, isError, error, ...rest }
 }
 
