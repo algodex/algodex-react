@@ -42,15 +42,15 @@ export const useAlgoNameService = (wallets) => {
 
   useEffect(() => {
     const fetchName = async () => {
-      const dump = [...wallets]
+      const tmpWallets = [...wallets]
       for (let i = 0; i < wallets.length; i++) {
         const names = await sdk.address(wallets[i].address).getNames(options)
 
         if (Array.isArray(names) && names.length > 0 && names[0].name) {
-          dump[i].name = names[0]?.name
+          tmpWallets[i].name = names[0]?.name
         }
       }
-      setAlgoWallets(dump)
+      setAlgoWallets(tmpWallets)
     }
     if (wallets) {
       fetchName()
