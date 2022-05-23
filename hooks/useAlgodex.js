@@ -66,7 +66,7 @@ export function useSearchResultsQuery({
     if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
       return {
         assets: queryData.assets.map((asset) => {
-          const isRestricted = getIsRestricted(asset.id)
+          const isRestricted = getIsRestricted(`${asset.assetId}`)
           return {
             ...asset,
             isRestricted,
@@ -75,7 +75,7 @@ export function useSearchResultsQuery({
         })
       }
     } else {
-      return { assets: [] }
+      return queryData
     }
   }, [queryData])
   console.log(data)
