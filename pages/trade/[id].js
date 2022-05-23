@@ -90,11 +90,6 @@ function TradePage({ staticExplorerAsset }) {
   const { isFallback, query } = useRouter()
   // Use the static asset or fallback to the route id
   if (query?.cc === 'US' || query?.cc === 'CA') {
-    // if (UnrestrictedAssets[staticExplorerAsset?.id] === undefined) {
-    //   staticExplorerAsset.isGeoBlocked = true
-    // } else if (staticExplorerAsset.circulating !== 1) {
-    //   staticExplorerAsset.isGeoBlocked = true
-    // }
     staticExplorerAsset.isGeoBlocked =
       staticExplorerAsset.circulating !== 1 ||
       typeof UnrestrictedAssets[staticExplorerAsset?.id] === 'undefined'
