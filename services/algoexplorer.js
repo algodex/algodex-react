@@ -61,8 +61,8 @@ const toExplorerAsset = (data) => {
   const {
     decimals,
     url,
-    name,
-    'unit-name': fullName,
+    name: fullName,
+    'unit-name': name,
     total,
     'circulating-supply': circulating
   } = params
