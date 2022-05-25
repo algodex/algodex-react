@@ -34,7 +34,7 @@ export function routeQueryError({ isError, error, router }) {
   } else if (isError) {
     // router.push('/500')
     console.error({ error })
-    router.push('/restricted')
+    // router.push('/restricted')
   }
 }
 const refetchInterval = 3000
