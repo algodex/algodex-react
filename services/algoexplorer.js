@@ -6,6 +6,8 @@ export const EXPLORER_INDEXER_API =
   process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API || 'https://algoindexer.testnet.algoexplorerapi.io'
 export const ALGO_EXPLORER_V1_API =
   process.env.NEXT_PUBLIC_ALGO_EXPLORER_V1_API || 'https://testnet.algoexplorerapi.io'
+export const ALGO_EXPLORER_V2_API =
+  process.env.NEXT_PUBLIC_ALGO_EXPLORER_V2_API || 'https://indexer.testnet.algoexplorerapi.io'
 export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/algo-usd'
 
 console.debug('NEXT_PUBLIC_EXPLORER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_API)
@@ -13,7 +15,7 @@ console.debug('EXPLORER_API: ' + EXPLORER_API)
 console.debug('NEXT_PUBLIC_EXPLORER_INDEXER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API)
 console.debug('EXPLORER_INDEXER_API: ' + EXPLORER_INDEXER_API)
 console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
-
+console.debug('EXPLORER_V2_API: ' + ALGO_EXPLORER_V2_API)
 /**
  * @see https://algoindexer.testnet.algoexplorerapi.io/v2/assets/185
  * @typedef {Object} ExplorerIndexAsset
@@ -47,37 +49,41 @@ console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
  * @param {ExplorerIndexAsset} explorerIndexAsset The asset response
  * @returns {{circulating, total, deleted, decimals, name, verified, txid, fullName, id, url, timestamp, txns}}
  */
-const toExplorerAsset = ({
-  assetID: id,
-  txid,
-  timestamp,
-  decimals,
-  assetName: fullName,
-  unitName: name,
-  txCount: txns,
-  circulatingSupply: circulating,
-  destroyed: deleted,
-  verified,
-  url,
-  verified_info,
-  totalSupply: total
-}) => {
+const toExplorerAsset = (data) => {
+  const {
+    index: id,
+    'creation-txid': txid,
+    'asset-tx-counter': txns,
+    deleted,
+    verification,
+    params
+  } = data.asset
+  const {
+    decimals,
+    url,
+    name,
+    'unit-name': fullName,
+    total,
+    'circulating-supply': circulating
+  } = params
+
   let res = {
     id,
     deleted,
     txid,
-    timestamp,
     decimals,
     name: name || fullName || null,
     txns,
     fullName,
     circulating,
-    verified,
+    verified: typeof verification !== 'undefined',
     url: url || null,
     total
   }
-  if (verified && verified_info) {
-    res.verified_info = verified_info
+
+  if (typeof verification !== 'undefined') {
+    console.log(verification)
+    res.verified_info = verification
   }
   return res
 }
@@ -100,8 +106,8 @@ export async function fetchExplorerAssetInfo(id) {
   if (typeof id === 'undefined') {
     throw new Error('Must have ID')
   }
-  //console.debug(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
-  const { data } = await axios.get(`${ALGO_EXPLORER_V1_API}/v1/asset/${id}/info`)
+  // console.debug(`${ALGO_EXPLORER_V2_API}/v2/asset/${id}/info`)
+  const { data } = await axios.get(`${ALGO_EXPLORER_V2_API}/v2/assets/${id}`)
   //console.debug(`Fetched ${id} with ${data.txCount} transactions`)
   return toExplorerAsset(data)
 }
@@ -142,6 +148,7 @@ export async function fetchAssetInfoV2(id) {
   const {
     data: { asset }
   } = await axios.get(`${EXPLORER_INDEXER_API}/v2/assets/${id}?include-all=true`)
+
   return toExplorerAssetV2(asset)
 }
 
