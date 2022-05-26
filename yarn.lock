@@ -10,10 +10,10 @@
     lodash "^4.17.21"
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@2.0.0-next.15":
-  version "2.0.0-next.15"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.15/1e623285e87cc58244236bd3d8db28f844f361248d1f76fd9849a761ec59b932#5bcb2a7771e5715ae0f3ee8bf487f9d4a045880b"
-  integrity sha512-67HaHsnVi2qOcFSNbDE6q6H+RBdULtqbtESKd0byH9T559Cg1G0BOw3moTImoxVpbfim28FP5/5X3vzbbY2FLg==
+"@algodex/algodex-sdk@2.0.0-next.17":
+  version "2.0.0-next.17"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.17/4123daa97e8c2e05ba30658e3a88f151be98b1bcc13cade3aede8b3041bb7080#7469243c62ee29a2a9a7dea6446157bf67173c96"
+  integrity sha512-6t5paM2vkZn3I7fdMt0gM9IQmLOsrvnDJvi5NUpZ+Ffu/tSrobWN7zGsBZH1MLLItFEHpTC0hdzrcJXS9BUosw==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"
