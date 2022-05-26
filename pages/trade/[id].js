@@ -47,7 +47,7 @@ export async function getStaticProps({ params: { id } }) {
     }
   }
 
-  staticExplorerAsset.isRestricted = getIsRestricted(id)
+  staticExplorerAsset.isRestricted = getIsRestricted(id) && staticExplorerAsset.total !== 1
 
   try {
     staticAssetPrice = await fetchAssetPrice(id)
