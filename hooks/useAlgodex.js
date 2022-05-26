@@ -61,12 +61,11 @@ export function useSearchResultsQuery({
     ...rest
   } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
   routeQueryError({ isError, error, router })
-
   const data = useMemo(() => {
     if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
       return {
         assets: queryData.assets.map((asset) => {
-          const isRestricted = getIsRestricted(`${asset.assetId}`)
+          const isRestricted = getIsRestricted(`${asset.assetId}`) && asset.total !== 1
           return {
             ...asset,
             isRestricted,
