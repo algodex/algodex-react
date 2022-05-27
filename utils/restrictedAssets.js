@@ -1,6 +1,6 @@
 const unrestrictedAssets = {
   31566704: 'USDC', //USDC
-  465865291: 'STLB', //STBL
+  465865291: 'STBL', //STBL
   386192725: 'goBTC', //goBTC
   386195940: 'goETH', //goETH
   312769: 'USDt', //USDt
