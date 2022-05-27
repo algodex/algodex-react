@@ -48,6 +48,7 @@ export const mapToSearchResults = ({
   hasOrders,
   isTraded,
   verified,
+  name,
   unitName,
   isGeoBlocked,
   formattedASALiquidity,
@@ -63,7 +64,7 @@ export const mapToSearchResults = ({
 
   return {
     id: assetId,
-    name: unitName,
+    name: name || unitName,
     fullName: assetName,
     verified: verified,
     hasBeenOrdered: isTraded || hasOrders,
