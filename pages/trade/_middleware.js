@@ -33,10 +33,8 @@ export function middleware(request) {
     // Check if the user has modified the search parameter
     url.searchParams.get('cc') !== country
   ) {
-    // Send the user to restricted
-    url.pathname = `/restricted/${country}`
+    // Append the Country Code and redirect to the same page
+    url.searchParams.set('cc', country)
     return NextResponse.redirect(url)
   }
-
-  // TODO: Always redirect to restricted just in case the conditionals fail
 }
