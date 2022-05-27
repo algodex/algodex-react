@@ -9,6 +9,7 @@ import Spinner from '@/components/Spinner'
 import { useAssetOrdersQuery } from '@/hooks/useAlgodex'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+
 function PlaceOrder({ asset }) {
   const { t } = useTranslation('place-order')
   const wallets = useStorePersisted((state) => state.wallets)
