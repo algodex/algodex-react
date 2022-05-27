@@ -9,7 +9,11 @@ import {
   fetchWalletTradeHistory,
   searchAssets
 } from '@/services/algodex'
-import { getIsRestricted, getIsRestrictedCountry } from '@/utils/restrictedAssets'
+import {
+  getAssetTotalStatus,
+  getIsRestricted,
+  getIsRestrictedCountry
+} from '@/utils/restrictedAssets'
 import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
@@ -65,7 +69,8 @@ export function useSearchResultsQuery({
     if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
       return {
         assets: queryData.assets.map((asset) => {
-          const isRestricted = getIsRestricted(`${asset.assetId}`) && asset.total !== 1
+          const isRestricted =
+            getIsRestricted(`${asset.assetId}`) && getAssetTotalStatus(asset.total)
           return {
             ...asset,
             isRestricted,

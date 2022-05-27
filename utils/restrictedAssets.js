@@ -17,3 +17,12 @@ export function getIsRestricted(id) {
 export function getIsRestrictedCountry(query) {
   return query?.cc === 'US' || query?.cc === 'CA'
 }
+
+export function getAssetTotalStatus(total) {
+  if (typeof total === 'undefined') return false
+  if (total !== 1) {
+    return true
+  } else {
+    return false
+  }
+}

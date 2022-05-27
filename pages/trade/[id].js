@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
-import { getIsRestricted, getIsRestrictedCountry } from '@/utils/restrictedAssets'
+import {
+  getAssetTotalStatus,
+  getIsRestricted,
+  getIsRestrictedCountry
+} from '@/utils/restrictedAssets'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
@@ -47,7 +51,8 @@ export async function getStaticProps({ params: { id } }) {
     }
   }
 
-  staticExplorerAsset.isRestricted = getIsRestricted(id) && staticExplorerAsset.total !== 1
+  staticExplorerAsset.isRestricted =
+    getIsRestricted(id) && getAssetTotalStatus(staticExplorerAsset.total)
 
   try {
     staticAssetPrice = await fetchAssetPrice(id)
