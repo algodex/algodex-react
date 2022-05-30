@@ -1,5 +1,11 @@
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
+import { Hero } from '@/components/About/Hero'
+import { AboutFooter } from '@/components/About/Footer'
+import { PartnerShip } from '@/components/About/PartnerShip'
+import { Features } from '@/components/About/Features'
+import { RoadMap } from '@/components/About/RoadMap'
+import { BlogPreview } from '@/components/About/blog'
 
 /**
  * About Page
@@ -15,13 +21,12 @@ const AboutPage = () => {
         <title>About</title>
       </Head>
       <Header />
-      <iframe
-        style={{ overflow: 'hidden', height: '100%', width: '100%' }}
-        height="100%"
-        width="100%"
-        title="about"
-        src={'https://about.algodex.com/'}
-      />
+      <Hero />
+      <Features />
+      <RoadMap />
+      <PartnerShip />
+      <BlogPreview />
+      <AboutFooter />
     </>
   )
 }
