@@ -90,7 +90,7 @@ export const BlogPreview = () => {
     <BlogSection>
       <AboutContainer>
         <div className="w-4/5 lg:w-2/6 md:w-1/2 sm:w-3/5 mb-9">
-          <AboutTitle>{t('BLOG')}</AboutTitle>
+          <AboutTitle className="uppercase">{t('blog')}</AboutTitle>
           <hr />
         </div>
         <div>
@@ -107,7 +107,7 @@ export const BlogPreview = () => {
           ))}
         </div>
         <div className="text-center my-9">
-          <MoreButton>View More Posts</MoreButton>
+          <MoreButton>{t('View More Posts')}</MoreButton>
         </div>
       </AboutContainer>
     </BlogSection>

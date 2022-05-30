@@ -65,8 +65,9 @@ export const Hero = () => {
             <LaunchBtn>{t('launch app')}</LaunchBtn>
           </Link>
           <Note className="mt-5">
+            {t('NOTE')}:{' '}
             {t(
-              'NOTE: Users in the USA and Canada are currently restricted from Mainnet and should try out Testnet instead at'
+              'Users in the USA and Canada are currently restricted from Mainnet and should try out Testnet instead at'
             )}{' '}
             <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
           </Note>

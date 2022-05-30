@@ -130,40 +130,40 @@ export const RoadMap = () => {
               February
               <br /> 2022
             </h2>
-            <p className="mb-3">Algodex Mainnet Launch</p>
+            <p className="mb-3">{t('Algodex Mainnet Launch')}</p>
           </li>
           <li className="mb-5">
             <h2>
               March
               <br /> 2022
             </h2>
-            <p className="mb-3">Algodex Token (ALGX) token generation event</p>
-            <p className="mb-3">Algodex Token (ALGX) Public Sale A</p>
-            <p className="mb-3">Launch of Algodex Mailbox Application</p>
+            <p className="mb-3">{t('Algodex Token (ALGX) token generation event')}</p>
+            <p className="mb-3">{t('Algodex Token (ALGX) Public Sale A')}</p>
+            <p className="mb-3">{t('Launch of Algodex Mailbox Application')}</p>
           </li>
           <li className="mb-5">
             <h2>
               Q2
               <br /> 2022
             </h2>
-            <p className="mb-3">Launch of trading SDK for Algodex</p>
-            <p className="mb-3">Launch of Algodex as a downloadable desktop application</p>
+            <p className="mb-3">{t('Launch of trading SDK for Algodex')}</p>
+            <p className="mb-3">{t('Launch of Algodex as a downloadable desktop application')}</p>
           </li>
           <li className="mb-5">
             <h2>
               Q3
               <br /> 2022
             </h2>
-            <p className="mb-3">Algodex rewards and fee system</p>
-            <p className="mb-3">Launch of trading bot for Algodex</p>
+            <p className="mb-3">{t('Algodex rewards and fee system')}</p>
+            <p className="mb-3">{t('Launch of trading bot for Algodex')}</p>
           </li>
           <li className="mb-5">
             <h2>
               Q4
               <br /> 2022
             </h2>
-            <p className="mb-3">Algodex rewards and fee system</p>
-            <p className="mb-3">Launch of Algodex NFT marketplace</p>
+            <p className="mb-3">{t('Algodex rewards and fee system')}</p>
+            <p className="mb-3">{t('Launch of Algodex NFT marketplace')}</p>
           </li>
         </TimeLine>
       </AboutContainer>

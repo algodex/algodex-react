@@ -76,7 +76,7 @@ export const PartnerShip = () => {
         </Grid>
         <Note className="my-14">
           {t('For more information on joining as a partner, contact us')}{' '}
-          <Link href="/about">here</Link>
+          <Link href="/about">{t('here')}</Link>
         </Note>
       </AboutContainer>
     </PartnerShipSection>

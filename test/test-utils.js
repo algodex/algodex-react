@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import assetsEN from '../locales/en/assets.json'
 import chartEN from '../locales/en/chart.json'
 import commonEN from '../locales/en/common.json'
+import aboutEN from '../locales/en/about.json'
 import createEmotionCache from '@/utils/createEmotionCache'
 import networkNoficationEN from '../locales/en/network-notification.json'
 import ordersEN from '../locales/en/orders.json'
@@ -31,7 +32,8 @@ const Providers = ({ children }) => (
             'place-order': placeOrderEN,
             chart: chartEN,
             'network-notification': networkNoficationEN,
-            wallet: walletEN
+            wallet: walletEN,
+            about: aboutEN
           }}
         >
           {children}

@@ -81,8 +81,9 @@ export const AboutFooter = () => {
         <div className="w-5/5 xl:2/5 lg:w-1/2 md:w-1/2 pt-4 mb-16">
           <p className="text-white font-medium text-xl mb-6">
             {t(
-              'Stay up to date with info on Algodex updates, new features, and releases by joining our mailing list.'
+              'Stay up to date with info on Algodex updates, new features, and releases by joining our mailing list'
             )}
+            .
           </p>
           <InputContainer>
             <span className="icon">
@@ -109,7 +110,7 @@ export const AboutFooter = () => {
               {t('docs')}
             </FooterLinks>
             <FooterLinks target="_blanc" href="https://github.com/algodex/algodex-mailbox">
-              {'Github'}
+              Github
             </FooterLinks>
             <FooterLinks target="_blanc" href="https://about.algodex.com/support/">
               {t('support')}
@@ -119,7 +120,7 @@ export const AboutFooter = () => {
               target="_blanc"
               href="https://github.com/algodex/algodex-public-documents/blob/master/Algodex%20Whitepaper%201.0.pdf"
             >
-              {t('white-paper')}
+              {t('white paper')}
             </FooterLinks>
             <FooterLinks
               target="_blanc"
@@ -144,16 +145,16 @@ export const AboutFooter = () => {
               target={'_blank'}
               href="https://twitter.com/AlgodexOfficial?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
             >
-              {'Twitter'}
+              Twitter
             </FooterLinks>
             <FooterLinks target={'_blank'} href="https://discord.gg/qS3Q7AqwF6">
-              {'Discord'}
+              Discord
             </FooterLinks>
             <FooterLinks target={'_blank'} href="https://www.reddit.com/r/algodex">
-              {'Reddit'}
+              Reddit
             </FooterLinks>
             <FooterLinks target={'_blank'} href="https://t.me/algodex">
-              {'Telegram'}
+              Telegram
             </FooterLinks>
           </div>
         </div>
