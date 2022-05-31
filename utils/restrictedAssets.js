@@ -10,19 +10,19 @@ const unrestrictedAssets = {
   15921880: 'HEAP' // HEAP Testnet
 }
 
-const PROCESS_ENV = process.env.NEXT_PUBLIC_ENV
+const NETWORK_TYPE = process.env.NEXT_PUBLIC_ALGORAND_NETWORK
 export function getIsRestricted(id) {
-  if (PROCESS_ENV === 'development') return false
+  if (NETWORK_TYPE !== 'mainnet') return false
   return !Object.keys(unrestrictedAssets).includes(id.toString())
 }
 
 export function getIsRestrictedCountry(query) {
-  if (PROCESS_ENV === 'development') return false
+  if (NETWORK_TYPE !== 'mainnet') return false
   return query?.cc === 'US' || query?.cc === 'CA'
 }
 
 export function getAssetTotalStatus(total) {
-  if (PROCESS_ENV === 'development') return false
+  if (NETWORK_TYPE !== 'mainnet') return false
   if (typeof total === 'undefined') return false
   if (total !== 1) {
     return true
