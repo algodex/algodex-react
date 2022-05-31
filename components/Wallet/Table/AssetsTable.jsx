@@ -3,12 +3,13 @@ import { useCallback, useMemo } from 'react'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
-import { BrightGraySpan } from '@/components/Typography'
+// import { Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
 import Table, { DefaultCell, AssetNameCell } from '@/components/Table'
 import useUserStore from '@/store/use-user-state'
 import { useEventDispatch } from '@/hooks/useEvents'
-import { withWalletAssetsQuery } from '@/hooks/withAlgodex'
+import { withWalletAssetsQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +39,7 @@ export const AssetCoinCell = (props) => {
     <Link href={`/trade/${props.row.original.id}`}>
       <button onClick={onClick}>
         <AssetNameBlock className="text-left" data-testid="asset-coin-cell">
-          <BrightGraySpan>{props.value}</BrightGraySpan>
+          <Typography>{props.value}</Typography>
           <br />
           <AssetId>{props.row.original.id}</AssetId>
         </AssetNameBlock>

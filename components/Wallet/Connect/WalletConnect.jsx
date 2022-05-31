@@ -1,17 +1,16 @@
-import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
-import { useEffect, useMemo } from 'react'
-import useStore, { useStorePersisted } from 'store/use-store'
+// import { Typography, Typography, Typography, Typography } from 'components/Typography'
 
 import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import SvgImage from 'components/SvgImage'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import useMyAlgo from 'hooks/useMyAlgo'
+import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
-import { useWalletsQuery } from 'hooks/useAlgodex'
+// import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -162,12 +161,11 @@ const WalletRow = styled.div`
   }
 `
 export function WalletView(props) {
-  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
-
+  const { addresses, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
   const { t } = useTranslation('wallet')
 
   const getButtonVariant = () => {
-    return isSignedIn ? 'secondary' : 'primary'
+    return isSignedIn ? 'default' : 'primary'
   }
 
   const isWalletActive = (addr) => {
@@ -198,31 +196,31 @@ export function WalletView(props) {
     )
   }
 
-  const renderBalance = (bal) => {
-    const split = bal.toFixed(6).split('.')
+  // const renderBalance = (bal) => {
+  //   const split = bal.toFixed(6).split('.')
 
-    return (
-      <Balance>
-        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-        <LabelMd fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </LabelMd>
-      </Balance>
-    )
-  }
+  //   return (
+  //     <Balance>
+  //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
+  //       <Typography fontWeight="500">
+  //         {`${split[0]}.`}
+  //         <span>{split[1]}</span>
+  //       </Typography>
+  //     </Balance>
+  //   )
+  // }
 
   const renderWallets = () => {
-    return wallets.map((wallet) => (
+    return addresses?.map((wallet) => (
       <WalletRow
         key={wallet.address}
         tabIndex={isTabbable(wallet.address)}
         role="button"
         isActive={isWalletActive(wallet.address)}
-        onClick={() => handleWalletClick(wallet.address)}
+        onClick={() => handleWalletClick(wallet)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
-        <LabelMd fontWeight="500" title={wallet.address}>
+        <Typography fontWeight="500" title={wallet.address}>
           <Icon
             color="gray"
             fillGradient="000"
@@ -231,8 +229,9 @@ export function WalletView(props) {
             size={0.75}
           />
           {wallet.name}
-        </LabelMd>
-        {renderBalance(wallet.balance)}
+        </Typography>
+
+        {/* {renderBalance(wallet?.amount)} */}
       </WalletRow>
     ))
   }
@@ -242,13 +241,14 @@ export function WalletView(props) {
   }
 
   const WalletButtonText =
-    wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
+    addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
 
   return (
     <Section area="topRight">
       <Container>
         <ButtonContainer>
           <Button
+            // color="primary-button"
             variant={getButtonVariant()}
             onClick={getButtonState}
             data-testid="connect-wallet-btn"
@@ -259,26 +259,26 @@ export function WalletView(props) {
         {isSignedIn ? (
           <>
             <Header>
-              <BodyCopyTiny color="gray.500">{t('wallet')}</BodyCopyTiny>
-              <BodyCopyTiny color="gray.500" textAlign="right">
+              <Typography color="gray.500">{t('wallet')}</Typography>
+              <Typography color="gray.500" textAlign="right">
                 {t('balance')}
-              </BodyCopyTiny>
+              </Typography>
             </Header>
             <Wallets>
               <WalletsWrapper>{renderWallets()}</WalletsWrapper>
             </Wallets>
           </>
         ) : (
-          <EmptyState>
+          <EmptyState p={3}>
             <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow>
-            <HeaderSm color="gray.100" m={0} mb={16}>
+            <Typography variant="h5" color="gray.100" m={0} mb={4}>
               {t('start-by')}
-            </HeaderSm>
-            <BodyCopySm color="gray.500" m={0}>
+            </Typography>
+            <Typography variant="subtitle_small" color="gray.500" m={0}>
               {t('once-connected')}
-            </BodyCopySm>
+            </Typography>
           </EmptyState>
         )}
       </Container>
@@ -287,8 +287,8 @@ export function WalletView(props) {
 }
 
 WalletView.propTypes = {
-  wallets: PropTypes.array.isRequired,
-  activeWalletAddress: PropTypes.string.isRequired,
+  addresses: PropTypes.array.isRequired,
+  activeWalletAddress: PropTypes.string,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
   onSetActiveWallet: PropTypes.func.isRequired,
@@ -299,53 +299,23 @@ WalletView.defaultProps = {
   isSignedIn: false
 }
 
+/**
+ * @todo Merge WalletView into WalletConnect
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function WalletConnect(props) {
-  const { connect: onWalletConnect, addresses } = useMyAlgo()
+  const { wallet, setWallet } = useAlgodex()
+  const { addresses, myAlgoConnect } = useWallets(wallet)
 
-  const wallets = useStorePersisted((state) => state.wallets)
-  const setWallets = useStorePersisted((state) => state.setWallets)
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
-
-  const walletAddresses = useMemo(() => {
-    if (addresses) {
-      return addresses
-    }
-    return wallets ? wallets.map((w) => w.address) : []
-  }, [addresses, wallets])
-
-  // fetch wallet balances from blockchain
-  const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
-  useEffect(() => {
-    if (walletsQuery.data?.wallets) {
-      setWallets(walletsQuery.data.wallets)
-
-      if (!isSignedIn) {
-        setIsSignedIn(true)
-      }
-
-      if (!walletAddresses.includes(activeWalletAddress)) {
-        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-      }
-    }
-  }, [
-    activeWalletAddress,
-    isSignedIn,
-    setActiveWalletAddress,
-    setIsSignedIn,
-    setWallets,
-    walletAddresses,
-    walletsQuery.data
-  ])
   return (
     <WalletView
-      wallets={wallets}
-      activeWalletAddress={activeWalletAddress}
-      isSignedIn={isSignedIn}
-      onConnectClick={onWalletConnect}
-      onSetActiveWallet={setActiveWalletAddress}
+      addresses={addresses}
+      activeWalletAddress={wallet?.address}
+      isSignedIn={addresses.length > 0}
+      onConnectClick={myAlgoConnect}
+      onSetActiveWallet={setWallet}
       {...props}
     />
   )

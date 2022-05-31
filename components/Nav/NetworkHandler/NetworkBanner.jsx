@@ -26,7 +26,6 @@ const NetworkBanner = () => {
         <div
           data-testid="banner-container"
           style={{
-            padding: '0.8rem 0',
             background: `${
               activeNetwork == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']
             }`

@@ -1,6 +1,6 @@
-import React from 'react'
 import { PlaceOrderForm as Component } from './Form'
-import generateAsset, { Example } from 'spec/Asset'
+// import generateAsset, { Example } from 'spec/Asset'
+import { Example } from 'spec/Asset'
 
 export default {
   title: '@algodex/recipes/Wallet/Place Order Form',
@@ -34,10 +34,10 @@ export default {
 }
 
 /* eslint-disable */
-export const PlaceOrderForm = ({isRegenerate, asset, wallet, ...props}) => {
-  if (isRegenerate) {
-    asset = generateAsset()
-    wallet.assets[asset.id] = wallet.assets[Example.id]
-  }
-  return <Component asset={asset} wallet={wallet} {...props} />
-}
+// export const PlaceOrderForm = ({isRegenerate, asset, wallet, ...props}) => {
+//   if (isRegenerate) {
+//     asset = generateAsset()
+//     wallet.assets[asset.id] = wallet.assets[Example.id]
+//   }
+//   return <Component asset={asset} wallet={wallet} {...props} />
+// }

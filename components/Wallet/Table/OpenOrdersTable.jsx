@@ -6,14 +6,16 @@ import Table, {
 } from '@/components/Table'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { BrightGraySpan } from '@/components/Typography'
-import OrderService from '@/services/order'
+// import { Typography } from '@/components/Typography'
+// import OrderService from '@/services/order'
+import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
+import React from 'react'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
+import { withWalletOrdersQuery } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -52,7 +54,6 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // console.log(_orders, 'orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
 
   useEffect(() => {
@@ -85,11 +86,22 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
-        const cancelOrderPromise = OrderService.closeOrder(
-          escrowAddress,
-          ownerAddress,
-          orderBookEntry,
-          version
+        // const cancelOrderPromise = OrderService.closeOrder(
+        //   escrowAddress,
+        //   ownerAddress,
+        //   orderBookEntry,
+        //   version
+        // )
+        const cancelOrderPromise = new Promise((resolve) =>
+          resolve({
+            escrowAddress,
+            ownerAddress,
+            assetLimitPriceN,
+            assetLimitPriceD,
+            assetId,
+            version,
+            orderBookEntry
+          })
         )
 
         toast.promise(cancelOrderPromise, {
@@ -109,9 +121,9 @@ export function OpenOrdersTable({ orders: _orders }) {
       }
 
       return (
-        <BrightGraySpan data-testid="cancel-order-button">
+        <Typography data-testid="cancel-order-button">
           <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
-        </BrightGraySpan>
+        </Typography>
       )
     },
     [t, openOrdersData]

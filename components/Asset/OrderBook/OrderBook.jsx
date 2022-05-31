@@ -1,28 +1,26 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
-import { BodyCopySm, BodyCopyTiny, HeaderCaps, HeaderSm } from '@/components/Typography'
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks/withAlgodex'
+// import { Typography, Typography, Typography, Typography } from '@/components/Typography'
+import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 import Big from 'big.js'
+import { Fragment } from 'react'
 import PriceInfo from './OrderBookPriceInfo'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
-import { floatToFixed } from '@/services/display'
+import Typography from '@mui/material/Typography'
+// import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+// import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
-import useUserState from 'store/use-user-state'
-
-// import { customAggregator } from './helpers'
 
 const FirstOrderContainer = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -32,7 +30,7 @@ const FirstOrderContainer = styled.div`
 
 const EmptyState = styled.div`
   position: relative;
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,27 +66,21 @@ const Arrow = styled.div`
 const PairSlash = styled.span`
   letter-spacing: 0.125rem;
 `
-
-const AggregatorSelector = styled.select`
-  background-color: ${({ theme }) => theme.palette.gray['700']};
-  border: solid 1px ${({ theme }) => theme.palette.gray['700']};
-  color: ${({ theme }) => theme.palette.gray['300']};
-`
 export function FirstOrderMsg(props) {
   const { asset, isSignedIn } = props
 
   const renderMessage = () => {
     if (isSignedIn) {
       return (
-        <BodyCopySm color="gray.500" m={0}>
+        <Typography color="gray.500" m={0}>
           Place a maker buy/sell order to add liquidity for this trading&nbsp;pair
-        </BodyCopySm>
+        </Typography>
       )
     }
     return (
-      <BodyCopySm color="gray.500" m={0}>
+      <Typography color="gray.500" m={0}>
         Connect your wallet and place an order to add liquidity for this trading&nbsp;pair
-      </BodyCopySm>
+      </Typography>
     )
   }
 
@@ -100,11 +92,11 @@ export function FirstOrderMsg(props) {
             <SvgImage use="walletArrow" h={4} color="gray.600" />
           </Arrow>
         )}
-        <HeaderSm color="gray.100" m={0} mb={16}>
+        <Typography color="gray.100" m={0} mb={16}>
           Place the first limit order for {asset.name}
           {` `}
           <PairSlash>{`/`}</PairSlash>ALGO
-        </HeaderSm>
+        </Typography>
         {renderMessage()}
       </EmptyState>
     </FirstOrderContainer>
@@ -117,7 +109,7 @@ FirstOrderMsg.propTypes = {
 }
 
 const Container = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.palette.background.dark};
@@ -132,21 +124,20 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
-const HeaderWrapper = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? `0 1rem` : '1rem')};
-`
 const Header = styled.header`
-  flex-shrink: 0%;
+  flex-shrink: 0;
   display: grid;
+  padding: 0 0.5rem 0rem;
   ${gridStyles}
 `
 
 const BookRow = styled.div`
   display: grid;
-  ${gridStyles}
+  align-items: center;
+  padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
-
+  ${gridStyles}
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buy' ? 'green' : 'red'
@@ -154,7 +145,7 @@ const BookRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
@@ -169,29 +160,32 @@ const OrdersWrapper = styled.div`
 `
 
 const SellOrders = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
   display: flex;
   flex-direction: column-reverse;
   /* width */
+
   ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     display: none;
   }
 `
 
 const BuyOrders = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
 
   ${OrdersWrapper} {
     right: 0;
   }
+
   /* width */
+
   ::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     display: none;
   }
 `
@@ -231,13 +225,26 @@ export function OrderBookPrice({ asset }) {
     return (
       <Fragment>
         --
-        <BodyCopySm data-testid="no-price-info" as="span">
+        <Typography data-testid="no-price-info" as="span">
           0.00%
-        </BodyCopySm>
+        </Typography>
       </Fragment>
     )
   }
 
+  // function PriceInfo() {
+  //   return (
+  //     <Fragment>
+  //       {floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))}
+  //       <Typography data-testid="has-price-info" as="span">
+  //         {(asset?.price_info?.price24Change &&
+  //           `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
+  //           '0.00%'}
+  //       </Typography>
+  //     </Fragment>
+  //   )
+  // }
+  // TODO: Remove extra component, should only have one PriceInfo Component
   return (
     <Price color={color} data-testid="order-book-price">
       {!isUndefined(asset.price_info) && isDecrease ? (
@@ -289,71 +296,14 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBook({ isMobile, asset, orders, components }) {
+export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
-  const setOrder = useStore((state) => state.setOrder)
-  const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
-  const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-  const DECIMALS_MAP = {
-    0.000001: 6,
-    0.00001: 5,
-    0.0001: 4,
-    0.001: 3,
-    0.01: 2,
-    0.1: 1
-  }
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const [selectedPrecision, setSelectedPrecision] = useState(
-    DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
-  )
+  const { setOrder, isConnected } = useAlgodex()
+  const isSignedIn = isConnected
 
   const dispatcher = useEventDispatch()
-
-  const reduceOrders = (result, order) => {
-    const _price = floatToFixed(order.price, selectedPrecision, selectedPrecision)
-
-    const _amount = order.amount
-    const index = result.findIndex(
-      (obj) => floatToFixed(obj.price, selectedPrecision, selectedPrecision) === _price
-    )
-
-    if (index !== -1) {
-      result[index].amount += _amount
-      result[index].total += _amount * _price
-      return result
-    }
-
-    result.push({
-      price: _price,
-      amount: _amount,
-      total: _amount * _price
-    })
-    return result
-  }
-
-  const aggregatedBuyOrder = useMemo(() => {
-    if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
-    return orders.buy.reduce(reduceOrders, [])
-  }, [orders.buy, selectedPrecision])
-
-  const aggregatedSellOrder = useMemo(() => {
-    if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
-    return orders.sell.reduce(reduceOrders, [])
-  }, [orders.sell, selectedPrecision])
-
-  const onAggrSelectorChange = (e) => {
-    setCachedSelectedPrecision({
-      ...cachedSelectedPrecision,
-      [asset.id]: e.target.value
-    })
-    setSelectedPrecision(DECIMALS_MAP[e.target.value])
-  }
-
-  useEffect(() => {
-    setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
-  }, [asset])
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -379,15 +329,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           type={type}
           data-testid={`order-book-${type}-row`}
         >
-          <BodyCopyTiny
-            fontFamily="'Roboto Mono', monospace"
-            color={`${color}.500`}
-            title={row.price}
-            m={0}
-          >
+          <Typography variant="price" color={`${color}.500`}>
             {row.price}
-          </BodyCopyTiny>
-          <BodyCopyTiny
+          </Typography>
+          <Typography
+            variant="body_tiny"
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -395,8 +341,9 @@ export function OrderBook({ isMobile, asset, orders, components }) {
             m={0}
           >
             {amount.toFixed(Math.min(3, decimals))}
-          </BodyCopyTiny>
-          <BodyCopyTiny
+          </Typography>
+          <Typography
+            variant="body_tiny"
             fontFamily="'Roboto Mono', monospace"
             color="gray.400"
             textAlign="right"
@@ -404,7 +351,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
             m={0}
           >
             {total.toFixed(Math.min(3, decimals))}
-          </BodyCopyTiny>
+          </Typography>
         </BookRow>
       )
     })
@@ -417,39 +364,21 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <HeaderWrapper isMobile={isMobile}>
-          {!isMobile && (
-            <div className="flex justify-between item-center">
-              <HeaderCaps color="gray.500" mb={1}>
-                {t('order-book')}
-              </HeaderCaps>
-              <AggregatorSelector
-                onChange={onAggrSelectorChange}
-                value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
-              >
-                <option>0.000001</option>
-                <option>0.00001</option>
-                <option>0.0001</option>
-                <option>0.001</option>
-                <option>0.01</option>
-                <option>0.1</option>
-              </AggregatorSelector>
-            </div>
-          )}
-          <br></br>
-          <Header>
-            <TablePriceHeader />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
-            </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('total')}
-            </BodyCopyTiny>
-          </Header>
-        </HeaderWrapper>
+        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
+          {t('order-book')}
+        </Typography>
+        <Header>
+          <TablePriceHeader />
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {t('amount')}
+          </Typography>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {t('total')}
+          </Typography>
+        </Header>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -457,9 +386,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
         </CurrentPrice>
 
         <BuyOrders>
-          <OrdersWrapper className="px-4 pt-4">
-            {renderOrders(aggregatedBuyOrder, 'buy')}
-          </OrdersWrapper>
+          <OrdersWrapper className="px-4 pt-4">{renderOrders(orders.buy, 'buy')}</OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>
@@ -467,10 +394,6 @@ export function OrderBook({ isMobile, asset, orders, components }) {
 }
 
 OrderBook.propTypes = {
-  /**
-   * Manages mobile render
-   */
-  isMobile: PropTypes.bool,
   /**
    * Algorand Asset Information
    */
@@ -485,7 +408,7 @@ OrderBook.propTypes = {
     sell: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
         total: PropTypes.number.isRequired
       })
     ),
@@ -495,19 +418,18 @@ OrderBook.propTypes = {
     buy: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
         total: PropTypes.number.isRequired
       })
     )
   }),
-  components: {
+  components: PropTypes.shape({
     PriceDisplay: PropTypes.elementType.isRequired
-  }
+  })
 }
 
 OrderBook.defaultProps = {
   orders: { sell: [], buy: [] },
-  isMobile: false,
   components: {
     PriceDisplay: DefaultOrderBookPrice
   }

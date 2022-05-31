@@ -1,28 +1,28 @@
-import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
+// import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
-import { convertFromAsaUnits } from '@/services/convert'
-import { floatToFixed } from '@/services/display'
+import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
-import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
-
+import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
+import Typography from '@mui/material/Typography'
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
   return (
     <>
-      <HeaderSmInter color="white">{asaValue}</HeaderSmInter>
+      <Typography color="white">{asaValue}</Typography>
       {asset && asset.price_info && (
-        <BodyCopy data-testid="price-info" as="span">
+        <Typography data-testid="price-info" as="span">
           {(asset?.price_info?.price24Change &&
             `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
             '0.00%'}
-        </BodyCopy>
+        </Typography>
       )}
       <div className="flex items-center ml-4 text-gray-500">
         <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
-        <LabelLg as="p">${formatUSDPrice(algoPrice * asaValue)}</LabelLg>
+        <Typography as="p">${formatUSDPrice(algoPrice * asaValue)}</Typography>
       </div>
     </>
   )
