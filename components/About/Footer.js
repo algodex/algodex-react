@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
-import React from 'react'
+import React, { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { ReactSVG } from 'react-svg'
 import styled from '@emotion/styled'
+import toast from 'react-hot-toast'
 
 //Iconify icon
 import { Icon } from '@iconify/react'
@@ -10,12 +11,14 @@ import { Icon } from '@iconify/react'
 // Custom Styled Components
 import Button from 'components/Button'
 import { AboutContainer } from './styles.css'
+import { addSubscriber } from '@/services/algodex'
+import Spinner from '../Spinner'
 
 const FooterWrapper = styled.div`
   background-color: ${({ theme }) => theme.palette.gray[500]};
   padding-block: 3rem;
 `
-const InputContainer = styled.div`
+const Form = styled.form`
   display: flex;
   align-items: center;
   position: relative;
@@ -75,6 +78,37 @@ const InlineLogo = styled(ReactSVG)`
 
 export const AboutFooter = () => {
   const { t } = useTranslation('about')
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const payload = {
+      fields: [
+        {
+          objectTypeId: '0-1',
+          name: 'email',
+          value: email
+        }
+      ]
+    }
+
+    if (email) {
+      setLoading(true)
+      const res = await addSubscriber(payload)
+      setLoading(false)
+      if (res instanceof Error) {
+        const error =
+          res.response?.data?.errors[0].errorType == 'INVALID_EMAIL'
+            ? 'Invalid Email Address'
+            : 'Sorry, an error occurred'
+        toast.error(error)
+      } else {
+        toast.success(res.inlineMessage)
+        setEmail('')
+      }
+    }
+  }
   return (
     <FooterWrapper>
       <AboutContainer>
@@ -85,14 +119,25 @@ export const AboutFooter = () => {
             )}
             .
           </p>
-          <InputContainer>
+          <Form onSubmit={handleSubmit}>
             <span className="icon">
               <Icon icon="codicon:mail" />
             </span>
-            <input type="email" placeholder="Email Address" />
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              value={email}
+              onChange={({ target: { value } }) => {
+                setEmail(value)
+              }}
+            />
 
-            <FooterButton>Submit</FooterButton>
-          </InputContainer>
+            <FooterButton type="submit" disabled={loading}>
+              <span className="mr-2">Submit</span>
+              {loading && <Spinner size={1} color={'white'} />}
+            </FooterButton>
+          </Form>
         </div>
 
         <div className="pb-5 grid lg:grid-flow-col grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">

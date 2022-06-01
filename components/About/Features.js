@@ -57,34 +57,34 @@ export const Features = () => {
           sub={
             'Algodex supports limit orders so you can rest assured your trade will only occur at the price you set'
           }
-          imgLink={'/Exchange-Mockup.png'}
+          imgLink={'/Vector-Limit.svg'}
           imgPosition={'last'}
         />
         <Layout
           number={'02'}
           title={'Trade all Algorand Standard Assets (ASAs)'}
           sub={
-            'All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it. Yes - even NFTs'
+            'All assets on the Algorand blockchain are supported in Algodex by default If it exists, you can trade it Yes - even NFTs'
           }
-          imgLink={'/Exchange-Mockup.png'}
+          imgLink={'/Vector-ASAs.svg'}
           imgPosition={'first'}
         />
         <Layout
           number={'03'}
           title={'NFT Trading'}
           sub={
-            'Purchase and trade Non-Fungible Tokens (NFTs) directly within Algodex. View and place bids on NFTs even if they’re not currently listed for sale anywhere'
+            'Purchase and trade Non-Fungible Tokens (NFTs) directly within Algodex View and place bids on NFTs even if they’re not currently listed for sale anywhere'
           }
-          imgLink={'/Exchange-Mockup.png'}
+          imgLink={'/Vector-NFTS.svg'}
           imgPosition={'last'}
         />
         <Layout
           number={'04'}
           title={'Staking Rewards'}
           sub={
-            'Coming Soon - Every token will have staking pools with the option to stake for ALGX, ALGO, and/or the staked token. Stay tuned for more information'
+            'Coming Soon - Every token will have staking pools with the option to stake for ALGX, ALGO, and/or the staked token Stay tuned for more information'
           }
-          imgLink={'/Exchange-Mockup.png'}
+          imgLink={'/Vector-Staking.svg'}
           imgPosition={'first'}
         />
       </AboutContainer>

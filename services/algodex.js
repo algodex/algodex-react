@@ -222,3 +222,31 @@ export async function fetchAssetPrice(id) {
   } = await getEtagResponse(`${API_HOST}/assets.php?id=${id}`)
   return typeof data !== 'undefined' ? data[0] : {}
 }
+
+/**
+ * Add Email to the subscription mailing list on hubspot
+ *
+ * @returns {Promise<Object>}
+ */
+export const addSubscriber = async (payload) => {
+  const portalId = '20146426'
+  const formGuid = 'f4023600-6995-433b-894a-2a1ab09dc2f6'
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  axios.defaults.headers = {
+    'Content-Type': 'application/json'
+  }
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+  return response
+}
