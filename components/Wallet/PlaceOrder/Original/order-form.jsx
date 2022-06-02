@@ -137,8 +137,9 @@ export const OrderForm = ({
         </TxnFeeContainer> */}
         {orderType === 'limit' && (
           <OrderOptions
+            asset={asset}
             order={order}
-            onChange={handleOptionsChange}
+            onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
             allowTaker={typeof asset !== 'undefined'}
             orderFilter={newOrderSizeFilter}
             setOrderFilter={setNewOrderSizeFilter}

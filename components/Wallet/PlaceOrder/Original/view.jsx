@@ -24,6 +24,7 @@ import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
 import { LimitOrder } from './limit-order'
 import { MarketOrder } from './market-order'
+import MaterialIcon from '@mdi/react'
 import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
 import { Tooltip } from '@/components/Tooltip'
@@ -34,7 +35,10 @@ import { convertFromAsaUnits } from '@/services/convert'
 import { convertToAsaUnits } from 'services/convert'
 import detectMobileDisplay from 'utils/detectMobileDisplay'
 import { floatToFixed } from '@/services/display'
+import { mdiAlertCircleOutline } from '@mdi/js'
+import theme from 'theme'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
 import { useStore } from '@/store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
@@ -55,6 +59,7 @@ function PlaceOrderView(props) {
   const [buyOrders, setBuyOrders] = useState()
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
+  const { query } = useRouter()
 
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
   const algoBalance = activeWallet?.balance || 0
@@ -318,6 +323,7 @@ function PlaceOrderView(props) {
       isInvalid() ||
       isBalanceExceeded() ||
       isLessThanMicroAlgo() ||
+      asset.isGeoBlocked ||
       status.submitting
 
     return (
@@ -343,7 +349,7 @@ function PlaceOrderView(props) {
             id="type-buy"
             value="buy"
             checked={order.type === 'buy'}
-            onChange={(e) => handleChange(e, 'type')}
+            onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
           />
           <BuyButton>
             <label htmlFor="type-buy">{t('buy')}</label>
@@ -353,7 +359,7 @@ function PlaceOrderView(props) {
             id="type-sell"
             value="sell"
             checked={order.type === 'sell'}
-            onChange={(e) => handleChange(e, 'type')}
+            onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
           />
           <SellButton>
             <label htmlFor="type-sell">{t('sell')}</label>
@@ -442,8 +448,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === LIMIT_PANEL}
             onClick={() => {
-              setOrderView(LIMIT_PANEL)
-              handleOptionsChange({ target: { value: 'both' } })
+              !asset.isGeoBlocked && setOrderView(LIMIT_PANEL)
+              !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'both' } })
             }}
           >
             {t('limit')}
@@ -452,8 +458,8 @@ function PlaceOrderView(props) {
             orderType={order.type}
             isActive={orderView === MARKET_PANEL}
             onClick={() => {
-              setOrderView(MARKET_PANEL)
-              handleOptionsChange({ target: { value: 'market' } })
+              !asset.isGeoBlocked && setOrderView(MARKET_PANEL)
+              !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'market' } })
             }}
           >
             {t('market')}
@@ -462,13 +468,13 @@ function PlaceOrderView(props) {
         {orderView === LIMIT_PANEL ? (
           <LimitOrder
             order={order}
-            handleChange={handleChange}
+            handleChange={asset.isGeoBlocked ? () => {} : handleChange}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={handleRangeChange}
+            handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
             enableOrder={enableOrder}
-            handleOptionsChange={handleOptionsChange}
+            handleOptionsChange={!asset.isGeoBlocked && handleOptionsChange}
             newOrderSizeFilter={newOrderSizeFilter}
             microAlgo={MICROALGO}
             setNewOrderSizeFilter={setNewOrderSizeFilter}
@@ -476,11 +482,11 @@ function PlaceOrderView(props) {
         ) : (
           <MarketOrder
             order={order}
-            handleChange={handleChange}
+            handleChange={asset.isGeoBlocked ? () => {} : handleChange}
             asset={asset}
             maxSpendableAlgo={maxSpendableAlgo}
             asaBalance={asaBalance}
-            handleRangeChange={handleRangeChange}
+            handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
             enableOrder={enableOrder}
           />
         )}
@@ -491,12 +497,33 @@ function PlaceOrderView(props) {
 
   return (
     <Container data-testid="place-order">
-      <Header>
-        <HeaderCaps color="gray.500" mb={1}>
-          {t('place-order')}
-        </HeaderCaps>
-      </Header>
-      {renderForm()}
+      <div className={`${asset.isGeoBlocked ? 'opacity-40' : 'opacity-100'}`}>
+        <Header>
+          <HeaderCaps color="gray.500" mb={1}>
+            {t('place-order')}
+          </HeaderCaps>
+        </Header>
+        {renderForm()}
+      </div>
+      {asset.isGeoBlocked && (
+        <div className="px-4 flex">
+          <MaterialIcon
+            path={mdiAlertCircleOutline}
+            title="Verified asset"
+            height="1.5rem"
+            width="4rem"
+            color={theme.palette.gray['500']}
+          />{' '}
+          &nbsp;
+          <div className="flex flex-col">
+            <p className="text-white text-xs font-medium">
+              This asset is not able to be traded in your country (${query.cc}) for legal reasons.
+              You can view the chart and book but will not be able to place trades for this asset.
+            </p>
+            {/* <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p> */}
+          </div>
+        </div>
+      )}
     </Container>
   )
 }
