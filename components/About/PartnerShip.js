@@ -1,7 +1,6 @@
 import React from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import styled from '@emotion/styled'
-import Image from 'next/image'
 import Link from 'next/link'
 import { AboutContainer, AboutTitle } from './styles.css'
 
@@ -18,24 +17,30 @@ const Note = styled.p`
 `
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-  @media (max-width: 501px) {
-    grid-template-columns: repeat(auto-fit, minmax(61px, 1fr));
-  }
+  grid-template-columns: repeat(auto-fit, minmax(114px, 1fr));
   grid-row-gap: 2rem;
-  grid-column-gap: 40px;
+  grid-column-gap: 2rem;
   margin-block: 5rem;
-`
-const PartnerImg = styled.div`
-  background-color: ${({ theme }) => theme.palette.green['400']};
-  width: 96px;
-  height: 96px;
-  border-radius: 6px;
-  img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+  @media (max-width: 501px) {
+    grid-template-columns: repeat(auto-fit, minmax(69px, 1fr));
+    grid-row-gap: 1rem;
+    grid-column-gap: 1rem;
   }
+`
+const PartnerImgWrapper = styled.div`
+  width: 114px;
+  height: 114px;
+  border-radius: 3px;
+  @media (max-width: 501px) {
+    width: 69px;
+    height: 69px;
+  }
+`
+const PartnerImg = styled.img`
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
 `
 const PartnerShipSection = styled.section`
   background-color: ${({ theme }) => theme.palette.gray[700]};
@@ -44,18 +49,21 @@ const PartnerShipSection = styled.section`
 `
 
 const ImgLinks = [
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg',
-  '/Powered-by-Algorand.svg'
+  '/partnership/NODESEEDS.png',
+  '/partnership/FISH-DAO.png',
+  '/partnership/VESPERTINE.png',
+  '/partnership/GENESIS.png',
+  '/partnership/BIG-BRAINS.png',
+  '/partnership/DIB.png',
+  '/partnership/Criterion.png',
+  '/partnership/CV.png',
+  '/partnership/AVG.png',
+  '/partnership/GAP.png',
+  '/partnership/FLOW.png',
+  '/partnership/SRT.png',
+  '/partnership/IN.png',
+  '/partnership/O1CAPITAL.png',
+  '/partnership/AVERAGEMEN.png'
 ]
 
 export const PartnerShip = () => {
@@ -69,9 +77,9 @@ export const PartnerShip = () => {
         </div>
         <Grid className="w-5/5 lg:w-4/5 md:w-4/5 mx-auto">
           {ImgLinks.map((link, index) => (
-            <PartnerImg key={index}>
-              <Image src={link} width={96} height={96} />
-            </PartnerImg>
+            <PartnerImgWrapper key={index}>
+              <PartnerImg src={link} />
+            </PartnerImgWrapper>
           ))}
         </Grid>
         <Note className="my-14">
