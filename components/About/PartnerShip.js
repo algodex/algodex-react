@@ -75,7 +75,7 @@ export const PartnerShip = () => {
           <AboutTitle>{t('PARTNERSHIPS')}</AboutTitle>
           <hr />
         </div>
-        <Grid className="w-5/5 lg:w-3/5 md:w-4/5 mx-auto">
+        <Grid className="w-5/5 xl:w-3/5 lg:w-4/5 md:w-4/5 mx-auto">
           {ImgLinks.map((link, index) => (
             <PartnerImgWrapper key={index}>
               <PartnerImg src={link} />
