@@ -1,17 +1,21 @@
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import {
+  getAssetTotalStatus,
+  getIsRestricted,
+  getIsRestrictedCountry
+} from '@/utils/restrictedAssets'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
+import Layout from '@/components/Layout/OriginalLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import useUserStore from '@/store/use-user-state'
-
 import Spinner from '@/components/Spinner'
-import Layout from '@/components/Layout/OriginalLayout'
-import { useRouter } from 'next/router'
+import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import { useRouter } from 'next/router'
+import useUserStore from '@/store/use-user-state'
 
 /**
  * Fetch Traded Asset Paths
@@ -36,7 +40,6 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
-
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
   } catch ({ response: { status } }) {
@@ -47,6 +50,9 @@ export async function getStaticProps({ params: { id } }) {
         }
     }
   }
+
+  staticExplorerAsset.isRestricted =
+    getIsRestricted(id) && getAssetTotalStatus(staticExplorerAsset.total)
 
   try {
     staticAssetPrice = await fetchAssetPrice(id)
@@ -89,13 +95,18 @@ function TradePage({ staticExplorerAsset }) {
 
   const { isFallback, query } = useRouter()
 
-  // Use the static asset or fallback to the route id
   const [asset, setAsset] = useState(staticExplorerAsset)
+  //TODO: useEffect and remove this from the compilation
+  if (typeof staticExplorerAsset !== 'undefined') {
+    // Add GeoBlocking
+    staticExplorerAsset.isGeoBlocked =
+      getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
+  }
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
-  const { data } = useAssetPriceQuery({ asset: _asset })
 
+  const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
     (e) => {
       if (e.target.name === 'interval' && e.target.value !== interval) {

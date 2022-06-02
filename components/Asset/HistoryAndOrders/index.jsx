@@ -50,7 +50,7 @@ const Container = styled.div`
   flex: 1 1 0%;
 `
 function HistoryAndOrderBook({ asset, isMobile }) {
-  const { t } = useTranslation('orders')
+  const { t } = useTranslation('common')
   const [selectedPanel, setSelectedPanel] = useState('order-book')
   const ORDER_BOOK_PANEL = 'order-book'
   const TRADE_HISTORY_PANEL = 'trade-history'

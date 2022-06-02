@@ -35,7 +35,6 @@ const PlaceOrderSection = styled.section`
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   display: ${({ active }) => (active ? 'flex' : 'none')};
   // overflow: hidden scroll;
-
   @media (min-width: 996px) {
     grid-area: trade;
     display: flex;
