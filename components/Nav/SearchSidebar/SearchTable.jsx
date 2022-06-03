@@ -311,7 +311,7 @@ export const NavSearchTable = ({
                       title="Information asset"
                       className="mt-0.5"
                       size={0.4}
-                      color={theme.palette.gray['500']}
+                      color={theme.palette.gray['600']}
                     />
                     &nbsp;
                     <p style={{ fontSize: '8px' }} className="text-gray-600 font-medium">
