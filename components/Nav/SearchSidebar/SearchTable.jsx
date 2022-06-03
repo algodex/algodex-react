@@ -137,7 +137,7 @@ export const AssetChangeCell = ({ value, row }) => {
     }
     return (
       <span
-        className={row?.original?.isGeoBlocked ? 'opacity-60' : 'opacity-100'}
+        className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
       >{`${value}%`}</span>
     )
   }
@@ -238,7 +238,7 @@ export const NavSearchTable = ({
       return (
         <AssetPrice
           className={`${
-            row.original.isGeoBlocked ? 'opacity-60' : 'opacity-100'
+            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
           } cursor-pointer font-semibold`}
         >
           {value}
@@ -261,7 +261,7 @@ export const NavSearchTable = ({
       return (
         <div className="cursor-pointer flex flex-col">
           <div
-            className={`${row.original.isGeoBlocked ? 'opacity-60' : 'opacity-100'} flex flex-col`}
+            className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
           >
             <div className="flex items-center">
               <Icon
