@@ -517,7 +517,7 @@ function PlaceOrderView(props) {
           &nbsp;
           <div className="flex flex-col">
             <p className="text-white text-xs font-medium">
-              This asset is not able to be traded in your country (${query.cc}) for legal reasons.
+              This asset is not able to be traded in your country ({query.cc}) for legal reasons.
               You can view the chart and book but will not be able to place trades for this asset.
             </p>
             {/* <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p> */}
