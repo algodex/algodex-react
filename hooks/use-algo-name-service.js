@@ -1,6 +1,7 @@
-import { ANS } from '@algonameservice/sdk'
+import ANS from '@algonameservice/sdk'
 import algosdk from 'algosdk'
 import { useState, useEffect } from 'react'
+import { getActiveNetwork } from '../services/environment'
 
 const purestakeIndexerToken =
   process.env.NEXT_PUBLIC_PURE_STAKE_INDEXER_TOKEN || 'VELyABA1dGqGbAVktbew4oACvp0c0298gMgYtYIb'
@@ -33,7 +34,7 @@ const options = {
   limit: 1
 }
 
-const sdk = new ANS(client, indexer)
+const sdk = new ANS(client, indexer, getActiveNetwork())
 
 export const useAlgoNameService = (wallets) => {
   const [algoWallets, setAlgoWallets] = useState([])
