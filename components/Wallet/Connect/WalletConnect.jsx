@@ -323,6 +323,7 @@ function WalletConnect(props) {
 
   useEffect(() => {
     if (walletsQuery.data?.wallets) {
+      setWallets(walletsQuery.data.wallets)
       if (!isSignedIn) {
         setIsSignedIn(true)
       }
