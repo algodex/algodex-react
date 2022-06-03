@@ -314,7 +314,7 @@ export const NavSearchTable = ({
                       color={theme.palette.gray['500']}
                     />
                     &nbsp;
-                    <p style={{ fontSize: '8px' }} className="text-gray-500 font-medium">
+                    <p style={{ fontSize: '8px' }} className="text-gray-600 font-medium">
                       Restricted Trading (USA)
                     </p>
                   </div>
