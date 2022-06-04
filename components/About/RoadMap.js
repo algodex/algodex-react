@@ -65,9 +65,15 @@ const TimeLine = styled.ul`
       font-size: 1.12rem;
       color: ${({ theme }) => theme.palette.gray[100]};
       position: absolute;
+      line-height: 23px;
       top: -4rem;
       left: 29%;
-      line-height: 23px;
+      @media (min-width: 1000px) {
+        left: 34%;
+      }
+      @media (min-width: 1300px) {
+        left: 37%;
+      }
       @media (max-width: 600px) {
         position: relative;
         top: 0;
@@ -107,6 +113,13 @@ const TimeLine = styled.ul`
         }
       }
     }
+    &:nth-child(1) {
+      h2 {
+        @media (min-width: 1000px) {
+          left: 30%;
+        }
+      }
+    }
     p {
       font-weight: 500;
       font-size: 0.87rem;
@@ -137,7 +150,6 @@ export const RoadMap = () => {
               March
               <br /> 2022
             </h2>
-            <p className="mb-3">{t('Algodex Token (ALGX) token generation event')}</p>
             <p className="mb-3">{t('Algodex Token (ALGX) Public Sale A')}</p>
             <p className="mb-3">{t('Launch of Algodex Mailbox Application')}</p>
           </li>
@@ -148,6 +160,7 @@ export const RoadMap = () => {
             </h2>
             <p className="mb-3">{t('Launch of trading SDK for Algodex')}</p>
             <p className="mb-3">{t('Launch of Algodex as a downloadable desktop application')}</p>
+            <p className="mb-3">{t('Algodex Token (ALGX) token generation event')}</p>
           </li>
           <li className="mb-5">
             <h2>
@@ -162,7 +175,6 @@ export const RoadMap = () => {
               Q4
               <br /> 2022
             </h2>
-            <p className="mb-3">{t('Algodex rewards and fee system')}</p>
             <p className="mb-3">{t('Launch of Algodex NFT marketplace')}</p>
           </li>
         </TimeLine>

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
+import Link from 'next/link'
 
 //Styled components
 import { AboutContainer, AboutTitle } from './styles.css'
@@ -107,7 +108,9 @@ export const BlogPreview = () => {
           ))}
         </div>
         <div className="text-center my-9">
-          <MoreButton>{t('View More Posts')}</MoreButton>
+          <Link href="https://about.algodex.com/blog/" target={'_blank'}>
+            <MoreButton>{t('View More Posts')}</MoreButton>
+          </Link>
         </div>
       </AboutContainer>
     </BlogSection>

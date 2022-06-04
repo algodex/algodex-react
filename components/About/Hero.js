@@ -67,9 +67,9 @@ export const Hero = () => {
           <Note className="mt-5">
             {t('NOTE')}:{' '}
             {t(
-              'Users in the USA and Canada are currently restricted from Mainnet and should try out Testnet instead at'
-            )}{' '}
-            <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
+              'Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at'
+            )}
+            : <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
           </Note>
         </div>
       </AboutContainer>

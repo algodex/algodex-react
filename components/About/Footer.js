@@ -24,7 +24,7 @@ const Form = styled.form`
   position: relative;
   flex-wrap: wrap;
   .icon {
-    color: ${({ theme }) => theme.palette.gray[700]};
+    color: ${({ theme }) => theme.palette.gray[600]};
     position: absolute;
     left: 0.5rem;
     top: 0.6rem;
@@ -36,13 +36,20 @@ const Form = styled.form`
     padding-left: 2rem;
     color: ${({ theme }) => theme.palette.gray[700]};
     background-color: ${({ theme }) => theme.palette.gray[300]};
-    border: 1px solid;
-    border-color: ${({ theme }) => theme.palette.gray[100]};
+    border: 2px solid;
+    border-color: ${({ theme }) => theme.palette.gray[600]};
     border-radius: 0.19rem;
     transition: all ease 0.3s;
+    font-size: 1rem;
     &:focus {
       outline: none;
       border-color: ${({ theme }) => theme.palette.gray[400]};
+    }
+    &::placeholder {
+      color: ${({ theme }) => theme.palette.gray[600]};
+      font-size: 1rem;
+      font-weight: bold;
+      font-style: italic;
     }
   }
 `
@@ -55,8 +62,7 @@ const Title = styled.h4`
 const FooterLinks = styled.a`
   font-weight: 500;
   color: ${({ theme }) => theme.palette.gray[100]};
-  margin-bottom: 0.5rem;
-  color: ${({ theme }) => theme.palette.gray[100]};
+  margin-bottom: 1.1rem;
   cursor: pointer;
   text-decoration: none;
   display: block;
@@ -66,8 +72,8 @@ const FooterLinks = styled.a`
 const FooterButton = styled(Button)`
   color: ${({ theme }) => theme.palette.gray[100]};
   border: solid 1px;
-  bordercolor: ${({ theme }) => theme.palette.gray[100]};
-  textdecoration: uppercase;
+  border-color: ${({ theme }) => theme.palette.gray[100]};
+  text-decoration: uppercase;
   background-color: ${({ theme }) => theme.palette.gray[600]};
 `
 const InlineLogo = styled(ReactSVG)`
@@ -133,9 +139,13 @@ export const AboutFooter = () => {
               }}
             />
 
-            <FooterButton type="submit" disabled={loading}>
-              <span className="mr-2">Submit</span>
-              {loading && <Spinner size={1} color={'white'} />}
+            <FooterButton type="submit" disabled={loading} className="text-center">
+              Submit
+              {loading && (
+                <span className="ml-2">
+                  <Spinner size={1} color={'white'} />
+                </span>
+              )}
             </FooterButton>
           </Form>
         </div>
