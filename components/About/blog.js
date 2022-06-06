@@ -64,7 +64,6 @@ const MoreButton = styled(Button)`
   background-color: transparent;
 `
 
-// eslint-disable-next-line react/prop-types
 const Post = ({ title, date, content }) => {
   return (
     <Blog className="lg:flex mb-12">
@@ -86,8 +85,14 @@ const Post = ({ title, date, content }) => {
   )
 }
 
+Post.propTypes = {
+  title: PropTypes.string,
+  date: PropTypes.string,
+  content: PropTypes.string
+}
+
 const BlogPreview = ({ staticBlogPosts }) => {
-  console.log(staticBlogPosts)
+  // console.log(staticBlogPosts)
   const { t } = useTranslation('about')
 
   if (staticBlogPosts.length < 1) {
