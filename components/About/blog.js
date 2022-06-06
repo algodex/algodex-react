@@ -104,6 +104,7 @@ Post.propTypes = {
 }
 
 const BlogPreview = ({ staticBlogPosts }) => {
+  // console.log(staticBlogPosts)
   const { t } = useTranslation('about')
 
   if (staticBlogPosts.length < 1) {

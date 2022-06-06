@@ -27,13 +27,14 @@ const Form = styled.form`
     color: ${({ theme }) => theme.palette.gray[600]};
     position: absolute;
     left: 0.5rem;
-    top: 0.6rem;
+    top: 0.68rem;
+    font-size: 1rem;
   }
   input {
     height: 2.3rem;
     margin-right: 1rem;
     flex: 1;
-    padding-left: 2rem;
+    padding-left: 1.8rem;
     color: ${({ theme }) => theme.palette.gray[700]};
     background-color: ${({ theme }) => theme.palette.gray[300]};
     border: 2px solid;
@@ -130,7 +131,7 @@ export const AboutFooter = () => {
           </p>
           <Form onSubmit={handleSubmit}>
             <span className="icon">
-              <Icon icon="codicon:mail" />
+              <Icon icon="mi:email" />
             </span>
             <input
               type="email"
@@ -197,7 +198,7 @@ export const AboutFooter = () => {
             </FooterLinks>
           </div>
           <div className="col-span-1">
-            <Title className="mb-6">{t('COMMUNITY')}</Title>
+            <Title className="mb-6 pr-8">{t('COMMUNITY')}</Title>
 
             <FooterLinks
               target={'_blank'}

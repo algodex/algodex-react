@@ -1,20 +1,19 @@
 import React from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import styled from '@emotion/styled'
-import Link from 'next/link'
-import { AboutContainer, AboutTitle } from './styles.css'
 
 // Custom Styled Components
+import { AboutContainer, AboutTitle } from './styles.css'
 
-const Note = styled.p`
-  font-size: 0.875rem;
-  color: ${({ theme }) => theme.palette.gray[100]};
-  line-height: 19px;
-  font-style: italic;
-  a {
-    color: ${({ theme }) => theme.palette.green['400']};
-  }
-`
+// const Note = styled.p`
+//   font-size: 0.875rem;
+//   color: ${({ theme }) => theme.palette.gray[100]};
+//   line-height: 19px;
+//   font-style: italic;
+//   a {
+//     color: ${({ theme }) => theme.palette.green['400']};
+//   }
+// `
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(114px, 1fr));
@@ -82,10 +81,10 @@ export const PartnerShip = () => {
             </PartnerImgWrapper>
           ))}
         </Grid>
-        <Note className="my-14">
+        {/* <Note className="my-14">
           {t('For more information on joining as a partner, contact us')}{' '}
           <Link href="/about">{t('here')}</Link>
-        </Note>
+        </Note> */}
       </AboutContainer>
     </PartnerShipSection>
   )
