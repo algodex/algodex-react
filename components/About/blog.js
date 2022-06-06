@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-import Image from 'next/image'
-import Link from 'next/link'
+import PropTypes from 'prop-types'
 
 //Styled components
 import { AboutContainer, AboutTitle } from './styles.css'
 import Button from 'components/Button'
+import moment from 'moment'
 
 const BlogSection = styled.section`
   background-color: ${({ theme }) => theme.palette.gray[800]};
@@ -23,10 +23,11 @@ const Blog = styled.section`
     position: relative;
     width: 400px;
     max-width: 100%;
+    z-index: 1;
+    height: 180px;
     img {
       max-width: 100%;
       object-fit: cover;
-      z-index: 1;
     }
     &:after {
       content: '';
@@ -37,6 +38,7 @@ const Blog = styled.section`
       top: 11px;
       bottom: 0;
       left: 11px;
+      z-index: -1;
     }
   }
   h3 {
@@ -62,31 +64,36 @@ const MoreButton = styled(Button)`
   background-color: transparent;
 `
 
-const blogPost = [
-  '/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png',
-  '/medicine-3298451_1920.jpeg',
-  '/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png',
-  '/medicine-3298451_1920.jpeg'
-]
-
 // eslint-disable-next-line react/prop-types
-const Preview = ({ img, title, date, content }) => {
+const Post = ({ img, title, date, content }) => {
   return (
     <Blog className="lg:flex mb-12">
       <div className="blog-img lg:w-2/5 lg:mr-10 mb-8 lg:mb-0">
-        <Image src={img} width={400} height={180} />
+        <img
+          src={img || '/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png'}
+          width={400}
+          height={180}
+          alt="blog post"
+        />
       </div>
       <div className="content-wrapper lg:w-3/5">
         <h3 className="mb-3">{title}</h3>
         <p className="date">{date}</p>
         <hr />
-        <p>{content}</p>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </Blog>
   )
 }
-export const BlogPreview = () => {
+
+const BlogPreview = ({ staticBlogPosts }) => {
+  console.log(staticBlogPosts)
   const { t } = useTranslation('about')
+
+  if (staticBlogPosts.length < 1) {
+    return <></>
+  }
+
   return (
     <BlogSection>
       <AboutContainer>
@@ -95,24 +102,28 @@ export const BlogPreview = () => {
           <hr />
         </div>
         <div>
-          {blogPost.map((link, index) => (
-            <Preview
-              key={index}
-              img={link}
-              title={'Algodex Token (ALGX) Airdrop Plan'}
-              date={'March 7, 2022'}
-              content={
-                'Introduction: Algodex Token, symbol ALGX, is the token created by a subsidiary of Algonaut Capital Corporation, Algodex’s parent company. ALGX is not yet minted, and its token generation event will occur within the next 30 days. ALGX will be created as an Algorand Standard Asset .... Continue ....'
-              }
+          {staticBlogPosts.slice(0, 4).map((post) => (
+            <Post
+              key={post.guid.rendered}
+              img={post.img}
+              title={post.title.rendered}
+              date={moment(post.date).format('LL')}
+              content={post.excerpt.rendered}
             />
           ))}
         </div>
         <div className="text-center my-9">
-          <Link href="https://about.algodex.com/blog/" target={'_blank'}>
+          <a href="https://about.algodex.com/blog/" target="_blank" rel="noreferrer">
             <MoreButton>{t('View More Posts')}</MoreButton>
-          </Link>
+          </a>
         </div>
       </AboutContainer>
     </BlogSection>
   )
 }
+
+BlogPreview.propTypes = {
+  staticBlogPosts: PropTypes.array
+}
+
+export default BlogPreview

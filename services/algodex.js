@@ -224,6 +224,15 @@ export async function fetchAssetPrice(id) {
 }
 
 /**
+ * Fetch Blog Posts
+ * @returns {Promise<*>}
+ */
+export async function fetchBlogPosts() {
+  const res = await getEtagResponse('https://about.algodex.com/wp-json/wp/v2/posts')
+  return res.data
+}
+
+/**
  * Add Email to the subscription mailing list on hubspot
  *
  * @returns {Promise<Object>}

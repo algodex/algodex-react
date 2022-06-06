@@ -5,7 +5,9 @@ import { AboutFooter } from '@/components/About/Footer'
 import { PartnerShip } from '@/components/About/PartnerShip'
 import { Features } from '@/components/About/Features'
 import { RoadMap } from '@/components/About/RoadMap'
-import { BlogPreview } from '@/components/About/blog'
+import BlogPreview from '@/components/About/blog'
+import { fetchBlogPosts } from '@/services/algodex'
+import PropTypes from 'prop-types'
 
 /**
  * About Page
@@ -14,7 +16,7 @@ import { BlogPreview } from '@/components/About/blog'
  * @returns {JSX.Element}
  * @constructor
  */
-const AboutPage = () => {
+const AboutPage = ({ staticBlogPosts }) => {
   return (
     <>
       <Head>
@@ -25,9 +27,27 @@ const AboutPage = () => {
       <Features />
       <RoadMap />
       <PartnerShip />
-      <BlogPreview />
+      <BlogPreview staticBlogPosts={staticBlogPosts} />
       <AboutFooter />
     </>
   )
 }
+export async function getStaticProps() {
+  let staticBlogPosts = []
+  try {
+    staticBlogPosts = await fetchBlogPosts()
+  } catch (error) {
+    console.debug(error)
+    staticBlogPosts = []
+  }
+
+  return {
+    props: { staticBlogPosts }
+  }
+}
+
+AboutPage.propTypes = {
+  staticBlogPosts: PropTypes.array
+}
+
 export default AboutPage

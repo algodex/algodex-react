@@ -58,6 +58,9 @@ const Title = styled.h4`
   margin-bottom: 1rem;
   font-weight: 700;
   color: ${({ theme }) => theme.palette.gray[100]};
+  border-bottom: 0.4px solid;
+  border-color: ${({ theme }) => theme.palette.gray[100]};
+  line-height: 30px;
 `
 const FooterLinks = styled.a`
   font-weight: 500;
@@ -153,10 +156,10 @@ export const AboutFooter = () => {
         <div className="pb-5 grid lg:grid-flow-col grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="col-span-2">
             <InlineLogo src="/logo-inline-dark.svg" />
-            <Title className="mt-5">{t('Decentralized marketplace on Algorand')}</Title>
+            <Title className="mt-5 border-0">{t('Decentralized marketplace on Algorand')}</Title>
           </div>
           <div className="col-span-1">
-            <Title>{t('RESOURCES')}</Title>
+            <Title className="mb-6">{t('RESOURCES')}</Title>
             <FooterLinks target="_blanc" href="https://about.algodex.com/disclaimers/">
               {t('disclaimers')}
             </FooterLinks>
@@ -185,7 +188,7 @@ export const AboutFooter = () => {
             </FooterLinks>
           </div>
           <div className="col-span-1">
-            <Title>{t('COMPANY')}</Title>
+            <Title className="mb-6">{t('COMPANY')}</Title>
             <FooterLinks target={'_blank'} href="https://about.algodex.com/">
               {t('about')}
             </FooterLinks>
@@ -194,7 +197,7 @@ export const AboutFooter = () => {
             </FooterLinks>
           </div>
           <div className="col-span-1">
-            <Title>{t('COMMUNITY')}</Title>
+            <Title className="mb-6">{t('COMMUNITY')}</Title>
 
             <FooterLinks
               target={'_blank'}
