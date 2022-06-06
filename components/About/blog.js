@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import PropTypes from 'prop-types'
+import { fetchBlogMedia } from '@/services/algodex'
 
 //Styled components
 import { AboutContainer, AboutTitle } from './styles.css'
@@ -64,16 +65,26 @@ const MoreButton = styled(Button)`
   background-color: transparent;
 `
 
-const Post = ({ title, date, content }) => {
+const Post = ({ title, date, content, featured_media }) => {
+  const defaultImg = '/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png'
+  const [imgLink, setImgLink] = useState('')
+
+  const getImageLink = async () => {
+    if (featured_media !== 0) {
+      try {
+        const res = await fetchBlogMedia(featured_media)
+        setImgLink(res.source_url)
+      } catch (error) {
+        console.debug(error)
+        setImgLink(defaultImg)
+      }
+    }
+  }
+  getImageLink()
   return (
     <Blog className="lg:flex mb-12">
       <div className="blog-img lg:w-2/5 lg:mr-10 mb-8 lg:mb-0">
-        <img
-          src={'/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png'}
-          width={400}
-          height={180}
-          alt="blog post"
-        />
+        <img src={imgLink || defaultImg} width={400} height={180} alt="blog post" />
       </div>
       <div className="content-wrapper lg:w-3/5">
         <h3 className="mb-3">{title}</h3>
@@ -88,11 +99,11 @@ const Post = ({ title, date, content }) => {
 Post.propTypes = {
   title: PropTypes.string,
   date: PropTypes.string,
-  content: PropTypes.string
+  content: PropTypes.string,
+  featured_media: PropTypes.number
 }
 
 const BlogPreview = ({ staticBlogPosts }) => {
-  // console.log(staticBlogPosts)
   const { t } = useTranslation('about')
 
   if (staticBlogPosts.length < 1) {
@@ -113,6 +124,7 @@ const BlogPreview = ({ staticBlogPosts }) => {
               title={post.title.rendered}
               date={moment(post.date).format('LL')}
               content={post.excerpt.rendered}
+              featured_media={post.featured_media}
             />
           ))}
         </div>

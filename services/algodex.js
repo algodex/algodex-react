@@ -233,14 +233,22 @@ export async function fetchBlogPosts() {
 }
 
 /**
+ * Fetch Blog Media
+ * @param {number} id
+ * @returns {Promise<*>}
+ */
+export async function fetchBlogMedia(id) {
+  const res = await getEtagResponse(`https://about.algodex.com/wp-json/wp/v2/media/${id}`)
+  return res.data
+}
+
+/**
  * Add Email to the subscription mailing list on hubspot
  *
  * @returns {Promise<Object>}
  */
 export const addSubscriber = async (payload) => {
-  const portalId = '20146426'
-  const formGuid = 'f4023600-6995-433b-894a-2a1ab09dc2f6'
-  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${process.env.NEXT_PUBLIC_FORM_ID}`
   const config = {
     headers: {
       'Content-Type': 'application/json'
