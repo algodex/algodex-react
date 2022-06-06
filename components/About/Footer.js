@@ -198,7 +198,7 @@ export const AboutFooter = () => {
             </FooterLinks>
           </div>
           <div className="col-span-1">
-            <Title className="mb-6 pr-8">{t('COMMUNITY')}</Title>
+            <Title className="mb-6 pr-10">{t('COMMUNITY')}</Title>
 
             <FooterLinks
               target={'_blank'}
