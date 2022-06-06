@@ -12,7 +12,6 @@ import PropTypes from 'prop-types'
 /**
  * About Page
  *
- * @todo Bring about from Algodex
  * @returns {JSX.Element}
  * @constructor
  */
