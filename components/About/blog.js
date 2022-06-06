@@ -65,12 +65,12 @@ const MoreButton = styled(Button)`
 `
 
 // eslint-disable-next-line react/prop-types
-const Post = ({ img, title, date, content }) => {
+const Post = ({ title, date, content }) => {
   return (
     <Blog className="lg:flex mb-12">
       <div className="blog-img lg:w-2/5 lg:mr-10 mb-8 lg:mb-0">
         <img
-          src={img || '/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png'}
+          src={'/Algodex_Skyline_draft_02-1-e1641253822183-768x346 1.png'}
           width={400}
           height={180}
           alt="blog post"
@@ -105,7 +105,6 @@ const BlogPreview = ({ staticBlogPosts }) => {
           {staticBlogPosts.slice(0, 4).map((post) => (
             <Post
               key={post.guid.rendered}
-              img={post.img}
               title={post.title.rendered}
               date={moment(post.date).format('LL')}
               content={post.excerpt.rendered}
