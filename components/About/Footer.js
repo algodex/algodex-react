@@ -27,8 +27,7 @@ const Form = styled.form`
     color: ${({ theme }) => theme.palette.gray[600]};
     position: absolute;
     left: 0.5rem;
-    top: 0.68rem;
-    font-size: 1rem;
+    top: 0.58rem;
   }
   input {
     height: 2.3rem;
@@ -131,7 +130,7 @@ export const AboutFooter = () => {
           </p>
           <Form onSubmit={handleSubmit}>
             <span className="icon">
-              <Icon icon="mi:email" />
+              <Icon icon="mi:email" fontSize={'1.05rem'} />
             </span>
             <input
               type="email"
