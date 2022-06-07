@@ -87,7 +87,7 @@ const Post = ({ title, date, content, featured_media }) => {
         <img src={imgLink || defaultImg} width={400} height={180} alt="blog post" />
       </div>
       <div className="content-wrapper lg:w-3/5">
-        <h3 className="mb-3">{title}</h3>
+        <h3 className="mb-3" dangerouslySetInnerHTML={{ __html: title }} />
         <p className="date">{date}</p>
         <hr />
         <div dangerouslySetInnerHTML={{ __html: content }} />
