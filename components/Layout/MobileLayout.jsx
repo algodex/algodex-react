@@ -41,31 +41,13 @@ const ContentSection = styled.section`
 
 const AssetsSection = styled.section`
   // overflow: hidden;
-  @media (min-width: 1536px) {
-    display: flex !important;
-  }
 `
 
 const SearchAndChartSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   position: relative;
-
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-
   display: ${({ active }) => (active ? 'grid' : 'none')};
   grid-template-rows: 50px 1fr;
-
-  @media (min-width: 996px) {
-    display: grid;
-    grid-area: chart;
-  }
-
-  @media (min-width: 1536px) {
-    grid-template-columns: 365px 1fr;
-    grid-template-rows: 1fr;
-  }
 `
 
 const AssetOrderBookSection = styled.section`
@@ -79,25 +61,12 @@ const AssetOrderBookSection = styled.section`
   }
 
   display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: book;
-    display: flex;
-  }
 `
 const AssetTradeHistorySection = styled.section`
   display: flex;
   flex-direction: column;
-
   display: ${({ active }) => (active ? 'flex' : 'none')};
-
   height: calc(100% - 50px);
-
-  @media (min-width: 996px) {
-    grid-area: history;
-    display: flex;
-    height: inherit;
-  }
 `
 
 const WalletOrdersSection = styled.section`
@@ -108,22 +77,12 @@ const WalletOrdersSection = styled.section`
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
   display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: orders;
-    display: flex;
-  }
 `
 
 const MainWrapper = styled.div`
   position: relative;
   height: 100%;
   min-height: 500px;
-
-  @media (min-width: 996px) {
-    min-height: 100%;
-    height: auto;
-  }
 `
 
 const Main = styled.main`
