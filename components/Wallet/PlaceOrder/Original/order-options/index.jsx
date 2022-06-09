@@ -10,6 +10,8 @@ import {
   OptionsWrapper
 } from './order-options.css'
 import { BodyCopyTiny, LabelSm } from '@/components/Typography'
+/* eslint-disable */
+import { useMemo, useState } from 'react'
 
 import { ChevronDown } from 'react-feather'
 import Icon from 'components/Icon'
@@ -17,14 +19,11 @@ import Icon from 'components/Icon'
 import OrderSizeFilter from '../order-size-filter'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
-/* eslint-disable */
-import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 function OrderOptions(props) {
-  const { order, onChange, allowTaker, orderFilter, setOrderFilter } = props
+  const { order, onChange, allowTaker, orderFilter, setOrderFilter, asset } = props
   const { t } = useTranslation('place-order')
-
   const router = useRouter()
   const showMakerOnly = router && router.query.showMakerOnly === 'true'
 
@@ -59,8 +58,8 @@ function OrderOptions(props) {
   return (
     <Container isExpanded={isExpanded} type={order.type}>
       <ExpandToggle
-        onClick={() => setIsExpanded(!isExpanded)}
-        onKeyDown={handleKeyDown}
+        onClick={() => asset.isGeoBlocked ? () => {} : setIsExpanded(!isExpanded) }
+        onKeyDown={() => asset.isGeoBlocked ? () => {} : handleKeyDown}
         tabIndex="0"
       >
         <LabelSm color="gray.500">{t('advanced-options')}</LabelSm>
@@ -161,6 +160,7 @@ function OrderOptions(props) {
 
 OrderOptions.propTypes = {
   order: PropTypes.object.isRequired,
+  asset: PropTypes.object,
   orderFilter: PropTypes.any,
   setOrderFilter: PropTypes.any,
   onChange: PropTypes.func.isRequired,
