@@ -9,6 +9,7 @@ import {
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Layout from '@/components/Layout/OriginalLayout'
+import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
@@ -105,6 +106,8 @@ function TradePage({ staticExplorerAsset }) {
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const isMobile = true
+  // const [isMobile, setIsMobile] = useState(true)
 
   const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
@@ -150,7 +153,8 @@ function TradePage({ staticExplorerAsset }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      <Layout asset={asset}>{renderContent()}</Layout>
+      {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
+      {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
   )
 }
