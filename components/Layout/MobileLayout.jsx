@@ -26,11 +26,6 @@ const PlaceOrderSection = styled.section`
 
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   display: ${({ active }) => (active ? 'flex' : 'none')};
-  // overflow: hidden scroll;
-  @media (min-width: 996px) {
-    grid-area: trade;
-    display: flex;
-  }
 `
 
 const ContentSection = styled.section`
@@ -54,12 +49,6 @@ const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
-
   display: ${({ active }) => (active ? 'flex' : 'none')};
 `
 const AssetTradeHistorySection = styled.section`
@@ -71,11 +60,6 @@ const AssetTradeHistorySection = styled.section`
 
 const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  @media (min-width: 1024px) and (orientation: landscape) {
-    border-top: none;
-    border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  }
   display: ${({ active }) => (active ? 'flex' : 'none')};
 `
 
