@@ -1,18 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
-import OrderBook from '@/components/Asset/OrderBook'
+// import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import TradeHistory from '@/components/Asset/TradeHistory'
+// import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
-import useDebounce from '@/hooks/useDebounce'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -20,13 +18,7 @@ const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
   display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: wallet;
-    display: flex;
-  }
 `
 
 const PlaceOrderSection = styled.section`
@@ -139,46 +131,6 @@ const Main = styled.main`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   height: 100%;
-
-
-  @media (min-width: 996px) {
-    height: 100%;
-    min-height: 900px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 240px 200px 300px 300px;
-    grid-template-areas:
-      'chart chart wallet'
-      'chart chart trade'
-      'book history trade'
-      'orders orders trade';
-
-    & > section {
-      // for demo
-      &.demo {
-        border: 1px dotted rgba(255, 255, 255, 0.125);
-      }
-    }
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-areas:
-      'chart book wallet'
-      'chart book trade'
-      'orders history trade';
-  }
-
-  @media (min-width: 1536px) {
-    grid-template-columns: 1fr 3fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-areas:
-      'chart chart book wallet'
-      'chart chart book trade'
-      'orders orders history trade';
-  }
-
 }
 `
 
@@ -199,10 +151,6 @@ const MobileMenu = styled.nav`
   }
 
   z-index: 99;
-
-  @media (min-width: 996px) {
-    display: none;
-  }
 `
 
 const MobileMenuButton = styled(Button)`
@@ -218,27 +166,6 @@ const MobileMenuButton = styled(Button)`
 `
 
 /**
- * Detect Mobile
- * @returns {unknown}
- */
-function useMobileDetect() {
-  const [isMobile, setIsMobile] = useState(undefined)
-  const debounceIsMobile = useDebounce(isMobile, 500)
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(detectMobileDisplay())
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [debounceIsMobile])
-
-  return isMobile
-}
-/**
  * @param asset
  * @param children
  * @returns {JSX.Element}
@@ -249,7 +176,6 @@ function MainLayout({ asset, children }) {
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const searchTableRef = useRef()
-  const isMobile = useMobileDetect()
   const TABS = {
     CHART: 'CHART',
     BOOK: 'BOOK',
@@ -299,17 +225,11 @@ function MainLayout({ asset, children }) {
         </SearchAndChartSection>
 
         <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          {isMobile && activeMobile === TABS.BOOK && (
-            <HistoryAndOrderBook isMobile={isMobile} asset={asset} />
-          )}
-          {!isMobile && <OrderBook asset={asset} />}
+          {activeMobile === TABS.BOOK && <HistoryAndOrderBook isMobile={true} asset={asset} />}
         </AssetOrderBookSection>
-        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-          {!isMobile && <TradeHistory asset={asset} />}
-        </AssetTradeHistorySection>
+        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}></AssetTradeHistorySection>
         <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
-          {isMobile && activeMobile === TABS.ORDERS && <Orders asset={asset} />}
-          {!isMobile && <Orders asset={asset} />}
+          {activeMobile === TABS.ORDERS && <Orders asset={asset} />}
         </WalletOrdersSection>
         <MobileMenu>
           <ul>
