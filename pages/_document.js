@@ -4,6 +4,7 @@ import createEmotionServer from '@emotion/server/create-instance'
 import createEmotionCache from '@/utils/createEmotionCache'
 const APP_NAME = 'Algodex'
 const APP_DESCRIPTION = 'Decentralized Exchange'
+const APP_SOCIAL_TWITTER = '@AlgodexOfficial'
 
 export default class NextHTMLDocument extends Document {
   render() {
@@ -23,6 +24,11 @@ export default class NextHTMLDocument extends Document {
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content={APP_SOCIAL_TWITTER} />
+          <meta name="twitter:title" content={APP_NAME} />
+          <meta name="twitter:description" content={APP_DESCRIPTION} />
+          <meta name="twitter:image" content="https://app.algodex.com/beautiful-milky.png" />
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
           <link rel="stylesheet" href="/fonts/style.css" />
           <link rel="manifest" href="/manifest.json" />
