@@ -23,7 +23,7 @@ const LaunchBtn = styled(Button)`
   bordercolor: ${({ theme }) => theme.palette.gray[100]};
   textdecoration: uppercase;
   background-color: transparent;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 500;
 `
 
