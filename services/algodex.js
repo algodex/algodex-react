@@ -222,3 +222,48 @@ export async function fetchAssetPrice(id) {
   } = await getEtagResponse(`${API_HOST}/assets.php?id=${id}`)
   return typeof data !== 'undefined' ? data[0] : {}
 }
+
+/**
+ * Fetch Blog Posts
+ * @returns {Promise<*>}
+ */
+export async function fetchBlogPosts() {
+  const res = await getEtagResponse('https://about.algodex.com/wp-json/wp/v2/posts')
+  return res.data
+}
+
+/**
+ * Fetch Blog Media
+ * @param {number} id
+ * @returns {Promise<*>}
+ */
+export async function fetchBlogMedia(id) {
+  const res = await getEtagResponse(`https://about.algodex.com/wp-json/wp/v2/media/${id}`)
+  return res.data
+}
+
+/**
+ * Add Email to the subscription mailing list on hubspot
+ *
+ * @returns {Promise<Object>}
+ */
+export const addSubscriber = async (payload) => {
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${process.env.NEXT_PUBLIC_FORM_ID}`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  axios.defaults.headers = {
+    'Content-Type': 'application/json'
+  }
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+  return response
+}
