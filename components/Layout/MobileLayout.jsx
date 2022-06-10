@@ -18,14 +18,13 @@ const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'flex' : 'none')};
+  display: 'flex';
 `
 
 const PlaceOrderSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
-
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'flex' : 'none')};
+  display: 'flex';
 `
 
 const ContentSection = styled.section`
@@ -41,7 +40,7 @@ const AssetsSection = styled.section`
 const SearchAndChartSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   position: relative;
-  display: ${({ active }) => (active ? 'grid' : 'none')};
+  display: 'grid';
   grid-template-rows: 50px 1fr;
 `
 
@@ -49,18 +48,18 @@ const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'flex' : 'none')};
+  display: 'flex';
 `
 const AssetTradeHistorySection = styled.section`
   display: flex;
   flex-direction: column;
-  display: ${({ active }) => (active ? 'flex' : 'none')};
+  display: 'flex';
   height: calc(100% - 50px);
 `
 
 const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'flex' : 'none')};
+  display: 'flex';
 `
 
 const MainWrapper = styled.div`
@@ -149,31 +148,42 @@ function MainLayout({ asset, children }) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <WalletSection active={activeMobile === TABS.WALLET}>
-          <Wallet />
-        </WalletSection>
-        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          <PlaceOrder asset={asset} />
-        </PlaceOrderSection>
-        <SearchAndChartSection active={activeMobile === TABS.CHART}>
-          <AssetsSection ref={searchTableRef}>
-            <MobileAssetSearch
-              style={{ height: '6rem' }}
-              className="h-24"
-              searchTableRef={searchTableRef}
-              gridRef={gridRef}
-            />
-          </AssetsSection>
-          <ContentSection>{children}</ContentSection>
-        </SearchAndChartSection>
+        {activeMobile === TABS.WALLET && (
+          <WalletSection>
+            <Wallet />
+          </WalletSection>
+        )}
+        {activeMobile === TABS.TRADE && (
+          <PlaceOrderSection>
+            <PlaceOrder asset={asset} />
+          </PlaceOrderSection>
+        )}
+        {activeMobile === TABS.CHART && (
+          <SearchAndChartSection>
+            <AssetsSection ref={searchTableRef}>
+              <MobileAssetSearch
+                style={{ height: '6rem' }}
+                className="h-24"
+                searchTableRef={searchTableRef}
+                gridRef={gridRef}
+              />
+            </AssetsSection>
+            <ContentSection>{children}</ContentSection>
+          </SearchAndChartSection>
+        )}
 
-        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          {activeMobile === TABS.BOOK && <HistoryAndOrderBook isMobile={true} asset={asset} />}
-        </AssetOrderBookSection>
-        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}></AssetTradeHistorySection>
-        <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
-          {activeMobile === TABS.ORDERS && <Orders asset={asset} />}
-        </WalletOrdersSection>
+        {activeMobile === TABS.BOOK && (
+          <AssetOrderBookSection>
+            <HistoryAndOrderBook isMobile={true} asset={asset} />
+          </AssetOrderBookSection>
+        )}
+        {activeMobile === TABS.HISTORY && <AssetTradeHistorySection></AssetTradeHistorySection>}
+        {activeMobile === TABS.ORDERS && (
+          <WalletOrdersSection>
+            <Orders asset={asset} />
+          </WalletOrdersSection>
+        )}
+
         <MobileMenu>
           <ul>
             <li>
