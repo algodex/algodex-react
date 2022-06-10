@@ -85,12 +85,14 @@ export async function getStaticProps({ params: { id } }) {
  * found
  *
  * @param {object} staticExplorerAsset The Explorer Response
+ * @param {object} deviceType Browser Device: mobile or desktop
  * @returns {JSX.Element}
  * @constructor
  */
-function TradePage({ staticExplorerAsset }) {
+function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   console.debug(`TradePage(`, staticExplorerAsset, `)`)
+  console.debug(`Device Type: `, deviceType)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
@@ -107,8 +109,6 @@ function TradePage({ staticExplorerAsset }) {
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
-  const isMobile = true
-  // const [isMobile, setIsMobile] = useState(true)
 
   const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
@@ -155,14 +155,15 @@ function TradePage({ staticExplorerAsset }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
-      {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
+      {deviceType !== 'mobile' && <Layout asset={asset}>{renderContent()}</Layout>}
+      {deviceType === 'mobile' && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
   )
 }
 
 TradePage.propTypes = {
   staticExplorerAsset: PropTypes.object,
-  staticAssetPrice: PropTypes.object
+  staticAssetPrice: PropTypes.object,
+  deviceType: PropTypes.string
 }
 export default TradePage
