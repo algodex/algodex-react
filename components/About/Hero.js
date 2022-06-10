@@ -19,11 +19,12 @@ const HeroSection = styled.div`
 
 const LaunchBtn = styled(Button)`
   color: ${({ theme }) => theme.palette.gray[100]};
-  border: solid 2px;
+  border: solid 1px;
   bordercolor: ${({ theme }) => theme.palette.gray[100]};
   textdecoration: uppercase;
   background-color: transparent;
   font-size: 1.3rem;
+  font-weight: 500;
 `
 
 const InlineLogo = styled(ReactSVG)`
