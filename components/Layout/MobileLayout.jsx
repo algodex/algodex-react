@@ -18,13 +18,13 @@ const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: 'flex';
+  display: flex;
 `
 
 const PlaceOrderSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: 'flex';
+  display: flex;
 `
 
 const ContentSection = styled.section`
@@ -40,7 +40,7 @@ const AssetsSection = styled.section`
 const SearchAndChartSection = styled.section`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   position: relative;
-  display: 'grid';
+  display: grid;
   grid-template-rows: 50px 1fr;
 `
 
@@ -48,18 +48,16 @@ const AssetOrderBookSection = styled.section`
   display: flex;
   flex-direction: column;
   border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: 'flex';
 `
 const AssetTradeHistorySection = styled.section`
   display: flex;
   flex-direction: column;
-  display: 'flex';
   height: calc(100% - 50px);
 `
 
 const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: 'flex';
+  display: flex;
 `
 
 const MainWrapper = styled.div`
