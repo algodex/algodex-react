@@ -20,8 +20,8 @@ const HeroSection = styled.div`
 const LaunchBtn = styled(Button)`
   color: ${({ theme }) => theme.palette.gray[100]};
   border: solid 1px;
-  bordercolor: ${({ theme }) => theme.palette.gray[100]};
-  textdecoration: uppercase;
+  border-color: ${({ theme }) => theme.palette.gray[100]};
+  text-decoration: uppercase;
   background-color: transparent;
   font-size: 1.1rem;
   font-weight: 500;
