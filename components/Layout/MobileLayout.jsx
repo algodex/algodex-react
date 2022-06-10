@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import AssetSearch from '@/components/Nav/SearchSidebar'
+import MobileAssetSearch from '@/components/Nav/MobileSearchSidebar'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 // import OrderBook from '@/components/Asset/OrderBook'
@@ -157,7 +157,7 @@ function MainLayout({ asset, children }) {
         </PlaceOrderSection>
         <SearchAndChartSection active={activeMobile === TABS.CHART}>
           <AssetsSection ref={searchTableRef}>
-            <AssetSearch
+            <MobileAssetSearch
               style={{ height: '6rem' }}
               className="h-24"
               searchTableRef={searchTableRef}

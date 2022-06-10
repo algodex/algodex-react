@@ -7,7 +7,8 @@ import {
 } from '@/utils/restrictedAssets'
 
 import AssetInfo from '@/components/Asset/Asset'
-import Chart from '@/components/Asset/Chart'
+// import Chart from '@/components/Asset/Chart'
+import MobileChart from '@/components/Asset/MobileChart'
 import Layout from '@/components/Layout/OriginalLayout'
 import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
@@ -144,7 +145,8 @@ function TradePage({ staticExplorerAsset }) {
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
-    else return <Chart asset={asset} interval={interval} onChange={onChange} />
+    // else return <Chart asset={asset} interval={interval} onChange={onChange} />
+    else return <MobileChart asset={asset} interval={interval} onChange={onChange} />
   }
 
   return (
