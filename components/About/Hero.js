@@ -23,7 +23,7 @@ const LaunchBtn = styled(Button)`
   bordercolor: ${({ theme }) => theme.palette.gray[100]};
   textdecoration: uppercase;
   background-color: transparent;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
 `
 
 const InlineLogo = styled(ReactSVG)`
