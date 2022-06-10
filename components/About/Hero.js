@@ -20,9 +20,11 @@ const HeroSection = styled.div`
 const LaunchBtn = styled(Button)`
   color: ${({ theme }) => theme.palette.gray[100]};
   border: solid 1px;
-  bordercolor: ${({ theme }) => theme.palette.gray[100]};
-  textdecoration: uppercase;
+  border-color: ${({ theme }) => theme.palette.gray[100]};
+  text-transform: uppercase;
   background-color: transparent;
+  font-size: 1.1rem;
+  font-weight: 500;
 `
 
 const InlineLogo = styled(ReactSVG)`
@@ -30,14 +32,14 @@ const InlineLogo = styled(ReactSVG)`
   width: 19rem;
 `
 
-const Note = styled.p`
-  font-size: 0.875rem;
-  color: ${({ theme }) => theme.palette.gray[100]};
-  line-height: 19px;
-  a {
-    color: ${({ theme }) => theme.palette.green['400']};
-  }
-`
+// const Note = styled.p`
+//   font-size: 0.875rem;
+//   color: ${({ theme }) => theme.palette.gray[100]};
+//   line-height: 19px;
+//   a {
+//     color: ${({ theme }) => theme.palette.green['400']};
+//   }
+// `
 
 export const Hero = () => {
   const { t } = useTranslation('about')
@@ -64,13 +66,13 @@ export const Hero = () => {
           <Link href="/trade">
             <LaunchBtn>{t('launch app')}</LaunchBtn>
           </Link>
-          <Note className="mt-5">
+          {/* <Note className="mt-5">
             {t('NOTE')}:{' '}
             {t(
               'Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at'
             )}
             : <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
-          </Note>
+          </Note> */}
         </div>
       </AboutContainer>
     </HeroSection>
