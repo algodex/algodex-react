@@ -9,15 +9,6 @@ import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
-// export const Section = styled.section`
-//   height: inherit;
-//   width: 100%;
-//   margin: 0;
-//   padding: 0;
-//   @media (min-width: 1536px) {
-//     display: flex;
-//   }
-// `
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -65,22 +56,6 @@ export function NavSearchSidebar({
   //  */
 
   /**
-   * The `gridSize` prop changes on window resize, so this is equivalent to a
-   * resize listener callback. On large screens, `isActive` is always true.
-   * The active (focused) element is blurred so an asset row can't remain
-   * focused when flyout is hidden.
-   */
-  useEffect(() => {
-    const isFixed = window.matchMedia('(min-width: 1536px)').matches
-    const isMobile = window.matchMedia('(max-width: 996px)').matches
-
-    if (!isMobile) {
-      setIsActive(isFixed)
-      document.activeElement.blur()
-    }
-  }, [gridSize])
-
-  /**
    *
    * @type {(function(): void)|*}
    */
@@ -93,7 +68,7 @@ export function NavSearchSidebar({
    * @type {(function(): void)|*}
    */
   const handleExternalClick = useCallback(() => {
-    const isFixed = window.matchMedia('(min-width: 1536px)').matches
+    const isFixed = false
     !isFixed && setIsActive(false)
   }, [setIsActive])
 
