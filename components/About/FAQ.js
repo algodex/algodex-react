@@ -128,7 +128,7 @@ export const FAQSection = () => {
                     <li>
                       <span className="font-bold">Reddit:</span>{' '}
                       <a href="https://www.reddit.com/r/Algodex/" target="_blank" rel="noreferrer">
-                        @AlgodexOfficial
+                        r/Algodex
                       </a>
                     </li>
                     <li>
