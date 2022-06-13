@@ -46,9 +46,9 @@ export const Hero = () => {
   return (
     <HeroSection>
       <AboutContainer>
-        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 ml-5">
+        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
           <InlineLogo src="/logo-inline-dark.svg" />
-          <AboutTitle>
+          <AboutTitle className="leading-10">
             {t('A Decentralized')} <br /> {t('Marketplace')}
           </AboutTitle>
           <Image src="/Powered-by-Algorand.svg" width={150} height={24} />
@@ -56,7 +56,7 @@ export const Hero = () => {
         <div className="w-5/5 lg:w-1/2 md:w-4/5 sm:w-5/5">
           <hr />
         </div>
-        <div className="w-5/5 lg:w-2/6 md:w-1/2 sm:w-3/5 mt-4 mb-3 ml-5">
+        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
           <p className="mb-6 leading-6">
             {t(
               'Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself'

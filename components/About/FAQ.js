@@ -33,7 +33,7 @@ const FAQuestions = [
   },
   {
     q: 'Where can I follow Algodex and keep up with announcements?',
-    a: 'You can follow Algodex on the following social media websites <br/>',
+    a: 'You can follow Algodex on the following social media websites: <br/>',
     socialLink: true
   }
 ]
@@ -49,6 +49,15 @@ const Title = styled.p`
 `
 
 const Body = styled.div`
+  color: ${({ theme }) => theme.palette.gray['300']};
+  line-height: 1.5rem;
+  a {
+    color: ${({ theme }) => theme.palette.green['400']};
+  }
+`
+
+const List = styled.ul`
+  margin-top: 0.5rem;
   color: ${({ theme }) => theme.palette.gray['300']};
   line-height: 1.5rem;
   a {
@@ -86,20 +95,19 @@ export const FAQSection = () => {
               <AccordionDetails style={{ paddingTop: 0 }}>
                 <Body dangerouslySetInnerHTML={{ __html: faq.a }} />
                 {faq.socialLink && (
-                  <ul>
+                  <List>
                     <li>
-                      Twitter:{' '}
+                      <span className="font-bold">Twitter:</span>{' '}
                       <a
                         href="https://twitter.com/AlgodexOfficial"
                         target="_blank"
                         rel="noreferrer"
                       >
-                        {' '}
                         @AlgodexOfficial
                       </a>
                     </li>
                     <li>
-                      Telegram:
+                      <span className="font-bold">Telegram:</span>
                       <ul>
                         <li>
                           <a
@@ -118,18 +126,18 @@ export const FAQSection = () => {
                       </ul>
                     </li>
                     <li>
-                      Reddit:{' '}
+                      <span className="font-bold">Reddit:</span>{' '}
                       <a href="https://www.reddit.com/r/Algodex/" target="_blank" rel="noreferrer">
                         @AlgodexOfficial
                       </a>
                     </li>
                     <li>
-                      Discord:{' '}
+                      <span className="font-bold">Discord:</span>{' '}
                       <a href="https://discord.gg/b6gTsNrPB8" target="_blank" rel="noreferrer">
                         Algodex Discussion
                       </a>
                     </li>
-                  </ul>
+                  </List>
                 )}
               </AccordionDetails>
             </Accordion>
