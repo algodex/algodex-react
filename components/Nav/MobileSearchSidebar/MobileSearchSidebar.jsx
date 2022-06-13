@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { default as NavSearchTable } from './MobileSearchTable'
+import { default as NavSearchTable } from 'components/Nav/SearchSidebar/SearchTable'
 import PropTypes from 'prop-types'
 import { default as SearchInput } from 'components/Input/SearchInput'
 import { Section } from '@/components/Layout/Section'
