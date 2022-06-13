@@ -154,13 +154,13 @@ function MainLayout({ asset, children }) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <WalletSection active={false}>
+        <WalletSection>
           <Wallet />
         </WalletSection>
-        <PlaceOrderSection active={false}>
+        <PlaceOrderSection>
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
-        <SearchAndChartSection active={false}>
+        <SearchAndChartSection>
           <AssetsSection ref={searchTableRef}>
             <AssetSearch
               style={{ height: '6rem' }}
@@ -172,13 +172,13 @@ function MainLayout({ asset, children }) {
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
-        <AssetOrderBookSection active={false}>
+        <AssetOrderBookSection>
           <OrderBook asset={asset} />
         </AssetOrderBookSection>
-        <AssetTradeHistorySection active={false}>
+        <AssetTradeHistorySection>
           <TradeHistory asset={asset} />
         </AssetTradeHistorySection>
-        <WalletOrdersSection active={false}>
+        <WalletOrdersSection>
           <Orders asset={asset} />
         </WalletOrdersSection>
       </Main>

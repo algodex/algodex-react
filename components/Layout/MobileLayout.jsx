@@ -11,6 +11,7 @@ import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import { lighten } from 'polished'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -94,13 +95,15 @@ const MobileMenu = styled.nav`
 const MobileMenuButton = styled(Button)`
   height: 100%;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['800']};
+  // background-color: ${({ theme }) => theme.colors.gray['800']};
   padding: 0;
   border: 1px solid ${({ theme }) => theme.colors.gray['700']};
   max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
   min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
+  background-color: ${({ active, theme }) =>
+    active ? `${lighten(0.05, theme.colors.green['600'])} !important` : theme.colors.gray['800']};
 `
 
 /**
@@ -123,6 +126,11 @@ function MainLayout({ asset, children }) {
   }
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
+
+  /**
+   * delay time in ms between Nav Button switch
+   */
+  const delaySwitch = 10
   /**
    * Use Clicked Events
    *
@@ -131,10 +139,10 @@ function MainLayout({ asset, children }) {
    */
   useEvent('clicked', (data) => {
     if (data === 'asset') {
-      setTimeout(() => setActiveMobile(TABS.CHART), 10)
+      setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)
     }
     if (data === 'order') {
-      setTimeout(() => setActiveMobile(TABS.TRADE), 10)
+      setTimeout(() => setActiveMobile(TABS.TRADE), delaySwitch)
     }
   })
   if (!asset) {
@@ -186,7 +194,8 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-CHART').length}
                 type="button"
-                onClick={() => setTimeout(() => setActiveMobile(TABS.CHART), 10)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)}
+                active={activeMobile === TABS.CHART}
               >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
@@ -195,7 +204,8 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-BOOK').length}
                 type="button"
-                onClick={() => setTimeout(() => setActiveMobile(TABS.BOOK), 10)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.BOOK), delaySwitch)}
+                active={activeMobile === TABS.BOOK}
               >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
@@ -204,7 +214,8 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-TRADE').length}
                 type="button"
-                onClick={() => setTimeout(() => setActiveMobile(TABS.TRADE), 10)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.TRADE), delaySwitch)}
+                active={activeMobile === TABS.TRADE}
               >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
@@ -213,7 +224,8 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
-                onClick={() => setTimeout(() => setActiveMobile(TABS.ORDERS), 10)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.ORDERS), delaySwitch)}
+                active={activeMobile === TABS.ORDERS}
               >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
@@ -230,7 +242,8 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 type="button"
                 characterLength={t('mobilefooter-WALLET').length}
-                onClick={() => setTimeout(() => setActiveMobile(TABS.WALLET), 10)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.WALLET), delaySwitch)}
+                active={activeMobile === TABS.WALLET}
               >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
