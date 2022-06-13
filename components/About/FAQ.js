@@ -106,8 +106,8 @@ export const FAQSection = () => {
                         @AlgodexOfficial
                       </a>
                     </li>
-                    <li>
-                      <span className="font-bold">Telegram:</span>
+                    <li className="flex">
+                      <span className="font-bold mr-1">Telegram:</span>
                       <ul>
                         <li>
                           <a
