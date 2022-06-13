@@ -7,7 +7,7 @@ import {
 } from '@/utils/restrictedAssets'
 
 import AssetInfo from '@/components/Asset/Asset'
-// import Chart from '@/components/Asset/Chart'
+import Chart from '@/components/Asset/Chart'
 import MobileChart from '@/components/Asset/MobileChart'
 import Layout from '@/components/Layout/OriginalLayout'
 import MobileLayout from '@/components/Layout/MobileLayout'
@@ -82,7 +82,7 @@ export async function getStaticProps({ params: { id } }) {
  * Detect Mobile
  * @returns {unknown}
  */
- function useMobileDetect(isMobileSSR = false) {
+function useMobileDetect(isMobileSSR = false) {
   const [isMobile, setIsMobile] = useState(isMobileSSR)
   const debounceIsMobile = useDebounce(isMobile, 500)
   useEffect(() => {
@@ -134,7 +134,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
   const isMobile = useMobileDetect(deviceType === 'mobile')
-  console.log('isMobile: ', isMobile)
 
   const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
@@ -171,8 +170,8 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
-    // else return <Chart asset={asset} interval={interval} onChange={onChange} />
-    else return <MobileChart asset={asset} interval={interval} onChange={onChange} />
+    else if (isMobile) return <MobileChart asset={asset} interval={interval} onChange={onChange} />
+    else return <Chart asset={asset} interval={interval} onChange={onChange} />
   }
 
   return (
@@ -181,7 +180,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      <div>isMobile: {isMobile}</div>
+      <div>isMobile: {isMobile ? 'true' : 'false'}</div>
       {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
       {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
