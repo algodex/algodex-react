@@ -32,14 +32,14 @@ const InlineLogo = styled(ReactSVG)`
   width: 19rem;
 `
 
-// const Note = styled.p`
-//   font-size: 0.875rem;
-//   color: ${({ theme }) => theme.palette.gray[100]};
-//   line-height: 19px;
-//   a {
-//     color: ${({ theme }) => theme.palette.green['400']};
-//   }
-// `
+const Note = styled.p`
+  font-size: 0.875rem;
+  color: ${({ theme }) => theme.palette.gray[100]};
+  line-height: 19px;
+  a {
+    color: ${({ theme }) => theme.palette.green['400']};
+  }
+`
 
 export const Hero = () => {
   const { t } = useTranslation('about')
@@ -66,13 +66,22 @@ export const Hero = () => {
           <Link href="/trade">
             <LaunchBtn>{t('launch app')}</LaunchBtn>
           </Link>
-          {/* <Note className="mt-5">
-            {t('NOTE')}:{' '}
-            {t(
-              'Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at'
-            )}
-            : <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
-          </Note> */}
+          <Note className="mt-5">
+            Projects can apply with{' '}
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              this form
+            </a>{' '}
+            to be listed for North American trading. The rest of the world can trade all ASAs with
+            no restrictions.
+            <br />
+            <br />
+            Testnet is also available for anyone trying out the platform risk free at :{' '}
+            <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
+          </Note>
         </div>
       </AboutContainer>
     </HeroSection>
