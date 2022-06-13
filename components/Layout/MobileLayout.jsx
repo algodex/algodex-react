@@ -3,12 +3,10 @@ import { useRef, useState } from 'react'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
-// import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-// import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
 import { useEvent } from 'hooks/useEvents'
@@ -133,10 +131,10 @@ function MainLayout({ asset, children }) {
    */
   useEvent('clicked', (data) => {
     if (data === 'asset') {
-      setActiveMobile(TABS.CHART)
+      setTimeout(() => setActiveMobile(TABS.CHART), 10)
     }
     if (data === 'order') {
-      setActiveMobile(TABS.TRADE)
+      setTimeout(() => setActiveMobile(TABS.TRADE), 10)
     }
   })
   if (!asset) {
@@ -188,7 +186,7 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-CHART').length}
                 type="button"
-                onClick={() => setActiveMobile(TABS.CHART)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.CHART), 10)}
               >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
@@ -197,7 +195,7 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-BOOK').length}
                 type="button"
-                onClick={() => setActiveMobile(TABS.BOOK)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.BOOK), 10)}
               >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
@@ -206,7 +204,7 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-TRADE').length}
                 type="button"
-                onClick={() => setActiveMobile(TABS.TRADE)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.TRADE), 10)}
               >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
@@ -215,7 +213,7 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
-                onClick={() => setActiveMobile(TABS.ORDERS)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.ORDERS), 10)}
               >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
@@ -232,7 +230,7 @@ function MainLayout({ asset, children }) {
               <MobileMenuButton
                 type="button"
                 characterLength={t('mobilefooter-WALLET').length}
-                onClick={() => setActiveMobile(TABS.WALLET)}
+                onClick={() => setTimeout(() => setActiveMobile(TABS.WALLET), 10)}
               >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
