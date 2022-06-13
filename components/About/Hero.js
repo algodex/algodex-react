@@ -46,10 +46,10 @@ export const Hero = () => {
   return (
     <HeroSection>
       <AboutContainer>
-        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
+        <div className="mt-4 mb-3 md:ml-7 lg:ml-9">
           <InlineLogo src="/logo-inline-dark.svg" />
           <AboutTitle className="leading-10">
-            {t('A Decentralized')} <br /> {t('Marketplace')}
+            {t('A Decentralized')} {t('Marketplace')}
           </AboutTitle>
           <Image src="/Powered-by-Algorand.svg" width={150} height={24} />
         </div>
