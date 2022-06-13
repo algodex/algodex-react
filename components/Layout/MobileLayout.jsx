@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import MobileAssetSearch from '@/components/Nav/MobileSearchSidebar'
+import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 // import OrderBook from '@/components/Asset/OrderBook'

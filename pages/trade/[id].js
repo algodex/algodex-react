@@ -115,7 +115,6 @@ function useMobileDetect(isMobileSSR = false) {
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   console.debug(`TradePage(`, staticExplorerAsset, `)`)
-  console.debug(`Device Type: `, deviceType)
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
@@ -178,7 +177,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      <div>isMobile: {isMobile ? 'true' : 'false'}</div>
       {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
       {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
