@@ -18,6 +18,8 @@ import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
+import useDebounce from '@/hooks/useDebounce'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
 
 /**
  * Fetch Traded Asset Paths
@@ -77,6 +79,28 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 /**
+ * Detect Mobile
+ * @returns {unknown}
+ */
+ function useMobileDetect(isMobileSSR = false) {
+  const [isMobile, setIsMobile] = useState(isMobileSSR)
+  const debounceIsMobile = useDebounce(isMobile, 500)
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(detectMobileDisplay())
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [debounceIsMobile])
+
+  return isMobile
+}
+
+/**
  * Trade Page
  *
  * Display a chart of historical orders. Takes an Algorand Asset
@@ -109,6 +133,8 @@ function TradePage({ staticExplorerAsset, deviceType }) {
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const isMobile = useMobileDetect(deviceType === 'mobile')
+  console.log('isMobile: ', isMobile)
 
   const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
@@ -155,8 +181,9 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      {deviceType !== 'mobile' && <Layout asset={asset}>{renderContent()}</Layout>}
-      {deviceType === 'mobile' && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
+      <div>isMobile: {isMobile}</div>
+      {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
+      {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
   )
 }

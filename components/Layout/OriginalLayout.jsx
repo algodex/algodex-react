@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
-import Button from '@/components/Button'
-import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
@@ -10,11 +8,7 @@ import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import styled from '@emotion/styled'
-import useDebounce from '@/hooks/useDebounce'
-import { useEvent } from 'hooks/useEvents'
-import useTranslation from 'next-translate/useTranslation'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -181,63 +175,6 @@ const Main = styled.main`
 
 }
 `
-
-const MobileMenu = styled.nav`
-  height: 50px;
-  width: 100%;
-
-  & > ul {
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-
-  & > ul > li {
-    flex: 1 0 auto;
-    height: 100%;
-  }
-
-  z-index: 99;
-
-  @media (min-width: 996px) {
-    display: none;
-  }
-`
-
-const MobileMenuButton = styled(Button)`
-  height: 100%;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['800']};
-  padding: 0;
-  border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  max-width: ${({ characterLength }) => (characterLength > 8 ? '4rem' : '7rem')};
-  min-width: ${({ characterLength }) => (characterLength > 8 ? '3.5rem' : '3.5rem')};
-  font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
-  overflow-wrap: anywhere;
-`
-
-/**
- * Detect Mobile
- * @returns {unknown}
- */
-function useMobileDetect() {
-  const [isMobile, setIsMobile] = useState(undefined)
-  const debounceIsMobile = useDebounce(isMobile, 500)
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(detectMobileDisplay())
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [debounceIsMobile])
-
-  return isMobile
-}
 /**
  * @param asset
  * @param children
@@ -246,33 +183,9 @@ function useMobileDetect() {
  */
 function MainLayout({ asset, children }) {
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { t } = useTranslation('common')
   const gridRef = useRef()
   const searchTableRef = useRef()
-  const isMobile = useMobileDetect()
-  const TABS = {
-    CHART: 'CHART',
-    BOOK: 'BOOK',
-    TRADE: 'TRADE',
-    ORDERS: 'ORDERS',
-    HISTORY: 'HISTORY'
-  }
 
-  const [activeMobile, setActiveMobile] = useState(TABS.CHART)
-  /**
-   * Use Clicked Events
-   *
-   * This is only used to switch to MobileMenu Chart view
-   * when the Next/Router navigates to a shallow route
-   */
-  useEvent('clicked', (data) => {
-    if (data === 'asset') {
-      setActiveMobile(TABS.CHART)
-    }
-    if (data === 'order') {
-      setActiveMobile(TABS.TRADE)
-    }
-  })
   if (!asset) {
     return <Spinner flex={true} />
   }
@@ -280,13 +193,13 @@ function MainLayout({ asset, children }) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <WalletSection active={activeMobile === TABS.WALLET}>
+        <WalletSection active={false}>
           <Wallet />
         </WalletSection>
-        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
+        <PlaceOrderSection active={false}>
           <PlaceOrder asset={asset} />
         </PlaceOrderSection>
-        <SearchAndChartSection active={activeMobile === TABS.CHART}>
+        <SearchAndChartSection active={false}>
           <AssetsSection ref={searchTableRef}>
             <AssetSearch
               style={{ height: '6rem' }}
@@ -298,76 +211,15 @@ function MainLayout({ asset, children }) {
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
-        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          {isMobile && activeMobile === TABS.BOOK && (
-            <HistoryAndOrderBook isMobile={isMobile} asset={asset} />
-          )}
-          {!isMobile && <OrderBook asset={asset} />}
+        <AssetOrderBookSection active={false}>
+          <OrderBook asset={asset} />
         </AssetOrderBookSection>
-        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-          {!isMobile && <TradeHistory asset={asset} />}
+        <AssetTradeHistorySection active={false}>
+          <TradeHistory asset={asset} />
         </AssetTradeHistorySection>
-        <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
-          {isMobile && activeMobile === TABS.ORDERS && <Orders asset={asset} />}
-          {!isMobile && <Orders asset={asset} />}
+        <WalletOrdersSection active={false}>
+          <Orders asset={asset} />
         </WalletOrdersSection>
-        <MobileMenu>
-          <ul>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-CHART').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.CHART)}
-              >
-                {t('mobilefooter-CHART')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-BOOK').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.BOOK)}
-              >
-                {t('mobilefooter-BOOK')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-TRADE').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.TRADE)}
-              >
-                {t('mobilefooter-TRADE')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                characterLength={t('mobilefooter-ORDERS').length}
-                type="button"
-                onClick={() => setActiveMobile(TABS.ORDERS)}
-              >
-                {t('mobilefooter-ORDERS')}
-              </MobileMenuButton>
-            </li>
-            {/*
-            <li>
-              // Trade history. Disable for now until it is refactored into the Orders tab
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                History
-              </MobileMenuButton>
-            </li>
-            */}
-            <li>
-              <MobileMenuButton
-                type="button"
-                characterLength={t('mobilefooter-WALLET').length}
-                onClick={() => setActiveMobile(TABS.WALLET)}
-              >
-                {t('mobilefooter-WALLET')}
-              </MobileMenuButton>
-            </li>
-          </ul>
-        </MobileMenu>
       </Main>
     </MainWrapper>
   )
