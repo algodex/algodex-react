@@ -34,7 +34,7 @@ export const BlogWrapper = styled.section`
 export const AboutTitle = styled.h2`
   font-size: 2rem;
   font-weight: 700;
-  line-height: 2.5rem;
+  line-height: 1.5rem;
   color: ${({ theme }) => theme.palette.gray[100]};
   margin-block: 1.7rem 0.8rem;
 `
