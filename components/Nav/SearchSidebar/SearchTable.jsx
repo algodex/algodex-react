@@ -179,10 +179,15 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (searchTableRef?.current) {
-        const { width, height } = searchTableRef.current.getBoundingClientRect()
-        setSearchTableSize({ width, height })
-      }
+      /**
+       * Wait all the event queue process
+       */
+      setTimeout(() => {
+        if (searchTableRef?.current) {
+          const { width, height } = searchTableRef.current.getBoundingClientRect()
+          setSearchTableSize({ width, height })
+        }
+      })
     }
     window.addEventListener('resize', handleResize)
     handleResize()

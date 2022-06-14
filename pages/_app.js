@@ -21,6 +21,8 @@ import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useStore from '@/store/use-store'
 import useUserStore from '@/store/use-user-state'
+import NextApp from 'next/app'
+import parser from 'ua-parser-js'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -241,6 +243,12 @@ function Algodex(props) {
       </Hydrate>
     </QueryClientProvider>
   )
+}
+
+Algodex.getInitialProps = async (ctx) => {
+  const initialProps = await NextApp.getInitialProps(ctx)
+  const deviceType = parser(ctx.ctx.req.headers['user-agent']).device.type || 'desktop'
+  return { pageProps: { ...initialProps, deviceType } }
 }
 
 Algodex.propTypes = {

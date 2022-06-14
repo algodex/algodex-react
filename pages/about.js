@@ -8,6 +8,7 @@ import { RoadMap } from '@/components/About/RoadMap'
 import BlogPreview from '@/components/About/blog'
 import { fetchBlogPosts } from '@/services/algodex'
 import PropTypes from 'prop-types'
+import { FAQSection } from '@/components/About/FAQ'
 
 /**
  * About Page
@@ -27,6 +28,7 @@ const AboutPage = ({ staticBlogPosts }) => {
       <RoadMap />
       <PartnerShip />
       <BlogPreview staticBlogPosts={staticBlogPosts} />
+      <FAQSection />
       <AboutFooter />
     </>
   )
