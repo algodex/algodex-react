@@ -133,7 +133,7 @@ export const FAQSection = () => {
                     </li>
                     <li>
                       <span className="font-bold">Discord:</span>{' '}
-                      <a href="https://discord.gg/b6gTsNrPB8" target="_blank" rel="noreferrer">
+                      <a href="https://discord.gg/qS3Q7AqwF6" target="_blank" rel="noreferrer">
                         Algodex Discussion
                       </a>
                     </li>
