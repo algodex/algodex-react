@@ -65,6 +65,7 @@ export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
       numDigits = minDigits
     }
   } else {
+    // number of digits decide number of decimals
     const decimalStr = new Big(float).toFixed(maxDigits).toString().split('.')[0]
 
     if (decimalStr.length > 2 && decimalStr.length < maxDigits) {
