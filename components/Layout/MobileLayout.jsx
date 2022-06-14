@@ -103,7 +103,7 @@ const MobileMenuButton = styled(Button)`
   font-size: ${({ characterLength }) => (characterLength > 6 ? '10px' : '0.875rem')};
   overflow-wrap: anywhere;
   background-color: ${({ active, theme }) =>
-    active ? `${lighten(0.05, theme.colors.green['600'])} !important` : theme.colors.gray['800']};
+    active ? `${lighten(0.05, theme.colors.blue['1000'])} !important` : theme.colors.gray['800']};
 `
 
 /**
@@ -130,7 +130,7 @@ function MainLayout({ asset, children }) {
   /**
    * delay time in ms between Nav Button switch
    */
-  const delaySwitch = 10
+  const delaySwitch = 1
   /**
    * Use Clicked Events
    *
