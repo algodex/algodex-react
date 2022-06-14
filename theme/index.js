@@ -219,6 +219,14 @@ export const buttons = {
       backgroundColor: lighten(0.05, colors.gray['600'])
     }
   },
+  third: {
+    color: colors.gray['000'],
+    border: '1px solid transparent',
+    backgroundColor: colors.gray['600'],
+    '&:hover': {
+      backgroundColor: lighten(0.05, colors.blue['1000'])
+    }
+  },
   danger: {
     color: colors.gray['000'],
     border: '1px solid transparent',
