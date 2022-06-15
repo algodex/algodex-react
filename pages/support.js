@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
+import { SupportForm } from '@/components/SupportForm'
 
 /**
  * Support Page
@@ -14,13 +15,7 @@ const SupportPage = () => {
         <title>Support</title>
       </Head>
       <Header />
-      <iframe
-        style={{ overflow: 'hidden', height: '100%', width: '100%' }}
-        height="100%"
-        width="100%"
-        title="about"
-        src={'https://about.algodex.com/support'}
-      />
+      <SupportForm />
     </>
   )
 }
