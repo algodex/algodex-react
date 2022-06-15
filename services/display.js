@@ -21,34 +21,34 @@ export const truncateAddress = (addr) => {
  * @param {Number} maxDigits maximum number of digits after decimal point
  * @returns {String}
  */
-// export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
-//   if (typeof float === 'undefined') throw new Error('Must have a valid float')
-//   let numDigits
-//   const absValue = new Big(float).abs().toNumber()
+export const floatToFixedDynamic = (float, minDigits = 4, maxDigits = 6) => {
+  if (typeof float === 'undefined') throw new Error('Must have a valid float')
+  let numDigits
+  const absValue = new Big(float).abs().toNumber()
 
-//   // checks for fractional numbers less than zero with preceding zeros after decimal point
-//   if (absValue > 0 && absValue < 0.1) {
-//     // if number is 0.0001, fractionalStr is '0001'
-//     const fractionalStr = new Big(float).toFixed(maxDigits).toString().split('.')[1]
+  // checks for fractional numbers less than zero with preceding zeros after decimal point
+  if (absValue > 0 && absValue < 0.1) {
+    // if number is 0.0001, fractionalStr is '0001'
+    const fractionalStr = new Big(float).toFixed(maxDigits).toString().split('.')[1]
 
-//     let precedingZeros
-//     for (let i = 0; i < fractionalStr.length; i++) {
-//       if (fractionalStr[i] !== '0') {
-//         precedingZeros = i
-//         break
-//       }
-//     }
+    let precedingZeros
+    for (let i = 0; i < fractionalStr.length; i++) {
+      if (fractionalStr[i] !== '0') {
+        precedingZeros = i
+        break
+      }
+    }
 
-//     if (precedingZeros >= minDigits && precedingZeros < maxDigits) {
-//       numDigits = precedingZeros + 1
-//     } else {
-//       numDigits = minDigits
-//     }
-//   } else {
-//     numDigits = minDigits
-//   }
-//   return new Big(float).toFixed(numDigits)
-// }
+    if (precedingZeros >= minDigits && precedingZeros < maxDigits) {
+      numDigits = precedingZeros + 1
+    } else {
+      numDigits = minDigits
+    }
+  } else {
+    numDigits = minDigits
+  }
+  return new Big(float).toFixed(numDigits)
+}
 
 export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
   if (typeof float === 'undefined') throw new Error('Must have a valid float')
