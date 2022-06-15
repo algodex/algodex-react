@@ -1,4 +1,4 @@
-import ANS from '@algonameservice/sdk'
+import { ANS } from '@algonameservice/sdk'
 import algosdk from 'algosdk'
 import { useState, useEffect } from 'react'
 import { getActiveNetwork } from '../services/environment'
