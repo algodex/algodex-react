@@ -13,7 +13,8 @@ const colors = {
     600: '#2668c0',
     700: '#225daa',
     800: '#1d5195',
-    900: '#194680'
+    900: '#194680',
+    1000: '#A698B5'
   },
   amber: {
     '000': '#FFC30D',
@@ -44,6 +45,7 @@ const colors = {
     100: '#EDF2F6',
     200: '#E2E8F0',
     300: '#CBD5E0',
+    350: '#6A727D',
     400: '#A1AEC0',
     500: '#718096',
     600: '#4A5568',
@@ -216,6 +218,14 @@ export const buttons = {
     backgroundColor: colors.gray['600'],
     '&:hover': {
       backgroundColor: lighten(0.05, colors.gray['600'])
+    }
+  },
+  third: {
+    color: colors.gray['000'],
+    border: '1px solid transparent',
+    backgroundColor: colors.gray['600'],
+    '&:hover': {
+      backgroundColor: lighten(0.05, colors.blue['1000'])
     }
   },
   danger: {

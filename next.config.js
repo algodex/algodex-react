@@ -39,7 +39,7 @@ const moduleExports = nextPWA(
       return [
         {
           source: '/',
-          destination: '/trade/' + defaultAsset,
+          destination: '/about',
           permanent: true
         },
         {

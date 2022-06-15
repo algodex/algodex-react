@@ -137,7 +137,7 @@ export const AssetChangeCell = ({ value, row }) => {
     }
     return (
       <span
-        className={row?.original?.isGeoBlocked ? 'opacity-60' : 'opacity-100'}
+        className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
       >{`${value}%`}</span>
     )
   }
@@ -179,10 +179,15 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (searchTableRef?.current) {
-        const { width, height } = searchTableRef.current.getBoundingClientRect()
-        setSearchTableSize({ width, height })
-      }
+      /**
+       * Wait all the event queue process
+       */
+      setTimeout(() => {
+        if (searchTableRef?.current) {
+          const { width, height } = searchTableRef.current.getBoundingClientRect()
+          setSearchTableSize({ width, height })
+        }
+      })
     }
     window.addEventListener('resize', handleResize)
     handleResize()
@@ -238,7 +243,7 @@ export const NavSearchTable = ({
       return (
         <AssetPrice
           className={`${
-            row.original.isGeoBlocked ? 'opacity-60' : 'opacity-100'
+            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
           } cursor-pointer font-semibold`}
         >
           {value}
@@ -261,7 +266,7 @@ export const NavSearchTable = ({
       return (
         <div className="cursor-pointer flex flex-col">
           <div
-            className={`${row.original.isGeoBlocked ? 'opacity-60' : 'opacity-100'} flex flex-col`}
+            className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
           >
             <div className="flex items-center">
               <Icon
@@ -311,10 +316,10 @@ export const NavSearchTable = ({
                       title="Information asset"
                       className="mt-0.5"
                       size={0.4}
-                      color={theme.palette.gray['500']}
+                      color={theme.palette.gray['600']}
                     />
                     &nbsp;
-                    <p style={{ fontSize: '8px' }} className="text-gray-500 font-medium">
+                    <p style={{ fontSize: '8px' }} className="text-gray-600 font-medium">
                       Restricted Trading (USA)
                     </p>
                   </div>
