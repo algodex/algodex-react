@@ -21,10 +21,12 @@ import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
 import AlgodexApi from '@algodex/algodex-sdk'
-import { Provider } from '@algodex/algodex-hooks'
+import { Provider, useWallets } from '@algodex/algodex-hooks'
 import config from '@/config.json'
+import { WalletContext } from '@/components/Wallet/WalletContext'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
+
 let api
 
 /**
@@ -95,10 +97,12 @@ function Algodex(props) {
               <CssBaseline />
               <Global styles={styles} />
               <Provider dex={makeApi()}>
+                <WalletContext.Provider value={useWallets()}>
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <Toaster />
                 <ReactQueryDevtools initialIsOpen={false} />
                 <Component {...pageProps} />
+                </WalletContext.Provider>
               </Provider>
             </ThemeProvider>
           </CacheProvider>

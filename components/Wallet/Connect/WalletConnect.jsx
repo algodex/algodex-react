@@ -8,11 +8,13 @@ import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import useWallets from '../../../hooks/useWallets'
+import { useAlgodex, AlgodexContext, useWallets } from '@algodex/algodex-hooks'
+// import useWallets from '../../../hooks/useWallets'
 import useTranslation from 'next-translate/useTranslation'
-import WalletsOptions from './WalletDropdown/WalletOptionsList'
+import { WalletContext } from '../WalletContext'
 import { useState } from 'react'
+import { Algod } from 'algosdk'
+
 // import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
@@ -168,6 +170,8 @@ export function WalletView(props) {
   const { activeWalletAddress, isSignedIn, addresses, onConnectClick, onSetActiveWallet } = props
   const { t } = useTranslation('wallet')
 
+  debugger;
+
   const getButtonVariant = () => {
     return isSignedIn ? 'default' : 'primary'
   }
@@ -315,17 +319,28 @@ WalletView.defaultProps = {
  */
 function WalletConnect(props) {
   const { algodex, wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
-  const { addresses, myAlgoConnect } = useWallets(wallet) //useWallets hook will reset addresses into local storage as an empty array
-  // debugger;
+//   debugger;
+//   const { addresses, myAlgoConnect } = useWallets(wallet) //useWallets hook will reset addresses into local storage as an empty array
+
+  
   return (
-    <WalletView
-      addresses={addresses}
-      activeWalletAddress={'faker'}
-      isSignedIn={false}
-      onConnectClick={myAlgoConnect}
-      onSetActiveWallet={setWallet}
-      {...props}
-    />
+    <WalletContext.Consumer>
+        { walletOptions => (
+             <WalletView
+             addresses={walletOptions.addresses}
+             activeWalletAddress={'faker'}
+             isSignedIn={false}
+             onConnectClick={walletOptions.myAlgoConnect}
+             onSetActiveWallet={walletOptions.setWallet}
+             {...props}
+           />
+
+        )}
+
+   
+  
+               
+     </WalletContext.Consumer>
   )
 }
 

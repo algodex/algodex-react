@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@algodex/algodex-hooks@1.5.2":
+"@algodex/algodex-hooks@^1.5.2":
   version "1.5.2"
   resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.5.2/eb7e016b4e1241d945694bcb5137bfbbb433c60ae52afc1ef5350a0348d93bfb#acba11cfd5b2ba427f9bdc92c2c42db4d68f4725"
   integrity sha512-iez0mmRN+PZFJyhpRYxr6Hhus5fQviWcrcgsNSO+/SQQ95BoGeW+Q0juqksS0gJ7sXn3oxMiJdlABxUu+pCtpg==
@@ -10,10 +10,10 @@
     lodash "^4.17.21"
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@2.0.0-next.18":
-  version "2.0.0-next.18"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.18/93238876347befe20dd03f52928b9d4c6629934c6e82d0373b89a7b3c30688ed#e37618f528d80b713cf200629c52677e2251c5af"
-  integrity sha512-Jtgm9NAuel4klSVmnNsJqUThrXu8MLntDrNRvhLDE1c5uM0as65wE+rw43OyzpLsOyU7KEsn/lDMeHuWE8rr8Q==
+"@algodex/algodex-sdk@2.0.0-next.19":
+  version "2.0.0-next.19"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.19/52b8068ec057d0aeabf7f4829ed5fd18793951f21007e1ea5b69117b771d5f44#8ec58697949f5937a1b5bae41c157e2b8d8a0988"
+  integrity sha512-gjfcFb+6aVTirdYn5AC5SVyVtfdLCJTmyFxwPxUS8IwJG2/kA98aCewvqyw9M/Tin8MjDg/tox94zi7L7rpNgQ==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"

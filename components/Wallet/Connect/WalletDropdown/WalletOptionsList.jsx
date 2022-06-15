@@ -2,12 +2,12 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import  useWallets  from '../../../../hooks/useWallets'
+import { useWallets } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
 
 
-const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
-  const { peraConnect, myAlgoConnect, addresses } = useWallets()
+const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, walletOptions }) => {
+  const { peraConnect, myAlgoConnect, addresses } = walletOptions
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,

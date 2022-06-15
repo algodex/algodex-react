@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import useWallets from '../../../../hooks/useWallets'
 import { useMemo } from 'react'
 
 const styleReset = css`
