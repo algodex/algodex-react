@@ -24,6 +24,7 @@ import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
+import useWallets from '@/hooks/useWallets'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -36,6 +37,8 @@ export function Header() {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
   const { wallet } = useAlgodex()
+  const { addresses } = useWallets()
+  console.log(addresses, 'addresses')
   const isMobile = useMobileDetect()
 
   /**
@@ -52,6 +55,11 @@ export function Header() {
       window.location = TESTNET_LINK
     }
   }
+
+  const MAILBOX_URL =
+    activeNetwork === 'testnet'
+      ? 'https://mailbox-testnet.algodex.com/'
+      : 'https://mailbox.algodex.com/'
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -97,6 +105,9 @@ export function Header() {
         {/*</a>*/}
         <NavActiveLink href="/support" matches={/^\/support/}>
           <NavTextLg>{t('header-support')}</NavTextLg>
+        </NavActiveLink>
+        <NavActiveLink href={MAILBOX_URL}>
+          <NavTextLg>{t('header-mailbox')}</NavTextLg>
         </NavActiveLink>
         {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
@@ -149,6 +160,9 @@ export function Header() {
           </a>
           <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
+          </a>
+          <a target="_blank" href={MAILBOX_URL} rel="noreferrer">
+            <NavTextSm>Mailbox</NavTextSm>
           </a>
           {/*
           <ActiveLink href="/wallet">

@@ -26,6 +26,7 @@ import createEmotionCache from '@/utils/createEmotionCache'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
 
+// import config from '@/config.json'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 let api

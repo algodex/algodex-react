@@ -2,17 +2,26 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
-import { useWalletConnect } from '@/hooks/useWalletConnect'
+import { useEventDispatch } from '@/hooks/useEvents'
+import useWallets from '../../../../hooks/useWallets'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
-  const { connect } = useMyAlgoConnect()
-  const { connect: peraConnect } = useWalletConnect()
-  // const peraWallet = useWalletConnect()
+  const { peraConnect, myAlgoConnect, addresses } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': connect,
+    'my-algo-wallet': myAlgoConnect,
     'wallet-connect': peraConnect
+  }
+  const dispatcher = useEventDispatch()
+
+  const myAlgoOnClick = async () => {
+    await WALLETS_CONNECT_MAP['my-algo-wallet']()
+    dispatcher('wallet', { type: 'my-algo-wallet', wallet: addresses[0] })
+    // debugger;
+    console.log(`This onClick calls the myAlgoConnect export of useWallets() hook. 
+    It is hitting the callback in useWallets() which triggers setAddresses, yet addresses
+    is still undefined as you can see here. This console.log() runs before 
+     : ${addresses[0]}`)
   }
   return (
     <>
@@ -55,7 +64,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             className="cursor-pointer flex items-center mb-2"
             role="button"
             tabIndex="0"
-            onClick={() => WALLETS_CONNECT_MAP['my-algo-wallet']()}
+            onClick={myAlgoOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
             <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />

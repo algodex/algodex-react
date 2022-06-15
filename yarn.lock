@@ -2,22 +2,24 @@
 # yarn lockfile v1
 
 
-"@algodex/algodex-hooks@1.2.1":
-  version "1.2.1"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.2.1/a8d5b6a47a945f8fe215a3470474eb202c62965334595748f7f868d045282636#1d6ed3cf9237c1645658c7110da92dba17d013fb"
-  integrity sha512-uvBiD0b9zLZmHO6j55Ygqq58byKSpddgLv1bSi3SJI00HecsPoQB6wF9aFt3k29pQ/g6sIjaKs2sP2G0AKfrZw==
+"@algodex/algodex-hooks@1.5.2":
+  version "1.5.2"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.5.2/eb7e016b4e1241d945694bcb5137bfbbb433c60ae52afc1ef5350a0348d93bfb#acba11cfd5b2ba427f9bdc92c2c42db4d68f4725"
+  integrity sha512-iez0mmRN+PZFJyhpRYxr6Hhus5fQviWcrcgsNSO+/SQQ95BoGeW+Q0juqksS0gJ7sXn3oxMiJdlABxUu+pCtpg==
   dependencies:
+    lodash "^4.17.21"
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@2.0.0-next.5":
-  version "2.0.0-next.5"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.5/f91f018a9e2b883bd25b1d8788ac0422f10fc1c7df8006f4ea07c35a75e21c34#0a89e7762534de2970155415d3232a5938b62369"
-  integrity sha512-0S7tDruVMvjtJvNQ1JFk88qqjkT4x3FjaY2ymi7dF1S8TWr8si4fjkH4RMG6nv2QEsvRMPrNYu4swNkiKm7S/A==
+"@algodex/algodex-sdk@2.0.0-next.19":
+  version "2.0.0-next.19"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.19/52b8068ec057d0aeabf7f4829ed5fd18793951f21007e1ea5b69117b771d5f44#8ec58697949f5937a1b5bae41c157e2b8d8a0988"
+  integrity sha512-gjfcFb+6aVTirdYn5AC5SVyVtfdLCJTmyFxwPxUS8IwJG2/kA98aCewvqyw9M/Tin8MjDg/tox94zi7L7rpNgQ==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"
     axios "^0.21.4"
     big.js "^6.1.1"
+    commander "^9.2.0"
     dayjs "^1.11.0"
     eventemitter3 "^4.0.7"
     js-big-decimal "^1.3.4"
@@ -6437,6 +6439,11 @@ commander@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
   integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
+
+commander@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-9.2.0.tgz#6e21014b2ed90d8b7c9647230d8b7a94a4a419a9"
+  integrity sha512-e2i4wANQiSXgnrBlIatyHtP1odfUp0BbV5Y5nEGbxtIrStkEOAAzCUirvLBNXHLr7kwLvJl6V+4V3XV9x7Wd9w==
 
 common-path-prefix@^3.0.0:
   version "3.0.0"

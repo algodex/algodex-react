@@ -9,11 +9,11 @@ import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useMyAlgoConnect } from '@/hooks/useMyAlgoConnect'
+import useWallets from '../../../hooks/useWallets'
 import useTranslation from 'next-translate/useTranslation'
-
-// import { useEffect, useMemo } from 'react'
-// import useStore, { useStorePersisted } from 'store/use-store'
+import WalletsOptions from './WalletDropdown/WalletOptionsList'
+import { useState } from 'react'
+// import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -164,9 +164,8 @@ const WalletRow = styled.div`
   }
 `
 export function WalletView(props) {
-  const { addresses } = useAlgodex()
-  const { activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
-
+  const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+  const { activeWalletAddress, isSignedIn, addresses, onConnectClick, onSetActiveWallet } = props
   const { t } = useTranslation('wallet')
 
   const getButtonVariant = () => {
@@ -233,8 +232,9 @@ export function WalletView(props) {
             use="wallet"
             size={0.75}
           />
-          {wallet.name}
+          {wallet.address}
         </Typography>
+
         {/* {renderBalance(wallet?.amount)} */}
       </WalletRow>
     ))
@@ -251,14 +251,18 @@ export function WalletView(props) {
     <Section area="topRight">
       <Container>
         <ButtonContainer>
-          <Button
+          {/* <WalletsOptions isConnectingAddress={isConnectingAddress} setIsConnectingAddress={setIsConnectingAddress}>
+
+          </WalletsOptions> */}
+          {/* <Button
             // color="primary-button"
             variant={getButtonVariant()}
             onClick={getButtonState}
             data-testid="connect-wallet-btn"
           >
             {WalletButtonText}
-          </Button>
+          </Button> */}
+
         </ButtonContainer>
         {isSignedIn ? (
           <>
@@ -291,7 +295,7 @@ export function WalletView(props) {
 }
 
 WalletView.propTypes = {
-  wallets: PropTypes.array.isRequired,
+  addresses: PropTypes.array.isRequired,
   activeWalletAddress: PropTypes.string,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
@@ -303,40 +307,22 @@ WalletView.defaultProps = {
   isSignedIn: false
 }
 
+/**
+ * @todo Merge WalletView into WalletConnect
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function WalletConnect(props) {
-  const { connect } = useMyAlgoConnect()
-  const { isConnected, wallet, setWallet, addresses } = useAlgodex()
-  // console.log('!!!!!!!!!!!!!!!!', addresses)
-  // fetch wallet balances from blockchain
-  // const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
-  // useEffect(() => {
-  //   if (wallet.data?.wallets) {
-  //     setWallets(walletsQuery.data.wallets)
-  //
-  //     if (!isSignedIn) {
-  //       setIsSignedIn(true)
-  //     }
-  //
-  //     if (!walletAddresses.includes(activeWalletAddress)) {
-  //       setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-  //     }
-  //   }
-  // }, [
-  //   activeWalletAddress,
-  //   isSignedIn,
-  //   setActiveWalletAddress,
-  //   setIsSignedIn,
-  //   setWallets,
-  //   walletAddresses,
-  //   walletsQuery.data
-  // ])
+  const { algodex, wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
+  const { addresses, myAlgoConnect } = useWallets(wallet) //useWallets hook will reset addresses into local storage as an empty array
+  // debugger;
   return (
-    // <div>Wallet Connect {isConnected ? 'Connected' : 'Not Connected'}</div>
     <WalletView
-      wallets={addresses || []}
-      activeWalletAddress={wallet?.address}
-      isSignedIn={isConnected}
-      onConnectClick={connect}
+      addresses={addresses}
+      activeWalletAddress={'faker'}
+      isSignedIn={false}
+      onConnectClick={myAlgoConnect}
       onSetActiveWallet={setWallet}
       {...props}
     />

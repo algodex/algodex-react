@@ -1,18 +1,20 @@
-import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+// import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+// import { useCallback, useEffect, useMemo, useState } from 'react'
+
+import { useAlgodex, useAssetOrdersQuery, useWallets } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import AvailableBalance from './Form/AvailableBalance'
+// import AvailableBalance from './Form/AvailableBalance'
 import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
+import BuySellToggle from './Form/BuySellToggle'
+import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
 import { default as MaterialButton } from '@mui/material/Button'
 import { OrderForm } from './OrderForm'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import Tab from '@/components/Tab'
-import Tabs from '@/components/Tabs'
-import Typography from '@mui/material/Typography'
-// import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
 // import toast from 'react-hot-toast'
@@ -61,9 +63,45 @@ export const convertToAsaUnits = (toConvert, decimals) => {
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  // const { wallet, placeOrder, isConnected } = useAlgodex()
-  const { wallet, isConnected } = useAlgodex()
-  const { isLoading, isError } = useAssetOrdersQuery({ asset })
+
+  const { wallet: initialState, placeOrder, http } = useAlgodex()
+  const { wallet } = useWallets(initialState)
+
+  if (typeof wallet?.address === 'undefined') {
+    throw new TypeError('Invalid Wallet!')
+  }
+  // TODO: Handle empty asset wallets
+  // if (typeof wallet?.assets === 'undefined') {
+  //   throw new TypeError('Invalid Account Info!')
+  // }
+
+  const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
+
+  const orderBook = useMemo(
+    () => ({
+      buyOrders: assetOrders?.buyASAOrdersInEscrow || [],
+      sellOrders: assetOrders?.sellASAOrdersInEscrow || []
+    }),
+    [assetOrders]
+  )
+  const [sellOrders, setSellOrders] = useState()
+  const [buyOrders, setBuyOrders] = useState()
+  // Eslint bypass to keep rest of code available
+  if (typeof sellOrders !== 'undefined' && sellOrders?.length === -1) {
+    console.debug(sellOrders?.length, buyOrders?.length)
+  }
+  useEffect(() => {
+    setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
+    setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
+  }, [orderBook, setSellOrders, setBuyOrders, asset])
+
+  // const buttonProps = useMemo(
+  //   () => ({
+  //     buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
+  //     sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
+  //   }),
+  //   [asset]
+  // )
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -137,15 +175,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
     return 0
   }, [order, algoBalance, assetBalance])
-  const hasBalance = useMemo(() => {
-    if (order.type === 'sell') {
-      return assetBalance > 0
-    }
-    if (order.type === 'buy') {
-      return algoBalance > 0
-    }
-    return false
-  }, [order])
+
+  const hasBalance = order.type === 'sell' ? assetBalance > 0 : algoBalance > 0
+  // useEffect(() => {
+  //   if (order.type === 'sell') {
+  //   }
+  //   if (order.amount !== (order.amount * sliderPercent) / 100) {
+  //   }
+  // }, [setOrder, sliderPercent])
 
   const MICROALGO = 0.000001
 
@@ -209,50 +246,95 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [setOrder, order]
   )
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      let orderPromise
+      if (typeof onSubmit === 'function') {
+        orderPromise = onSubmit({
+          ...order,
+          wallet,
+          asset
+        })
+      } else {
+        console.log(
+          {
+            ...order,
+            address: wallet.address,
+            wallet,
+            asset,
+            appId: order.type === 'sell' ? 22045522 : 22045503,
+            version: 6
+          },
+          { wallet }
+        )
+        orderPromise = placeOrder(
+          {
+            ...order,
+            address: wallet.address,
+            wallet,
+            asset,
+            appId: order.type === 'sell' ? 22045522 : 22045503,
+            version: 6
+          },
+          { wallet }
+        )
+      }
 
-  // const handleSubmit = useCallback(
-  //   (e) => {
-  //     e.preventDefault()
-  //     let orderPromise
-  //     if (typeof onSubmit === 'function') {
-  //       orderPromise = onSubmit({
-  //         ...order,
-  //         wallet,
-  //         asset
-  //       })
-  //     } else {
-  //       orderPromise = placeOrder({
-  //         ...order,
-  //         wallet,
-  //         asset
-  //       })
-  //     }
-  //     // TODO add events
-  //     toast.promise(orderPromise, {
-  //       loading: t('awaiting-confirmation'),
-  //       success: t('order-success'),
-  //       error: (err) => {
-  //         if (/PopupOpenError|blocked/.test(err)) {
-  //           return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-  //         }
+      // TODO add events
+      toast.promise(orderPromise, {
+        loading: t('awaiting-confirmation'),
+        success: t('order-success'),
+        error: (err) => {
+          console.log(err)
+          if (/PopupOpenError|blocked/.test(err)) {
+            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+          }
 
-  //         if (/Operation cancelled/i.test(err)) {
-  //           return t('order-cancelled')
-  //         }
+          // const handleSubmit = useCallback(
+          //   (e) => {
+          //     e.preventDefault()
+          //     let orderPromise
+          //     if (typeof onSubmit === 'function') {
+          //       orderPromise = onSubmit({
+          //         ...order,
+          //         wallet,
+          //         asset
+          //       })
+          //     } else {
+          //       orderPromise = placeOrder({
+          //         ...order,
+          //         wallet,
+          //         asset
+          //       })
+          //     }
+          //     // TODO add events
+          //     toast.promise(orderPromise, {
+          //       loading: t('awaiting-confirmation'),
+          //       success: t('order-success'),
+          //       error: (err) => {
+          //         if (/PopupOpenError|blocked/.test(err)) {
+          //           return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
+          //         }
 
-  //         return t('error-placing-order')
-  //       }
-  //     })
-  //   },
-  //   [onSubmit, asset, order]
-  // )
+          //         if (/Operation cancelled/i.test(err)) {
+          //           return t('order-cancelled')
+          //         }
 
-  if (
-    typeof wallet === 'undefined' ||
-    typeof wallet.amount === 'undefined' ||
-    isLoading ||
-    isError
-  ) {
+          //         return t('error-placing-order')
+          //       }
+          //     })
+          //   },
+          //   [onSubmit, asset, order]
+          // )
+
+          return t('error-placing-order')
+        }
+      })
+    },
+    [onSubmit, asset, order]
+  )
+  if (typeof wallet === 'undefined' || isLoading || isError) {
     return <Spinner />
   }
   return (

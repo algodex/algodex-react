@@ -4,7 +4,7 @@ import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -77,7 +77,9 @@ export const WalletOrdersSection = styled.section`
 `
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
-  const { isConnected, wallet } = useAlgodex()
+  const { wallet: initialState } = useAlgodex()
+  const { wallet } = useWallets(initialState)
+  const isConnected = typeof wallet?.address !== 'undefined'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
