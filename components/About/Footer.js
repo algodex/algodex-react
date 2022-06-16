@@ -186,6 +186,13 @@ export const AboutFooter = () => {
             >
               {t('tokenomics')}
             </FooterLinks>
+            <FooterLinks
+              target="_blanc"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
+              className="leading-5"
+            >
+              Apply for North American Listing
+            </FooterLinks>
           </div>
           <div className="col-span-1">
             <Title className="mb-6">{t('COMPANY')}</Title>
