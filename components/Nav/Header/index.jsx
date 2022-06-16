@@ -38,7 +38,7 @@ export function Header() {
   const { t } = useTranslation('common')
   const { wallet } = useAlgodex()
   const { addresses } = useWallets()
-  console.log(addresses, 'addresses')
+  console.log(addresses, 'addresses updated')
   const isMobile = useMobileDetect()
 
   /**
