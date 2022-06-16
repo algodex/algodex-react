@@ -210,7 +210,7 @@ export const SupportForm = () => {
                 <div className="mb-4 px-2 w-full">
                   <input
                     type="email"
-                    placeholder="Email Address"
+                    placeholder="Email Address*"
                     name="email"
                     value={email}
                     onChange={(e) => onChange(e)}
@@ -221,7 +221,7 @@ export const SupportForm = () => {
                 <div className="mb-4 px-2 w-full md:w-1/2">
                   <input
                     type="text"
-                    placeholder="Subject"
+                    placeholder="Subject*"
                     name="subject"
                     value={subject}
                     onChange={(e) => onChange(e)}
@@ -247,8 +247,8 @@ export const SupportForm = () => {
                     cols="4"
                     placeholder={
                       messageType == 'bug'
-                        ? 'Enter issue description and steps to reproduce'
-                        : 'Enter details of feature request'
+                        ? 'Enter issue description and steps to reproduce*'
+                        : 'Enter details of feature request*'
                     }
                     name="detail"
                     value={detail}
