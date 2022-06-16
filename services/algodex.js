@@ -247,8 +247,8 @@ export async function fetchBlogMedia(id) {
  *
  * @returns {Promise<Object>}
  */
-export const addSubscriber = async (payload) => {
-  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${process.env.NEXT_PUBLIC_FORM_ID}`
+export const submitHubspotForm = async ({ payload, formId }) => {
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${formId}`
   const config = {
     headers: {
       'Content-Type': 'application/json'
