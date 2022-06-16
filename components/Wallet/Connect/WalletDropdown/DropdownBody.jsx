@@ -18,23 +18,12 @@ const DropdownBody = ({ activeWalletAddress, sortedWalletsList }) => {
     >
       {(!activeWalletAddress || isConnectingAddress) && (
 
-        <WalletContext.Consumer>
-            {walletOptions => (
+        
+        
                        <WalletOptionsList
                        isConnectingAddress={isConnectingAddress}
                        setIsConnectingAddress={setIsConnectingAddress}
-                       walletOptions={{
-                         peraConnect: walletOptions.peraConnect,
-                         myAlgoConnect: walletOptions.myAlgoConnect,
-                         addresses: walletOptions.addresses
-                     }}
                      />
-            )
-
-            }
-
- 
-        </WalletContext.Consumer>
       )}
       {activeWalletAddress && !isConnectingAddress && (
         <>
