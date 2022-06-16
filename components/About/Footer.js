@@ -167,7 +167,7 @@ export const AboutFooter = () => {
             <FooterLinks target="_blanc" href="https://about.algodex.com/docs/">
               {t('docs')}
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://github.com/algodex/algodex-mailbox">
+            <FooterLinks target="_blanc" href="https://github.com/algodex/">
               Github
             </FooterLinks>
             <FooterLinks target="_blanc" href="https://about.algodex.com/support/">
@@ -185,6 +185,13 @@ export const AboutFooter = () => {
               href="https://github.com/algodex/algodex-public-documents/blob/master/Algodex%20Tokenomics.pdf"
             >
               {t('tokenomics')}
+            </FooterLinks>
+            <FooterLinks
+              target="_blanc"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
+              className="leading-5"
+            >
+              Apply for North American Listing
             </FooterLinks>
           </div>
           <div className="col-span-1">
