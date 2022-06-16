@@ -2,6 +2,7 @@ import { ANS } from '@algonameservice/sdk'
 import algosdk from 'algosdk'
 import { useState, useEffect } from 'react'
 import { getActiveNetwork } from '../services/environment'
+import { truncateAddress } from '../services/display'
 
 const purestakeIndexerToken =
   process.env.NEXT_PUBLIC_PURE_STAKE_INDEXER_TOKEN || 'VELyABA1dGqGbAVktbew4oACvp0c0298gMgYtYIb'
@@ -48,7 +49,7 @@ export const useAlgoNameService = (wallets) => {
         try {
           const names = await sdk.address(wallets[i].address).getNames(options)
           if (Array.isArray(names) && names.length > 0 && names[0].name) {
-            tmpWallets[i].name = names[0]?.name
+            tmpWallets[i].name = truncateAddress(names[0]?.name)
           }
         } catch (err) {
           console.log('AlogoNameService Error:', err)
