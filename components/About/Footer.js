@@ -167,7 +167,7 @@ export const AboutFooter = () => {
             <FooterLinks target="_blanc" href="https://about.algodex.com/docs/">
               {t('docs')}
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://github.com/algodex/algodex-mailbox">
+            <FooterLinks target="_blanc" href="https://github.com/algodex/">
               Github
             </FooterLinks>
             <FooterLinks target="_blanc" href="https://about.algodex.com/support/">
