@@ -46,10 +46,12 @@ export const useAlgoNameService = (wallets) => {
     const fetchName = async () => {
       const tmpWallets = [...wallets]
       for (let i = 0; i < wallets.length; i++) {
+        tmpWallets[i].tooltip = tmpWallets[i].address
         try {
           const names = await sdk.address(wallets[i].address).getNames(options)
           if (Array.isArray(names) && names.length > 0 && names[0].name) {
             tmpWallets[i].name = truncateAddress(names[0]?.name)
+            tmpWallets[i].tooltip = tmpWallets[i].name + '\n' + tmpWallets[i].tooltip
           }
         } catch (err) {
           console.log('AlogoNameService Error:', err)

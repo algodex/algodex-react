@@ -123,6 +123,7 @@ const WalletRow = styled.div`
   margin: 0.375rem 0.75rem;
   padding: 0.125rem 0.375rem;
   border-radius: 0.125rem;
+  data-html: true;
   cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
   transition: color 50ms ease-out;
   color: ${({ theme, isActive }) =>
@@ -223,7 +224,7 @@ export function WalletView(props) {
         onClick={() => handleWalletClick(wallet.address)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
-        <LabelMd fontWeight="500" title={wallet.address}>
+        <LabelMd fontWeight="500" title={wallet.tooltip}>
           <Icon
             color="gray"
             fillGradient="000"
