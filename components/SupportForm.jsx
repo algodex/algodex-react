@@ -127,13 +127,28 @@ export const SupportForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
+
   const onSubmit = async (e) => {
     e.preventDefault()
     const ticketDescription = `messageType: ${messageType},\nfirstName: ${firstName},\nlastName: ${lastName},\nproduct: ${product},\nsubject: ${subject},\ndetail: ${detail}, \n${
       messageType == 'bug' &&
       `transactionId: ${transactionId}, \n expectedFunctionality: ${expectedFunctionality}`
     }`
-    console.log(upload)
+    const fileSize = (upload.size / 1024).toFixed(2)
+
+    if (fileSize > 100) {
+      toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
+      return
+    }
+    const hs_file_upload = await toBase64(upload)
+
     const payload = {
       fields: [
         {
@@ -150,15 +165,14 @@ export const SupportForm = () => {
           objectTypeId: '0-1',
           name: 'TICKET.content',
           value: ticketDescription
+        },
+        {
+          objectTypeId: '0-1',
+          name: 'TICKET.hs_file_upload',
+          value: hs_file_upload
         }
-        // {
-        //   objectTypeId: '0-1',
-        //   name: 'TICKET.hs_file_upload',
-        //   value: upload
-        // }
       ]
     }
-    // console.log(payload)
     const formId = process.env.NEXT_PUBLIC_SUPPORT_FORM_ID
     if (email && subject && detail) {
       setLoading(true)
@@ -184,7 +198,34 @@ export const SupportForm = () => {
     <section className="pb-1">
       <SupportWrapper className="w-6/6 mx-4 lg:w-5/6 lg:mx-auto ">
         <div className="flex flex-wrap">
-          <div className="w-full md:w-2/3 order-2 md:order-1">
+          <div className="w-full md:w-1/3 bg-grey p-7">
+            <Title className="md:mt-9">Kindly select the type of support you need</Title>
+            <Label htmlFor="messageType1">
+              <input
+                type="radio"
+                checked={messageType == 'new-feature'}
+                onChange={(e) => onChange(e)}
+                className="mr-3"
+                id="messageType1"
+                name="messageType"
+                value="new-feature"
+              />
+              Feature request
+            </Label>
+            <Label htmlFor="messageType2">
+              <input
+                type="radio"
+                checked={messageType == 'bug'}
+                onChange={(e) => onChange(e)}
+                className="mr-3"
+                id="messageType2"
+                name="messageType"
+                value="bug"
+              />
+              Issue and bug report
+            </Label>
+          </div>
+          <div className="w-full md:w-2/3">
             <Form className="px-7 py-10" onSubmit={onSubmit}>
               <div className="flex flex-wrap">
                 <div className="mb-4 px-2 w-full md:w-1/2">
@@ -306,33 +347,6 @@ export const SupportForm = () => {
                 </SubmitButton>
               </div>
             </Form>
-          </div>
-          <div className="w-full md:w-1/3 order-1 md:order-last bg-grey p-7">
-            <Title className="md:mt-9">Kindly select the type of support you need</Title>
-            <Label htmlFor="messageType1">
-              <input
-                type="radio"
-                checked={messageType == 'new-feature'}
-                onChange={(e) => onChange(e)}
-                className="mr-3"
-                id="messageType1"
-                name="messageType"
-                value="new-feature"
-              />
-              Feature request
-            </Label>
-            <Label htmlFor="messageType2">
-              <input
-                type="radio"
-                checked={messageType == 'bug'}
-                onChange={(e) => onChange(e)}
-                className="mr-3"
-                id="messageType2"
-                name="messageType"
-                value="bug"
-              />
-              Issue and bug report
-            </Label>
           </div>
         </div>
       </SupportWrapper>
