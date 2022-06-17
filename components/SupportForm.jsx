@@ -143,8 +143,8 @@ export const SupportForm = () => {
     }`
     const fileSize = (upload.size / 1024).toFixed(2)
 
-    if (fileSize > 100) {
-      toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
+    if (fileSize > 50) {
+      toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 50kb`)
       return
     }
     const hs_file_upload = await toBase64(upload)
