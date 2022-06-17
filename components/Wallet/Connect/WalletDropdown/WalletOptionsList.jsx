@@ -2,15 +2,36 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import { useWallets } from '@algodex/algodex-hooks'
+// import { useWallets } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
+import { useContext } from 'react'
+import WalletContext from '../../WalletContext'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
-  const { peraConnect, myAlgoConnect } = useWallets()
+  const walletContext = useContext(WalletContext)
+  const { peraConnect, myAlgoConnect, addresses } = walletContext
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'wallet-connect': peraConnect
   }
+
+  const myAlgoState = () => {
+    myAlgoConnect()
+    console.log(addresses)
+  }
+
+  const dummyFunction = () => {
+   setIsConnectingAddress()
+    debugger
+    console.log(addresses)
+  }
+
+  // useEffect(() => {
+  //   dummyFunction()
+  // }, [addresses])
+
+
   return (
     <>
       <div
@@ -52,13 +73,14 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             className="cursor-pointer flex items-center mb-2"
             role="button"
             tabIndex="0"
-            onClick={() => WALLETS_CONNECT_MAP['my-algo-wallet']()}
+            onClick={myAlgoState}
             onKeyPress={() => console.log('key pressed')}
           >
             <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
             <Typography className="underline ml-2" variant="body_small_bold">
               My Algo Wallet
             </Typography>
+          
           </div>
         </div>
       </div>

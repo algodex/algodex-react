@@ -12,6 +12,9 @@ import { useRouter } from 'next/router'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 import AlgodexApi from '@algodex/algodex-sdk'
 import config from '@/config.json'
+import WalletContext from '@/components/Wallet/WalletContext'
+import useWallets from '@/hooks/useWallets'
+// import { useWallets } from '@algodex/algodex-hooks'
 
 /**
  * Fetch Traded Asset Paths
@@ -89,6 +92,20 @@ function TradePage({ staticExplorerAsset }) {
   // eslint-disable-next-line no-undef
   // console.debug(`TradePage(`, staticExplorerAsset, `)`)
 
+  const [persistedAddresses, setPersistedAddresses] = useState([])
+
+  const saveActiveAddress = (addresses, setPersistedAddresses) => {
+    debugger
+    setPersistedAddresses((prev) => [...prev, addresses[0]])
+  }
+  const walletContextValue = {
+    ...useWallets(),
+    persistedAddresses: persistedAddresses,
+    setPersistedAddresses: setPersistedAddresses,
+    saveActiveAddress: saveActiveAddress
+  }
+  // debugger;
+
   const title = 'Algodex | Algorand Decentralized Exchange'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
@@ -139,13 +156,15 @@ function TradePage({ staticExplorerAsset }) {
   }
 
   return (
-    <Page
-      title={`${prefix} ${title}`}
-      description={'Decentralized exchange for trading Algorand ASAs'}
-      noFollow={true}
-    >
-      <Layout asset={asset}>{renderContent()}</Layout>
-    </Page>
+    <WalletContext.Provider value={walletContextValue}>
+      <Page
+        title={`${prefix} ${title}`}
+        description={'Decentralized exchange for trading Algorand ASAs'}
+        noFollow={true}
+      >
+        <Layout asset={asset}>{renderContent()}</Layout>
+      </Page>
+    </WalletContext.Provider>
   )
 }
 

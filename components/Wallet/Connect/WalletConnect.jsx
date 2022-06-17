@@ -8,8 +8,11 @@ import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
+import { useAlgodex, AlgodexContext } from '@algodex/algodex-hooks'
+// import useWallets from '@/hooks/useWallets'
+import { useContext, useEffect } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import WalletContext from '../WalletContext'
 // import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
@@ -164,6 +167,10 @@ export function WalletView(props) {
   const { addresses, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
   const { t } = useTranslation('wallet')
 
+  // const {persistedAddresses, saveActiveAddress, setPersistedAddresses} = useContext(WalletContext)
+  // debugger;
+
+
   const getButtonVariant = () => {
     return isSignedIn ? 'default' : 'primary'
   }
@@ -209,8 +216,17 @@ export function WalletView(props) {
   //     </Balance>
   //   )
   // }
+  // debugger;
+  // saveActiveAddress(addresses, persistedAddresses, setPersistedAddresses)
+
+  // useEffect(() => {
+  //   debugger
+  //   saveActiveAddress(addresses, setPersistedAddresses)
+
+  // }, [addresses])
 
   const renderWallets = () => {
+    debugger;
     return addresses?.map((wallet) => (
       <WalletRow
         key={wallet.address}
@@ -228,7 +244,7 @@ export function WalletView(props) {
             use="wallet"
             size={0.75}
           />
-          {wallet.name}
+          {wallet.address}
         </Typography>
 
         {/* {renderBalance(wallet?.amount)} */}
@@ -246,7 +262,7 @@ export function WalletView(props) {
   return (
     <Section area="topRight">
       <Container>
-        <ButtonContainer>
+        {/* <ButtonContainer>
           <Button
             // color="primary-button"
             variant={getButtonVariant()}
@@ -255,7 +271,7 @@ export function WalletView(props) {
           >
             {WalletButtonText}
           </Button>
-        </ButtonContainer>
+        </ButtonContainer> */}
         {isSignedIn ? (
           <>
             <Header>
@@ -307,7 +323,10 @@ WalletView.defaultProps = {
  */
 function WalletConnect(props) {
   const { wallet, setWallet } = useAlgodex()
-  const { addresses, myAlgoConnect } = useWallets(wallet)
+
+  const walletContext = useContext(WalletContext)
+  const { addresses, myAlgoConnect } = walletContext
+
 
   return (
     <WalletView
