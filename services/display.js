@@ -80,4 +80,3 @@ export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
   }
   return new Big(float).toFixed(numDigits)
 }
-console.log(floatToFixed(23001.0))
