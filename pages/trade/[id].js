@@ -9,6 +9,7 @@ import {
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Layout from '@/components/Layout/OriginalLayout'
+import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
@@ -16,6 +17,8 @@ import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
+import useDebounce from '@/hooks/useDebounce'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
 
 /**
  * Fetch Traded Asset Paths
@@ -75,6 +78,28 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 /**
+ * Detect Mobile
+ * @returns {unknown}
+ */
+function useMobileDetect(isMobileSSR = false) {
+  const [isMobile, setIsMobile] = useState(isMobileSSR)
+  const debounceIsMobile = useDebounce(isMobile, 500)
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(detectMobileDisplay())
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [debounceIsMobile])
+
+  return isMobile
+}
+
+/**
  * Trade Page
  *
  * Display a chart of historical orders. Takes an Algorand Asset
@@ -83,13 +108,14 @@ export async function getStaticProps({ params: { id } }) {
  * found
  *
  * @param {object} staticExplorerAsset The Explorer Response
+ * @param {object} deviceType Browser Device: mobile or desktop
  * @returns {JSX.Element}
  * @constructor
  */
-function TradePage({ staticExplorerAsset }) {
+function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   console.debug(`TradePage(`, staticExplorerAsset, `)`)
-  const title = 'Algodex | Algorand Decentralized Exchange'
+  const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
@@ -105,6 +131,7 @@ function TradePage({ staticExplorerAsset }) {
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const isMobile = useMobileDetect(deviceType === 'mobile')
 
   const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
@@ -150,13 +177,15 @@ function TradePage({ staticExplorerAsset }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      <Layout asset={asset}>{renderContent()}</Layout>
+      {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
+      {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
   )
 }
 
 TradePage.propTypes = {
   staticExplorerAsset: PropTypes.object,
-  staticAssetPrice: PropTypes.object
+  staticAssetPrice: PropTypes.object,
+  deviceType: PropTypes.string
 }
 export default TradePage

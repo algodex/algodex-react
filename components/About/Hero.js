@@ -46,17 +46,17 @@ export const Hero = () => {
   return (
     <HeroSection>
       <AboutContainer>
-        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 ml-5">
+        <div className="mt-4 mb-3 md:ml-7 lg:ml-9">
           <InlineLogo src="/logo-inline-dark.svg" />
-          <AboutTitle>
-            {t('A Decentralized')} <br /> {t('Marketplace')}
+          <AboutTitle className="leading-10">
+            {t('A Decentralized')} {t('Marketplace')}
           </AboutTitle>
           <Image src="/Powered-by-Algorand.svg" width={150} height={24} />
         </div>
         <div className="w-5/5 lg:w-1/2 md:w-4/5 sm:w-5/5">
           <hr />
         </div>
-        <div className="w-5/5 lg:w-2/6 md:w-1/2 sm:w-3/5 mt-4 mb-3 ml-5">
+        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
           <p className="mb-6 leading-6">
             {t(
               'Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself'
@@ -67,11 +67,20 @@ export const Hero = () => {
             <LaunchBtn>{t('launch app')}</LaunchBtn>
           </Link>
           {/* <Note className="mt-5">
-            {t('NOTE')}:{' '}
-            {t(
-              'Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at'
-            )}
-            : <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
+            Projects can apply with{' '}
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              this form
+            </a>{' '}
+            to be listed for North American trading. The rest of the world can trade all ASAs with
+            no restrictions.
+            <br />
+            <br />
+            Testnet is also available for anyone trying out the platform risk free at :{' '}
+            <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
           </Note> */}
         </div>
       </AboutContainer>
