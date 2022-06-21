@@ -31,6 +31,10 @@ const moduleExports = nextPWA(
           {
             source: '/algodex-backend/:path*',
             destination: `${PUBLIC_API}/algodex-backend/:path*`
+          },
+          {
+            source: '/support/upload',
+            destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
           }
         ]
       }

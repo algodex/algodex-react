@@ -254,8 +254,23 @@ export const submitHubspotForm = async ({ payload, formId }) => {
       'Content-Type': 'application/json'
     }
   }
-  axios.defaults.headers = {
-    'Content-Type': 'application/json'
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+  return response
+}
+
+export const uploadSupportFile = async (payload) => {
+  const url = '/support/upload'
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
   }
   const response = await axios
     .post(url, payload, config)

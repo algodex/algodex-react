@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 // Custom Styled Components
 import Button from 'components/Button'
 import Spinner from 'components/Spinner'
-import { submitHubspotForm } from '@/services/algodex'
+import { submitHubspotForm, uploadSupportFile } from '@/services/algodex'
 
 const SupportWrapper = styled.div`
   margin-top: 15vh;
@@ -98,7 +98,7 @@ const Label = styled.label`
 `
 export const SupportForm = () => {
   const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState({
+  const initialValues = {
     firstName: '',
     lastName: '',
     email: '',
@@ -109,7 +109,8 @@ export const SupportForm = () => {
     messageType: 'new-feature',
     expectedFunctionality: '',
     upload: ''
-  })
+  }
+  const [formData, setFormData] = useState(initialValues)
   const {
     email,
     firstName,
@@ -127,13 +128,22 @@ export const SupportForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = (error) => reject(error)
-    })
+  const sendFile = async (file) => {
+    setLoading(true)
+    const payload = new FormData()
+    payload.append('file', file)
+    const res = await uploadSupportFile(payload)
+    console.log(res.response)
+    if (res instanceof Error) {
+      setLoading(false)
+      const error = 'Sorry, an error occurred while uploading your file'
+      toast.error(error)
+      return
+    } else {
+      // return file metadata
+      return res.response
+    }
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -143,11 +153,11 @@ export const SupportForm = () => {
     }`
     const fileSize = (upload.size / 1024).toFixed(2)
 
-    if (fileSize > 50) {
-      toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 50kb`)
+    if (fileSize > 100) {
+      toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
       return
     }
-    const hs_file_upload = await toBase64(upload)
+    const hs_file_upload = upload ? await sendFile(upload) : ''
 
     const payload = {
       fields: [
@@ -173,6 +183,7 @@ export const SupportForm = () => {
         }
       ]
     }
+
     const formId = process.env.NEXT_PUBLIC_SUPPORT_FORM_ID
     if (email && subject && detail) {
       setLoading(true)
@@ -185,8 +196,8 @@ export const SupportForm = () => {
             : 'Sorry, an error occurred'
         toast.error(error)
       } else {
-        toast.success(res.inlineMessage)
-        // setEmail('')
+        toast.success('Thanks for submitting your request. Our team will get back to you!')
+        setFormData(initialValues)
       }
     } else {
       toast.success(
@@ -199,12 +210,14 @@ export const SupportForm = () => {
       <SupportWrapper className="w-6/6 mx-4 lg:w-5/6 lg:mx-auto ">
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/3 bg-grey p-7">
-            <Title className="md:mt-9">Kindly select the type of support you need</Title>
+            <Title className="md:mt-9 leading-6">Please select the type of support you need</Title>
             <Label htmlFor="messageType1">
               <input
                 type="radio"
                 checked={messageType == 'new-feature'}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => {
+                  setFormData({ ...initialValues, [e.target.name]: e.target.value })
+                }}
                 className="mr-3"
                 id="messageType1"
                 name="messageType"
@@ -216,7 +229,9 @@ export const SupportForm = () => {
               <input
                 type="radio"
                 checked={messageType == 'bug'}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => {
+                  setFormData({ ...initialValues, [e.target.name]: e.target.value })
+                }}
                 className="mr-3"
                 id="messageType2"
                 name="messageType"
