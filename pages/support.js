@@ -12,7 +12,7 @@ const SupportPage = () => {
   return (
     <>
       <Head>
-        <title>Support</title>
+        <title>Support | Algodex</title>
       </Head>
       <Header />
       <SupportForm />
