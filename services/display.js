@@ -22,7 +22,7 @@ export const truncateAddress = (addr) => {
  * @returns {String}
  */
 export const floatToFixedDynamic = (float, minDigits = 4, maxDigits = 6) => {
-  if (typeof float === 'undefined') throw new Error('Must have a valid float')
+  if (typeof float === 'undefined' || isNaN(float) === true) throw new Error('Must have a valid float')
   let numDigits
   const absValue = new Big(float).abs().toNumber()
 
