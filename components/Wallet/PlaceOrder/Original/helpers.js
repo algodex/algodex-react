@@ -10,7 +10,7 @@ export const customAggregator = (order, decimals) => {
 
 export const aggregateOrders = (orders, asaDecimals, type) => {
   const isBuyOrder = type === 'buy'
-  let total = 0
+  // let total = 0
   const leftPriceDecimalsLength = orders.map((order) => {
     const price = new BigJS(convertFromAsaUnits(order.asaPrice, asaDecimals))
     const left = Math.floor(price)
@@ -32,13 +32,14 @@ export const aggregateOrders = (orders, asaDecimals, type) => {
   const reduceAggregateData = (result, order) => {
     const _price = convertFromAsaUnits(order.asaPrice, asaDecimals)
     const price = floatToFixed(_price, 6, decimalLength)
+    console.log('Price', price)
     const orderAmount = isBuyOrder ? order.algoAmount : order.asaAmount
 
     const amount = isBuyOrder
       ? calculateAsaBuyAmount(price, orderAmount)
       : parseFloat(order.formattedASAAmount)
 
-    total += amount
+    // total += amount
 
     const index = result.findIndex((obj) => obj.price === price)
 
@@ -48,11 +49,13 @@ export const aggregateOrders = (orders, asaDecimals, type) => {
       return result
     }
 
-    result.push({
+    const model = {
       price,
-      amount,
-      total
-    })
+      amount
+      // total
+    }
+
+    result.push(model)
     return result
   }
 
