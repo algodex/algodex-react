@@ -300,7 +300,7 @@ export const uploadSupportFile = async (payload) => {
  * @returns
  */
 export const createEngagement = async ({ fileId }) => {
-  const url = `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+  const url = `/support/engagement`
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -321,10 +321,7 @@ export const createEngagement = async ({ fileId }) => {
       ownerIds: []
       // ticketIds: [ticketId]
     },
-    attachments: [{ id: fileId }],
-    metadata: {
-      body: 'note body'
-    }
+    attachments: [{ id: fileId }]
   }
 
   const response = await axios

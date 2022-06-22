@@ -35,6 +35,10 @@ const moduleExports = nextPWA(
           {
             source: '/support/upload',
             destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+          },
+          {
+            source: '/support/engagement',
+            destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
           }
         ]
       }
