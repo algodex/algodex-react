@@ -272,6 +272,17 @@ export const uploadSupportFile = async (payload) => {
       'Content-Type': 'multipart/form-data'
     }
   }
+  
+  var fileOptions = {
+    access: 'PUBLIC_INDEXABLE',
+    ttl: 'P3M',
+    overwrite: false,
+    duplicateValidationStrategy: 'NONE',
+    duplicateValidationScope: 'ENTIRE_PORTAL'
+  };
+
+  payload.append('options', JSON.stringify(fileOptions))
+  payload.append('folderPath', 'attachments')
   const response = await axios
     .post(url, payload, config)
     .then((res) => {
