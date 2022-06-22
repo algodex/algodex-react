@@ -11,9 +11,9 @@ describe('floatToFixed', () => {
 
   it(`should add more decimal points if needed for smaller numbers`, () => {
     const float = 0.0000123456789
-    const toDisplay = '0.00001'
+    const toDisplay = '0.000012'
 
-    const result = floatToFixed(float, 4)
+    const result = floatToFixed(float)
     expect(result).toBe(toDisplay)
   })
 
@@ -21,14 +21,14 @@ describe('floatToFixed', () => {
     const float = 0.0000004
     const toDisplay = '0.00'
 
-    const result = floatToFixed(float, 2, 6)
+    const result = floatToFixed(float, 2, 2)
     expect(result).toBe(toDisplay)
   })
 
   it(`should also accept a string that can be parsed as a float`, () => {
-    expect(floatToFixed('123.456789', 4)).toBe('123.4568')
-    expect(floatToFixed('0.0000123456789', 4)).toBe('0.00001')
-    expect(floatToFixed('0.0000004', 2, 6)).toBe('0.00')
+    expect(floatToFixed('123.456789')).toBe('123.4568')
+    expect(floatToFixed('0.0000123456789')).toBe('0.000012')
+    expect(floatToFixed('0.0000004', 2, 2)).toBe('0.00')
 
     expect(floatToFixed).toThrowError()
   })

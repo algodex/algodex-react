@@ -16,7 +16,7 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
-import { floatToFixed } from '@/services/display'
+import { floatToFixed, floatToFixedDynamic } from '@/services/display'
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -57,7 +57,7 @@ export const mapToSearchResults = ({
   const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
-    ? floatToFixed(priceChg24Pct, 2)
+    ? floatToFixedDynamic(priceChg24Pct, 2)
     : hasOrders
     ? '--'
     : null
