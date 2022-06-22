@@ -272,14 +272,14 @@ export const uploadSupportFile = async (payload) => {
       'Content-Type': 'multipart/form-data'
     }
   }
-  
+
   var fileOptions = {
     access: 'PUBLIC_INDEXABLE',
-    ttl: 'P3M',
+    ttl: 'P6M',
     overwrite: false,
     duplicateValidationStrategy: 'NONE',
     duplicateValidationScope: 'ENTIRE_PORTAL'
-  };
+  }
 
   payload.append('options', JSON.stringify(fileOptions))
   payload.append('folderPath', 'attachments')
@@ -291,5 +291,51 @@ export const uploadSupportFile = async (payload) => {
     .catch((error) => {
       return error
     })
+  return response
+}
+
+/**
+ * Create an Hubspot engagement from file upload
+ * @param {*} param0
+ * @returns
+ */
+export const createEngagement = async ({ fileId }) => {
+  const url = `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const payload = {
+    engagement: {
+      active: true,
+      ownerId: 1,
+      type: 'NOTE',
+      timestamp: 1409172644778
+    },
+    associations: {
+      contactIds: [],
+      companyIds: [],
+      dealIds: [],
+      ownerIds: []
+      // ticketIds: [ticketId]
+    },
+    attachments: [{ id: fileId }],
+    metadata: {
+      body: 'note body'
+    }
+  }
+
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+
+  console.log('Engagement: ', response)
   return response
 }

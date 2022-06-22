@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 // Custom Styled Components
 import Button from 'components/Button'
 import Spinner from 'components/Spinner'
-import { submitHubspotForm, uploadSupportFile } from '@/services/algodex'
+import { createEngagement, submitHubspotForm, uploadSupportFile } from '@/services/algodex'
 
 const SupportWrapper = styled.div`
   margin-top: 15vh;
@@ -133,7 +133,7 @@ export const SupportForm = () => {
     const payload = new FormData()
     payload.append('file', file)
     const res = await uploadSupportFile(payload)
-    console.log(res.response)
+
     if (res instanceof Error) {
       setLoading(false)
       const error = 'Sorry, an error occurred while uploading your file'
@@ -141,7 +141,7 @@ export const SupportForm = () => {
       return
     } else {
       // return file metadata
-      return res.response
+      return res.objects
     }
   }
 
@@ -157,7 +157,8 @@ export const SupportForm = () => {
       toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
       return
     }
-    const hs_file_upload = upload ? await sendFile(upload) : ''
+    const fileMetadata = upload ? await sendFile(upload) : ''
+    const engaementMetadata = fileMetadata?.length > 0 ? createEngagement(fileMetadata[0].id) : ''
 
     const payload = {
       fields: [
@@ -179,7 +180,7 @@ export const SupportForm = () => {
         {
           objectTypeId: '0-1',
           name: 'TICKET.hs_file_upload',
-          value: hs_file_upload
+          value: engaementMetadata
         }
       ]
     }
