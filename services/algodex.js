@@ -321,7 +321,8 @@ export const createEngagement = async ({ fileId }) => {
       ownerIds: []
       // ticketIds: [ticketId]
     },
-    attachments: [{ id: fileId }]
+    attachments: [{ id: fileId }],
+    metadata: { body: 'file upload' }
   }
 
   const response = await axios

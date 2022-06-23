@@ -158,7 +158,8 @@ export const SupportForm = () => {
       return
     }
     const fileMetadata = upload ? await sendFile(upload) : ''
-    const engaementMetadata = fileMetadata?.length > 0 ? createEngagement(fileMetadata[0].id) : ''
+    const engaementMetadata =
+      fileMetadata?.length > 0 ? await createEngagement(fileMetadata[0].id) : ''
 
     const payload = {
       fields: [
@@ -180,11 +181,15 @@ export const SupportForm = () => {
         {
           objectTypeId: '0-1',
           name: 'TICKET.hs_file_upload',
-          value: engaementMetadata
+          value: engaementMetadata?.engagement ? engaementMetadata.engagement.id : ''
         }
       ]
     }
-
+    if (!engaementMetadata?.engagement) {
+      toast.success('There is a problem in file uploading.')
+      setLoading(false)
+      return
+    }
     const formId = process.env.NEXT_PUBLIC_SUPPORT_FORM_ID
     if (email && subject && detail) {
       setLoading(true)
@@ -347,6 +352,7 @@ export const SupportForm = () => {
                           setFormData({ ...formData, [e.target.name]: e.target.files[0] })
                         }}
                         className="form-control"
+                        required
                       />
                     </div>
                   </>
