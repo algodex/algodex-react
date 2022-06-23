@@ -5,13 +5,21 @@ import styled from '@emotion/styled'
 const trackHeight = '0.125rem'
 const thumbDiameter = '0.75rem'
 
-const track = css`
-  box-sizing: border-box;
-  border: none;
-  height: ${trackHeight};
-  background: ${({ theme }) => rgba(theme.colors.gray['000'], 0.25)};
-  border-radius: ${trackHeight};
-`
+// const track = css`
+//   box-sizing: border-box;
+//   border: none;
+//   height: ${trackHeight};
+//   background: ${({ theme }) => rgba(theme.colors.gray['000'], 0.25)};
+//   border-radius: ${trackHeight};
+// `
+
+const track = css({
+  boxSizing: 'border-box',
+  border: 'none',
+  height: trackHeight,
+  background: (theme) => rgba(theme.colors.gray['000'], 0.25),
+  borderRadius: trackHeight
+})
 
 const trackFill = css`
   ${track};
@@ -27,11 +35,17 @@ const trackFill = css`
   background-repeat: no-repeat;
 `
 
-const fill = css`
-  height: ${trackHeight};
-  background: ${({ theme }) => theme.colors.gray['700']};
-  border-radius: ${trackHeight};
-`
+// const fill = css`
+//   height: ${trackHeight};
+//   background: ${({ theme }) => theme.colors.gray['700']};
+//   border-radius: ${trackHeight};
+// `
+
+const fill = css({
+  height: trackHeight,
+  background: (theme) => theme.colors.gray['700'],
+  borderRadius: trackHeight
+})
 
 const thumb = css`
   box-sizing: border-box;
