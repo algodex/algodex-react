@@ -129,16 +129,16 @@ export const SupportForm = () => {
   }
 
   const sendFile = async (file) => {
-    setLoading(true)
+    // setLoading(true)
     const payload = new FormData()
     payload.append('file', file)
     const res = await uploadSupportFile(payload)
 
     if (res instanceof Error) {
-      setLoading(false)
+      // setLoading(false)
       const error = 'Sorry, an error occurred while uploading your file'
       toast.error(error)
-      return
+      return null
     } else {
       // return file metadata
       return res.objects
@@ -147,11 +147,23 @@ export const SupportForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    const ticketDescription = `messageType: ${messageType},\nfirstName: ${firstName},\nlastName: ${lastName},\nproduct: ${product},\nsubject: ${subject},\ndetail: ${detail}, \n${
+
+    // Check the file size before ticket creation
+    let fileSize = 0
+    if (formData.messageType === 'bug') {
+      fileSize = (upload.size / 1024).toFixed(2)
+      if (fileSize > 100) {
+        toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
+        return
+      }
+    }
+
+    const ticketDescription = `messageType: ${messageType},\nemail: ${firstName},\nfirstName: ${firstName},\nlastName: ${lastName},\nproduct: ${product},\nsubject: ${subject},\ndetail: ${detail}, \n${
       messageType == 'bug' &&
       `transactionId: ${transactionId}, \n expectedFunctionality: ${expectedFunctionality}`
     }`
 
+    // Ticket detail
     const payload = [
       {
         name: 'subject',
@@ -171,59 +183,73 @@ export const SupportForm = () => {
       }
     ]
 
+    if (!email && !subject && !detail) {
+      toast.success(
+        'Please fill all the required fields, this will help us handle your request appropriately'
+      )
+      return
+    }
+    // Show loading button
+    setLoading(true)
     const ticketRes = await createTicket(payload)
     console.log('Ticket Metadata:', ticketRes)
 
-    const fileSize = (upload.size / 1024).toFixed(2)
-
-    if (fileSize > 100) {
-      toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
+    if (ticketRes instanceof Error) {
+      const error =
+        ticketRes.response?.data?.errors[0]?.errorType == 'INVALID_EMAIL'
+          ? 'Invalid Email Address'
+          : 'Sorry, an error occurred'
+      setLoading(false)
+      toast.error(error)
       return
     }
-    const fileMetadata = upload ? await sendFile(upload) : ''
-    const engaementMetadata =
-      fileMetadata?.length > 0 ? await createEngagement(ticketRes.objectId, fileMetadata[0].id) : ''
 
-    if (!engaementMetadata?.engagement) {
-      toast.success('There is a problem in file uploading.')
+    if (formData.messageType === 'bug') {
+      const fileRes = upload ? await sendFile(upload) : null
+      if (fileRes === null) {
+        setLoading(false)
+        return
+      }
+      const engaementRes =
+        fileRes?.length > 0 ? await createEngagement(ticketRes.objectId, fileRes[0].id) : ''
+
       setLoading(false)
-      return
-    }
-    const formId = process.env.NEXT_PUBLIC_SUPPORT_FORM_ID
-    if (email && subject && detail) {
-      setLoading(true)
-      console.log(formId)
-      const res = 0
-      // const res = await submitHubspotForm({ payload, formId })
-      setLoading(false)
-      if (res instanceof Error) {
-        const error =
-          res.response?.data?.errors[0]?.errorType == 'INVALID_EMAIL'
-            ? 'Invalid Email Address'
-            : 'Sorry, an error occurred'
-        toast.error(error)
+      if (engaementRes instanceof Error) {
+        toast.success('There is a problem in file uploading.')
       } else {
         toast.success('Thanks for submitting your request. Our team will get back to you!')
         setFormData(initialValues)
       }
-    } else {
-      toast.success(
-        'Please fill all the required fields, this will help us handle your request appropriately'
-      )
     }
+    // setLoading(false)
+    // if (email && subject && detail) {
+    //   // const res = await submitHubspotForm({ payload, formId })
+    //   setLoading(false)
+    //   if (res instanceof Error) {
+    //     const error =
+    //       res.response?.data?.errors[0]?.errorType == 'INVALID_EMAIL'
+    //         ? 'Invalid Email Address'
+    //         : 'Sorry, an error occurred'
+    //     toast.error(error)
+    //   } else {
+    //     toast.success('Thanks for submitting your request. Our team will get back to you!')
+    //     setFormData(initialValues)
+    //   }
+    // }
   }
   return (
     <section className="pb-1">
       <SupportWrapper className="w-6/6 mx-4 lg:w-5/6 lg:mx-auto ">
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/3 bg-grey p-7">
+            {formData.messageType}- {upload.size}
             <Title className="md:mt-9 leading-6">Please select the type of support you need</Title>
             <Label htmlFor="messageType1">
               <input
                 type="radio"
                 checked={messageType == 'new-feature'}
                 onChange={(e) => {
-                  setFormData({ ...initialValues, [e.target.name]: e.target.value })
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
                 }}
                 className="mr-3"
                 id="messageType1"
@@ -237,7 +263,7 @@ export const SupportForm = () => {
                 type="radio"
                 checked={messageType == 'bug'}
                 onChange={(e) => {
-                  setFormData({ ...initialValues, [e.target.name]: e.target.value })
+                  setFormData({ ...formData, [e.target.name]: e.target.value })
                 }}
                 className="mr-3"
                 id="messageType2"
