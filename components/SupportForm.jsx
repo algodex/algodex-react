@@ -129,15 +129,13 @@ export const SupportForm = () => {
   }
 
   const sendFile = async (file) => {
-    // setLoading(true)
     const payload = new FormData()
     payload.append('file', file)
     const res = await uploadSupportFile(payload)
 
     if (res instanceof Error) {
-      // setLoading(false)
-      const error = 'Sorry, an error occurred while uploading your file'
-      toast.error(error)
+      setLoading(false)
+      toast.error('Sorry, an error occurred while uploading your file')
       return null
     } else {
       // return file metadata
@@ -158,7 +156,7 @@ export const SupportForm = () => {
       }
     }
 
-    const ticketDescription = `messageType: ${messageType},\nemail: ${firstName},\nfirstName: ${firstName},\nlastName: ${lastName},\nproduct: ${product},\nsubject: ${subject},\ndetail: ${detail}, \n${
+    const ticketDescription = `messageType: ${messageType},\nemail: ${email},\nfirstName: ${firstName},\nlastName: ${lastName},\nproduct: ${product},\nsubject: ${subject},\ndetail: ${detail}, \n${
       messageType == 'bug' &&
       `transactionId: ${transactionId}, \n expectedFunctionality: ${expectedFunctionality}`
     }`
@@ -184,7 +182,7 @@ export const SupportForm = () => {
     ]
 
     if (!email && !subject && !detail) {
-      toast.success(
+      toast.error(
         'Please fill all the required fields, this will help us handle your request appropriately'
       )
       return
@@ -192,33 +190,35 @@ export const SupportForm = () => {
     // Show loading button
     setLoading(true)
     const ticketRes = await createTicket(payload)
-    console.log('Ticket Metadata:', ticketRes)
 
     if (ticketRes instanceof Error) {
-      const error =
-        ticketRes.response?.data?.errors[0]?.errorType == 'INVALID_EMAIL'
-          ? 'Invalid Email Address'
-          : 'Sorry, an error occurred'
+      // const error =
+      //   ticketRes.response?.data?.validationResults[0]?.errorType == 'INVALID_EMAIL'
+      //     ? 'Invalid Email Address'
+      //     : 'Sorry, an error occurred'
       setLoading(false)
-      toast.error(error)
+      toast.error('There is an error while creating a ticket')
       return
     }
 
-    if (formData.messageType === 'bug') {
+    if (formData.messageType === 'new-feature') {
+      setLoading(false)
+      toast.success('Thanks for submitting your request. Our team will get back to you!')
+      setFormData(initialValues)
+    } else {
       const fileRes = upload ? await sendFile(upload) : null
       if (fileRes === null) {
-        setLoading(false)
         return
       }
       const engaementRes =
-        fileRes?.length > 0 ? await createEngagement(ticketRes.objectId, fileRes[0].id) : ''
+        fileRes?.length > 0 ? await createEngagement(ticketRes.objectId, fileRes[0].id) : null
 
       setLoading(false)
-      if (engaementRes instanceof Error) {
-        toast.success('There is a problem in file uploading.')
+      if (engaementRes instanceof Error || engaementRes === null) {
+        toast.error('There is a problem in file uploading.')
       } else {
         toast.success('Thanks for submitting your request. Our team will get back to you!')
-        setFormData(initialValues)
+        setFormData({ ...initialValues, messageType: 'bug' })
       }
     }
     // setLoading(false)

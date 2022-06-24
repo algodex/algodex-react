@@ -327,12 +327,16 @@ export const createEngagement = async (ticketId, fileId) => {
     metadata: { body: 'Attachment' }
   }
 
-  console.log('Engagement Payload: ', payload)
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
 
-  const response = await axios.post(url, payload, config)
-
-  console.log('Engagement: ', response.data)
-  return response.data
+  return response
 }
 
 /**
@@ -347,7 +351,14 @@ export const createTicket = async (payload) => {
       'Content-Type': 'application/json'
     }
   }
-  const response = await axios.post(url, payload, config)
-  console.log('Ticket: ', response.data)
-  return response.data
+
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+  return response
 }
