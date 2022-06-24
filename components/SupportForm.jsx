@@ -201,7 +201,10 @@ export const SupportForm = () => {
     if (formData.messageType === 'new-feature') {
       setLoading(false)
       toast.success('Thanks for submitting your request. Our team will get back to you!')
-      document.getElementsByName('upload')[0].value = ''
+      const eles = document.getElementsByName('upload')
+      if (Array.isArray(eles) && eles.length > 0) {
+        eles[0].value = ''
+      }
       setFormData(initialValues)
     } else {
       const fileRes = upload ? await sendFile(upload) : null
@@ -216,7 +219,10 @@ export const SupportForm = () => {
         toast.error('There is a problem in file uploading.')
       } else {
         toast.success('Thanks for submitting your request. Our team will get back to you!')
-        document.getElementsByName('upload')[0].value = ''
+        const eles = document.getElementsByName('upload')
+        if (Array.isArray(eles) && eles.length > 0) {
+          eles[0].value = ''
+        }
         setFormData({ ...initialValues, messageType: 'bug' })
       }
     }
