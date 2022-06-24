@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 // Custom Styled Components
 import Button from 'components/Button'
 import Spinner from 'components/Spinner'
-import { createEngagement, submitHubspotForm, uploadSupportFile } from '@/services/algodex'
+import { createEngagement, createTicket, uploadSupportFile } from '@/services/algodex'
 
 const SupportWrapper = styled.div`
   margin-top: 15vh;
@@ -151,6 +151,29 @@ export const SupportForm = () => {
       messageType == 'bug' &&
       `transactionId: ${transactionId}, \n expectedFunctionality: ${expectedFunctionality}`
     }`
+
+    const payload = [
+      {
+        name: 'subject',
+        value: `Algodex Support Ticket <${new Date()}>`
+      },
+      {
+        name: 'content',
+        value: ticketDescription
+      },
+      {
+        name: 'hs_pipeline',
+        value: 0
+      },
+      {
+        name: 'hs_pipeline_stage',
+        value: 1
+      }
+    ]
+
+    const ticketMetadata = await createTicket(payload)
+    console.log('Ticket Metadata:', ticketMetadata)
+
     const fileSize = (upload.size / 1024).toFixed(2)
 
     if (fileSize > 100) {
@@ -161,30 +184,6 @@ export const SupportForm = () => {
     const engaementMetadata =
       fileMetadata?.length > 0 ? await createEngagement(fileMetadata[0].id) : ''
 
-    const payload = {
-      fields: [
-        {
-          objectTypeId: '0-1',
-          name: 'Email',
-          value: email
-        },
-        {
-          objectTypeId: '0-1',
-          name: 'TICKET.subject',
-          value: `Algodex Support Ticket <${new Date()}>`
-        },
-        {
-          objectTypeId: '0-1',
-          name: 'TICKET.content',
-          value: ticketDescription
-        },
-        {
-          objectTypeId: '0-1',
-          name: 'TICKET.hs_file_upload',
-          value: engaementMetadata?.engagement ? engaementMetadata.engagement.id : ''
-        }
-      ]
-    }
     if (!engaementMetadata?.engagement) {
       toast.success('There is a problem in file uploading.')
       setLoading(false)
@@ -193,7 +192,9 @@ export const SupportForm = () => {
     const formId = process.env.NEXT_PUBLIC_SUPPORT_FORM_ID
     if (email && subject && detail) {
       setLoading(true)
-      const res = await submitHubspotForm({ payload, formId })
+      console.log(formId)
+      const res = 0
+      // const res = await submitHubspotForm({ payload, formId })
       setLoading(false)
       if (res instanceof Error) {
         const error =

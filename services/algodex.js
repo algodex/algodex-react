@@ -257,11 +257,13 @@ export const submitHubspotForm = async ({ payload, formId }) => {
   const response = await axios
     .post(url, payload, config)
     .then((res) => {
+      console.log('Hubspot Form1:', res)
       return res.data
     })
     .catch((error) => {
       return error
     })
+  console.log('Hubspot Form:', response)
   return response
 }
 
@@ -318,8 +320,8 @@ export const createEngagement = async ({ fileId }) => {
       contactIds: [],
       companyIds: [],
       dealIds: [],
-      ownerIds: []
-      // ticketIds: [ticketId]
+      ownerIds: [],
+      ticketIds: [967643537]
     },
     attachments: [{ id: fileId }],
     metadata: { body: 'file upload' }
@@ -335,5 +337,23 @@ export const createEngagement = async ({ fileId }) => {
     })
 
   console.log('Engagement: ', response)
+  return response
+}
+
+/**
+ * Create an Hubspot ticket
+ * @param {*} param0
+ * @returns
+ */
+export const createTicket = async ({ payload }) => {
+  const url = `/support/ticket`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const response = await axios.post(url, payload, config)
+  console.log('Ticket: ', response)
   return response
 }

@@ -39,6 +39,10 @@ const moduleExports = nextPWA(
           {
             source: '/support/engagement',
             destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+          },
+          {
+            source: '/support/ticket',
+            destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
           }
         ]
       }
