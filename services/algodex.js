@@ -242,6 +242,30 @@ export async function fetchBlogMedia(id) {
   return res.data
 }
 
+/**
+ * Add Email to the subscription mailing list on hubspot
+ *
+ * @returns {Promise<Object>}
+ */
+export const submitHubspotForm = async ({ payload, formId }) => {
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${formId}`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+
+  return response
+}
+
 export const uploadSupportFile = async (payload) => {
   const url = '/support/upload'
   const config = {
