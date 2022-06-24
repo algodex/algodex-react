@@ -301,7 +301,7 @@ export const uploadSupportFile = async (payload) => {
  * @param {*} param0
  * @returns
  */
-export const createEngagement = async ({ fileId }) => {
+export const createEngagement = async (ticketId, fileId) => {
   const url = `/support/engagement`
   const config = {
     headers: {
@@ -321,23 +321,18 @@ export const createEngagement = async ({ fileId }) => {
       companyIds: [],
       dealIds: [],
       ownerIds: [],
-      ticketIds: [967643537]
+      ticketIds: [ticketId]
     },
     attachments: [{ id: fileId }],
-    metadata: { body: 'file upload' }
+    metadata: { body: 'Attachment' }
   }
 
-  const response = await axios
-    .post(url, payload, config)
-    .then((res) => {
-      return res.data
-    })
-    .catch((error) => {
-      return error
-    })
+  console.log('Engagement Payload: ', payload)
 
-  console.log('Engagement: ', response)
-  return response
+  const response = await axios.post(url, payload, config)
+
+  console.log('Engagement: ', response.data)
+  return response.data
 }
 
 /**
@@ -345,15 +340,14 @@ export const createEngagement = async ({ fileId }) => {
  * @param {*} param0
  * @returns
  */
-export const createTicket = async ({ payload }) => {
+export const createTicket = async (payload) => {
   const url = `/support/ticket`
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   }
-
   const response = await axios.post(url, payload, config)
-  console.log('Ticket: ', response)
-  return response
+  console.log('Ticket: ', response.data)
+  return response.data
 }

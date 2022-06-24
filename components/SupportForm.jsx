@@ -171,8 +171,8 @@ export const SupportForm = () => {
       }
     ]
 
-    const ticketMetadata = await createTicket(payload)
-    console.log('Ticket Metadata:', ticketMetadata)
+    const ticketRes = await createTicket(payload)
+    console.log('Ticket Metadata:', ticketRes)
 
     const fileSize = (upload.size / 1024).toFixed(2)
 
@@ -182,7 +182,7 @@ export const SupportForm = () => {
     }
     const fileMetadata = upload ? await sendFile(upload) : ''
     const engaementMetadata =
-      fileMetadata?.length > 0 ? await createEngagement(fileMetadata[0].id) : ''
+      fileMetadata?.length > 0 ? await createEngagement(ticketRes.objectId, fileMetadata[0].id) : ''
 
     if (!engaementMetadata?.engagement) {
       toast.success('There is a problem in file uploading.')
