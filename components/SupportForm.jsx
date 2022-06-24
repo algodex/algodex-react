@@ -157,8 +157,9 @@ export const SupportForm = () => {
     }
 
     const ticketDescription = `messageType: ${messageType},\nemail: ${email},\nfirstName: ${firstName},\nlastName: ${lastName},\nproduct: ${product},\nsubject: ${subject},\ndetail: ${detail}, \n${
-      messageType == 'bug' &&
-      `transactionId: ${transactionId}, \n expectedFunctionality: ${expectedFunctionality}`
+      messageType == 'bug'
+        ? `transactionId: ${transactionId}, \n expectedFunctionality: ${expectedFunctionality}`
+        : ''
     }`
 
     // Ticket detail
@@ -192,10 +193,6 @@ export const SupportForm = () => {
     const ticketRes = await createTicket(payload)
 
     if (ticketRes instanceof Error) {
-      // const error =
-      //   ticketRes.response?.data?.validationResults[0]?.errorType == 'INVALID_EMAIL'
-      //     ? 'Invalid Email Address'
-      //     : 'Sorry, an error occurred'
       setLoading(false)
       toast.error('There is an error while creating a ticket')
       return
@@ -204,6 +201,7 @@ export const SupportForm = () => {
     if (formData.messageType === 'new-feature') {
       setLoading(false)
       toast.success('Thanks for submitting your request. Our team will get back to you!')
+      document.getElementsByName('upload')[0].value = ''
       setFormData(initialValues)
     } else {
       const fileRes = upload ? await sendFile(upload) : null
@@ -218,31 +216,16 @@ export const SupportForm = () => {
         toast.error('There is a problem in file uploading.')
       } else {
         toast.success('Thanks for submitting your request. Our team will get back to you!')
+        document.getElementsByName('upload')[0].value = ''
         setFormData({ ...initialValues, messageType: 'bug' })
       }
     }
-    // setLoading(false)
-    // if (email && subject && detail) {
-    //   // const res = await submitHubspotForm({ payload, formId })
-    //   setLoading(false)
-    //   if (res instanceof Error) {
-    //     const error =
-    //       res.response?.data?.errors[0]?.errorType == 'INVALID_EMAIL'
-    //         ? 'Invalid Email Address'
-    //         : 'Sorry, an error occurred'
-    //     toast.error(error)
-    //   } else {
-    //     toast.success('Thanks for submitting your request. Our team will get back to you!')
-    //     setFormData(initialValues)
-    //   }
-    // }
   }
   return (
     <section className="pb-1">
       <SupportWrapper className="w-6/6 mx-4 lg:w-5/6 lg:mx-auto ">
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/3 bg-grey p-7">
-            {formData.messageType}- {upload.size}
             <Title className="md:mt-9 leading-6">Please select the type of support you need</Title>
             <Label htmlFor="messageType1">
               <input
