@@ -238,7 +238,13 @@ export const SupportForm = () => {
                 type="radio"
                 checked={messageType == 'new-feature'}
                 onChange={(e) => {
-                  setFormData({ ...formData, [e.target.name]: e.target.value })
+                  setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value,
+                    expectedFunctionality: '',
+                    transactionId: '',
+                    upload: ''
+                  })
                 }}
                 className="mr-3"
                 id="messageType1"
@@ -368,6 +374,7 @@ export const SupportForm = () => {
                           setFormData({ ...formData, [e.target.name]: e.target.files[0] })
                         }}
                         className="form-control"
+                        accept="image/*, video/*"
                         required
                       />
                     </div>
