@@ -2,26 +2,24 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import { useWallets } from '@algodex/algodex-hooks'
-import { useEventDispatch } from '@/hooks/useEvents'
+// import { useWallets } from '@algodex/algodex-hooks'
+// import { useEventDispatch } from '@/hooks/useEvents'
 import { useContext } from 'react'
 import { WalletContext } from '../../WalletContext'
 
-const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, walletOptions }) => {
-  const { peraConnect, myAlgoConnect, addresses } = useContext(WalletContext)
+const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress /*, walletOptions */ }) => {
+  const { peraConnect, myAlgoConnect /*,addresses*/ } = useContext(WalletContext)
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'wallet-connect': peraConnect
   }
 
-  
-
   const myAlgoOnClick = () => {
-    WALLETS_CONNECT_MAP['my-algo-wallet']();
-    // console.log(`This onClick calls the myAlgoConnect export of useWallets() hook. 
+    WALLETS_CONNECT_MAP['my-algo-wallet']()
+    // console.log(`This onClick calls the myAlgoConnect export of useWallets() hook.
     // It is hitting the callback in useWallets() which triggers setAddresses, yet addresses
-    // is still undefined as you can see here. This console.log() runs before 
+    // is still undefined as you can see here. This console.log() runs before
     //  : ${addresses[0]}`)
   }
   return (

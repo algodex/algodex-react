@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import theme from 'theme'
 import { useState } from 'react'
-import { WalletContext } from '../../WalletContext'
+// import { WalletContext } from '../../WalletContext'
 
 const DropdownBody = ({ activeWalletAddress, sortedWalletsList }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
@@ -17,13 +17,10 @@ const DropdownBody = ({ activeWalletAddress, sortedWalletsList }) => {
       }}
     >
       {(!activeWalletAddress || isConnectingAddress) && (
-
-        
-        
-                       <WalletOptionsList
-                       isConnectingAddress={isConnectingAddress}
-                       setIsConnectingAddress={setIsConnectingAddress}
-                     />
+        <WalletOptionsList
+          isConnectingAddress={isConnectingAddress}
+          setIsConnectingAddress={setIsConnectingAddress}
+        />
       )}
       {activeWalletAddress && !isConnectingAddress && (
         <>

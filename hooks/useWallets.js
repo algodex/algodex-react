@@ -1,7 +1,10 @@
-import {useMyAlgoConnect,useWalletConnect, useAlgodex} from '@algodex/algodex-hooks';
-import {useCallback, useEffect, useState} from 'react';
-import {isEqual} from 'lodash/lang';
-import events from '@algodex/algodex-sdk/lib/events';
+import { useAlgodex } from '@algodex/algodex-hooks'
+import useMyAlgoConnect from './useMyAlgoConnect'
+import useWalletConnect from './useWalletConnect'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { isEqual } from 'lodash/lang'
+import events from '@algodex/algodex-sdk/lib/events'
+import PropTypes from 'prop-types'
 /**
  *
  * @param {Array<Wallet>} a
@@ -10,105 +13,113 @@ import events from '@algodex/algodex-sdk/lib/events';
  * @private
  */
 function _mergeAddresses(a, b) {
+  console.log(`ab`, a, b)
   if (!Array.isArray(a) || !Array.isArray(b)) {
-    throw new TypeError('Must be an array of addresses!');
+    throw new TypeError('Must be an array of addresses!')
   }
-  const map = new Map();
-  a.forEach((wallet) => map.set(wallet.address, wallet));
-  b.forEach((wallet) => map.set(wallet.address,
-      {...map.get(wallet.address), ...wallet},
-  ));
-  return Array.from(map.values());
+  const map = new Map()
+  a.forEach((wallet) => map.set(wallet.address, wallet))
+  b.forEach((wallet) => map.set(wallet.address, { ...map.get(wallet.address), ...wallet }))
+  return Array.from(map.values())
 }
-
+export const WalletsContext = createContext()
+export function WalletsProvider({ children }) {
+  const [addresses, setAddresses] = useState([])
+  return (
+    <WalletsContext.Provider value={[addresses, setAddresses]}>{children}</WalletsContext.Provider>
+  )
+}
+WalletsProvider.propTypes = {
+  children: PropTypes.node
+}
 /**
  * Use Wallets Hooks
  * @param {Object} initialState Wallet Initial State
  * @return {*}
  */
 function useWallets(initialState) {
-  const [wallet, setWallet] = useState(initialState);
-  const [activeWallet, setActiveWallet] = useState();
-  const [addresses, setAddresses] = useState([]);
-  const {http} = useAlgodex();
+  const context = useContext(WalletsContext)
+  if (context === undefined) {
+    throw new Error('Must be inside of a Wallets Provider')
+  }
+  const [wallet, setWallet] = useState(initialState)
+  const [activeWallet, setActiveWallet] = useState()
+  const [addresses, setAddresses] = context
+
+  const { http } = useAlgodex()
 
   const onEvents = useCallback(
-      (props) => {
-        const {type, wallet: _wallet} = props;
-        if (type === 'change' && !isEqual(wallet, _wallet)) {
-          setWallet(_wallet);
-          setActiveWallet(_wallet.address);
-        }
-      },
-      [setWallet, wallet],
-  );
+    (props) => {
+      const { type, wallet: _wallet } = props
+      if (type === 'change' && !isEqual(wallet, _wallet)) {
+        setWallet(_wallet)
+        setActiveWallet(_wallet.address)
+      }
+    },
+    [setWallet, wallet]
+  )
+
   useEffect(() => {
-    events.on('wallet', onEvents);
+    events.on('wallet', onEvents)
     return () => {
-      events.off('wallet', onEvents);
-    };
-  }, [onEvents]);
+      events.off('wallet', onEvents)
+    }
+  }, [onEvents])
 
-
-  const handleConnect = async (_addresses) => {
-    const accounts = await http.indexer.fetchAccounts(_addresses);
-    debugger;
-    console.log(accounts);
-    setAddresses(_mergeAddresses(_addresses, accounts));
-  }
   // TODO: Account Info Query
   // Handle any Connection
-  // const handleConnect = useCallback(
-  //     async (_addresses) => {
-  //       const accounts = await http.indexer.fetchAccounts(_addresses);
-  //       debugger;
-  //       console.log(accounts);
-  //       setAddresses(_mergeAddresses(_addresses, accounts));
-  //     },
-  //     [addresses],
-  // ); 
-  //useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed.
-  // If we are changing the dependency in the callback it will not call on first load.
-  // It only triggers after the useEffect parses local storage.
+  const handleConnect = useCallback(
+    async (_addresses) => {
+      console.log('Handling Connect')
+      const accounts = await http.indexer.fetchAccounts(_addresses)
+      const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
+      console.log({
+        accounts,
+        _addresses,
+        addresses,
+        mergedPrivateAddresses,
+        merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
+      })
+      setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+    },
+    [setAddresses, addresses]
+  )
 
   // Handle any Disconnect
   const handleDisconnect = useCallback((_addresses) => {
-    console.error('Handle removing from storage', _addresses);
-  }, []);
+    console.error('Handle removing from storage', _addresses)
+  }, [])
 
   // My Algo Connect/Disconnect
-  const {
-    connect: myAlgoConnect,
-    disconnect: myAlgoDisconnect,
-  } = useMyAlgoConnect(
-      handleConnect,
-      handleDisconnect,
-  );
+  const { connect: myAlgoConnect, disconnect: myAlgoDisconnect } = useMyAlgoConnect(
+    handleConnect,
+    handleDisconnect
+  )
   // Pera Connect/Disconnect
-  const {connect: peraConnect, disconnect: peraDisconnect} = useWalletConnect(
-      handleConnect,
-      handleDisconnect,
-  );
+  const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect(
+    handleConnect,
+    handleDisconnect
+  )
 
   // Fetch active wallet from local storage
   useEffect(() => {
-    const res = localStorage.getItem('activeWallet');
+    const res = localStorage.getItem('activeWallet')
     if (res && res !== activeWallet) {
-      setActiveWallet(localStorage.getItem('activeWallet'));
+      setActiveWallet(localStorage.getItem('activeWallet'))
     }
-  }, [setActiveWallet]);
+  }, [setActiveWallet])
 
   // Fetch all wallet addresses from local storage
-  useEffect(() => {
-    const res = localStorage.getItem('addresses');
-    if (res) {
-      setAddresses([JSON.parse(localStorage.getItem('addresses'))]);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('addresses', JSON.stringify(addresses));
-  }, [addresses]);
+  // useEffect(() => {
+  //   const res = localStorage.getItem('addresses')
+  //   if (res) {
+  //     setAddresses(_mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses))
+  //   }
+  // }, [])
+  //
+  // useEffect(() => {
+  //   localStorage.setItem('addresses', JSON.stringify(addresses))
+  // }, [addresses])
 
   return {
     wallet,
@@ -117,8 +128,8 @@ function useWallets(initialState) {
     myAlgoConnect,
     peraConnect,
     peraDisconnect,
-    myAlgoDisconnect,
-  };
+    myAlgoDisconnect
+  }
 }
 
-export default useWallets;
+export default useWallets
