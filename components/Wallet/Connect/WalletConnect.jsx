@@ -164,7 +164,7 @@ const WalletRow = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWalletAddress, isSignedIn, addresses, onConnectClick, onSetActiveWallet } = props
+  const { activeWalletAddress, isSignedIn, addresses, onSetActiveWallet } = props
 
   const { t } = useTranslation('wallet')
 
@@ -301,10 +301,10 @@ WalletView.defaultProps = {
  */
 function WalletConnect(props) {
   const { setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
-  const[ addresses ] = useContext(WalletsContext)
-  const [ signedIn, setSignedIn ] = useState(false)
+  const [addresses] = useContext(WalletsContext)
+  const [signedIn, setSignedIn] = useState(false)
 
-  useEffect(()=> {
+  useEffect(() => {
     if (addresses.length > 0) setSignedIn(true)
   }, [addresses])
 
