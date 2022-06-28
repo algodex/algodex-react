@@ -202,7 +202,6 @@ export function WalletView(props) {
     )
   }
 
-
   // const renderBalance = (bal) => {
   //   const split = bal.toFixed(6).split('.')
 
@@ -243,15 +242,14 @@ export function WalletView(props) {
     ))
   }
 
-  const getButtonState = () => {
-    onConnectClick()
-  }
+  // const getButtonState = () => {
+  //   onConnectClick()
+  // }
   // const WalletButtonText =
   //   addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
   return (
     <Section area="topRight">
       <Container>
-
         {isSignedIn ? (
           <>
             <Header>
@@ -303,11 +301,9 @@ WalletView.defaultProps = {
  */
 function WalletConnect(props) {
   const { setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
-  //   debugger;
-  const[addresses] = useContext(WalletsContext)
+  const[ addresses ] = useContext(WalletsContext)
+  const [ signedIn, setSignedIn ] = useState(false)
 
-  const [signedIn, setSignedIn] = useState(false)
-  
   useEffect(()=> {
     if (addresses.length > 0) setSignedIn(true)
   }, [addresses])
