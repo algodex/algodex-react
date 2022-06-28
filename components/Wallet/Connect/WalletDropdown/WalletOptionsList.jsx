@@ -6,9 +6,10 @@ import theme from 'theme'
 // import { useEventDispatch } from '@/hooks/useEvents'
 import { useContext } from 'react'
 import { WalletContext } from '../../WalletContext'
+import useWallets from '@/hooks/useWallets'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress /*, walletOptions */ }) => {
-  const { peraConnect, myAlgoConnect /*,addresses*/ } = useContext(WalletContext)
+  const { peraConnect, myAlgoConnect /*,addresses*/ } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
