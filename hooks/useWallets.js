@@ -71,16 +71,18 @@ function useWallets(initialState) {
   const handleConnect = useCallback(
     async (_addresses) => {
       console.log('Handling Connect')
-      const accounts = await http.indexer.fetchAccounts(_addresses)
-      const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
-      console.log({
-        accounts,
-        _addresses,
-        addresses,
-        mergedPrivateAddresses,
-        merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
-      })
-      setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+      if (_addresses.length > 0) {
+        const accounts = await http.indexer.fetchAccounts(_addresses)
+        const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
+        console.log({
+          accounts,
+          _addresses,
+          addresses,
+          mergedPrivateAddresses
+          // merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
+        })
+        setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+      }
     },
     [setAddresses, addresses]
   )
