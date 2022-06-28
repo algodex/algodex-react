@@ -1,6 +1,5 @@
 // import { Typography, Typography, Typography, Typography } from 'components/Typography'
 
-import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -10,9 +9,8 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets, {WalletsContext} from '@/hooks/useWallets'
+import { WalletsContext } from '@/hooks/useWallets'
 import { useState, useContext, useEffect } from 'react'
-
 
 // import useWallets from '@/hooks/useWallets'
 
@@ -25,16 +23,16 @@ const Container = styled.div`
   padding: 0.875rem 0 1rem;
 `
 
-const ButtonContainer = styled.div`
-  flex-shrink: 0%;
-  display: flex;
-  width: 100%;
+// const ButtonContainer = styled.div`
+//   flex-shrink: 0%;
+//   display: flex;
+//   width: 100%;
 
-  button {
-    flex-grow: 1;
-    margin: 0 1.125rem;
-  }
-`
+//   button {
+//     flex-grow: 1;
+//     margin: 0 1.125rem;
+//   }
+// `
 
 const EmptyState = styled.div`
   position: relative;
@@ -168,14 +166,13 @@ export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   const { activeWalletAddress, isSignedIn, addresses, onConnectClick, onSetActiveWallet } = props
 
-
   const { t } = useTranslation('wallet')
 
   // const walletContext= useContext(WalletContext)
 
-  const getButtonVariant = () => {
-    return isSignedIn ? 'default' : 'primary'
-  }
+  // const getButtonVariant = () => {
+  //   return isSignedIn ? 'default' : 'primary'
+  // }
 
   const isWalletActive = (addr) => {
     return activeWalletAddress === addr
@@ -249,10 +246,8 @@ export function WalletView(props) {
   const getButtonState = () => {
     onConnectClick()
   }
-
-  const WalletButtonText =
-    addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
-
+  // const WalletButtonText =
+  //   addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
   return (
     <Section area="topRight">
       <Container>
@@ -310,12 +305,12 @@ function WalletConnect(props) {
   const { setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
   //   debugger;
   const[addresses] = useContext(WalletsContext)
+
   const [signedIn, setSignedIn] = useState(false)
+  
   useEffect(()=> {
     if (addresses.length > 0) setSignedIn(true)
   }, [addresses])
-
-  
 
   return (
     <WalletView

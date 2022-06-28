@@ -4,8 +4,6 @@ import Typography from '@mui/material/Typography'
 import theme from 'theme'
 // import { useWallets } from '@algodex/algodex-hooks'
 // import { useEventDispatch } from '@/hooks/useEvents'
-import { useContext } from 'react'
-import { WalletContext } from '../../WalletContext'
 import useWallets from '@/hooks/useWallets'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress /*, walletOptions */ }) => {
