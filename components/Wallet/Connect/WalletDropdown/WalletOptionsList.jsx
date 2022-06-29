@@ -2,25 +2,41 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-// import { useWallets } from '@algodex/algodex-hooks'
-// import { useEventDispatch } from '@/hooks/useEvents'
+import { useEffect, useRef } from 'react'
+
 import useWallets from '@/hooks/useWallets'
 
-const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress /*, walletOptions */ }) => {
-  const { peraConnect, myAlgoConnect /*,addresses*/ } = useWallets()
+const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
+  const { peraConnect, myAlgoConnect, addresses } = useWallets()
+
+  const addressesRef = useRef(null)
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
-    'wallet-connect': peraConnect
+    'pera-connect': peraConnect
   }
 
   const myAlgoOnClick = () => {
     WALLETS_CONNECT_MAP['my-algo-wallet']()
-    // console.log(`This onClick calls the myAlgoConnect export of useWallets() hook.
-    // It is hitting the callback in useWallets() which triggers setAddresses, yet addresses
-    // is still undefined as you can see here. This console.log() runs before
-    //  : ${addresses[0]}`)
   }
+
+  const peraConnectOnClick = () => {
+    WALLETS_CONNECT_MAP['pera-connect']()
+  }
+  useEffect(() => {
+    if (!addressesRef.current) {
+      addressesRef.current = addresses
+    }
+
+    if (addressesRef.current.length < addresses.length) {
+      addressesRef.current = addresses
+      closeFn()
+    }
+    // **Note** Can't put closeFn() in the onClicks because it will closeOut
+    // modal before wallet-connect finishes connecting leading to stale state.
+    // Creating a ref that persists between renders gives us a way to automatically close out
+    // modals only when a new address is added to the addresses array.
+  }, [addresses])
   return (
     <>
       <div
@@ -45,7 +61,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress /*, wallet
             role="button"
             tabIndex="0"
             className="cursor-pointer flex items-center mb-2"
-            onClick={() => WALLETS_CONNECT_MAP['wallet-connect']()}
+            onClick={peraConnectOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
             <Image
@@ -78,7 +94,8 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress /*, wallet
 
 WalletsOptions.propTypes = {
   isConnectingAddress: PropTypes.bool,
-  setIsConnectingAddress: PropTypes.func
+  setIsConnectingAddress: PropTypes.func,
+  closeFn: PropTypes.func
 }
 
 WalletsOptions.defaultProps = {
