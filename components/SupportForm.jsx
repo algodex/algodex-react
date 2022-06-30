@@ -148,7 +148,7 @@ export const SupportForm = () => {
 
     // Check the file size before ticket creation
     let fileSize = 0
-    if (formData.messageType === 'bug') {
+    if (formData.messageType === 'bug' && upload) {
       fileSize = (upload.size / 1024).toFixed(2)
       if (fileSize > 100) {
         toast.error(`Uploaded file ${fileSize}kb exceeds maximum allowed size of 100kb`)
@@ -209,26 +209,34 @@ export const SupportForm = () => {
       }
       setFormData(initialValues)
     } else {
-      const fileRes = upload ? await sendFile(upload) : null
-      if (fileRes === null) {
-        return
-      }
-      const engaementRes =
-        fileRes?.length > 0 ? await createEngagement(ticketRes.objectId, fileRes[0].id) : null
-
-      setLoading(false)
-      if (engaementRes instanceof Error || engaementRes === null) {
-        toast.error('There is a problem in file uploading.')
-      } else {
-        toast.success('Thanks for submitting your request. Our team will get back to you!')
-
-        // *it returns NodeList and it is not Array
-        const eles = document.getElementsByName('upload')
-        if (eles.length > 0) {
-          eles[0].value = ''
+      // upload can contain files or can be empty
+      if (upload) {
+        const fileRes = await sendFile(upload)
+        if (fileRes === null) {
+          // File is selected but there was an error in file uploading and it is handled
+          return
         }
-        setFormData({ ...initialValues, messageType: 'bug' })
+
+        const engaementRes =
+          fileRes?.length > 0 ? await createEngagement(ticketRes.objectId, fileRes[0].id) : null
+
+        setLoading(false)
+        if (engaementRes instanceof Error || engaementRes === null) {
+          toast.error('There is a problem in file uploading.')
+        } else {
+          toast.success('Thanks for submitting your request. Our team will get back to you!')
+        }
+      } else {
+        setLoading(false)
+        toast.success('Thanks for submitting your request. Our team will get back to you!')
       }
+
+      // *it returns NodeList and it is not Array
+      const eles = document.getElementsByName('upload')
+      if (eles.length > 0) {
+        eles[0].value = ''
+      }
+      setFormData({ ...initialValues, messageType: 'bug' })
     }
   }
   return (
@@ -325,7 +333,7 @@ export const SupportForm = () => {
                     onChange={(e) => onChange(e)}
                     className="form-control"
                   >
-                    <option value="">Select product</option>
+                    <option value="">Select product*</option>
                     <option value="Algodex">Algodex</option>
                     <option value="Mailbox">Mailbox</option>
                   </select>
