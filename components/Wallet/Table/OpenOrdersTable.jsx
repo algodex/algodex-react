@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@algodex/algodex-hooks'
+import { withWalletOrdersQuery, useAlgodex } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -55,6 +55,10 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
+  const { algodex } = useAlgodex()
+  function closeOrder() {
+    return algodex.closeOrder.apply(algodex, arguments)
+  }
 
   useEffect(() => {
     setOpenOrdersData(_orders)
@@ -75,7 +79,8 @@ export function OpenOrdersTable({ orders: _orders }) {
           assetLimitPriceN,
           assetLimitPriceD,
           assetId,
-          version
+          version,
+          appId
         } = cellData.metadata
         const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
@@ -92,17 +97,34 @@ export function OpenOrdersTable({ orders: _orders }) {
         //   orderBookEntry,
         //   version
         // )
-        const cancelOrderPromise = new Promise((resolve) =>
-          resolve({
-            escrowAddress,
-            ownerAddress,
-            assetLimitPriceN,
-            assetLimitPriceD,
-            assetId,
-            version,
-            orderBookEntry
-          })
-        )
+        // const cancelOrderPromise = new Promise((resolve) =>
+        //   resolve({
+        //     escrowAddress,
+        //     ownerAddress,
+        //     assetLimitPriceN,
+        //     assetLimitPriceD,
+        //     assetId,
+        //     version,
+        //     orderBookEntry
+        //   })
+        // )
+
+        // ...order,
+        // address: wallet.address,
+        // wallet,
+        // asset,
+        // appId: order.type === 'sell' ? 22045522 : 22045503,
+        // version: 6
+        const cancelOrderPromise = closeOrder({
+          escrowAddress,
+          ownerAddress,
+          assetLimitPriceN,
+          assetLimitPriceD,
+          assetId,
+          version,
+          orderBookEntry,
+          appId
+        })
 
         toast.promise(cancelOrderPromise, {
           loading: t('awaiting-confirmation'),
