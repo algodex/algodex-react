@@ -201,8 +201,10 @@ export const SupportForm = () => {
     if (formData.messageType === 'new-feature') {
       setLoading(false)
       toast.success('Thanks for submitting your request. Our team will get back to you!')
+
+      // *it returns NodeList and it is not Array
       const eles = document.getElementsByName('upload')
-      if (Array.isArray(eles) && eles.length > 0) {
+      if (eles.length > 0) {
         eles[0].value = ''
       }
       setFormData(initialValues)
@@ -219,8 +221,10 @@ export const SupportForm = () => {
         toast.error('There is a problem in file uploading.')
       } else {
         toast.success('Thanks for submitting your request. Our team will get back to you!')
+
+        // *it returns NodeList and it is not Array
         const eles = document.getElementsByName('upload')
-        if (Array.isArray(eles) && eles.length > 0) {
+        if (eles.length > 0) {
           eles[0].value = ''
         }
         setFormData({ ...initialValues, messageType: 'bug' })
@@ -315,6 +319,7 @@ export const SupportForm = () => {
                 </div>
                 <div className="mb-4 px-2 w-full md:w-1/2">
                   <select
+                    required
                     name="product"
                     value={product}
                     onChange={(e) => onChange(e)}
@@ -344,8 +349,9 @@ export const SupportForm = () => {
                   <>
                     <div className="mb-4 px-2 w-full">
                       <textarea
+                        required
                         cols="4"
-                        placeholder="Enter expected functionality"
+                        placeholder="Enter expected functionality*"
                         name="expectedFunctionality"
                         value={expectedFunctionality}
                         onChange={(e) => onChange(e)}
@@ -375,7 +381,6 @@ export const SupportForm = () => {
                         }}
                         className="form-control"
                         accept="image/*, video/*"
-                        required
                       />
                     </div>
                   </>
