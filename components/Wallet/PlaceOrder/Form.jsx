@@ -179,6 +179,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [order]
   )
+  const disableSlider = order.price === 0
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
@@ -363,6 +364,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               step={0.000001}
               min={0.0}
               max={100.0}
+              disabled={disableSlider}
             />
             <OutlinedInput
               id="total"
