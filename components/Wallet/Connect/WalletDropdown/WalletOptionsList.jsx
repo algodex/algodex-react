@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
 import { useEffect, useRef } from 'react'
-
+import _ from 'lodash'
 import useWallets from '@/hooks/useWallets'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
@@ -28,7 +28,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
       addressesRef.current = addresses
     }
 
-    if (addressesRef.current.length < addresses.length) {
+    const walletDifference = _.difference(addresses, addressesRef.current)
+
+    if (walletDifference.length > 0) {
       addressesRef.current = addresses
       closeFn()
     }
