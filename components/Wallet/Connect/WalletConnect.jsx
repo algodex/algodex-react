@@ -1,5 +1,3 @@
-// import { Typography, Typography, Typography, Typography } from 'components/Typography'
-
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -8,6 +6,8 @@ import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import { truncatedWalletAddress } from '@/components/helpers'
 import useTranslation from 'next-translate/useTranslation'
 import { WalletsContext } from '@/hooks/useWallets'
 import { useState, useContext, useEffect } from 'react'
@@ -202,19 +202,19 @@ export function WalletView(props) {
     )
   }
 
-  // const renderBalance = (bal) => {
-  //   const split = bal.toFixed(6).split('.')
+  const renderBalance = (bal) => {
+    const split = bal.toFixed(6).split('.')
 
-  //   return (
-  //     <Balance>
-  //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-  //       <Typography fontWeight="500">
-  //         {`${split[0]}.`}
-  //         <span>{split[1]}</span>
-  //       </Typography>
-  //     </Balance>
-  //   )
-  // }
+    return (
+      <Balance>
+        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
+        <Typography fontWeight="500">
+          {`${split[0]}.`}
+          <span>{split[1]}</span>
+        </Typography>
+      </Balance>
+    )
+  }
 
   const renderWallets = () => {
     return addresses.map((wallet) => (
@@ -223,7 +223,7 @@ export function WalletView(props) {
         tabIndex={isTabbable(wallet.address)}
         role="button"
         isActive={isWalletActive(wallet.address)}
-        onClick={() => handleWalletClick(wallet)}
+        onClick={() => handleWalletClick(wallet.address)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <Typography fontWeight="500" title={wallet.address}>
@@ -234,10 +234,9 @@ export function WalletView(props) {
             use="wallet"
             size={0.75}
           />
-          {wallet.address}
+          {truncatedWalletAddress(wallet.address, 4)}
         </Typography>
-
-        {/* {renderBalance(wallet?.amount)} */}
+        {renderBalance(convertFromBaseUnits(wallet.amount))}
       </WalletRow>
     ))
   }
