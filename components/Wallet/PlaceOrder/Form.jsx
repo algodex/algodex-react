@@ -127,6 +127,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   }, [order, algoBalance, assetBalance])
 
   const hasBalance = order.type === 'sell' ? assetBalance > 0 : algoBalance > 0
+
+  const isValidOrder = !hasBalance
+    ? false
+    : order.execution === 'taker' && order.total > 0
+    ? true
+    : order.total > 0.5
+  // If account doesn't have balance not valid. If taker execution the 0.5 minimum does not apply. For both we need to restrict because maker orders break under 0.5.
+
   // useEffect(() => {
   //   if (order.type === 'sell') {
   //   }
@@ -397,7 +405,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 order.type === 'sell' ? darken(0.05, '#b23639') : darken(0.05, '#4b9064')
             }
           }}
-          disabled={!hasBalance}
+          disabled={!isValidOrder}
         >
           {buttonProps[order.type || 'buy']?.text}
         </Button>
