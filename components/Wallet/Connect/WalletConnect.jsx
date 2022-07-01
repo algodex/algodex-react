@@ -223,7 +223,7 @@ export function WalletView(props) {
         tabIndex={isTabbable(wallet.address)}
         role="button"
         isActive={isWalletActive(wallet.address)}
-        onClick={() => handleWalletClick(wallet.address)}
+        onClick={() => handleWalletClick(wallet)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <Typography fontWeight="500" title={wallet.address}>
