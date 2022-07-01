@@ -2,12 +2,13 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
-import { useEffect, useRef } from 'react'
-import _ from 'lodash'
-import useWallets from '@/hooks/useWallets'
+import { useEffect, useRef, useContext } from 'react'
+// import _ from 'lodash'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
-  const { peraConnect, myAlgoConnect, addresses } = useWallets()
+  const { peraConnect, myAlgoConnect } = useWallets()
+  const [addresses, setAddresses] = useContext(WalletsContext)
 
   const addressesRef = useRef(null)
 
@@ -25,12 +26,19 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
   }
   useEffect(() => {
     if (!addressesRef.current) {
+      // Initialize the ref after first checking to see what is in localStorage
+      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+      if (Array.isArray(storedAddrs)) {
+        setAddresses(storedAddrs)
+      }
       addressesRef.current = addresses
     }
 
-    const walletDifference = _.difference(addresses, addressesRef.current)
-
-    if (walletDifference.length > 0) {
+    // TODO: below declaration is returning difference when there is none, behavior started occuring with localStorage logic
+    // const walletDifference = _.difference(addresses, addressesRef.current)
+    if (addresses.length > addressesRef.current.length) {
+      //pretty naive approach but works for time being, above comment would be better
+      localStorage.setItem('addresses', JSON.stringify(addresses))
       addressesRef.current = addresses
       closeFn()
     }
