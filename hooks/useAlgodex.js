@@ -14,6 +14,8 @@ import {
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
+import { StableAssets } from '@/components/StableAssets'
+
 import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
@@ -136,17 +138,28 @@ function mapPriceData(data) {
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
-function getOhlc(data) {
-  const lastPriceData = data?.chart_data[0]
+function getOhlc(data, isStableAsset) {
+  let lastPriceData = {}
+
+  if (data?.chart_data[0]) {
+    if (isStableAsset) {
+      lastPriceData = {
+        open: floatToFixed(1 / data?.chart_data[0].formatted_open),
+        low: floatToFixed(1 / data?.chart_data[0].formatted_high),
+        high: floatToFixed(1 / data?.chart_data[0].formatted_low),
+        close: floatToFixed(1 / data?.chart_data[0].formatted_close)
+      }
+    } else {
+      lastPriceData = {
+        open: floatToFixed(data?.chart_data[0].formatted_open),
+        high: floatToFixed(data?.chart_data[0].formatted_high),
+        low: floatToFixed(data?.chart_data[0].formatted_low),
+        close: floatToFixed(data?.chart_data[0].formatted_close)
+      }
+    }
+  }
 
   return lastPriceData
-    ? {
-        open: floatToFixed(lastPriceData.formatted_open),
-        high: floatToFixed(lastPriceData.formatted_high),
-        low: floatToFixed(lastPriceData.formatted_low),
-        close: floatToFixed(lastPriceData.formatted_close)
-      }
-    : {}
 }
 
 function mapVolumeData(data, volUpColor, volDownColor) {
@@ -218,9 +231,10 @@ export function useAssetChartQuery({
     ...rest
   } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
 
+  const isStableAsset = useMemo(() => StableAssets.includes(data?.asset_info.asset.index), [data])
   const priceData = useMemo(() => mapPriceData(data), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
-  const ohlcOverlay = useMemo(() => getOhlc(data), [data])
+  const ohlcOverlay = useMemo(() => getOhlc(data, isStableAsset), [data, isStableAsset])
 
   const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
 
@@ -237,7 +251,8 @@ export function useAssetChartQuery({
       volume: volumeData,
       ohlc: priceData,
       isLoading,
-      isError
+      isError,
+      isStableAsset
     },
     isLoading,
     isError,
