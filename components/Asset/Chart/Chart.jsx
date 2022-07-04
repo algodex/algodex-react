@@ -10,6 +10,7 @@ import styled from '@emotion/styled'
 import useAreaChart from '@/hooks/use-area-chart'
 import useCandleChart from '@/hooks/use-candle-chart'
 import { withAssetChartQuery } from '@/hooks/withAlgodex'
+import { StableAssets } from '@/components/StableAssets'
 
 const Container = styled.div`
   position: relative;
@@ -130,6 +131,9 @@ export function Chart({
   const { candleChart } = useCandleChart(candleChartRef, volume, ohlc, autoScaleProvider)
   const { areaChart } = useAreaChart(areaChartRef, ohlc, autoScaleProvider)
 
+  // Check whether asset is stablecoin
+  const isStableAsset = StableAssets.includes(asset.id)
+
   const onSettingsChange = useCallback(
     (e) => {
       if (e?.target?.name === 'mode') {
@@ -232,6 +236,7 @@ export function Chart({
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
           volume={overlay.volume}
+          inverted={isStableAsset}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -242,6 +247,7 @@ export function Chart({
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
           volume={_overlay.volume}
+          inverted={isStableAsset}
         />
       )}
       <SettingsContainer>
