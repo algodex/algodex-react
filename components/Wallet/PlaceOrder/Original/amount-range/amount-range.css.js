@@ -5,52 +5,99 @@ import styled from '@emotion/styled'
 const trackHeight = '0.125rem'
 const thumbDiameter = '0.75rem'
 
-const track = css`
-  box-sizing: border-box;
-  border: none;
-  height: ${trackHeight};
-  background: ${({ theme }) => rgba(theme.colors.gray['000'], 0.25)};
-  border-radius: ${trackHeight};
-`
+// const track = css`
+//   box-sizing: border-box;
+//   border: none;
+//   height: ${trackHeight};
+//   background: ${({ theme }) => rgba(theme.colors.gray['000'], 0.25)};
+//   border-radius: ${trackHeight};
+// `
 
-const trackFill = css`
-  ${track};
-  height: ${trackHeight};
-  background-color: transparent;
-  background-image: ${({ theme }) => {
+const track = css({
+  boxSizing: 'border-box',
+  border: 'none',
+  height: trackHeight,
+  background: (theme) => rgba(theme.colors.gray['000'], 0.25),
+  borderRadius: trackHeight
+})
+
+// const trackFill = css`
+//   ${track};
+//   height: ${trackHeight};
+//   background-color: transparent;
+//   background-image: ${({ theme }) => {
+//     const white = theme.colors.gray['000']
+//     const gray = theme.colors.gray['700']
+//     return `linear-gradient(${white}, ${white}), linear-gradient(${gray}, ${gray})`
+//   }};
+//   background-size: var(--sx) 0.375rem, calc(100% - var(--sx)) 0.25rem;
+//   background-position: left center, right center;
+//   background-repeat: no-repeat;
+// `
+
+const trackFill = css({
+  ...track,
+  height: trackHeight,
+  backgroundColor: 'transparent',
+  backgroundImage: (theme) => {
     const white = theme.colors.gray['000']
     const gray = theme.colors.gray['700']
     return `linear-gradient(${white}, ${white}), linear-gradient(${gray}, ${gray})`
-  }};
-  background-size: var(--sx) 0.375rem, calc(100% - var(--sx)) 0.25rem;
-  background-position: left center, right center;
-  background-repeat: no-repeat;
-`
+  },
+  backgroundSize: 'var(--sx) 0.375rem, calc(100% - var(--sx)) 0.25rem',
+  backgroundPosition: 'left center, right center',
+  backgroundRepeat: 'no-repeat'
+})
 
-const fill = css`
-  height: ${trackHeight};
-  background: ${({ theme }) => theme.colors.gray['700']};
-  border-radius: ${trackHeight};
-`
+// const fill = css`
+//   height: ${trackHeight};
+//   background: ${({ theme }) => theme.colors.gray['700']};
+//   border-radius: ${trackHeight};
+// `
 
-const thumb = css`
-  box-sizing: border-box;
-  border: none;
-  width: ${thumbDiameter};
-  height: ${thumbDiameter};
-  border-radius: 50%;
-  background: white;
-  transition: transform 120ms;
-  transform: ${({ isMouseDown }) => (isMouseDown ? 'scale(1.1375)' : 'scale(1)')};
-`
+const fill = css({
+  height: trackHeight,
+  background: (theme) => theme.colors.gray['700'],
+  borderRadius: trackHeight
+})
 
-const focus = css`
-  transition: box-shadow 120ms;
-  box-shadow: ${({ orderType, isMouseDown }) =>
+// const thumb = css`
+//   box-sizing: border-box;
+//   border: none;
+//   width: ${thumbDiameter};
+//   height: ${thumbDiameter};
+//   border-radius: 50%;
+//   background: white;
+//   transition: transform 120ms;
+//   transform: ${({ isMouseDown }) => (isMouseDown ? 'scale(1.1375)' : 'scale(1)')};
+// `
+
+const thumb = css({
+  boxSizing: 'border-box',
+  border: 'none',
+  width: thumbDiameter,
+  height: thumbDiameter,
+  borderRadius: '50%',
+  background: 'white',
+  transition: 'transform 120ms',
+  transform: (isMouseDown) => (isMouseDown ? 'scale(1.1375)' : 'scale(1)')
+})
+
+// const focus = css`
+//   transition: box-shadow 120ms;
+//   box-shadow: ${({ orderType, isMouseDown }) =>
+//     orderType === 'sell'
+//       ? `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #b23639`
+//       : `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #4b9064`};
+// `
+
+const focus = css({
+  transition: 'box-shadow 120ms',
+  boShadow: (orderType, isMouseDown) =>
     orderType === 'sell'
       ? `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #b23639`
-      : `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #4b9064`};
-`
+      : `0 0 0 ${isMouseDown ? '0.175rem' : '0.2rem'} #4b9064`
+})
 
 const disabled = css`
   background: grey;

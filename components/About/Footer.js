@@ -11,7 +11,7 @@ import { Icon } from '@iconify/react'
 // Custom Styled Components
 import Button from 'components/Button'
 import { AboutContainer } from './styles.css'
-import { addSubscriber } from '@/services/algodex'
+import { submitHubspotForm } from '@/services/algodex'
 import Spinner from '../Spinner'
 
 const FooterWrapper = styled.div`
@@ -101,10 +101,10 @@ export const AboutFooter = () => {
         }
       ]
     }
-
+    const formId = process.env.NEXT_PUBLIC_SUBSCRIBER_FORM_ID
     if (email) {
       setLoading(true)
-      const res = await addSubscriber(payload)
+      const res = await submitHubspotForm({ payload, formId })
       setLoading(false)
       if (res instanceof Error) {
         const error =

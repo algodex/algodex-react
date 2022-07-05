@@ -20,7 +20,7 @@ const AboutPage = ({ staticBlogPosts }) => {
   return (
     <>
       <Head>
-        <title>About</title>
+        <title>Algodex | Algorand Decentralized Exchange</title>
       </Head>
       <Header />
       <Hero />

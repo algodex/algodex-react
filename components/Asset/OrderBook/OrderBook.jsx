@@ -10,7 +10,7 @@ import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
-import { floatToFixed } from '@/services/display'
+import { floatToFixedDynamic } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
@@ -312,11 +312,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   const dispatcher = useEventDispatch()
 
   const reduceOrders = (result, order) => {
-    const _price = floatToFixed(order.price, selectedPrecision, selectedPrecision)
+    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     const _amount = order.amount
     const index = result.findIndex(
-      (obj) => floatToFixed(obj.price, selectedPrecision, selectedPrecision) === _price
+      (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
     )
 
     if (index !== -1) {
