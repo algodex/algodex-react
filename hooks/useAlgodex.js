@@ -195,15 +195,17 @@ function mapVolumeData(data, volUpColor, volDownColor) {
   return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
 }
 
-function getBidAskSpread(orderBook) {
+function getBidAskSpread(orderBook, isStableAsset) {
   const { buyOrders, sellOrders } = orderBook
 
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
   const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
 
-  const bid = floatToFixed(bidPrice)
-  const ask = floatToFixed(askPrice)
-  const spread = floatToFixed(new Big(ask).minus(bid).abs())
+  const bid = isStableAsset ? floatToFixed(1 / bidPrice) : floatToFixed(bidPrice)
+  const ask = isStableAsset ? floatToFixed(1 / askPrice) : floatToFixed(askPrice)
+  const spread = isStableAsset
+    ? floatToFixed(1 / new Big(ask).minus(bid).abs())
+    : floatToFixed(new Big(ask).minus(bid).abs())
 
   return { bid, ask, spread }
 }
@@ -241,8 +243,6 @@ export function useAssetChartQuery({
     [assetOrders]
   )
 
-  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
-
   const {
     isLoading: isChartLoading,
     isError: isChartError,
@@ -251,6 +251,10 @@ export function useAssetChartQuery({
   } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
 
   const isStableAsset = useMemo(() => StableAssets.includes(data?.asset_info.asset.index), [data])
+  const { bid, ask, spread } = useMemo(
+    () => getBidAskSpread(orderBook, isStableAsset),
+    [orderBook, isStableAsset]
+  )
   const priceData = useMemo(() => mapPriceData(data, isStableAsset), [data, isStableAsset])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
   const ohlcOverlay = useMemo(() => getOhlc(data, isStableAsset), [data, isStableAsset])
