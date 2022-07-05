@@ -247,16 +247,110 @@ export async function fetchBlogMedia(id) {
  *
  * @returns {Promise<Object>}
  */
-export const addSubscriber = async (payload) => {
-  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${process.env.NEXT_PUBLIC_FORM_ID}`
+export const submitHubspotForm = async ({ payload, formId }) => {
+  const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${formId}`
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   }
-  axios.defaults.headers = {
-    'Content-Type': 'application/json'
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+
+  return response
+}
+
+export const uploadSupportFile = async (payload) => {
+  const url = '/support/upload'
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
   }
+
+  var fileOptions = {
+    access: 'PUBLIC_INDEXABLE',
+    ttl: 'P6M',
+    overwrite: false,
+    duplicateValidationStrategy: 'NONE',
+    duplicateValidationScope: 'ENTIRE_PORTAL'
+  }
+
+  payload.append('options', JSON.stringify(fileOptions))
+  payload.append('folderPath', 'attachments')
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+  return response
+}
+
+/**
+ * Create an Hubspot engagement from file upload
+ * @param {*} param0
+ * @returns
+ */
+export const createEngagement = async (ticketId, fileId) => {
+  const url = `/support/engagement`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const payload = {
+    engagement: {
+      active: true,
+      ownerId: 1,
+      type: 'NOTE',
+      timestamp: 1409172644778
+    },
+    associations: {
+      contactIds: [],
+      companyIds: [],
+      dealIds: [],
+      ownerIds: [],
+      ticketIds: [ticketId]
+    },
+    attachments: [{ id: fileId }],
+    metadata: { body: 'Attachment' }
+  }
+
+  const response = await axios
+    .post(url, payload, config)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+
+  return response
+}
+
+/**
+ * Create an Hubspot ticket
+ * @param {*} param0
+ * @returns
+ */
+export const createTicket = async (payload) => {
+  const url = `/support/ticket`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
   const response = await axios
     .post(url, payload, config)
     .then((res) => {
