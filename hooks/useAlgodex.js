@@ -125,31 +125,33 @@ function mapPriceData(data, isStableAsset) {
   let prices = []
   // Use if-else condition for isStableAsset outside of iteration to speed up
   if (isStableAsset) {
-    prices = data?.chart_data.map(
-      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
-        const time = parseInt(unixTime)
-        return {
-          time: time,
-          open: floatToFixed(1 / formatted_open),
-          high: floatToFixed(1 / formatted_high),
-          low: floatToFixed(1 / formatted_low),
-          close: floatToFixed(1 / formatted_close)
+    prices =
+      data?.chart_data.map(
+        ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+          const time = parseInt(unixTime)
+          return {
+            time: time,
+            open: floatToFixed(1 / formatted_open),
+            high: floatToFixed(1 / formatted_high),
+            low: floatToFixed(1 / formatted_low),
+            close: floatToFixed(1 / formatted_close)
+          }
         }
-      }
-    )
+      ) || []
   } else {
-    prices = data?.chart_data.map(
-      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
-        const time = parseInt(unixTime)
-        return {
-          time: time,
-          open: floatToFixed(formatted_open),
-          high: floatToFixed(formatted_high),
-          low: floatToFixed(formatted_low),
-          close: floatToFixed(formatted_close)
+    prices =
+      data?.chart_data.map(
+        ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+          const time = parseInt(unixTime)
+          return {
+            time: time,
+            open: floatToFixed(formatted_open),
+            high: floatToFixed(formatted_high),
+            low: floatToFixed(formatted_low),
+            close: floatToFixed(formatted_close)
+          }
         }
-      }
-    )
+      ) || []
   }
 
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
@@ -222,6 +224,7 @@ export function useAssetChartQuery({
   }
 }) {
   // console.log(`useAssetChartQuery(${JSON.stringify({ interval, asset })})`)
+  console.log('UseAlgodex:-----')
   const { id } = asset
   const {
     data: assetOrders,
