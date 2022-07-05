@@ -121,9 +121,24 @@ export function useAssetPriceQuery({
   return { data: { asset }, ...rest }
 }
 
-function mapPriceData(data) {
-  const prices =
-    data?.chart_data.map(
+function mapPriceData(data, isStableAsset) {
+  let prices = []
+  // Use if-else condition for isStableAsset outside of iteration to speed up
+  if (isStableAsset) {
+    prices = data?.chart_data.map(
+      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+        const time = parseInt(unixTime)
+        return {
+          time: time,
+          open: floatToFixed(1 / formatted_open),
+          high: floatToFixed(1 / formatted_high),
+          low: floatToFixed(1 / formatted_low),
+          close: floatToFixed(1 / formatted_close)
+        }
+      }
+    )
+  } else {
+    prices = data?.chart_data.map(
       ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
         const time = parseInt(unixTime)
         return {
@@ -134,7 +149,9 @@ function mapPriceData(data) {
           close: floatToFixed(formatted_close)
         }
       }
-    ) || []
+    )
+  }
+
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
@@ -232,7 +249,7 @@ export function useAssetChartQuery({
   } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
 
   const isStableAsset = useMemo(() => StableAssets.includes(data?.asset_info.asset.index), [data])
-  const priceData = useMemo(() => mapPriceData(data), [data])
+  const priceData = useMemo(() => mapPriceData(data, isStableAsset), [data, isStableAsset])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
   const ohlcOverlay = useMemo(() => getOhlc(data, isStableAsset), [data, isStableAsset])
 
