@@ -10,7 +10,6 @@ import styled from '@emotion/styled'
 import useAreaChart from '@/hooks/use-area-chart'
 import useCandleChart from '@/hooks/use-candle-chart'
 import { withAssetChartQuery } from '@/hooks/withAlgodex'
-import { StableAssets } from '@/components/StableAssets'
 
 const Container = styled.div`
   position: relative;
@@ -104,7 +103,8 @@ export function Chart({
   volume,
   ohlc,
   overlay: _overlay,
-  onChange
+  onChange,
+  isStableAsset
 }) {
   // console.log(`Chart(`, arguments[0], `)`)
   const [interval, setInterval] = useState(_interval)
@@ -130,9 +130,6 @@ export function Chart({
 
   const { candleChart } = useCandleChart(candleChartRef, volume, ohlc, autoScaleProvider)
   const { areaChart } = useAreaChart(areaChartRef, ohlc, autoScaleProvider)
-
-  // Check whether asset is stablecoin
-  const isStableAsset = StableAssets.includes(asset.id)
 
   const onSettingsChange = useCallback(
     (e) => {
@@ -236,7 +233,7 @@ export function Chart({
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
           volume={overlay.volume}
-          inverted={isStableAsset}
+          isStableAsset={isStableAsset}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -247,7 +244,7 @@ export function Chart({
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
           volume={_overlay.volume}
-          inverted={isStableAsset}
+          isStableAsset={isStableAsset}
         />
       )}
       <SettingsContainer>
@@ -280,7 +277,8 @@ Chart.propTypes = {
   }),
   ohlc: PropTypes.array.isRequired,
   volume: PropTypes.array.isRequired,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  isStableAsset: PropTypes.bool
 }
 
 Chart.defaultProps = {

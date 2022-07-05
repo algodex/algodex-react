@@ -178,7 +178,7 @@ export const Volume = styled.div`
 `
 
 function ChartOverlay(props) {
-  const { asset, ohlc, bid, ask, spread, volume, inverted } = props
+  const { asset, ohlc, bid, ask, spread, volume, isStableAsset } = props
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
   const changeAmt = asset.priceChange24hr
@@ -207,12 +207,12 @@ function ChartOverlay(props) {
               color={theme.palette.gray['500']}
             />
           )}
-          {!inverted && (
+          {!isStableAsset && (
             <div>
               &nbsp;<span>{`${asset.name} `}</span> / ALGO
             </div>
           )}
-          {inverted && (
+          {isStableAsset && (
             <div>
               &nbsp;ALGO / <span>{`${asset.name} `}</span>
             </div>
@@ -267,7 +267,7 @@ ChartOverlay.propTypes = {
   ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  inverted: PropTypes.bool
+  isStableAsset: PropTypes.bool
 }
 
 ChartOverlay.defaultProps = {

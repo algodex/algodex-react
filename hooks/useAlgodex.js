@@ -224,7 +224,6 @@ export function useAssetChartQuery({
   }
 }) {
   // console.log(`useAssetChartQuery(${JSON.stringify({ interval, asset })})`)
-  console.log('UseAlgodex:-----')
   const { id } = asset
   const {
     data: assetOrders,
