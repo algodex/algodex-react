@@ -312,7 +312,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   const dispatcher = useEventDispatch()
 
   const reduceOrders = (result, order) => {
-    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+    // const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+    const _price = order.price
+
+    console.log('_price: ', _price)
+    console.log('order.price: ', order.price)
 
     const _amount = order.amount
     const index = result.findIndex(
