@@ -55,7 +55,6 @@ export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
   let numDigits
 
   const absValue = new Big(float).abs().toNumber()
-  // console.log('absValue: ', absValue)
 
   // checks for fractional numbers less than zero with preceding zeros after decimal point
   if (absValue > 0 && absValue < 0.1) {
@@ -83,9 +82,5 @@ export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
       numDigits = 0
     }
   }
-  // console.log('Float: ', float)
-  // console.log('minDigits: ', minDigits)
-  // console.log('maxDigits: ', maxDigits)
-  // console.log('numDigits: ', numDigits)
   return new Big(float).toFixed(numDigits)
 }
