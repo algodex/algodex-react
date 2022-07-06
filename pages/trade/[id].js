@@ -19,6 +19,7 @@ import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import useDebounce from '@/hooks/useDebounce'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import { StableAssets } from '@/components/StableAssets'
 
 /**
  * Fetch Traded Asset Paths
@@ -45,6 +46,7 @@ export async function getStaticProps({ params: { id } }) {
   let staticAssetPrice = {}
   try {
     staticExplorerAsset = await fetchExplorerAssetInfo(id)
+    console.log('staticExplorerAsset: ', staticExplorerAsset)
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -71,6 +73,8 @@ export async function getStaticProps({ params: { id } }) {
   if (typeof staticAssetPrice.isTraded !== 'undefined') {
     staticExplorerAsset.price_info = staticAssetPrice
   }
+
+  staticExplorerAsset.isStable = StableAssets.includes(id)
 
   return {
     props: { staticExplorerAsset }
