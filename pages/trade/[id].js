@@ -74,7 +74,9 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.price_info = staticAssetPrice
   }
 
-  staticExplorerAsset.isStable = StableAssets.includes(id)
+  console.log('Page StableAssets: ', StableAssets)
+  console.log('Page isStable: ', id, StableAssets.includes(parseInt(id)))
+  staticExplorerAsset.isStable = StableAssets.includes(parseInt(id))
 
   return {
     props: { staticExplorerAsset }
@@ -163,7 +165,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   }, [asset, setAsset, staticExplorerAsset])
 
   const isTraded = useMemo(() => {
-    console.log(asset, data)
     return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
   }, [asset, data])
 
