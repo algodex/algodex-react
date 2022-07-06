@@ -300,7 +300,7 @@ export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
-  const { setOrder, isConnected } = useAlgodex()
+  const { isConnected } = useAlgodex()
   const isSignedIn = isConnected
 
   const dispatcher = useEventDispatch()
@@ -312,14 +312,13 @@ export function OrderBook({ asset, orders, components }) {
       const total = new Big(row.total)
 
       const handleSelectOrder = () => {
-        dispatcher('clicked', 'order')
-        setOrder(
-          {
+        dispatcher('clicked', {
+          type: 'order',
+          payload: {
             price: row.price,
             type: type === 'buy' ? 'sell' : 'buy'
-          },
-          asset
-        )
+          }
+        })
       }
 
       return (

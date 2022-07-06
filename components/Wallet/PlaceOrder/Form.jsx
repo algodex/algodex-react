@@ -18,6 +18,7 @@ import { useAlgodex, useAssetOrdersQuery, useWallets } from '@algodex/algodex-ho
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
+import { useEvent } from 'hooks/useEvents'
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -92,6 +93,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     amount: 0,
     total: 0,
     execution: 'both'
+  })
+
+  useEvent('clicked', (data) => {
+    if (data.type === 'order') {
+      setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
+      console.log(order)
+    }
   })
 
   const assetBalance = useMemo(() => {
