@@ -54,9 +54,7 @@ export const floatToFixedDynamic = (float, minDigits = 4, maxDigits = 6) => {
 export const floatToFixed = (float, minDigits = 4, maxDigits = 6) => {
   if (typeof float === 'undefined') throw new Error('Must have a valid float')
   let numDigits
-
   const absValue = new Big(float).abs().toNumber()
-
   // checks for fractional numbers less than zero with preceding zeros after decimal point
   if (absValue > 0 && absValue < 0.1) {
     // if number is 0.0001, fractionalStr is '0001'
