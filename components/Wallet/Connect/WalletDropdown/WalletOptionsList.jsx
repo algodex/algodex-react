@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import theme from 'theme'
 import { useEffect, useRef, useContext } from 'react'
-// import _ from 'lodash'
+import _ from 'lodash'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
@@ -34,10 +34,11 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
       addressesRef.current = addresses
     }
 
-    // TODO: below declaration is returning difference when there is none, behavior started occuring with localStorage logic
-    // const walletDifference = _.difference(addresses, addressesRef.current)
-    if (addresses.length > addressesRef.current.length) {
-      //pretty naive approach but works for time being, above comment would be better
+    const walletDifference = _.difference(
+      addresses.map((addr) => addr.address),
+      addressesRef.current.map((addr) => addr.address)
+    )
+    if (walletDifference.length > 0) {
       localStorage.setItem('addresses', JSON.stringify(addresses))
       addressesRef.current = addresses
       closeFn()
