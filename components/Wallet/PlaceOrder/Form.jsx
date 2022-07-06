@@ -95,6 +95,15 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     execution: 'both'
   })
 
+  const [marketPrice, setMarketPrice] = useState()
+
+  useEffect(() => {
+    if (order.execution === 'market') {
+      const mp = order.type === 'buy' ? sellOrders[sellOrders.length - 1] : buyOrders[0]
+      setMarketPrice(Number(mp.price))
+    }
+  }, [order])
+
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
       setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
@@ -318,7 +327,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               type="number"
               pattern="\d*"
               disabled={order.execution === 'market'}
-              value={order.execution === 'market' ? 123 : order.price}
+              value={order.execution === 'market' ? marketPrice : order.price}
               onChange={handleChange}
               startAdornment={
                 <InputAdornment position="start">
