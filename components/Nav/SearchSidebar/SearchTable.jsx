@@ -52,7 +52,8 @@ export const mapToSearchResults = ({
   unitName,
   isGeoBlocked,
   formattedASALiquidity,
-  formattedAlgoLiquidity
+  formattedAlgoLiquidity,
+  isStable
 }) => {
   const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
 
@@ -72,7 +73,8 @@ export const mapToSearchResults = ({
     liquidityAlgo: formattedAlgoLiquidity,
     liquidityAsa: formattedASALiquidity,
     price,
-    change
+    change,
+    isStable
   }
 }
 
