@@ -18,6 +18,7 @@ import { useAlgodex, useAssetOrdersQuery, useWallets } from '@algodex/algodex-ho
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import toast from 'react-hot-toast'
+import { useEvent } from 'hooks/useEvents'
 
 // function _minDecimalValue(decimals) {
 //   if (typeof decimals !== 'number') {
@@ -94,6 +95,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     execution: 'both'
   })
 
+  const [marketPrice, setMarketPrice] = useState()
+
+  useEffect(() => {
+    if (order.execution === 'market') {
+      const mp = order.type === 'buy' ? sellOrders[sellOrders.length - 1] : buyOrders[0]
+      setMarketPrice(Number(mp.price))
+    }
+  }, [order])
+
+  useEvent('clicked', (data) => {
+    if (data.type === 'order') {
+      setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
+      console.log(order)
+    }
+  })
+
   const assetBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
@@ -127,6 +144,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   }, [order, algoBalance, assetBalance])
 
   const hasBalance = order.type === 'sell' ? assetBalance > 0 : algoBalance > 0
+
+  const isValidOrder = !hasBalance
+    ? false
+    : order.execution === 'taker' && order.total > 0
+    ? true
+    : order.total > 0.5
+  // If account doesn't have balance not valid. If taker execution the 0.5 minimum does not apply. For both we need to restrict because maker orders break under 0.5.
+
   // useEffect(() => {
   //   if (order.type === 'sell') {
   //   }
@@ -171,6 +196,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [order]
   )
+  const disableSlider = order.price === 0
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
@@ -301,7 +327,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               type="number"
               pattern="\d*"
               disabled={order.execution === 'market'}
-              value={order.execution === 'market' ? 123 : order.price}
+              value={order.execution === 'market' ? marketPrice : order.price}
               onChange={handleChange}
               startAdornment={
                 <InputAdornment position="start">
@@ -355,6 +381,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               step={0.000001}
               min={0.0}
               max={100.0}
+              disabled={disableSlider}
             />
             <OutlinedInput
               id="total"
@@ -397,7 +424,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                 order.type === 'sell' ? darken(0.05, '#b23639') : darken(0.05, '#4b9064')
             }
           }}
-          disabled={!hasBalance}
+          disabled={!isValidOrder}
         >
           {buttonProps[order.type || 'buy']?.text}
         </Button>

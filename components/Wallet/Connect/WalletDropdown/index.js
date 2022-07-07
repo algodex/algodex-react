@@ -35,7 +35,6 @@ const Container = styled.div`
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const { addresses, wallet } = useAlgodex()
-
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
@@ -51,7 +50,11 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     <Container className="">
       <div className="flex flex-col justify-between">
         <DropdownHeader closeFn={closeDropdown} />
-        <DropdownBody activeWalletAddress={wallet?.address} sortedWalletsList={sortedWalletsList} />
+        <DropdownBody
+          activeWalletAddress={wallet?.address}
+          sortedWalletsList={sortedWalletsList}
+          closeFn={closeDropdown}
+        />
         <DropdownFooter />
       </div>
     </Container>
