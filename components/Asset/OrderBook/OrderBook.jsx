@@ -312,12 +312,26 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   const dispatcher = useEventDispatch()
 
   const reduceOrders = (result, order) => {
-    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+    /**
+     * We can implement inversion of price in custom hook
+     * But we can have more dynamic options here for some incidents
+     * For example hide when price is 0, to prevent division by 0
+     */
+    if (order.price === 0) {
+      return result
+    }
+
+    let _price = asset.isStable
+      ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
+      : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     const _amount = order.amount
-    const index = result.findIndex(
-      (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
-    )
+    const index = result.findIndex((obj) => {
+      let objPrice = asset.isStable
+        ? floatToFixedDynamic(1 / obj.price, selectedPrecision, selectedPrecision)
+        : floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision)
+      return objPrice === _price
+    })
 
     if (index !== -1) {
       result[index].amount += _amount
