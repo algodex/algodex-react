@@ -141,16 +141,19 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
       })
       .map((row) => {
         const amount = new Big(row.amount)
-
+        if (row.price === 0) {
+          return
+        }
+        const price = asset.isStable ? 1 / row.price : row.price
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"
               color={getColor(row.type)}
-              title={row.price}
+              title={price}
               m={0}
             >
-              {floatToFixed(row.price)}
+              {floatToFixed(price)}
             </BodyCopyTiny>
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"
