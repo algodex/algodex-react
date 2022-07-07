@@ -9,7 +9,7 @@ import { useAlgodex } from '@algodex/algodex-hooks'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { truncatedWalletAddress } from '@/components/helpers'
 import useTranslation from 'next-translate/useTranslation'
-import { WalletsContext } from '@/hooks/useWallets'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { useState, useContext, useEffect } from 'react'
 
 // import useWallets from '@/hooks/useWallets'
@@ -168,23 +168,46 @@ export function WalletView(props) {
 
   const { t } = useTranslation('wallet')
 
-  // const walletContext= useContext(WalletContext)
+  const { peraConnect, myAlgoConnect } = useWallets()
+
+  const walletReconnectorMap = {
+    'my-algo-wallet': myAlgoConnect,
+    'wallet-connect': peraConnect
+  }
 
   // const getButtonVariant = () => {
   //   return isSignedIn ? 'default' : 'primary'
   // }
 
   const isWalletActive = (addr) => {
-    return activeWalletAddress === addr
+    return activeWalletAddress?.address === addr.address
   }
 
   const isTabbable = (addr) => {
     return isWalletActive(addr) ? -1 : 0
   }
 
-  const handleWalletClick = (addr) => {
+  const handleWalletClick = async (addr) => {
     !isWalletActive(addr) && onSetActiveWallet(addr)
   }
+
+  useEffect(async () => {
+    if (
+      typeof activeWalletAddress !== 'undefined' &&
+      typeof activeWalletAddress?.connector?.sign === 'undefined'
+    ) {
+      await walletReconnectorMap[activeWalletAddress.type]()
+    }
+  }, [activeWalletAddress])
+
+  useEffect(() => {
+    if (typeof activeWalletAddress !== 'undefined' && addresses.length > 0) {
+      const targetWallet = addresses.filter(
+        (addr) => addr.address === activeWalletAddress.address
+      )[0]
+      if (typeof targetWallet?.connector?.sign !== 'undefined') onSetActiveWallet(targetWallet)
+    }
+  }, [addresses])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -299,7 +322,7 @@ WalletView.defaultProps = {
  * @constructor
  */
 function WalletConnect(props) {
-  const { setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
+  const { wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
   const [addresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
 
@@ -310,7 +333,7 @@ function WalletConnect(props) {
   return (
     <WalletView
       addresses={addresses}
-      activeWalletAddress={'faker'}
+      activeWalletAddress={wallet}
       isSignedIn={signedIn}
       onSetActiveWallet={setWallet}
       {...props}
