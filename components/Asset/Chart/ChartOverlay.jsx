@@ -268,8 +268,4 @@ ChartOverlay.propTypes = {
   spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
-
-ChartOverlay.defaultProps = {
-  inverted: false
-}
 export default ChartOverlay
