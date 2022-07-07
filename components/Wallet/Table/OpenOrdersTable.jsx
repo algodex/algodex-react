@@ -54,25 +54,24 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   // Update price in case it includes StableCoin
-  _orders.forEach((_order, index) => {
+  _orders.forEach((_order) => {
     if (StableAssets.includes(_order.asset.id)) {
       // Invert the Pair and Price
       const pairs = _order.pair.split('/')
       if (pairs.length > 1) {
-        _orders[index].calculated_pair = 'ALGO/' + pairs[0]
-        // _orders[index].calculated_pair = 'sdfsdf/sdfsdf'
+        _order.calculated_pair = 'ALGO/' + pairs[0]
       } else {
-        _orders[index].calculated_pair = 'Invalid Pair'
+        _order.calculated_pair = 'Invalid Pair'
       }
 
       if (_order.price === 0) {
-        _orders[index].calculated_price = 'Invalid Price'
+        _order.calculated_price = 'Invalid Price'
       } else {
-        _orders[index].calculated_price = 1 / _orders[index].price
+        _order.calculated_price = 1 / _order.price
       }
     } else {
-      _orders[index].calculated_pair = _orders[index].pair
-      _orders[index].calculated_price = _orders[index].price
+      _order.calculated_pair = _order.pair
+      _order.calculated_price = _order.price
     }
   })
 
