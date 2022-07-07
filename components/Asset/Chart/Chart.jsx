@@ -103,8 +103,7 @@ export function Chart({
   volume,
   ohlc,
   overlay: _overlay,
-  onChange,
-  isStableAsset
+  onChange
 }) {
   // console.log(`Chart(`, arguments[0], `)`)
   const [interval, setInterval] = useState(_interval)
@@ -233,7 +232,6 @@ export function Chart({
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
           volume={overlay.volume}
-          isStableAsset={isStableAsset}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -244,7 +242,6 @@ export function Chart({
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
           volume={_overlay.volume}
-          isStableAsset={isStableAsset}
         />
       )}
       <SettingsContainer>
@@ -277,8 +274,7 @@ Chart.propTypes = {
   }),
   ohlc: PropTypes.array.isRequired,
   volume: PropTypes.array.isRequired,
-  onChange: PropTypes.func,
-  isStableAsset: PropTypes.bool
+  onChange: PropTypes.func
 }
 
 Chart.defaultProps = {
