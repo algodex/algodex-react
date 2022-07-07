@@ -76,7 +76,8 @@ export function useSearchResultsQuery({
           return {
             ...asset,
             isRestricted,
-            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted
+            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted,
+            isStable: StableAssets.includes(asset.assetId)
           }
         })
       }
@@ -201,6 +202,10 @@ function getBidAskSpread(orderBook, isStableAsset) {
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
   const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
 
+  // const bid = floatToFixed(bidPrice)
+  // const ask = floatToFixed(askPrice)
+  // const spread = floatToFixed(new Big(ask).minus(bid).abs())
+
   const bid = isStableAsset ? floatToFixed(1 / bidPrice) : floatToFixed(bidPrice)
   const ask = isStableAsset ? floatToFixed(1 / askPrice) : floatToFixed(askPrice)
   const spread = isStableAsset
@@ -250,14 +255,13 @@ export function useAssetChartQuery({
     ...rest
   } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
 
-  const isStableAsset = useMemo(() => StableAssets.includes(data?.asset_info.asset.index), [data])
   const { bid, ask, spread } = useMemo(
-    () => getBidAskSpread(orderBook, isStableAsset),
-    [orderBook, isStableAsset]
+    () => getBidAskSpread(orderBook, asset.isStable),
+    [orderBook]
   )
-  const priceData = useMemo(() => mapPriceData(data, isStableAsset), [data, isStableAsset])
+  const priceData = useMemo(() => mapPriceData(data, asset.isStable), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
-  const ohlcOverlay = useMemo(() => getOhlc(data, isStableAsset), [data, isStableAsset])
+  const ohlcOverlay = useMemo(() => getOhlc(data, asset.isStable), [data])
 
   const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
 
@@ -274,8 +278,7 @@ export function useAssetChartQuery({
       volume: volumeData,
       ohlc: priceData,
       isLoading,
-      isError,
-      isStableAsset
+      isError
     },
     isLoading,
     isError,
