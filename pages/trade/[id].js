@@ -1,17 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import {
+  getAssetTotalStatus,
+  getIsRestricted,
+  getIsRestrictedCountry
+} from '@/utils/restrictedAssets'
 
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
+import Layout from '@/components/Layout/OriginalLayout'
+import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import useUserStore from '@/store/use-user-state'
-
-import Spinner from '@/components/Spinner'
 import Layout from '@/components/Layout/OriginalLayout'
 import { useRouter } from 'next/router'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 import AlgodexApi from '@algodex/algodex-sdk'
 import config from '@/config.json'
+import Spinner from '@/components/Spinner'
+import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import useDebounce from '@/hooks/useDebounce'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
 
 /**
  * Fetch Traded Asset Paths
@@ -49,6 +59,9 @@ export async function getStaticProps({ params: { id } }) {
     }
   }
 
+  staticExplorerAsset.isRestricted =
+    getIsRestricted(id) && getAssetTotalStatus(staticExplorerAsset.total)
+
   try {
     staticAssetPrice = await api.http.dexd.fetchAssetPrice(id)
   } catch (error) {
@@ -74,6 +87,28 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 /**
+ * Detect Mobile
+ * @returns {unknown}
+ */
+function useMobileDetect(isMobileSSR = false) {
+  const [isMobile, setIsMobile] = useState(isMobileSSR)
+  const debounceIsMobile = useDebounce(isMobile, 500)
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(detectMobileDisplay())
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [debounceIsMobile])
+
+  return isMobile
+}
+
+/**
  * Trade Page
  *
  * Display a chart of historical orders. Takes an Algorand Asset
@@ -82,26 +117,32 @@ export async function getStaticProps({ params: { id } }) {
  * found
  *
  * @param {object} staticExplorerAsset The Explorer Response
+ * @param {object} deviceType Browser Device: mobile or desktop
  * @returns {JSX.Element}
  * @constructor
  */
-function TradePage({ staticExplorerAsset }) {
+function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
-  // console.debug(`TradePage(`, staticExplorerAsset, `)`)
-
-  const title = 'Algodex | Algorand Decentralized Exchange'
+  console.debug(`TradePage(`, staticExplorerAsset, `)`)
+  const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
 
   const { isFallback, query } = useRouter()
 
-  // Use the static asset or fallback to the route id
   const [asset, setAsset] = useState(staticExplorerAsset)
+  //TODO: useEffect and remove this from the compilation
+  if (typeof staticExplorerAsset !== 'undefined') {
+    // Add GeoBlocking
+    staticExplorerAsset.isGeoBlocked =
+      getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
+  }
 
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
-  const { data } = useAssetPriceQuery({ asset: _asset })
+  const isMobile = useMobileDetect(deviceType === 'mobile')
 
+  const { data } = useAssetPriceQuery({ asset: _asset })
   const onChange = useCallback(
     (e) => {
       if (e.target.name === 'interval' && e.target.value !== interval) {
@@ -144,13 +185,15 @@ function TradePage({ staticExplorerAsset }) {
       description={'Decentralized exchange for trading Algorand ASAs'}
       noFollow={true}
     >
-      <Layout asset={asset}>{renderContent()}</Layout>
+      {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
+      {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
   )
 }
 
 TradePage.propTypes = {
   staticExplorerAsset: PropTypes.object,
-  staticAssetPrice: PropTypes.object
+  staticAssetPrice: PropTypes.object,
+  deviceType: PropTypes.string
 }
 export default TradePage

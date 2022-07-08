@@ -23,6 +23,9 @@ import useUserStore from '@/store/use-user-state'
 import AlgodexApi from '@algodex/algodex-sdk'
 import { Provider } from '@algodex/algodex-hooks'
 import config from '@/config.json'
+import NextApp from 'next/app'
+import parser from 'ua-parser-js'
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 import { WalletsProvider } from '@/hooks/useWallets'
@@ -109,6 +112,12 @@ function Algodex(props) {
       </Hydrate>
     </QueryClientProvider>
   )
+}
+
+Algodex.getInitialProps = async (ctx) => {
+  const initialProps = await NextApp.getInitialProps(ctx)
+  const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
+  return { pageProps: { ...initialProps, deviceType } }
 }
 
 Algodex.propTypes = {

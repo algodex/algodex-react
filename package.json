@@ -76,9 +76,11 @@
     "react-svg": "^14.1.18",
     "react-table": "^7.7.0",
     "resize-detector": "^0.3.0",
-    "stylis": "^4.1.0",
-    "translate": "^1.4.1",
-    "zustand": "^3.7.2"
+    "styled-system": "^5.1.5",
+    "stylis": "^4.0.13",
+    "translate": "^1.4.0",
+    "ua-parser-js": "^1.0.2",
+    "zustand": "^3.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
@@ -108,7 +110,7 @@
     "chromatic": "^6.5.4",
     "concurrently": "^7.1.0",
     "cross-env": "^7.0.3",
-    "cypress": "^9.5.4",
+    "cypress": "^9.7.0",
     "cypress-react-selector": "^2.3.16",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^8.13.0",

@@ -21,17 +21,20 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.75rem 0.625rem 1rem;
+  padding: ${({ isMobile }) => (isMobile ? `0 0.625rem 1rem;` : '0.75rem 0.625rem 1rem;')};
 `
 
 const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
   column-gap: 0.25rem;
 `
+const HeaderWrapper = styled.div`
+  padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
+`
 
 const Header = styled.header`
   flex-shrink: 0;
   display: grid;
-  padding: 0 0.5rem 0.75rem;
   ${gridStyles}
 `
 
@@ -121,7 +124,7 @@ const PriceHeader = () => {
  * @returns {JSX.Element}
  * @constructor
  */
-export function TradeHistory({ asset, orders: tradesData }) {
+export function TradeHistory({ isMobile, asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
@@ -170,19 +173,20 @@ export function TradeHistory({ asset, orders: tradesData }) {
 
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
-      <Container>
-        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
-          {t('trade-history')}
-        </Typography>
-        <Header>
-          <PriceHeader />
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('amount')}
-          </Typography>
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('time')}
-          </Typography>
-        </Header>
+      <Container isMobile={isMobile}>
+        <HeaderWrapper isMobile={isMobile}>
+          {!isMobile && <HeaderCaps color="gray.500">{t('trade-history')}</HeaderCaps>}
+          <br />
+          <Header>
+            <PriceHeader />
+            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+              {t('amount')}
+            </BodyCopyTiny>
+            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+              {t('time')}
+            </BodyCopyTiny>
+          </Header>
+        </HeaderWrapper>
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (
@@ -200,11 +204,13 @@ export function TradeHistory({ asset, orders: tradesData }) {
 }
 
 TradeHistory.propTypes = {
+  isMobile: PropTypes.bool,
   asset: PropTypes.object.isRequired,
   orders: PropTypes.array.isRequired
 }
 
 TradeHistory.defaultProps = {
-  orders: []
+  orders: [],
+  isMobile: false
 }
 export default withAssetTradeHistoryQuery(TradeHistory)
