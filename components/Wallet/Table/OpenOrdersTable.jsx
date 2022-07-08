@@ -16,7 +16,6 @@ import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletOrdersQuery, useAlgodex } from '@algodex/algodex-hooks'
-import useWallets from '@/hooks/useWallets'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -56,8 +55,7 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
-  const { algodex, wallet: initialState } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { algodex, wallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
@@ -131,7 +129,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         </Typography>
       )
     },
-    [t, openOrdersData]
+    [t, openOrdersData, wallet]
   )
 
   const columns = useMemo(
