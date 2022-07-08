@@ -1,4 +1,3 @@
-
 import { ArrowDown, ArrowUp } from 'react-feather'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'

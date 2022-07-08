@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import AssetSearch from '@/components/Nav/SearchSidebar'
 // import Button from '@/components/Button'
 // import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
@@ -11,11 +11,11 @@ import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import useTranslation from 'next-translate/useTranslation'
+// import { useAlgodex } from '@algodex/algodex-hooks'
+// import useTranslation from 'next-translate/useTranslation'
 
 // import { Typography, Typography } from '@/components/Typography'
-import Typography from '@mui/material/Typography'
+// import Typography from '@mui/material/Typography'
 // import useWallets from '@/hooks/useWallets'
 // Offline PlaceOrder Container
 export const Container = styled.div`
@@ -139,7 +139,6 @@ const Main = styled.main`
       border: 1px dotted rgba(255, 255, 255, 0.125);
     }
   }
-  
 
   @media (min-width: 1024px) {
     grid-template-columns: 2fr 1fr 1fr;
@@ -167,10 +166,10 @@ const Main = styled.main`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet } = useAlgodex()
-  const isConnected =
-    typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
-  const { t } = useTranslation('common')
+  // const { wallet } = useAlgodex()
+  // const isConnected =
+  //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
+  // const { t } = useTranslation('common')
   console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const gridRef = useRef()
   const searchTableRef = useRef()

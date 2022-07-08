@@ -237,7 +237,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           },
           { wallet }
         )
-        debugger;
+
         orderPromise = placeOrder(
           {
             ...order,

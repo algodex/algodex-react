@@ -28,9 +28,9 @@ const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
   column-gap: 0.25rem;
 `
-const HeaderWrapper = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
-`
+// const HeaderWrapper = styled.div`
+//   padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
+// `
 
 const Header = styled.header`
   flex-shrink: 0;
@@ -124,7 +124,7 @@ const PriceHeader = () => {
  * @returns {JSX.Element}
  * @constructor
  */
-export function TradeHistory({ isMobile, asset, orders: tradesData }) {
+export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
@@ -143,30 +143,30 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-          <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-            {floatToFixed(row.price)}
-          </Typography>
-          <Typography
-            variant="body_tiny_cap"
-            fontFamily="'Roboto Mono', monospace"
-            color="gray.400"
-            textAlign="right"
-            title={amount.toFixed(asset.decimals)}
-            m={0}
-          >
-            {amount.toFixed(Math.min(3, asset.decimals))}
-          </Typography>
-          <Typography
-            variant="body_tiny_cap"
-            fontFamily="'Roboto Mono', monospace"
-            color="gray.400"
-            textAlign="right"
-            title={dayjs(row.timestamp).format('lll')}
-            m={0}
-          >
-            {dayjs(row.timestamp).format('HH:mm:ss')}
-          </Typography>
-        </TradesRow>
+            <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
+              {floatToFixed(row.price)}
+            </Typography>
+            <Typography
+              variant="body_tiny_cap"
+              fontFamily="'Roboto Mono', monospace"
+              color="gray.400"
+              textAlign="right"
+              title={amount.toFixed(asset.decimals)}
+              m={0}
+            >
+              {amount.toFixed(Math.min(3, asset.decimals))}
+            </Typography>
+            <Typography
+              variant="body_tiny_cap"
+              fontFamily="'Roboto Mono', monospace"
+              color="gray.400"
+              textAlign="right"
+              title={dayjs(row.timestamp).format('lll')}
+              m={0}
+            >
+              {dayjs(row.timestamp).format('HH:mm:ss')}
+            </Typography>
+          </TradesRow>
         )
       })
   }
