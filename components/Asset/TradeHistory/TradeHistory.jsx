@@ -143,50 +143,49 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-            <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-              {floatToFixed(row.price)}
-            </Typography>
-            <Typography
-              variant="body_tiny_cap"
-              fontFamily="'Roboto Mono', monospace"
-              color="gray.400"
-              textAlign="right"
-              title={amount.toFixed(asset.decimals)}
-              m={0}
-            >
-              {amount.toFixed(Math.min(3, asset.decimals))}
-            </Typography>
-            <Typography
-              variant="body_tiny_cap"
-              fontFamily="'Roboto Mono', monospace"
-              color="gray.400"
-              textAlign="right"
-              title={dayjs(row.timestamp).format('lll')}
-              m={0}
-            >
-              {dayjs(row.timestamp).format('HH:mm:ss')}
-            </Typography>
-          </TradesRow>
+          <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
+            {floatToFixed(row.price)}
+          </Typography>
+          <Typography
+            variant="body_tiny_cap"
+            fontFamily="'Roboto Mono', monospace"
+            color="gray.400"
+            textAlign="right"
+            title={amount.toFixed(asset.decimals)}
+            m={0}
+          >
+            {amount.toFixed(Math.min(3, asset.decimals))}
+          </Typography>
+          <Typography
+            variant="body_tiny_cap"
+            fontFamily="'Roboto Mono', monospace"
+            color="gray.400"
+            textAlign="right"
+            title={dayjs(row.timestamp).format('lll')}
+            m={0}
+          >
+            {dayjs(row.timestamp).format('HH:mm:ss')}
+          </Typography>
+        </TradesRow>
         )
       })
   }
 
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
-      <Container isMobile={isMobile}>
-        <HeaderWrapper isMobile={isMobile}>
-          {!isMobile && <HeaderCaps color="gray.500">{t('trade-history')}</HeaderCaps>}
-          <br />
-          <Header>
-            <PriceHeader />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
-            </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('time')}
-            </BodyCopyTiny>
-          </Header>
-        </HeaderWrapper>
+      <Container>
+        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
+          {t('trade-history')}
+        </Typography>
+        <Header>
+          <PriceHeader />
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {t('amount')}
+          </Typography>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {t('time')}
+          </Typography>
+        </Header>
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (

@@ -11,7 +11,7 @@ import { Icon } from '@iconify/react'
 // Custom Styled Components
 import Button from 'components/Button'
 import { AboutContainer } from './styles.css'
-import { submitHubspotForm } from '@/services/algodex'
+import { submitHubspotForm } from '@/services/cms'
 import Spinner from '../Spinner'
 
 const FooterWrapper = styled.div`

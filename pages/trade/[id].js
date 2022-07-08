@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+// import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
   getIsRestricted,
@@ -13,13 +13,12 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import useUserStore from '@/store/use-user-state'
-import Layout from '@/components/Layout/OriginalLayout'
 import { useRouter } from 'next/router'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 import AlgodexApi from '@algodex/algodex-sdk'
 import config from '@/config.json'
 import Spinner from '@/components/Spinner'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+// import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 

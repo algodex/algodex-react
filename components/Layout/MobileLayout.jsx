@@ -4,7 +4,7 @@ import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSideba
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
