@@ -191,12 +191,12 @@ export function WalletView(props) {
     !isWalletActive(addr) && onSetActiveWallet(addr)
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (
       typeof activeWalletAddress !== 'undefined' &&
       typeof activeWalletAddress?.connector?.sign === 'undefined'
     ) {
-      await walletReconnectorMap[activeWalletAddress.type]()
+      walletReconnectorMap[activeWalletAddress.type]()
     }
   }, [activeWalletAddress])
 
