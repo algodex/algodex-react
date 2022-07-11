@@ -10,9 +10,10 @@ import PropTypes from 'prop-types'
 import { find } from 'lodash'
 import theme from 'theme'
 // import { useAlgodex } from '@algodex/algodex-hooks'
-import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
+// import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
-import useWalletConnect from '@/hooks/useWalletConnect'
+
+// import useWalletConnect from '@/hooks/useWalletConnect'
 
 // import useUserStore from 'store/use-user-state'
 

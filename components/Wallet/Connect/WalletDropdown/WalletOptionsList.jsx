@@ -7,8 +7,9 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { difference } from 'lodash'
 import theme from 'theme'
-import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
-import useWalletConnect from '@/hooks/useWalletConnect'
+
+// import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
+// import useWalletConnect from '@/hooks/useWalletConnect'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
   const { peraConnect, myAlgoConnect } = useWallets()

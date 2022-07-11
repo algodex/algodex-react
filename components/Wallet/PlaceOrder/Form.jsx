@@ -1,19 +1,19 @@
-import { darken, lighten } from 'polished'
+// import { darken, lighten } from 'polished'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import AdvancedOptions from './Form/AdvancedOptions'
+// import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+// import Button from '@mui/material/Button'
 import { ButtonGroup } from '@mui/material'
-import BuySellToggle from './Form/BuySellToggle'
-import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
-import InputAdornment from '@mui/material/InputAdornment'
+// import BuySellToggle from './Form/BuySellToggle'
+// import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
+// import InputAdornment from '@mui/material/InputAdornment'
 import { default as MaterialButton } from '@mui/material/Button'
-import OutlinedInput from '@/components/Input/OutlinedInput'
+// import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
-import Slider from '@/components/Input/Slider'
+// import Slider from '@/components/Input/Slider'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
@@ -22,7 +22,7 @@ import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import theme from '../../../theme'
+// import theme from '../../../theme'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
@@ -139,14 +139,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   execution: 'both'
   // })
 
-  const [marketPrice, setMarketPrice] = useState()
+  // const [marketPrice, setMarketPrice] = useState()
 
-  useEffect(() => {
-    if (order.execution === 'market') {
-      const mp = order.type === 'buy' ? sellOrders[sellOrders.length - 1] : buyOrders[0]
-      setMarketPrice(Number(mp.price))
-    }
-  }, [order])
+  // useEffect(() => {
+  //   if (order.execution === 'market') {
+  //     const mp = order.type === 'buy' ? sellOrders[sellOrders.length - 1] : buyOrders[0]
+  //     setMarketPrice(Number(mp.price))
+  //   }
+  // }, [order])
 
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
@@ -196,7 +196,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return false
   }, [order])
 
-  const MICROALGO = 0.000001
+  // const MICROALGO = 0.000001
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -252,7 +252,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   },
   //   [order]
   // )
-  const disableSlider = order.price === 0
+  // const disableSlider = order.price === 0
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
