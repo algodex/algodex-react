@@ -36,6 +36,18 @@ const moduleExports = nextPWA(
           {
             source: '/algodex-backend/:path*',
             destination: `${PUBLIC_API}/algodex-backend/:path*`
+          },
+          {
+            source: '/support/upload',
+            destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+          },
+          {
+            source: '/support/engagement',
+            destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+          },
+          {
+            source: '/support/ticket',
+            destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
           }
         ]
       }
@@ -44,7 +56,7 @@ const moduleExports = nextPWA(
       return [
         {
           source: '/',
-          destination: '/trade/' + defaultAsset,
+          destination: '/about',
           permanent: true
         },
         {

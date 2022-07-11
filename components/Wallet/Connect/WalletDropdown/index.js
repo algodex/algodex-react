@@ -50,7 +50,11 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     <Container className="">
       <div className="flex flex-col justify-between">
         <DropdownHeader closeFn={closeDropdown} />
-        <DropdownBody activeWalletAddress={wallet?.address} sortedWalletsList={sortedWalletsList} />
+        <DropdownBody
+          activeWalletAddress={wallet?.address}
+          sortedWalletsList={sortedWalletsList}
+          closeFn={closeDropdown}
+        />
         <DropdownFooter />
       </div>
     </Container>

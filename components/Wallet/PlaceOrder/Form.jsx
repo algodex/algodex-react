@@ -1,11 +1,19 @@
+import { darken, lighten } from 'polished'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import { ButtonGroup } from '@mui/material'
+import BuySellToggle from './Form/BuySellToggle'
+import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
+import InputAdornment from '@mui/material/InputAdornment'
 import { default as MaterialButton } from '@mui/material/Button'
+import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
+import Slider from '@/components/Input/Slider'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
@@ -14,7 +22,9 @@ import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
+import theme from '../../../theme'
 import toast from 'react-hot-toast'
+import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useWallets from '@/hooks/useWallets'
 
@@ -84,9 +94,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //   return res
   // }, [wallet, asset])
 
-  if (typeof wallet?.address === 'undefined') {
-    throw new TypeError('Invalid Wallet!')
-  }
+  // if (typeof wallet?.address === 'undefined') {
+  //   throw new TypeError('Invalid Wallet!')
+  // }
   // TODO: Handle empty asset wallets
   // if (typeof wallet?.assets === 'undefined') {
   //   throw new TypeError('Invalid Account Info!')
@@ -110,7 +120,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  }, [orderBook, setSellOrders, asset])
+    // }, [orderBook, setSellOrders, asset])
+  }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const buttonProps = useMemo(
     () => ({
@@ -119,6 +130,30 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }),
     [asset]
   )
+
+  // const [order, setOrder] = useState({
+  //   type: 'buy',
+  //   price: 0,
+  //   amount: 0,
+  //   total: 0,
+  //   execution: 'both'
+  // })
+
+  const [marketPrice, setMarketPrice] = useState()
+
+  useEffect(() => {
+    if (order.execution === 'market') {
+      const mp = order.type === 'buy' ? sellOrders[sellOrders.length - 1] : buyOrders[0]
+      setMarketPrice(Number(mp.price))
+    }
+  }, [order])
+
+  useEvent('clicked', (data) => {
+    if (data.type === 'order') {
+      setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
+      console.log(order)
+    }
+  })
 
   const assetBalance = useMemo(() => {
     let res = 0
@@ -132,6 +167,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet, asset])
 
+  // const algoBalance = useMemo(() => {
+  //   let res = 0
+  //   if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
+  //     res = fromBaseUnits(wallet.amount)
+  //   }
+  //   return res
+  // }, [wallet])
+
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell') {
@@ -140,6 +183,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     if (order.type === 'buy') {
       return (order.total / algoBalance) * 100
     }
+
     return 0
   }, [order, algoBalance, assetBalance])
   const hasBalance = useMemo(() => {
@@ -171,6 +215,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [order]
   )
 
+  // Fix Precision
   useEffect(() => {
     let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
     let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
@@ -191,6 +236,23 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
   }, [order, asset])
 
+  // const handleSlider = useCallback(
+  //   (e, value) => {
+  //     let _price = order.price || 0
+  //     let _balance = order.type === 'sell' ? assetBalance : algoBalance
+  //     let _percent = (value / 100) * _balance
+  //     const _amount = order.type === 'sell' ? _percent : _percent / _price
+
+  //     if (order.amount !== _amount) {
+  //       setOrder({
+  //         ...order,
+  //         amount: _amount
+  //       })
+  //     }
+  //   },
+  //   [order]
+  // )
+  const disableSlider = order.price === 0
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
@@ -202,6 +264,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       if (typeof value === 'undefined') {
         throw new Error('Must have a valid value!')
       }
+
       if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
         value = parseFloat(value)
       }
@@ -236,6 +299,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           },
           { wallet }
         )
+
         orderPromise = placeOrder(
           {
             ...order,
@@ -302,16 +366,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   //           return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
   //         }
 
-  //         if (/Operation cancelled/i.test(err)) {
-  //           return t('order-cancelled')
-  //         }
-
-  //         return t('error-placing-order')
-  //       }
-  //     })
-  //   },
-  //   [onSubmit, asset, order]
-  // )
+  // if (/Operation cancelled/i.test(err)) {
+  //   return t('order-cancelled')
+  // }
 
   if (typeof wallet === 'undefined' || isLoading || isError) {
     return <Spinner />
@@ -383,8 +440,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               updateAmount={handleSlider}
               sliderPercent={sliderPercent}
               order={order}
+              onChange={handleChange}
               asset={asset}
-              microAlgo={MICROALGO}
+              allowTaker={typeof asset !== 'undefined'}
             />
           )}
 

@@ -1,23 +1,25 @@
+import { Box, Typography } from '@mui/material'
 import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
+import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
 
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { Typography, Box } from '@mui/material'
 import { find } from 'lodash'
 import theme from 'theme'
-import { useAlgodex } from '@algodex/algodex-hooks'
+// import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
 import useWalletConnect from '@/hooks/useWalletConnect'
 
+// import useUserStore from 'store/use-user-state'
+
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { wallet, setWallet, addresses } = useAlgodex()
-  const { disconnect: peraDisconnect } = useWalletConnect()
-  const { disconnect: disconnectMyAlgoWallet } = useMyAlgoConnect()
+  const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
 
   const isWalletActive = (addr) => {
     return wallet.address === addr
@@ -31,7 +33,7 @@ const InactiveWalletsList = ({ walletsList }) => {
   }
 
   const WALLETS_DISCONNECT_MAP = {
-    'my-algo-wallet': disconnectMyAlgoWallet,
+    'my-algo-wallet': myAlgoDisconnect,
     'wallet-connect': peraDisconnect
   }
 

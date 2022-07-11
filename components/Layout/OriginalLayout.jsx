@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
-import Button from '@/components/Button'
-import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
+// import Button from '@/components/Button'
+// import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
 // import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
@@ -11,14 +11,15 @@ import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 // import { Typography, Typography } from '@/components/Typography'
-import Typography from '@mui/material/Typography'
+// import Typography from '@mui/material/Typography'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import { useEvent } from 'hooks/useEvents'
-import useMobileDetect from '@/hooks/useMobileDetect'
-import useTranslation from 'next-translate/useTranslation'
+// import { useAlgodex } from '@algodex/algodex-hooks'
+// import useTranslation from 'next-translate/useTranslation'
 
+// import { Typography, Typography } from '@/components/Typography'
+// import Typography from '@mui/material/Typography'
+// import useWallets from '@/hooks/useWallets'
 // Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -41,26 +42,17 @@ const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
-
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: wallet;
-    display: flex;
-  }
+  grid-area: wallet;
+  display: flex;
 `
 
 const PlaceOrderSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
 
   border-left: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  display: ${({ active }) => (active ? 'flex' : 'none')};
   // overflow: hidden scroll;
-
-  @media (min-width: 996px) {
-    grid-area: trade;
-    display: flex;
-  }
+  grid-area: trade;
+  display: flex;
 `
 
 const ContentSection = styled.section`
@@ -84,13 +76,9 @@ const SearchAndChartSection = styled.section`
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  display: ${({ active }) => (active ? 'grid' : 'none')};
+  display: grid;
+  grid-area: chart;
   grid-template-rows: 50px 1fr;
-
-  @media (min-width: 996px) {
-    display: grid;
-    grid-area: chart;
-  }
 
   @media (min-width: 1536px) {
     grid-template-columns: 365px 1fr;
@@ -108,26 +96,15 @@ const AssetOrderBookSection = styled.section`
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
 
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: book;
-    display: flex;
-  }
+  grid-area: book;
+  display: flex;
 `
 const AssetTradeHistorySection = styled.section`
   display: flex;
   flex-direction: column;
-
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  height: calc(100% - 50px);
-
-  @media (min-width: 996px) {
-    grid-area: history;
-    display: flex;
-    height: inherit;
-  }
+  grid-area: history;
+  display: flex;
+  height: inherit;
 `
 
 const WalletOrdersSection = styled.section`
@@ -137,48 +114,32 @@ const WalletOrdersSection = styled.section`
     border-top: none;
     border-right: 1px solid ${({ theme }) => theme.colors.gray['700']};
   }
-  display: ${({ active }) => (active ? 'flex' : 'none')};
-
-  @media (min-width: 996px) {
-    grid-area: orders;
-    display: flex;
-  }
+  grid-area: orders;
+  display: flex;
 `
 
 const MainWrapper = styled.div`
   position: relative;
-  height: 100%;
-  min-height: 500px;
-
-  @media (min-width: 996px) {
-    min-height: 100%;
-    height: auto;
-  }
+  min-height: 100%;
+  height: auto;
 `
 
 const Main = styled.main`
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
   height: 100%;
+  min-height: 900px;
+  grid-template-columns: 1fr 1fr 280px;
+  grid-template-rows: 240px 200px 300px 300px;
+  grid-template-areas:
+    'chart chart wallet'
+    'chart chart trade'
+    'book history trade'
+    'orders orders trade';
 
-  @media (min-width: 996px) {
-    height: 100%;
-    min-height: 900px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 280px;
-    grid-template-rows: 240px 200px 300px 300px;
-    grid-template-areas:
-      'chart chart wallet'
-      'chart chart trade'
-      'book history trade'
-      'orders orders trade';
-
-    & > section {
-      // for demo
-      &.demo {
-        border: 1px dotted rgba(255, 255, 255, 0.125);
-      }
+  & > section {
+    // for demo
+    &.demo {
+      border: 1px dotted rgba(255, 255, 255, 0.125);
     }
   }
 
@@ -200,40 +161,6 @@ const Main = styled.main`
       'orders orders history trade';
   }
 `
-
-const MobileMenu = styled.nav`
-  height: 50px;
-  width: 100%;
-  & > ul {
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-  }
-
-  & > ul > li {
-    flex: 1 0 auto;
-    height: 100%;
-  }
-
-  z-index: 99;
-
-  @media (min-width: 996px) {
-    display: none;
-  }
-`
-
-const MobileMenuButton = styled(Button)`
-  height: 100%;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.gray['800']};
-  padding: 0;
-  border: 1px solid ${({ theme }) => theme.colors.gray['700']};
-  overflow-wrap: anywhere;
-`
-
 /**
  * @param asset
  * @param children
@@ -242,76 +169,28 @@ const MobileMenuButton = styled(Button)`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet } = useAlgodex()
-  // const { addresses } = useWallets()
-  const isConnected =
-    typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
-  // console.log(addresses, wallet)
-  // const isConnected = useMemo(() => {
-  //   console.log(addresses, isConnected)
-  //   return addresses?.length > 0
-  // }, [addresses])
-  // console.log(`DEX: ${isConnected}`, algodex)
-  const { t } = useTranslation('common')
+  // const { wallet } = useAlgodex()
+  // const isConnected =
+  //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
+  // const { t } = useTranslation('common')
+  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const gridRef = useRef()
   const searchTableRef = useRef()
-  const isMobile = useMobileDetect()
-  const TABS = {
-    CHART: 'CHART',
-    BOOK: 'BOOK',
-    TRADE: 'TRADE',
-    ORDERS: 'ORDERS',
-    HISTORY: 'HISTORY'
-  }
 
-  const [activeMobile, setActiveMobile] = useState(TABS.CHART)
-  /**
-   * Use Clicked Events
-   *
-   * This is only used to switch to MobileMenu Chart view
-   * when the Next/Router navigates to a shallow route
-   */
-  useEvent('clicked', (data) => {
-    if (data === 'asset') {
-      setActiveMobile(TABS.CHART)
-    }
-    if (data === 'order') {
-      setActiveMobile(TABS.TRADE)
-    }
-  })
   if (!asset) {
     return <Spinner flex={true} />
   }
-  // console.log(isMobile)
+
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <WalletSection active={activeMobile === TABS.WALLET}>
-          {!isMobile && <Wallet />}
-          {isMobile && <MobileWallet />}
+        <WalletSection>
+          <Wallet />
         </WalletSection>
-        <PlaceOrderSection active={activeMobile === TABS.TRADE}>
-          {isConnected && <PlaceOrder asset={asset} wallet={wallet} />}
-          {!isConnected && (
-            <Container data-testid="place-order">
-              <Header>
-                <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
-                  Place Order
-                </Typography>
-              </Header>
-              <Typography
-                variant="subtitle_medium"
-                className="m-4"
-                data-testid="not-signed-in"
-                color="gray.500"
-                textAlign="center"
-              >
-                Not signed in
-              </Typography>
-            </Container>
-          )}
+        <PlaceOrderSection>
+          <PlaceOrder asset={asset} />
         </PlaceOrderSection>
-        <SearchAndChartSection active={activeMobile === TABS.CHART}>
+        <SearchAndChartSection>
           <AssetsSection ref={searchTableRef}>
             <AssetSearch
               style={{ height: '6rem' }}
@@ -323,70 +202,15 @@ function MainLayout({ asset, children }) {
           <ContentSection>{children}</ContentSection>
         </SearchAndChartSection>
 
-        <AssetOrderBookSection active={activeMobile === TABS.BOOK}>
-          {isMobile && activeMobile === TABS.BOOK && <OrderBook asset={asset} />}
-          {!isMobile && <OrderBook asset={asset} />}
+        <AssetOrderBookSection>
+          <OrderBook asset={asset} />
         </AssetOrderBookSection>
-        <AssetTradeHistorySection active={activeMobile === TABS.HISTORY}>
-          {isMobile && activeMobile === TABS.HISTORY && <TradeHistory asset={asset} />}
-          {!isMobile && <TradeHistory asset={asset} />}
+        <AssetTradeHistorySection>
+          <TradeHistory asset={asset} />
         </AssetTradeHistorySection>
-        <WalletOrdersSection active={activeMobile === TABS.ORDERS}>
-          {isMobile && activeMobile === TABS.ORDERS && <Orders asset={asset} />}
-          {!isMobile && <Orders asset={asset} />}
+        <WalletOrdersSection>
+          <Orders asset={asset} />
         </WalletOrdersSection>
-        <MobileMenu>
-          <ul>
-            <li>
-              <MobileMenuButton
-                sx={{ color: 'white', fontWeight: '600' }}
-                onClick={() => setActiveMobile(TABS.CHART)}
-              >
-                {t('mobilefooter-CHART')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                sx={{ color: 'white', fontWeight: '600' }}
-                onClick={() => setActiveMobile(TABS.BOOK)}
-              >
-                {t('mobilefooter-BOOK')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                sx={{ color: 'white', fontWeight: '600' }}
-                onClick={() => setActiveMobile(TABS.TRADE)}
-              >
-                {t('mobilefooter-TRADE')}
-              </MobileMenuButton>
-            </li>
-            <li>
-              <MobileMenuButton
-                sx={{ color: 'white', fontWeight: '600' }}
-                onClick={() => setActiveMobile(TABS.ORDERS)}
-              >
-                {t('mobilefooter-ORDERS')}
-              </MobileMenuButton>
-            </li>
-            {/*
-            <li>
-              // Trade history. Disable for now until it is refactored into the Orders tab
-              <MobileMenuButton type="button" onClick={() => setActiveMobile(TABS.HISTORY)}>
-                History
-              </MobileMenuButton>
-            </li>
-            */}
-            <li>
-              <MobileMenuButton
-                sx={{ color: 'white', fontWeight: '600' }}
-                onClick={() => setActiveMobile(TABS.WALLET)}
-              >
-                {t('mobilefooter-WALLET')}
-              </MobileMenuButton>
-            </li>
-          </ul>
-        </MobileMenu>
       </Main>
     </MainWrapper>
   )

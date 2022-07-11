@@ -14,7 +14,7 @@ const DocsPage = () => {
   return (
     <>
       <Head>
-        <title>Documentation</title>
+        <title>Docs | Algodex</title>
       </Head>
       <Header />
       <iframe

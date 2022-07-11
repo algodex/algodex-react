@@ -1,20 +1,57 @@
+import { Box, Typography } from '@mui/material'
+import { useContext, useEffect, useRef } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
+
+import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
+import { difference } from 'lodash'
 import theme from 'theme'
 import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useWalletConnect from '@/hooks/useWalletConnect'
-import { Typography, Box } from '@mui/material'
-import Button from '@mui/material/Button'
 
-const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
-  const { connect } = useMyAlgoConnect()
-  const { connect: peraConnect } = useWalletConnect()
-  // const peraWallet = useWalletConnect()
+const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
+  const { peraConnect, myAlgoConnect } = useWallets()
+  const [addresses, setAddresses] = useContext(WalletsContext)
+
+  const addressesRef = useRef(null)
 
   const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': connect,
-    'wallet-connect': peraConnect
+    'my-algo-wallet': myAlgoConnect,
+    'pera-connect': peraConnect
   }
+
+  const myAlgoOnClick = () => {
+    WALLETS_CONNECT_MAP['my-algo-wallet']()
+  }
+
+  const peraConnectOnClick = () => {
+    WALLETS_CONNECT_MAP['pera-connect']()
+  }
+  useEffect(() => {
+    if (!addressesRef.current) {
+      // Initialize the ref after first checking to see what is in localStorage
+      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+      if (Array.isArray(storedAddrs)) {
+        setAddresses(storedAddrs)
+      }
+      addressesRef.current = addresses
+    }
+
+    const walletDifference = difference(
+      addresses.map((addr) => addr.address),
+      addressesRef.current.map((addr) => addr.address)
+    )
+    if (walletDifference.length > 0) {
+      localStorage.setItem('addresses', JSON.stringify(addresses))
+      addressesRef.current = addresses
+      closeFn()
+    }
+    // **Note** Can't put closeFn() in the onClicks because it will closeOut
+    // modal before wallet-connect finishes connecting leading to stale state.
+    // Creating a ref that persists between renders gives us a way to automatically close out
+    // modals only when a new address is added to the addresses array.
+  }, [addresses])
   return (
     <>
       <Box
@@ -39,7 +76,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             role="button"
             tabIndex="0"
             className="cursor-pointer flex items-center mb-2"
-            onClick={() => WALLETS_CONNECT_MAP['wallet-connect']()}
+            onClick={peraConnectOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
             <Image
@@ -56,7 +93,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
             className="cursor-pointer flex items-center mb-2"
             role="button"
             tabIndex="0"
-            onClick={() => WALLETS_CONNECT_MAP['my-algo-wallet']()}
+            onClick={myAlgoOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
             <Image src="/My-Algo-Wallet-icon.svg" alt="My Algo Wallet" width={25} height={25} />
@@ -72,7 +109,8 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress }) => {
 
 WalletsOptions.propTypes = {
   isConnectingAddress: PropTypes.bool,
-  setIsConnectingAddress: PropTypes.func
+  setIsConnectingAddress: PropTypes.func,
+  closeFn: PropTypes.func
 }
 
 WalletsOptions.defaultProps = {

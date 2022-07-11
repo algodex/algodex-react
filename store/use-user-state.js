@@ -23,6 +23,15 @@ export const createStore = ({ config, options, localstorage = false, name = 'Alg
     : create(withDevTools(immer(config), { name }))
 
 const userState = (set, get) => ({
+  /**
+   * Order Aggregation in Orderbook
+   *
+   * @cachedSelectedPrecision All Aggregation options selected by a user
+   * for an asset
+   */
+  cachedSelectedPrecision: {},
+  setCachedSelectedPrecision: (cachedSelectedPrecision) => set({ cachedSelectedPrecision }),
+
   // Controls showing of Asset Info or Chart
   showAssetInfo: false,
   setShowAssetInfo: (bool) => set({ showAssetInfo: bool }),

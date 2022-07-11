@@ -46,19 +46,15 @@ const Arrow = styled.div`
   top: 50%;
   right: 2.5rem;
   transform: translateY(4.5rem);
-
   svg {
     transform: scale(-1) scaleY(-1) rotate(-115deg);
   }
-
   @media (min-width: 1024px) {
     display: block;
   }
-
   @media (min-width: 1024px) and (orientation: portrait) {
     display: none;
   }
-
   @media (min-width: 1536px) {
     display: block;
   }
@@ -114,7 +110,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.palette.background.dark};
-
   @media (min-width: 996px) {
     overflow: hidden;
   }
@@ -142,7 +137,6 @@ const BookRow = styled.div`
       const color = type === 'buy' ? 'green' : 'red'
       return rgba(theme.palette[color]['500'], 0.15)
     }};
-
     p {
       &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
@@ -165,7 +159,6 @@ const SellOrders = styled.div`
   display: flex;
   flex-direction: column-reverse;
   /* width */
-
   ::-webkit-scrollbar {
     width: 0;
     display: none;
@@ -176,13 +169,10 @@ const BuyOrders = styled.div`
   flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
-
   ${OrdersWrapper} {
     right: 0;
   }
-
   /* width */
-
   ::-webkit-scrollbar {
     width: 0;
     display: none;
@@ -201,11 +191,9 @@ const Price = styled.div`
   font-weight: 600;
   color: ${({ theme, color }) => theme.palette[color]['500']};
   margin: 0;
-
   svg {
     // margin-right: 0.5rem;
   }
-
   span {
     // margin-left: 0.75rem;
   }
@@ -299,7 +287,7 @@ export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
-  const { setOrder, isConnected } = useAlgodex()
+  const { isConnected } = useAlgodex()
   const isSignedIn = isConnected
 
   const dispatcher = useEventDispatch()
@@ -311,14 +299,13 @@ export function OrderBook({ asset, orders, components }) {
       const total = new Big(row.total)
 
       const handleSelectOrder = () => {
-        dispatcher('clicked', 'order')
-        setOrder(
-          {
+        dispatcher('clicked', {
+          type: 'order',
+          payload: {
             price: row.price,
             type: type === 'buy' ? 'sell' : 'buy'
-          },
-          asset
-        )
+          }
+        })
       }
 
       return (

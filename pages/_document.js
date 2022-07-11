@@ -5,7 +5,9 @@ import createEmotionServer from '@emotion/server/create-instance'
 import theme from '../theme/index'
 
 const APP_NAME = 'Algodex'
-const APP_DESCRIPTION = 'Decentralized Exchange'
+const APP_DESCRIPTION = 'Algodex is a decentralized exchange on the Algorand blockchain network'
+const APP_SOCIAL_TWITTER = '@AlgodexOfficial'
+const APP_IMAGE_LINK = 'https://app.algodex.com/beautiful-milky.png'
 
 export default class NextHTMLDocument extends Document {
   render() {
@@ -25,13 +27,15 @@ export default class NextHTMLDocument extends Document {
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content={theme.palette.primary.main} />
-          {/* <link rel="stylesheet" href="https://rsms.me/inter/inter.css" /> */}
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-            rel="stylesheet"
-          />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content={APP_SOCIAL_TWITTER} />
+          <meta name="twitter:title" content={APP_NAME} />
+          <meta name="twitter:description" content={APP_DESCRIPTION} />
+          <meta name="twitter:image" content={APP_IMAGE_LINK} />
+          <meta property="og:title" content={APP_NAME} />
+          <meta property="og:description" content={APP_DESCRIPTION} />
+          <meta property="og:image" content={APP_IMAGE_LINK} />
+          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
           <link rel="stylesheet" href="/fonts/style.css" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="icon" href="/favicon.ico" />
