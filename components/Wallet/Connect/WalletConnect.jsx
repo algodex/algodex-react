@@ -327,7 +327,10 @@ function WalletConnect(props) {
   const [signedIn, setSignedIn] = useState(false)
 
   useEffect(() => {
-    if (addresses.length > 0) setSignedIn(true)
+    if (addresses.length > 0) {
+      setSignedIn(true)
+      setWallet(addresses[0])
+    }
   }, [addresses])
 
   return (
