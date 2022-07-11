@@ -506,13 +506,20 @@ const mapOpenOrdersData = (data) => {
 
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
+    let pair = `${assetsInfo[assetId].params['unit-name']}/ALGO`
+    let price = floatToFixed(formattedPrice)
+
+    if (StableAssets.includes(assetId)) {
+      pair = `ALGO/${assetsInfo[assetId].params['unit-name']}`
+      price = formattedPrice !== 0 ? floatToFixed(1 / formattedPrice) : 'Invalid Price'
+    }
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
-      price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      price: price,
+      pair: pair,
       type: 'BUY',
       status: 'OPEN',
       amount: formattedASAAmount,

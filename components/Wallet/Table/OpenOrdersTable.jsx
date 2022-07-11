@@ -14,7 +14,6 @@ import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
-import { StableAssets } from '@/components/StableAssets'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -53,28 +52,6 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // Update price in case it includes StableCoin
-  _orders.forEach((_order) => {
-    if (StableAssets.includes(_order.asset.id)) {
-      // Invert the Pair and Price
-      const pairs = _order.pair.split('/')
-      if (pairs.length > 1) {
-        _order.calculated_pair = 'ALGO/' + pairs[0]
-      } else {
-        _order.calculated_pair = 'Invalid Pair'
-      }
-
-      if (_order.price === 0) {
-        _order.calculated_price = 'Invalid Price'
-      } else {
-        _order.calculated_price = 1 / _order.price
-      }
-    } else {
-      _order.calculated_pair = _order.pair
-      _order.calculated_price = _order.price
-    }
-  })
-
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
 
   useEffect(() => {
@@ -151,12 +128,12 @@ export function OpenOrdersTable({ orders: _orders }) {
       },
       {
         Header: t('pair'),
-        accessor: 'calculated_pair',
+        accessor: 'pair',
         Cell: AssetNameCell
       },
       {
         Header: t('price') + ' (ALGO)',
-        accessor: 'calculated_price',
+        accessor: 'price',
         Cell: DefaultCell
       },
       {
