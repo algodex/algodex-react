@@ -4,7 +4,7 @@ import {
   AssetNameBlock,
   NameVerifiedWrapper
 } from '@/components/Asset/Typography'
-import { mdiCheckDecagram, mdiStar } from '@mdi/js'
+import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -14,9 +14,13 @@ import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
+import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
+// import { floatToFixedDynamic } from '@/services/display'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+
 import { formatUSDPrice } from '@/components/helpers'
+import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
@@ -46,7 +50,9 @@ export const mapToSearchResults = ({
   hasOrders,
   isTraded,
   verified,
+  name,
   unitName,
+  isGeoBlocked,
   formattedASALiquidity,
   formattedAlgoLiquidity
 }) => {
@@ -60,10 +66,11 @@ export const mapToSearchResults = ({
 
   return {
     id: assetId,
-    name: unitName,
+    name: name || unitName,
     fullName: assetName,
     verified: verified,
     hasBeenOrdered: isTraded || hasOrders,
+    isGeoBlocked,
     liquidityAlgo: formattedAlgoLiquidity,
     liquidityAsa: formattedASALiquidity,
     price,
@@ -122,7 +129,7 @@ const Algos = styled(AlgoIcon)`
   fill: ${({ theme }) => theme.palette.gray['500']};
 `
 
-export const AssetChangeCell = ({ value }) => {
+export const AssetChangeCell = ({ value, row }) => {
   const displayChange = () => {
     if (value === null) {
       return ''
@@ -130,7 +137,11 @@ export const AssetChangeCell = ({ value }) => {
     if (value === '--') {
       return value
     }
-    return `${value}%`
+    return (
+      <span
+        className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
+      >{`${value}%`}</span>
+    )
   }
   return (
     <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
@@ -139,7 +150,8 @@ export const AssetChangeCell = ({ value }) => {
   )
 }
 AssetChangeCell.propTypes = {
-  value: PropTypes.any
+  value: PropTypes.any,
+  row: PropTypes.object
 }
 
 export const NavSearchTable = ({
@@ -158,6 +170,7 @@ export const NavSearchTable = ({
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const searchTableRef = useRef()
   const { t } = useTranslation('assets')
+
   const filterByFavoritesFn = useCallback(
     (e) => {
       e.stopPropagation()
@@ -168,10 +181,15 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (searchTableRef?.current) {
-        const { width, height } = searchTableRef.current.getBoundingClientRect()
-        setSearchTableSize({ width, height })
-      }
+      /**
+       * Wait all the event queue process
+       */
+      setTimeout(() => {
+        if (searchTableRef?.current) {
+          const { width, height } = searchTableRef.current.getBoundingClientRect()
+          setSearchTableSize({ width, height })
+        }
+      })
     }
     window.addEventListener('resize', handleResize)
     handleResize()
@@ -202,7 +220,9 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    const filteredList = assets.filter((asset) => !(asset.assetId in bannedAssets))
+    const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
+    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: true })
+
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
@@ -221,9 +241,13 @@ export const NavSearchTable = ({
   }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
 
   const AssetPriceCell = useCallback(
-    ({ value }) => {
+    ({ value, row }) => {
       return (
-        <AssetPrice className="cursor-pointer font-semibold">
+        <AssetPrice
+          className={`${
+            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
+          } cursor-pointer font-semibold`}
+        >
           {value}
           <br />
           <p className="text-gray-600">
@@ -235,14 +259,17 @@ export const NavSearchTable = ({
     [algoPrice]
   )
   AssetPriceCell.propTypes = {
-    value: PropTypes.any
+    value: PropTypes.any,
+    row: PropTypes.object
   }
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="cursor-pointer flex items-center">
-          <div className="flex flex-col">
+        <div className="cursor-pointer flex flex-col">
+          <div
+            className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
+          >
             <div className="flex items-center">
               <Icon
                 role="button"
@@ -275,13 +302,42 @@ export const NavSearchTable = ({
                 <Icon
                   path={mdiCheckDecagram}
                   title="Verified asset"
-                  className="mt-0.5"
                   size={0.5}
                   color={theme.palette.gray['500']}
                 />
               )}
             </div>
           </div>
+          {row.original.isGeoBlocked && (
+            <div className="flex items-center">
+              <Tooltip
+                renderButton={(setTriggerRef) => (
+                  <div className="flex items-center" ref={setTriggerRef}>
+                    <Icon
+                      path={mdiAlertCircleOutline}
+                      title="Information asset"
+                      className="mt-0.5"
+                      size={0.4}
+                      color={theme.palette.gray['600']}
+                    />
+                    &nbsp;
+                    <p style={{ fontSize: '8px' }} className="text-gray-600 font-medium">
+                      Restricted Trading (USA)
+                    </p>
+                  </div>
+                )}
+              >
+                <div>
+                  <p className="whitespace-normal text-white">
+                    Some ASAs have restricted trading in your country for legal reasons. You can
+                    view the chart and book but you will not be able to place any trades for this
+                    asset.
+                  </p>
+                  {/* <p className="text-green-500 font-semibold text-xs">Learn more here</p> */}
+                </div>
+              </Tooltip>
+            </div>
+          )}
         </div>
       )
     },

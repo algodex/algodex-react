@@ -21,17 +21,20 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0.75rem 0.625rem 1rem;
+  padding: ${({ isMobile }) => (isMobile ? `0 0.625rem 1rem;` : '0.75rem 0.625rem 1rem;')};
 `
 
 const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
   column-gap: 0.25rem;
 `
+// const HeaderWrapper = styled.div`
+//   padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
+// `
 
 const Header = styled.header`
   flex-shrink: 0;
   display: grid;
-  padding: 0 0.5rem 0.75rem;
   ${gridStyles}
 `
 
@@ -200,11 +203,13 @@ export function TradeHistory({ asset, orders: tradesData }) {
 }
 
 TradeHistory.propTypes = {
+  isMobile: PropTypes.bool,
   asset: PropTypes.object.isRequired,
   orders: PropTypes.array.isRequired
 }
 
 TradeHistory.defaultProps = {
-  orders: []
+  orders: [],
+  isMobile: false
 }
 export default withAssetTradeHistoryQuery(TradeHistory)

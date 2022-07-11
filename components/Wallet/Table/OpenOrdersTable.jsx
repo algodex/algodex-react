@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@algodex/algodex-hooks'
+import { withWalletOrdersQuery, useAlgodex } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -55,6 +55,10 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
+  const { algodex, wallet } = useAlgodex()
+  function closeOrder() {
+    return algodex.closeOrder.apply(algodex, arguments)
+  }
 
   useEffect(() => {
     setOpenOrdersData(_orders)
@@ -70,14 +74,15 @@ export function OpenOrdersTable({ orders: _orders }) {
         const cellData = data[cellIndex]
 
         const {
-          escrowAddress,
           ownerAddress,
-          assetLimitPriceN,
-          assetLimitPriceD,
           assetId,
-          version
+          version,
+          formattedASAAmount,
+          decimals,
+          formattedPrice,
+          appId
         } = cellData.metadata
-        const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
+        // const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
         const updateOrderStatus = (statusMsg) =>
           openOrdersData.map((order, index) =>
@@ -86,23 +91,21 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
-        // const cancelOrderPromise = OrderService.closeOrder(
-        //   escrowAddress,
-        //   ownerAddress,
-        //   orderBookEntry,
-        //   version
-        // )
-        const cancelOrderPromise = new Promise((resolve) =>
-          resolve({
-            escrowAddress,
-            ownerAddress,
-            assetLimitPriceN,
-            assetLimitPriceD,
-            assetId,
-            version,
-            orderBookEntry
-          })
-        )
+        const cancelOrderPromise = closeOrder({
+          address: ownerAddress,
+          version,
+          price: Number(formattedPrice),
+          amount: Number(formattedASAAmount),
+          total: Number(formattedPrice) * Number(formattedASAAmount),
+          asset: { id: assetId, decimals },
+          assetId,
+          type: cellData.type.toLowerCase(),
+          appId,
+          contract: {
+            creator: ownerAddress
+          },
+          wallet
+        })
 
         toast.promise(cancelOrderPromise, {
           loading: t('awaiting-confirmation'),
@@ -126,7 +129,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         </Typography>
       )
     },
-    [t, openOrdersData]
+    [t, openOrdersData, wallet]
   )
 
   const columns = useMemo(

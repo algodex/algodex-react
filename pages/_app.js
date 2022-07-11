@@ -11,6 +11,10 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { EventEmitter } from '@/hooks/useEvents'
 import Head from 'next/head'
 import { Hydrate } from 'react-query/hydration'
+// import AlgodexApi from '@algodex/algodex-sdk'
+// import { Provider } from '@algodex/algodex-hooks'
+// import config from '@/config.json'
+import NextApp from 'next/app'
 import PropTypes from 'prop-types'
 import { Provider } from '@algodex/algodex-hooks'
 // Algodex
@@ -19,14 +23,15 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 // Material UI
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
+import { WalletsProvider } from '@/hooks/useWallets'
 // import AlgodexApi from '@algodex/algodex-sdk'
 // import { Provider } from '@algodex/algodex-hooks'
 import config from '@/config.json'
 import createEmotionCache from '@/utils/createEmotionCache'
+import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
 
-// import config from '@/config.json'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 let api
@@ -98,18 +103,26 @@ function Algodex(props) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Global styles={styles} />
-              <Provider dex={makeApi()}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <Toaster />
-                <ReactQueryDevtools initialIsOpen={false} />
-                <Component {...pageProps} />
-              </Provider>
+              <WalletsProvider>
+                <Provider dex={makeApi()}>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <Toaster />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                  <Component {...pageProps} />
+                </Provider>
+              </WalletsProvider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>
       </Hydrate>
     </QueryClientProvider>
   )
+}
+
+Algodex.getInitialProps = async (ctx) => {
+  const initialProps = await NextApp.getInitialProps(ctx)
+  const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
+  return { pageProps: { ...initialProps, deviceType } }
 }
 
 Algodex.propTypes = {

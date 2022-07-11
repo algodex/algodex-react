@@ -1,6 +1,3 @@
-// import { Typography, Typography, Typography, Typography } from 'components/Typography'
-
-import Button from 'components/Button'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -9,10 +6,12 @@ import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import useWallets from '../../../hooks/useWallets'
+import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import { truncatedWalletAddress } from '@/components/helpers'
 import useTranslation from 'next-translate/useTranslation'
-import WalletsOptions from './WalletDropdown/WalletOptionsList'
-import { useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { useState, useContext, useEffect } from 'react'
+
 // import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
@@ -24,16 +23,16 @@ const Container = styled.div`
   padding: 0.875rem 0 1rem;
 `
 
-const ButtonContainer = styled.div`
-  flex-shrink: 0%;
-  display: flex;
-  width: 100%;
+// const ButtonContainer = styled.div`
+//   flex-shrink: 0%;
+//   display: flex;
+//   width: 100%;
 
-  button {
-    flex-grow: 1;
-    margin: 0 1.125rem;
-  }
-`
+//   button {
+//     flex-grow: 1;
+//     margin: 0 1.125rem;
+//   }
+// `
 
 const EmptyState = styled.div`
   position: relative;
@@ -164,25 +163,51 @@ const WalletRow = styled.div`
   }
 `
 export function WalletView(props) {
-  const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWalletAddress, isSignedIn, addresses, onConnectClick, onSetActiveWallet } = props
+  // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+  const { activeWalletAddress, isSignedIn, addresses, onSetActiveWallet } = props
+
   const { t } = useTranslation('wallet')
 
-  const getButtonVariant = () => {
-    return isSignedIn ? 'default' : 'primary'
+  const { peraConnect, myAlgoConnect } = useWallets()
+
+  const walletReconnectorMap = {
+    'my-algo-wallet': myAlgoConnect,
+    'wallet-connect': peraConnect
   }
 
+  // const getButtonVariant = () => {
+  //   return isSignedIn ? 'default' : 'primary'
+  // }
+
   const isWalletActive = (addr) => {
-    return activeWalletAddress === addr
+    return activeWalletAddress?.address === addr.address
   }
 
   const isTabbable = (addr) => {
     return isWalletActive(addr) ? -1 : 0
   }
 
-  const handleWalletClick = (addr) => {
+  const handleWalletClick = async (addr) => {
     !isWalletActive(addr) && onSetActiveWallet(addr)
   }
+
+  useEffect(() => {
+    if (
+      typeof activeWalletAddress !== 'undefined' &&
+      typeof activeWalletAddress?.connector?.sign === 'undefined'
+    ) {
+      walletReconnectorMap[activeWalletAddress.type]()
+    }
+  }, [activeWalletAddress])
+
+  useEffect(() => {
+    if (typeof activeWalletAddress !== 'undefined' && addresses.length > 0) {
+      const targetWallet = addresses.filter(
+        (addr) => addr.address === activeWalletAddress.address
+      )[0]
+      if (typeof targetWallet?.connector?.sign !== 'undefined') onSetActiveWallet(targetWallet)
+    }
+  }, [addresses])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -200,22 +225,22 @@ export function WalletView(props) {
     )
   }
 
-  // const renderBalance = (bal) => {
-  //   const split = bal.toFixed(6).split('.')
+  const renderBalance = (bal) => {
+    const split = bal.toFixed(6).split('.')
 
-  //   return (
-  //     <Balance>
-  //       <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-  //       <Typography fontWeight="500">
-  //         {`${split[0]}.`}
-  //         <span>{split[1]}</span>
-  //       </Typography>
-  //     </Balance>
-  //   )
-  // }
+    return (
+      <Balance>
+        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
+        <Typography fontWeight="500">
+          {`${split[0]}.`}
+          <span>{split[1]}</span>
+        </Typography>
+      </Balance>
+    )
+  }
 
   const renderWallets = () => {
-    return addresses?.map((wallet) => (
+    return addresses.map((wallet) => (
       <WalletRow
         key={wallet.address}
         tabIndex={isTabbable(wallet.address)}
@@ -232,38 +257,21 @@ export function WalletView(props) {
             use="wallet"
             size={0.75}
           />
-          {wallet.address}
+          {truncatedWalletAddress(wallet.address, 4)}
         </Typography>
-
-        {/* {renderBalance(wallet?.amount)} */}
+        {renderBalance(convertFromBaseUnits(wallet.amount))}
       </WalletRow>
     ))
   }
 
-  const getButtonState = () => {
-    onConnectClick()
-  }
-
-  const WalletButtonText =
-    addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
-
+  // const getButtonState = () => {
+  //   onConnectClick()
+  // }
+  // const WalletButtonText =
+  //   addresses?.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
   return (
     <Section area="topRight">
       <Container>
-        <ButtonContainer>
-          {/* <WalletsOptions isConnectingAddress={isConnectingAddress} setIsConnectingAddress={setIsConnectingAddress}>
-
-          </WalletsOptions> */}
-          {/* <Button
-            // color="primary-button"
-            variant={getButtonVariant()}
-            onClick={getButtonState}
-            data-testid="connect-wallet-btn"
-          >
-            {WalletButtonText}
-          </Button> */}
-
-        </ButtonContainer>
         {isSignedIn ? (
           <>
             <Header>
@@ -314,15 +322,22 @@ WalletView.defaultProps = {
  * @constructor
  */
 function WalletConnect(props) {
-  const { algodex, wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
-  const { addresses, myAlgoConnect } = useWallets(wallet) //useWallets hook will reset addresses into local storage as an empty array
-  // debugger;
+  const { wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
+  const [addresses] = useContext(WalletsContext)
+  const [signedIn, setSignedIn] = useState(false)
+
+  useEffect(() => {
+    if (addresses.length > 0) {
+      setSignedIn(true)
+      setWallet(addresses[0])
+    }
+  }, [addresses])
+
   return (
     <WalletView
       addresses={addresses}
-      activeWalletAddress={'faker'}
-      isSignedIn={false}
-      onConnectClick={myAlgoConnect}
+      activeWalletAddress={wallet}
+      isSignedIn={signedIn}
       onSetActiveWallet={setWallet}
       {...props}
     />
