@@ -198,7 +198,7 @@ function mapVolumeData(data, volUpColor, volDownColor) {
 
 function getBidAskSpread(orderBook, isStableAsset) {
   const { buyOrders, sellOrders } = orderBook
-
+  console.log('buyOrders: ', buyOrders)
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
   const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
 
@@ -206,11 +206,21 @@ function getBidAskSpread(orderBook, isStableAsset) {
   // const ask = floatToFixed(askPrice)
   // const spread = floatToFixed(new Big(ask).minus(bid).abs())
 
-  const bid = isStableAsset ? floatToFixed(1 / bidPrice) : floatToFixed(bidPrice)
-  const ask = isStableAsset ? floatToFixed(1 / askPrice) : floatToFixed(askPrice)
-  const spread = isStableAsset
-    ? floatToFixed(1 / new Big(ask).minus(bid).abs())
-    : floatToFixed(new Big(ask).minus(bid).abs())
+  let bid = floatToFixed(bidPrice)
+  let ask = floatToFixed(askPrice)
+  let spread = floatToFixed(new Big(ask).minus(bid).abs())
+
+  if (isStableAsset) {
+    bid = bidPrice === 0 ? 'Invalid Price' : floatToFixed(1 / bidPrice)
+    ask = askPrice === 0 ? 'Invalid Price' : floatToFixed(1 / askPrice)
+    if (bidPrice === 0 || bidPrice === 0 || bidPrice === askPrice) {
+      spread = 'Invalid Price'
+    } else {
+      console.log('ask: ', ask, 'bid: ', bid)
+      console.log('askPrice: ', askPrice, 'bidPrice: ', bidPrice)
+      spread = floatToFixed(1 / new Big(ask).minus(bid).abs())
+    }
+  }
 
   return { bid, ask, spread }
 }

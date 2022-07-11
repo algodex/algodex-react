@@ -316,8 +316,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
      * We can implement inversion of price in custom hook
      * But we can have more dynamic options here for some incidents
      * For example hide when price is 0, to prevent division by 0
+     * Compare using double equal operator instead of triple equal operator
+     * because the value is string value
      */
-    if (order.price === 0) {
+    console.log('Obj Price: ', order.price, typeof order.price, order.price == 0)
+    if (order.price == 0) {
       return result
     }
 
@@ -327,8 +330,14 @@ export function OrderBook({ isMobile, asset, orders, components }) {
 
     const _amount = order.amount
     const index = result.findIndex((obj) => {
+      /*
+       * Compare using double equal operator instead of triple equal operator
+       * because the value is string value
+       */
       let objPrice = asset.isStable
-        ? floatToFixedDynamic(1 / obj.price, selectedPrecision, selectedPrecision)
+        ? obj.price == 0
+          ? 'Invalid Price'
+          : floatToFixedDynamic(1 / obj.price, selectedPrecision, selectedPrecision)
         : floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision)
       return objPrice === _price
     })
