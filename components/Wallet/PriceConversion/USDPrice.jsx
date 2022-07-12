@@ -12,8 +12,8 @@ export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
 
 USDPrice.propTypes = {
   algoPrice: PropTypes.any,
-  priceToConvert: PropTypes.number,
-  asaWorth: PropTypes.number,
+  priceToConvert: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  asaWorth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   currency: PropTypes.string
 }
 

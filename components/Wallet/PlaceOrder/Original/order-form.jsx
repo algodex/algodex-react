@@ -29,7 +29,7 @@ export const USDInputPrice = ({ value, id }) => {
 }
 
 USDInputPrice.propTypes = {
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string
 }
 
