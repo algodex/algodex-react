@@ -1,4 +1,3 @@
-import { Button, Typography } from '@mui/material'
 import { mdiDiscord, mdiReddit, mdiSend, mdiTwitter } from '@mdi/js'
 
 import ButtonEl from 'components/Button'
@@ -6,6 +5,7 @@ import Icon from '@mdi/react'
 import Link from '@/components/Nav/Link'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import styled from '@emotion/styled'
 
 // export const Button = styled.Button`
