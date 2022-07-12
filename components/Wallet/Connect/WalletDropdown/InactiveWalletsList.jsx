@@ -23,12 +23,11 @@ const InactiveWalletsList = ({ walletsList }) => {
   const { wallet, setWallet } = useAlgodex()
   const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const { addresses } = useWallets()
-  console.log(wallet, addresses, 'wallet and addresses')
 
   // const { wallet } = useAlgodex()
   wallet
   // const { addresses } = useWallets()
-  console.log(addresses, 'addresses updated again')
+  // console.log(addresses, 'addresses updated again')
 
   const isWalletActive = (addr) => {
     return wallet.address === addr

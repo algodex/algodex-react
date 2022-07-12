@@ -1,13 +1,14 @@
-import ActiveWalletList from './ActiveWalletList'
-import Button from '@mui/material/Button'
-import InactiveWalletsList from './InactiveWalletsList'
+// import ActiveWalletList from './ActiveWalletList'
+// import Button from '@mui/material/Button'
+// import InactiveWalletsList from './InactiveWalletsList'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import theme from 'theme'
 import { useState } from 'react'
 // import { WalletContext } from '../../WalletContext'
 
-const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
+// const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
+const DropdownBody = ({ closeFn }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   return (
     <div
@@ -16,14 +17,19 @@ const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {(!activeWalletAddress || isConnectingAddress) && (
+      <WalletOptionsList
+        isConnectingAddress={isConnectingAddress}
+        setIsConnectingAddress={setIsConnectingAddress}
+        closeFn={closeFn}
+      />
+      {/* {(!activeWalletAddress || isConnectingAddress) && (
         <WalletOptionsList
           isConnectingAddress={isConnectingAddress}
           setIsConnectingAddress={setIsConnectingAddress}
           closeFn={closeFn}
         />
-      )}
-      {activeWalletAddress && !isConnectingAddress && (
+      )} */}
+      {/* {activeWalletAddress && !isConnectingAddress && (
         <>
           <ActiveWalletList wallet={sortedWalletsList?.activeWallet} />
           <InactiveWalletsList walletsList={sortedWalletsList?.inactiveWallet} />
@@ -38,7 +44,7 @@ const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
             CONNECT ANOTHER WALLET
           </Button>
         </>
-      )}
+      )} */}
     </div>
   )
 }

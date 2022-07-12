@@ -52,6 +52,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
     // Creating a ref that persists between renders gives us a way to automatically close out
     // modals only when a new address is added to the addresses array.
   }, [addresses])
+
   return (
     <>
       <Box
@@ -60,11 +61,13 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
           backgroundColor: theme.colors.gray['500']
         }}
       >
-        <Box className="flex justify-between">
+        <Box className="flex justify-between items-center">
           <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
           {isConnectingAddress && (
             <Button
-              className="cursor-pointer font-medium text-white"
+              className="cursor-pointer text-white"
+              variant="text"
+              size="small"
               onClick={() => setIsConnectingAddress(!isConnectingAddress)}
             >
               Go back

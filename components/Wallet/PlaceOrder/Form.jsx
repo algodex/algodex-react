@@ -1,19 +1,11 @@
-// import { darken, lighten } from 'polished'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-// import AdvancedOptions from './Form/AdvancedOptions'
 import AvailableBalance from './Form/AvailableBalance'
 import Box from '@mui/material/Box'
-// import Button from '@mui/material/Button'
 import { ButtonGroup } from '@mui/material'
-// import BuySellToggle from './Form/BuySellToggle'
-// import ExecutionToggle from '@/components/Wallet/PlaceOrder/Form/ExecutionToggle'
-// import InputAdornment from '@mui/material/InputAdornment'
 import { default as MaterialButton } from '@mui/material/Button'
-// import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
-// import Slider from '@/components/Input/Slider'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
@@ -22,7 +14,6 @@ import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-// import theme from '../../../theme'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
@@ -131,23 +122,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [asset]
   )
 
-  // const [order, setOrder] = useState({
-  //   type: 'buy',
-  //   price: 0,
-  //   amount: 0,
-  //   total: 0,
-  //   execution: 'both'
-  // })
-
-  // const [marketPrice, setMarketPrice] = useState()
-
-  // useEffect(() => {
-  //   if (order.execution === 'market') {
-  //     const mp = order.type === 'buy' ? sellOrders[sellOrders.length - 1] : buyOrders[0]
-  //     setMarketPrice(Number(mp.price))
-  //   }
-  // }, [order])
-
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
       setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
@@ -166,14 +140,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
     return res
   }, [wallet, asset])
-
-  // const algoBalance = useMemo(() => {
-  //   let res = 0
-  //   if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-  //     res = fromBaseUnits(wallet.amount)
-  //   }
-  //   return res
-  // }, [wallet])
 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
@@ -236,23 +202,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
   }, [order, asset])
 
-  // const handleSlider = useCallback(
-  //   (e, value) => {
-  //     let _price = order.price || 0
-  //     let _balance = order.type === 'sell' ? assetBalance : algoBalance
-  //     let _percent = (value / 100) * _balance
-  //     const _amount = order.type === 'sell' ? _percent : _percent / _price
-
-  //     if (order.amount !== _amount) {
-  //       setOrder({
-  //         ...order,
-  //         amount: _amount
-  //       })
-  //     }
-  //   },
-  //   [order]
-  // )
-  // const disableSlider = order.price === 0
   const handleChange = useCallback(
     (e, _key, _value) => {
       const key = _key || e.target.name
@@ -339,36 +288,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       execution: tabId === 0 ? 'both' : 'market'
     })
   }
-
-  // const handleSubmit = useCallback(
-  //   (e) => {
-  //     e.preventDefault()
-  //     let orderPromise
-  //     if (typeof onSubmit === 'function') {
-  //       orderPromise = onSubmit({
-  //         ...order,
-  //         wallet,
-  //         asset
-  //       })
-  //     } else {
-  //       orderPromise = placeOrder({
-  //         ...order,
-  //         wallet,
-  //         asset
-  //       })
-  //     }
-  //     // TODO add events
-  //     toast.promise(orderPromise, {
-  //       loading: t('awaiting-confirmation'),
-  //       success: t('order-success'),
-  //       error: (err) => {
-  //         if (/PopupOpenError|blocked/.test(err)) {
-  //           return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-  //         }
-
-  // if (/Operation cancelled/i.test(err)) {
-  //   return t('order-cancelled')
-  // }
 
   if (typeof wallet === 'undefined' || isLoading || isError) {
     return <Spinner />
