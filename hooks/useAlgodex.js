@@ -198,7 +198,6 @@ function mapVolumeData(data, volUpColor, volDownColor) {
 
 function getBidAskSpread(orderBook, isStableAsset) {
   const { buyOrders, sellOrders } = orderBook
-  console.log('buyOrders: ', buyOrders)
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
   const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
 

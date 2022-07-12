@@ -370,12 +370,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    /***
-     * Use index variable to be used as key in <BookRow>
-     * When it use the price as the key for stable coin sometimes there might be duplicated same prices divided by 1
-     *  */
-
-    return data.map((row, index) => {
+    return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
 
@@ -393,7 +388,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
       return (
         <BookRow
           onClick={handleSelectOrder}
-          key={`sell-${index}-${row.price}`}
+          key={`sell-${row.price}`}
           type={type}
           data-testid={`order-book-${type}-row`}
         >
