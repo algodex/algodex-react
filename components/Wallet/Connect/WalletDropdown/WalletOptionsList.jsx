@@ -28,12 +28,15 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
     if (!addressesRef.current) {
       // Initialize the ref after first checking to see what is in localStorage
       const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-      if (Array.isArray(storedAddrs)) {
+      if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
         setAddresses(storedAddrs)
       }
       addressesRef.current = addresses
     }
 
+    if (JSON.parse(localStorage.getItem('addresses')).length === 0 && addresses.length > 0) {
+      localStorage.setItem('addresses', JSON.stringify(addresses))
+    }
     const walletDifference = _.difference(
       addresses.map((addr) => addr.address),
       addressesRef.current.map((addr) => addr.address)

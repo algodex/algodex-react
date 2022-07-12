@@ -10,7 +10,8 @@ import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseU
 import { truncatedWalletAddress } from '@/components/helpers'
 import useTranslation from 'next-translate/useTranslation'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useRef } from 'react'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 
 // import useWallets from '@/hooks/useWallets'
 
@@ -164,11 +165,26 @@ const WalletRow = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWalletAddress, isSignedIn, addresses, onSetActiveWallet } = props
+  const { activeWalletAddress, isSignedIn, addresses, onSetActiveWallet, setAddresses } = props
 
   const { t } = useTranslation('wallet')
 
-  const { peraConnect, myAlgoConnect } = useWallets()
+  const { peraConnect } = useWallets()
+  const myAlgoConnector = useRef(null)
+
+  const myAlgoConnect = () => {
+    const mappedAddresses = addresses.map((addr) => {
+      if (addr.type === 'my-algo-wallet') {
+        return {
+          ...addr,
+          connector: myAlgoConnector.current
+        }
+      } else {
+        return addr
+      }
+    })
+    setAddresses(mappedAddresses)
+  }
 
   const walletReconnectorMap = {
     'my-algo-wallet': myAlgoConnect,
@@ -190,6 +206,18 @@ export function WalletView(props) {
   const handleWalletClick = async (addr) => {
     !isWalletActive(addr) && onSetActiveWallet(addr)
   }
+
+  useEffect(() => {
+    const reConnectMyAlgoWallet = async () => {
+      // '@randlabs/myalgo-connect' is imported dynamically
+      // because it uses the window object
+      const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+      MyAlgoConnect.prototype.sign = signer
+      myAlgoConnector.current = new MyAlgoConnect()
+      myAlgoConnector.current.connected = true
+    }
+    reConnectMyAlgoWallet()
+  }, [])
 
   useEffect(() => {
     if (
@@ -304,6 +332,7 @@ export function WalletView(props) {
 
 WalletView.propTypes = {
   addresses: PropTypes.array.isRequired,
+  setAddresses: PropTypes.func.isRequired,
   activeWalletAddress: PropTypes.string,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
@@ -323,7 +352,7 @@ WalletView.defaultProps = {
  */
 function WalletConnect(props) {
   const { wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
-  const [addresses] = useContext(WalletsContext)
+  const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
 
   useEffect(() => {
@@ -336,6 +365,7 @@ function WalletConnect(props) {
   return (
     <WalletView
       addresses={addresses}
+      setAddresses={setAddresses}
       activeWalletAddress={wallet}
       isSignedIn={signedIn}
       onSetActiveWallet={setWallet}
