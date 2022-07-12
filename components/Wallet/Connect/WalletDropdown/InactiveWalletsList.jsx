@@ -9,6 +9,7 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { find } from 'lodash'
 import theme from 'theme'
+import { useEffect } from 'react'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 // import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
@@ -19,8 +20,15 @@ import useUserStore from 'store/use-user-state'
 
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  const { wallet, setWallet, addresses } = useAlgodex()
+  const { wallet, setWallet } = useAlgodex()
   const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
+  const { addresses } = useWallets()
+  console.log(wallet, addresses, 'wallet and addresses')
+
+  // const { wallet } = useAlgodex()
+  wallet
+  // const { addresses } = useWallets()
+  console.log(addresses, 'addresses updated again')
 
   const isWalletActive = (addr) => {
     return wallet.address === addr
@@ -32,6 +40,10 @@ const InactiveWalletsList = ({ walletsList }) => {
       setWallet(_wallet, { validate: false, merge: true })
     }
   }
+
+  useEffect(() => {
+    console.log(addresses, 'hello')
+  }, [addresses])
 
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': myAlgoDisconnect,

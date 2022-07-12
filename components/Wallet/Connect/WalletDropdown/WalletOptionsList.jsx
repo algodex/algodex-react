@@ -14,7 +14,6 @@ import theme from 'theme'
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
   const { peraConnect, myAlgoConnect } = useWallets()
   const [addresses, setAddresses] = useContext(WalletsContext)
-
   const addressesRef = useRef(null)
 
   const WALLETS_CONNECT_MAP = {
