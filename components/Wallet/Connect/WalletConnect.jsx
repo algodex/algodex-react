@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import SvgImage from 'components/SvgImage'
+// import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
@@ -52,11 +52,11 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
-const Arrow = styled.div`
-  position: absolute;
-  top: 0.5rem;
-  left: 0.375rem;
-`
+// const Arrow = styled.div`
+//   position: absolute;
+//   top: 0.5rem;
+//   left: 0.375rem;
+// `
 
 const Header = styled.header`
   flex-shrink: 0%;
