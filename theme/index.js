@@ -491,6 +491,22 @@ const theme = {
     MuiButton: {
       variants: [
         {
+          props: { variant: 'tertiary' },
+          style: {
+            color: colors.gray['900'],
+            border: '1px solid transparent',
+            backgroundColor: colors.gray['000'],
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.gray['100'])
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 700,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
           props: { variant: 'primary' },
           style: {
             color: colors.gray['000'],
