@@ -319,7 +319,6 @@ export function OrderBook({ isMobile, asset, orders, components }) {
      * Compare using double equal operator instead of triple equal operator
      * because the value is string value
      */
-    console.log('Obj Price: ', order.price, typeof order.price, order.price == 0)
     if (order.price == 0) {
       return result
     }
@@ -334,12 +333,12 @@ export function OrderBook({ isMobile, asset, orders, components }) {
        * Compare using double equal operator instead of triple equal operator
        * because the value is string value
        */
-      let objPrice = asset.isStable
-        ? obj.price == 0
-          ? 'Invalid Price'
-          : floatToFixedDynamic(1 / obj.price, selectedPrecision, selectedPrecision)
-        : floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision)
-      return objPrice === _price
+      // let objPrice = asset.isStable
+      //   ? obj.price == 0
+      //     ? 'Invalid Price'
+      //     : floatToFixedDynamic(1 / obj.price, selectedPrecision, selectedPrecision)
+      //   : floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision)
+      return obj.price === order.price
     })
 
     if (index !== -1) {
@@ -380,7 +379,12 @@ export function OrderBook({ isMobile, asset, orders, components }) {
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    return data.map((row) => {
+    /***
+     * Use index variable to be used as key in <BookRow>
+     * When it use the price as the key for stable coin sometimes there might be duplicated same prices divided by 1
+     *  */
+
+    return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
 
@@ -398,7 +402,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
       return (
         <BookRow
           onClick={handleSelectOrder}
-          key={`sell-${row.price}`}
+          key={`sell-${index}-${row.price}`}
           type={type}
           data-testid={`order-book-${type}-row`}
         >

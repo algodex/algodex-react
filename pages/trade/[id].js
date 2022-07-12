@@ -74,8 +74,6 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.price_info = staticAssetPrice
   }
 
-  console.log('Page StableAssets: ', StableAssets)
-  console.log('Page isStable: ', id, StableAssets.includes(parseInt(id)))
   staticExplorerAsset.isStable = StableAssets.includes(parseInt(id))
 
   return {
