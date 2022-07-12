@@ -328,18 +328,9 @@ export function OrderBook({ isMobile, asset, orders, components }) {
       : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     const _amount = order.amount
-    const index = result.findIndex((obj) => {
-      /*
-       * Compare using double equal operator instead of triple equal operator
-       * because the value is string value
-       */
-      // let objPrice = asset.isStable
-      //   ? obj.price == 0
-      //     ? 'Invalid Price'
-      //     : floatToFixedDynamic(1 / obj.price, selectedPrecision, selectedPrecision)
-      //   : floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision)
-      return obj.price === order.price
-    })
+    const index = result.findIndex(
+      (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
+    )
 
     if (index !== -1) {
       result[index].amount += _amount
