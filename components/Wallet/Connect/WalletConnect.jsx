@@ -1,13 +1,17 @@
+import { useContext, useEffect, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
+
+import { Box } from '@mui/material'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import SvgImage from 'components/SvgImage'
+// import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
+import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { truncatedWalletAddress } from '@/components/helpers'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { useState, useContext, useEffect, useRef } from 'react'
@@ -21,7 +25,7 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
-  padding: 0.875rem 0 1rem;
+  padding: 0rem 0 1rem;
 `
 
 // const ButtonContainer = styled.div`
@@ -51,11 +55,11 @@ const gridStyles = `
   column-gap: 0.25rem;
 `
 
-const Arrow = styled.div`
-  position: absolute;
-  top: 0.5rem;
-  left: 0.375rem;
-`
+// const Arrow = styled.div`
+//   position: absolute;
+//   top: 0.5rem;
+//   left: 0.375rem;
+// `
 
 const Header = styled.header`
   flex-shrink: 0%;
@@ -96,7 +100,7 @@ const WalletsWrapper = styled.div`
   right: 0;
 `
 
-const Balance = styled.p`
+const Balance = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -196,7 +200,7 @@ export function WalletView(props) {
   // }
 
   const isWalletActive = (addr) => {
-    return activeWalletAddress?.address === addr.address
+    return activeWalletAddress?.address === addr
   }
 
   const isTabbable = (addr) => {
@@ -258,11 +262,15 @@ export function WalletView(props) {
 
     return (
       <Balance>
-        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-        <Typography fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </Typography>
+        <Box mr={0.5} mt={0.4}>
+          <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
+        </Box>
+        <Box>
+          <Typography variant="body_small" fontWeight="bold">{`${split[0]}.`}</Typography>
+          <Typography variant="body_small" fontWeight="bold">
+            {split[1]}
+          </Typography>
+        </Box>
       </Balance>
     )
   }
@@ -277,16 +285,19 @@ export function WalletView(props) {
         onClick={() => handleWalletClick(wallet)}
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
-        <Typography fontWeight="500" title={wallet.address}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Icon
-            color="gray"
             fillGradient="000"
             onClick={() => copyAddress(wallet.address)}
             use="wallet"
             size={0.75}
           />
-          {truncatedWalletAddress(wallet.address, 4)}
-        </Typography>
+          &nbsp;
+          <Typography variant="body_small" fontWeight="bold" title={wallet.address}>
+            {truncatedWalletAddress(wallet.address, 4)}
+          </Typography>
+        </Box>
+
         {renderBalance(convertFromBaseUnits(wallet.amount))}
       </WalletRow>
     ))
@@ -303,8 +314,23 @@ export function WalletView(props) {
         {isSignedIn ? (
           <>
             <Header>
-              <Typography color="gray.500">{t('wallet')}</Typography>
-              <Typography color="gray.500" textAlign="right">
+              <Typography
+                sx={{
+                  textTransform: 'uppercase'
+                }}
+                variant="body_tiny"
+                color="gray.500"
+              >
+                {t('wallet')}
+              </Typography>
+              <Typography
+                sx={{
+                  textTransform: 'uppercase'
+                }}
+                variant="body_tiny"
+                color="gray.500"
+                textAlign="right"
+              >
                 {t('balance')}
               </Typography>
             </Header>
@@ -314,9 +340,9 @@ export function WalletView(props) {
           </>
         ) : (
           <EmptyState p={3}>
-            <Arrow>
+            {/* <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
-            </Arrow>
+            </Arrow> */}
             <Typography variant="h5" color="gray.100" m={0} mb={4}>
               {t('start-by')}
             </Typography>

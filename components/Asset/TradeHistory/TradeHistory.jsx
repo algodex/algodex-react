@@ -174,7 +174,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <Typography variant="subtitle_medium_cap" color="gray.500" mb={1}>
+        <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
           {t('trade-history')}
         </Typography>
         <Header>
@@ -191,7 +191,13 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <Typography variant="body_tiny" color="gray.600" textAlign="center" m={4}>
+              <Typography
+                variant="body_tiny_cap"
+                className="flex items-center justify-center"
+                color="gray.600"
+                textAlign="center"
+                m={4}
+              >
                 {t('no-trades-completed')}
               </Typography>
             )}

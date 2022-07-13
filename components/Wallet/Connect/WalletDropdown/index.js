@@ -8,6 +8,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useMemo } from 'react'
+import useWallets from '@/hooks/useWallets'
 
 const styleReset = css`
   margin: 0;
@@ -34,7 +35,8 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const { addresses, wallet } = useAlgodex()
+  const { wallet } = useAlgodex()
+  const { addresses } = useWallets()
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)

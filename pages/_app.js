@@ -6,29 +6,33 @@ import { CacheProvider, Global, css } from '@emotion/react'
 // React Query
 import { QueryClient, QueryClientProvider } from 'react-query'
 
+import AlgodexApi from '@algodex/algodex-sdk'
 import CssBaseline from '@mui/material/CssBaseline'
 import { EventEmitter } from '@/hooks/useEvents'
 import Head from 'next/head'
 import { Hydrate } from 'react-query/hydration'
+import NextApp from 'next/app'
 import PropTypes from 'prop-types'
+import { Provider } from '@algodex/algodex-hooks'
 // Algodex
 import ReactGA from 'react-ga'
 import { ReactQueryDevtools } from 'react-query/devtools'
 // Material UI
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
+import { WalletsProvider } from '@/hooks/useWallets'
+// import AlgodexApi from '@algodex/algodex-sdk'
+// import { Provider } from '@algodex/algodex-hooks'
+import config from '@/config.json'
+// import AlgodexApi from '@algodex/algodex-sdk'
+// import { Provider } from '@algodex/algodex-hooks'
 import createEmotionCache from '@/utils/createEmotionCache'
+import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
-import AlgodexApi from '@algodex/algodex-sdk'
-import { Provider } from '@algodex/algodex-hooks'
-import config from '@/config.json'
-import NextApp from 'next/app'
-import parser from 'ua-parser-js'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
-import { WalletsProvider } from '@/hooks/useWallets'
 let api
 
 /**

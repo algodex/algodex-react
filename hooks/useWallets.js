@@ -1,10 +1,11 @@
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+
+import PropTypes from 'prop-types'
+import events from '@algodex/algodex-sdk/lib/events'
+import { isEqual } from 'lodash/lang'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { isEqual } from 'lodash/lang'
-import events from '@algodex/algodex-sdk/lib/events'
-import PropTypes from 'prop-types'
 /**
  *
  * @param {Array<Wallet>} a
@@ -58,7 +59,6 @@ function useWallets(initialState) {
     },
     [setWallet, wallet]
   )
-
   useEffect(() => {
     events.on('wallet', onEvents)
     return () => {

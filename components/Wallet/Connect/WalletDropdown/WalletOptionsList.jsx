@@ -1,15 +1,19 @@
+import { Box, Typography } from '@mui/material'
+import { useContext, useEffect, useRef } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
+
+import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
-import Typography from '@mui/material/Typography'
+import { difference } from 'lodash'
 import theme from 'theme'
-import { useEffect, useRef, useContext } from 'react'
-import _ from 'lodash'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+
+// import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
+// import useWalletConnect from '@/hooks/useWalletConnect'
 
 const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
   const { peraConnect, myAlgoConnect } = useWallets()
   const [addresses, setAddresses] = useContext(WalletsContext)
-
   const addressesRef = useRef(null)
 
   const WALLETS_CONNECT_MAP = {
@@ -51,27 +55,30 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
     // Creating a ref that persists between renders gives us a way to automatically close out
     // modals only when a new address is added to the addresses array.
   }, [addresses])
+
   return (
     <>
-      <div
+      <Box
         className="text-xs text-white rounded p-2"
         style={{
           backgroundColor: theme.colors.gray['500']
         }}
       >
-        <div className="flex justify-between">
+        <Box className="flex justify-between items-center">
           <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
           {isConnectingAddress && (
-            <button
-              className="cursor-pointer font-medium text-white"
+            <Button
+              className="cursor-pointer text-white"
+              variant="text"
+              size="small"
               onClick={() => setIsConnectingAddress(!isConnectingAddress)}
             >
               Go back
-            </button>
+            </Button>
           )}
-        </div>
-        <div className="mt-4 ml-4">
-          <div
+        </Box>
+        <Box className="mt-4 ml-4">
+          <Box
             role="button"
             tabIndex="0"
             className="cursor-pointer flex items-center mb-2"
@@ -87,8 +94,8 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
             <Typography className="underline ml-2" variant="body_small_bold">
               Algorand Mobile Wallet
             </Typography>
-          </div>
-          <div
+          </Box>
+          <Box
             className="cursor-pointer flex items-center mb-2"
             role="button"
             tabIndex="0"
@@ -99,9 +106,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
             <Typography className="underline ml-2" variant="body_small_bold">
               My Algo Wallet
             </Typography>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     </>
   )
 }

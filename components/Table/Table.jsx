@@ -145,7 +145,13 @@ const Container = styled.div`
 // height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 126}px`};
 export function DefaultCell({ value }) {
   return (
-    <Typography className="cursor-default" title={value} data-testid="default-cell">
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={value}
+      data-testid="default-cell"
+    >
       {value}
     </Typography>
   )

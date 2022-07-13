@@ -1,9 +1,5 @@
 import { createTheme } from '@mui/material/styles'
 import { lighten } from 'polished'
-import { experimental_sx as sx } from '@mui/material/styles'
-/**
- * Design System Name: Lucid 0.0.1
- */
 
 const colors = {
   white: '#FFFFFF',
@@ -17,8 +13,7 @@ const colors = {
     600: '#2668c0',
     700: '#225daa',
     800: '#1d5195',
-    900: '#194680',
-    1000: '#A698B5'
+    900: '#194680'
   },
   amber: {
     '000': '#FFC30D',
@@ -49,7 +44,6 @@ const colors = {
     100: '#EDF2F6',
     200: '#E2E8F0',
     300: '#CBD5E0',
-    350: '#6A727D',
     400: '#A1AEC0',
     500: '#718096',
     600: '#4A5568',
@@ -95,124 +89,6 @@ const fontSizes = [
 
 // const breakpoints = ['40em', '48em']
 
-// const textStyles = {
-//   title: {
-//     as: 'h1',
-//     fontFamily: fontFamilies.heading,
-//     fontSize: [fontSizes[7], fontSizes[8], fontSizes[9]],
-//     fontWeight: 700,
-//     lineHeight: '0.9',
-//     letterSpacing: '-0.04em'
-//   },
-//   headerLg: {
-//     as: 'h2',
-//     fontFamily: fontFamilies.heading,
-//     fontSize: [fontSizes[5], fontSizes[6], fontSizes[7]],
-//     fontWeight: 700,
-//     lineHeight: ['2rem', '2.25rem', '2.5rem'],
-//     letterSpacing: '-0.03em'
-//   },
-//   headerSm: {
-//     as: 'h3',
-//     fontFamily: fontFamilies.heading,
-//     fontSize: [fontSizes[5], fontSizes[4], fontSizes[5]],
-//     fontWeight: 700,
-//     lineHeight: ['1.75rem', '1.75rem', '2rem'],
-//     letterSpacing: '-0.02em'
-//   },
-//   headerCaps: {
-//     as: 'h3',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[3],
-//     fontWeight: 700,
-//     lineHeight: '1.25rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.12em'
-//   },
-//   subtitle: {
-//     as: 'p',
-//     fontFamily: fontFamilies.body,
-//     fontSize: [fontSizes[4], fontSizes[4], fontSizes[5]],
-//     fontWeight: 500,
-//     lineHeight: ['1.75rem', '1.75rem', '2rem']
-//   },
-//   bodyCopyLg: {
-//     as: 'p',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[4],
-//     fontWeight: 500,
-//     lineHeight: '1.75rem'
-//   },
-//   bodyCopy: {
-//     as: 'p',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[3],
-//     fontWeight: 500,
-//     lineHeight: '1.5rem'
-//   },
-//   bodyCopySm: {
-//     as: 'p',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[2],
-//     fontWeight: 500,
-//     lineHeight: '1.25rem'
-//   },
-//   bodyCopyTiny: {
-//     as: 'p',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[0],
-//     fontWeight: 400,
-//     lineHeight: '1rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.04em'
-//   },
-//   preTitle: {
-//     as: 'h2',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[2],
-//     fontWeight: 700,
-//     lineHeight: '1.25rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.025em'
-//   },
-//   labelLg: {
-//     as: 'span',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[2],
-//     fontWeight: 700,
-//     lineHeight: '1.25rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.025em'
-//   },
-//   labelMd: {
-//     as: 'span',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[1],
-//     fontWeight: 700,
-//     lineHeight: '1.125rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.05em'
-//   },
-//   labelSm: {
-//     as: 'span',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[0],
-//     fontWeight: 700,
-//     lineHeight: '1rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.04em'
-//   },
-//   navLabel: {
-//     as: 'li',
-//     fontFamily: fontFamilies.body,
-//     fontSize: fontSizes[1],
-//     fontWeight: 600,
-//     lineHeight: '1.125rem',
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.2em'
-//   }
-// }
-
 export const buttons = {
   primary: {
     color: colors.gray['000'],
@@ -228,14 +104,6 @@ export const buttons = {
     backgroundColor: colors.gray['600'],
     '&:hover': {
       backgroundColor: lighten(0.05, colors.gray['600'])
-    }
-  },
-  third: {
-    color: colors.gray['000'],
-    border: '1px solid transparent',
-    backgroundColor: colors.gray['600'],
-    '&:hover': {
-      backgroundColor: lighten(0.05, colors.blue['1000'])
     }
   },
   danger: {
@@ -282,12 +150,6 @@ const theme = {
     h3: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[7],
-      [muiTheme.breakpoints.up('xs')]: {
-        fontSize: fontSizes[5]
-      },
-      [muiTheme.breakpoints.up('md')]: {
-        fontSize: fontSizes[7]
-      },
       fontWeight: 700,
       lineHeight: '1.25rem',
       letterSpacing: '0.025em'
@@ -308,11 +170,12 @@ const theme = {
     },
     h6: {
       fontFamily: fontFamilies.heading,
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: fontSizes[4],
       lineHeight: 1.6,
       letterSpacing: '0.0075em'
     },
+
     // Subtitles
     subtitle: {
       fontFamily: fontFamilies.body,
@@ -335,14 +198,8 @@ const theme = {
       fontSize: fontSizes[3],
       lineHeight: 1.57
     },
-    subtitle_medium_bold: {
-      fontFamily: fontFamilies.body,
-      fontWeight: 700,
-      fontSize: fontSizes[3],
-      lineHeight: 1.75,
-      letterSpacing: '0.1em'
-    },
-    subtitle_medium_cap_bold: {
+    subtitle_large: {},
+    subtitle_medium_cap: {
       fontFamily: fontFamilies.body,
       fontWeight: 700,
       fontSize: fontSizes[3],
@@ -350,7 +207,6 @@ const theme = {
       letterSpacing: '0.1em',
       textTransform: 'uppercase'
     },
-    subtitle_large: {},
 
     // Body
     body: {
@@ -359,58 +215,34 @@ const theme = {
       lineHeight: '0.9',
       letterSpacing: '-0.04em'
     },
-    body_tiny: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[0],
-      fontWeight: 400,
-      letterSpacing: '0.03em'
-    },
+    body_tiny: {},
     body_tiny_bold: {
       fontFamily: fontFamilies.body,
-      fontSize: fontSizes[0],
+      fontSize: fontSizes[1],
       fontWeight: 700,
       lineHeight: '1.5rem',
       letterSpacing: '0.03em'
-    },
-    body_tiny_cap_bold: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[0],
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      lineHeight: '1.5rem',
-      letterSpacing: '0.03em'
-    },
-    body_tiny_cap: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[0],
-      fontWeight: 400,
-      textTransform: 'uppercase'
     },
     body_small: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
-      fontWeight: 500,
-      lineHeight: '1.5'
-    },
-    body_small_medium: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[1],
-      fontWeight: 500
-    },
-    body_small_cap_medium: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[1],
-      fontWeight: 500,
-      textTransform: 'uppercase',
-      lineHeight: '1.5rem',
-      letterSpacing: '0.05em'
+      fontWeight: 400,
+      lineHeight: '1.5rem'
     },
     body_small_bold: {
       fontFamily: fontFamilies.body,
       fontSize: fontSizes[1],
       fontWeight: 700,
       lineHeight: '1.5rem',
-      letterSpacing: '0.05em'
+      letterSpacing: '0.03em'
+    },
+    body_small_cap: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 400,
+      lineHeight: '1.5rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.03em'
     },
     body_small_cap_bold: {
       fontFamily: fontFamilies.body,
@@ -418,7 +250,7 @@ const theme = {
       fontWeight: 700,
       lineHeight: '1.5rem',
       textTransform: 'uppercase',
-      letterSpacing: '0.05em'
+      letterSpacing: '0.03em'
     },
     body_medium: {},
     body_large: {},
@@ -444,16 +276,7 @@ const theme = {
     },
 
     // Labels
-    label_regular: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[2],
-      fontWeight: 400
-    },
-    label_regular_bold: {
-      fontFamily: fontFamilies.body,
-      fontSize: fontSizes[2],
-      fontWeight: 700
-    },
+    label_regular: {},
     label_tiny: {},
     label_medium: {},
     label_large: {},
@@ -470,42 +293,19 @@ const theme = {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,
       [muiTheme.breakpoints.up('xs')]: {
-        fontSize: fontSizes[0]
+        fontSize: '0.1rem'
       },
-      // [muiTheme.breakpoints.up('md')]: {
-      //   fontSize: '0.625rem'
-      // },
+      [muiTheme.breakpoints.up('md')]: {
+        fontSize: '0.625rem'
+      },
       lineHeight: '1rem',
       letterSpacing: '0.04em',
       textTransform: 'uppercase'
     }
   },
   components: {
-    MuiTypography: {
-      styleOverrides: {
-        root: sx({
-          lineHeight: '1rem'
-        })
-      }
-    },
     MuiButton: {
       variants: [
-        {
-          props: { variant: 'tertiary' },
-          style: {
-            color: colors.gray['900'],
-            border: '1px solid transparent',
-            backgroundColor: colors.gray['000'],
-            '&:hover': {
-              backgroundColor: lighten(0.05, colors.gray['100'])
-            },
-            textTransform: 'uppercase',
-            fontFamily: fontFamilies.body,
-            fontWeight: 700,
-            fontSize: fontSizes[2],
-            letterSpacing: '0.05em'
-          }
-        },
         {
           props: { variant: 'primary' },
           style: {
@@ -527,28 +327,9 @@ const theme = {
           style: {
             color: colors.gray['000'],
             border: '1px solid transparent',
-            backgroundColor: colors.gray['700'],
+            backgroundColor: colors.gray['600'],
             '&:hover': {
-              backgroundColor: lighten(0.05, colors.gray['700'])
-            },
-            textTransform: 'uppercase',
-            fontFamily: fontFamilies.body,
-            fontWeight: 600,
-            fontSize: fontSizes[2],
-            letterSpacing: '0.05em'
-          }
-        },
-        {
-          props: { variant: 'sell' },
-          style: {
-            color: colors.gray['000'],
-            border: '1px solid transparent',
-            backgroundColor: colors.red['500'],
-            '&:hover': {
-              backgroundColor: lighten(0.05, colors.red['500'])
-            },
-            '&:disabled': {
-              color: '#fff'
+              backgroundColor: lighten(0.05, colors.gray['600'])
             },
             textTransform: 'uppercase',
             fontFamily: fontFamilies.body,
@@ -557,12 +338,7 @@ const theme = {
             letterSpacing: '0.05em'
           }
         }
-      ],
-      styleOverrides: ({ ownerState }) => ({
-        ...(ownerState.size === 'small' && {
-          height: '2rem'
-        })
-      })
+      ]
     }
   },
   palette: {
@@ -580,13 +356,13 @@ const theme = {
       contrastText: 'white'
     },
     buy: {
-      main: colors.green['500'],
+      main: colors.green['600'],
       light: colors.green['400'],
       dark: colors.green['900'],
       contrastText: 'white'
     },
     sell: {
-      main: colors.red['500'],
+      main: colors.red['600'],
       light: colors.red['400'],
       dark: colors.red['900'],
       contrastText: 'white'

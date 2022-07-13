@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 
 const DropdownFooter = () => {
   return (
-    <div className="p-4">
+    <Box className="p-4">
       <Typography variant="body_small_bold" color="gray.000">
         New to Algorand
       </Typography>
@@ -11,7 +11,7 @@ const DropdownFooter = () => {
       <Typography variant="body_small_bold" color="gray.000" className="underline mt-1">
         Learn More About Algorand Wallets
       </Typography>
-    </div>
+    </Box>
   )
 }
 
