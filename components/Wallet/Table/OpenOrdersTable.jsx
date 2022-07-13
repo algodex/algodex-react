@@ -91,6 +91,8 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
+        const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
+
         const cancelOrderPromise = closeOrder({
           address: ownerAddress,
           version,
@@ -102,7 +104,11 @@ export function OpenOrdersTable({ orders: _orders }) {
           type: cellData.type.toLowerCase(),
           appId,
           contract: {
-            creator: ownerAddress
+            creator: ownerAddress,
+            escrow: cellData.metadata.escrowAddress,
+            N: cellData.metadata.assetLimitPriceN,
+            D: cellData.metadata.assetLimitPriceD,
+            entry: orderbookEntry
           },
           wallet
         })
