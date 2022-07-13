@@ -103,7 +103,6 @@ function AmountRange(props) {
         value={value || 0}
         marks={marks}
         defaultValue={0}
-        orderType={order.type}
         max={100}
       />
     </Container>
