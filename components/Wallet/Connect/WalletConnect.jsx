@@ -1,6 +1,3 @@
-import { useContext, useEffect, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
-
 import { Box } from '@mui/material'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
