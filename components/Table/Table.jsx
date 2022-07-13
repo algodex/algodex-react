@@ -42,14 +42,14 @@ const Container = styled.div`
         // cursor: pointer;
       }
 
-      &:nth-child(odd) {
+      &:nth-of-type(odd) {
         td {
           background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.01)};
         }
       }
 
-      &:nth-child(odd),
-      &:nth-child(even) {
+      &:nth-of-type(odd),
+      &:nth-of-type(even) {
         &:hover {
           td {
             background-color: ${({ theme }) => rgba(theme.palette.gray['000'], 0.04)};
@@ -66,7 +66,7 @@ const Container = styled.div`
       font-size: 0.75rem;
       line-height: 1.25;
 
-      &:first-child {
+      &:first-of-type {
         padding-left: 1.125rem;
         box-sizing: border-box;
         flex: 45 0 auto;

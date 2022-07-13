@@ -154,7 +154,7 @@ const BookRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
