@@ -166,10 +166,16 @@ const WalletRow = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWalletAddress, isSignedIn, addresses, onSetActiveWallet, setAddresses } = props
+  const {
+    activeWalletAddress,
+    isSignedIn,
+    addresses,
+    onSetActiveWallet,
+    setAddresses,
+    isConnected
+  } = props
 
   const { t } = useTranslation('wallet')
-
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
 
@@ -208,6 +214,15 @@ export function WalletView(props) {
     !isWalletActive(addr) && onSetActiveWallet(addr)
   }
 
+  // const removeWalletConnect =
+  //   typeof activeWalletAddress !== 'undefined' && //activeWallet exists &
+  //   !activeWalletAddress.connector.isConnected && //is not connected &
+  //   activeWalletAddress.type === 'wallet-connect' // is type wallet connect
+
+  const rehyrdateWallet =
+    typeof activeWalletAddress !== 'undefined' && //activeWallet exists &
+    typeof activeWalletAddress?.connector?.sign === 'undefined' // does not have a signing method
+
   useEffect(() => {
     const reConnectMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
@@ -221,10 +236,23 @@ export function WalletView(props) {
   }, [])
 
   useEffect(() => {
-    if (
-      typeof activeWalletAddress !== 'undefined' &&
-      typeof activeWalletAddress?.connector?.sign === 'undefined'
-    ) {
+    if (!isConnected && typeof activeWalletAddress !== 'undefined') {
+      const cachedAddresses = JSON.parse(localStorage.getItem('addresses'))
+      if (
+        Array.isArray(cachedAddresses) &&
+        cachedAddresses.map((addr) => addr.address).includes(activeWalletAddress?.address)
+      ) {
+        const addressesToCache = cachedAddresses.filter(
+          (addr) => addr.address !== activeWalletAddress?.address
+        )
+        localStorage.setItem('addresses', JSON.stringify(addressesToCache))
+        setAddresses(addressesToCache)
+      }
+    }
+  }, [isConnected])
+
+  useEffect(() => {
+    if (rehyrdateWallet) {
       walletReconnectorMap[activeWalletAddress.type]()
     }
   }, [activeWalletAddress])
@@ -357,6 +385,7 @@ WalletView.propTypes = {
   addresses: PropTypes.array.isRequired,
   setAddresses: PropTypes.func.isRequired,
   activeWalletAddress: PropTypes.string,
+  isConnected: PropTypes.bool,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
   onSetActiveWallet: PropTypes.func.isRequired,
@@ -374,7 +403,7 @@ WalletView.defaultProps = {
  * @constructor
  */
 function WalletConnect(props) {
-  const { wallet, setWallet } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
+  const { wallet, setWallet, isConnected } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
 
@@ -388,6 +417,7 @@ function WalletConnect(props) {
   return (
     <WalletView
       addresses={addresses}
+      isConnected={isConnected}
       setAddresses={setAddresses}
       activeWalletAddress={wallet}
       isSignedIn={signedIn}
