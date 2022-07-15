@@ -7,7 +7,8 @@ import {
   fetchWalletAssets,
   fetchWalletOrders,
   fetchWalletTradeHistory,
-  searchAssets
+  searchAssets,
+  fetchCurrentAssetPrices
 } from '@/services/algodex'
 import {
   getAssetTotalStatus,
@@ -662,4 +663,8 @@ export function useWalletsQuery({
   }
 }) {
   return useQuery('wallets', () => WalletService.fetchWallets(wallets), options)
+}
+
+export function useCurrentAssetPricesQuery({ options = {} }) {
+  return useQuery(['currentAssetPrices'], () => fetchCurrentAssetPrices(), options)
 }
