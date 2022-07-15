@@ -9,7 +9,13 @@ import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
 export function OrderBookPriceInfo({ algoPrice, asset }) {
-  const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+  const asaUnit = convertFromAsaUnits(asset?.price_info?.price, asset.decimals)
+  let asaValue = !asset.isStable
+    ? floatToFixed(asaUnit)
+    : asaUnit === 0
+    ? 'Invalid Number'
+    : floatToFixed(1 / asaUnit)
+
   return (
     <>
       <HeaderSmInter color="white">{asaValue}</HeaderSmInter>
