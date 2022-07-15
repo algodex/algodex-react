@@ -195,11 +195,11 @@ const Tabs = styled(_Tabs)`
   }
 `
 
-const LimitOrder = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-`
+// const LimitOrder = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   margin-bottom: 1rem;
+// `
 
 const SubmitButton = styled(Button)`
   &:focus {
@@ -384,7 +384,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
             </BodyCopy>
           )}
           {hasBalance && (
-            <LimitOrder>
+            <section className="flex flex-col mb-4">
               <CurrencyInput
                 name="price"
                 type="number"
@@ -441,7 +441,7 @@ export function PlaceOrderForm({ showTitle = true, asset, wallet, onSubmit }) {
                 // onChange={handleOptionsChange}
                 allowTaker={typeof asset !== 'undefined'}
               />
-            </LimitOrder>
+            </section>
           )}
           <SubmitButton
             type="submit"

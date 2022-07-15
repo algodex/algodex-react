@@ -64,87 +64,168 @@ export const OrderForm = ({
       return true
     }
   }
-
   return (
     <>
-      <section className="flex flex-col mb-4">
-        <OrderInput
-          type="number"
-          pattern="\d*"
-          id="price"
-          name="af2Km9q"
-          label={t('price')}
-          asset="ALGO"
-          decimals={6}
-          disabled={orderType === 'market'}
-          orderType={order.type}
-          value={order.price}
-          onChange={handleChange}
-          autocomplete="false"
-          min="0"
-          step="0.000001"
-          inputMode="decimal"
-          hasError={isErrorMsgVisible()}
-          errorMessage={`Price cannot be less than ${microAlgo}`}
-        />
-        <USDInputPrice value={order.price} id="price" />
-
-        <OrderInput
-          type="number"
-          pattern="\d*"
-          id="amount"
-          name="af2Km9q"
-          label={t('amount')}
-          asset={asset.name}
-          decimals={asset.decimals}
-          orderType={order.type}
-          value={order.amount}
-          onChange={(e) => {
-            handleChange(e)
-          }}
-          autocomplete="false"
-          min="0"
-          step={new Big(10).pow(-1 * asset.decimals).toString()}
-          inputMode="decimal"
-        />
-        <AmountRange
-          order={order}
-          algoBalance={maxSpendableAlgo}
-          asaBalance={asaBalance}
-          asset={asset}
-          // txnFee={txnFee}
-          onChange={handleRangeChange}
-        />
-        <OrderInput
-          type="number"
-          id="total"
-          label={t('total')}
-          asset="ALGO"
-          decimals={6}
-          orderType={order.type}
-          value={order.total}
-          // usdEquivalent={order.total}
-          readOnly
-          disabled
-        />
-        <USDInputPrice value={order.total} id="total" />
-        {/* <TxnFeeContainer>
-          <BodyCopyTiny color="gray.500" textTransform="none">
-            Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
-            {txnFee.toFixed(3)}
-          </BodyCopyTiny>
-        </TxnFeeContainer> */}
-        {orderType === 'limit' && (
-          <OrderOptions
-            asset={asset}
-            order={order}
-            onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
-            allowTaker={typeof asset !== 'undefined'}
-            orderFilter={newOrderSizeFilter}
-            setOrderFilter={setNewOrderSizeFilter}
+      {!asset.isStable && (
+        <section className="flex flex-col mb-4">
+          <OrderInput
+            type="number"
+            pattern="\d*"
+            id="price"
+            name="af2Km9q"
+            label={t('price')}
+            asset="ALGO"
+            decimals={6}
+            disabled={orderType === 'market'}
+            orderType={order.type}
+            value={order.price}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+            step="0.000001"
+            inputMode="decimal"
+            hasError={isErrorMsgVisible()}
+            errorMessage={`Price cannot be less than ${microAlgo}`}
           />
-        )}
-      </section>
+          <USDInputPrice value={order.price} id="price" />
+
+          <OrderInput
+            type="number"
+            pattern="\d*"
+            id="amount"
+            name="af2Km9q"
+            label={t('amount')}
+            asset={asset.name}
+            decimals={asset.decimals}
+            orderType={order.type}
+            value={order.amount}
+            onChange={(e) => {
+              handleChange(e)
+            }}
+            autocomplete="false"
+            min="0"
+            step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
+          />
+          <AmountRange
+            order={order}
+            algoBalance={maxSpendableAlgo}
+            asaBalance={asaBalance}
+            asset={asset}
+            // txnFee={txnFee}
+            onChange={handleRangeChange}
+          />
+          <OrderInput
+            type="number"
+            id="total"
+            label={t('total')}
+            asset="ALGO"
+            decimals={6}
+            orderType={order.type}
+            value={order.total}
+            // usdEquivalent={order.total}
+            readOnly
+            disabled
+          />
+          <USDInputPrice value={order.total} id="total" />
+          {/* <TxnFeeContainer>
+            <BodyCopyTiny color="gray.500" textTransform="none">
+              Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
+              {txnFee.toFixed(3)}
+            </BodyCopyTiny>
+          </TxnFeeContainer> */}
+          {orderType === 'limit' && (
+            <OrderOptions
+              asset={asset}
+              order={order}
+              onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
+              allowTaker={typeof asset !== 'undefined'}
+              orderFilter={newOrderSizeFilter}
+              setOrderFilter={setNewOrderSizeFilter}
+            />
+          )}
+        </section>
+      )}
+      {asset.isStable && (
+        <section className="flex flex-col mb-4">
+          <OrderInput
+            type="number"
+            pattern="\d*"
+            id="price"
+            name="af2Km9q"
+            label={t('price')}
+            asset={asset.name}
+            decimals={6}
+            disabled={orderType === 'market'}
+            orderType={order.type}
+            value={order.price}
+            onChange={handleChange}
+            autocomplete="false"
+            min="0"
+            step="0.000001"
+            inputMode="decimal"
+            hasError={isErrorMsgVisible()}
+            errorMessage={`Price cannot be less than ${microAlgo}`}
+          />
+          <USDInputPrice value={order.price} id="price" />
+
+          <OrderInput
+            type="number"
+            pattern="\d*"
+            id="amount"
+            name="af2Km9q"
+            label={t('amount')}
+            asset="ALGO"
+            decimals={asset.decimals}
+            orderType={order.type}
+            value={order.amount}
+            onChange={(e) => {
+              handleChange(e)
+            }}
+            autocomplete="false"
+            min="0"
+            step={new Big(10).pow(-1 * asset.decimals).toString()}
+            inputMode="decimal"
+          />
+          <AmountRange
+            order={order}
+            algoBalance={maxSpendableAlgo}
+            asaBalance={asaBalance}
+            asset={asset}
+            // txnFee={txnFee}
+            onChange={handleRangeChange}
+          />
+          <OrderInput
+            type="number"
+            id="total"
+            label={t('total')}
+            asset="ALGO"
+            decimals={6}
+            orderType={order.type}
+            value={order.total}
+            // usdEquivalent={order.total}
+            readOnly
+            disabled
+          />
+          <USDInputPrice value={order.total} id="total" />
+          {/* <TxnFeeContainer>
+            <BodyCopyTiny color="gray.500" textTransform="none">
+              Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
+              {txnFee.toFixed(3)}
+            </BodyCopyTiny>
+          </TxnFeeContainer> */}
+          {orderType === 'limit' && (
+            <OrderOptions
+              asset={asset}
+              order={order}
+              onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
+              allowTaker={typeof asset !== 'undefined'}
+              orderFilter={newOrderSizeFilter}
+              setOrderFilter={setNewOrderSizeFilter}
+            />
+          )}
+        </section>
+      )}
     </>
   )
 }
