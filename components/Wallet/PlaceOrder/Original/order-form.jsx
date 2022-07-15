@@ -2,7 +2,6 @@ import { BodyCopy, BodyCopyTiny } from '@/components/Typography'
 
 import AmountRange from './amount-range'
 import Big from 'big.js'
-import { LimitOrder } from './place-order.css'
 import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
@@ -68,7 +67,7 @@ export const OrderForm = ({
 
   return (
     <>
-      <LimitOrder>
+      <section className="flex flex-col mb-4">
         <OrderInput
           type="number"
           pattern="\d*"
@@ -145,7 +144,7 @@ export const OrderForm = ({
             setOrderFilter={setNewOrderSizeFilter}
           />
         )}
-      </LimitOrder>
+      </section>
     </>
   )
 }
