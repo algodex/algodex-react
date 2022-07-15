@@ -462,7 +462,9 @@ export function OrderBook({ isMobile, asset, orders, components }) {
         </HeaderWrapper>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">
+            {renderOrders(asset.isStable ? aggregatedBuyOrder : aggregatedSellOrder, 'sell')}
+          </OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -471,7 +473,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderOrders(aggregatedBuyOrder, 'buy')}
+            {renderOrders(asset.isStable ? aggregatedSellOrder : aggregatedBuyOrder, 'buy')}
           </OrdersWrapper>
         </BuyOrders>
       </Container>
