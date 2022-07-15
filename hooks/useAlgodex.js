@@ -19,6 +19,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Big from 'big.js'
 import WalletService from '@/services/wallet'
 import dayjs from 'dayjs'
+import { find } from 'lodash'
 import { floatToFixed } from '@/services/display'
 import millify from 'millify'
 import { useQuery } from 'react-query'
@@ -447,7 +448,13 @@ export function useWalletAssetsQuery({
   return { data: { assets }, ...rest }
 }
 
-const mapOpenOrdersData = (data) => {
+const formattedPair = (asaId, assetsList) => {
+  return assetsList && assetsList.data
+    ? find(assetsList.data.assets, (asa) => asa.assetId === asaId)?.unitName
+    : ''
+}
+
+const mapOpenOrdersData = (data, assetList = []) => {
   // if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data?.allAssets) {
   if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow) {
     return null
@@ -469,7 +476,7 @@ const mapOpenOrdersData = (data) => {
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId]?.params['unit-name'] || ''}/ALGO`,
+      pair: `${assetsInfo[assetId]?.params['unit-name'] || formattedPair(assetId, assetList)}/ALGO`,
       type: 'BUY',
       status: 'OPEN',
       amount: formattedASAAmount,
@@ -485,7 +492,7 @@ const mapOpenOrdersData = (data) => {
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId]?.params['unit-name'] || ''}/ALGO`,
+      pair: `${assetsInfo[assetId]?.params['unit-name'] || formattedPair(assetId, assetList)}/ALGO`,
       type: 'SELL',
       status: 'OPEN',
       amount: formattedASAAmount,
@@ -513,7 +520,9 @@ export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) 
     () => fetchWalletOrders(address),
     options
   )
-  const orders = useMemo(() => mapOpenOrdersData(data), [data])
+  const assetsList = useSearchResultsQuery()
+  const orders = useMemo(() => mapOpenOrdersData(data, assetsList), [data, assetsList])
+
   return { data: { orders }, ...rest }
 }
 /**
