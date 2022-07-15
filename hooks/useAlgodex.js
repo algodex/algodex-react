@@ -201,10 +201,6 @@ function getBidAskSpread(orderBook, isStableAsset) {
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
   const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
 
-  // const bid = floatToFixed(bidPrice)
-  // const ask = floatToFixed(askPrice)
-  // const spread = floatToFixed(new Big(ask).minus(bid).abs())
-
   let bid = floatToFixed(bidPrice)
   let ask = floatToFixed(askPrice)
   let spread = floatToFixed(new Big(ask).minus(bid).abs())
@@ -212,12 +208,11 @@ function getBidAskSpread(orderBook, isStableAsset) {
   if (isStableAsset) {
     bid = bidPrice === 0 ? 'Invalid Price' : floatToFixed(1 / bidPrice)
     ask = askPrice === 0 ? 'Invalid Price' : floatToFixed(1 / askPrice)
-    if (bidPrice === 0 || bidPrice === 0 || bidPrice === askPrice) {
+
+    if (Number(bidPrice) === 0 || Number(bidPrice) === 0) {
       spread = 'Invalid Price'
     } else {
-      console.log('ask: ', ask, 'bid: ', bid)
-      console.log('askPrice: ', askPrice, 'bidPrice: ', bidPrice)
-      spread = floatToFixed(1 / new Big(ask).minus(bid).abs())
+      spread = floatToFixed(new Big(ask).minus(bid).abs())
     }
   }
 
