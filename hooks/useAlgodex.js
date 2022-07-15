@@ -19,7 +19,6 @@ import { useEffect, useMemo, useState } from 'react'
 import Big from 'big.js'
 import WalletService from '@/services/wallet'
 import dayjs from 'dayjs'
-import { find } from 'lodash'
 import { floatToFixed } from '@/services/display'
 import millify from 'millify'
 import { useQuery } from 'react-query'
@@ -448,10 +447,21 @@ export function useWalletAssetsQuery({
   return { data: { assets }, ...rest }
 }
 
-const formattedPair = (asaId, assetsList) => {
-  return assetsList && assetsList.data
-    ? find(assetsList.data.assets, (asa) => asa.assetId === asaId)?.unitName
-    : ''
+const useFormattedPair = (asaId, assetsList) => {
+  const cachedAssetsList = useMemo(() => {
+    return (
+      assetsList &&
+      assetsList.data &&
+      assetsList.data.assets.reduce((previous, currentValue) => {
+        const key = currentValue.assetId
+        const updated = {
+          [key]: currentValue
+        }
+        return Object.assign(previous, updated)
+      }, {})
+    )
+  }, [assetsList])
+  return cachedAssetsList && cachedAssetsList[asaId]?.unitName
 }
 
 const mapOpenOrdersData = (data, assetList = []) => {
@@ -476,7 +486,9 @@ const mapOpenOrdersData = (data, assetList = []) => {
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId]?.params['unit-name'] || formattedPair(assetId, assetList)}/ALGO`,
+      pair: `${
+        assetsInfo[assetId]?.params['unit-name'] || useFormattedPair(assetId, assetList)
+      }/ALGO`,
       type: 'BUY',
       status: 'OPEN',
       amount: formattedASAAmount,
@@ -492,7 +504,9 @@ const mapOpenOrdersData = (data, assetList = []) => {
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId]?.params['unit-name'] || formattedPair(assetId, assetList)}/ALGO`,
+      pair: `${
+        assetsInfo[assetId]?.params['unit-name'] || useFormattedPair(assetId, assetList)
+      }/ALGO`,
       type: 'SELL',
       status: 'OPEN',
       amount: formattedASAAmount,
