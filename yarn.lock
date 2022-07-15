@@ -15,13 +15,14 @@
     lodash "^4.17.21"
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@2.0.0-next.19":
-  version "2.0.0-next.19"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/2.0.0-next.19/52b8068ec057d0aeabf7f4829ed5fd18793951f21007e1ea5b69117b771d5f44#8ec58697949f5937a1b5bae41c157e2b8d8a0988"
-  integrity sha512-gjfcFb+6aVTirdYn5AC5SVyVtfdLCJTmyFxwPxUS8IwJG2/kA98aCewvqyw9M/Tin8MjDg/tox94zi7L7rpNgQ==
+"@algodex/algodex-sdk@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.0.2.tgz#c23bc502ef8896a1efdf132e9ce17c30039c98b0"
+  integrity sha512-4KkHmIQkjNrY8Z7YQ+m5+8SBS+3fvy6VF1FJL3gB3ZuCVYetDJuA1uHfW0fRXAg/Cj0BAJHaoIGAvTOnXcSAVg==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"
+    ajv-keywords "^5.1.0"
     axios "^0.21.4"
     big.js "^6.1.1"
     commander "^9.2.0"
@@ -4848,6 +4849,13 @@ ajv-keywords@^3.1.0, ajv-keywords@^3.4.1, ajv-keywords@^3.5.2:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
   integrity sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==
+
+ajv-keywords@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-5.1.0.tgz#69d4d385a4733cdbeab44964a1170a88f87f0e16"
+  integrity sha512-YCS/JNFAUyr5vAuhk1DWm1CBxRHW9LbJ2ozWeemrIqpbsqKjHVxYPyi5GC0rjZIT5JxJ3virVTS8wk4i/Z+krw==
+  dependencies:
+    fast-deep-equal "^3.1.3"
 
 ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.5:
   version "6.12.6"
