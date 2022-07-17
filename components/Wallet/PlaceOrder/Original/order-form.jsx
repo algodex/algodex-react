@@ -100,7 +100,7 @@ export const OrderForm = ({
           hasError={isErrorMsgVisible()}
           errorMessage={`Price cannot be less than ${microAlgo}`}
         />
-        <USDInputPrice value={order.price} id="price" showFee={false}/>
+        <USDInputPrice value={order.price} id="price" showFee={false} />
 
         <OrderInput
           type="number"
