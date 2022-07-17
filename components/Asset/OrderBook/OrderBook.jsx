@@ -18,6 +18,7 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
+import Icon from 'components/Icon'
 
 // import { customAggregator } from './helpers'
 
@@ -355,12 +356,19 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
 
+  const assetVeryShortName = useMemo(() => {
+    if (asset?.name && asset.name.length >= 1) {
+      return asset.name
+    } else {
+      return 'NO-NAME'
+    }
+  }, [asset])
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
-
       const handleSelectOrder = () => {
         dispatcher('clicked', 'order')
         setOrder(
@@ -438,13 +446,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           )}
           <br></br>
           <Header>
-            <TablePriceHeader />
+            <TablePriceHeader title="price" textAlign="left" />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+              {t('amount')} ({assetVeryShortName})
             </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('total')}
-            </BodyCopyTiny>
+            <TablePriceHeader title="total" textAlign="right" />
           </Header>
         </HeaderWrapper>
 
