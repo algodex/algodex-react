@@ -14,7 +14,7 @@ export const PriceHeaderText = styled(BodyCopyTiny)`
   }
 `
 
-export const TablePriceHeader = ({title, textAlign}) => {
+export const TablePriceHeader = ({ title, textAlign }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText data-testid="header-item" textAlign={textAlign}>
@@ -24,7 +24,7 @@ export const TablePriceHeader = ({title, textAlign}) => {
   )
 }
 
-TablePriceHeader.defaultProps = {
+TablePriceHeader.propTypes = {
   title: PropTypes.string.isRequired,
   textAlign: PropTypes.string.isRequired
 }

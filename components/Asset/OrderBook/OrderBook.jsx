@@ -18,7 +18,6 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
-import Icon from 'components/Icon'
 
 // import { customAggregator } from './helpers'
 
