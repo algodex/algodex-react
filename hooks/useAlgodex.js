@@ -447,22 +447,37 @@ export function useWalletAssetsQuery({
   return { data: { assets }, ...rest }
 }
 
-const mapOpenOrdersData = (data) => {
-  if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
+const useFormattedPair = (asaId, assetsList) => {
+  const cachedAssetsList = useMemo(() => {
+    return (
+      assetsList &&
+      assetsList.data &&
+      assetsList.data.assets.reduce((previous, currentValue) => {
+        const key = currentValue.assetId
+        const updated = {
+          [key]: currentValue
+        }
+        return Object.assign(previous, updated)
+      }, {})
+    )
+  }, [assetsList])
+  return cachedAssetsList && cachedAssetsList[asaId]?.unitName
+}
+
+const mapOpenOrdersData = (data, assetList = []) => {
+  // if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data?.allAssets) {
+  if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow) {
     return null
   }
-
   const {
     buyASAOrdersInEscrow: buyOrdersData,
     sellASAOrdersInEscrow: sellOrdersData,
     allAssets: assetsData
   } = data
-
-  const assetsInfo = assetsData.reduce((allAssetsInfo, currentAssetInfo) => {
+  const assetsInfo = (assetsData || []).reduce((allAssetsInfo, currentAssetInfo) => {
     allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
     return allAssetsInfo
   }, {})
-
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     return {
@@ -471,7 +486,9 @@ const mapOpenOrdersData = (data) => {
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      pair: `${
+        assetsInfo[assetId]?.params['unit-name'] || useFormattedPair(assetId, assetList)
+      }/ALGO`,
       type: 'BUY',
       status: 'OPEN',
       amount: formattedASAAmount,
@@ -487,16 +504,18 @@ const mapOpenOrdersData = (data) => {
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      pair: `${
+        assetsInfo[assetId]?.params['unit-name'] || useFormattedPair(assetId, assetList)
+      }/ALGO`,
       type: 'SELL',
       status: 'OPEN',
       amount: formattedASAAmount,
       metadata: order
     }
   })
-
   const allOrders = [...buyOrders, ...sellOrders]
   allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
+
   return allOrders
 }
 
@@ -515,7 +534,9 @@ export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) 
     () => fetchWalletOrders(address),
     options
   )
-  const orders = useMemo(() => mapOpenOrdersData(data), [data])
+  const assetsList = useSearchResultsQuery()
+  const orders = useMemo(() => mapOpenOrdersData(data, assetsList), [data, assetsList])
+
   return { data: { orders }, ...rest }
 }
 /**
