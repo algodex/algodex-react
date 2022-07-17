@@ -357,11 +357,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   }, [asset])
 
   const assetVeryShortName = useMemo(() => {
-    if (asset?.name && asset.name.length >= 1) {
-      return asset.name
-    } else {
-      return 'NO-NAME'
-    }
+    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
   }, [asset])
 
   const renderOrders = (data, type) => {
