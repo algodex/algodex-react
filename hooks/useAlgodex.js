@@ -454,6 +454,8 @@ const getFormattedPairMap = (assetsList) => {
   return assetsList.data.assets.reduce((map, currentValue) => {
     const key = currentValue.assetId
     map.set(key, currentValue)
+    map.set(key, currentValue.unitName)
+    return map
   }, new Map())
 }
 
