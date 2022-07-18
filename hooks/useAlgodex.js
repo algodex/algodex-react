@@ -448,7 +448,7 @@ export function useWalletAssetsQuery({
 }
 
 const getFormattedPairMap = (assetsList) => {
-  if (!assetsList.data.assets) {
+  if (!assetsList?.data?.assets) {
     return new Map()
   }
   return assetsList.data.assets.reduce((map, currentValue) => {
