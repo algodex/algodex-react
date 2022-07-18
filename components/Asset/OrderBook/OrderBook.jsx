@@ -180,6 +180,9 @@ const SellOrders = styled.div`
     display: none;
   }
 `
+const NoLineBreak = styled.div`
+  white-space: nowrap;
+`
 
 const BuyOrders = styled.div`
   flex: 1 1 0%;
@@ -443,7 +446,9 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           <Header>
             <TablePriceHeader title="price" textAlign="left" />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({assetVeryShortName})
+              <NoLineBreak>
+                {t('amount')} ({assetVeryShortName})
+              </NoLineBreak>
             </BodyCopyTiny>
             <TablePriceHeader title="total" textAlign="right" />
           </Header>
