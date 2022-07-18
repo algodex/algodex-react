@@ -53,9 +53,9 @@ export const Form = styled.form`
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-
   const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   const { wallet } = useWallets(initialState)
+
   const [tabSwitch, setTabSwitch] = useState(0)
 
   const [order, setOrder] = useState({
@@ -143,10 +143,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
-    if (order.type === 'sell') {
+    if (order.type === 'sell' && assetBalance !== 0) {
       return (order.amount / assetBalance) * 100
     }
-    if (order.type === 'buy') {
+    if (order.type === 'buy' && algoBalance !== 0) {
       return (order.total / algoBalance) * 100
     }
 
@@ -289,7 +289,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     })
   }
 
-  if (typeof wallet === 'undefined' || isLoading || isError) {
+  const isActive = typeof wallet === 'undefined'
+  if (isLoading || isError) {
     return <Spinner />
   }
   return (
@@ -310,7 +311,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         </header>
       )}
       {typeof order !== 'undefined' && isConnected && (
-        <Form onSubmit={handleSubmit} className="overflow-x-scroll">
+        <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
               disableElevation={order.type === 'buy'}
