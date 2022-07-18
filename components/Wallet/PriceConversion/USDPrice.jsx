@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
 import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
+import { useCurrentAssetPricesQuery } from '@/hooks/useAlgoExplorer'
+
 export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
+  const currentPrices = useCurrentAssetPricesQuery({})
+  console.log('CurrentPrices: ', currentPrices)
   return (
     <span data-testid="USDprice-element">
       {currency}

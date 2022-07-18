@@ -361,15 +361,3 @@ export const createTicket = async (payload) => {
     })
   return response
 }
-
-/**
- * Fetch Current Asset Prices
- * @returns {Promise<*>}
- */
-export async function fetchCurrentAssetPrices() {
-  console.debug(`fetchCurrentAssetPrices()`)
-  const {
-    data: { data }
-  } = await getEtagResponse(`${process.env.ANALYTICS_TINYMAN_V1_API}/current-asset-prices`)
-  return typeof data !== 'undefined' ? data[0] : {}
-}
