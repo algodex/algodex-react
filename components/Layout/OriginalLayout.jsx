@@ -169,7 +169,7 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-// console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const { wallet } = useAlgodex()
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'

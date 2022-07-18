@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useContext } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useContext, useRef } from 'react'
 // import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
@@ -22,6 +22,7 @@ import Spinner from '@/components/Spinner'
 import useDebounce from '@/hooks/useDebounce'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { WalletsContext } from '@/hooks/useWallets'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 
 /**
  * Fetch Traded Asset Paths
@@ -131,6 +132,22 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const { isFallback, query } = useRouter()
 
   const [locStorage, setLocStorage] = useState([])
+  const myAlgoConnector = useRef(null)
+
+  useEffect(() => {
+    if (!myAlgoConnector.current) {
+      const reConnectMyAlgoWallet = async () => {
+        // '@randlabs/myalgo-connect' is imported dynamically
+        // because it uses the window object
+        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+        MyAlgoConnect.prototype.sign = signer
+        myAlgoConnector.current = new MyAlgoConnect()
+        myAlgoConnector.current.connected = true
+      }
+
+      reConnectMyAlgoWallet()
+    }
+  }, [])
 
   useEffect(() => {
     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
@@ -138,7 +155,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     if (locStorage.length === 0 && storedAddrs.length > 0) {
       setLocStorage(storedAddrs)
     }
-  })
+  }, [myAlgoConnector.current])
 
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
@@ -165,9 +182,18 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const [addresses, setAddresses] = useContext(WalletsContext)
 
   useEffect(() => {
-    // debugger;
     if (addresses.length === 0 && locStorage.length > 0) {
-      setAddresses(locStorage)
+      const reHydratedAddresses = locStorage.map((wallet) => {
+        if (wallet.type === 'my-algo-wallet') {
+          return {
+            ...wallet,
+            connector: myAlgoConnector.current
+          }
+        } else {
+          return wallet
+        }
+      })
+      setAddresses(reHydratedAddresses)
     }
   }, [locStorage])
 
