@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useContext } from 'react'
 // import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
@@ -21,6 +21,7 @@ import Spinner from '@/components/Spinner'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import { WalletsContext } from '@/hooks/useWallets'
 
 /**
  * Fetch Traded Asset Paths
@@ -129,6 +130,16 @@ function TradePage({ staticExplorerAsset, deviceType }) {
 
   const { isFallback, query } = useRouter()
 
+  const [locStorage, setLocStorage] = useState([])
+
+  useEffect(() => {
+    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+
+    if (locStorage.length === 0 && storedAddrs.length > 0) {
+      setLocStorage(storedAddrs)
+    }
+  })
+
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
@@ -150,6 +161,15 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     },
     [setInterval, interval]
   )
+
+  const [addresses, setAddresses] = useContext(WalletsContext)
+
+  useEffect(() => {
+    // debugger;
+    if (addresses.length === 0 && locStorage.length > 0) {
+      setAddresses(locStorage)
+    }
+  }, [locStorage])
 
   useEffect(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
