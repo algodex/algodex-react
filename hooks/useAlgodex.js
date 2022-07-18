@@ -475,7 +475,9 @@ const mapOpenOrdersData = (data, assetList = []) => {
   }, {})
 
   //FIXME: after 2.0 backend updates, this may not be necessary
-  const unitNameMap = assetsInfo.size === 0 ? getFormattedPairMap(assetList) : new Map()
+  const unitNameMap =
+    Object.keys(assetsInfo).length === 0 ? getFormattedPairMap(assetList) : new Map()
+  console.log(unitNameMap, 'unit name map')
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
@@ -530,6 +532,7 @@ export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) 
     options
   )
   const assetsList = useSearchResultsQuery()
+
   const orders = useMemo(() => mapOpenOrdersData(data, assetsList), [data, assetsList])
 
   return { data: { orders }, ...rest }
