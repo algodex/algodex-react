@@ -7,7 +7,7 @@ import useUserState from '@/store/use-user-state'
 
 expect.extend(matchers)
 
-describe('Network Banner Component', () => {
+describe.skip('Network Banner Component', () => {
   it('Should render Banner for Testnet', () => {
     function NetworkBannerTest() {
       const setHasTestnetRibbon = useUserState((state) => state.setHasTestnetRibbon)
