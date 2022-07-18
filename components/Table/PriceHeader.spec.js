@@ -6,7 +6,7 @@ expect.extend(matchers)
 
 describe('Price Header Component', () => {
   it('Should render Table Price Header', () => {
-    const { queryByTestId } = render(<PriceHeader />)
+    const { queryByTestId } = render(<PriceHeader title="amount" textAlign="left" />)
     expect(queryByTestId('header-item')).not.toBeNull()
   })
 })

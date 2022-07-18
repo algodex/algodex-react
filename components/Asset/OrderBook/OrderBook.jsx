@@ -368,12 +368,15 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
 
+  const assetVeryShortName = useMemo(() => {
+    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
+  }, [asset])
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
-
       const handleSelectOrder = () => {
         dispatcher('clicked', 'order')
         setOrder(
@@ -451,13 +454,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           )}
           <br></br>
           <Header>
-            <TablePriceHeader />
+            <TablePriceHeader title="price" textAlign="left" />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+              {t('amount')} ({assetVeryShortName})
             </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('total')}
-            </BodyCopyTiny>
+            <TablePriceHeader title="total" textAlign="right" />
           </Header>
         </HeaderWrapper>
 
