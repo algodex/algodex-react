@@ -447,21 +447,14 @@ export function useWalletAssetsQuery({
   return { data: { assets }, ...rest }
 }
 
-const useFormattedPair = (asaId, assetsList) => {
-  const cachedAssetsList = useMemo(() => {
-    return (
-      assetsList &&
-      assetsList.data &&
-      assetsList.data.assets.reduce((previous, currentValue) => {
-        const key = currentValue.assetId
-        const updated = {
-          [key]: currentValue
-        }
-        return Object.assign(previous, updated)
-      }, {})
-    )
-  }, [assetsList])
-  return cachedAssetsList && cachedAssetsList[asaId]?.unitName
+const getFormattedPairMap = (assetsList) => {
+  if (!assetsList.data.assets) {
+    return new Map()
+  }
+  return assetsList.data.assets.reduce((map, currentValue) => {
+    const key = currentValue.assetId
+    map.set(key, currentValue)
+  }, new Map())
 }
 
 const mapOpenOrdersData = (data, assetList = []) => {
@@ -478,17 +471,19 @@ const mapOpenOrdersData = (data, assetList = []) => {
     allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
     return allAssetsInfo
   }, {})
+
+  //FIXME: after 2.0 backend updates, this may not be necessary
+  const unitNameMap = assetsInfo.size === 0 ? getFormattedPairMap(assetList) : new Map()
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
+    const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${
-        assetsInfo[assetId]?.params['unit-name'] || useFormattedPair(assetId, assetList)
-      }/ALGO`,
+      pair: `${unitName}/ALGO`,
       type: 'BUY',
       status: 'OPEN',
       amount: formattedASAAmount,
@@ -498,15 +493,13 @@ const mapOpenOrdersData = (data, assetList = []) => {
 
   const sellOrders = sellOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
-
+    const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${
-        assetsInfo[assetId]?.params['unit-name'] || useFormattedPair(assetId, assetList)
-      }/ALGO`,
+      pair: `${unitName}/ALGO`,
       type: 'SELL',
       status: 'OPEN',
       amount: formattedASAAmount,
