@@ -477,7 +477,6 @@ const mapOpenOrdersData = (data, assetList = []) => {
   //FIXME: after 2.0 backend updates, this may not be necessary
   const unitNameMap =
     Object.keys(assetsInfo).length === 0 ? getFormattedPairMap(assetList) : new Map()
-  console.log(unitNameMap, 'unit name map')
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
