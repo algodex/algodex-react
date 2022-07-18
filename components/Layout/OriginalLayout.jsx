@@ -15,7 +15,7 @@ import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
 
-// import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@algodex/algodex-hooks'
 // import useTranslation from 'next-translate/useTranslation'
 
 // import { Typography, Typography } from '@/components/Typography'
@@ -169,8 +169,8 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  // const { wallet } = useAlgodex()
+// console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const { wallet } = useAlgodex()
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
@@ -189,7 +189,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection>
-          <PlaceOrder asset={asset} />
+          {typeof wallet !== 'undefined' && <PlaceOrder asset={asset} />}
         </PlaceOrderSection>
         <SearchAndChartSection>
           <AssetsSection ref={searchTableRef}>

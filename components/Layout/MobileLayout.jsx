@@ -12,6 +12,7 @@ import styled from '@emotion/styled'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { lighten } from 'polished'
+import { useAlgodex } from '@algodex/algodex-hooks'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -125,6 +126,8 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
+  const { wallet } = useAlgodex()
+
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**
@@ -159,7 +162,7 @@ function MainLayout({ asset, children }) {
         )}
         {activeMobile === TABS.TRADE && (
           <PlaceOrderSection>
-            <PlaceOrder asset={asset} />
+            {typeof wallet !== 'undefined' && <PlaceOrder asset={asset} />}
           </PlaceOrderSection>
         )}
         {activeMobile === TABS.CHART && (
