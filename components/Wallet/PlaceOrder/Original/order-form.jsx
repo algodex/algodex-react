@@ -52,17 +52,13 @@ USDInputPrice.propTypes = {
  * @param {*} { value, id }
  * @return {*}
  */
-export const StableAssetUSDInputPrice = ({ value, id, stableUSDPrice, asset }) => {
+export const StableAssetUSDInputPrice = ({ value, id, assetId }) => {
   return (
     <>
       <div className="flex justify-between items-center mx-4 mb-4 font-medium">
         <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
         <BodyCopyTiny>
-          <StableAssetUSDPrice
-            priceToConvert={value}
-            stableUSDPrice={stableUSDPrice}
-            assetId={asset.id}
-          />
+          <StableAssetUSDPrice priceToConvert={value} assetId={assetId} />
           <span className="ml-4 mr-3">USD</span>
         </BodyCopyTiny>
       </div>
@@ -71,11 +67,9 @@ export const StableAssetUSDInputPrice = ({ value, id, stableUSDPrice, asset }) =
 }
 
 StableAssetUSDInputPrice.propTypes = {
-  stableUSDPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  showFee: PropTypes.boolean,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
-  asset: PropTypes.object
+  assetId: PropTypes.number
 }
 
 export const OrderForm = ({
@@ -214,12 +208,7 @@ export const OrderForm = ({
             hasError={isErrorMsgVisible()}
             errorMessage={`Price cannot be less than ${microAlgo}`}
           />
-          <StableAssetUSDInputPrice
-            value={order.price}
-            id="price"
-            isStableAsset={true}
-            asset={asset}
-          />
+          <StableAssetUSDInputPrice value={order.price} id="price" assetId={asset.id} />
 
           <OrderInput
             type="number"
@@ -259,7 +248,7 @@ export const OrderForm = ({
             readOnly
             disabled
           />
-          <StableAssetUSDInputPrice value={order.total} id="total" asset={asset} />
+          <StableAssetUSDInputPrice value={order.total} id="total" assetId={asset.id} />
           {/* <TxnFeeContainer>
             <BodyCopyTiny color="gray.500" textTransform="none">
               Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
