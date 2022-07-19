@@ -403,7 +403,7 @@ WalletView.defaultProps = {
  * @constructor
  */
 function WalletConnect(props) {
-  const { wallet, setWallet, isConnected } = useAlgodex() // useAlgodex does not return a wallet, even when wallet is present in local storage
+  const { wallet, setWallet, isConnected } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
 
