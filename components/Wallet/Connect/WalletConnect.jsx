@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import Image from 'next/image'
 // import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
@@ -299,6 +300,17 @@ export function WalletView(props) {
       </Balance>
     )
   }
+  const getWalletLogo = (wallet) => {
+    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
+      throw new TypeError('Must have a valid wallet!')
+    }
+    switch (wallet.type) {
+      case 'pera-connect':
+        return '/Official-Algo-Wallet-icon.svg'
+      case 'my-algo-wallet':
+        return '/My-Algo-Wallet-icon.svg'
+    }
+  }
 
   const renderWallets = () => {
     return addresses.map((wallet) => (
@@ -311,6 +323,8 @@ export function WalletView(props) {
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Image src={getWalletLogo(wallet)} alt="Algorand Wallet Client Image" width={25} height={25} />
+          &nbsp;
           <Icon
             fillGradient="000"
             onClick={() => copyAddress(wallet.address)}
