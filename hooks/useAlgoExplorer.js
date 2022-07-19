@@ -56,21 +56,42 @@ export const useAlgorandPriceQuery = ({
 
 /**
  * Use Search Results Query
+ * Use Asset
+ * @param {Object} props The props of the parent
+ * @param {string} props.query Search Query
+ * @param {Object} [props.options] useQuery Options
+ * @returns {UseQueryResult<{assets: *}, unknown>}
+ */
+export const useCurrentAssetPricesQuery = ({
+  query = '',
+  asset = {},
+  options = {
+    refetchInterval: query === '' ? refetchInterval : 20000
+  }
+} = {}) =>
+  useQuery(
+    ['fetchCurrentAssetPrices', { query, asset }],
+    () => fetchCurrentAssetPrices(query, asset?.id ?? -1),
+    options
+  )
+
+/**
+ * Use Search Results Query
  * @param {Object} props The props of the parent
  * @param {Object} [props.options] useQuery Options
  * @returns {UseQueryResult<{assets: *}, unknown>}
  */
-export function useCurrentAssetPricesQuery({ options = { refetchInterval: 30000 } }) {
-  // return useQuery(['currentAssetPrices'], () => fetchCurrentAssetPrices(), options)
-  const { data: _prices } = useQuery(
-    ['currentAssetPrices'],
-    () => fetchCurrentAssetPrices(),
-    options
-  )
+// export function useCurrentAssetPricesQuery({ options = { refetchInterval: 30000 } }) {
+//   // return useQuery(['currentAssetPrices'], () => fetchCurrentAssetPrices(), options)
+//   const { data: _prices } = useQuery(
+//     ['currentAssetPrices'],
+//     () => fetchCurrentAssetPrices(),
+//     options
+//   )
 
-  const currentPrices = useMemo(() => {
-    return _prices
-  }, [_prices])
+//   const currentPrices = useMemo(() => {
+//     return _prices
+//   }, [_prices])
 
-  return currentPrices
-}
+//   return currentPrices
+// }

@@ -167,14 +167,21 @@ export async function fetchAlgorandPrice() {
 }
 
 /**
- * Fetch Current Asset Prices
+ * Fetch Current Asset Prices and AlgorandPrice
  * @see https://testnet.analytics.tinyman.org/api/v1/current-asset-prices
  * @see https://mainnet.analytics.tinyman.org/api/v1/current-asset-prices
  */
-export async function fetchCurrentAssetPrices() {
+export async function fetchCurrentAssetPrices(query, assetId) {
   console.log('Env: ', process.env)
   // console.debug(`fetchCurrentAssetPrices(): ${EXPLORER_CURRENT_ASSET_PRICES}`)
+  const algoPriceRes = await axios.get(`${EXPLORER_ALGORAND_PRICE}`)
   const { data } = await axios.get(`${EXPLORER_CURRENT_ASSET_PRICES}`)
-  console.debug(`fetchCurrentAssetPrices(): `, data)
-  return typeof data !== 'undefined' ? data : {}
+  console.debug(`algorandPrice: `, algoPriceRes.data.price)
+  console.debug(`fetchCurrentAssetPrices(): `, data?.[assetId]?.['price'] ?? 1)
+
+  return {
+    algoPrice: algoPriceRes.data.price,
+    usdPrice: data?.[assetId]?.['price'] ?? 1
+  }
+  // return typeof data !== 'undefined' ? data : {}
 }

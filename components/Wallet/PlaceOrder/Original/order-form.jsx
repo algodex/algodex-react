@@ -15,14 +15,14 @@ import useTranslation from 'next-translate/useTranslation'
  * @param {*} { value, id }
  * @return {*}
  */
-export const USDInputPrice = ({ value, id, showFee }) => {
+export const USDInputPrice = ({ value, id, showFee, stableUSDPrice, asset }) => {
   return (
     <>
       {showFee && (
         <div className="flex justify-between items-center mx-4 font-medium">
           <BodyCopyTiny>Fee</BodyCopyTiny>
           <BodyCopyTiny>
-            <USDPrice priceToConvert={0} />
+            <USDPrice priceToConvert={0} stableUSDPrice={stableUSDPrice} asset={asset} />
             <span className="ml-4 mr-3">USD</span>
           </BodyCopyTiny>
         </div>
@@ -30,7 +30,7 @@ export const USDInputPrice = ({ value, id, showFee }) => {
       <div className="flex justify-between items-center mx-4 mb-4 font-medium">
         <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
         <BodyCopyTiny>
-          <USDPrice priceToConvert={value} />
+          <USDPrice priceToConvert={value} stableUSDPrice={stableUSDPrice} asset={asset} />
           <span className="ml-4 mr-3">USD</span>
         </BodyCopyTiny>
       </div>
@@ -39,9 +39,11 @@ export const USDInputPrice = ({ value, id, showFee }) => {
 }
 
 USDInputPrice.propTypes = {
+  stableUSDPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showFee: PropTypes.boolean,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  id: PropTypes.string
+  id: PropTypes.string,
+  asset: PropTypes.object
 }
 
 export const OrderForm = ({
@@ -76,6 +78,7 @@ export const OrderForm = ({
       return true
     }
   }
+
   return (
     <>
       {!asset.isStable && (
@@ -99,7 +102,7 @@ export const OrderForm = ({
             hasError={isErrorMsgVisible()}
             errorMessage={`Price cannot be less than ${microAlgo}`}
           />
-          <USDInputPrice value={order.price} id="price" showFee={false} />
+          <USDInputPrice value={order.price} id="price" showFee={false} asset={asset} />
 
           <OrderInput
             type="number"
@@ -139,7 +142,7 @@ export const OrderForm = ({
             readOnly
             disabled
           />
-          <USDInputPrice value={order.total} id="total" showFee={true} />
+          <USDInputPrice value={order.total} id="total" showFee={true} asset={asset} />
           {/* <TxnFeeContainer>
             <BodyCopyTiny color="gray.500" textTransform="none">
               Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
@@ -179,7 +182,13 @@ export const OrderForm = ({
             hasError={isErrorMsgVisible()}
             errorMessage={`Price cannot be less than ${microAlgo}`}
           />
-          <USDInputPrice value={order.price} id="price" showFee={false} />
+          <USDInputPrice
+            value={order.price}
+            id="price"
+            showFee={false}
+            isStableAsset={true}
+            asset={asset}
+          />
 
           <OrderInput
             type="number"
@@ -219,7 +228,7 @@ export const OrderForm = ({
             readOnly
             disabled
           />
-          <USDInputPrice value={order.total} id="total" showFee={true} />
+          <USDInputPrice value={order.total} id="total" showFee={true} asset={asset} />
           {/* <TxnFeeContainer>
             <BodyCopyTiny color="gray.500" textTransform="none">
               Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

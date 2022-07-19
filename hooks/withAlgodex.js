@@ -7,8 +7,7 @@ import {
   useAssetChartQuery,
   useWalletAssetsQuery,
   useWalletOrdersQuery,
-  useWalletTradeHistoryQuery,
-  useCurrentAssetPricesQuery
+  useWalletTradeHistoryQuery
 } from '@/hooks/useAlgodex'
 
 import { withQuery } from '@/hooks/withQuery'
@@ -113,11 +112,3 @@ export function withWalletTradeHistoryQuery(Component, options) {
     ...options
   })
 }
-
-// export function withCurrentAssetPricesQuery(Component, options) {
-//   return withQuery(Component, {
-//     hook: useCurrentAssetPricesQuery,
-//     components,
-//     ...options
-//   })
-// }
