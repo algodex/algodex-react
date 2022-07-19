@@ -7,6 +7,7 @@ import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import React from 'react'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
+import StableAssetUSDPrice from '@/components/Wallet/PriceConversion/StableAssetUSDPrice'
 import useTranslation from 'next-translate/useTranslation'
 
 /**
@@ -15,14 +16,14 @@ import useTranslation from 'next-translate/useTranslation'
  * @param {*} { value, id }
  * @return {*}
  */
-export const USDInputPrice = ({ value, id, showFee, stableUSDPrice, asset }) => {
+export const USDInputPrice = ({ value, id, showFee }) => {
   return (
     <>
       {showFee && (
         <div className="flex justify-between items-center mx-4 font-medium">
           <BodyCopyTiny>Fee</BodyCopyTiny>
           <BodyCopyTiny>
-            <USDPrice priceToConvert={0} stableUSDPrice={stableUSDPrice} asset={asset} />
+            <USDPrice priceToConvert={0} />
             <span className="ml-4 mr-3">USD</span>
           </BodyCopyTiny>
         </div>
@@ -30,7 +31,7 @@ export const USDInputPrice = ({ value, id, showFee, stableUSDPrice, asset }) => 
       <div className="flex justify-between items-center mx-4 mb-4 font-medium">
         <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
         <BodyCopyTiny>
-          <USDPrice priceToConvert={value} stableUSDPrice={stableUSDPrice} asset={asset} />
+          <USDPrice priceToConvert={value} />
           <span className="ml-4 mr-3">USD</span>
         </BodyCopyTiny>
       </div>
@@ -39,6 +40,37 @@ export const USDInputPrice = ({ value, id, showFee, stableUSDPrice, asset }) => 
 }
 
 USDInputPrice.propTypes = {
+  showFee: PropTypes.boolean,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  id: PropTypes.string,
+  asset: PropTypes.object
+}
+
+/**
+ *
+ * Render USD Price for an input component
+ * @param {*} { value, id }
+ * @return {*}
+ */
+export const StableAssetUSDInputPrice = ({ value, id, stableUSDPrice, asset }) => {
+  return (
+    <>
+      <div className="flex justify-between items-center mx-4 mb-4 font-medium">
+        <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
+        <BodyCopyTiny>
+          <StableAssetUSDPrice
+            priceToConvert={value}
+            stableUSDPrice={stableUSDPrice}
+            assetId={asset.id}
+          />
+          <span className="ml-4 mr-3">USD</span>
+        </BodyCopyTiny>
+      </div>
+    </>
+  )
+}
+
+StableAssetUSDInputPrice.propTypes = {
   stableUSDPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showFee: PropTypes.boolean,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -182,10 +214,9 @@ export const OrderForm = ({
             hasError={isErrorMsgVisible()}
             errorMessage={`Price cannot be less than ${microAlgo}`}
           />
-          <USDInputPrice
+          <StableAssetUSDInputPrice
             value={order.price}
             id="price"
-            showFee={false}
             isStableAsset={true}
             asset={asset}
           />
@@ -228,7 +259,7 @@ export const OrderForm = ({
             readOnly
             disabled
           />
-          <USDInputPrice value={order.total} id="total" showFee={true} asset={asset} />
+          <StableAssetUSDInputPrice value={order.total} id="total" asset={asset} />
           {/* <TxnFeeContainer>
             <BodyCopyTiny color="gray.500" textTransform="none">
               Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

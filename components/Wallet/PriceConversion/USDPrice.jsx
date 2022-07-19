@@ -1,17 +1,12 @@
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
-// import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
-import { withCurrentAssetPricesQuery } from '@/hooks/withAlgoExplorer'
+import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
 
-export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency, usdPrice, asset }) {
-  const displayPrice = asset?.isStable
-    ? asaWorth * priceToConvert * usdPrice
-    : asaWorth * priceToConvert * algoPrice
-
+export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
   return (
     <span data-testid="USDprice-element">
       {currency}
-      {formatUSDPrice(displayPrice)}
+      {formatUSDPrice(asaWorth * priceToConvert * algoPrice)}
     </span>
   )
 }
@@ -20,9 +15,7 @@ USDPrice.propTypes = {
   algoPrice: PropTypes.any,
   priceToConvert: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   asaWorth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  currency: PropTypes.string,
-  usdPrice: PropTypes.any,
-  asset: PropTypes.any
+  currency: PropTypes.string
 }
 
 USDPrice.defaultProps = {
@@ -32,5 +25,4 @@ USDPrice.defaultProps = {
   currency: ''
 }
 
-// export default withAlgorandPriceQuery(USDPrice)
-export default withCurrentAssetPricesQuery(USDPrice)
+export default withAlgorandPriceQuery(USDPrice)

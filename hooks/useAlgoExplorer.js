@@ -64,14 +64,14 @@ export const useAlgorandPriceQuery = ({
  */
 export const useCurrentAssetPricesQuery = ({
   query = '',
-  asset = {},
+  assetId = -1,
   options = {
     refetchInterval: query === '' ? refetchInterval : 20000
   }
 } = {}) =>
   useQuery(
-    ['fetchCurrentAssetPrices', { query, asset }],
-    () => fetchCurrentAssetPrices(query, asset?.id ?? -1),
+    ['fetchCurrentAssetPrices', { query, assetId }],
+    () => fetchCurrentAssetPrices(query, assetId),
     options
   )
 
