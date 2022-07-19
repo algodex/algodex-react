@@ -4,7 +4,7 @@ import { withCurrentAssetPricesQuery } from '@/hooks/withAlgoExplorer'
 
 export function StableAssetUSDPrice({ asaWorth, priceToConvert, currency, usdPrice }) {
   return (
-    <span data-testid="USDprice-element">
+    <span data-testid="StableAssetUSDprice-element">
       {currency}
       {formatUSDPrice(asaWorth * priceToConvert * usdPrice)}
     </span>
