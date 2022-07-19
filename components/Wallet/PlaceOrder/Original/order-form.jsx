@@ -48,7 +48,7 @@ USDInputPrice.propTypes = {
 
 /**
  *
- * Render USD Price for an input component
+ * Render Stable Asset USD Price for an input component
  * @param {*} { value, id }
  * @return {*}
  */
@@ -240,7 +240,7 @@ export const OrderForm = ({
             type="number"
             id="total"
             label={t('total')}
-            asset="ALGO"
+            asset={asset.name}
             decimals={6}
             orderType={order.type}
             value={order.total}
