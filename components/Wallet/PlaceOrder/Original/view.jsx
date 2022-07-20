@@ -204,6 +204,22 @@ function PlaceOrderView(props) {
       target: { value: orderView === LIMIT_PANEL ? order.execution : 'market' }
     })
     console.log('order submitted')
+    console.log('Order: ')
+    console.log(order)
+
+    //     amount: "0.999998"
+    // decimals: 6
+    // execution: "both"
+    // price: "1.000000"
+    // total: "0.999998"
+    // type: "buy"
+
+    // amount: "0.08973"
+    // decimals: 6
+    // execution: "both"
+    // price: "1"
+    // total: "0.08973"
+    // type: "sell"
 
     e.preventDefault()
     setStatus((prev) => ({ ...prev, submitting: true }))
@@ -219,6 +235,7 @@ function PlaceOrderView(props) {
       toast.error(t('fund-wallet'))
       return
     }
+
     const orderData = {
       ...order,
       execution: orderView === LIMIT_PANEL ? order.execution : 'market',
@@ -297,9 +314,16 @@ function PlaceOrderView(props) {
     }
 
     const isBelowMinOrderAmount = () => {
-      if (order.type === 'buy') {
+      let _type = order.type
+      if (asset.isStable) {
+        // if asset is stable invert sell/buy option
+        _type = order.type === 'buy' ? 'sell' : 'buy'
+      }
+      if (_type === 'buy') {
+        console.log('BuyCondition: isBelowMinOrderAmount: ', order.total)
         return new Big(order.total).lt(0.5)
       }
+      console.log('BuyCondition: isBelowMinOrderAmount: ', order.total)
       return new Big(order.total).eq(0)
     }
 
@@ -308,7 +332,14 @@ function PlaceOrderView(props) {
     }
 
     const isBalanceExceeded = () => {
-      if (order.type === 'buy') {
+      let _type = order.type
+      if (asset.isStable) {
+        // if asset is stable invert sell/buy option
+        _type = order.type === 'buy' ? 'sell' : 'buy'
+      }
+      if (_type === 'buy') {
+        console.log('BuyCondition: order.price : ', order.price)
+        console.log('BuyCondition: order.amount : ', order.amount)
         return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
       }
       return new Big(order.amount).gt(asaBalance)
@@ -326,6 +357,14 @@ function PlaceOrderView(props) {
       asset.isGeoBlocked ||
       status.submitting
 
+    console.log('BuyCondition: isBelowMinOrderAmount: ', isBelowMinOrderAmount())
+    console.log('BuyCondition: isInvalid: ', isInvalid())
+    // console.log('BuyCondition: isBalanceExceeded: ', isBalanceExceeded())
+    console.log('BuyCondition: isLessThanMicroAlgo: ', isLessThanMicroAlgo())
+    console.log('BuyCondition: asset.isGeoBlocked: ', asset.isGeoBlocked)
+    console.log('BuyCondition: status.submitting: ', status.submitting)
+
+    console.log('isDisabled: ', isDisabled)
     return (
       <SubmitButton
         type="submit"
