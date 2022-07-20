@@ -6,6 +6,7 @@ import { isEqual } from 'lodash/lang'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
+import { filter } from 'lodash'
 /**
  *
  * @param {Array<Wallet>} a
@@ -72,25 +73,47 @@ function useWallets(initialState) {
     async (_addresses) => {
       console.log('Handling Connect')
       if (_addresses.length > 0) {
+        const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
+        const otherWalletClients =
+          addresses.filter((wallet) => wallet.type !== _addresses[0].type) || []
+
         const accounts = await http.indexer.fetchAccounts(_addresses)
         const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
-        console.log({
-          accounts,
-          _addresses,
-          addresses,
-          mergedPrivateAddresses
-          // merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
-        })
-        setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+
+        if (sameWalletClient.length > _addresses.length) {
+          // disconnect even occured for atleast one address
+          setAddresses(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
+          localStorage.setItem(
+            'addresses',
+            JSON.stringify(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
+          )
+        } else {
+          console.log({
+            accounts,
+            _addresses,
+            addresses,
+            mergedPrivateAddresses
+            // merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
+          })
+          setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+        }
       }
     },
     [setAddresses, addresses]
   )
 
   // Handle any Disconnect
-  const handleDisconnect = useCallback((_addresses) => {
-    console.error('Handle removing from storage', _addresses)
-  }, [])
+  const handleDisconnect = useCallback(
+    (_addresses) => {
+      const remainingAddresses =
+        addresses.filter((wallet) => wallet.address !== _addresses[0]) || []
+      setAddresses(remainingAddresses)
+      setWallet(remainingAddresses.length > 0 ? remainingAddresses[0] : undefined)
+      localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+      console.error('Handle removing from storage', _addresses)
+    },
+    [setAddresses, addresses]
+  )
 
   // My Algo Connect/Disconnect
   const { connect: myAlgoConnect, disconnect: myAlgoDisconnect } = useMyAlgoConnect(
