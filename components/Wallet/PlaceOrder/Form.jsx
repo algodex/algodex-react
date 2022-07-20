@@ -196,7 +196,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
     let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
-    if (order.type === 'buy' && _total >= algoBalance) {
+    if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
       _fixedAmount = algoBalance / _fixedPrice
     }
     if (order.type === 'sell' && _fixedAmount >= assetBalance) {
@@ -329,7 +329,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           </Typography>
         </header>
       )}
-      {typeof order !== 'undefined' && isConnected && (
+      {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && (
         <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
