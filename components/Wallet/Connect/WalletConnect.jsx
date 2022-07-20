@@ -305,7 +305,7 @@ export function WalletView(props) {
       throw new TypeError('Must have a valid wallet!')
     }
     switch (wallet.type) {
-      case 'pera-connect':
+      case 'wallet-connect':
         return '/Official-Algo-Wallet-icon.svg'
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
@@ -323,7 +323,12 @@ export function WalletView(props) {
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Image src={getWalletLogo(wallet)} alt="Algorand Wallet Client Image" width={25} height={25} />
+          <Image
+            src={getWalletLogo(wallet)}
+            alt="Algorand Wallet Client Image"
+            width={25}
+            height={25}
+          />
           &nbsp;
           <Icon
             fillGradient="000"
