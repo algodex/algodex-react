@@ -129,6 +129,13 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
+  const formatAmountFn = (amount) => {
+    let splited_amount = amount.toFixed(asset.decimals).toString().split('.') // Split amount based on decimal
+    let striped_amount = parseInt(splited_amount[1], 10).toString() // Stripe Preceding zeros
+    let index = splited_amount[1].indexOf(striped_amount[0]) // Get index of first value greater than 0
+    return amount.toFixed(Math.min(index + 1, asset.decimals))
+  }
+
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
@@ -159,7 +166,8 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
               title={amount.toFixed(asset.decimals)}
               m={0}
             >
-              {amount.toFixed(Math.min(3, asset.decimals))}
+              {/* {amount.toFixed(Math.min(3, asset.decimals))} */}
+              {formatAmountFn(amount)}
             </BodyCopyTiny>
             <BodyCopyTiny
               fontFamily="'Roboto Mono', monospace"
