@@ -184,7 +184,7 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
           <Header>
             <PriceHeader />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+              {t('amount')} ({asset.fullName})
             </BodyCopyTiny>
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               {t('time')}
