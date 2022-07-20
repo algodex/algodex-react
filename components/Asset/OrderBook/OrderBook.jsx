@@ -491,7 +491,7 @@ OrderBook.propTypes = {
     sell: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.string.isRequired,
         total: PropTypes.number.isRequired
       })
     ),
@@ -501,7 +501,7 @@ OrderBook.propTypes = {
     buy: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.string.isRequired,
         total: PropTypes.number.isRequired
       })
     )
