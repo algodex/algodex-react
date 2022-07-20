@@ -240,7 +240,8 @@ function PlaceOrderView(props) {
       ...order,
       execution: orderView === LIMIT_PANEL ? order.execution : 'market',
       address: activeWalletAddress,
-      asset
+      asset,
+      type: asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
     }
 
     Sentry.addBreadcrumb({
@@ -314,11 +315,8 @@ function PlaceOrderView(props) {
     }
 
     const isBelowMinOrderAmount = () => {
-      let _type = order.type
-      if (asset.isStable) {
-        // if asset is stable invert sell/buy option
-        _type = order.type === 'buy' ? 'sell' : 'buy'
-      }
+      // if asset is stable invert sell/buy option
+      let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
       if (_type === 'buy') {
         console.log('BuyCondition: isBelowMinOrderAmount: ', order.total)
         return new Big(order.total).lt(0.5)
@@ -332,11 +330,7 @@ function PlaceOrderView(props) {
     }
 
     const isBalanceExceeded = () => {
-      let _type = order.type
-      if (asset.isStable) {
-        // if asset is stable invert sell/buy option
-        _type = order.type === 'buy' ? 'sell' : 'buy'
-      }
+      let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
       if (_type === 'buy') {
         console.log('BuyCondition: order.price : ', order.price)
         console.log('BuyCondition: order.amount : ', order.amount)
