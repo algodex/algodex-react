@@ -4,6 +4,7 @@ import Big from 'big.js'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -176,9 +177,7 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
       })
   }
 
-  const assetVeryShortName = useMemo(() => {
-    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
-  }, [asset])
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
