@@ -445,10 +445,8 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           <br></br>
           <Header>
             <TablePriceHeader title="price" textAlign="left" />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              <NoLineBreak>
-                {t('amount')} ({assetVeryShortName})
-              </NoLineBreak>
+            <BodyCopyTiny color="gray.500" className="whitespace-nowrap" textAlign="right" m={0}>
+              {t('amount')} ({assetVeryShortName})
             </BodyCopyTiny>
             <TablePriceHeader title="total" textAlign="right" />
           </Header>
