@@ -356,13 +356,26 @@ function PlaceOrderView(props) {
     }
 
     const isBalanceExceeded = () => {
-      let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
-      if (_type === 'buy') {
-        console.log('BuyCondition: order.price : ', order.price)
+      // let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
+      if (asset.isStable) {
+        if (order.type === 'sell') {
+          console.log('BuyCondition: order.price : ', order.price)
+          console.log('BuyCondition: order.amount : ', order.amount)
+          return new Big(order.amount).times(order.price).gt(maxSpendableAlgo)
+        }
         console.log('BuyCondition: order.amount : ', order.amount)
-        return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+        console.log('BuyCondition: asaBalance : ', asaBalance)
+        return new Big(order.price).gt(asaBalance)
+      } else {
+        if (order.type === 'buy') {
+          console.log('BuyCondition: order.price : ', order.price)
+          console.log('BuyCondition: order.amount : ', order.amount)
+          return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+        }
+        console.log('BuyCondition: order.amount : ', order.amount)
+        console.log('BuyCondition: asaBalance : ', asaBalance)
+        return new Big(order.amount).gt(asaBalance)
       }
-      return new Big(order.amount).gt(asaBalance)
     }
 
     const isLessThanMicroAlgo = () => {

@@ -230,8 +230,8 @@ export const OrderForm = ({
           />
           <AmountRange
             order={order}
-            algoBalance={maxSpendableAlgo}
-            asaBalance={asaBalance}
+            asaBalance={maxSpendableAlgo}
+            algoBalance={asaBalance}
             asset={asset}
             // txnFee={txnFee}
             onChange={handleRangeChange}
