@@ -12,12 +12,12 @@ export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/a
 export const EXPLORER_CURRENT_ASSET_PRICES =
   'https://testnet.analytics.tinyman.org/api/v1/current-asset-prices'
 
-console.debug('NEXT_PUBLIC_EXPLORER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_API)
-console.debug('EXPLORER_API: ' + EXPLORER_API)
-console.debug('NEXT_PUBLIC_EXPLORER_INDEXER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API)
-console.debug('EXPLORER_INDEXER_API: ' + EXPLORER_INDEXER_API)
-console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
-console.debug('EXPLORER_V2_API: ' + ALGO_EXPLORER_V2_API)
+// console.debug('NEXT_PUBLIC_EXPLORER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_API)
+// console.debug('EXPLORER_API: ' + EXPLORER_API)
+// console.debug('NEXT_PUBLIC_EXPLORER_INDEXER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_INDEXER_API)
+// console.debug('EXPLORER_INDEXER_API: ' + EXPLORER_INDEXER_API)
+// console.debug('EXPLORER_ALGORAND_PRICE: ' + EXPLORER_ALGORAND_PRICE)
+// console.debug('EXPLORER_V2_API: ' + ALGO_EXPLORER_V2_API)
 /**
  * @see https://algoindexer.testnet.algoexplorerapi.io/v2/assets/185
  * @typedef {Object} ExplorerIndexAsset

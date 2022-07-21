@@ -13,12 +13,12 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
 import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
-import useDebounce from '@/hooks/useDebounce'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { StableAssets } from '@/components/StableAssets'
 
 /**
@@ -118,7 +118,7 @@ function useMobileDetect(isMobileSSR = false) {
  */
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
-  console.debug(`TradePage(`, staticExplorerAsset, `)`)
+  // console.debug(`TradePage(`, staticExplorerAsset, `)`)
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
