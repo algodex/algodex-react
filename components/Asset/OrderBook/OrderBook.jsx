@@ -180,9 +180,6 @@ const SellOrders = styled.div`
     display: none;
   }
 `
-const NoLineBreak = styled.div`
-  white-space: nowrap;
-`
 
 const BuyOrders = styled.div`
   flex: 1 1 0%;
