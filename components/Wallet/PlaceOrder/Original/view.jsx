@@ -203,23 +203,6 @@ function PlaceOrderView(props) {
     handleOptionsChange({
       target: { value: orderView === LIMIT_PANEL ? order.execution : 'market' }
     })
-    console.log('order submitted')
-    console.log('Order: ')
-    console.log(order)
-
-    //     amount: "0.999998"
-    // decimals: 6
-    // execution: "both"
-    // price: "1.000000"
-    // total: "0.999998"
-    // type: "buy"
-
-    // amount: "0.08973"
-    // decimals: 6
-    // execution: "both"
-    // price: "1"
-    // total: "0.08973"
-    // type: "sell"
 
     e.preventDefault()
     setStatus((prev) => ({ ...prev, submitting: true }))
@@ -240,9 +223,52 @@ function PlaceOrderView(props) {
       ...order,
       execution: orderView === LIMIT_PANEL ? order.execution : 'market',
       address: activeWalletAddress,
-      asset,
-      type: asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
+      asset
     }
+
+    console.log('Order Submitted: ', order)
+
+    // Adjust OrderData if it is stablecoin
+    if (asset.isStable) {
+      orderData.amount = order.price
+      orderData.price = order.amount
+      orderData.type = order.type === 'buy' ? 'sell' : 'buy'
+    }
+    //     amount: "0.999998"
+    // decimals: 6
+    // execution: "both"
+    // price: "1.000000"
+    // total: "0.999998"
+    // type: "buy"
+
+    // amount: "0.08973"
+    // decimals: 6
+    // execution: "both"
+    // price: "1"
+    // total: "0.08973"
+    // type: "sell"
+
+    // Changed
+    // address: "4VBQQU66PR2MOHJ5PXNQTBCRBNJ2WRLMIAX5O6EQWIZREAEKR4GSDG56N4"
+    // amount: "0.1"
+    // asset: {id: 37074699, deleted: false, txid: 'JGNZUFHKV6SANVFQBI5CBNCJZVQMR233TKQIVIII3RGYLMGRBT6Q', decimals: 6, name: 'USDC', …}
+    // decimals: 6
+    // execution: "both"
+    // price: "1.00"
+    // total: "0.1"
+    // type: "sell"
+
+    //Current
+    // address: "4VBQQU66PR2MOHJ5PXNQTBCRBNJ2WRLMIAX5O6EQWIZREAEKR4GSDG56N4"
+    // amount: "0.2"
+    // asset: {id: 15322902, deleted: false, txid: 'NOFSUK4EXHFFXJK3ZA6DZMGE6CAGQ7G5JT2X7FYTYQBSQEBZHY4Q', decimals: 6, name: 'LAMP', …}
+    // decimals: 6
+    // execution: "both"
+    // price: "0.1"
+    // total: "0.02"
+    // type: "sell"
+
+    console.log('Order Submitted: OrderData', orderData)
 
     Sentry.addBreadcrumb({
       category: 'order',
@@ -318,10 +344,10 @@ function PlaceOrderView(props) {
       // if asset is stable invert sell/buy option
       let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
       if (_type === 'buy') {
-        console.log('BuyCondition: isBelowMinOrderAmount: ', order.total)
+        console.log(`BuyCondition: isBelowMinOrderAmount: ${_type}: `, order.total)
         return new Big(order.total).lt(0.5)
       }
-      console.log('BuyCondition: isBelowMinOrderAmount: ', order.total)
+      console.log(`BuyCondition: isBelowMinOrderAmount: ${_type}: `, order.total)
       return new Big(order.total).eq(0)
     }
 
@@ -467,7 +493,7 @@ function PlaceOrderView(props) {
               {asset.name}
             </LabelMd>
             <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance}
+              **{asaBalance}**
               <br />
               <LabelSm color="gray.500" fontWeight="500">
                 <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
