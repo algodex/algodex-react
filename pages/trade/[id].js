@@ -155,7 +155,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     if (locStorage.length === 0 && storedAddrs.length > 0) {
       setLocStorage(storedAddrs)
     }
-  }, [myAlgoConnector.current])
+  }, [myAlgoConnector.current, addresses])
 
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
