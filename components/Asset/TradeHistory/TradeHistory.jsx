@@ -130,22 +130,6 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
-  // const formatAmountFn = (amount) => {
-  //   let splited_amount = amount.toFixed(asset.decimals).split('.') // Split amount based on decimal
-  //   let strip_amount = parseInt(splited_amount[1], 10).toString() // Strip Preceding zeros
-  //   // let index = splited_amount[1].indexOf(strip_amount[0]) // Get index of first value greater than 0
-
-  //   if (splited_amount[1]?.length > 6) {
-  //     // Return with exponent
-  //     let last_decimal = asset.decimals - 6
-  //     let end_value = `e-${last_decimal}`
-  //     let f_res = strip_amount.padStart(6, '0').concat(end_value)
-  //     return `${splited_amount[0]}.`.concat(f_res)
-  //   }
-
-  //   return amount.toFixed(Math.min(asset.decimals))
-  // }
-
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 

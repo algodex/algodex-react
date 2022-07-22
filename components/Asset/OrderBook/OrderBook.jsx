@@ -363,24 +363,6 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
   }, [asset])
 
-  // const formatAmountFn = (amount) => {
-  //   let splited_amount = amount.toFixed(asset.decimals).split('.') // Split amount based on decimal
-  //   let strip_amount = parseInt(splited_amount[1], 10).toString() // Strip Preceding zeros
-  //   // let index = splited_amount[1].indexOf(strip_amount[0]) // Get index of first value greater than 0
-
-  //   if (splited_amount[1]?.length > 6) {
-  //     let last_decimal = asset.decimals - 6
-  //     let end_value = `e-${last_decimal}`
-  //     let f_res = strip_amount.padStart(6, '0').concat(end_value)
-  //     if (strip_amount.length > 6) {
-  //       return amount.toFixed(6)
-  //     }
-  //     return `${Math.round(splited_amount[0])}.`.concat(f_res)
-  //   }
-
-  //   return amount.toFixed(Math.min(6))
-  // }
-
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row) => {
