@@ -170,7 +170,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return algoBalance > 0
     }
     return false
-  }, [order])
+  }, [order, wallet])
 
   // const MICROALGO = 0.000001
 
