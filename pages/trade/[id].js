@@ -148,6 +148,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       reConnectMyAlgoWallet()
     }
   }, [])
+  const [addresses, setAddresses] = useContext(WalletsContext)
 
   useEffect(() => {
     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
@@ -178,8 +179,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     },
     [setInterval, interval]
   )
-
-  const [addresses, setAddresses] = useContext(WalletsContext)
 
   useEffect(() => {
     if (addresses.length === 0 && locStorage.length > 0) {
