@@ -296,7 +296,7 @@ export function useAssetChartQuery({
  * @param type
  * @returns {*}
  */
-function aggregateOrders(orders, asaDecimals, type) {
+function aggregateOrders(orders, asaDecimals, type, ascending) {
   const isBuyOrder = type === 'buy'
   let total = 0
 
@@ -349,7 +349,14 @@ function aggregateOrders(orders, asaDecimals, type) {
     return b.price - a.price
   }
 
-  return orders.sort(sortOrdersToAggregate).reduce(reduceAggregateData, []).sort(sortRowsByPrice)
+  const sortRowsByPriceInAscending = (a, b) => {
+    return a.price - b.price
+  }
+
+  return orders
+    .sort(sortOrdersToAggregate)
+    .reduce(reduceAggregateData, [])
+    .sort(ascending ? sortRowsByPriceInAscending : sortRowsByPrice)
 }
 
 /**
@@ -366,7 +373,7 @@ export function useAssetOrderbookQuery({
   }
 } = {}) {
   // console.log(`useAssetOrderbookQuery(${JSON.stringify({ asset })})`)
-  const { id, decimals } = asset
+  const { id, decimals, isStable } = asset
   const [sell, setSellOrders] = useState([])
   const [buy, setBuyOrders] = useState([])
 
@@ -385,8 +392,8 @@ export function useAssetOrderbookQuery({
       typeof data.sellASAOrdersInEscrow !== 'undefined' &&
       typeof data.buyASAOrdersInEscrow !== 'undefined'
     ) {
-      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, decimals, 'sell'))
-      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, decimals, 'buy'))
+      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, decimals, 'sell', isStable && true))
+      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, decimals, 'buy', isStable && true))
     }
   }, [isLoading, data, setSellOrders, setBuyOrders, decimals])
 
