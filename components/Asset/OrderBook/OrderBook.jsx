@@ -457,13 +457,21 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           )}
           <br></br>
           <Header>
-            <TablePriceHeader title="price" textAlign="left" />
+            <TablePriceHeader
+              title="price"
+              textAlign="left"
+              currenySymbol={asset.isStable && '$'}
+            />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               <NoLineBreak>
-                {t('amount')} ({assetVeryShortName})
+                {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
               </NoLineBreak>
             </BodyCopyTiny>
-            <TablePriceHeader title="total" textAlign="right" />
+            <TablePriceHeader
+              title="total"
+              textAlign="right"
+              currenySymbol={asset.isStable && '$'}
+            />
           </Header>
         </HeaderWrapper>
 

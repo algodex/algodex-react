@@ -14,19 +14,21 @@ export const PriceHeaderText = styled(BodyCopyTiny)`
   }
 `
 
-export const TablePriceHeader = ({ title, textAlign }) => {
+export const TablePriceHeader = ({ title, textAlign, currenySymbol }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText data-testid="header-item" textAlign={textAlign}>
       {t(title)}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!currenySymbol && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
+      {currenySymbol && <span>&nbsp;{currenySymbol}</span>}
     </PriceHeaderText>
   )
 }
 
 TablePriceHeader.propTypes = {
   title: PropTypes.string.isRequired,
-  textAlign: PropTypes.string.isRequired
+  textAlign: PropTypes.string.isRequired,
+  currenySymbol: PropTypes.string
 }
 
 export default TablePriceHeader
