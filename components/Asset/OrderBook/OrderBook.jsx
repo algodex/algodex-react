@@ -460,7 +460,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
             <TablePriceHeader
               title="price"
               textAlign="left"
-              currenySymbol={asset.isStable && '$'}
+              currenySymbol={asset.isStable && `(${assetVeryShortName})`}
             />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               <NoLineBreak>
@@ -470,7 +470,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
             <TablePriceHeader
               title="total"
               textAlign="right"
-              currenySymbol={asset.isStable && '$'}
+              currenySymbol={asset.isStable && `(${assetVeryShortName})`}
             />
           </Header>
         </HeaderWrapper>

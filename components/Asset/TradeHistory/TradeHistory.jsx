@@ -9,6 +9,7 @@ import { floatToFixed } from 'services/display'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
 
@@ -134,6 +135,10 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
+  const assetVeryShortName = useMemo(() => {
+    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
+  }, [asset])
+
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
@@ -190,7 +195,7 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
           {!isMobile && <HeaderCaps color="gray.500">{t('trade-history')}</HeaderCaps>}
           <br />
           <Header>
-            <PriceHeader currenySymbol={asset.isStable && '$'} />
+            <PriceHeader currenySymbol={asset.isStable && `(${assetVeryShortName})`} />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               {t('amount')}
             </BodyCopyTiny>
