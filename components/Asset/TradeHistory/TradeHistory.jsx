@@ -106,14 +106,19 @@ const PriceHeaderText = styled(BodyCopyTiny)`
   }
 `
 
-const PriceHeader = () => {
+const PriceHeader = ({ currenySymbol }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText>
       {t('price')}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!currenySymbol && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
+      {currenySymbol && <span>&nbsp;{currenySymbol}</span>}
     </PriceHeaderText>
   )
+}
+
+PriceHeader.propTypes = {
+  currenySymbol: PropTypes.string
 }
 
 /**
@@ -185,7 +190,7 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
           {!isMobile && <HeaderCaps color="gray.500">{t('trade-history')}</HeaderCaps>}
           <br />
           <Header>
-            <PriceHeader />
+            <PriceHeader currenySymbol={asset.isStable && '$'} />
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               {t('amount')}
             </BodyCopyTiny>
