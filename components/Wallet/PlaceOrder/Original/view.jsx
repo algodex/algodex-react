@@ -336,8 +336,8 @@ function PlaceOrderView(props) {
 
   const renderSubmit = () => {
     const buttonProps = {
-      buy: { variant: 'primary', text: `${t('buy')} ${asset.name}` },
-      sell: { variant: 'danger', text: `${t('sell')} ${asset.name}` }
+      buy: { variant: 'primary', text: `${t('buy')} ${asset.isStable ? 'ALGO' : asset.name}` },
+      sell: { variant: 'danger', text: `${t('sell')} ${asset.isStable ? 'ALGO' : asset.name}` }
     }
 
     const isBelowMinOrderAmount = () => {
