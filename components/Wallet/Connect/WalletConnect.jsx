@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -180,6 +180,27 @@ export function WalletView(props) {
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
 
+  const myAlgoDisconnect = (targetWallet) => {
+    const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
+      return wallet.address !== targetWallet.address
+    })
+    //You may want to filter by active address array to avoid rehydration?
+    localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+    setAddresses(remainingAddresses)
+    if (targetWallet.address === activeWalletAddress.address)
+      onSetActiveWallet(remainingAddresses[0] || null)
+  }
+
+  const peraDisconnect = (targetWallet) => {
+    const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
+      return wallet.address !== targetWallet.address
+    })
+
+    localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+    setAddresses(remainingAddresses)
+    targetWallet.connector.killSession()
+  }
+
   const myAlgoConnect = () => {
     const mappedAddresses = addresses.map((addr) => {
       if (addr.type === 'my-algo-wallet') {
@@ -197,6 +218,11 @@ export function WalletView(props) {
   const walletReconnectorMap = {
     'my-algo-wallet': myAlgoConnect,
     'wallet-connect': peraConnect
+  }
+
+  const walletDisconnectMap = {
+    'my-algo-wallet': myAlgoDisconnect,
+    'wallet-connect': peraDisconnect
   }
 
   // const getButtonVariant = () => {
@@ -314,36 +340,54 @@ export function WalletView(props) {
 
   const renderWallets = () => {
     return addresses.map((wallet) => (
-      <WalletRow
-        key={wallet.address}
-        tabIndex={isTabbable(wallet.address)}
-        role="button"
-        isActive={isWalletActive(wallet.address)}
-        onClick={() => handleWalletClick(wallet)}
-        onKeyDown={(e) => handleKeyDown(e, wallet.address)}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Image
-            src={getWalletLogo(wallet)}
-            alt="Algorand Wallet Client Image"
-            width={25}
-            height={25}
-          />
-          &nbsp;
-          <Icon
-            fillGradient="000"
-            onClick={() => copyAddress(wallet.address)}
-            use="wallet"
-            size={0.75}
-          />
-          &nbsp;
-          <Typography variant="body_small" fontWeight="bold" title={wallet.address}>
-            {truncatedWalletAddress(wallet.address, 4)}
-          </Typography>
+      <Container key={wallet.address}>
+        <WalletRow
+          key={wallet.address}
+          tabIndex={isTabbable(wallet.address)}
+          role="button"
+          isActive={isWalletActive(wallet.address)}
+          onClick={() => handleWalletClick(wallet)}
+          onKeyDown={(e) => handleKeyDown(e, wallet.address)}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Image
+              src={getWalletLogo(wallet)}
+              alt="Algorand Wallet Client Image"
+              width={25}
+              height={25}
+            />
+            &nbsp;
+            <Icon
+              fillGradient="000"
+              onClick={() => copyAddress(wallet.address)}
+              use="wallet"
+              size={0.75}
+            />
+            &nbsp;
+            <Typography variant="body_small" fontWeight="bold" title={wallet.address}>
+              {truncatedWalletAddress(wallet.address, 4)}
+            </Typography>
+          </Box>
+          {renderBalance(convertFromBaseUnits(wallet.amount))}
+        </WalletRow>
+        <Box
+          sx={{
+            margin: '0.375rem 0.75rem',
+            padding: ' 0.125rem 0.375rem'
+          }}
+        >
+          <Button
+            onClick={() => {
+              walletDisconnectMap[wallet.type](wallet)
+            }}
+            className="font-semibold hover:font-bold text-white border-white hover:border-white"
+            variant="outlined"
+            size="small"
+          >
+            Disconnect {truncatedWalletAddress(wallet.address, 4)}
+          </Button>
         </Box>
-
-        {renderBalance(convertFromBaseUnits(wallet.amount))}
-      </WalletRow>
+      </Container>
     ))
   }
 
