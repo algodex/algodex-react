@@ -19,6 +19,7 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(114px, 1fr));
   grid-row-gap: 1rem;
   grid-column-gap: 1rem;
+  min-height: 30vh;
   @media (max-width: 501px) {
     grid-template-columns: repeat(auto-fit, minmax(69px, 1fr));
   }
