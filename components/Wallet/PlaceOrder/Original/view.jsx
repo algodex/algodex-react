@@ -86,8 +86,8 @@ function PlaceOrderView(props) {
    * Sell orders are enabled if active wallet has an ASA balance > 0
    */
   const enableOrder = {
-    buy: maxSpendableAlgo > 0,
-    sell: asaBalance > 0
+    buy: asset.isStable ? asaBalance > 0 : maxSpendableAlgo > 0,
+    sell: asset.isStable ? maxSpendableAlgo > 0 : asaBalance > 0
   }
 
   const order = useStore((state) => state.order)
