@@ -14,6 +14,7 @@ import useTranslation from 'next-translate/useTranslation'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { useState, useContext, useEffect, useRef } from 'react'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+import useAccountsInfo from '@/hooks/useAccountsInfo'
 
 // import useWallets from '@/hooks/useWallets'
 
@@ -167,14 +168,7 @@ const WalletRow = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const {
-    activeWalletAddress,
-    isSignedIn,
-    addresses,
-    onSetActiveWallet,
-    setAddresses,
-    isConnected
-  } = props
+  const { activeWallet, isSignedIn, addresses, setActiveWallet, setAddresses, isConnected } = props
 
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
@@ -187,8 +181,8 @@ export function WalletView(props) {
     //You may want to filter by active address array to avoid rehydration?
     localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
     setAddresses(remainingAddresses)
-    if (targetWallet.address === activeWalletAddress.address)
-      onSetActiveWallet(remainingAddresses[0] || null)
+    if (targetWallet.address === activeWallet.address)
+      setActiveWallet(remainingAddresses[0] || null)
   }
 
   const peraDisconnect = (targetWallet) => {
@@ -230,7 +224,7 @@ export function WalletView(props) {
   // }
 
   const isWalletActive = (addr) => {
-    return activeWalletAddress?.address === addr
+    return activeWallet?.address === addr
   }
 
   const isTabbable = (addr) => {
@@ -238,17 +232,29 @@ export function WalletView(props) {
   }
 
   const handleWalletClick = async (addr) => {
-    !isWalletActive(addr) && onSetActiveWallet(addr)
+    !isWalletActive(addr) && setActiveWallet(addr)
   }
 
-  // const removeWalletConnect =
-  //   typeof activeWalletAddress !== 'undefined' && //activeWallet exists &
-  //   !activeWalletAddress.connector.isConnected && //is not connected &
-  //   activeWalletAddress.type === 'wallet-connect' // is type wallet connect
+  const walletsQuery = useAccountsInfo(addresses)
+
+  useEffect(() => {
+    if (walletsQuery.data) {
+      const mappedAddresses = addresses.map((wallet, idx) => {
+        return { ...wallet, ...walletsQuery.data[idx] }
+      })
+      const updatedActiveWallet = mappedAddresses.filter(
+        (wallet) => wallet.address === activeWallet.address
+      )[0]
+      setActiveWallet(updatedActiveWallet)
+
+      setAddresses(mappedAddresses)
+      localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
+    }
+  }, [walletsQuery.data])
 
   const rehyrdateWallet =
-    typeof activeWalletAddress !== 'undefined' && //activeWallet exists &
-    typeof activeWalletAddress?.connector?.sign === 'undefined' // does not have a signing method
+    typeof activeWallet !== 'undefined' && //activeWallet exists &
+    typeof activeWallet?.connector?.sign === 'undefined' // does not have a signing method
 
   useEffect(() => {
     const reConnectMyAlgoWallet = async () => {
@@ -263,14 +269,14 @@ export function WalletView(props) {
   }, [])
 
   useEffect(() => {
-    if (!isConnected && typeof activeWalletAddress !== 'undefined') {
+    if (!isConnected && typeof activeWallet !== 'undefined') {
       const cachedAddresses = JSON.parse(localStorage.getItem('addresses'))
       if (
         Array.isArray(cachedAddresses) &&
-        cachedAddresses.map((addr) => addr.address).includes(activeWalletAddress?.address)
+        cachedAddresses.map((addr) => addr.address).includes(activeWallet?.address)
       ) {
         const addressesToCache = cachedAddresses.filter(
-          (addr) => addr.address !== activeWalletAddress?.address
+          (addr) => addr.address !== activeWallet?.address
         )
         localStorage.setItem('addresses', JSON.stringify(addressesToCache))
         setAddresses(addressesToCache)
@@ -280,22 +286,20 @@ export function WalletView(props) {
 
   useEffect(() => {
     if (rehyrdateWallet) {
-      walletReconnectorMap[activeWalletAddress.type]()
+      walletReconnectorMap[activeWallet.type]()
     }
-  }, [activeWalletAddress])
+  }, [activeWallet])
 
   useEffect(() => {
-    if (typeof activeWalletAddress !== 'undefined' && addresses.length > 0) {
-      const targetWallet = addresses.filter(
-        (addr) => addr.address === activeWalletAddress.address
-      )[0]
-      if (typeof targetWallet?.connector?.sign !== 'undefined') onSetActiveWallet(targetWallet)
+    if (typeof activeWallet !== 'undefined' && addresses.length > 0) {
+      const targetWallet = addresses.filter((addr) => addr.address === activeWallet.address)[0]
+      if (typeof targetWallet?.connector?.sign !== 'undefined') setActiveWallet(targetWallet)
     }
   }, [addresses])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      !isWalletActive(addr) && onSetActiveWallet(addr)
+      !isWalletActive(addr) && setActiveWallet(addr)
     }
   }
   const copyAddress = (address) => {
@@ -447,11 +451,11 @@ export function WalletView(props) {
 WalletView.propTypes = {
   addresses: PropTypes.array.isRequired,
   setAddresses: PropTypes.func.isRequired,
-  activeWalletAddress: PropTypes.string,
+  activeWallet: PropTypes.string,
   isConnected: PropTypes.bool,
   isSignedIn: PropTypes.bool,
   onConnectClick: PropTypes.func.isRequired,
-  onSetActiveWallet: PropTypes.func.isRequired,
+  setActiveWallet: PropTypes.func.isRequired,
   area: PropTypes.string
 }
 
@@ -465,7 +469,7 @@ WalletView.defaultProps = {
  * @returns {JSX.Element}
  * @constructor
  */
-function WalletConnect(props) {
+function WalletConnect() {
   const { wallet, setWallet, isConnected } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
@@ -482,10 +486,9 @@ function WalletConnect(props) {
       addresses={addresses}
       isConnected={isConnected}
       setAddresses={setAddresses}
-      activeWalletAddress={wallet}
+      activeWallet={wallet}
       isSignedIn={signedIn}
-      onSetActiveWallet={setWallet}
-      {...props}
+      setActiveWallet={setWallet}
     />
   )
 }
