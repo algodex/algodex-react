@@ -51,8 +51,24 @@ const gridStyles = `
 
 const Arrow = styled.div`
   position: absolute;
-  top: 0.5rem;
+  top: -0.5rem;
   left: 0.375rem;
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    top: 0.5rem;
+  }
+
+  @media (min-width: 1024px) and (orientation: portrait) {
+    display: none;
+    top: -0.5rem;
+  }
+
+  @media (min-width: 1536px) {
+    display: block;
+    top: -0.5rem;
+  }
 `
 
 const Header = styled.header`
