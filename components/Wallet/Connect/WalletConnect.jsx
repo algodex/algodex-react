@@ -192,7 +192,9 @@ export function WalletView(props) {
 
     localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
     setAddresses(remainingAddresses)
-    targetWallet.connector.killSession()
+    if (activeWallet.address === targetWallet.address) setActiveWallet(remainingAddresses[0])
+    if (typeof targetWallet.connector.killSession !== 'undefined')
+      targetWallet.connector.killSession()
   }
 
   const myAlgoConnect = () => {
