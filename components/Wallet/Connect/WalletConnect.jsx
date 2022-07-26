@@ -242,10 +242,6 @@ export function WalletView(props) {
       const mappedAddresses = addresses.map((wallet, idx) => {
         return { ...wallet, ...walletsQuery.data[idx] }
       })
-      const updatedActiveWallet = mappedAddresses.filter(
-        (wallet) => wallet.address === activeWallet.address
-      )[0]
-      setActiveWallet(updatedActiveWallet)
 
       setAddresses(mappedAddresses)
       localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
@@ -475,7 +471,7 @@ function WalletConnect() {
   const [signedIn, setSignedIn] = useState(false)
 
   useEffect(() => {
-    if (addresses.length > 0) {
+    if (addresses.length > 0 && typeof wallet === 'undefined') {
       setSignedIn(true)
       setWallet(addresses[0])
     }
