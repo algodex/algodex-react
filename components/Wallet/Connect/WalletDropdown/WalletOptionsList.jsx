@@ -38,7 +38,11 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
       addressesRef.current = addresses
     }
 
-    if (JSON.parse(localStorage.getItem('addresses')).length === 0 && addresses.length > 0) {
+    if (
+      JSON.parse(localStorage.getItem('addresses')).length === 0 &&
+      typeof addresses !== 'undefined' &&
+      addresses.length > 0
+    ) {
       localStorage.setItem('addresses', JSON.stringify(addresses))
     }
     const walletDifference = difference(
