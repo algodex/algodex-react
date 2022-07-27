@@ -40,7 +40,7 @@ export const USDInputPrice = ({ value, id, showFee }) => {
 }
 
 USDInputPrice.propTypes = {
-  showFee: PropTypes.boolean,
+  showFee: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   asset: PropTypes.object
