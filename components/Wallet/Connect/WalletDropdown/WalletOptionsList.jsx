@@ -90,13 +90,13 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
             onKeyPress={() => console.log('key pressed')}
           >
             <Image
-              src="/Official-Algo-Wallet-icon.svg"
+              src="/Pera-Wallet-icon.svg"
               alt="Algorand Mobile Wallet"
               width={25}
               height={25}
             />
             <Typography className="underline ml-2" variant="body_small_bold">
-              Algorand Mobile Wallet
+              Wallet Connect (Pera or Defly)
             </Typography>
           </Box>
           <Box
