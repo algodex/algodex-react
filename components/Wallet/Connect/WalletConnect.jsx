@@ -168,7 +168,7 @@ const WalletRow = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWallet, isSignedIn, addresses, setActiveWallet, setAddresses, isConnected } = props
+  const { activeWallet, isSignedIn, addresses, setActiveWallet, setAddresses } = props
 
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
@@ -246,7 +246,8 @@ export function WalletView(props) {
       })
 
       setAddresses(mappedAddresses)
-      localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
+      //Below is commented out because setting localstorage breaks with myAlgo Popup
+      // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
     }
   }, [walletsQuery.data])
 
@@ -266,21 +267,21 @@ export function WalletView(props) {
     reConnectMyAlgoWallet()
   }, [])
 
-  useEffect(() => {
-    if (!isConnected && typeof activeWallet !== 'undefined') {
-      const cachedAddresses = JSON.parse(localStorage.getItem('addresses'))
-      if (
-        Array.isArray(cachedAddresses) &&
-        cachedAddresses.map((addr) => addr.address).includes(activeWallet?.address)
-      ) {
-        const addressesToCache = cachedAddresses.filter(
-          (addr) => addr.address !== activeWallet?.address
-        )
-        localStorage.setItem('addresses', JSON.stringify(addressesToCache))
-        setAddresses(addressesToCache)
-      }
-    }
-  }, [isConnected])
+  // useEffect(() => {
+  //   if (!isConnected && typeof activeWallet !== 'undefined') {
+  //     const cachedAddresses = JSON.parse(localStorage.getItem('addresses'))
+  //     if (
+  //       Array.isArray(cachedAddresses) &&
+  //       cachedAddresses.map((addr) => addr.address).includes(activeWallet?.address)
+  //     ) {
+  //       const addressesToCache = cachedAddresses.filter(
+  //         (addr) => addr.address !== activeWallet?.address
+  //       )
+  //       localStorage.setItem('addresses', JSON.stringify(addressesToCache))
+  //       setAddresses(addressesToCache)
+  //     }
+  //   }
+  // }, [isConnected])
 
   useEffect(() => {
     if (rehyrdateWallet) {
@@ -334,7 +335,7 @@ export function WalletView(props) {
     }
     switch (wallet.type) {
       case 'wallet-connect':
-        return '/Official-Algo-Wallet-icon.svg'
+        return '/Pera-Wallet-Icon.svg'
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
     }
