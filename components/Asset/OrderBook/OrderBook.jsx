@@ -14,6 +14,7 @@ import { floatToFixedDynamic } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
+import { useDetermineAssetAmount } from '@/hooks/useDetermineAmount'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
@@ -362,6 +363,8 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
   }, [asset])
 
+  const calculateAmount = useDetermineAssetAmount(asset, 100)
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row) => {
@@ -372,7 +375,8 @@ export function OrderBook({ isMobile, asset, orders, components }) {
         setOrder(
           {
             price: row.price,
-            type: type === 'buy' ? 'sell' : 'buy'
+            type: type === 'buy' ? 'sell' : 'buy',
+            amount: parseFloat(Big(calculateAmount).div(asset.price_info.price)).toString()
           },
           asset
         )

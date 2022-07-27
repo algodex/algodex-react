@@ -43,7 +43,7 @@ let urlToLastResp
  * @returns {Promise<AxiosResponse<Object>>} Response or Cached Result
  */
 async function getEtagResponse(url) {
-  // DEBUG && console.debug(`getEtagResponse(${API_HOST})`)
+  DEBUG && console.debug(`getEtagResponse(${API_HOST})`)
   if (typeof urlToEtag === 'undefined') {
     urlToEtag = {}
   }
@@ -67,8 +67,8 @@ async function getEtagResponse(url) {
     options.headers['if-none-match'] = urlToEtag[url]
   }
 
-  // DEBUG && console.debug(options)
-  // DEBUG && console.debug('url: ' + url)
+  DEBUG && console.debug(options)
+  DEBUG && console.debug('url: ' + url)
   return await axios
     .get(url, options)
     .then((res) => {
@@ -115,7 +115,7 @@ export async function fetchRecentTrades() {
  * @returns {Promise<Object>}
  */
 export async function fetchAssetChart(id, interval) {
-  // DEBUG && console.debug(`fetchAssetChart(${id}, ${interval})`)
+  DEBUG && console.debug(`fetchAssetChart(${id}, ${interval})`)
   const res = await getEtagResponse(`${API_HOST}/charts2.php?assetId=${id}&chartTime=${interval}`)
   return res.data
 }
@@ -126,7 +126,7 @@ export async function fetchAssetChart(id, interval) {
  * @returns {Promise<Object>}
  */
 export async function fetchAssetOrders(id) {
-  // DEBUG && console.debug(`fetchAssetOrders(${id})`)
+  DEBUG && console.debug(`fetchAssetOrders(${id})`)
   let url = `${API_HOST}/orders.php?assetId=${id}`
   const res = await getEtagResponse(url)
 
@@ -157,7 +157,7 @@ export async function fetchWalletOrders(address, includeAssetInfo = true) {
  * @returns {Promise<Object>}
  */
 export async function fetchAssetTradeHistory(id) {
-  // DEBUG && console.debug(`fetchAssetTradeHistory(${id})`)
+  DEBUG && console.debug(`fetchAssetTradeHistory(${id})`)
   const res = await getEtagResponse(`${API_HOST}/trade_history.php?assetId=${id}`)
   return res.data
 }
@@ -193,7 +193,7 @@ export async function fetchWalletAssets(address) {
  * @returns {Promise<{assets: any}>}
  */
 export async function searchAssets(query) {
-  // console.debug(`searchAssets(${query})`)
+  console.debug(`searchAssets(${query})`)
   const res = await getEtagResponse(`${API_HOST}/asset_search.php?query=${query}`)
   return { assets: res.data }
 }
@@ -216,7 +216,7 @@ export async function fetchAssets() {
  * @returns {Promise<*>}
  */
 export async function fetchAssetPrice(id) {
-  // console.debug(`fetchAssetPrice(${id})`)
+  console.debug(`fetchAssetPrice(${id})`)
   const {
     data: { data }
   } = await getEtagResponse(`${API_HOST}/assets.php?id=${id}`)

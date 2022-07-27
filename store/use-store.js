@@ -108,7 +108,7 @@ export const useStore = create(
         amount: '',
         total: '0',
         execution: 'both',
-        decimals: 6,
+        decimals: 6
       },
       setOrder: (order, asset) =>
         set((state) => {
