@@ -20,11 +20,15 @@ export const useSpendableAmount = (asset, value) => {
   })
 
   useEffect(() => {
-    if (!isWalletBalanceLoading && !isWalletBalanceError) {
-      const total = new Big(algoBalance)
-      const min = new Big(minBalance).div(1000000)
-      const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
-      setMaxSpendableAlgo(Math.max(0, max))
+    try {
+      if (!isWalletBalanceLoading && !isWalletBalanceError) {
+        const total = new Big(algoBalance)
+        const min = new Big(minBalance).div(1000000)
+        const max = total.minus(min).minus(0.1).round(6, Big.roundDown).toNumber()
+        setMaxSpendableAlgo(Math.max(0, max))
+      }
+    } catch (error) {
+      console.debug('Wallet not connected')
     }
   }, [minBalance, algoBalance, isWalletBalanceLoading, isWalletBalanceError])
 
