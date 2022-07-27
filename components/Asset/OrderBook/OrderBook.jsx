@@ -14,8 +14,8 @@ import { floatToFixedDynamic } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
-import { useDetermineAssetAmount } from '@/hooks/useDetermineAmount'
 import { useEventDispatch } from '@/hooks/useEvents'
+import { useSpendableAmount } from '@/hooks/useSpendableAmount'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
@@ -363,7 +363,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
   }, [asset])
 
-  const calculateAmount = useDetermineAssetAmount(asset, 100)
+  const calculateAmount = useSpendableAmount(asset, 100)
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
