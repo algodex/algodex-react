@@ -6,7 +6,7 @@ import { isEqual } from 'lodash/lang'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
-import { filter } from 'lodash'
+
 /**
  *
  * @param {Array<Wallet>} a
@@ -48,7 +48,7 @@ function useWallets(initialState) {
   const [activeWallet, setActiveWallet] = useState()
   const [addresses, setAddresses] = context
 
-  const { http } = useAlgodex()
+  const { http, setWallet: setAlgodexWallet } = useAlgodex()
 
   const onEvents = useCallback(
     (props) => {
@@ -106,9 +106,11 @@ function useWallets(initialState) {
   const handleDisconnect = useCallback(
     (_addresses) => {
       const remainingAddresses =
-        addresses.filter((wallet) => wallet.address !== _addresses[0]) || []
+        JSON.parse(localStorage.getItem('addresses')).filter(
+          (wallet) => wallet.address !== _addresses[0]
+        ) || []
       setAddresses(remainingAddresses)
-      setWallet(remainingAddresses.length > 0 ? remainingAddresses[0] : undefined)
+      setAlgodexWallet(remainingAddresses.length > 0 ? remainingAddresses[0] : undefined)
       localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
       console.error('Handle removing from storage', _addresses)
     },
