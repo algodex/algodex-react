@@ -335,7 +335,7 @@ export function WalletView(props) {
     }
     switch (wallet.type) {
       case 'wallet-connect':
-        return '/Pera-Wallet-icon.svg'
+        return '/Wallet-Connect-icon.svg'
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
     }

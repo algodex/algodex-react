@@ -92,7 +92,7 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
             onKeyPress={() => console.log('key pressed')}
           >
             <Image
-              src="/Pera-Wallet-icon.svg"
+              src="/Wallet-Connect-icon.svg"
               alt="Algorand Mobile Wallet"
               width={25}
               height={25}
