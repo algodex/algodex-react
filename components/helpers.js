@@ -2,7 +2,7 @@ export const formatUSDPrice = (amount) => {
   return amount > 10000 ? Math.round(amount).toLocaleString() : amount.toFixed(2).toLocaleString()
 }
 
-export const formatAmountFn = (amount, decimals = 6) => {
+export const formatAmountFn = (amount, decimals) => {
   try {
     let splited_amount = amount.toFixed(decimals).split('.') // Split amount based on decimal
     let strip_amount = parseInt(splited_amount[1], 10).toString() // Strip Preceding zeros
