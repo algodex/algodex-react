@@ -26,12 +26,11 @@ const TableWrapper = styled.div`
   padding: 0;
   position: absolute;
   inset: 0;
-  overflow: scroll;
-  scrollbar-width: none;
+  // scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 `
 
 const OrderCancelButton = styled.button`
@@ -52,6 +51,7 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
+  // console.log(_orders, 'orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
 
   useEffect(() => {
