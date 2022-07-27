@@ -19,7 +19,6 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(114px, 1fr));
   grid-row-gap: 1rem;
   grid-column-gap: 1rem;
-  min-height: 30vh;
   @media (max-width: 501px) {
     grid-template-columns: repeat(auto-fit, minmax(69px, 1fr));
   }
@@ -56,6 +55,9 @@ const TabPanel = styled.div`
   flex: 1;
   border-bottom: 2px solid ${({ theme }) => theme.palette.white};
   padding-bottom: 2rem;
+  @media (min-width: 1000px) and (max-width: 1298px) {
+    padding-right: 2rem;
+  }
 `
 const Tabs = styled.div`
   position: relative;
