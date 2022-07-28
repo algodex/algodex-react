@@ -330,7 +330,8 @@ export function OrderBook({ isMobile, asset, orders, components }) {
       ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
       : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
-    const _amount = order.amount
+    const _amount = asset.isStable ? order.amount * order.price : order.amount
+
     const index = result.findIndex(
       (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
     )
