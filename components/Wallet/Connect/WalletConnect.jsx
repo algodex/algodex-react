@@ -1,20 +1,21 @@
 import { Box, Button } from '@mui/material'
+import { useContext, useEffect, useRef, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
+
 import Icon from 'components/Icon/Icon'
+import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import Image from 'next/image'
 // import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { truncatedWalletAddress } from '@/components/helpers'
+import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
-import { useState, useContext, useEffect, useRef } from 'react'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-import useAccountsInfo from '@/hooks/useAccountsInfo'
 
 // import useWallets from '@/hooks/useWallets'
 
@@ -434,7 +435,7 @@ export function WalletView(props) {
             {/* <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow> */}
-            <Typography variant="h5" color="gray.100" m={0} mb={4}>
+            <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
               {t('start-by')}
             </Typography>
             <Typography variant="subtitle_small" color="gray.500" m={0}>
