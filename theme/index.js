@@ -523,6 +523,22 @@ const theme = {
           }
         },
         {
+          props: { variant: 'disconnect-wallet' },
+          style: {
+            color: colors.gray['900'],
+            // border: '1px solid transparent',
+            backgroundColor: colors.gray['400'],
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.gray['400'])
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[1],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
           props: { variant: 'default' },
           style: {
             color: colors.gray['000'],
