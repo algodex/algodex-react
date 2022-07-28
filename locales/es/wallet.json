@@ -3,7 +3,7 @@
   "connect-another-wallet-button": "Conectar otra billetera",
   "wallet": "Billetera",
   "balance": "Saldo",
-  "start-by": "Comience conectando una billetera Algorand",
+  "start-by": "Una vez que haya conectado una billetera, puede comenzar a operar",
   "once-connected": "Una vez que haya conectado una billetera usando MyAlgo, puede comenzar a operar",
   "copy-success":"¡Copié la dirección de la billetera al portapapeles!",
   "copy-fail":"Error al copiar la dirección de la billetera al portapapeles"

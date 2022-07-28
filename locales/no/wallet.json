@@ -3,7 +3,7 @@
   "connect-another-wallet-button": "Koble til en annen lommebok ",
   "wallet": "Lommebok",
   "balance": "BALANSERE",
-  "start-by": "  Start med å koble til en Algorand-lommebok  ",
+  "start-by": "Når du har koblet til en lommebok, kan du begynne å handle",
   "once-connected": "Når du har koblet til en lommebok med MyAlgo, kan du begynne å handle ",
   "copy-success":"Kopierte lommebokadressen til utklippstavlen!",
   "copy-fail":"Kunne ikke kopiere lommebokadressen til utklippstavlen"

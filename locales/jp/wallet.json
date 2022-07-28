@@ -3,7 +3,7 @@
   "connect-another-wallet-button": " 別のウォレットに接続する",
   "wallet": "ウォレット",
   "balance": "残高",
-  "start-by": "Algorandのウォレットを接続してみよう ",
+  "start-by": "ウォレットを接続したら、取引を開始できます",
   "once-connected": "MyAlgoを使ってウォレットを接続すれば取引を開始できます",
   "copy-success":"ウォレットアドレスをクリップボードにコピーしました！",
   "copy-fail":"ウォレットアドレスをクリップボードにコピーできませんでした"

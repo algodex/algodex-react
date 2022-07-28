@@ -3,7 +3,7 @@
   "connect-another-wallet-button": "Connecter un Autre Portefeuille ",
   "wallet": "Portefeuille",
   "balance": "SOLDE",
-  "start-by": "  Commencer par connecter un portefeuille Algorand  ",
+  "start-by": "Une fois que vous avez connecté un portefeuille, vous pouvez commencer à trader",
   "once-connected": "Une fois que vous avez connecté un portefeuille via MyAlgo vous pouvez commencer à trader ",
   "copy-success":"Adresse du portefeuille copiée dans le presse-papier !",
   "copy-fail":"Échec de la copie de l'adresse du portefeuille dans le presse-papiers"

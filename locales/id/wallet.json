@@ -3,7 +3,7 @@
   "connect-another-wallet-button": " Hubungkan Dompet Lain",
   "wallet": "DOMPET",
   "balance": "SALDO",
-  "start-by": " Mulai dengan menghubungkan dompet Algorand   ",
+  "start-by": "Setelah Anda menghubungkan dompet, Anda dapat mulai berdagang",
   "once-connected": "Setelah Anda menghubungkan dompet menggunakan MyAlgo, Anda dapat memulai Perdagangan ",
   "copy-success":"Salin alamat dompet ke papan klip!",
   "copy-fail":"Gagal menyalin alamat dompet ke papan klip"
