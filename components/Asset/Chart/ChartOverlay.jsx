@@ -243,6 +243,10 @@ function ChartOverlay(props) {
           <OhlcItem value={changeAmt}>
             <dd data-testid="dailyChange">{openCloseChange()}</dd>
           </OhlcItem>
+          <OhlcItem value={volume}>
+            <dt>Volume:</dt>
+            <dd data-testid="volume">{volume}</dd>
+          </OhlcItem>
         </OhlcList>
       </Header>
       <BidAskSpreadContainer>

@@ -182,12 +182,12 @@ function getOhlc(data, isStableAsset) {
   return lastPriceData
 }
 
-function mapVolumeData(data, volUpColor, volDownColor) {
+function mapVolumeData(data, isStableAsset, volUpColor, volDownColor) {
   const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
     const time = parseInt(unixTime)
     return {
       time: time,
-      value: asaVolume
+      value: isStableAsset ? (asaVolume == 0 ? 'Invalid' : 1 / asaVolume) : asaVolume
     }
   })
   const volumeColors = data?.chart_data.map(({ open, close }) =>
@@ -264,14 +264,21 @@ export function useAssetChartQuery({
     [orderBook]
   )
   const priceData = useMemo(() => mapPriceData(data, asset.isStable), [data])
-  const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
+  const volumeData = useMemo(
+    () => mapVolumeData(data, asset.isStable, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR),
+    [data]
+  )
   const ohlcOverlay = useMemo(() => getOhlc(data, asset.isStable), [data])
 
-  const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
+  let volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
+
+  if (asset.isStable) {
+    volume = volume == 0 ? 'Invalid' : 1 / volume
+  }
 
   const isLoading = isOrdersLoading || isChartLoading
   const isError = isOrdersError || isChartError
-
+  console.log('VolumeData: ', volumeData)
   return {
     data: {
       overlay: {
