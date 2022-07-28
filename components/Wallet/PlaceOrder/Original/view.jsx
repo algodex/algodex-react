@@ -412,160 +412,189 @@ function PlaceOrderView(props) {
     )
   }
 
-  const renderForm = () => {
-    return (
-      <Form onSubmit={handleSubmit} autocomplete="off">
-        <ToggleWrapper>
-          <ToggleInput
-            type="radio"
-            id="type-buy"
-            value="buy"
-            checked={order.type === 'buy'}
-            onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
-          />
-          <BuyButton>
-            <label htmlFor="type-buy">{t('buy')}</label>
-          </BuyButton>
-          <ToggleInput
-            type="radio"
-            id="type-sell"
-            value="sell"
-            checked={order.type === 'sell'}
-            onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
-          />
-          <SellButton>
-            <label htmlFor="type-sell">{t('sell')}</label>
-          </SellButton>
-        </ToggleWrapper>
+  const renderForm = () => (
+    <Form onSubmit={handleSubmit} autocomplete="off">
+      <ToggleWrapper>
+        <ToggleInput
+          type="radio"
+          id="type-buy"
+          value="buy"
+          checked={order.type === 'buy'}
+          onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
+        />
+        <BuyButton>
+          <label htmlFor="type-buy">{t('buy')}</label>
+        </BuyButton>
+        <ToggleInput
+          type="radio"
+          id="type-sell"
+          value="sell"
+          checked={order.type === 'sell'}
+          onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
+        />
+        <SellButton>
+          <label htmlFor="type-sell">{t('sell')}</label>
+        </SellButton>
+      </ToggleWrapper>
 
-        <AvailableBalance>
-          <IconTextContainer style={{ marginBottom: '10px' }}>
-            <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
-            <Tooltip
-              renderButton={(setTriggerRef) => (
-                <IconButton ref={setTriggerRef} type="button">
-                  <Info />
-                </IconButton>
-              )}
-            >
-              <BalanceRow>
+      <AvailableBalance>
+        <IconTextContainer style={{ marginBottom: '10px' }}>
+          <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
+          <Tooltip
+            renderButton={(setTriggerRef) => (
+              <IconButton ref={setTriggerRef} type="button">
+                <Info />
+              </IconButton>
+            )}
+          >
+            <BalanceRow>
+              <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                {t('orders:available')}:
+              </LabelMd>
+              <IconTextContainer>
                 <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                  {t('orders:available')}:
+                  {maxSpendableAlgo}
                 </LabelMd>
-                <IconTextContainer>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {maxSpendableAlgo}
-                  </LabelMd>
-                  <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
+                <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
+              </IconTextContainer>
+            </BalanceRow>
+            <BalanceRow>
+              <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                {t('total')}:
+              </LabelMd>
+              <IconTextContainer>
                 <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                  {t('total')}:
+                  {algoBalance}
                 </LabelMd>
-                <IconTextContainer>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {algoBalance}
-                  </LabelMd>
-                  <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
-                <LabelSm
-                  color="gray.300"
-                  fontWeight="400"
-                  textTransform="initial"
-                  lineHeight="0.9rem"
-                  letterSpacing="0.1em"
-                >
-                  &nbsp;*
-                  {t('max-spend-explanation', {
-                    amount: new Big(algoBalance)
-                      .minus(new Big(maxSpendableAlgo))
-                      .round(6)
-                      .toString()
-                  })}
+                <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
+              </IconTextContainer>
+            </BalanceRow>
+            <BalanceRow>
+              <LabelSm
+                color="gray.300"
+                fontWeight="400"
+                textTransform="initial"
+                lineHeight="0.9rem"
+                letterSpacing="0.1em"
+              >
+                &nbsp;*
+                {t('max-spend-explanation', {
+                  amount: new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString()
+                })}
+              </LabelSm>
+            </BalanceRow>
+          </Tooltip>
+        </IconTextContainer>
+
+        {asset.isStable && (
+          <>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                {asset.name}
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {asaBalance}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
                 </LabelSm>
-              </BalanceRow>
-            </Tooltip>
-          </IconTextContainer>
-          <BalanceRow className="text-right items-start">
-            <LabelMd color="gray.400" fontWeight="500">
-              ALGO
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {maxSpendableAlgo}
-              <br />
-              <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
-              </LabelSm>
-            </LabelMd>
-          </BalanceRow>
-          <BalanceRow className="text-right items-start">
-            <LabelMd color="gray.400" fontWeight="500">
-              {asset.name}
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              **{asaBalance}**
-              <br />
-              <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
-              </LabelSm>
-            </LabelMd>
-          </BalanceRow>
-        </AvailableBalance>
-
-        <Tabs>
-          <Tab
-            orderType={order.type}
-            isActive={orderView === LIMIT_PANEL}
-            onClick={() => {
-              !asset.isGeoBlocked && setOrderView(LIMIT_PANEL)
-              !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'both' } })
-            }}
-          >
-            {t('limit')}
-          </Tab>
-          <Tab
-            orderType={order.type}
-            isActive={orderView === MARKET_PANEL}
-            onClick={() => {
-              !asset.isGeoBlocked && setOrderView(MARKET_PANEL)
-              !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'market' } })
-            }}
-          >
-            {t('market')}
-          </Tab>
-        </Tabs>
-        {orderView === LIMIT_PANEL ? (
-          <LimitOrder
-            order={order}
-            handleChange={asset.isGeoBlocked ? () => {} : handleChange}
-            asset={asset}
-            maxSpendableAlgo={maxSpendableAlgo}
-            asaBalance={asaBalance}
-            handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
-            enableOrder={enableOrder}
-            handleOptionsChange={!asset.isGeoBlocked && handleOptionsChange}
-            newOrderSizeFilter={newOrderSizeFilter}
-            microAlgo={MICROALGO}
-            setNewOrderSizeFilter={setNewOrderSizeFilter}
-          />
-        ) : (
-          <MarketOrder
-            order={order}
-            handleChange={asset.isGeoBlocked ? () => {} : handleChange}
-            asset={asset}
-            maxSpendableAlgo={maxSpendableAlgo}
-            asaBalance={asaBalance}
-            handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
-            enableOrder={enableOrder}
-          />
+              </LabelMd>
+            </BalanceRow>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                ALGO
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {maxSpendableAlgo}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
+                </LabelSm>
+              </LabelMd>
+            </BalanceRow>
+          </>
         )}
-        {renderSubmit()}
-      </Form>
-    )
-  }
+
+        {!asset.isStable && (
+          <>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                ALGO
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {maxSpendableAlgo}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
+                </LabelSm>
+              </LabelMd>
+            </BalanceRow>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                {asset.name}
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {asaBalance}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
+                </LabelSm>
+              </LabelMd>
+            </BalanceRow>
+          </>
+        )}
+      </AvailableBalance>
+
+      <Tabs>
+        <Tab
+          orderType={order.type}
+          isActive={orderView === LIMIT_PANEL}
+          onClick={() => {
+            !asset.isGeoBlocked && setOrderView(LIMIT_PANEL)
+            !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'both' } })
+          }}
+        >
+          {t('limit')}
+        </Tab>
+        <Tab
+          orderType={order.type}
+          isActive={orderView === MARKET_PANEL}
+          onClick={() => {
+            !asset.isGeoBlocked && setOrderView(MARKET_PANEL)
+            !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'market' } })
+          }}
+        >
+          {t('market')}
+        </Tab>
+      </Tabs>
+      {orderView === LIMIT_PANEL ? (
+        <LimitOrder
+          order={order}
+          handleChange={asset.isGeoBlocked ? () => {} : handleChange}
+          asset={asset}
+          maxSpendableAlgo={maxSpendableAlgo}
+          asaBalance={asaBalance}
+          handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
+          enableOrder={enableOrder}
+          handleOptionsChange={!asset.isGeoBlocked && handleOptionsChange}
+          newOrderSizeFilter={newOrderSizeFilter}
+          microAlgo={MICROALGO}
+          setNewOrderSizeFilter={setNewOrderSizeFilter}
+        />
+      ) : (
+        <MarketOrder
+          order={order}
+          handleChange={asset.isGeoBlocked ? () => {} : handleChange}
+          asset={asset}
+          maxSpendableAlgo={maxSpendableAlgo}
+          asaBalance={asaBalance}
+          handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
+          enableOrder={enableOrder}
+        />
+      )}
+      {renderSubmit()}
+    </Form>
+  )
 
   return (
     <Container data-testid="place-order">
