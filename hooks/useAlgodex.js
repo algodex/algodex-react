@@ -565,7 +565,10 @@ const mapOpenOrdersData = (data, assetList = []) => {
     if (StableAssets.includes(assetId)) {
       pair = `ALGO/${unitName}`
       amount = `${formattedPrice * formattedASAAmount} (ALGO) `
-      price = formattedPrice !== 0 ? floatToFixed(1 / formattedPrice) + ' (USDC) ' : 'Invalid Price'
+      price =
+        formattedPrice !== 0
+          ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
+          : 'Invalid Price'
     }
     return {
       asset: { id: assetId },
@@ -581,7 +584,6 @@ const mapOpenOrdersData = (data, assetList = []) => {
   })
   const allOrders = [...buyOrders, ...sellOrders]
   allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
-
   return allOrders
 }
 
