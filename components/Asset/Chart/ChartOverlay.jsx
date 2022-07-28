@@ -253,7 +253,8 @@ function ChartOverlay(props) {
       <VolumeContainer>
         <Volume>
           <dt>Vol:</dt>
-          <dd>{`${volume} ${asset.name}`}</dd>
+          {asset.isStable && <dd>{`${volume} ALGO`}</dd>}
+          {!asset.isStable && <dd>{`${volume} ${asset.name}`}</dd>}
         </Volume>
       </VolumeContainer>
     </Container>
