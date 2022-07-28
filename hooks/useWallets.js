@@ -6,6 +6,7 @@ import { isEqual } from 'lodash/lang'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
+import { useEventDispatch } from './useEvents'
 
 /**
  *
@@ -40,6 +41,7 @@ WalletsProvider.propTypes = {
  * @return {*}
  */
 function useWallets(initialState) {
+  const dispatcher = useEventDispatch()
   const context = useContext(WalletsContext)
   if (context === undefined) {
     throw new Error('Must be inside of a Wallets Provider')
@@ -97,6 +99,7 @@ function useWallets(initialState) {
           })
           setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
         }
+        dispatcher('signIn', { type: 'wallet' })
       }
     },
     [setAddresses, addresses]
@@ -110,7 +113,16 @@ function useWallets(initialState) {
           (wallet) => wallet.address !== _addresses[0]
         ) || []
       setAddresses(remainingAddresses)
-      setAlgodexWallet(remainingAddresses.length > 0 ? remainingAddresses[0] : undefined)
+      const disconnectedActiveWallet = {
+        ...activeWallet,
+        connector: {
+          ...activeWallet.connector,
+          connected: false
+        }
+      }
+      setAlgodexWallet(
+        remainingAddresses.length > 0 ? remainingAddresses[0] : disconnectedActiveWallet
+      )
       localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
       console.error('Handle removing from storage', _addresses)
     },

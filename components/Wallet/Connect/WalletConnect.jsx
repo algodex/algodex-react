@@ -15,6 +15,7 @@ import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { useState, useContext, useEffect, useRef } from 'react'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
+import { useEventDispatch } from '@/hooks/useEvents'
 
 // import useWallets from '@/hooks/useWallets'
 
@@ -168,11 +169,13 @@ const WalletRow = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWallet, isSignedIn, addresses, setActiveWallet, setAddresses } = props
+  const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
 
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
+
+  const dispatcher = useEventDispatch()
 
   const myAlgoDisconnect = (targetWallet) => {
     const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
@@ -181,8 +184,13 @@ export function WalletView(props) {
     //You may want to filter by active address array to avoid rehydration?
     localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
     setAddresses(remainingAddresses)
-    if (targetWallet.address === activeWallet.address)
-      setActiveWallet(remainingAddresses[0] || null)
+    if (remainingAddresses.length === 0) {
+      dispatcher('signOut', {
+        type: 'wallet'
+      })
+      setSignedIn(false)
+    }
+    // setActiveWallet(remainingAddresses[0] || null)
   }
 
   const peraDisconnect = (targetWallet) => {
@@ -192,9 +200,16 @@ export function WalletView(props) {
 
     localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
     setAddresses(remainingAddresses)
-    if (activeWallet.address === targetWallet.address) setActiveWallet(remainingAddresses[0])
+    if (remainingAddresses.length === 0) {
+      dispatcher('signOut', {
+        type: 'wallet'
+      })
+      setSignedIn(false)
+      // setActiveWallet(remainingAddresses[0])
+    }
     if (typeof targetWallet.connector.killSession !== 'undefined')
       targetWallet.connector.killSession()
+    localStorage.removeItem('walletconnect')
   }
 
   const myAlgoConnect = () => {
@@ -222,7 +237,7 @@ export function WalletView(props) {
   }
 
   // const getButtonVariant = () => {
-  //   return isSignedIn ? 'default' : 'primary'
+  //   return signedIn ? 'default' : 'primary'
   // }
 
   const isWalletActive = (addr) => {
@@ -402,7 +417,7 @@ export function WalletView(props) {
   return (
     <Section area="topRight">
       <Container>
-        {isSignedIn ? (
+        {signedIn ? (
           <>
             <Header>
               <Typography
@@ -452,14 +467,15 @@ WalletView.propTypes = {
   setAddresses: PropTypes.func.isRequired,
   activeWallet: PropTypes.string,
   isConnected: PropTypes.bool,
-  isSignedIn: PropTypes.bool,
+  signedIn: PropTypes.bool,
+  setSignedIn: PropTypes.func,
   onConnectClick: PropTypes.func.isRequired,
   setActiveWallet: PropTypes.func.isRequired,
   area: PropTypes.string
 }
 
 WalletView.defaultProps = {
-  isSignedIn: false
+  signedIn: false
 }
 
 /**
@@ -474,9 +490,11 @@ function WalletConnect() {
   const [signedIn, setSignedIn] = useState(false)
 
   useEffect(() => {
-    if (addresses.length > 0 && typeof wallet === 'undefined') {
+    if (addresses.length > 0) {
       setSignedIn(true)
-      setWallet(addresses[0])
+      if (typeof wallet === 'undefined') {
+        setWallet(addresses[0])
+      }
     }
   }, [addresses])
 
@@ -486,7 +504,8 @@ function WalletConnect() {
       isConnected={isConnected}
       setAddresses={setAddresses}
       activeWallet={wallet}
-      isSignedIn={signedIn}
+      signedIn={signedIn}
+      setSignedIn={setSignedIn}
       setActiveWallet={setWallet}
     />
   )
