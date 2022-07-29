@@ -3,7 +3,7 @@
     "connect-another-wallet-button": "Collega un portafoglio diverso",
     "wallet": "Portafoglio",
     "balance": "BILANCIO",
-    "start-by": "Dopo aver collegato un portafoglio, puoi iniziare a fare trading",
+    "start-by": "Inizia collegando un portafoglio Algorand utilizzando il pulsante nell'intestazione",
     "once-connected": "Dopo aver collegato un portafoglio utilizzando MyAlgo puoi iniziare a fare scambi",
     "copy-success":"Indirizzo del portafoglio copiato negli appunti!",
     "copy-fail":"Impossibile copiare l'indirizzo del portafoglio negli appunti"

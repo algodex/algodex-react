@@ -3,7 +3,7 @@
   "connect-another-wallet-button": "Másik tárca csatlakoztatása",
   "wallet": "Tárca",
   "balance": "EGYENLEG",
-  "start-by": "Miután csatlakoztatta a pénztárcát, megkezdheti a kereskedést",
+  "start-by": "Kezdje azzal, hogy a fejlécben található gomb segítségével csatlakoztasson egy Algorand Walletet",
   "once-connected": "Megkezdheted a kereskedést, amint a MyAlgo használatával csatlakoztattad Algorand tárcádat",
   "copy-success":"A pénztárca címe a vágólapra másolva!",
   "copy-fail":"Nem sikerült a pénztárca címét a vágólapra másolni"

@@ -3,7 +3,7 @@
     "connect-another-wallet-button": "Anslut en annan plånbok",
     "wallet": "Plånbok",
     "balance": "Saldo",
-    "start-by": "När du har anslutit en plånbok kan du börja handla",
+    "start-by": "Börja med att ansluta en Algorand Wallet med knappen i rubriken",
     "once-connected": "När du har anslutit en plånbok med MyAlgo så kan du börja handla",
     "copy-success":"Kopierade plånboksadress till urklipp!",
     "copy-fail":"Det gick inte att kopiera plånboksadress till urklipp"

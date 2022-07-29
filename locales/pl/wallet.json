@@ -3,7 +3,7 @@
   "connect-another-wallet-button": "Dołącz kolejny portfel.",
   "wallet": "Portfel",
   "balance": "Balans",
-  "start-by": "Po podłączeniu portfela możesz rozpocząć handel",
+  "start-by": "Zacznij od podłączenia portfela Algorand za pomocą przycisku w nagłówku",
   "once-connected": "Kiedy dołączysz portfel używając MyAlgo, możesz zacząć trading. ",
   "copy-success":"Skopiowano adres portfela do schowka!",
   "copy-fail":"Nie udało się skopiować adresu portfela do schowka"
