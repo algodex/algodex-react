@@ -382,7 +382,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            disabled={!hasBalance}
+            disabled={!hasBalance || order.total === 0}
             sx={{
               opacity: hasBalance ? 1 : 0.5
             }}
