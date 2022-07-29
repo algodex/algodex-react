@@ -1,21 +1,22 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
+import { useContext, useEffect, useRef, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
+
 import Icon from 'components/Icon/Icon'
+import Image from 'next/image'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import Image from 'next/image'
 // import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { truncatedWalletAddress } from '@/components/helpers'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import useTranslation from 'next-translate/useTranslation'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
-import { useState, useContext, useEffect, useRef } from 'react'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
+import useTranslation from 'next-translate/useTranslation'
 
 // import useWallets from '@/hooks/useWallets'
 
@@ -388,23 +389,18 @@ export function WalletView(props) {
           </Box>
           {renderBalance(convertFromBaseUnits(wallet.amount))}
         </WalletRow>
-        <Box
-          sx={{
-            margin: '0.375rem 0.75rem',
-            padding: ' 0.125rem 0.375rem'
-          }}
-        >
+        <Stack direction="row" justifyContent="center" alignItems="center">
           <Button
             onClick={() => {
               walletDisconnectMap[wallet.type](wallet)
             }}
-            className="font-semibold hover:font-bold text-white border-white hover:border-white"
-            variant="outlined"
+            // className="font-semibold hover:font-bold text-white border-white hover:border-white"
+            variant="disconnect-wallet"
             size="small"
           >
             Disconnect {truncatedWalletAddress(wallet.address, 4)}
           </Button>
-        </Box>
+        </Stack>
       </Container>
     ))
   }
