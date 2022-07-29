@@ -184,6 +184,7 @@ export function WalletView(props) {
     })
     //You may want to filter by active address array to avoid rehydration?
     localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+
     setAddresses(remainingAddresses)
     if (remainingAddresses.length === 0) {
       dispatcher('signOut', {
@@ -192,6 +193,7 @@ export function WalletView(props) {
       setSignedIn(false)
     }
     // setActiveWallet(remainingAddresses[0] || null)
+    persistActiveWallet(remainingAddresses[0] || addresses[0] || {})
   }
 
   const peraDisconnect = (targetWallet) => {
@@ -206,6 +208,7 @@ export function WalletView(props) {
         type: 'wallet'
       })
       setSignedIn(false)
+      persistActiveWallet(remainingAddresses[0] || addresses[0] || {})
       // setActiveWallet(remainingAddresses[0])
     }
     if (typeof targetWallet.connector.killSession !== 'undefined')
@@ -241,6 +244,18 @@ export function WalletView(props) {
   //   return signedIn ? 'default' : 'primary'
   // }
 
+  const persistActiveWallet = (addr) => {
+    Object.keys(addr).length > 1 && localStorage.setItem('activeWallet', JSON.stringify(addr))
+  }
+
+  // Set Active Wallet when page renders
+  useEffect(() => {
+    const activeWallet = JSON.parse(localStorage.getItem('activeWallet'))
+    if (activeWallet) {
+      setActiveWallet(activeWallet)
+    }
+  }, [])
+
   const isWalletActive = (addr) => {
     return activeWallet?.address === addr
   }
@@ -250,7 +265,13 @@ export function WalletView(props) {
   }
 
   const handleWalletClick = async (addr) => {
-    !isWalletActive(addr) && setActiveWallet(addr)
+    // !isWalletActive(addr) && setActiveWallet(addr)
+    if (!isWalletActive(addr)) {
+      setActiveWallet(addr)
+      console.log(addresses, 'adddresses')
+      persistActiveWallet(addr)
+      // localStorage.setItem('activeWallet', JSON.stringify(addr))
+    }
   }
 
   const walletsQuery = useAccountsInfo(addresses)
