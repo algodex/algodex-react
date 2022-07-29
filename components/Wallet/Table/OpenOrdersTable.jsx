@@ -132,7 +132,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: AssetNameCell
       },
       {
-        Header: t('price') + ' (ALGO)',
+        Header: t('price'),
         accessor: 'price',
         Cell: DefaultCell
       },

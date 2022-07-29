@@ -179,6 +179,6 @@ export async function fetchCurrentAssetPrices(assetId) {
   console.debug(`fetchCurrentAssetPrices(): `, data?.[assetId]?.['price'] ?? 1)
 
   return {
-    usdPrice: data?.[assetId]?.['price'] ?? 1
+    usdPrice: data?.[assetId]?.['price'] ?? 0.99
   }
 }

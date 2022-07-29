@@ -540,13 +540,16 @@ const mapOpenOrdersData = (data, assetList = []) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
     let pair = `${unitName}/ALGO`
-    let price = floatToFixed(formattedPrice)
-    let amount = formattedASAAmount
+    let price = floatToFixed(formattedPrice) + ' (ALGO)'
+    let amount = formattedASAAmount + ` (${unitName}) `
 
     if (StableAssets.includes(assetId)) {
       pair = `ALGO/${unitName}`
       amount = `${formattedPrice * formattedASAAmount} (ALGO) `
-      price = formattedPrice !== 0 ? floatToFixed(1 / formattedPrice) + ' (USDC) ' : 'Invalid Price'
+      price =
+        formattedPrice !== 0
+          ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
+          : 'Invalid Price'
     }
     return {
       asset: { id: assetId },
@@ -566,12 +569,12 @@ const mapOpenOrdersData = (data, assetList = []) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
     let pair = `${unitName}/ALGO`
-    let price = floatToFixed(formattedPrice)
-    let amount = formattedASAAmount
+    let price = floatToFixed(formattedPrice) + ' (ALGO)'
+    let amount = formattedASAAmount + ` (${unitName}) `
 
     if (StableAssets.includes(assetId)) {
       pair = `ALGO/${unitName}`
-      amount = `${formattedPrice * formattedASAAmount} (ALGO) `
+      amount = `${formattedPrice * formattedASAAmount} (1ALGO) `
       price =
         formattedPrice !== 0
           ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
