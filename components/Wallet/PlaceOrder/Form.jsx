@@ -58,6 +58,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet, setWallet } = useWallets(initialState)
 
   const [tabSwitch, setTabSwitch] = useState(0)
+  const [showForm, setShowForm] = useState(true)
 
   const dispatcher = useEventDispatch()
 
@@ -129,6 +130,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     if (data.type === 'order') {
       setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
       console.log(order)
+    }
+  })
+
+  useEvent('signOut', (data) => {
+    if (data.type === 'wallet') {
+      setShowForm(false)
+    }
+  })
+  useEvent('signIn', (data) => {
+    if (data.type === 'wallet') {
+      setShowForm(true)
     }
   })
 
@@ -329,7 +341,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           </Typography>
         </header>
       )}
-      {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && (
+      {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && showForm && (
         <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
