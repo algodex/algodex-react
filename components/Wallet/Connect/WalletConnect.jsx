@@ -445,7 +445,7 @@ export function WalletView(props) {
             {/* <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow> */}
-            <Typography variant="h5" color="gray.100" m={0} mb={4}>
+            <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
               {t('start-by')}
             </Typography>
             <Typography variant="subtitle_small" color="gray.500" m={0}>
