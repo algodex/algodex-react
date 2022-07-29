@@ -287,10 +287,9 @@ export function useAssetChartQuery({
 
   const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
   const algoVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.algoVolume || 0)
-
   const isLoading = isOrdersLoading || isChartLoading
   const isError = isOrdersError || isChartError
-  console.log('VolumeData: ', algoVolumeData)
+
   return {
     data: {
       overlay: {

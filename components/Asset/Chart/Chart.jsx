@@ -101,11 +101,13 @@ export function Chart({
   interval: _interval,
   mode: _mode,
   volume,
+  algoVolume,
   ohlc,
   overlay: _overlay,
   onChange
 }) {
   // console.log(`Chart(`, arguments[0], `)`)
+
   const [interval, setInterval] = useState(_interval)
   const [overlay, setOverlay] = useState(_overlay)
   const [chartMode, setChartMode] = useState(_mode)
@@ -151,19 +153,28 @@ export function Chart({
 
   const updateHoverPrices = useCallback(
     (logical) => {
-      if (ohlc == null || volume == null) {
-        return
+      if (asset.isStable) {
+        if (ohlc == null || algoVolume == null) {
+          return
+        }
+      } else {
+        if (ohlc == null || volume == null) {
+          return
+        }
       }
+
       const priceEntry = ohlc[logical]
       const volumeEntry = volume[logical]
+      const algoVolumeEntry = algoVolume[logical]
 
       setOverlay({
         ...overlay,
         ohlc: priceEntry,
-        volume: volumeEntry != null ? millify(volumeEntry.value) : '0'
+        volume: volumeEntry != null ? millify(volumeEntry.value) : '0',
+        algoVolume: algoVolumeEntry != null ? millify(algoVolumeEntry.value) : '0'
       })
     },
-    [ohlc, volume, setOverlay, overlay]
+    [ohlc, volume, setOverlay, overlay, asset, algoVolume]
   )
 
   const mouseOut = useCallback(() => {
@@ -182,9 +193,16 @@ export function Chart({
       const x = ev.clientX - rect.left
       const logical = candleChart.timeScale().coordinateToLogical(x)
 
-      if (logical >= ohlc.length || logical >= volume.length) {
-        setOverlay(_overlay)
-        return
+      if (asset.isStable) {
+        if (logical >= ohlc.length || logical >= algoVolume.length) {
+          setOverlay(_overlay)
+          return
+        }
+      } else {
+        if (logical >= ohlc.length || logical >= volume.length) {
+          setOverlay(_overlay)
+          return
+        }
       }
 
       if (logical !== currentLogical) {
@@ -202,11 +220,11 @@ export function Chart({
       setCurrentLogical,
       updateHoverPrices,
       volume,
+      algoVolume,
+      asset.isStable,
       ohlc
     ]
   )
-
-  console.log('asset.isStable: ', asset.isStable)
 
   return (
     <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={() => mouseOut()}>
