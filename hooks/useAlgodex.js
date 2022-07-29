@@ -182,12 +182,26 @@ function getOhlc(data, isStableAsset) {
   return lastPriceData
 }
 
-function mapVolumeData(data, isStableAsset, volUpColor, volDownColor) {
+function mapVolumeData(data, volUpColor, volDownColor) {
   const mappedData = data?.chart_data?.map(({ asaVolume, unixTime }) => {
     const time = parseInt(unixTime)
     return {
       time: time,
-      value: isStableAsset ? (asaVolume == 0 ? 'Invalid' : 1 / asaVolume) : asaVolume
+      value: asaVolume
+    }
+  })
+  const volumeColors = data?.chart_data.map(({ open, close }) =>
+    open > close ? volDownColor : volUpColor
+  )
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
+}
+
+function mapAlgoVolumeData(data, volUpColor, volDownColor) {
+  const mappedData = data?.chart_data?.map(({ algoVolume, unixTime }) => {
+    const time = parseInt(unixTime)
+    return {
+      time: time,
+      value: algoVolume
     }
   })
   const volumeColors = data?.chart_data.map(({ open, close }) =>
@@ -264,29 +278,29 @@ export function useAssetChartQuery({
     [orderBook]
   )
   const priceData = useMemo(() => mapPriceData(data, asset.isStable), [data])
-  const volumeData = useMemo(
-    () => mapVolumeData(data, asset.isStable, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR),
+  const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
+  const algoVolumeData = useMemo(
+    () => mapAlgoVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR),
     [data]
   )
   const ohlcOverlay = useMemo(() => getOhlc(data, asset.isStable), [data])
 
-  let volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
-
-  if (asset.isStable) {
-    volume = volume == 0 ? 'Invalid' : 1 / volume
-  }
+  const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
+  const algoVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.algoVolume || 0)
 
   const isLoading = isOrdersLoading || isChartLoading
   const isError = isOrdersError || isChartError
-  console.log('VolumeData: ', volumeData)
+  console.log('VolumeData: ', algoVolumeData)
   return {
     data: {
       overlay: {
         ohlc: ohlcOverlay,
         orderbook: { bid, ask, spread },
-        volume
+        volume,
+        algoVolume
       },
       volume: volumeData,
+      algoVolume: algoVolumeData,
       ohlc: priceData,
       isLoading,
       isError

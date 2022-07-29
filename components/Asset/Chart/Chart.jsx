@@ -206,6 +206,8 @@ export function Chart({
     ]
   )
 
+  console.log('asset.isStable: ', asset.isStable)
+
   return (
     <Container onMouseMove={(ev) => mouseMove(ev)} onMouseOut={() => mouseOut()}>
       {/*{!isFetched && isFetching && <Spinner flex={true}/> }*/}
@@ -231,7 +233,7 @@ export function Chart({
           bid={overlay.orderbook.bid}
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
-          volume={overlay.volume}
+          volume={asset.isStable ? overlay.algoVolume : overlay.volume}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -241,7 +243,7 @@ export function Chart({
           bid={_overlay.orderbook.bid}
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
-          volume={_overlay.volume}
+          volume={asset.isStable ? _overlay.algoVolume : _overlay.volume}
         />
       )}
       <SettingsContainer>
@@ -254,7 +256,8 @@ export function Chart({
 Chart.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    isStable: PropTypes.bool
   }).isRequired,
   interval: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
@@ -266,6 +269,7 @@ Chart.propTypes = {
       close: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }),
     volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    algoVolume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     orderbook: PropTypes.shape({
       bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -274,6 +278,7 @@ Chart.propTypes = {
   }),
   ohlc: PropTypes.array.isRequired,
   volume: PropTypes.array.isRequired,
+  algoVolume: PropTypes.array,
   onChange: PropTypes.func
 }
 
