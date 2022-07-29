@@ -16,8 +16,6 @@ import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletOrdersQuery, useAlgodex } from '@algodex/algodex-hooks'
-import { useEventDispatch } from '@/hooks/useEvents'
-import { useEvent } from 'hooks/useEvents'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -57,19 +55,10 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
-  const { algodex, wallet, setWallet, http } = useAlgodex()
+  const { algodex, wallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
-
-  const dispatcher = useEventDispatch()
-
-  useEvent('updateBalance', async (data) => {
-    if (data.type === 'order') {
-      const updatedWalletBalance = await http.indexer.fetchAccountInfo(data.payload.wallet)
-      setWallet(updatedWalletBalance)
-    }
-  })
 
   useEffect(() => {
     setOpenOrdersData(_orders)
@@ -126,16 +115,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         toast.promise(cancelOrderPromise, {
           loading: t('awaiting-confirmation'),
-          success: () => {
-            dispatcher('updateBalance', {
-              type: 'order',
-              payload: {
-                wallet
-              }
-            })
-
-            return t('order-cancelled')
-          },
+          success: t('order-cancelled'),
           error: t('error-cancelling')
         })
 

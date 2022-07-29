@@ -17,7 +17,6 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { useEventDispatch } from '@/hooks/useEvents'
 import useWallets from '@/hooks/useWallets'
 
 export const Form = styled.form`
@@ -55,12 +54,10 @@ export const Form = styled.form`
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
   const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
-  const { wallet, setWallet } = useWallets(initialState)
+  const { wallet } = useWallets(initialState)
 
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
-  const dispatcher = useEventDispatch()
 
   const [order, setOrder] = useState({
     type: 'buy',
@@ -141,13 +138,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   useEvent('signIn', (data) => {
     if (data.type === 'wallet') {
       setShowForm(true)
-    }
-  })
-
-  useEvent('updateBalance', async (data) => {
-    if (data.type === 'order') {
-      const updatedWalletBalance = await http.indexer.fetchAccountInfo(data.payload.wallet)
-      setWallet(updatedWalletBalance)
     }
   })
 
@@ -287,16 +277,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       // TODO add events
       toast.promise(orderPromise, {
         loading: t('awaiting-confirmation'),
-        success: () => {
-          dispatcher('updateBalance', {
-            type: 'order',
-            payload: {
-              wallet
-            }
-          })
-
-          return t('order-success')
-        },
+        success: t('order-success'),
         error: (err) => {
           console.log(err)
           if (/PopupOpenError|blocked/.test(err)) {
