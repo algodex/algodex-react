@@ -4,7 +4,7 @@
   "wallet": "Cartera",
   "balance": "Balanç",
   "start-by": "Comenceu connectant una cartera Algorand mitjançant el botó de la capçalera",
-  "once-connected": " Un cop hàgiu connectat una cartera amb MyAlgo, podeu començar a operar",
+  "once-connected": "Un cop hàgiu connectat una cartera, podeu començar a operar i veureu les vostres carteres connectades aquí",
   "copy-success":"S'ha copiat l'adreça de la cartera al porta-retalls!",
   "copy-fail":"No s'ha pogut copiar l'adreça de la cartera al porta-retalls"
 }

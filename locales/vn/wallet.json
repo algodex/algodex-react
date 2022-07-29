@@ -4,7 +4,7 @@
   "wallet": "Ví",
   "balance": "Số dư",
   "start-by": "Bắt đầu bằng cách kết nối Ví Algorand bằng nút trong tiêu đề",
-  "once-connected": "Một khi bạn kết nối ví MyAlgo, bạn có thể bắt đầu giao dịch",
+  "once-connected": "Khi bạn đã kết nối ví, bạn có thể bắt đầu giao dịch và sẽ thấy các ví được kết nối của bạn ở đây",
   "copy-success":"Đã sao chép địa chỉ ví vào khay nhớ tạm!",
   "copy-fail":"Không sao chép được địa chỉ ví vào khay nhớ tạm"
 }

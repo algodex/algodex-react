@@ -4,7 +4,7 @@
   "wallet": "Portemonee",
   "balance": "Balans",
   "start-by": "Begin door een Algorand Wallet aan te sluiten via de knop in de kop",
-  "once-connected": "Zodra je een portemonee verbonden hebt met MyAlgo kun je beginnen met handelen",
+  "once-connected": "Zodra u een portemonnee heeft gekoppeld, kunt u beginnen met handelen en ziet u hier uw gekoppelde portemonnee",
   "copy-success":"Portefeuilleadres gekopieerd naar klembord!",
   "copy-fail":"Kan het portefeuilleadres niet naar het klembord kopiëren"
 }

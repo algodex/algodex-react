@@ -4,7 +4,7 @@
   "wallet": "Portefeuille",
   "balance": "SOLDE",
   "start-by": "Commencez par connecter un portefeuille Algorand à l'aide du bouton dans l'en-tête",
-  "once-connected": "Une fois que vous avez connecté un portefeuille via MyAlgo vous pouvez commencer à trader ",
+  "once-connected": "Une fois que vous avez connecté un portefeuille, vous pouvez commencer à trader et vous verrez vos portefeuilles connectés ici ",
   "copy-success":"Adresse du portefeuille copiée dans le presse-papier !",
   "copy-fail":"Échec de la copie de l'adresse du portefeuille dans le presse-papiers"
 }
