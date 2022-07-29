@@ -633,7 +633,7 @@ export function useWalletTradeHistoryQuery({
   }
 }) {
   const { address } = wallet
-  const mapTradeHistoryData = (data) => {
+  const mapTradeHistoryData = (data, assetList = []) => {
     const buyText = 'BUY'
     const sellText = 'SELL'
     if (!data || !data.transactions || !data.allAssets) {
@@ -646,18 +646,34 @@ export function useWalletTradeHistoryQuery({
       allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
       return allAssetsInfo
     }, {})
+    const unitNameMap =
+      Object.keys(assetsInfo).length === 0 ? getFormattedPairMap(assetList) : new Map()
     return tradeHistoryData.map(
       ({ unix_time, group_id, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
         const side = tradeType === 'buyASA' ? buyText : sellText
+        // const unitName = assetsInfo[asset_id]?.params['unit-name'] || unitNameMap.get(asset_id)
+        const unitName = assetsInfo[asset_id].params['unit-name']
+        let price = floatToFixed(formattedPrice) + ' (ALGO)'
+        let amount = formattedASAAmount + ` (${unitName}) `
+        let pair = `${unitName}/ALGO`
+
+        if (StableAssets.includes(asset_id)) {
+          pair = `ALGO/${unitName}`
+          amount = `${formattedPrice * formattedASAAmount} (ALGO) `
+          price =
+            formattedPrice !== 0
+              ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
+              : 'Invalid Price'
+        }
 
         return {
           id: asset_id,
           groupId: encodeURIComponent(group_id),
           date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-          price: floatToFixed(formattedPrice),
-          pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
+          price: price,
+          pair: pair,
           side,
-          amount: formattedASAAmount
+          amount: amount
         }
       }
     )
@@ -667,7 +683,9 @@ export function useWalletTradeHistoryQuery({
     () => fetchWalletTradeHistory(address),
     options
   )
-  const orders = useMemo(() => mapTradeHistoryData(data), [data])
+  const assetsList = useSearchResultsQuery()
+
+  const orders = useMemo(() => mapTradeHistoryData(data, assetsList), [data, assetsList])
   return { data: { orders }, ...rest }
 }
 /**
