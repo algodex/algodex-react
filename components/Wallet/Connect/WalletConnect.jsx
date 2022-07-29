@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
 import { useContext, useEffect, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
@@ -374,23 +374,18 @@ export function WalletView(props) {
           </Box>
           {renderBalance(convertFromBaseUnits(wallet.amount))}
         </WalletRow>
-        <Box
-          sx={{
-            margin: '0.375rem 0.75rem',
-            padding: ' 0.125rem 0.375rem'
-          }}
-        >
+        <Stack direction="row" justifyContent="center" alignItems="center">
           <Button
             onClick={() => {
               walletDisconnectMap[wallet.type](wallet)
             }}
-            className="font-semibold hover:font-bold text-white border-white hover:border-white"
+            // className="font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="disconnect-wallet"
             size="small"
           >
             Disconnect {truncatedWalletAddress(wallet.address, 4)}
           </Button>
-        </Box>
+        </Stack>
       </Container>
     ))
   }
