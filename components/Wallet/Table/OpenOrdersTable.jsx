@@ -109,7 +109,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
       return (
         <BrightGraySpan data-testid="cancel-order-button">
-          <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
+          <OrderCancelButton onClick={handleCancelOrder}>Cancel</OrderCancelButton>
         </BrightGraySpan>
       )
     },
