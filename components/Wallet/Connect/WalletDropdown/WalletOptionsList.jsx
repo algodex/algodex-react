@@ -1,5 +1,5 @@
-import { Box, Typography } from '@mui/material'
-import { useContext, useEffect, useRef } from 'react'
+import { Box, Stack, Typography } from '@mui/material'
+import { useContext, useEffect, useMemo, useRef } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import Button from '@mui/material/Button'
@@ -62,6 +62,12 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
     // modals only when a new address is added to the addresses array.
   }, [addresses])
 
+  const isPeraConnected = useMemo(() => {
+    const peraAddr = addresses.filter((addr) => addr.type !== 'my-algo-wallet')
+    return peraAddr.length > 0
+  }, [addresses])
+  // console.log(addresses, 'addresses')
+
   return (
     <>
       <Box
@@ -84,23 +90,51 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
           )}
         </Box>
         <Box className="mt-4 ml-4">
-          <Box
+          <Stack
+            direction="row"
+            alignItems={`${isPeraConnected ? 'flex-start' : 'center'}`}
             role="button"
             tabIndex="0"
-            className="cursor-pointer flex items-center mb-2"
+            className="cursor-pointer mb-2"
             onClick={peraConnectOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
-            <Image
-              src="/Wallet-Connect-icon.svg"
-              alt="Algorand Mobile Wallet"
-              width={25}
-              height={25}
-            />
-            <Typography className="underline ml-2" variant="body_small_bold">
-              Wallet Connect (Pera or Defly)
-            </Typography>
-          </Box>
+            {isPeraConnected ? (
+              <Box width={50} height={50}>
+                <Image
+                  src="/Wallet-Connect-icon.svg"
+                  alt="Algorand Mobile Wallet"
+                  width="100%"
+                  height="100%"
+                />
+              </Box>
+            ) : (
+              <Image
+                src="/Wallet-Connect-icon.svg"
+                alt="Algorand Mobile Wallet"
+                width={25}
+                height={25}
+              />
+            )}
+
+            <Stack>
+              <Typography
+                sx={{
+                  color: isPeraConnected ? '#BABABA' : '#FFF'
+                }}
+                className="underline ml-2"
+                variant="body_small_bold"
+              >
+                Wallet Connect (Pera or Defly)
+              </Typography>
+              {isPeraConnected && (
+                <Typography className="italic color-white ml-2 mt-2" variant="body_tiny">
+                  There is a wallet currently connected with Wallet Connect. You must disonnect this
+                  wallet to connect another.
+                </Typography>
+              )}
+            </Stack>
+          </Stack>
           <Box
             className="cursor-pointer flex items-center mb-2"
             role="button"

@@ -2,6 +2,7 @@ import { Box, Button, Stack } from '@mui/material'
 import { useContext, useEffect, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import Icon from 'components/Icon/Icon'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
@@ -124,8 +125,9 @@ const Balance = styled.div`
 `
 
 const WalletRow = styled.div`
-  display: grid;
-  ${gridStyles}
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 0.375rem 0.75rem;
   padding: 0.125rem 0.375rem;
   border-radius: 0.125rem;
@@ -372,20 +374,15 @@ export function WalletView(props) {
             <Image
               src={getWalletLogo(wallet)}
               alt="Algorand Wallet Client Image"
-              width={25}
-              height={25}
-            />
-            &nbsp;
-            <Icon
-              fillGradient="000"
-              onClick={() => copyAddress(wallet.address)}
-              use="wallet"
-              size={0.75}
+              width={18}
+              height={18}
             />
             &nbsp;
             <Typography variant="body_small" fontWeight="bold" title={wallet.address}>
               {truncatedWalletAddress(wallet.address, 4)}
             </Typography>
+            &nbsp;
+            <ContentCopyIcon fontSize="small" sx={{ fontSize: 16 }} />
           </Box>
           {renderBalance(convertFromBaseUnits(wallet.amount))}
         </WalletRow>
