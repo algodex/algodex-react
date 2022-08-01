@@ -382,7 +382,11 @@ export function WalletView(props) {
               {truncatedWalletAddress(wallet.address, 4)}
             </Typography>
             &nbsp;
-            <ContentCopyIcon fontSize="small" sx={{ fontSize: 16 }} />
+            <ContentCopyIcon
+              onClick={() => copyAddress(wallet.address)}
+              fontSize="small"
+              sx={{ fontSize: 16 }}
+            />
           </Box>
           {renderBalance(convertFromBaseUnits(wallet.amount))}
         </WalletRow>
