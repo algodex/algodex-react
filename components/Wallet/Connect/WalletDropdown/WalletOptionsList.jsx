@@ -63,10 +63,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
   }, [addresses])
 
   const isPeraConnected = useMemo(() => {
-    const peraAddr = addresses.filter((addr) => addr.type !== 'my-algo-wallet')
+    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
     return peraAddr.length > 0
   }, [addresses])
-  // console.log(addresses, 'addresses')
 
   return (
     <>
