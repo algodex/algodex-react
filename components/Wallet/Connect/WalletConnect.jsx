@@ -190,8 +190,9 @@ export function WalletView(props) {
         type: 'wallet'
       })
       setSignedIn(false)
+    } else {
+      setActiveWallet(remainingAddresses[0])
     }
-    // setActiveWallet(remainingAddresses[0] || null)
   }
 
   const peraDisconnect = (targetWallet) => {
@@ -206,7 +207,8 @@ export function WalletView(props) {
         type: 'wallet'
       })
       setSignedIn(false)
-      // setActiveWallet(remainingAddresses[0])
+    } else {
+      setActiveWallet(remainingAddresses[0])
     }
     if (typeof targetWallet.connector.killSession !== 'undefined')
       targetWallet.connector.killSession()
