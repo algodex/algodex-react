@@ -64,6 +64,16 @@ const Container = styled.div`
   flex-direction: column;
   flex: 1 1 0%;
 `
+
+const PanelWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  overflow: hidden scroll;
+  @media (max-width: 1536px) {
+    overflow: scroll hidden;
+  }
+`
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.palette.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -128,7 +138,8 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
             {t('assets')}
           </Tab>
         </Header>
-        {renderPanel(selectedPanel)}
+        <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper>
+        {/* {renderPanel(selectedPanel)} */}
       </Container>
     </Section>
   )

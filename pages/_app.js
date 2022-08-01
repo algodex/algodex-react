@@ -10,6 +10,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { EventEmitter } from '@/hooks/useEvents'
 import Head from 'next/head'
 import { Hydrate } from 'react-query/hydration'
+import NextApp from 'next/app'
 import PropTypes from 'prop-types'
 // Algodex
 import ReactGA from 'react-ga'
@@ -18,11 +19,10 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
 import createEmotionCache from '@/utils/createEmotionCache'
+import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useStore from '@/store/use-store'
 import useUserStore from '@/store/use-user-state'
-import NextApp from 'next/app'
-import parser from 'ua-parser-js'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
