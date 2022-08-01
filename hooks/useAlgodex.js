@@ -447,31 +447,46 @@ export function useWalletAssetsQuery({
   return { data: { assets }, ...rest }
 }
 
-const mapOpenOrdersData = (data) => {
-  if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data.allAssets) {
+const getFormattedPairMap = (assetsList) => {
+  if (!assetsList?.data?.assets) {
+    return new Map()
+  }
+  return assetsList.data.assets.reduce((map, currentValue) => {
+    const key = currentValue.assetId
+    map.set(key, currentValue)
+    map.set(key, currentValue.unitName)
+    return map
+  }, new Map())
+}
+
+const mapOpenOrdersData = (data, assetList = []) => {
+  // if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow || !data?.allAssets) {
+  if (!data || !data.buyASAOrdersInEscrow || !data.sellASAOrdersInEscrow) {
     return null
   }
-
   const {
     buyASAOrdersInEscrow: buyOrdersData,
     sellASAOrdersInEscrow: sellOrdersData,
     allAssets: assetsData
   } = data
-
-  const assetsInfo = assetsData.reduce((allAssetsInfo, currentAssetInfo) => {
+  const assetsInfo = (assetsData || []).reduce((allAssetsInfo, currentAssetInfo) => {
     allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
     return allAssetsInfo
   }, {})
 
+  //FIXME: after 2.0 backend updates, this may not be necessary
+  const unitNameMap =
+    Object.keys(assetsInfo).length === 0 ? getFormattedPairMap(assetList) : new Map()
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
+    const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      pair: `${unitName}/ALGO`,
       type: 'BUY',
       status: 'OPEN',
       amount: formattedASAAmount,
@@ -481,22 +496,22 @@ const mapOpenOrdersData = (data) => {
 
   const sellOrders = sellOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
-
+    const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
       price: floatToFixed(formattedPrice),
-      pair: `${assetsInfo[assetId].params['unit-name']}/ALGO`,
+      pair: `${unitName}/ALGO`,
       type: 'SELL',
       status: 'OPEN',
       amount: formattedASAAmount,
       metadata: order
     }
   })
-
   const allOrders = [...buyOrders, ...sellOrders]
   allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
+
   return allOrders
 }
 
@@ -515,7 +530,10 @@ export function useWalletOrdersQuery({ wallet, options = { refetchInterval } }) 
     () => fetchWalletOrders(address),
     options
   )
-  const orders = useMemo(() => mapOpenOrdersData(data), [data])
+  const assetsList = useSearchResultsQuery()
+
+  const orders = useMemo(() => mapOpenOrdersData(data, assetsList), [data, assetsList])
+
   return { data: { orders }, ...rest }
 }
 /**

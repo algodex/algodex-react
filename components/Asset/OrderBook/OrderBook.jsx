@@ -10,6 +10,7 @@ import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import { floatToFixedDynamic } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
@@ -355,12 +356,13 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
 
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
-
       const handleSelectOrder = () => {
         dispatcher('clicked', 'order')
         setOrder(
@@ -438,13 +440,11 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           )}
           <br></br>
           <Header>
-            <TablePriceHeader />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+            <TablePriceHeader title="price" textAlign="left" />
+            <BodyCopyTiny color="gray.500" className="whitespace-nowrap" textAlign="right" m={0}>
+              {t('amount')} ({assetVeryShortName})
             </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('total')}
-            </BodyCopyTiny>
+            <TablePriceHeader title="total" textAlign="right" />
           </Header>
         </HeaderWrapper>
 
@@ -485,7 +485,7 @@ OrderBook.propTypes = {
     sell: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.string.isRequired,
         total: PropTypes.number.isRequired
       })
     ),
@@ -495,7 +495,7 @@ OrderBook.propTypes = {
     buy: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.string.isRequired,
         total: PropTypes.number.isRequired
       })
     )

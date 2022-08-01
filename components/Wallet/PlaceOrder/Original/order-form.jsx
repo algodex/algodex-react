@@ -16,19 +16,31 @@ import useTranslation from 'next-translate/useTranslation'
  * @param {*} { value, id }
  * @return {*}
  */
-export const USDInputPrice = ({ value, id }) => {
+export const USDInputPrice = ({ value, id, showFee }) => {
   return (
-    <div className="flex justify-between items-center mx-4 mb-4 font-medium">
-      <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
-      <BodyCopyTiny>
-        <USDPrice priceToConvert={value} />
-        <span className="ml-4 mr-3">USD</span>
-      </BodyCopyTiny>
-    </div>
+    <>
+      {showFee && (
+        <div className="flex justify-between items-center mx-4 font-medium">
+          <BodyCopyTiny>Fee</BodyCopyTiny>
+          <BodyCopyTiny>
+            <USDPrice priceToConvert={0} />
+            <span className="ml-4 mr-3">USD</span>
+          </BodyCopyTiny>
+        </div>
+      )}
+      <div className="flex justify-between items-center mx-4 mb-4 font-medium">
+        <BodyCopyTiny>USD {id === 'price' ? 'Price' : 'Total'} </BodyCopyTiny>
+        <BodyCopyTiny>
+          <USDPrice priceToConvert={value} />
+          <span className="ml-4 mr-3">USD</span>
+        </BodyCopyTiny>
+      </div>
+    </>
   )
 }
 
 USDInputPrice.propTypes = {
+  showFee: PropTypes.boolean,
   value: PropTypes.number,
   id: PropTypes.string
 }
@@ -88,7 +100,7 @@ export const OrderForm = ({
           hasError={isErrorMsgVisible()}
           errorMessage={`Price cannot be less than ${microAlgo}`}
         />
-        <USDInputPrice value={order.price} id="price" />
+        <USDInputPrice value={order.price} id="price" showFee={false} />
 
         <OrderInput
           type="number"
@@ -128,7 +140,7 @@ export const OrderForm = ({
           readOnly
           disabled
         />
-        <USDInputPrice value={order.total} id="total" />
+        <USDInputPrice value={order.total} id="total" showFee={true} />
         {/* <TxnFeeContainer>
           <BodyCopyTiny color="gray.500" textTransform="none">
             Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}
