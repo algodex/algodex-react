@@ -1,5 +1,3 @@
-import { useRef } from 'react'
-
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
@@ -9,6 +7,7 @@ import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
+import { useRef } from 'react'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -143,7 +142,7 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const gridRef = useRef()
   const searchTableRef = useRef()
 

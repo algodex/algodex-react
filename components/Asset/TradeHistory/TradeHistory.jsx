@@ -4,12 +4,14 @@ import Big from 'big.js'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
 import { formatAmountFn } from '@/components/helpers'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
 
@@ -177,6 +179,8 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
       })
   }
 
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container isMobile={isMobile}>
@@ -185,8 +189,8 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
           <br />
           <Header>
             <PriceHeader />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+            <BodyCopyTiny color="gray.500" className="whitespace-nowrap" textAlign="right" m={0}>
+              {t('amount')} ({assetVeryShortName})
             </BodyCopyTiny>
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               {t('time')}
