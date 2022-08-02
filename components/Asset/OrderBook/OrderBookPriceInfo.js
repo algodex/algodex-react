@@ -10,7 +10,9 @@ import { useMemo } from 'react'
 import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
 export function OrderBookPriceInfo({ algoPrice, asset }) {
-  const percentageChange = useMemo(() => floatToFixed(asset?.price_info?.price24Change, 2), [asset])
+  const percentageChange = useMemo(() => {
+    return asset?.price_info && floatToFixed(asset?.price_info?.price24Change, 2)
+  }, [asset])
   const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
   return (
     <>
