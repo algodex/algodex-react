@@ -113,16 +113,20 @@ function useWallets(initialState) {
           (wallet) => wallet.address !== _addresses[0]
         ) || []
       setAddresses(remainingAddresses)
-      const disconnectedActiveWallet = {
-        ...activeWallet,
-        connector: {
-          ...activeWallet.connector,
-          connected: false
+
+      if (typeof activeWallet !== 'undefined') {
+        const disconnectedActiveWallet = {
+          ...activeWallet,
+          connector: {
+            ...activeWallet.connector,
+            connected: false
+          }
         }
+        setAlgodexWallet(
+          remainingAddresses.length > 0 ? remainingAddresses[0] : disconnectedActiveWallet
+        )
       }
-      setAlgodexWallet(
-        remainingAddresses.length > 0 ? remainingAddresses[0] : disconnectedActiveWallet
-      )
+
       localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
       console.error('Handle removing from storage', _addresses)
     },
