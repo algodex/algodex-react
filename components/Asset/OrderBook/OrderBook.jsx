@@ -10,6 +10,7 @@ import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import { floatToFixedDynamic } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
@@ -179,9 +180,6 @@ const SellOrders = styled.div`
     width: 0px;
     display: none;
   }
-`
-const NoLineBreak = styled.div`
-  white-space: nowrap;
 `
 
 const BuyOrders = styled.div`
@@ -372,9 +370,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
 
-  const assetVeryShortName = useMemo(() => {
-    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
-  }, [asset])
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -463,10 +459,8 @@ export function OrderBook({ isMobile, asset, orders, components }) {
               textAlign="left"
               currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''}
             />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              <NoLineBreak>
-                {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
-              </NoLineBreak>
+            <BodyCopyTiny color="gray.500" className="whitespace-nowrap" textAlign="right" m={0}>
+              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </BodyCopyTiny>
             <TablePriceHeader
               title="total"

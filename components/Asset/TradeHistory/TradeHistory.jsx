@@ -4,6 +4,7 @@ import Big from 'big.js'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import dayjs from 'dayjs'
 import { floatToFixed } from 'services/display'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -135,10 +136,6 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
-  const assetVeryShortName = useMemo(() => {
-    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
-  }, [asset])
-
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
@@ -188,6 +185,8 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
       })
   }
 
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container isMobile={isMobile}>
@@ -196,8 +195,8 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
           <br />
           <Header>
             <PriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+            <BodyCopyTiny className="whitespace-nowrap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </BodyCopyTiny>
             <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
               {t('time')}
