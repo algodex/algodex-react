@@ -26,7 +26,7 @@ export function getIsRestrictedCountry(query) {
 export function getAssetTotalStatus(total) {
   if (NETWORK_TYPE !== 'mainnet') return false
   if (typeof total === 'undefined') return false
-  if (total !== 1) {
+  if (total > 1000) {
     return true
   } else {
     return false
