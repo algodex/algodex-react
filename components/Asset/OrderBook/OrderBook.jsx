@@ -16,7 +16,7 @@ import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import { useSpendableAmount } from '@/hooks/useSpendableAmount'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
@@ -358,19 +358,21 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   }, [asset])
 
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
-  const maxSpendableAlgo = useSpendableAmount()
+  const maxSpendableAlgo = useMaxSpendableAlgo()
+
   const calculatedAmountFn = (price, ordersList, index, type) => {
+    const _price = parseFloat(price).toFixed(asset.decimals)
     let slicedList = []
     if (type === 'sell') slicedList = ordersList.slice(index)
     if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
 
-    const determinedTotal = (
-      slicedList.reduce((prev, curr) => prev + curr.amount, 0) * price
-    ).toFixed(6)
+    const compoundedAmount = slicedList.reduce((prev, curr) => prev + curr.amount, 0)
+    const determinedTotal = new Big(_price).times(compoundedAmount)
     if (determinedTotal > maxSpendableAlgo) {
-      return parseFloat(maxSpendableAlgo / price).toFixed(6)
+      // Deducted a Microalgo because of rounding in use-store while setting total
+      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - 0.000001
     } else {
-      return determinedTotal
+      return compoundedAmount
     }
   }
 
