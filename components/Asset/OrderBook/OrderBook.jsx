@@ -380,7 +380,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
     if (determinedTotal > maxSpendableAlgo) {
       // Deducted a Microalgo because of rounding in use-store while setting total
-      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - 0.000001
+      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
     } else {
       return compoundedAmount
     }
