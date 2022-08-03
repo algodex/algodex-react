@@ -15,7 +15,7 @@ export const PriceHeaderText = styled(Typography)`
   }
 `
 
-export const TablePriceHeader = ({ title, textAlign }) => {
+export const TablePriceHeader = () => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText variant="body_tiny_cap" data-testid="header-item">

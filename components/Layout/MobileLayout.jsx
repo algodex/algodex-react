@@ -12,7 +12,6 @@ import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { lighten } from 'polished'
 import { useAlgodex } from '@algodex/algodex-hooks'
 
 const WalletSection = styled.section`
