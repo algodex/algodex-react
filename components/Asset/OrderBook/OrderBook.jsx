@@ -358,12 +358,26 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   }, [asset])
 
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+  const maxSpendableAlgo = useSpendableAmount()
+  const calculatedAmountFn = (price, ordersList, index, type) => {
+    let slicedList = []
+    if (type === 'sell') slicedList = ordersList.slice(index)
+    if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
 
-  const calculateAmount = useSpendableAmount(asset, 100)
+    const determinedTotal = (
+      slicedList.reduce((prev, curr) => prev + curr.amount, 0) * price
+    ).toFixed(6)
+    if (determinedTotal > maxSpendableAlgo) {
+      return parseFloat(maxSpendableAlgo / price).toFixed(6)
+    } else {
+      return determinedTotal
+    }
+  }
 
+  // console.log(parseFloat(Big(calculateAmount)), 'hello here')
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    return data.map((row) => {
+    return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
@@ -372,7 +386,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           {
             price: row.price,
             type: type === 'buy' ? 'sell' : 'buy',
-            amount: parseFloat(Big(calculateAmount).div(asset.price_info.price)).toString()
+            amount: calculatedAmountFn(row.price, data, index, type).toString()
           },
           asset
         )

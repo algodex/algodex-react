@@ -4,7 +4,7 @@ import Big from 'big.js'
 import { useStorePersisted } from 'store/use-store'
 import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
 
-export const useSpendableAmount = (asset, value) => {
+export const useSpendableAmount = () => {
   const wallets = useStorePersisted((state) => state.wallets)
   const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
   const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
@@ -31,6 +31,5 @@ export const useSpendableAmount = (asset, value) => {
       console.debug('Wallet not connected')
     }
   }, [minBalance, algoBalance, isWalletBalanceLoading, isWalletBalanceError])
-
-  return new Big(value).div(100).times(maxSpendableAlgo).toString()
+  return maxSpendableAlgo
 }
