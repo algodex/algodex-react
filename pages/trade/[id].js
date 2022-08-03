@@ -124,7 +124,7 @@ function useMobileDetect(isMobileSSR = false) {
  */
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
-  console.debug(`TradePage(`, staticExplorerAsset, `)`)
+  // console.debug(`TradePage(`, staticExplorerAsset, `)`)
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)

@@ -38,7 +38,8 @@ export default class NextHTMLDocument extends Document {
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
           <link rel="stylesheet" href="/fonts/style.css" />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <link rel="icon" type="image/png" href="/favicon.png" />
           {this.props.emotionStyleTags}
         </Head>
         <body>

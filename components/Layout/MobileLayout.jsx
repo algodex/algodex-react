@@ -1,17 +1,17 @@
 import { useRef, useState } from 'react'
 
-import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
+import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { lighten } from 'polished'
 import { useAlgodex } from '@algodex/algodex-hooks'
 
 const WalletSection = styled.section`
@@ -114,7 +114,7 @@ const MobileMenuButton = styled(Button)`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Mobile Layout Render ${asset?.id || 'Missing'}`)
+  // console.debug(`Main Mobile Layout Render ${asset?.id || 'Missing'}`)
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const searchTableRef = useRef()

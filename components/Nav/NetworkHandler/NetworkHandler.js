@@ -1,6 +1,7 @@
+import { useEffect, useMemo } from 'react'
+
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
-import { useEffect, useMemo } from 'react'
 import useUserStore from '@/store/use-user-state'
 
 const NetworkHandler = () => {
