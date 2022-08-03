@@ -360,14 +360,24 @@ export function OrderBook({ isMobile, asset, orders, components }) {
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
   const maxSpendableAlgo = useMaxSpendableAlgo()
 
+  /**
+   * Determines amount for an asset
+   * when an order is clicked
+   *
+   * @param {String} price
+   * @param {Array} ordersList
+   * @param {Number} index
+   * @param {String} type
+   * @return {Number}
+   */
   const calculatedAmountFn = (price, ordersList, index, type) => {
-    const _price = parseFloat(price).toFixed(asset.decimals)
+    const _price = parseFloat(price)
     let slicedList = []
     if (type === 'sell') slicedList = ordersList.slice(index)
     if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
 
     const compoundedAmount = slicedList.reduce((prev, curr) => prev + curr.amount, 0)
-    const determinedTotal = new Big(_price).times(compoundedAmount)
+    const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
     if (determinedTotal > maxSpendableAlgo) {
       // Deducted a Microalgo because of rounding in use-store while setting total
       return parseFloat(new Big(maxSpendableAlgo).div(_price)) - 0.000001
@@ -376,7 +386,6 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     }
   }
 
-  // console.log(parseFloat(Big(calculateAmount)), 'hello here')
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
