@@ -297,7 +297,6 @@ export function OrderBook({ asset, orders, components }) {
     return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
-
       const handleSelectOrder = () => {
         dispatcher('clicked', {
           type: 'order',

@@ -1,18 +1,19 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react'
-import useTranslation from 'next-translate/useTranslation'
-import { ReactSVG } from 'react-svg'
-import styled from '@emotion/styled'
-import toast from 'react-hot-toast'
 
-//Iconify icon
-import { Icon } from '@iconify/react'
-
+import { AboutContainer } from './styles.css'
 // Custom Styled Components
 import Button from 'components/Button'
 import { AboutContainer } from './styles.css'
 import { submitHubspotForm } from '@/services/cms'
+//Iconify icon
+import { Icon } from '@iconify/react'
+import { ReactSVG } from 'react-svg'
 import Spinner from '../Spinner'
+import styled from '@emotion/styled'
+import { submitHubspotForm } from '@/services/algodex'
+import toast from 'react-hot-toast'
+import useTranslation from 'next-translate/useTranslation'
 
 const FooterWrapper = styled.div`
   background-color: ${({ theme }) => theme.palette.gray[500]};
@@ -170,7 +171,7 @@ export const AboutFooter = () => {
             <FooterLinks target="_blanc" href="https://github.com/algodex/">
               Github
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://about.algodex.com/support/">
+            <FooterLinks target="_blanc" href="https://app.algodex.com/support">
               {t('support')}
             </FooterLinks>
 
