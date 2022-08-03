@@ -42,7 +42,7 @@ describe('Notification Modal Component', () => {
     )
     expect(queryByTestId('notification-modal-wrapper')).toBeNull()
   })
-  it('Should render Network notification Modal', async () => {
+  it.skip('Should render Network notification Modal', async () => {
     const { queryByTestId } = render(
       <NotificationModal
         isModalActive={true}
