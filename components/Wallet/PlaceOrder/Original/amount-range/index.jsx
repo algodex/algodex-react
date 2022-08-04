@@ -5,13 +5,12 @@ import { default as Slider } from 'components/Input/Slider'
 
 function AmountRange(props) {
   const { order, algoBalance: _algoBalance, asaBalance: _asaBalance, asset, onChange } = props
-
   const isBuyOrder = order.type === 'buy'
   const price = new Big(order.price || 0).toString()
   const amount = new Big(order.amount || 0).toString()
   const algoBalance = new Big(_algoBalance).toString()
   const asaBalance = new Big(_asaBalance).toString()
-  const currentPrice = new Big(asset.price || 0).toString()
+  const currentPrice = new Big(asset.price_info.price || 0).toString()
 
   // @todo: calculate txn fees
   // const value = isBuyOrder
