@@ -9,9 +9,6 @@ import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 export function OrderBookPriceInfo({ algoPrice, asset }) {
-  const percentageChange = useMemo(() => {
-    return asset?.price_info && floatToFixed(asset?.price_info?.price24Change, 2)
-  }, [asset])
   const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
   return (
     <>

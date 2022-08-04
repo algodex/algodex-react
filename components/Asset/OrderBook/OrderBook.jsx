@@ -294,7 +294,7 @@ export function OrderBook({ asset, orders, components }) {
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    return data.map((row, index) => {
+    return data.map((row) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
