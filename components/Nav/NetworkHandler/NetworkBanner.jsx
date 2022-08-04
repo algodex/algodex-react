@@ -20,7 +20,7 @@ const NetworkBanner = () => {
   }
 
   return (
-    <div>
+    <>
       {((hasMainnetRibbon && activeNetwork === 'mainnet') ||
         (hasTestnetRibbon && activeNetwork === 'testnet')) && (
         <div
@@ -53,7 +53,7 @@ const NetworkBanner = () => {
           />
         </div>
       )}
-    </div>
+    </>
   )
 }
 
