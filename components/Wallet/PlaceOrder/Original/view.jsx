@@ -397,7 +397,6 @@ function PlaceOrderView(props) {
     console.log('BuyCondition: asset.isGeoBlocked: ', asset.isGeoBlocked)
     console.log('BuyCondition: status.submitting: ', status.submitting)
 
-    console.log('isDisabled: ', isDisabled)
     return (
       <SubmitButton
         type="submit"

@@ -663,7 +663,7 @@ export function useWalletTradeHistoryQuery({
       Object.keys(assetsInfo).length === 0 ? getFormattedPairMap(assetList) : new Map()
     return tradeHistoryData.map(
       ({ unix_time, group_id, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
-        const side = tradeType === 'buyASA' ? buyText : sellText
+        let side = tradeType === 'buyASA' ? buyText : sellText
         // const unitName = assetsInfo[asset_id]?.params['unit-name'] || unitNameMap.get(asset_id)
         const unitName = assetsInfo[asset_id].params['unit-name']
         let price = floatToFixed(formattedPrice) + ' (ALGO)'
@@ -677,6 +677,7 @@ export function useWalletTradeHistoryQuery({
             formattedPrice !== 0
               ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
               : 'Invalid Price'
+          side = side === buyText ? sellText : buyText
         }
 
         return {
