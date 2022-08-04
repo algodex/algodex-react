@@ -197,6 +197,7 @@ export function SearchInput(props) {
       placeholder={`${t('search')}`}
       isListingVerifiedAssets={isListingVerifiedAssets}
       setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+      data-testid="search-input"
     />
   )
 }
