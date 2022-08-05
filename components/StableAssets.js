@@ -3,5 +3,7 @@
 export const StableAssets = [
   51435943, // USDC,
   37074699, // USDC,
-  38718614 // USDC
+  38718614, // USDC,
+  42279195, // USDT
+  94115664 //USDT
 ]

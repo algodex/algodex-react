@@ -283,14 +283,26 @@ export const NavSearchTable = ({
                 style={{ minWidth: '0.75rem' }}
                 color={handleFavoritesFn(row?.original?.id)}
               />
-              <AssetNameBlock>
-                <AssetName>{value}</AssetName>
-                <PairSlash>{`/`}</PairSlash>
-                <NameVerifiedWrapper>
-                  ALGO
-                  {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
-                </NameVerifiedWrapper>
-              </AssetNameBlock>
+              {row?.original.isStable && (
+                <AssetNameBlock>
+                  <AssetName>ALGO</AssetName>
+                  <PairSlash>{`/`}</PairSlash>
+                  <NameVerifiedWrapper>
+                    {value}
+                    {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
+                  </NameVerifiedWrapper>
+                </AssetNameBlock>
+              )}
+              {!row?.original.isStable && (
+                <AssetNameBlock>
+                  <AssetName>{value}</AssetName>
+                  <PairSlash>{`/`}</PairSlash>
+                  <NameVerifiedWrapper>
+                    ALGO
+                    {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
+                  </NameVerifiedWrapper>
+                </AssetNameBlock>
+              )}
             </div>
             <br />
             <div className="flex item-center -mt-3">
