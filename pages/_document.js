@@ -7,7 +7,7 @@ import theme from '../theme/index'
 const APP_NAME = 'Algodex'
 const APP_DESCRIPTION = 'Algodex is a decentralized exchange on the Algorand blockchain network'
 const APP_SOCIAL_TWITTER = '@AlgodexOfficial'
-const APP_IMAGE_LINK = '/algx_background_preview.png'
+const APP_IMAGE_LINK = '/algx_background_preview.jpg'
 
 export default class NextHTMLDocument extends Document {
   render() {
