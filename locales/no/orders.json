@@ -1,6 +1,6 @@
 {
     "open-orders": "ÅPNE BESTILLINGER",
-    "order-history": "ORDREHISTORIKK",
+    "order-history": "Bestelgeschiedenis",
     "assets": "EIENDELER",
     "date": "DATO",
     "pair": "PAIR (handelspar)",
@@ -21,5 +21,6 @@
     "error": "Noe gikk galt.",
     "name": "NAVN",
     "buy": "Kjøp",
-    "sell": "Salg"
+    "sell": "Salg",
+    "cancel-all": "Verwijder alles"
 }

@@ -21,5 +21,6 @@
   "error": "Có lỗi",
   "name": "Tên",
   "buy": "Bán",
-  "sell": "Bán"
+  "sell": "Bán",
+  "cancel-all": "Hủy bỏ tất cả"
 }

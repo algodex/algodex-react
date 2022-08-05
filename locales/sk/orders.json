@@ -21,5 +21,6 @@
   "error": "Niečo sa pokazilo",
   "name": "Názov",
   "buy": "Kúpiť",
-  "sell": "Predať"
+  "sell": "Predať",
+  "cancel-all": "Zrušiť všetko"
 }
