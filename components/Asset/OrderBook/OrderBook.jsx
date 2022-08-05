@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp } from 'react-feather'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 import Big from 'big.js'
+import Box from '@mui/material/Box'
 import { Fragment } from 'react'
 import PriceInfo from './OrderBookPriceInfo'
 import PropTypes from 'prop-types'
@@ -11,7 +12,6 @@ import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
@@ -353,7 +353,7 @@ export function OrderBook({ asset, orders, components }) {
           <Typography variant="subtitle_medium_cap_bold" color="gray.500">
             {t('order-book')}
           </Typography>
-          <Header className="mt-2">
+          <Header className="mt-4">
             <TablePriceHeader />
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')}
