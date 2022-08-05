@@ -4,12 +4,14 @@ import React, { useState } from 'react'
 import { AboutContainer } from './styles.css'
 // Custom Styled Components
 import Button from 'components/Button'
+
+import { submitHubspotForm } from '@/services/cms'
 //Iconify icon
 import { Icon } from '@iconify/react'
 import { ReactSVG } from 'react-svg'
 import Spinner from '../Spinner'
 import styled from '@emotion/styled'
-import { submitHubspotForm } from '@/services/algodex'
+
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 

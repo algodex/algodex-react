@@ -4,7 +4,7 @@ function clear() {
   cy.clearLocalStorage()
 }
 
-describe('Check Mobile Tabs on Different Screens', () => {
+describe.skip('Check Mobile Tabs on Different Screens', () => {
   beforeEach(clear)
   afterEach(clear)
   sizes.forEach((size) => {
@@ -160,7 +160,7 @@ describe('Checks if trade section is visible on Mobile view on Different Screens
   })
 })
 
-describe('Checks if wallet section is visible on Mobile view on Different Screens', () => {
+describe.skip('Checks if wallet section is visible on Mobile view on Different Screens', () => {
   beforeEach(clear)
   afterEach(clear)
   sizes.forEach((size) => {

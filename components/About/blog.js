@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import PropTypes from 'prop-types'
-import { fetchBlogMedia } from '@/services/algodex'
+import { fetchBlogMedia } from '@/services/cms'
 
 //Styled components
 import { AboutContainer, AboutTitle } from './styles.css'

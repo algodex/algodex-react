@@ -1,23 +1,21 @@
-import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
-
 import Big from 'big.js'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import { assetVeryShortNameFn } from '@/components/helpers'
+// import { Typography, Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
+import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
 dayjs.extend(localizedFormat)
 
 const Container = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -30,18 +28,18 @@ const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
   column-gap: 0.25rem;
 `
-const HeaderWrapper = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
-`
+// const HeaderWrapper = styled.div`
+//   padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
+// `
 
 const Header = styled.header`
-  flex-shrink: 0%;
+  flex-shrink: 0;
   display: grid;
   ${gridStyles}
 `
 
 const Trades = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
   /* width */
@@ -68,7 +66,7 @@ const Trades = styled.div`
 `
 
 const TradesWrapper = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -78,11 +76,10 @@ const TradesWrapper = styled.div`
 
 const TradesRow = styled.div`
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
-
+  ${gridStyles}
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buyASA' ? 'green' : 'red'
@@ -90,14 +87,14 @@ const TradesRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
 `
 
-const PriceHeaderText = styled(BodyCopyTiny)`
+const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   margin: 0;
@@ -111,7 +108,7 @@ const PriceHeaderText = styled(BodyCopyTiny)`
 const PriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText>
+    <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
@@ -127,7 +124,7 @@ const PriceHeader = () => {
  * @returns {JSX.Element}
  * @constructor
  */
-export function TradeHistory({ isMobile, asset, orders: tradesData }) {
+export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
@@ -146,15 +143,11 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-            <BodyCopyTiny
-              fontFamily="'Roboto Mono', monospace"
-              color={getColor(row.type)}
-              title={row.price}
-              m={0}
-            >
+            <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
               {floatToFixed(row.price)}
-            </BodyCopyTiny>
-            <BodyCopyTiny
+            </Typography>
+            <Typography
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -162,8 +155,9 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
               m={0}
             >
               {amount.toFixed(Math.min(3, asset.decimals))}
-            </BodyCopyTiny>
-            <BodyCopyTiny
+            </Typography>
+            <Typography
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -171,38 +165,41 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
               m={0}
             >
               {dayjs(row.timestamp).format('HH:mm:ss')}
-            </BodyCopyTiny>
+            </Typography>
           </TradesRow>
         )
       })
   }
 
-  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
-
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
-      <Container isMobile={isMobile}>
-        <HeaderWrapper isMobile={isMobile}>
-          {!isMobile && <HeaderCaps color="gray.500">{t('trade-history')}</HeaderCaps>}
-          <br />
-          <Header>
-            <PriceHeader />
-            <BodyCopyTiny color="gray.500" className="whitespace-nowrap" textAlign="right" m={0}>
-              {t('amount')} ({assetVeryShortName})
-            </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('time')}
-            </BodyCopyTiny>
-          </Header>
-        </HeaderWrapper>
+      <Container>
+        <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
+          {t('trade-history')}
+        </Typography>
+        <Header>
+          <PriceHeader />
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {t('amount')}
+          </Typography>
+          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {t('time')}
+          </Typography>
+        </Header>
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
+              <Typography
+                variant="body_tiny_cap"
+                className="flex items-center justify-center"
+                color="gray.600"
+                textAlign="center"
+                m={4}
+              >
                 {t('no-trades-completed')}
-              </BodyCopyTiny>
+              </Typography>
             )}
           </TradesWrapper>
         </Trades>

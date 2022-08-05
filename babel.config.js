@@ -1,4 +1,4 @@
 module.exports = {
   presets: ['next/babel'],
-  plugins: ['@emotion']
+  plugins: ['@emotion', '@babel/plugin-transform-runtime']
 }

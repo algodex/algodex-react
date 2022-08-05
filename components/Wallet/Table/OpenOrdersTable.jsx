@@ -6,14 +6,16 @@ import Table, {
 } from '@/components/Table'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { BrightGraySpan } from '@/components/Typography'
-import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
+import React from 'react'
+// import { Typography } from '@/components/Typography'
+// import OrderService from '@/services/order'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
+import { withWalletOrdersQuery, useAlgodex } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -51,8 +53,11 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // console.log(_orders, 'orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
+  const { algodex, wallet } = useAlgodex()
+  function closeOrder() {
+    return algodex.closeOrder.apply(algodex, arguments)
+  }
 
   useEffect(() => {
     setOpenOrdersData(_orders)
@@ -68,14 +73,15 @@ export function OpenOrdersTable({ orders: _orders }) {
         const cellData = data[cellIndex]
 
         const {
-          escrowAddress,
           ownerAddress,
-          assetLimitPriceN,
-          assetLimitPriceD,
           assetId,
-          version
+          version,
+          formattedASAAmount,
+          decimals,
+          formattedPrice,
+          appId
         } = cellData.metadata
-        const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
+        // const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
         const updateOrderStatus = (statusMsg) =>
           openOrdersData.map((order, index) =>
@@ -84,12 +90,27 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
-        const cancelOrderPromise = OrderService.closeOrder(
-          escrowAddress,
-          ownerAddress,
-          orderBookEntry,
-          version
-        )
+        const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
+
+        const cancelOrderPromise = closeOrder({
+          address: ownerAddress,
+          version,
+          price: Number(formattedPrice),
+          amount: Number(formattedASAAmount),
+          total: Number(formattedPrice) * Number(formattedASAAmount),
+          asset: { id: assetId, decimals },
+          assetId,
+          type: cellData.type.toLowerCase(),
+          appId,
+          contract: {
+            creator: ownerAddress,
+            escrow: cellData.metadata.escrowAddress,
+            N: cellData.metadata.assetLimitPriceN,
+            D: cellData.metadata.assetLimitPriceD,
+            entry: orderbookEntry
+          },
+          wallet
+        })
 
         toast.promise(cancelOrderPromise, {
           loading: t('awaiting-confirmation'),
@@ -108,12 +129,12 @@ export function OpenOrdersTable({ orders: _orders }) {
       }
 
       return (
-        <BrightGraySpan data-testid="cancel-order-button">
-          <OrderCancelButton onClick={handleCancelOrder}>Cancel</OrderCancelButton>
-        </BrightGraySpan>
+        <Typography variant="body_small" color="gray.000" data-testid="cancel-order-button">
+          <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
+        </Typography>
       )
     },
-    [t, openOrdersData]
+    [t, openOrdersData, wallet]
   )
 
   const columns = useMemo(

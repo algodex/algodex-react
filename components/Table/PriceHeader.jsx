@@ -1,10 +1,11 @@
-import { BodyCopyTiny } from 'components/Typography'
 import Icon from 'components/Icon'
+// import { Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import PropTypes from 'prop-types'
 
-export const PriceHeaderText = styled(BodyCopyTiny)`
+export const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   ${(props) => (props.textAlign === 'right' ? 'margin-left: auto' : 'margin: 0')};
@@ -14,11 +15,11 @@ export const PriceHeaderText = styled(BodyCopyTiny)`
   }
 `
 
-export const TablePriceHeader = ({ title, textAlign }) => {
+export const TablePriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText data-testid="header-item" textAlign={textAlign}>
-      {t(title)}
+    <PriceHeaderText variant="body_tiny_cap" data-testid="header-item">
+      {t('price')}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
   )
