@@ -6,18 +6,20 @@ import { convertFromAsaUnits } from '@/services/convert'
 import { floatToFixed } from '@/services/display'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
+import { useMemo } from 'react'
 import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
 
 export function OrderBookPriceInfo({ algoPrice, asset }) {
+  const percentageChange = useMemo(() => {
+    return asset?.price_info && floatToFixed(asset?.price_info?.price24Change, 2)
+  }, [asset])
   const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
   return (
     <>
       <HeaderSmInter color="white">{asaValue}</HeaderSmInter>
       {asset && asset.price_info && (
         <BodyCopy data-testid="price-info" as="span">
-          {(asset?.price_info?.price24Change &&
-            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-            '0.00%'}
+          {(asset?.price_info?.price24Change && `${percentageChange}%`) || '0.00%'}
         </BodyCopy>
       )}
       <div className="flex items-center ml-4 text-gray-500">
