@@ -305,6 +305,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   if (isLoading || isError) {
     return <Spinner />
   }
+  const notSignedIn = !isConnected ? true : !showForm ? true : false
   return (
     <Box
       sx={{
@@ -320,6 +321,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
             {t('place-order')}
           </Typography>
+          {notSignedIn && (
+            <Typography data-testid="not-signed-in" color="gray.500" textAlign="center" my={5}>
+              {t('not-signed-in')}
+            </Typography>
+          )}
         </header>
       )}
       {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && showForm && (

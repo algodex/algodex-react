@@ -38,11 +38,11 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.GHP_AUTH_TOKEN }}
       - name: Run Unit Tests
         run: yarn test-jest
-      - uses: paambaati/codeclimate-action@v3.0.0
-        env:
-          CC_TEST_REPORTER_ID: 6928d153a461a3dbacd2d88ddbe0d6005c98f588abb27cefe006f299a5ffb471
-        with:
-          coverageCommand: yarn coverage
+      #- uses: paambaati/codeclimate-action@v3.0.0
+      #  env:
+      #    CC_TEST_REPORTER_ID: 6928d153a461a3dbacd2d88ddbe0d6005c98f588abb27cefe006f299a5ffb471
+      #  with:
+      #    coverageCommand: yarn coverage
   e2e:
     name: End<->End
     runs-on: ubuntu-latest
