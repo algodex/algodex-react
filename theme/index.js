@@ -1,6 +1,9 @@
+import { lighten, opacify } from 'polished'
+
 import { createTheme } from '@mui/material/styles'
-import { lighten } from 'polished'
+import { opacity } from 'styled-system'
 import { experimental_sx as sx } from '@mui/material/styles'
+
 /**
  * Design System Name: Lucid 0.0.1
  */
@@ -514,6 +517,10 @@ const theme = {
             backgroundColor: colors.green['500'],
             '&:hover': {
               backgroundColor: lighten(0.05, colors.green['500'])
+            },
+            '&.Mui-disabled': {
+              color: colors.gray['000'],
+              opacity: '0.3'
             },
             textTransform: 'uppercase',
             fontFamily: fontFamilies.body,
