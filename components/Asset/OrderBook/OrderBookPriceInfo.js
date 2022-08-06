@@ -7,9 +7,13 @@ import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUni
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
+import { useMemo } from 'react'
 import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+  const percentageChange = useMemo(() => {
+    return asset?.price_info && floatToFixed(asset?.price_info?.price24Change, 2)
+  }, [asset])
   return (
     <>
       <Typography variant="h5" color="white">
@@ -17,9 +21,7 @@ export function OrderBookPriceInfo({ algoPrice, asset }) {
       </Typography>
       {asset && asset.price_info && (
         <Typography className="ml-3" data-testid="price-info">
-          {(asset?.price_info?.price24Change &&
-            `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-            '0.00%'}
+          {(asset?.price_info?.price24Change && `${percentageChange}%`) || '0.00%'}
         </Typography>
       )}
       <div className="flex items-center ml-4 text-gray-500">
