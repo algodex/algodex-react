@@ -354,7 +354,7 @@ export function OrderBook({ asset, orders, components }) {
   }, [orders.buy, selectedPrecision])
 
   const aggregatedSellOrder = useMemo(() => {
-    if (typeof orders?.sell === 'undefined' && !Array.isArray(orders.buy)) return []
+    if (typeof orders?.sell === 'undefined' && !Array.isArray(orders.sell)) return []
     return orders.sell.reduce(reduceOrders, [])
   }, [orders.sell, selectedPrecision])
 
@@ -432,7 +432,7 @@ export function OrderBook({ asset, orders, components }) {
               <option>0.1</option>
             </AggregatorSelector>
           </Stack>
-          <Header className="mt-2">
+          <Header className="mt-4">
             <TablePriceHeader />
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')}
