@@ -515,6 +515,7 @@ const theme = {
             color: colors.gray['000'],
             border: '1px solid transparent',
             backgroundColor: colors.green['500'],
+            cursor: 'pointer',
             '&:hover': {
               backgroundColor: lighten(0.05, colors.green['500'])
             },
