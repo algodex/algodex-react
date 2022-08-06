@@ -2,8 +2,10 @@ import Big from 'big.js'
 import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
+import { Stack } from '@mui/material'
 import Tooltip from '@/components/Tooltip'
 import Typography from '@mui/material/Typography'
+import USDPrice from '../../PriceConversion/USDPrice'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
 import { useMemo } from 'react'
@@ -44,7 +46,8 @@ const IconButton = styled.button`
     color: ${({ theme }) => theme.colors.gray[900]};
   }
 `
-function AvailableBalance({ wallet, asset }) {
+
+export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
   const assetBalance = useMemo(() => {
     let res = 0
@@ -54,7 +57,6 @@ function AvailableBalance({ wallet, asset }) {
         res = filter[0].amount
       }
     }
-
     return res
   }, [wallet, asset])
   return (
@@ -102,22 +104,32 @@ function AvailableBalance({ wallet, asset }) {
           </BalanceRow>
         </Tooltip>
       </IconTextContainer>
-      <BalanceRow>
+      <Stack direction="row" justifyContent="space-between">
         <Typography variant="body_small_cap_medium" color="gray.400">
           ALGO
         </Typography>
-        <Typography variant="body_small_medium" color="gray.300">
-          {fromBaseUnits(wallet.amount)}
-        </Typography>
-      </BalanceRow>
+        <Stack direction="column" className="text-right">
+          <Typography className="leading-5" variant="body_small_medium" color="gray.300">
+            {fromBaseUnits(wallet.amount)}
+          </Typography>
+          <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
+            <USDPrice priceToConvert={fromBaseUnits(wallet.amount)} currency="$" />
+          </Typography>
+        </Stack>
+      </Stack>
       <BalanceRow>
         <Typography variant="body_small_cap_medium" color="gray.400">
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
         </Typography>
-        <Typography variant="body_small_medium" color="gray.300">
-          {fromBaseUnits(assetBalance, asset.decimals)}
-        </Typography>
+        <Stack direction="column" className="text-right">
+          <Typography className="leading-5" variant="body_small_medium" color="gray.300">
+            {fromBaseUnits(assetBalance, asset.decimals)}
+          </Typography>
+          <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
+            <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />
+          </Typography>
+        </Stack>
       </BalanceRow>
     </AvailableBalanceContainer>
   )
