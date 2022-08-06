@@ -1,14 +1,17 @@
 import Big from 'big.js'
+import { Box } from '@mui/material'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 // import { Typography, Typography } from 'components/Typography'
 import Typography from '@mui/material/Typography'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import dayjs from 'dayjs'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
@@ -20,7 +23,7 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
-  padding: 0.75rem 0.625rem 1rem;
+  // padding: 0.75rem 0.625rem 1rem;
   padding: ${({ isMobile }) => (isMobile ? `0 0.625rem 1rem;` : '0.75rem 0.625rem 1rem;')};
 `
 
@@ -128,6 +131,8 @@ export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
 
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
@@ -174,18 +179,21 @@ export function TradeHistory({ asset, orders: tradesData }) {
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
       <Container>
-        <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
-          {t('trade-history')}
-        </Typography>
-        <Header>
-          <PriceHeader />
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('amount')}
+        <Box className="p-2">
+          <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
+            {t('trade-history')}
           </Typography>
-          <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-            {t('time')}
-          </Typography>
-        </Header>
+          <Header className="mt-4">
+            <PriceHeader />
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')} ({assetVeryShortName})
+            </Typography>
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('time')}
+            </Typography>
+          </Header>
+        </Box>
+
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (
