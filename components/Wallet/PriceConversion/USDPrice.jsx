@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
 import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
-export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
+export function USDPrice({ algoPrice, asaWorth, priceToConvert, currency }) {
   return (
     <span data-testid="USDprice-element">
       {currency}

@@ -1,7 +1,7 @@
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import AvailableBalance from './Form/AvailableBalance'
+import { AvailableBalance } from './Form/AvailableBalance'
 import Box from '@mui/material/Box'
 import { ButtonGroup } from '@mui/material'
 import { default as MaterialButton } from '@mui/material/Button'
