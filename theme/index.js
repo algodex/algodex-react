@@ -566,11 +566,13 @@ const theme = {
             color: colors.gray['000'],
             border: '1px solid transparent',
             backgroundColor: colors.red['500'],
+            cursor: 'pointer',
             '&:hover': {
               backgroundColor: lighten(0.05, colors.red['500'])
             },
-            '&:disabled': {
-              color: '#fff'
+            '&.Mui-disabled': {
+              color: colors.gray['000'],
+              opacity: '0.3'
             },
             textTransform: 'uppercase',
             fontFamily: fontFamilies.body,
