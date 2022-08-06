@@ -28,3 +28,7 @@ export const setExplorerLink = (addr, network) => {
     ? `https://testnet.algoexplorer.io/address/${addr}`
     : `https://algoexplorer.io/address/${addr}`
 }
+
+export const assetVeryShortNameFn = (asset) => {
+  return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
+}
