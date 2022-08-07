@@ -21,5 +21,6 @@
     "error": "Etwas ist Schiefgelaufen.",
     "name": "Name",
     "buy": "Kaufen",
-    "sell": "Verkaufen"
+    "sell": "Verkaufen",
+    "cancel-all": "Annuller alle"
 }

@@ -21,5 +21,6 @@
     "error": "Une erreur s'est produite.",
     "name": "NOM",
     "buy": "ACHETER",
-    "sell": "VENDRE"
+    "sell": "VENDRE",
+    "cancel-all": "Annuler tout"
 }

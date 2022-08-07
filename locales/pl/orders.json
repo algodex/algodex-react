@@ -21,5 +21,6 @@
     "error": "Cos poszlo nie tak ..",
     "name": "Nazwa jednostki",
     "buy": "Kup",
-    "sell": "Sprzedaj"
+    "sell": "Sprzedaj",
+    "cancel-all": "Anulować całość"
 }

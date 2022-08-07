@@ -4,6 +4,7 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
+import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import PropTypes from 'prop-types'
@@ -15,7 +16,6 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery, useAlgodex } from '@algodex/algodex-hooks'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -46,7 +46,8 @@ const OrderCancelButton = styled.button`
   color: inherit;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.red['500']};
+    background: ${({ theme }) => theme.palette.blue['700']};
+    color: ${({ theme }) => theme.palette.gray['000']};
   }
 `
 
@@ -130,7 +131,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
       return (
         <Typography variant="body_small" color="gray.000" data-testid="cancel-order-button">
-          <OrderCancelButton onClick={handleCancelOrder}>x</OrderCancelButton>
+          <OrderCancelButton onClick={handleCancelOrder}>Cancel</OrderCancelButton>
         </Typography>
       )
     },
@@ -173,7 +174,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: DefaultCell
       },
       {
-        Header: '',
+        Header: t('cancel-all'),
         accessor: 'cancel',
         Cell: OrderCancelCell,
         disableSortBy: true
