@@ -195,11 +195,6 @@ function ChartOverlay(props) {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
   }, [asset, changeAmt])
-  // const openCloseChange = () => {
-  //   const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-  //   // console.log(asset, changeAmt, parseFloat(changePct), 'all here')
-  //   return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
-  // }
 
   const onClick = useCallback(() => {
     setShowAssetInfo(true)
