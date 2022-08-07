@@ -18,6 +18,7 @@ import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import useTranslation from 'next-translate/useTranslation'
 
 const FirstOrderContainer = styled.div`
@@ -291,10 +292,36 @@ export function OrderBook({ asset, orders, components }) {
   const isSignedIn = isConnected
 
   const dispatcher = useEventDispatch()
+  const maxSpendableAlgo = useMaxSpendableAlgo()
+  /**
+   * Determines amount for an asset
+   * when an order is clicked
+   *
+   * @param {String} price
+   * @param {Array} ordersList
+   * @param {Number} index
+   * @param {String} type
+   * @return {Number}
+   */
+  const calculatedAmountFn = (price, ordersList, index, type) => {
+    const _price = parseFloat(price)
+    let slicedList = []
+    if (type === 'sell') slicedList = ordersList.slice(index)
+    if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
+
+    const compoundedAmount = slicedList.reduce((prev, curr) => prev + curr.amount, 0)
+    const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
+    if (determinedTotal > maxSpendableAlgo) {
+      // Deducted a Microalgo because of rounding in use-store while setting total
+      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+    } else {
+      return compoundedAmount
+    }
+  }
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    return data.map((row) => {
+    return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
@@ -302,7 +329,8 @@ export function OrderBook({ asset, orders, components }) {
           type: 'order',
           payload: {
             price: row.price,
-            type: type === 'buy' ? 'sell' : 'buy'
+            type: type === 'buy' ? 'sell' : 'buy',
+            amount: calculatedAmountFn(row.price, data, index, type)
           }
         })
       }
