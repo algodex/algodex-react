@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
+import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
@@ -10,9 +11,9 @@ import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { useAlgodex } from '@algodex/algodex-hooks'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -157,7 +158,9 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            <Wallet />
+            {/* <Wallet /> */}
+            {/* {!acti && <Wallet />} */}
+            <MobileWallet />
           </WalletSection>
         )}
         {activeMobile === TABS.TRADE && (

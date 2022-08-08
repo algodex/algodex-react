@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useContext, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 // import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
@@ -6,23 +6,23 @@ import {
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
 
+import AlgodexApi from '@algodex/algodex-sdk'
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Layout from '@/components/Layout/OriginalLayout'
 import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
-import useUserStore from '@/store/use-user-state'
-import { useRouter } from 'next/router'
-import { useAssetPriceQuery } from '@algodex/algodex-hooks'
-import AlgodexApi from '@algodex/algodex-sdk'
-import config from '@/config.json'
 import Spinner from '@/components/Spinner'
+import { WalletsContext } from '@/hooks/useWallets'
+import config from '@/config.json'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
-import { WalletsContext } from '@/hooks/useWallets'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+import { useRouter } from 'next/router'
+import useUserStore from '@/store/use-user-state'
 
 /**
  * Fetch Traded Asset Paths
@@ -153,7 +153,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   useEffect(() => {
     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
 
-    if (locStorage.length === 0 && storedAddrs.length > 0) {
+    if (locStorage.length === 0 && storedAddrs?.length > 0) {
       setLocStorage(storedAddrs)
     }
   }, [myAlgoConnector.current, addresses])

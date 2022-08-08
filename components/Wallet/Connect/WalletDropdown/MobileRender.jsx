@@ -1,6 +1,8 @@
+import { Box, Typography } from '@mui/material'
 import { copyAddress, truncatedWalletAddress } from 'components/helpers'
 import { filter, find } from 'lodash'
-import { useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
+
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Button from '@mui/material/Button'
 import DropdownBody from './DropdownBody'
@@ -11,12 +13,13 @@ import MaterialIcon from '@mdi/react'
 import Modal from 'components/Modal'
 import MuiAccordion from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
+import { WalletContext } from '../../WalletContext'
 // import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
+import { WalletsContext } from '@/hooks/useWallets'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { Typography, Box } from '@mui/material'
 
 const Container = styled.div`
   width: 100%;
@@ -57,7 +60,10 @@ const ModalContainer = styled.div`
 `
 
 const MobileWalletRender = () => {
-  const { addresses, wallet } = useAlgodex()
+  const { wallet } = useAlgodex()
+  const [addresses] = useContext(WalletsContext)
+
+  // const { addresses, wallet } = useAlgodex()
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const [isDisconnectingWallet, setIsDisconnectingWallet] = useState(false)
@@ -66,6 +72,7 @@ const MobileWalletRender = () => {
     setExpanded(isExpanded ? panel : false)
   }
 
+  console.log(wallet, addresses, 'addresses here')
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
@@ -158,6 +165,7 @@ const MobileWalletRender = () => {
           >
             <Box
               key={idx}
+              // className="font-medium w-full flex justify-between my-2"
               className={`${
                 wallet.address !== addr.address && 'opacity-40'
               } font-medium w-full flex justify-between my-2`}
@@ -181,12 +189,30 @@ const MobileWalletRender = () => {
               </Box>
             </Box>
           </AccordionSummary>
-          <AccordionDetails>{renderAssets(addr.assets, addr.address)}</AccordionDetails>
+          <AccordionDetails>
+            <Box
+              sx={{
+                height: '7rem',
+                overflowY: 'scroll'
+              }}
+            >
+              {renderAssets(addr.assets, addr.address)}
+            </Box>
+            <Button
+              className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white"
+              variant="outlined"
+              sx={{ border: 'solid 1px' }}
+              onClick={() => setIsDisconnectingWallet(true)}
+            >
+              DISCONNECT A WALLET
+            </Button>
+          </AccordionDetails>
         </Accordion>
       )
     })
   }
-
+  // height: 13rem;
+  // overflow-y: scroll;
   return (
     <Container>
       <Box style={{ height: '100%' }} className="flex justify-between flex-col px-3">
@@ -200,15 +226,6 @@ const MobileWalletRender = () => {
               >
                 CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
               </Button>
-              {addresses && addresses.length > 0 && (
-                <Button
-                  className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
-                  variant="contained"
-                  onClick={() => setIsDisconnectingWallet(true)}
-                >
-                  DISCONNECT A WALLET
-                </Button>
-              )}
             </Box>
           </Box>
           <Box>

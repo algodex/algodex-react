@@ -487,7 +487,7 @@ function WalletConnect() {
   const { wallet, setWallet, isConnected } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
-
+  // console.log(wallet, 'wallet here')
   useEffect(() => {
     if (addresses.length > 0) {
       setSignedIn(true)
