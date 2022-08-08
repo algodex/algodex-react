@@ -158,7 +158,7 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            <Wallet />
+            {wallet && <Wallet />}
             {/* {!acti && <Wallet />} */}
             {/* <MobileWallet /> */}
           </WalletSection>

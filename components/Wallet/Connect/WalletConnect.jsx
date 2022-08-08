@@ -3,12 +3,16 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
+import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
 import Icon from 'components/Icon/Icon'
 import Image from 'next/image'
+import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 // import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
+import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
@@ -17,6 +21,7 @@ import { truncatedWalletAddress } from '@/components/helpers'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
 
 // import useWallets from '@/hooks/useWallets'
@@ -28,6 +33,16 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0rem 0 1rem;
+`
+
+const ModalContainer = styled.div`
+  transform: translate(-50%, -50%);
+  @media (max-width: 992px) {
+    width: 90%;
+    transform: translate(-50%, -65%);
+    overflow-y: auto;
+    max-height: 100%;
+  }
 `
 
 // const ButtonContainer = styled.div`
@@ -477,6 +492,35 @@ WalletView.defaultProps = {
   signedIn: false
 }
 
+export function WalletOptionsListComp(props) {
+  const { setIsConnectingWallet, isConnectingWallet } = props
+  return (
+    <Modal
+      onClick={() => {
+        setIsConnectingWallet(false)
+      }}
+      data-testid="notification-modal-wrapper"
+      isVisible={isConnectingWallet}
+    >
+      <ModalContainer
+        className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
+        style={{ transform: 'translate(-50%, -50%)' }}
+      >
+        <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
+        <Box className="px-2 py-4 bg-gray-600">
+          <WalletOptionsList />
+        </Box>
+        <DropdownFooter />
+      </ModalContainer>
+    </Modal>
+  )
+}
+
+WalletOptionsListComp.propTypes = {
+  setIsConnectingWallet: PropTypes.func,
+  isConnectingWallet: PropTypes.bool
+}
+
 /**
  * @todo Merge WalletView into WalletConnect
  * @param props
@@ -487,6 +531,9 @@ function WalletConnect() {
   const { wallet, setWallet, isConnected } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+  const isMobile = useMobileDetect()
+
   // console.log(wallet, 'wallet here')
   useEffect(() => {
     if (addresses.length > 0) {
@@ -498,15 +545,35 @@ function WalletConnect() {
   }, [addresses])
 
   return (
-    <WalletView
-      addresses={addresses}
-      isConnected={isConnected}
-      setAddresses={setAddresses}
-      activeWallet={wallet}
-      signedIn={signedIn}
-      setSignedIn={setSignedIn}
-      setActiveWallet={setWallet}
-    />
+    <Box className="flex flex-col justify-center" width="100%">
+      {isMobile && (
+        <>
+          <WalletOptionsListComp
+            setIsConnectingWallet={setIsConnectingWallet}
+            isConnectingWallet={isConnectingWallet}
+          />
+
+          <Box mx={2}>
+            <Button
+              className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+              variant="contained"
+              onClick={() => setIsConnectingWallet(true)}
+            >
+              CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+            </Button>
+          </Box>
+        </>
+      )}
+      <WalletView
+        addresses={addresses}
+        isConnected={isConnected}
+        setAddresses={setAddresses}
+        activeWallet={wallet}
+        signedIn={signedIn}
+        setSignedIn={setSignedIn}
+        setActiveWallet={setWallet}
+      />
+    </Box>
   )
 }
 
