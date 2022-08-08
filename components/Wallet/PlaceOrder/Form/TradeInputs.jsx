@@ -11,7 +11,6 @@ import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-
 /**
  *
  * Render USD Price for an input component
@@ -197,6 +196,15 @@ export const TradeInputs = ({
           </MUIInputAdornment>
         }
       />
+      <MaterialBox className="flex justify-between items-center mx-4 font-medium">
+        <Typography color="gray.400" variant="body_tiny_cap">
+          Fee
+        </Typography>
+        <Typography color="gray.400" variant="body_tiny_cap">
+          <USDPrice priceToConvert={0} />
+          <span className="ml-4 mr-3">USD</span>
+        </Typography>
+      </MaterialBox>
       <USDInputPrice value={order.total} id="total" />
       {/* <TxnFeeContainer>
         <Typography color="gray.500" textTransform="none">
