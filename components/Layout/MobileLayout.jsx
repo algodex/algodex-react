@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
-import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
+// import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
@@ -158,9 +158,9 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            {/* <Wallet /> */}
+            <Wallet />
             {/* {!acti && <Wallet />} */}
-            <MobileWallet />
+            {/* <MobileWallet /> */}
           </WalletSection>
         )}
         {activeMobile === TABS.TRADE && (

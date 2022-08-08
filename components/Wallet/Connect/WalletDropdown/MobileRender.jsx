@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { copyAddress, truncatedWalletAddress } from 'components/helpers'
 import { filter, find } from 'lodash'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Button from '@mui/material/Button'
@@ -13,14 +13,12 @@ import MaterialIcon from '@mdi/react'
 import Modal from 'components/Modal'
 import MuiAccordion from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
-import { WalletContext } from '../../WalletContext'
 // import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import { WalletsContext } from '@/hooks/useWallets'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import useWalletMgmt from '@/hooks/useWalletMgmt'
 
 const Container = styled.div`
   width: 100%;
@@ -69,17 +67,6 @@ const MobileWalletRender = () => {
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const [isDisconnectingWallet, setIsDisconnectingWallet] = useState(false)
-  // const [signedIn, setSignedIn] = useState(false)
-
-  // useEffect(() => {
-  //   if (addresses.length > 0) {
-  //     setSignedIn(true)
-  //     if (typeof wallet === 'undefined') {
-  //       setWallet(addresses[0])
-  //     }
-  //   }
-  // }, [addresses])
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
