@@ -20,6 +20,7 @@ import { WalletsContext } from '@/hooks/useWallets'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import useWalletMgmt from '@/hooks/useWalletMgmt'
 
 const Container = styled.div`
   width: 100%;
@@ -60,6 +61,7 @@ const ModalContainer = styled.div`
 `
 
 const MobileWalletRender = () => {
+  // const { addresses, wallet, signedIn } = useWalletMgmt()
   const { wallet } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
 
@@ -67,12 +69,21 @@ const MobileWalletRender = () => {
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const [isDisconnectingWallet, setIsDisconnectingWallet] = useState(false)
+  // const [signedIn, setSignedIn] = useState(false)
+
+  // useEffect(() => {
+  //   if (addresses.length > 0) {
+  //     setSignedIn(true)
+  //     if (typeof wallet === 'undefined') {
+  //       setWallet(addresses[0])
+  //     }
+  //   }
+  // }, [addresses])
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
 
-  console.log(wallet, addresses, 'addresses here')
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
@@ -211,61 +222,64 @@ const MobileWalletRender = () => {
       )
     })
   }
-  // height: 13rem;
-  // overflow-y: scroll;
+
   return (
-    <Container>
-      <Box style={{ height: '100%' }} className="flex justify-between flex-col px-3">
-        <Box>
+    <>
+      {/* {signedIn && ( */}
+      <Container>
+        <Box style={{ height: '100%' }} className="flex justify-between flex-col px-3">
           <Box>
-            <Box className="flex flex-col justify-between">
-              <Button
-                className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
-                variant="contained"
-                onClick={() => setIsConnectingWallet(true)}
-              >
-                CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
-              </Button>
-            </Box>
-          </Box>
-          <Box>
-            <Box className="flex justify-between text-sm mt-4">
-              <Typography variant="label_regular" color="gray.500">
-                WALLET NAME
-              </Typography>
-              <Typography variant="label_regular" color="gray.500">
-                BALANCE
-              </Typography>
-            </Box>
-            {(!addresses || !addresses.length > 0) && (
-              <Box className="flex justify-center">
-                <Typography
-                  variant="label_regular_bold"
-                  color="gray.300"
-                  className="text-center mt-8 w-9/12"
+            <Box>
+              <Box className="flex flex-col justify-between">
+                <Button
+                  className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+                  variant="contained"
+                  onClick={() => setIsConnectingWallet(true)}
                 >
-                  No wallets connected yet. <br />
-                  Connect a wallet with the button above.
+                  CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+                </Button>
+              </Box>
+            </Box>
+            <Box>
+              <Box className="flex justify-between text-sm mt-4">
+                <Typography variant="label_regular" color="gray.500">
+                  WALLET NAME
+                </Typography>
+                <Typography variant="label_regular" color="gray.500">
+                  BALANCE
                 </Typography>
               </Box>
-            )}
-            {addresses && addresses.length > 0 && renderWalletAddresses()}
+              {(!addresses || !addresses.length > 0) && (
+                <Box className="flex justify-center">
+                  <Typography
+                    variant="label_regular_bold"
+                    color="gray.300"
+                    className="text-center mt-8 w-9/12"
+                  >
+                    No wallets connected yet. <br />
+                    Connect a wallet with the button above.
+                  </Typography>
+                </Box>
+              )}
+              {addresses && addresses.length > 0 && renderWalletAddresses()}
+            </Box>
+          </Box>
+          <Box className="flex">
+            <Typography
+              variant="body_small_medium"
+              color="gray.100"
+              className="text-center mb-4 px-4"
+            >
+              Active wallet is in white. Tap on an additional wallet to switch it to active. Tap on
+              arrow to expand list and see current holdings.
+            </Typography>
           </Box>
         </Box>
-        <Box className="flex">
-          <Typography
-            variant="body_small_medium"
-            color="gray.100"
-            className="text-center mb-4 px-4"
-          >
-            Active wallet is in white. Tap on an additional wallet to switch it to active. Tap on
-            arrow to expand list and see current holdings.
-          </Typography>
-        </Box>
-      </Box>
-      {renderWalletOptionsList()}
-      {renderAddressesList()}
-    </Container>
+        {renderWalletOptionsList()}
+        {renderAddressesList()}
+      </Container>
+      {/* )} */}
+    </>
   )
 }
 
