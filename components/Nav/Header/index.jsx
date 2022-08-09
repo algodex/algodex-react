@@ -150,11 +150,7 @@ export function Header() {
           <NavActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
           </NavActiveLink>
-          <NavActiveLink
-            target="_blank"
-            href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
-            rel="noreferrer"
-          >
+          <NavActiveLink target="_blank" href="/docs" rel="noreferrer">
             <NavTextSm>Docs</NavTextSm>
           </NavActiveLink>
           <NavActiveLink target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
