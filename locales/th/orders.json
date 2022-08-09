@@ -21,5 +21,7 @@
     "error": "Something went wrong.",
     "name": "ชื่อ",
     "buy": "ซื้ื้อ",
-    "sell": "ขาย"
+    "sell": "ขาย",
+    "cancel-all": "ยกเลิกทั้งหมด",
+    "cancel": "ยกเลิก"
 }

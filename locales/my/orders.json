@@ -21,5 +21,7 @@
     "error": "Kegagalan berlaku ",
     "name": "NAMA",
     "buy": "BELI",
-    "sell": "JUAL"
+    "sell": "JUAL",
+    "cancel-all": "Batalkan Semua",
+    "cancel": "Batal"
 }
