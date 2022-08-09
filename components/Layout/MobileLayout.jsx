@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useContext, useEffect } from 'react'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -12,6 +12,9 @@ import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { WalletsContext } from '@/hooks/useWallets'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -127,7 +130,10 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet } = useAlgodex()
+  const { wallet, setWallet } = useAlgodex()
+  const [addresses, setAddresses] = useContext(WalletsContext)
+  const [locStorage, setLocStorage] = useState([])
+  const myAlgoConnector = useRef()
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
@@ -141,6 +147,46 @@ function MainLayout({ asset, children }) {
    * This is only used to switch to MobileMenu Chart view
    * when the Next/Router navigates to a shallow route
    */
+  useEffect(() => {
+    if (!myAlgoConnector.current) {
+      const reConnectMyAlgoWallet = async () => {
+        // '@randlabs/myalgo-connect' is imported dynamically
+        // because it uses the window object
+        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+        MyAlgoConnect.prototype.sign = signer
+        myAlgoConnector.current = new MyAlgoConnect()
+        myAlgoConnector.current.connected = true
+      }
+
+      reConnectMyAlgoWallet()
+    }
+  }, [])
+
+  useEffect(() => {
+    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+
+    if (locStorage.length === 0 && storedAddrs?.length > 0) {
+      setLocStorage(storedAddrs)
+    }
+  }, [myAlgoConnector.current, addresses])
+
+  useEffect(() => {
+    if (addresses.length === 0 && locStorage.length > 0) {
+      const reHydratedAddresses = locStorage.map((wallet) => {
+        if (wallet.type === 'my-algo-wallet') {
+          return {
+            ...wallet,
+            connector: myAlgoConnector.current
+          }
+        } else {
+          return wallet
+        }
+      })
+      setAddresses(reHydratedAddresses)
+      setWallet(reHydratedAddresses[0])
+    }
+  }, [locStorage])
+
   useEvent('clicked', (data) => {
     if (data === 'asset') {
       setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)
