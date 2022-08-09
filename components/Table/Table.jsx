@@ -1,17 +1,28 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
-import { BrightGraySpan } from '@/components/Typography'
 import Fade from '@mui/material/Fade'
 import Icon from '@/components/Icon'
 import InfoFlyover from './InfoFlyover'
 import Popper from '@mui/material/Popper'
 import PropTypes from 'prop-types'
+// import { Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
 import _ from 'lodash'
+import { css } from '@emotion/react'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 
 // import { usePopperTooltip } from 'react-popper-tooltip'
+
+const styleReset = css`
+  margin: 0;
+  padding: 0;
+  // border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+`
 
 const SortIcon = styled(Icon)`
   position: relative;
@@ -20,17 +31,32 @@ const SortIcon = styled(Icon)`
 `
 
 const Container = styled.div`
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+
   // min-width: 600px;
   // overflow: hidden;
-
+  p,
+  table,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td {
+    ${styleReset}
+  }
+  display: flex;
+  height: 100%;
   table {
     position: relative;
     border-spacing: 0;
     border: none;
     width: 100%;
-    @media only (min-width: 996px) {
-      min-width: unset;
-    }
 
     & ::-webkit-scrollbar {
       display: none;
@@ -65,7 +91,12 @@ const Container = styled.div`
       color: ${({ theme }) => theme.palette.gray['600']};
       font-size: 0.75rem;
       line-height: 1.25;
+<<<<<<< HEAD
 
+=======
+      border-right: solid 1px ${({ theme }) => theme.palette.gray['700']};
+      border-bottom: solid 1px ${({ theme }) => theme.palette.gray['700']};
+>>>>>>> next3
       &:first-of-type {
         padding-left: 1.125rem;
         box-sizing: border-box;
@@ -73,28 +104,33 @@ const Container = styled.div`
         min-width: 45px;
         width: 45px;
       }
-      padding-right: 0.5rem;
     }
 
     thead {
       position: sticky;
       tr {
+        border: none;
         th {
+          border: none;
           position: sticky;
           top: 0;
           padding: 0.75rem 0.4rem;
           background-color: ${({ theme }) => theme.palette.gray['800']};
           color: ${({ theme }) => theme.palette.gray['500']};
+          border: solid 1px ${({ theme }) => theme.palette.gray['700']};
+          // border-bottom: solid 1px ${({ theme }) => theme.palette.gray['700']};
           text-align: left;
           text-transform: uppercase;
           font-weight: 500;
           user-select: none;
           white-space: nowrap;
-          padding-right: 0.5rem;
         }
       }
     }
     tbody {
+      tr {
+        border: 0;
+      }
       position: absolute;
       width: 100%;
       height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 125}px`};
@@ -113,9 +149,15 @@ const Container = styled.div`
 // height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 126}px`};
 export function DefaultCell({ value }) {
   return (
-    <BrightGraySpan className="cursor-default" title={value} data-testid="default-cell">
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={value}
+      data-testid="default-cell"
+    >
       {value}
-    </BrightGraySpan>
+    </Typography>
   )
 }
 DefaultCell.propTypes = { value: PropTypes.any }
@@ -202,7 +244,7 @@ function Table({
                 <th
                   data-testid="header-item-col"
                   key={headerKey}
-                  className="flex items-center border-r border-solid border-gray-700"
+                  className="flex items-center"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
@@ -228,17 +270,12 @@ function Table({
               customProps.onMouseEnter = (event) => handleRowFocus(event, row)
             }
             return (
-              <tr
-                className="border-t border-solid border-gray-700"
-                data-testid="row-item"
-                key={rowKey}
-                {...row.getRowProps(customProps)}
-              >
+              <tr data-testid="row-item" key={rowKey} {...row.getRowProps(customProps)}>
                 {row.cells.map((cell, cellKey) => {
                   return (
                     <td
                       data-testid="item"
-                      className="whitespace-nowrap border-r border-solid border-gray-700"
+                      className="whitespace-nowrap"
                       key={cellKey}
                       {...cell.getCellProps()}
                     >

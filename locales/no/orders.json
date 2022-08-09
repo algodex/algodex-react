@@ -21,5 +21,7 @@
     "error": "Noe gikk galt.",
     "name": "NAVN",
     "buy": "Kjøp",
-    "sell": "Salg"
+    "sell": "Salg",
+    "cancel-all": "annullere alle",
+    "cancel": "Afbestille"
 }

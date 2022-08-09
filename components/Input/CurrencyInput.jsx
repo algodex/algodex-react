@@ -80,7 +80,7 @@ export function CurrencyInput({ label, currency, ...props }) {
   const condenseAssetName = currency?.length > 5
 
   return (
-    <Container>
+    <Container data-testid="currency-input">
       <Input placeholder="0.00" {...props} />
       <Label>{label}</Label>
       <Asset isCondensed={condenseAssetName}>{currency}</Asset>

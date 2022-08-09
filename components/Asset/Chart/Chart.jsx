@@ -7,9 +7,9 @@ import ChartSettings from './ChartSettings'
 import PropTypes from 'prop-types'
 import millify from 'millify'
 import styled from '@emotion/styled'
-import useAreaChart from '@/hooks/use-area-chart'
-import useCandleChart from '@/hooks/use-candle-chart'
-import { withAssetChartQuery } from '@/hooks/withAlgodex'
+import useAreaChart from './hooks/useAreaChart'
+import useCandleChart from './hooks/useCandleChart'
+import { withAssetChartQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   position: relative;

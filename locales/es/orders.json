@@ -21,5 +21,7 @@
   "error": "Something went wrong.",
   "name": "nombre",
   "buy": "comprar",
-  "sell": "vender"
+  "sell": "vender",
+  "cancel-all": "Cancelalo todo",
+  "cancel": "Cancelar"
 }

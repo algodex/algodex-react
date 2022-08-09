@@ -4,16 +4,18 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
+import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { BrightGraySpan } from '@/components/Typography'
-import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
+import React from 'react'
+// import { Typography } from '@/components/Typography'
+// import OrderService from '@/services/order'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -44,15 +46,19 @@ const OrderCancelButton = styled.button`
   color: inherit;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.red['500']};
+    background: ${({ theme }) => theme.palette.blue['700']};
+    color: ${({ theme }) => theme.palette.gray['000']};
   }
 `
 
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // console.log(_orders, 'orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
+  const { algodex, wallet } = useAlgodex()
+  function closeOrder() {
+    return algodex.closeOrder.apply(algodex, arguments)
+  }
 
   useEffect(() => {
     setOpenOrdersData(_orders)
@@ -68,14 +74,15 @@ export function OpenOrdersTable({ orders: _orders }) {
         const cellData = data[cellIndex]
 
         const {
-          escrowAddress,
           ownerAddress,
-          assetLimitPriceN,
-          assetLimitPriceD,
           assetId,
-          version
+          version,
+          formattedASAAmount,
+          decimals,
+          formattedPrice,
+          appId
         } = cellData.metadata
-        const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
+        // const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
         const updateOrderStatus = (statusMsg) =>
           openOrdersData.map((order, index) =>
@@ -84,12 +91,27 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
-        const cancelOrderPromise = OrderService.closeOrder(
-          escrowAddress,
-          ownerAddress,
-          orderBookEntry,
-          version
-        )
+        const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
+
+        const cancelOrderPromise = closeOrder({
+          address: ownerAddress,
+          version,
+          price: Number(formattedPrice),
+          amount: Number(formattedASAAmount),
+          total: Number(formattedPrice) * Number(formattedASAAmount),
+          asset: { id: assetId, decimals },
+          assetId,
+          type: cellData.type.toLowerCase(),
+          appId,
+          contract: {
+            creator: ownerAddress,
+            escrow: cellData.metadata.escrowAddress,
+            N: cellData.metadata.assetLimitPriceN,
+            D: cellData.metadata.assetLimitPriceD,
+            entry: orderbookEntry
+          },
+          wallet
+        })
 
         toast.promise(cancelOrderPromise, {
           loading: t('awaiting-confirmation'),
@@ -108,12 +130,12 @@ export function OpenOrdersTable({ orders: _orders }) {
       }
 
       return (
-        <BrightGraySpan data-testid="cancel-order-button">
-          <OrderCancelButton onClick={handleCancelOrder}>Cancel</OrderCancelButton>
-        </BrightGraySpan>
+        <Typography variant="body_small" color="gray.000" data-testid="cancel-order-button">
+          <OrderCancelButton onClick={handleCancelOrder}>{t('cancel')}</OrderCancelButton>
+        </Typography>
       )
     },
-    [t, openOrdersData]
+    [t, openOrdersData, wallet]
   )
 
   const columns = useMemo(
@@ -152,7 +174,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: DefaultCell
       },
       {
-        Header: '',
+        Header: t('cancel-all'),
         accessor: 'cancel',
         Cell: OrderCancelCell,
         disableSortBy: true

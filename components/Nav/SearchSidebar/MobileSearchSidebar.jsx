@@ -7,7 +7,7 @@ import { Section } from '@/components/Layout/Section'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
+import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 
 export const Container = styled.div`
   flex: 1 1 0%;
