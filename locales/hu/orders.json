@@ -21,5 +21,7 @@
   "error": "Valami hiba történt",
   "name": "NÉV",
   "buy": "VÉTEL",
-  "sell": "ELADÁS"
+  "sell": "ELADÁS",
+  "cancel-all": "Összes törlése",
+  "cancel": "Megszünteti"
 }

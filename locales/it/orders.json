@@ -21,5 +21,7 @@
     "error": "Qualcosa non ha funzionato.",
     "name": "NOME",
     "buy": "ACQUISTA",
-    "sell": "VENDI"
+    "sell": "VENDI",
+    "cancel-all": "Cancella tutto",
+    "cancel": "Annulla"
 }
