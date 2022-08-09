@@ -22,5 +22,6 @@
     "name": "이름",
     "buy": "매수",
     "sell": "매도",
-    "cancel-all": "모두 취소"
+    "cancel-all": "모두 취소",
+    "cancel": "취소"
 }

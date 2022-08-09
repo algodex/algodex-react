@@ -22,5 +22,6 @@
   "name": "Názov",
   "buy": "Kúpiť",
   "sell": "Predať",
-  "cancel-all": "Zrušiť všetko"
+  "cancel-all": "Zrušiť všetko",
+  "cancel": "Zrušiť"
 }

@@ -22,5 +22,6 @@
   "name": "名前",
   "buy": "買",
   "sell": "売",
-  "cancel-all": "すべてキャンセル"
+  "cancel-all": "すべてキャンセル",
+  "cancel": "キャンセル"
 }

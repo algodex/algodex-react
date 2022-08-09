@@ -22,5 +22,6 @@
   "name": "Tên",
   "buy": "Bán",
   "sell": "Bán",
-  "cancel-all": "Hủy bỏ tất cả"
+  "cancel-all": "Hủy bỏ tất cả",
+  "cancel": "Hủy bỏ"
 }

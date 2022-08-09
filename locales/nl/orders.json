@@ -22,5 +22,6 @@
   "name": "Naam",
   "buy": "Koop",
   "sell": "Verkoop",
-  "cancel-all": "Verwijder alles"
+  "cancel-all": "Verwijder alles",
+  "cancel": "Annuleren"
 }

@@ -22,5 +22,6 @@
     "name": "NAMN",
     "buy": "KÖP",
     "sell": "SÄLJ",
-    "cancel-all": "Avbryt alla"
+    "cancel-all": "Avbryt alla",
+    "cancel": "Avbryt"
 }

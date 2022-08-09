@@ -22,5 +22,6 @@
     "name": "Nazwa jednostki",
     "buy": "Kup",
     "sell": "Sprzedaj",
-    "cancel-all": "Anulować całość"
+    "cancel-all": "Anulować całość",
+    "cancel": "Anulować"
 }

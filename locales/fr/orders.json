@@ -22,5 +22,6 @@
     "name": "NOM",
     "buy": "ACHETER",
     "sell": "VENDRE",
-    "cancel-all": "Annuler tout"
+    "cancel-all": "Annuler tout",
+    "cancel": "Annuler"
 }

@@ -22,5 +22,6 @@
     "name": "NAMA",
     "buy": "BELI",
     "sell": "JUAL",
-    "cancel-all": "Batalkan Semua"
+    "cancel-all": "Batalkan Semua",
+    "cancel": "Batal"
 }

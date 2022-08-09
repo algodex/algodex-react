@@ -22,5 +22,6 @@
   "name": "İSİM",
   "buy": "AL ",
   "sell": "SAT",
-  "cancel-all": "Hepsini iptal et"
+  "cancel-all": "Hepsini iptal et",
+  "cancel": "İptal"
 }

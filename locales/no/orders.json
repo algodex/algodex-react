@@ -22,5 +22,6 @@
     "name": "NAVN",
     "buy": "Kjøp",
     "sell": "Salg",
-    "cancel-all": "Verwijder alles"
+    "cancel-all": "annullere alle",
+    "cancel": "Afbestille"
 }

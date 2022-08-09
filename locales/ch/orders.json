@@ -22,5 +22,6 @@
   "name": "名称",
   "buy": "买",
   "sell": "卖",
-  "cancel-all": "全部取消"
+  "cancel-all": "全部取消",
+  "cancel": "取消"
 }

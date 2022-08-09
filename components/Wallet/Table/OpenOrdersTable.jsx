@@ -131,7 +131,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
       return (
         <Typography variant="body_small" color="gray.000" data-testid="cancel-order-button">
-          <OrderCancelButton onClick={handleCancelOrder}>Cancel</OrderCancelButton>
+          <OrderCancelButton onClick={handleCancelOrder}>{t('cancel')}</OrderCancelButton>
         </Typography>
       )
     },

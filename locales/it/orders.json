@@ -22,5 +22,6 @@
     "name": "NOME",
     "buy": "ACQUISTA",
     "sell": "VENDI",
-    "cancel-all": "Cancella tutto"
+    "cancel-all": "Cancella tutto",
+    "cancel": "Annulla"
 }
