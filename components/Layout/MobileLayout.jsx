@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
 
-import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
+import NavButton from '@/components/Button/NavButton'
 import Orders from '@/components/Wallet/WalletTabs'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
@@ -10,9 +10,9 @@ import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { useAlgodex } from '@algodex/algodex-hooks'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -93,7 +93,7 @@ const MobileMenu = styled.nav`
   z-index: 99;
 `
 
-const MobileMenuButton = styled(Button)`
+const MobileMenuButton = styled(NavButton)`
   height: 100%;
   width: 100%;
   // background-color: ${({ theme }) => theme.colors.gray['800']};
@@ -192,47 +192,47 @@ function MainLayout({ asset, children }) {
         )}
 
         <MobileMenu>
-          <ul>
-            <li>
+          <ul className="mt-0 p-0 list-none">
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-CHART').length}
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)}
                 active={activeMobile === TABS.CHART}
-                variant="third"
+                // variant="third"
               >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-BOOK').length}
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.BOOK), delaySwitch)}
                 active={activeMobile === TABS.BOOK}
-                variant="third"
+                // variant="third"
               >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-TRADE').length}
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.TRADE), delaySwitch)}
                 active={activeMobile === TABS.TRADE}
-                variant="third"
+                // variant="third"
               >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.ORDERS), delaySwitch)}
                 active={activeMobile === TABS.ORDERS}
-                variant="third"
+                // variant="third"
               >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
@@ -245,13 +245,13 @@ function MainLayout({ asset, children }) {
               </MobileMenuButton>
             </li>
             */}
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 type="button"
                 characterLength={t('mobilefooter-WALLET').length}
                 onClick={() => setTimeout(() => setActiveMobile(TABS.WALLET), delaySwitch)}
                 active={activeMobile === TABS.WALLET}
-                variant="third"
+                // variant="third"
               >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
