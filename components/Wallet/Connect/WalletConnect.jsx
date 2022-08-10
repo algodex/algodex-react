@@ -10,9 +10,9 @@ import Image from 'next/image'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-// import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
+import WalletsList from './WalletConnect/WalletsList'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
@@ -45,17 +45,6 @@ const ModalContainer = styled.div`
   }
 `
 
-// const ButtonContainer = styled.div`
-//   flex-shrink: 0%;
-//   display: flex;
-//   width: 100%;
-
-//   button {
-//     flex-grow: 1;
-//     margin: 0 1.125rem;
-//   }
-// `
-
 const EmptyState = styled.div`
   position: relative;
   flex: 1 1 0%;
@@ -71,12 +60,6 @@ const gridStyles = `
   grid-template-columns: repeat(2, 1fr);
   column-gap: 0.25rem;
 `
-
-// const Arrow = styled.div`
-//   position: absolute;
-//   top: 0.5rem;
-//   left: 0.375rem;
-// `
 
 const Header = styled.header`
   flex-shrink: 0%;
@@ -186,7 +169,6 @@ const WalletRow = styled.div`
   }
 `
 export function WalletView(props) {
-  // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
 
   const { t } = useTranslation('wallet')
@@ -455,7 +437,18 @@ export function WalletView(props) {
               </Typography>
             </Header>
             <Wallets>
-              <WalletsWrapper>{renderWallets()}</WalletsWrapper>
+              {/* <WalletsWrapper>{renderWallets()}</WalletsWrapper> */}
+              <WalletsWrapper>
+                <WalletsList
+                  addresses={addresses}
+                  isTabbable={isTabbable}
+                  isWalletActive={isWalletActive}
+                  handleWalletClick={handleWalletClick}
+                  handleKeyDown={handleKeyDown}
+                  getWalletLogo={getWalletLogo}
+                  walletDisconnectMap={walletDisconnectMap}
+                />
+              </WalletsWrapper>
             </Wallets>
           </>
         ) : (
@@ -492,8 +485,14 @@ WalletView.defaultProps = {
   signedIn: false
 }
 
-export function WalletOptionsListComp(props) {
-  const { setIsConnectingWallet, isConnectingWallet, addresses } = props
+/**
+ * Handles connection of wallet on mobile view.
+ *
+ * Renders the wallet options list for mobile render
+ * @param {*} param0
+ * @returns {React.ReactElement} WalletOptionsList
+ */
+export function WalletOptionsMobile({ setIsConnectingWallet, isConnectingWallet, addresses }) {
   const { peraConnect, myAlgoConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
@@ -543,7 +542,7 @@ export function WalletOptionsListComp(props) {
   )
 }
 
-WalletOptionsListComp.propTypes = {
+WalletOptionsMobile.propTypes = {
   setIsConnectingWallet: PropTypes.func,
   isConnectingWallet: PropTypes.bool,
   addresses: PropTypes.array
@@ -561,7 +560,6 @@ function WalletConnect() {
   const [signedIn, setSignedIn] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
-  // console.log(wallet, 'wallet here')
   useEffect(() => {
     if (addresses.length > 0) {
       setSignedIn(true)
@@ -575,7 +573,7 @@ function WalletConnect() {
     <Box className="flex flex-col justify-center" width="100%">
       {isMobile && (
         <>
-          <WalletOptionsListComp
+          <WalletOptionsMobile
             setIsConnectingWallet={setIsConnectingWallet}
             isConnectingWallet={isConnectingWallet}
             addresses={addresses}
