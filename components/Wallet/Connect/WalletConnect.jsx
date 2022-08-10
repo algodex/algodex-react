@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from '@mui/material'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
@@ -493,7 +493,27 @@ WalletView.defaultProps = {
 }
 
 export function WalletOptionsListComp(props) {
-  const { setIsConnectingWallet, isConnectingWallet } = props
+  const { setIsConnectingWallet, isConnectingWallet, addresses } = props
+  const { peraConnect, myAlgoConnect } = useWallets()
+
+  const WALLETS_CONNECT_MAP = {
+    'my-algo-wallet': myAlgoConnect,
+    'pera-connect': peraConnect
+  }
+
+  const myAlgoOnClick = () => {
+    WALLETS_CONNECT_MAP['my-algo-wallet']()
+  }
+
+  const peraConnectOnClick = () => {
+    WALLETS_CONNECT_MAP['pera-connect']()
+  }
+
+  const isPeraConnected = useMemo(() => {
+    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
+    return peraAddr.length > 0
+  }, [addresses])
+
   return (
     <Modal
       onClick={() => {
@@ -508,7 +528,14 @@ export function WalletOptionsListComp(props) {
       >
         <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
         <Box className="px-2 py-4 bg-gray-600">
-          <WalletOptionsList />
+          <WalletOptionsList
+            isConnectingAddress={isConnectingWallet}
+            setIsConnectingAddress={setIsConnectingWallet}
+            addresses={addresses}
+            myAlgoOnClick={myAlgoOnClick}
+            peraConnectOnClick={peraConnectOnClick}
+            isPeraConnected={isPeraConnected}
+          />
         </Box>
         <DropdownFooter />
       </ModalContainer>
@@ -518,7 +545,8 @@ export function WalletOptionsListComp(props) {
 
 WalletOptionsListComp.propTypes = {
   setIsConnectingWallet: PropTypes.func,
-  isConnectingWallet: PropTypes.bool
+  isConnectingWallet: PropTypes.bool,
+  addresses: PropTypes.array
 }
 
 /**
@@ -533,7 +561,6 @@ function WalletConnect() {
   const [signedIn, setSignedIn] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
-
   // console.log(wallet, 'wallet here')
   useEffect(() => {
     if (addresses.length > 0) {
@@ -551,6 +578,7 @@ function WalletConnect() {
           <WalletOptionsListComp
             setIsConnectingWallet={setIsConnectingWallet}
             isConnectingWallet={isConnectingWallet}
+            addresses={addresses}
           />
 
           <Box mx={2}>

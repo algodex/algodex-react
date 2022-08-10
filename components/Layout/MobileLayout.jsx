@@ -1,4 +1,4 @@
-import { useRef, useState, useContext, useEffect } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -9,12 +9,11 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import { WalletsContext } from '@/hooks/useWallets'
 import { lighten } from 'polished'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { WalletsContext } from '@/hooks/useWallets'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -204,7 +203,7 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            {wallet && <Wallet />}
+            <Wallet />
             {/* {!acti && <Wallet />} */}
             {/* <MobileWallet /> */}
           </WalletSection>
