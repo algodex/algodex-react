@@ -152,7 +152,7 @@ export function SearchInput(props) {
   useEffect(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
-  }, [onChange, debouncedSearchText])
+  }, [onChange, debouncedSearchText, searchText])
 
   /**
    * This ref is forwarded to the search input

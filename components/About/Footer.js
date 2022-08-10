@@ -163,7 +163,7 @@ export const AboutFooter = () => {
               {t('disclaimers')}
             </FooterLinks>
 
-            <FooterLinks target="_blanc" href="https://about.algodex.com/docs/">
+            <FooterLinks target="_blanc" href="https://docs.algodex.com/">
               {t('docs')}
             </FooterLinks>
             <FooterLinks target="_blanc" href="https://github.com/algodex/">

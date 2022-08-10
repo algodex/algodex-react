@@ -49,10 +49,6 @@ export function Header() {
     activeNetwork === 'testnet'
       ? 'https://mailbox-testnet.algodex.com/'
       : 'https://mailbox.algodex.com/'
-  const DOCS_URL =
-    activeNetwork === 'testnet'
-      ? 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'
-      : 'https://about.algodex.com/docs/algodex-trading-guide-mainnet/'
 
   return (
     <Container className="flex" data-testid="header-container">
@@ -89,7 +85,7 @@ export function Header() {
         {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink> */}
-        <NavActiveLink href={DOCS_URL}>
+        <NavActiveLink href="https://docs.algodex.com/">
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink>
         <NavActiveLink href="/support" matches={/^\/support/}>
@@ -128,7 +124,8 @@ export function Header() {
           </NavActiveLink>
           <a
             target="_blank"
-            href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+            href="https://docs.algodex.com/"
+            // href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
             rel="noreferrer"
           >
             <NavTextSm>Docs</NavTextSm>
