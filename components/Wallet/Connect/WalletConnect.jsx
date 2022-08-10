@@ -1,23 +1,17 @@
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
-import Icon from 'components/Icon/Icon'
-import Image from 'next/image'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import Typography from '@mui/material/Typography'
 import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
 import WalletsList from './WalletConnect/WalletsList'
-import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
-import toast from 'react-hot-toast'
-import { truncatedWalletAddress } from '@/components/helpers'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
@@ -98,75 +92,6 @@ const WalletsWrapper = styled.div`
   top: 0;
   left: 0;
   right: 0;
-`
-
-const Balance = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 0;
-  text-align: right;
-  font-weight: 500;
-  line-height: 1.5;
-
-  svg {
-    opacity: 0.5;
-  }
-
-  > span {
-    margin-left: 0.375rem;
-
-    > span {
-      opacity: 0.5;
-    }
-  }
-`
-
-const WalletRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0.375rem 0.75rem;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.125rem;
-  cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
-  transition: color 50ms ease-out;
-  color: ${({ theme, isActive }) =>
-    isActive ? theme.palette.gray['000'] : theme.palette.gray['500']};
-
-  span,
-  p {
-    color: inherit;
-    line-height: 1.25;
-  }
-
-  span {
-    display: inline-flex;
-    align-items: center;
-
-    svg {
-      margin-right: 0.375rem;
-    }
-  }
-
-  &:hover,
-  &:focus {
-    color: ${({ theme, isActive }) =>
-      isActive ? theme.palette.gray['000'] : theme.palette.gray['300']};
-  }
-
-  &:focus {
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(121, 255, 156, 0.5);
-  }
-
-  ${Balance} {
-    span {
-      > span {
-        opacity: ${({ isActive }) => (isActive ? 0.5 : 0.68)};
-      }
-    }
-  }
 `
 export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
@@ -318,34 +243,6 @@ export function WalletView(props) {
       !isWalletActive(addr) && setActiveWallet(addr)
     }
   }
-  const copyAddress = (address) => {
-    navigator.clipboard.writeText(address).then(
-      () => {
-        toast.success('Copied wallet address to clipboard!')
-      },
-      () => {
-        toast.error('Failed to copy wallet address to clipboard')
-      }
-    )
-  }
-
-  const renderBalance = (bal) => {
-    const split = bal.toFixed(6).split('.')
-
-    return (
-      <Balance>
-        <Box mr={0.5} mt={0.4}>
-          <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-        </Box>
-        <Box>
-          <Typography variant="body_small" fontWeight="bold">{`${split[0]}.`}</Typography>
-          <Typography variant="body_small" fontWeight="bold">
-            {split[1]}
-          </Typography>
-        </Box>
-      </Balance>
-    )
-  }
   const getWalletLogo = (wallet) => {
     if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
       throw new TypeError('Must have a valid wallet!')
@@ -356,53 +253,6 @@ export function WalletView(props) {
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
     }
-  }
-
-  const renderWallets = () => {
-    return addresses.map((wallet) => (
-      <Container key={wallet.address}>
-        <WalletRow
-          key={wallet.address}
-          tabIndex={isTabbable(wallet.address)}
-          role="button"
-          isActive={isWalletActive(wallet.address)}
-          onClick={() => handleWalletClick(wallet)}
-          onKeyDown={(e) => handleKeyDown(e, wallet.address)}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Image
-              src={getWalletLogo(wallet)}
-              alt="Algorand Wallet Client Image"
-              width={18}
-              height={18}
-            />
-            &nbsp;
-            <Typography variant="body_small" fontWeight="bold" title={wallet.address}>
-              {truncatedWalletAddress(wallet.address, 4)}
-            </Typography>
-            &nbsp;
-            <ContentCopyIcon
-              onClick={() => copyAddress(wallet.address)}
-              fontSize="small"
-              sx={{ fontSize: 16 }}
-            />
-          </Box>
-          {renderBalance(convertFromBaseUnits(wallet.amount))}
-        </WalletRow>
-        <Stack direction="row" justifyContent="center" alignItems="center">
-          <Button
-            onClick={() => {
-              walletDisconnectMap[wallet.type](wallet)
-            }}
-            // className="font-semibold hover:font-bold text-white border-white hover:border-white"
-            variant="disconnect-wallet"
-            size="small"
-          >
-            Disconnect {truncatedWalletAddress(wallet.address, 4)}
-          </Button>
-        </Stack>
-      </Container>
-    ))
   }
 
   // const getButtonState = () => {
@@ -437,7 +287,6 @@ export function WalletView(props) {
               </Typography>
             </Header>
             <Wallets>
-              {/* <WalletsWrapper>{renderWallets()}</WalletsWrapper> */}
               <WalletsWrapper>
                 <WalletsList
                   addresses={addresses}
