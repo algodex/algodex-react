@@ -1,17 +1,19 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 import Big from 'big.js'
 import Box from '@mui/material/Box'
-import { Fragment } from 'react'
 import PriceInfo from './OrderBookPriceInfo'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
+import { Stack } from '@mui/material'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
+import { floatToFixedDynamic } from '@/services/display'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
@@ -20,6 +22,7 @@ import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import useTranslation from 'next-translate/useTranslation'
+import useUserState from 'store/use-user-state'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0;
@@ -144,6 +147,12 @@ const BookRow = styled.div`
       }
     }
   }
+`
+
+const AggregatorSelector = styled.select`
+  background-color: ${({ theme }) => theme.palette.gray['700']};
+  border: solid 1px ${({ theme }) => theme.palette.gray['700']};
+  color: ${({ theme }) => theme.palette.gray['300']};
 `
 
 const OrdersWrapper = styled.div`
@@ -290,6 +299,31 @@ export function OrderBook({ asset, orders, components }) {
   const { decimals } = asset
   const { isConnected } = useAlgodex()
   const isSignedIn = isConnected
+  const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
+  const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
+  const DECIMALS_MAP = {
+    0.000001: 6,
+    0.00001: 5,
+    0.0001: 4,
+    0.001: 3,
+    0.01: 2,
+    0.1: 1
+  }
+  const onAggrSelectorChange = (e) => {
+    setCachedSelectedPrecision({
+      ...cachedSelectedPrecision,
+      [asset.id]: e.target.value
+    })
+    setSelectedPrecision(DECIMALS_MAP[e.target.value])
+  }
+
+  const [selectedPrecision, setSelectedPrecision] = useState(
+    DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
+  )
+
+  useEffect(() => {
+    setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
+  }, [asset])
 
   const dispatcher = useEventDispatch()
   const maxSpendableAlgo = useMaxSpendableAlgo()
@@ -318,6 +352,38 @@ export function OrderBook({ asset, orders, components }) {
       return compoundedAmount
     }
   }
+
+  const reduceOrders = (result, order) => {
+    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+
+    const _amount = order.amount
+    const index = result.findIndex(
+      (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
+    )
+
+    if (index !== -1) {
+      result[index].amount += _amount
+      result[index].total += _amount * _price
+      return result
+    }
+
+    result.push({
+      price: _price,
+      amount: _amount,
+      total: _amount * _price
+    })
+    return result
+  }
+
+  const aggregatedBuyOrder = useMemo(() => {
+    if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
+    return orders.buy.reduce(reduceOrders, [])
+  }, [orders.buy, selectedPrecision])
+
+  const aggregatedSellOrder = useMemo(() => {
+    if (typeof orders?.sell === 'undefined' && !Array.isArray(orders.sell)) return []
+    return orders.sell.reduce(reduceOrders, [])
+  }, [orders.sell, selectedPrecision])
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -378,9 +444,22 @@ export function OrderBook({ asset, orders, components }) {
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <Box className="p-4">
-          <Typography variant="subtitle_medium_cap_bold" color="gray.500">
-            {t('order-book')}
-          </Typography>
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Typography variant="subtitle_medium_cap_bold" color="gray.500">
+              {t('order-book')}
+            </Typography>
+            <AggregatorSelector
+              onChange={onAggrSelectorChange}
+              value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
+            >
+              <option>0.000001</option>
+              <option>0.00001</option>
+              <option>0.0001</option>
+              <option>0.001</option>
+              <option>0.01</option>
+              <option>0.1</option>
+            </AggregatorSelector>
+          </Stack>
           <Header className="mt-4">
             <TablePriceHeader />
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
@@ -393,7 +472,7 @@ export function OrderBook({ asset, orders, components }) {
         </Box>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(orders.sell, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -401,7 +480,9 @@ export function OrderBook({ asset, orders, components }) {
         </CurrentPrice>
 
         <BuyOrders>
-          <OrdersWrapper className="px-4 pt-4">{renderOrders(orders.buy, 'buy')}</OrdersWrapper>
+          <OrdersWrapper className="px-4 pt-4">
+            {renderOrders(aggregatedBuyOrder, 'buy')}
+          </OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>

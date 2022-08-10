@@ -1,9 +1,9 @@
+import { Button, ButtonGroup } from '@mui/material'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Box from '@mui/material/Box'
-import { ButtonGroup } from '@mui/material'
 import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
@@ -388,17 +388,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             />
           )}
 
-          <MaterialButton
+          <Button
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
             disabled={!hasBalance || order.total === 0}
-            sx={{
-              opacity: hasBalance ? 1 : 0.5
-            }}
           >
             {buttonProps[order.type || 'buy']?.text}
-          </MaterialButton>
+          </Button>
         </Form>
       )}
     </Box>
