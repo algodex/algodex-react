@@ -125,8 +125,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
-      setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
-      console.log(order)
+      setOrder({
+        ...order,
+        amount: data.payload.amount,
+        price: Number(data.payload.price),
+        type: data.payload.type
+      })
     }
   })
 
