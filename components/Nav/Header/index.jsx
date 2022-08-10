@@ -49,10 +49,6 @@ export function Header() {
     activeNetwork === 'testnet'
       ? 'https://mailbox-testnet.algodex.com/'
       : 'https://mailbox.algodex.com/'
-  const DOCS_URL =
-    activeNetwork === 'testnet'
-      ? 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'
-      : 'https://about.algodex.com/docs/algodex-trading-guide-mainnet/'
 
   return (
     <Container className="flex" data-testid="header-container">
