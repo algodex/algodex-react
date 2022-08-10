@@ -108,7 +108,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     onConnect(_addresses)
     QRCodeModal.close()
   }
-  console.log(walletConnect.current, 'wallet conet')
   useEffect(() => {
     // let listener;
     if (typeof walletConnect.current !== 'undefined') {

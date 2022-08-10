@@ -1,3 +1,4 @@
+import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useRef, useState } from 'react'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
@@ -9,12 +10,14 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import WalletOptionsMobile from '../Wallet/Connect/WalletConnect/WalletOptionsMobile'
 import { WalletsContext } from '@/hooks/useWallets'
 import { lighten } from 'polished'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
 
 const WalletSection = styled.section`
@@ -133,6 +136,8 @@ function MainLayout({ asset, children }) {
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef()
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+  const isMobile = useMobileDetect()
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
@@ -203,7 +208,25 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            <Wallet />
+            <Box className="flex flex-col justify-center" width="100%">
+              <Box>
+                <WalletOptionsMobile
+                  setIsConnectingWallet={setIsConnectingWallet}
+                  isConnectingWallet={isConnectingWallet}
+                />
+
+                <Box mx={2}>
+                  <Button
+                    className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+                    variant="contained"
+                    onClick={() => setIsConnectingWallet(true)}
+                  >
+                    CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+                  </Button>
+                </Box>
+              </Box>
+              <Wallet />
+            </Box>
             {/* {!acti && <Wallet />} */}
             {/* <MobileWallet /> */}
           </WalletSection>

@@ -341,61 +341,36 @@ WalletView.defaultProps = {
  * @param {*} param0
  * @returns {React.ReactElement} WalletOptionsList
  */
-export function WalletOptionsMobile({ setIsConnectingWallet, isConnectingWallet, addresses }) {
-  const { peraConnect, myAlgoConnect } = useWallets()
+// export function WalletOptionsMobile({ setIsConnectingWallet, isConnectingWallet }) {
+//   return (
+//     <Modal
+//       onClick={() => {
+//         setIsConnectingWallet(false)
+//       }}
+//       data-testid="notification-modal-wrapper"
+//       isVisible={isConnectingWallet}
+//     >
+//       <ModalContainer
+//         className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
+//         style={{ transform: 'translate(-50%, -50%)' }}
+//       >
+//         <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
+//         <Box className="px-2 py-4 bg-gray-600">
+//           <WalletOptionsList
+//             isConnectingAddress={isConnectingWallet}
+//             setIsConnectingAddress={setIsConnectingWallet}
+//           />
+//         </Box>
+//         <DropdownFooter />
+//       </ModalContainer>
+//     </Modal>
+//   )
+// }
 
-  const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': myAlgoConnect,
-    'pera-connect': peraConnect
-  }
-
-  const myAlgoOnClick = () => {
-    WALLETS_CONNECT_MAP['my-algo-wallet']()
-  }
-
-  const peraConnectOnClick = () => {
-    WALLETS_CONNECT_MAP['pera-connect']()
-  }
-
-  const isPeraConnected = useMemo(() => {
-    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
-    return peraAddr.length > 0
-  }, [addresses])
-
-  return (
-    <Modal
-      onClick={() => {
-        setIsConnectingWallet(false)
-      }}
-      data-testid="notification-modal-wrapper"
-      isVisible={isConnectingWallet}
-    >
-      <ModalContainer
-        className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
-        style={{ transform: 'translate(-50%, -50%)' }}
-      >
-        <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
-        <Box className="px-2 py-4 bg-gray-600">
-          <WalletOptionsList
-            isConnectingAddress={isConnectingWallet}
-            setIsConnectingAddress={setIsConnectingWallet}
-            addresses={addresses}
-            myAlgoOnClick={myAlgoOnClick}
-            peraConnectOnClick={peraConnectOnClick}
-            isPeraConnected={isPeraConnected}
-          />
-        </Box>
-        <DropdownFooter />
-      </ModalContainer>
-    </Modal>
-  )
-}
-
-WalletOptionsMobile.propTypes = {
-  setIsConnectingWallet: PropTypes.func,
-  isConnectingWallet: PropTypes.bool,
-  addresses: PropTypes.array
-}
+// WalletOptionsMobile.propTypes = {
+//   setIsConnectingWallet: PropTypes.func,
+//   isConnectingWallet: PropTypes.bool
+// }
 
 /**
  * @todo Merge WalletView into WalletConnect
@@ -419,16 +394,15 @@ function WalletConnect() {
   }, [addresses])
 
   return (
-    <Box className="flex flex-col justify-center" width="100%">
+    <Box>
       {isMobile && (
         <>
-          <WalletOptionsMobile
+          {/* <WalletOptionsMobile
             setIsConnectingWallet={setIsConnectingWallet}
             isConnectingWallet={isConnectingWallet}
-            addresses={addresses}
-          />
+          /> */}
 
-          <Box mx={2}>
+          {/* <Box mx={2}>
             <Button
               className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
               variant="contained"
@@ -436,7 +410,7 @@ function WalletConnect() {
             >
               CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
             </Button>
-          </Box>
+          </Box> */}
         </>
       )}
       <WalletView
