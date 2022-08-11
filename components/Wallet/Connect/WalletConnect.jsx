@@ -24,6 +24,9 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0rem 0 1rem;
+  @media (max-width: 1024px) {
+    height: 90vh;
+  }
 `
 
 const ModalContainer = styled.div`
@@ -240,7 +243,7 @@ export function WalletView(props) {
 
   return (
     <Section area="topRight">
-      <Container className="h-screen">
+      <Container>
         {signedIn ? (
           <>
             <Header>
