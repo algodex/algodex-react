@@ -6,6 +6,7 @@ import Table, {
 } from '@/components/Table'
 import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEvent } from '@/hooks/useEvents'
 
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -55,10 +56,22 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
-  const { algodex, wallet } = useAlgodex()
+  const { algodex, wallet, setWallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
+
+  useEvent('signOut', (data) => {
+    if (data.type === 'wallet') {
+      setWallet({
+        ...wallet,
+        connector: {
+          ...wallet.connector,
+          connected: false
+        }
+      })
+    }
+  })
 
   useEffect(() => {
     setOpenOrdersData(_orders)
