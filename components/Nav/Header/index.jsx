@@ -19,7 +19,6 @@ import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
-import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
@@ -38,7 +37,6 @@ export function Header() {
   // const { wallet } = useAlgodex()
   const wallet = useWallets()
   // console.log(addresses, 'addresses updated')
-  const isMobile = useMobileDetect()
 
   /**
    * Route to other network
@@ -127,18 +125,16 @@ export function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
-        {!isMobile && (
-          <Button
-            onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
-            className="font-semibold hover:font-bold text-white border-white hover:border-white"
-            variant="outlined"
-          >
-            {wallet && wallet?.address
-              ? `${truncatedWalletAddress(wallet.address, 5)}`
-              : 'CONNECT A WALLET'}
-          </Button>
-        )}
-        {!isMobile && openWalletConnectDropdown && (
+        <Button
+          onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
+          className="font-semibold hover:font-bold text-white border-white hover:border-white"
+          variant="outlined"
+        >
+          {wallet && wallet?.address
+            ? `${truncatedWalletAddress(wallet.address, 5)}`
+            : 'CONNECT A WALLET'}
+        </Button>
+        {openWalletConnectDropdown && (
           <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
         )}
         <LanguageSelection isMobile={false} />
