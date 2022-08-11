@@ -17,7 +17,6 @@ import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
-import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
 
 const WalletSection = styled.section`
@@ -137,7 +136,6 @@ function MainLayout({ asset, children }) {
   const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef()
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
-  const isMobile = useMobileDetect()
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
