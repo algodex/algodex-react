@@ -96,7 +96,6 @@ const WalletsWrapper = styled.div`
   right: 0;
 `
 export function WalletView(props) {
-  // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   const {
     addressesRef,
     activeWallet,
