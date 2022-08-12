@@ -10,6 +10,7 @@ import styled from '@emotion/styled'
 import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
 import { withAssetChartQuery } from '@algodex/algodex-hooks'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 
 const Container = styled.div`
   position: relative;
@@ -112,6 +113,17 @@ export function Chart({
   const [overlay, setOverlay] = useState(_overlay)
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
+
+  // Update ohlc data when it is stable asset
+  algoVolume = [...volume] // temporary solution: should be updated from backend
+  if (asset.isStable) {
+    ohlc.forEach((ele, index) => {
+      ohlc[index].open = ele.open != 0 ? floatToFixed(1 / ele.open) : 'Invalid'
+      ohlc[index].low = ele.low != 0 ? floatToFixed(1 / ele.low) : 'Invalid'
+      ohlc[index].high = ele.high != 0 ? floatToFixed(1 / ele.high) : 'Invalid'
+      ohlc[index].close = ele.close != 0 ? floatToFixed(1 / ele.close) : 'Invalid'
+    })
+  }
 
   useEffect(() => {
     setOverlay(_overlay)
