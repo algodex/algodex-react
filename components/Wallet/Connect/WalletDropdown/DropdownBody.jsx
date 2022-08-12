@@ -17,11 +17,6 @@ const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConn
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {/* <WalletOptionsList
-        isConnectingAddress={isConnectingAddress}
-        setIsConnectingAddress={setIsConnectingAddress}
-        closeFn={closeFn}
-      /> */}
       <WalletOptionsList
         isConnectingAddress={isConnectingAddress}
         setIsConnectingAddress={setIsConnectingAddress}

@@ -338,7 +338,6 @@ export function WalletOptionsListComp(props) {
     addressesRef
   } = props
   const { peraConnect, myAlgoConnect } = useWallets()
-  // const addressesRef = useRef(null)
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
