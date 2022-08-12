@@ -8,13 +8,7 @@ import { useState } from 'react'
 // import { WalletContext } from '../../WalletContext'
 
 // const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
-const DropdownBody = ({
-  closeFn,
-  addresses,
-  myAlgoOnClick,
-  peraConnectOnClick,
-  isPeraConnected
-}) => {
+const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   return (
     <div
@@ -66,7 +60,7 @@ const DropdownBody = ({
 DropdownBody.propTypes = {
   activeWalletAddress: PropTypes.string,
   sortedWalletsList: PropTypes.object,
-  closeFn: PropTypes.func,
+  // closeFn: PropTypes.func,
   addresses: PropTypes.array,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,

@@ -1,12 +1,13 @@
 import { Box, Stack, Typography } from '@mui/material'
-import { useContext, useEffect, useMemo, useRef } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
-import { difference } from 'lodash'
+// import { difference } from 'lodash'
 import theme from 'theme'
+
+// import { useContext, useEffect, useMemo, useRef } from 'react'
+// import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 // import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 // import useWalletConnect from '@/hooks/useWalletConnect'
