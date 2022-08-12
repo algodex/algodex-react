@@ -206,7 +206,7 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            <Box className="flex flex-col" width="100%" height="100%">
+            {/* <Box className="flex flex-col" width="100%" height="100%">
               <Box>
                 <WalletOptionsMobile
                   setIsConnectingWallet={setIsConnectingWallet}
@@ -224,7 +224,8 @@ function MainLayout({ asset, children }) {
                 </Box>
               </Box>
               <Wallet />
-            </Box>
+            </Box> */}
+            <Wallet />
           </WalletSection>
         )}
         {activeMobile === TABS.TRADE && (

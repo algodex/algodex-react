@@ -8,7 +8,13 @@ import { useState } from 'react'
 // import { WalletContext } from '../../WalletContext'
 
 // const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
-const DropdownBody = ({ closeFn }) => {
+const DropdownBody = ({
+  closeFn,
+  addresses,
+  myAlgoOnClick,
+  peraConnectOnClick,
+  isPeraConnected
+}) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   return (
     <div
@@ -17,10 +23,18 @@ const DropdownBody = ({ closeFn }) => {
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      <WalletOptionsList
+      {/* <WalletOptionsList
         isConnectingAddress={isConnectingAddress}
         setIsConnectingAddress={setIsConnectingAddress}
         closeFn={closeFn}
+      /> */}
+      <WalletOptionsList
+        isConnectingAddress={isConnectingAddress}
+        setIsConnectingAddress={setIsConnectingAddress}
+        addresses={addresses}
+        myAlgoOnClick={myAlgoOnClick}
+        peraConnectOnClick={peraConnectOnClick}
+        isPeraConnected={isPeraConnected}
       />
       {/* {(!activeWalletAddress || isConnectingAddress) && (
         <WalletOptionsList
@@ -52,7 +66,11 @@ const DropdownBody = ({ closeFn }) => {
 DropdownBody.propTypes = {
   activeWalletAddress: PropTypes.string,
   sortedWalletsList: PropTypes.object,
-  closeFn: PropTypes.func
+  closeFn: PropTypes.func,
+  addresses: PropTypes.array,
+  myAlgoOnClick: PropTypes.func,
+  peraConnectOnClick: PropTypes.func,
+  isPeraConnected: PropTypes.book
 }
 
 DropdownBody.defaultProps = {

@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Box, Button } from '@mui/material'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
-import { Box } from '@mui/material'
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
 import Modal from 'components/Modal'
@@ -10,11 +10,13 @@ import { Section } from '@/components/Layout/Section'
 import Typography from '@mui/material/Typography'
 import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
 import WalletsList from './WalletConnect/WalletsList'
+import { difference } from 'lodash'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
@@ -25,7 +27,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0rem 0 1rem;
   @media (max-width: 1024px) {
-    height: 90vh;
+    height: 70vh;
   }
 `
 
@@ -95,8 +97,16 @@ const WalletsWrapper = styled.div`
 `
 export function WalletView(props) {
   // const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
-
+  const {
+    addressesRef,
+    activeWallet,
+    signedIn,
+    addresses,
+    setActiveWallet,
+    setAddresses,
+    setSignedIn,
+    setIsConnectingWallet
+  } = props
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
@@ -277,6 +287,9 @@ export function WalletView(props) {
                   handleKeyDown={handleKeyDown}
                   getWalletLogo={getWalletLogo}
                   walletDisconnectMap={walletDisconnectMap}
+                  closeFn={() => setIsConnectingWallet(false)}
+                  addressesRef={addressesRef}
+                  setAddresses={setAddresses}
                 />
               </WalletsWrapper>
             </Wallets>
@@ -303,12 +316,12 @@ WalletView.propTypes = {
   addresses: PropTypes.array.isRequired,
   setAddresses: PropTypes.func.isRequired,
   activeWallet: PropTypes.string,
-  isConnected: PropTypes.bool,
   signedIn: PropTypes.bool,
   setSignedIn: PropTypes.func,
-  onConnectClick: PropTypes.func.isRequired,
   setActiveWallet: PropTypes.func.isRequired,
-  area: PropTypes.string
+  area: PropTypes.string,
+  setIsConnectingWallet: PropTypes.func,
+  addressesRef: PropTypes.object
 }
 
 WalletView.defaultProps = {
@@ -316,7 +329,68 @@ WalletView.defaultProps = {
 }
 
 export function WalletOptionsListComp(props) {
-  const { setIsConnectingWallet, isConnectingWallet } = props
+  const {
+    setIsConnectingWallet,
+    isConnectingWallet,
+    addresses,
+    setAddresses,
+    closeFn,
+    addressesRef
+  } = props
+  const { peraConnect, myAlgoConnect } = useWallets()
+  // const addressesRef = useRef(null)
+
+  const WALLETS_CONNECT_MAP = {
+    'my-algo-wallet': myAlgoConnect,
+    'pera-connect': peraConnect
+  }
+
+  const myAlgoOnClick = () => {
+    WALLETS_CONNECT_MAP['my-algo-wallet']()
+  }
+
+  const peraConnectOnClick = () => {
+    WALLETS_CONNECT_MAP['pera-connect']()
+  }
+  const isPeraConnected = useMemo(() => {
+    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
+    return peraAddr.length > 0
+  }, [addresses])
+
+  useEffect(() => {
+    if (!addressesRef.current) {
+      // Initialize the ref after first checking to see what is in localStorage
+      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+      if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
+        setAddresses(storedAddrs)
+      }
+      addressesRef.current = addresses
+    }
+
+    const localStorageExists =
+      JSON.parse(localStorage.getItem('addresses')) !== null &&
+      JSON.parse(localStorage.getItem('addresses')).length > 0
+
+    const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
+
+    if (localStorageExists && addressesExist) {
+      localStorage.setItem('addresses', JSON.stringify(addresses))
+    }
+    const walletDifference = difference(
+      addresses.map((addr) => addr.address),
+      addressesRef.current.map((addr) => addr.address)
+    )
+    if (walletDifference.length > 0) {
+      localStorage.setItem('addresses', JSON.stringify(addresses))
+      addressesRef.current = addresses
+      closeFn()
+    }
+    // **Note** Can't put closeFn() in the onClicks because it will closeOut
+    // modal before wallet-connect finishes connecting leading to stale state.
+    // Creating a ref that persists between renders gives us a way to automatically close out
+    // modals only when a new address is added to the addresses array.
+  }, [addresses])
+
   return (
     <Modal
       onClick={() => {
@@ -331,7 +405,15 @@ export function WalletOptionsListComp(props) {
       >
         <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
         <Box className="px-2 py-4 bg-gray-600">
-          <WalletOptionsList />
+          {/* <WalletOptionsList /> */}
+          <WalletOptionsList
+            isConnectingAddress={isConnectingWallet}
+            setIsConnectingAddress={setIsConnectingWallet}
+            addresses={addresses}
+            myAlgoOnClick={myAlgoOnClick}
+            peraConnectOnClick={peraConnectOnClick}
+            isPeraConnected={isPeraConnected}
+          />
         </Box>
         <DropdownFooter />
       </ModalContainer>
@@ -341,7 +423,11 @@ export function WalletOptionsListComp(props) {
 
 WalletOptionsListComp.propTypes = {
   setIsConnectingWallet: PropTypes.func,
-  isConnectingWallet: PropTypes.bool
+  isConnectingWallet: PropTypes.bool,
+  addresses: PropTypes.array,
+  setAddresses: PropTypes.array,
+  closeFn: PropTypes.array,
+  addressesRef: PropTypes.object
 }
 
 /**
@@ -351,9 +437,12 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
-  const { wallet, setWallet, isConnected } = useAlgodex()
+  const { wallet, setWallet } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+  const isMobile = useMobileDetect()
+  const addressesRef = useRef(null)
 
   // console.log(wallet, 'wallet here')
   useEffect(() => {
@@ -367,14 +456,37 @@ function WalletConnect() {
 
   return (
     <Box className="flex flex-col justify-center" width="100%">
+      {isMobile && (
+        <>
+          <WalletOptionsListComp
+            setIsConnectingWallet={setIsConnectingWallet}
+            isConnectingWallet={isConnectingWallet}
+            addresses={addresses}
+            setAddresses={setAddresses}
+            closeFn={() => setIsConnectingWallet(false)}
+            addressesRef={addressesRef}
+          />
+
+          <Box mx={2}>
+            <Button
+              className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+              variant="contained"
+              onClick={() => setIsConnectingWallet(true)}
+            >
+              CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+            </Button>
+          </Box>
+        </>
+      )}
       <WalletView
         addresses={addresses}
-        isConnected={isConnected}
         setAddresses={setAddresses}
         activeWallet={wallet}
         signedIn={signedIn}
         setSignedIn={setSignedIn}
         setActiveWallet={setWallet}
+        setIsConnectingWallet={setIsConnectingWallet}
+        addressesRef={addressesRef}
       />
     </Box>
   )
