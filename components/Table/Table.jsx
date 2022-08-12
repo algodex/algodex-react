@@ -91,12 +91,9 @@ const Container = styled.div`
       color: ${({ theme }) => theme.palette.gray['600']};
       font-size: 0.75rem;
       line-height: 1.25;
-<<<<<<< HEAD
-
-=======
       border-right: solid 1px ${({ theme }) => theme.palette.gray['700']};
       border-bottom: solid 1px ${({ theme }) => theme.palette.gray['700']};
->>>>>>> next3
+
       &:first-of-type {
         padding-left: 1.125rem;
         box-sizing: border-box;
