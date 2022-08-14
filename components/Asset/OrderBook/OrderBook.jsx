@@ -446,7 +446,7 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Box className="p-4" sx={{ paddingBottom: 0 }}>
+        <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="subtitle_medium_cap_bold" color="gray.500">
               {t('order-book')}
