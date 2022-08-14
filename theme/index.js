@@ -332,6 +332,11 @@ const theme = {
       lineHeight: 1.57,
       letterSpacing: '0.00714em'
     },
+    subtitle_small_bold: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[2]
+    },
     subtitle_medium: {
       fontFamily: fontFamilies.body,
       fontWeight: 500,

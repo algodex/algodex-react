@@ -47,6 +47,8 @@ const ToggleBtn = styled(Button)`
   margin: 0;
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
+  min-width: 48px;
+  line-height: 1;
   background-color: ${({ theme }) => theme.palette.gray['900']};
   label {
     cursor: pointer;

@@ -13,6 +13,7 @@ import { Stack } from '@mui/material'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import { floatToFixedDynamic } from '@/services/display'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
@@ -321,6 +322,8 @@ export function OrderBook({ asset, orders, components }) {
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
   )
 
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+
   useEffect(() => {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
@@ -443,7 +446,7 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Box className="p-4">
+        <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="subtitle_medium_cap_bold" color="gray.500">
               {t('order-book')}
@@ -463,7 +466,7 @@ export function OrderBook({ asset, orders, components }) {
           <Header className="mt-4">
             <TablePriceHeader />
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
+              {t('amount')} ({assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('total')}
