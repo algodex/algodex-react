@@ -73,7 +73,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
           )}
         >
           <section className="flex items-center justify-between mb-1">
-            <Typography variant="body_small_cap_medium" color="gray.300">
+            <Typography
+              sx={{ letterSpacing: '0.2em' }}
+              variant="body_small_cap_medium"
+              color="gray.300"
+            >
               {t('orders:available')}:
             </Typography>
             <IconTextContainer>
@@ -84,7 +88,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </IconTextContainer>
           </section>
           <BalanceRow>
-            <Typography variant="body_small_cap_medium" color="gray.300">
+            <Typography
+              sx={{ letterSpacing: '0.2em' }}
+              variant="body_small_cap_medium"
+              color="gray.300"
+            >
               {t('total')}:
             </Typography>
             <IconTextContainer>
@@ -95,7 +103,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </IconTextContainer>
           </BalanceRow>
           <BalanceRow>
-            <Typography variant="body_small" color="gray.300">
+            <Typography variant="body_tiny" color="gray.300">
               &nbsp;*
               {t('max-spend-explanation', {
                 amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
