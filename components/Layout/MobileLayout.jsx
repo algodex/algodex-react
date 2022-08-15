@@ -33,6 +33,7 @@ const ContentSection = styled.section`
   position: relative;
   height: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const AssetsSection = styled.section`
