@@ -139,11 +139,10 @@ function useWallets(initialState) {
     handleDisconnect
   )
   // Pera Connect/Disconnect
-  const {
-    connect: peraConnect,
-    disconnect: peraDisconnect,
-    connector
-  } = useWalletConnect(handleConnect, handleDisconnect)
+  const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect(
+    handleConnect,
+    handleDisconnect
+  )
 
   // Fetch active wallet from local storage
   useEffect(() => {
@@ -172,8 +171,7 @@ function useWallets(initialState) {
     myAlgoConnect,
     peraConnect,
     peraDisconnect,
-    myAlgoDisconnect,
-    connector
+    myAlgoDisconnect
   }
 }
 
