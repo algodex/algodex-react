@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
-import { useEventDispatch } from './useEvents'
 
 /**
  *
