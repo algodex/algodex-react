@@ -27,7 +27,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.palette.background.dark};
   padding: 0rem 0 1rem;
   @media (max-width: 1024px) {
-    height: 70vh;
+    // height: 70vh;
   }
 `
 
@@ -336,7 +336,7 @@ export function WalletOptionsListComp(props) {
     closeFn,
     addressesRef
   } = props
-  const { peraConnect, myAlgoConnect } = useWallets()
+  const { peraConnect, myAlgoConnect, connector } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
@@ -390,32 +390,39 @@ export function WalletOptionsListComp(props) {
   }, [addresses])
 
   return (
-    <Modal
-      onClick={() => {
-        setIsConnectingWallet(false)
-      }}
-      data-testid="notification-modal-wrapper"
-      isVisible={isConnectingWallet}
-    >
-      <ModalContainer
-        className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
-        style={{ transform: 'translate(-50%, -50%)' }}
-      >
-        <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
-        <Box className="px-2 py-4 bg-gray-600">
-          {/* <WalletOptionsList /> */}
-          <WalletOptionsList
-            isConnectingAddress={isConnectingWallet}
-            setIsConnectingAddress={setIsConnectingWallet}
-            addresses={addresses}
-            myAlgoOnClick={myAlgoOnClick}
-            peraConnectOnClick={peraConnectOnClick}
-            isPeraConnected={isPeraConnected}
-          />
-        </Box>
-        <DropdownFooter />
-      </ModalContainer>
-    </Modal>
+    <>
+      {isConnectingWallet ? (
+        <Modal
+          onClick={() => {
+            setIsConnectingWallet(false)
+          }}
+          data-testid="notification-modal-wrapper"
+          isVisible={isConnectingWallet}
+        >
+          <ModalContainer
+            className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
+            style={{ transform: 'translate(-50%, -50%)' }}
+          >
+            <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
+            <Box className="px-2 py-4 bg-gray-600">
+              {/* <WalletOptionsList /> */}
+              <WalletOptionsList
+                isConnectingAddress={isConnectingWallet}
+                setIsConnectingAddress={setIsConnectingWallet}
+                addresses={addresses}
+                myAlgoOnClick={myAlgoOnClick}
+                peraConnectOnClick={peraConnectOnClick}
+                isPeraConnected={isPeraConnected}
+                connector={connector}
+              />
+            </Box>
+            <DropdownFooter />
+          </ModalContainer>
+        </Modal>
+      ) : (
+        <></>
+      )}
+    </>
   )
 }
 
