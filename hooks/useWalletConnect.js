@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
+
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
@@ -15,10 +16,9 @@ const ERROR = {
 export default function useWalletConnect(onConnect, onDisconnect) {
   // const [addresses, setAddresses] = useState([]);
   /**
-   * Instance referenc
+   * Instance reference
    */
   const walletConnect = useRef()
-
   const connect = async () => {
     console.log('Connecting')
     try {
@@ -28,15 +28,21 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         return
       }
 
-      // Check if connection is already established
-      if (!walletConnect.current.connected) {
-        console.log('Creating Session')
-        // create new session
+      if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
+        walletConnect.current = await initWalletConnect()
+        walletConnect.current.connected = false
+        walletConnect.current.sessionStarted = true
         walletConnect.current.createSession()
+      } else if (!walletConnect.current.connected) {
+        console.log('Creating Session', walletConnect)
+        // create new session
+        await walletConnect.current.createSession()
+        walletConnect.current.sessionStarted = true
       } else {
         console.log('Already Connected')
         QRCodeModal.close()
       }
+
       // Map the connector to the address list
       const _addresses = walletConnect.current.accounts.map((acct) => {
         console.log(acct)
@@ -58,19 +64,27 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       walletConnect.current.killSession()
     }
   }
-  useEffect(() => {
-    const initWalletConnect = async () => {
+
+  const initWalletConnect = async () => {
+    try {
       const WalletConnect = (await import('@walletconnect/client')).default
       WalletConnect.prototype.sign = (
         await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
       ).default
-      walletConnect.current = new WalletConnect({
+      return new WalletConnect({
         bridge: 'https://bridge.walletconnect.org', // Required
         qrcodeModal: QRCodeModal
       })
-      walletConnect.current.connected = false
+    } catch (error) {
+      console.log(error, 'error occured')
     }
-    initWalletConnect()
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      walletConnect.current = await initWalletConnect()
+      walletConnect.current.connected = false
+    })()
   }, [])
 
   const handleDisconnect = useCallback(
@@ -84,7 +98,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   )
 
   const handleConnected = (err, payload) => {
-    console.log('CONNECTED')
+    console.log('CONNECTED', err)
     if (err) {
       throw err
     }
@@ -109,15 +123,21 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   useEffect(() => {
     // let listener;
     if (typeof walletConnect.current !== 'undefined') {
+      console.log(walletConnect, 'wallet connect here')
       walletConnect.current.on('connect', handleConnected)
       walletConnect.current.on('session_update', handleConnected)
       walletConnect.current.on('disconnect', handleDisconnect)
+      walletConnect.current.on('modal_closed', () => {
+        console.log('Close modal here')
+        QRCodeModal.close()
+      })
     }
     return () => {
       if (typeof walletConnect.current !== 'undefined') {
         walletConnect.current.off('connect')
         walletConnect.current.off('session_update')
         walletConnect.current.off('disconnect')
+        walletConnect.current.off('modal_closed')
       }
     }
   }, [walletConnect.current])
