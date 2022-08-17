@@ -33,7 +33,7 @@ describe('Landing Page In Potrait Mode', () => {
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       } else {
         cy.viewport(size)
-        cy.visit('/en/about')
+        cy.visit('/en/about')packa
         clear()
         cy.visit('/en/trade/15322902')
         cy.get('[data-testid=modal-accept]')

@@ -1,8 +1,8 @@
+import ButtonEl from './Button'
 import React from 'react'
-import { Button as Component } from './Button'
 export default {
   title: '@algodex/components/Button',
-  component: Component,
+  component: ButtonEl,
   argTypes: {
     variant: {
       options: ['primary', 'secondary', 'third', 'none'],
@@ -22,5 +22,5 @@ export default {
 
 //eslint-disable-next-line
 export const Button = (props) => {
-  return <Component {...props} />
+  return <ButtonEl {...props} />
 }
