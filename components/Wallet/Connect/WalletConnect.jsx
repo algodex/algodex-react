@@ -314,7 +314,7 @@ export function WalletView(props) {
 WalletView.propTypes = {
   addresses: PropTypes.array.isRequired,
   setAddresses: PropTypes.func.isRequired,
-  activeWallet: PropTypes.string,
+  activeWallet: PropTypes.object,
   signedIn: PropTypes.bool,
   setSignedIn: PropTypes.func,
   setActiveWallet: PropTypes.func.isRequired,
@@ -430,8 +430,8 @@ WalletOptionsListComp.propTypes = {
   setIsConnectingWallet: PropTypes.func,
   isConnectingWallet: PropTypes.bool,
   addresses: PropTypes.array,
-  setAddresses: PropTypes.array,
-  closeFn: PropTypes.array,
+  setAddresses: PropTypes.func,
+  closeFn: PropTypes.func,
   addressesRef: PropTypes.object
 }
 
