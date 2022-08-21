@@ -10,11 +10,13 @@ import { Section } from '@/components/Layout/Section'
 import ServiceError from '@/components/ServiceError'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import { floatToFixedDynamic } from '@/services/display'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import useStore from 'store/use-store'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
@@ -355,13 +357,38 @@ export function OrderBook({ isMobile, asset, orders, components }) {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
 
-  const assetVeryShortName = useMemo(() => {
-    return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
-  }, [asset])
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+  const maxSpendableAlgo = useMaxSpendableAlgo()
+
+  /**
+   * Determines amount for an asset
+   * when an order is clicked
+   *
+   * @param {String} price
+   * @param {Array} ordersList
+   * @param {Number} index
+   * @param {String} type
+   * @return {Number}
+   */
+  const calculatedAmountFn = (price, ordersList, index, type) => {
+    const _price = parseFloat(price)
+    let slicedList = []
+    if (type === 'sell') slicedList = ordersList.slice(index)
+    if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
+
+    const compoundedAmount = slicedList.reduce((prev, curr) => prev + curr.amount, 0)
+    const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
+    if (determinedTotal > maxSpendableAlgo) {
+      // Deducted a Microalgo because of rounding in use-store while setting total
+      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+    } else {
+      return compoundedAmount
+    }
+  }
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    return data.map((row) => {
+    return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
@@ -369,7 +396,8 @@ export function OrderBook({ isMobile, asset, orders, components }) {
         setOrder(
           {
             price: row.price,
-            type: type === 'buy' ? 'sell' : 'buy'
+            type: type === 'buy' ? 'sell' : 'buy',
+            amount: calculatedAmountFn(row.price, data, index, type).toString()
           },
           asset
         )
@@ -442,7 +470,7 @@ export function OrderBook({ isMobile, asset, orders, components }) {
           <br></br>
           <Header>
             <TablePriceHeader title="price" textAlign="left" />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            <BodyCopyTiny color="gray.500" className="whitespace-nowrap" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </BodyCopyTiny>
             <TablePriceHeader title="total" textAlign="right" />
@@ -486,7 +514,7 @@ OrderBook.propTypes = {
     sell: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.string.isRequired,
         total: PropTypes.number.isRequired
       })
     ),
@@ -496,7 +524,7 @@ OrderBook.propTypes = {
     buy: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        price: PropTypes.string.isRequired,
         total: PropTypes.number.isRequired
       })
     )

@@ -4,6 +4,7 @@ const unrestrictedAssets = {
   386192725: 'goBTC', //goBTC
   386195940: 'goETH', //goETH
   793124631: 'gALGO', //gALGO
+  441139422: 'goMINT', //goMINT
   312769: 'USDt', //USDt
   19386452: 'goETH Testet',
   15322902: 'LAMP', // LAMP Testnet
@@ -25,7 +26,7 @@ export function getIsRestrictedCountry(query) {
 export function getAssetTotalStatus(total) {
   if (NETWORK_TYPE !== 'mainnet') return false
   if (typeof total === 'undefined') return false
-  if (total !== 1) {
+  if (total > 1000) {
     return true
   } else {
     return false

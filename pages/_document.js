@@ -1,11 +1,13 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-import theme from '../theme/index'
-import createEmotionServer from '@emotion/server/create-instance'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
+
 import createEmotionCache from '@/utils/createEmotionCache'
+import createEmotionServer from '@emotion/server/create-instance'
+import theme from '../theme/index'
+
 const APP_NAME = 'Algodex'
 const APP_DESCRIPTION = 'Algodex is a decentralized exchange on the Algorand blockchain network'
 const APP_SOCIAL_TWITTER = '@AlgodexOfficial'
-const APP_IMAGE_LINK = 'https://app.algodex.com/beautiful-milky.png'
+const APP_IMAGE_LINK = '/algx_background_preview.jpg'
 
 export default class NextHTMLDocument extends Document {
   render() {
@@ -36,7 +38,8 @@ export default class NextHTMLDocument extends Document {
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
           <link rel="stylesheet" href="/fonts/style.css" />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <link rel="icon" type="image/png" href="/favicon.png" />
           {this.props.emotionStyleTags}
         </Head>
         <body>

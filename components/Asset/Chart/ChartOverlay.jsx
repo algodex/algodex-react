@@ -180,15 +180,18 @@ export const Volume = styled.div`
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
-  const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
-  const changeAmt = asset.priceChange24hr
-    ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
+  const currentPrice = asset.price_info?.price ? new Big(asset.price_info?.price) : new Big(0)
+  const changeAmt = asset.price_info?.price24Change
+    ? currentPrice
+        .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
+        .toString()
     : '0'
-  const changePct = asset.priceChange24hr ? new Big(asset.priceChange24hr) : new Big(0)
+  const changePct = asset.price_info?.price24Change
+    ? new Big(asset.price_info?.price24Change)
+    : new Big(0)
 
   const openCloseChange = () => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
   }
   const onClick = useCallback(() => {
