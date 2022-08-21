@@ -1,7 +1,7 @@
 ---
 name: ✨ Feature Request
 about: Add a new feature(✨) to the project
-title: '✨ Feature: '
+title: 'Feature: '
 labels: 'enhancement'
 assignees: ''
 ---
