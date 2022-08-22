@@ -123,7 +123,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   useEffect(() => {
     // let listener;
     if (typeof walletConnect.current !== 'undefined') {
-      console.log(walletConnect, 'wallet connect here')
       walletConnect.current.on('connect', handleConnected)
       walletConnect.current.on('session_update', handleConnected)
       walletConnect.current.on('disconnect', handleDisconnect)

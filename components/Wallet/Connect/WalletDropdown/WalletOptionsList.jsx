@@ -102,7 +102,7 @@ WalletsOptions.propTypes = {
   setIsConnectingAddress: PropTypes.func,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
-  isPeraConnected: PropTypes.func
+  isPeraConnected: PropTypes.bool
 }
 
 WalletsOptions.defaultProps = {
