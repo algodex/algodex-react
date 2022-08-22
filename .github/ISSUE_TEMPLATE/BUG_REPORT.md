@@ -1,7 +1,7 @@
 ---
 name: 🐛 Bug Report
 about: Submit a Bug(🐛) to be fixed
-title: '🐛 Fix: '
+title: 'Fix: '
 labels: 'bug'
 assignees: ''
 ---
