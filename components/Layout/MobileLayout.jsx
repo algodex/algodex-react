@@ -198,7 +198,6 @@ function MainLayout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
-  // console.log(isMobile)
   return (
     <MainWrapper>
       <Main ref={gridRef}>

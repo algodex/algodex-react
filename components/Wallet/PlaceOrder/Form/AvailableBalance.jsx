@@ -49,16 +49,24 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  const { address: activeWalletAddr } = wallet
+  const storedAddrs =
+    JSON.parse(localStorage.getItem('addresses')) !== null &&
+    JSON.parse(localStorage.getItem('addresses')).length > 0 &&
+    JSON.parse(localStorage.getItem('addresses'))
+
+  const activeWallet = storedAddrs && storedAddrs.filter((a) => a.address == activeWalletAddr)[0]
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (typeof activeWallet !== 'undefined' && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = filter[0].amount
       }
     }
     return res
-  }, [wallet, asset])
+  }, [storedAddrs, activeWallet])
+
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
@@ -125,7 +133,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
           </Typography>
         </Stack>
       </Stack>
-      <BalanceRow>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
         <Typography variant="body_small_cap_medium" color="gray.400">
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
@@ -133,12 +141,13 @@ export const AvailableBalance = ({ wallet, asset }) => {
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
             {fromBaseUnits(assetBalance, asset.decimals)}
+            {/* {assetBalance} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
             <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
-      </BalanceRow>
+      </Stack>
     </AvailableBalanceContainer>
   )
 }
@@ -149,6 +158,7 @@ AvailableBalance.propTypes = {
     decimals: PropTypes.number.isRequired
   }),
   wallet: PropTypes.shape({
+    address: PropTypes.string,
     amount: PropTypes.number.isRequired,
     assets: PropTypes.arrayOf(
       PropTypes.shape({

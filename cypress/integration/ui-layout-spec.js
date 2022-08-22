@@ -29,6 +29,7 @@ describe('Landing Page In Potrait Mode', () => {
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       } else {
         cy.viewport(size)
@@ -40,6 +41,7 @@ describe('Landing Page In Potrait Mode', () => {
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       }
     })
@@ -61,6 +63,7 @@ describe('Landing Page In Landscape Mode', () => {
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       } else {
         cy.viewport(size, 'landscape')
@@ -72,6 +75,7 @@ describe('Landing Page In Landscape Mode', () => {
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
         cy.get('[data-testid=candleStickChart]').should('be.visible')
       }
     })

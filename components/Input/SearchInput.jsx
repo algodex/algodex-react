@@ -83,7 +83,11 @@ export const Search = forwardRef(
 
     return (
       <div>
-        <Container isActive={isActive} className="flex items-center ml-4 mr-4 mt-2 mb-2">
+        <Container
+          data-testid="asa-table-search-input"
+          isActive={isActive}
+          className="flex items-center ml-4 mr-4 mt-2 mb-2"
+        >
           <Icon
             path={mdiMagnify}
             className="ml-2"
@@ -97,7 +101,6 @@ export const Search = forwardRef(
             className="focus:outline-none"
             ref={ref}
             value={value}
-            data-testid="asa-table-search-input"
             onKeyDown={handleKeyDown}
             {...props}
           />
@@ -152,7 +155,7 @@ export function SearchInput(props) {
   useEffect(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
-  }, [onChange, debouncedSearchText])
+  }, [onChange, debouncedSearchText, searchText])
 
   /**
    * This ref is forwarded to the search input

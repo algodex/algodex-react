@@ -22,11 +22,7 @@ const DocsPage = () => {
         height="100%"
         width="100%"
         title="about"
-        src={
-          activeNetwork == 'mainnet'
-            ? 'https://about.algodex.com/docs/algodex-trading-guide-mainnet/'
-            : 'https://about.algodex.com/docs/trading-algorand-standard-assets-testnet/'
-        }
+        src={activeNetwork == 'mainnet' ? 'https://docs.algodex.com/' : 'https://docs.algodex.com/'}
       />
     </>
   )
