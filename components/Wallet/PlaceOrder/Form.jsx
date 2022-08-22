@@ -133,7 +133,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   })
 
   const assetBalance = useMemo(() => {
-    console.log(asset, wallet, 'asset and wallet here')
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
@@ -205,10 +204,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       })
     }
   }, [order, asset])
-
-  useEffect(() => {
-    // console.log(wallet, asset, 'wallet and asset hgere')
-  }, [wallet, asset])
 
   const handleChange = useCallback(
     (e, _key, _value) => {

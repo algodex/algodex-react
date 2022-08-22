@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-
 import Big from 'big.js'
 import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
@@ -10,9 +8,8 @@ import Typography from '@mui/material/Typography'
 import USDPrice from '../../PriceConversion/USDPrice'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
@@ -52,9 +49,13 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-  const activeWallet = storedAddrs.filter((a) => a.address == wallet.address)[0]
+  const { address: activeWalletAddr } = wallet
+  const storedAddrs =
+    JSON.parse(localStorage.getItem('addresses')) !== null &&
+    JSON.parse(localStorage.getItem('addresses')).length > 0 &&
+    JSON.parse(localStorage.getItem('addresses'))
 
+  const activeWallet = storedAddrs && storedAddrs.filter((a) => a.address == activeWalletAddr)[0]
   const assetBalance = useMemo(() => {
     let res = 0
     if (typeof activeWallet !== 'undefined' && Array.isArray(activeWallet.assets)) {
@@ -157,6 +158,7 @@ AvailableBalance.propTypes = {
     decimals: PropTypes.number.isRequired
   }),
   wallet: PropTypes.shape({
+    address: PropTypes.string,
     amount: PropTypes.number.isRequired,
     assets: PropTypes.arrayOf(
       PropTypes.shape({
