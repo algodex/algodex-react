@@ -1,3 +1,5 @@
+import { useEffect, useMemo, useState } from 'react'
+
 import Big from 'big.js'
 import Icon from '@/components/Icon'
 import { Info } from 'react-feather'
@@ -8,8 +10,9 @@ import Typography from '@mui/material/Typography'
 import USDPrice from '../../PriceConversion/USDPrice'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
+import useWallets from '@/hooks/useWallets'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
@@ -49,16 +52,20 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+  const activeWallet = storedAddrs.filter((a) => a.address == wallet.address)[0]
+
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (typeof activeWallet !== 'undefined' && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = filter[0].amount
       }
     }
     return res
-  }, [wallet, asset])
+  }, [storedAddrs, activeWallet])
+
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
@@ -125,7 +132,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
           </Typography>
         </Stack>
       </Stack>
-      <BalanceRow>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
         <Typography variant="body_small_cap_medium" color="gray.400">
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
@@ -133,12 +140,13 @@ export const AvailableBalance = ({ wallet, asset }) => {
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
             {fromBaseUnits(assetBalance, asset.decimals)}
+            {/* {assetBalance} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
             <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
-      </BalanceRow>
+      </Stack>
     </AvailableBalanceContainer>
   )
 }

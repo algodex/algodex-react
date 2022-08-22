@@ -128,6 +128,7 @@ export const WalletsList = ({
     const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
 
     if (localStorageExists && addressesExist) {
+      console.log(addresses, 'addresses')
       localStorage.setItem('addresses', JSON.stringify(addresses))
     }
     const walletDifference = difference(
