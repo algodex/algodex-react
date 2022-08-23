@@ -96,16 +96,7 @@ const WalletsWrapper = styled.div`
   right: 0;
 `
 export function WalletView(props) {
-  const {
-    addressesRef,
-    activeWallet,
-    signedIn,
-    addresses,
-    setActiveWallet,
-    setAddresses,
-    setSignedIn,
-    setIsConnectingWallet
-  } = props
+  const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
@@ -286,9 +277,6 @@ export function WalletView(props) {
                   handleKeyDown={handleKeyDown}
                   getWalletLogo={getWalletLogo}
                   walletDisconnectMap={walletDisconnectMap}
-                  closeFn={() => setIsConnectingWallet(false)}
-                  addressesRef={addressesRef}
-                  setAddresses={setAddresses}
                 />
               </WalletsWrapper>
             </Wallets>
@@ -370,6 +358,11 @@ export function WalletOptionsListComp(props) {
       JSON.parse(localStorage.getItem('addresses')).length > 0
 
     const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
+
+    /**
+     * I will need more explanation on what this does
+     * We are setting addresses that already exists.
+     */
     if (localStorageExists && addressesExist) {
       // localStorage.setItem('addresses', JSON.stringify(addresses))
     }
