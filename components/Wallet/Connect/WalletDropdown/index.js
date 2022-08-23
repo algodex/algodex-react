@@ -74,7 +74,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
 
     if (localStorageExists && addressesExist) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
+      // localStorage.setItem('addresses', JSON.stringify(addresses))
     }
     const walletDifference = difference(
       addresses.map((addr) => addr.address),

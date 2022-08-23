@@ -134,10 +134,11 @@ function useWallets(initialState) {
   )
 
   // My Algo Connect/Disconnect
-  const { connect: myAlgoConnect, disconnect: myAlgoDisconnect } = useMyAlgoConnect(
-    handleConnect,
-    handleDisconnect
-  )
+  const {
+    connector: myAlgoConnector,
+    connect: myAlgoConnect,
+    disconnect: myAlgoDisconnect
+  } = useMyAlgoConnect(handleConnect, handleDisconnect)
   // Pera Connect/Disconnect
   const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect(
     handleConnect,
@@ -171,7 +172,8 @@ function useWallets(initialState) {
     myAlgoConnect,
     peraConnect,
     peraDisconnect,
-    myAlgoDisconnect
+    myAlgoDisconnect,
+    myAlgoConnector
   }
 }
 
