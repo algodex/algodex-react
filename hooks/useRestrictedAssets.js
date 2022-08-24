@@ -7,7 +7,7 @@ import {
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
-import { routeQueryError } from './useRouteQueryError'
+// import { routeQueryError } from './useRouteQueryError'
 const refetchInterval = 3000
 
 /**
@@ -30,7 +30,7 @@ export function useSearchResultsQuery({
     error,
     ...rest
   } = useQuery(['searchResults', { query }], () => searchAssets(query), options)
-  routeQueryError({ isError, error, router })
+  // routeQueryError({ isError, error, router })
   const data = useMemo(() => {
     if (typeof queryData !== 'undefined' && typeof queryData.assets !== 'undefined') {
       return {
@@ -50,5 +50,3 @@ export function useSearchResultsQuery({
   }, [queryData])
   return { data, isError, error, ...rest }
 }
-
-import useRouteQueryError from './useRouteQueryError'
