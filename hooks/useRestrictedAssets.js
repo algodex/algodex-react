@@ -1,7 +1,4 @@
-
-import {
-  searchAssets
-} from '@/services/cms'
+import { searchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
   getIsRestricted,
@@ -10,8 +7,7 @@ import {
 import { useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
-
-
+import { routeQueryError } from './useRouteQueryError'
 const refetchInterval = 3000
 
 /**
@@ -55,4 +51,4 @@ export function useSearchResultsQuery({
   return { data, isError, error, ...rest }
 }
 
-
+import useRouteQueryError from './useRouteQueryError'

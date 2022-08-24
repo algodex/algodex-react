@@ -16,13 +16,12 @@ import axios from 'axios'
 
 // TODO: Implement getLogger() from '@algodex/common'
 
-
 /**
  * Fetch Blog Posts
  * @returns {Promise<*>}
  */
 export async function fetchBlogPosts() {
-  const res = await getEtagResponse('https://about.algodex.com/wp-json/wp/v2/posts')
+  const res = await axios.get('https://about.algodex.com/wp-json/wp/v2/posts')
   return res.data
 }
 
@@ -32,7 +31,7 @@ export async function fetchBlogPosts() {
  * @returns {Promise<*>}
  */
 export async function fetchBlogMedia(id) {
-  const res = await getEtagResponse(`https://about.algodex.com/wp-json/wp/v2/media/${id}`)
+  const res = await axios.get(`https://about.algodex.com/wp-json/wp/v2/media/${id}`)
   return res.data
 }
 

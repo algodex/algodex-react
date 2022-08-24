@@ -1,5 +1,6 @@
 const isTestNet =
   typeof process.env.NEXT_PUBLIC_API !== 'undefined' && process.env.NEXT_PUBLIC_API.match('testnet')
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const Manifest = () => {}
 export const getServerSideProps = ({ res }) => {
   const manifest = {
