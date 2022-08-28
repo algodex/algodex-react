@@ -7,8 +7,8 @@
   "modal-second-paragraph-mainnet": "Algodex è stato sottoposto a un controllo di sicurezza, tuttavia potrebbero verificarsi perdite a causa di circostanze impreviste. Si prega di rivedere la nostra Dichiarazione di non responsabilità e la documentazione prima di continuare.",
   
   "modal-subtitle-testnet": "Prova nuove funzionalità senza rischi!",
-  "modal-first-paragraph-testnet": "Stai facendo trading sulla versione Testnet di Algodex utilizzata per testare le nostre nuove funzionalità e trovare bug. Tutte le operazioni su Testnet utilizzano algoritmi e asset di testnet senza valore reale. Puoi testare Algos dal link Faucet qui sotto.",
-  "modal-second-paragraph-testnet": "Si prega di inviare feedback su eventuali bug o richieste di funzionalità!",
+  "modal-first-paragraph-testnet": "Stai facendo trading sulla versione Testnet di Algodex utilizzata per testare le nostre nuove funzionalità e trovare bug. Tutte le operazioni su Testnet utilizzano algoritmi e asset di TESTNET-ALGOS senza valore reale. Puoi testare ALGOS dal link Faucet qui sotto.",
+  "modal-second-paragraph-testnet": "Invia feedback su eventuali bug o richieste di funzionalità alla nostra pagina di supporto!",
   
   "network-name-mainnet": "MAINNET",
   "network-name-testnet": "TESTNET",

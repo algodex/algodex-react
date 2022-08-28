@@ -7,8 +7,8 @@
   "modal-second-paragraph-mainnet": "Algodexはセキュリティ監査を受けていますが、予期しない状況により損失が発生する可能性があります。続行する前に、免責事項とドキュメントを確認してください。",
   
   "modal-subtitle-testnet": "新機能をリスクなしでテストしてください！",
-  "modal-first-paragraph-testnet": "あなたは私たちの新機能をテストし、バグを見つけるために使用されるAlgodexのTestnetバージョンで取引しています。 Testnetでのすべての取引は、実際の価値のないtestnetアルゴリズムと資産を使用します。以下の蛇口のリンクからAlgosをテストすることができます。",
-  "modal-second-paragraph-testnet": "バグや機能のリクエストについてフィードバックを送ってください！",
+  "modal-first-paragraph-testnet": "あなたは私たちの新機能をテストし、バグを見つけるために使用されるAlgodexのTestnetバージョンで取引しています。 Testnetでのすべての取引は、実際の価値のないTESTNET-ALGOSアルゴリズムと資産を使用します。以下の蛇口のリンクからALGOSをテストすることができます。",
+  "modal-second-paragraph-testnet": "バグや機能リクエストに関するフィードバックをサポート ページに送信してください。",
   
   "network-name-mainnet": "メインネット",
   "network-name-testnet": "TESTNET",

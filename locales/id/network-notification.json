@@ -7,8 +7,8 @@
   "modal-second-paragraph-mainnet": "Algodex telah melalui audit keamanan, namun kerugian dapat terjadi karena keadaan yang tidak terduga. Harap tinjau Penafian dan Dokumentasi kami sebelum melanjutkan.",
   
   "modal-subtitle-testnet": "Uji fitur baru tanpa risiko!",
-  "modal-first-paragraph-testnet": "Anda berdagang di Algodex versi Testnet yang digunakan untuk menguji fitur baru kami dan menemukan bug. Semua perdagangan di Testnet menggunakan algo dan aset testnet tanpa nilai nyata. Anda bisa mendapatkan Algos untuk diuji dari tautan Faucet di bawah ini.",
-  "modal-second-paragraph-testnet": "Silakan kirim umpan balik tentang bug atau permintaan fitur apa pun!",
+  "modal-first-paragraph-testnet": "Anda berdagang di Algodex versi Testnet yang digunakan untuk menguji fitur baru kami dan menemukan bug. Semua perdagangan di Testnet menggunakan algo dan aset TESTNET-ALGOS tanpa nilai nyata. Anda bisa mendapatkan Algos untuk diuji dari tautan Faucet di bawah ini.",
+  "modal-second-paragraph-testnet": "Silakan kirim umpan balik tentang bug atau permintaan fitur apa pun ke halaman dukungan kami!",
   
   "network-name-mainnet": "MAINNET",
   "network-name-testnet": "TESTNET",

@@ -7,8 +7,8 @@
   "modal-second-paragraph-mainnet": "Algodex har gått gjennom en sikkerhetsrevisjon, men tap kan oppstå på grunn av uforutsette omstendigheter. Les vår ansvarsfraskrivelse og dokumentasjon før du fortsetter.",
   
   "modal-subtitle-testnet": "Test nye funksjoner uten risiko!",
-  "modal-first-paragraph-testnet": "Du handler på Testnet-versjonen av Algodex som brukes til å teste våre nye funksjoner og finne feil. Alle handler på Testnet bruker testnet algoer og eiendeler uten reell verdi. Du kan få Algos til å teste med fra kranen nedenfor.",
-  "modal-second-paragraph-testnet": "Send tilbakemelding om eventuelle feil eller funksjonsforespørsler!",
+  "modal-first-paragraph-testnet": "Du handler på Testnet-versjonen av Algodex som brukes til å teste våre nye funksjoner og finne feil. Alle handler på Testnet bruker TESTNET-ALGOer og eiendeler uten reell verdi. Du kan få ALGOS til å teste med fra kranen nedenfor.",
+  "modal-second-paragraph-testnet": "Send tilbakemelding om eventuelle feil eller funksjonsforespørsler til vår støtteside!",
   
   "network-name-mainnet": "HOVEDNETT",
   "network-name-testnet": "TESTNET",
