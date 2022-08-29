@@ -1,9 +1,9 @@
+import { Button, ButtonGroup } from '@mui/material'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Box from '@mui/material/Box'
-import { ButtonGroup } from '@mui/material'
 import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
@@ -55,7 +55,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { t } = useTranslation('place-order')
   const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   const { wallet } = useWallets(initialState)
-
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
 
@@ -73,18 +72,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
     return res
   }, [wallet])
-
-  // const assetBalance = useMemo(() => {
-  //   let res = 0
-  //   if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-  //     const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
-  //     if (filter.length > 0) {
-  //       res = fromBaseUnits(filter[0].amount, asset.decimals)
-  //     }
-  //   }
-
-  //   return res
-  // }, [wallet, asset])
 
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
@@ -125,8 +112,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
-      setOrder({ ...order, price: Number(data.payload.price), type: data.payload.type })
-      console.log(order)
+      setOrder({
+        ...order,
+        amount: data.payload.amount,
+        price: Number(data.payload.price),
+        type: data.payload.type
+      })
     }
   })
 
@@ -279,7 +270,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         loading: t('awaiting-confirmation'),
         success: t('order-success'),
         error: (err) => {
-          console.log(err)
+          console.log(err, 'error occured')
           if (/PopupOpenError|blocked/.test(err)) {
             return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
           }
@@ -384,17 +375,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             />
           )}
 
-          <MaterialButton
+          <Button
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
             disabled={!hasBalance || order.total === 0}
-            sx={{
-              opacity: hasBalance ? 1 : 0.5
-            }}
           >
             {buttonProps[order.type || 'buy']?.text}
-          </MaterialButton>
+          </Button>
         </Form>
       )}
     </Box>

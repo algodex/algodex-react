@@ -1,9 +1,9 @@
-import React from 'react'
-import useTranslation from 'next-translate/useTranslation'
-import styled from '@emotion/styled'
-
 // Custom Styled Components
 import { AboutContainer } from './styles.css'
+import React from 'react'
+import { Typography } from '@mui/material'
+import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 
 const SubTitle = styled.h4`
   font-size: 1.5rem;
@@ -36,7 +36,9 @@ export const Features = () => {
         >
           <Number className="mb-4">{number}.</Number>
           <SubTitle className="mb-9">{t(title)}</SubTitle>
-          <p className="mb-4">{t(sub)}.</p>
+          <Typography color="gray.400" className="mb-4">
+            {t(sub)}.
+          </Typography>
         </div>
         <div
           className={`${

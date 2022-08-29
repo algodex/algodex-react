@@ -61,6 +61,7 @@ const ContentSection = styled.section`
   position: relative;
   height: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const AssetsSection = styled.section`
@@ -175,7 +176,7 @@ function MainLayout({ asset, children }) {
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const gridRef = useRef()
   const searchTableRef = useRef()
 

@@ -1,72 +1,17 @@
 import { Box, Stack, Typography } from '@mui/material'
-import { useContext, useEffect, useMemo, useRef } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
-import { difference } from 'lodash'
 import theme from 'theme'
 
-// import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
-// import useWalletConnect from '@/hooks/useWalletConnect'
-
-const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }) => {
-  const { peraConnect, myAlgoConnect } = useWallets()
-  const [addresses, setAddresses] = useContext(WalletsContext)
-  const addressesRef = useRef(null)
-
-  const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': myAlgoConnect,
-    'pera-connect': peraConnect
-  }
-
-  const myAlgoOnClick = () => {
-    WALLETS_CONNECT_MAP['my-algo-wallet']()
-  }
-
-  const peraConnectOnClick = () => {
-    WALLETS_CONNECT_MAP['pera-connect']()
-  }
-  useEffect(() => {
-    if (!addressesRef.current) {
-      // Initialize the ref after first checking to see what is in localStorage
-      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-      if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
-        setAddresses(storedAddrs)
-      }
-      addressesRef.current = addresses
-    }
-
-    const localStorageExists =
-      JSON.parse(localStorage.getItem('addresses')) !== null &&
-      JSON.parse(localStorage.getItem('addresses')).length > 0
-
-    const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
-
-    if (localStorageExists && addressesExist) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-    }
-    const walletDifference = difference(
-      addresses.map((addr) => addr.address),
-      addressesRef.current.map((addr) => addr.address)
-    )
-    if (walletDifference.length > 0) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-      addressesRef.current = addresses
-      closeFn()
-    }
-    // **Note** Can't put closeFn() in the onClicks because it will closeOut
-    // modal before wallet-connect finishes connecting leading to stale state.
-    // Creating a ref that persists between renders gives us a way to automatically close out
-    // modals only when a new address is added to the addresses array.
-  }, [addresses])
-
-  const isPeraConnected = useMemo(() => {
-    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
-    return peraAddr.length > 0
-  }, [addresses])
-
+const WalletsOptions = ({
+  isConnectingAddress,
+  setIsConnectingAddress,
+  myAlgoOnClick,
+  peraConnectOnClick,
+  isPeraConnected
+}) => {
   return (
     <>
       <Box
@@ -155,7 +100,9 @@ const WalletsOptions = ({ isConnectingAddress, setIsConnectingAddress, closeFn }
 WalletsOptions.propTypes = {
   isConnectingAddress: PropTypes.bool,
   setIsConnectingAddress: PropTypes.func,
-  closeFn: PropTypes.func
+  myAlgoOnClick: PropTypes.func,
+  peraConnectOnClick: PropTypes.func,
+  isPeraConnected: PropTypes.bool
 }
 
 WalletsOptions.defaultProps = {

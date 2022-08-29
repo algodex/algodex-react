@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
-import { useEventDispatch } from './useEvents'
 
 /**
  *
@@ -134,10 +134,11 @@ function useWallets(initialState) {
   )
 
   // My Algo Connect/Disconnect
-  const { connect: myAlgoConnect, disconnect: myAlgoDisconnect } = useMyAlgoConnect(
-    handleConnect,
-    handleDisconnect
-  )
+  const {
+    connector: myAlgoConnector,
+    connect: myAlgoConnect,
+    disconnect: myAlgoDisconnect
+  } = useMyAlgoConnect(handleConnect, handleDisconnect)
   // Pera Connect/Disconnect
   const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect(
     handleConnect,
@@ -171,7 +172,8 @@ function useWallets(initialState) {
     myAlgoConnect,
     peraConnect,
     peraDisconnect,
-    myAlgoDisconnect
+    myAlgoDisconnect,
+    myAlgoConnector
   }
 }
 

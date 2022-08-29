@@ -66,6 +66,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
     }
     return res
   }, [storedAddrs, activeWallet])
+
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
@@ -80,7 +81,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
           )}
         >
           <section className="flex items-center justify-between mb-1">
-            <Typography variant="body_small_cap_medium" color="gray.300">
+            <Typography
+              sx={{ letterSpacing: '0.2em' }}
+              variant="body_small_cap_medium"
+              color="gray.300"
+            >
               {t('orders:available')}:
             </Typography>
             <IconTextContainer>
@@ -91,7 +96,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </IconTextContainer>
           </section>
           <BalanceRow>
-            <Typography variant="body_small_cap_medium" color="gray.300">
+            <Typography
+              sx={{ letterSpacing: '0.2em' }}
+              variant="body_small_cap_medium"
+              color="gray.300"
+            >
               {t('total')}:
             </Typography>
             <IconTextContainer>
@@ -102,7 +111,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </IconTextContainer>
           </BalanceRow>
           <BalanceRow>
-            <Typography variant="body_small" color="gray.300">
+            <Typography variant="body_tiny" color="gray.300">
               &nbsp;*
               {t('max-spend-explanation', {
                 amount: new Big(wallet.amount).minus(new Big(wallet.amount)).round(6).toString()
@@ -124,7 +133,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
           </Typography>
         </Stack>
       </Stack>
-      <BalanceRow>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
         <Typography variant="body_small_cap_medium" color="gray.400">
           <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
           {asset.name || asset.id}
@@ -132,12 +141,13 @@ export const AvailableBalance = ({ wallet, asset }) => {
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
             {fromBaseUnits(assetBalance, asset.decimals)}
+            {/* {assetBalance} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
             <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
-      </BalanceRow>
+      </Stack>
     </AvailableBalanceContainer>
   )
 }
@@ -148,8 +158,8 @@ AvailableBalance.propTypes = {
     decimals: PropTypes.number.isRequired
   }),
   wallet: PropTypes.shape({
-    amount: PropTypes.number.isRequired,
     address: PropTypes.string,
+    amount: PropTypes.number.isRequired,
     assets: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired

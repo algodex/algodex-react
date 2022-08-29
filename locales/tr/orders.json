@@ -21,5 +21,7 @@
   "error": "Bir şeyler ters gitti",
   "name": "İSİM",
   "buy": "AL ",
-  "sell": "SAT"
+  "sell": "SAT",
+  "cancel-all": "Hepsini iptal et",
+  "cancel": "İptal"
 }

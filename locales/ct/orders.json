@@ -21,5 +21,7 @@
     "error": "Alguna cosa ha anat malament.",
     "name": "Nom",
     "buy": "Comprar",
-    "sell": "Vendre"
+    "sell": "Vendre",
+    "cancel-all": "Cancel·la-ho tot",
+    "cancel": "Cancel · lar"
 }
