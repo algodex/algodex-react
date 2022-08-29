@@ -92,7 +92,10 @@ export function Header() {
         <NavActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </NavActiveLink>
-        <NavActiveLink href="/docs" matches={/^\/docs/}>
+        {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
+          <NavTextLg>{t('header-docs')}</NavTextLg>
+        </NavActiveLink> */}
+        <NavActiveLink href="https://docs.algodex.com/">
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink>
         {/*<a*/}
@@ -152,7 +155,8 @@ export function Header() {
           </NavActiveLink>
           <a
             target="_blank"
-            href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
+            href="https://docs.algodex.com/"
+            // href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
             rel="noreferrer"
           >
             <NavTextSm>Docs</NavTextSm>
