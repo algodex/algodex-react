@@ -49,16 +49,22 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  const storedAddrs =
+    JSON.parse(localStorage.getItem('addresses')) !== null &&
+    JSON.parse(localStorage.getItem('addresses')).length > 0 &&
+    JSON.parse(localStorage.getItem('addresses'))
+
+  const activeWallet = storedAddrs && storedAddrs.filter((a) => a.address == activeWalletAddr)[0]
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (typeof activeWallet !== 'undefined' && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = filter[0].amount
       }
     }
     return res
-  }, [wallet, asset])
+  }, [storedAddrs, activeWallet])
   return (
     <AvailableBalanceContainer>
       <IconTextContainer style={{ marginBottom: '10px' }}>
