@@ -49,6 +49,7 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  const { address: activeWalletAddr } = wallet
   const storedAddrs =
     JSON.parse(localStorage.getItem('addresses')) !== null &&
     JSON.parse(localStorage.getItem('addresses')).length > 0 &&
@@ -148,6 +149,7 @@ AvailableBalance.propTypes = {
   }),
   wallet: PropTypes.shape({
     amount: PropTypes.number.isRequired,
+    address: PropTypes.string,
     assets: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired
