@@ -38,7 +38,7 @@ function OrderInput({ label, asset, orderType, usdEquivalent, hasError, errorMes
       <Container orderType={orderType}>
         <Input placeholder="0.00" {...props} />
         <Label>{label}</Label>
-        <Asset isCondensed={condenseAssetName}>{asset}</Asset>
+        {/* <Asset isCondensed={condenseAssetName}>{asset}</Asset> */}
         <Asset isCondensed={condenseAssetName}>{asset}</Asset>
       </Container>
       {hasError && <ValidationMessage message={errorMessage} />}

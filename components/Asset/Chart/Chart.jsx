@@ -7,9 +7,10 @@ import ChartSettings from './ChartSettings'
 import PropTypes from 'prop-types'
 import millify from 'millify'
 import styled from '@emotion/styled'
-import useAreaChart from '@/hooks/use-area-chart'
-import useCandleChart from '@/hooks/use-candle-chart'
-import { withAssetChartQuery } from '@/hooks/withAlgodex'
+import useAreaChart from './hooks/useAreaChart'
+import useCandleChart from './hooks/useCandleChart'
+import { withAssetChartQuery } from '@algodex/algodex-hooks'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 
 const Container = styled.div`
   position: relative;
@@ -101,15 +102,28 @@ export function Chart({
   interval: _interval,
   mode: _mode,
   volume,
+  algoVolume,
   ohlc,
   overlay: _overlay,
   onChange
 }) {
   // console.log(`Chart(`, arguments[0], `)`)
+
   const [interval, setInterval] = useState(_interval)
   const [overlay, setOverlay] = useState(_overlay)
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
+
+  // Update ohlc data when it is stable asset
+  algoVolume = [...volume] // temporary solution: should be updated from backend
+  if (asset.isStable) {
+    ohlc.forEach((ele, index) => {
+      ohlc[index].open = ele.open != 0 ? floatToFixed(1 / ele.open) : 'Invalid'
+      ohlc[index].low = ele.low != 0 ? floatToFixed(1 / ele.low) : 'Invalid'
+      ohlc[index].high = ele.high != 0 ? floatToFixed(1 / ele.high) : 'Invalid'
+      ohlc[index].close = ele.close != 0 ? floatToFixed(1 / ele.close) : 'Invalid'
+    })
+  }
 
   useEffect(() => {
     setOverlay(_overlay)
@@ -151,19 +165,28 @@ export function Chart({
 
   const updateHoverPrices = useCallback(
     (logical) => {
-      if (ohlc == null || volume == null) {
-        return
+      if (asset.isStable) {
+        if (ohlc == null || algoVolume == null) {
+          return
+        }
+      } else {
+        if (ohlc == null || volume == null) {
+          return
+        }
       }
+
       const priceEntry = ohlc[logical]
       const volumeEntry = volume[logical]
+      const algoVolumeEntry = algoVolume[logical]
 
       setOverlay({
         ...overlay,
         ohlc: priceEntry,
-        volume: volumeEntry != null ? millify(volumeEntry.value) : '0'
+        volume: volumeEntry != null ? millify(volumeEntry.value) : '0',
+        algoVolume: algoVolumeEntry != null ? millify(algoVolumeEntry.value) : '0'
       })
     },
-    [ohlc, volume, setOverlay, overlay]
+    [ohlc, volume, setOverlay, overlay, asset, algoVolume]
   )
 
   const mouseOut = useCallback(() => {
@@ -182,9 +205,16 @@ export function Chart({
       const x = ev.clientX - rect.left
       const logical = candleChart.timeScale().coordinateToLogical(x)
 
-      if (logical >= ohlc.length || logical >= volume.length) {
-        setOverlay(_overlay)
-        return
+      if (asset.isStable) {
+        if (logical >= ohlc.length || logical >= algoVolume.length) {
+          setOverlay(_overlay)
+          return
+        }
+      } else {
+        if (logical >= ohlc.length || logical >= volume.length) {
+          setOverlay(_overlay)
+          return
+        }
       }
 
       if (logical !== currentLogical) {
@@ -202,6 +232,8 @@ export function Chart({
       setCurrentLogical,
       updateHoverPrices,
       volume,
+      algoVolume,
+      asset.isStable,
       ohlc
     ]
   )
@@ -231,7 +263,7 @@ export function Chart({
           bid={overlay.orderbook.bid}
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
-          volume={overlay.volume}
+          volume={asset.isStable ? overlay.algoVolume : overlay.volume}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -241,7 +273,7 @@ export function Chart({
           bid={_overlay.orderbook.bid}
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
-          volume={_overlay.volume}
+          volume={asset.isStable ? _overlay.algoVolume : _overlay.volume}
         />
       )}
       <SettingsContainer>
@@ -254,7 +286,8 @@ export function Chart({
 Chart.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    isStable: PropTypes.bool
   }).isRequired,
   interval: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
@@ -266,6 +299,7 @@ Chart.propTypes = {
       close: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }),
     volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    algoVolume: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     orderbook: PropTypes.shape({
       bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       ask: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -274,6 +308,7 @@ Chart.propTypes = {
   }),
   ohlc: PropTypes.array.isRequired,
   volume: PropTypes.array.isRequired,
+  algoVolume: PropTypes.array,
   onChange: PropTypes.func
 }
 

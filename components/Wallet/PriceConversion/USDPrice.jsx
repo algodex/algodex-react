@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
-import { withAlgorandPriceQuery } from '@/hooks/withAlgoExplorer'
-export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
+import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
+export function USDPrice({ algoPrice, asaWorth, priceToConvert, currency }) {
   return (
     <span data-testid="USDprice-element">
       {currency}
@@ -12,8 +12,8 @@ export function USDPrice({ asaWorth, algoPrice, priceToConvert, currency }) {
 
 USDPrice.propTypes = {
   algoPrice: PropTypes.any,
-  priceToConvert: PropTypes.number,
-  asaWorth: PropTypes.number,
+  priceToConvert: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  asaWorth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   currency: PropTypes.string
 }
 

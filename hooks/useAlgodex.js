@@ -14,6 +14,8 @@ import {
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
+import { StableAssets } from '@/components/StableAssets'
+
 import { useEffect, useMemo, useState } from 'react'
 
 import Big from 'big.js'
@@ -74,7 +76,8 @@ export function useSearchResultsQuery({
           return {
             ...asset,
             isRestricted,
-            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted
+            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted,
+            isStable: StableAssets.includes(asset.assetId)
           }
         })
       }
@@ -119,34 +122,64 @@ export function useAssetPriceQuery({
   return { data: { asset }, ...rest }
 }
 
-function mapPriceData(data) {
-  const prices =
-    data?.chart_data.map(
-      ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
-        const time = parseInt(unixTime)
-        return {
-          time: time,
-          open: floatToFixed(formatted_open),
-          high: floatToFixed(formatted_high),
-          low: floatToFixed(formatted_low),
-          close: floatToFixed(formatted_close)
+function mapPriceData(data, isStableAsset) {
+  let prices = []
+  // Use if-else condition for isStableAsset outside of iteration to speed up
+  if (isStableAsset) {
+    prices =
+      data?.chart_data.map(
+        ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+          const time = parseInt(unixTime)
+          return {
+            time: time,
+            open: floatToFixed(1 / formatted_open),
+            high: floatToFixed(1 / formatted_high),
+            low: floatToFixed(1 / formatted_low),
+            close: floatToFixed(1 / formatted_close)
+          }
         }
-      }
-    ) || []
+      ) || []
+  } else {
+    prices =
+      data?.chart_data.map(
+        ({ formatted_open, formatted_high, formatted_low, formatted_close, unixTime }) => {
+          const time = parseInt(unixTime)
+          return {
+            time: time,
+            open: floatToFixed(formatted_open),
+            high: floatToFixed(formatted_high),
+            low: floatToFixed(formatted_low),
+            close: floatToFixed(formatted_close)
+          }
+        }
+      ) || []
+  }
+
   return prices.sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0))
 }
 
-function getOhlc(data) {
-  const lastPriceData = data?.chart_data[0]
+function getOhlc(data, isStableAsset) {
+  let lastPriceData = {}
+
+  if (data?.chart_data[0]) {
+    if (isStableAsset) {
+      lastPriceData = {
+        open: floatToFixed(1 / data?.chart_data[0].formatted_open),
+        low: floatToFixed(1 / data?.chart_data[0].formatted_high),
+        high: floatToFixed(1 / data?.chart_data[0].formatted_low),
+        close: floatToFixed(1 / data?.chart_data[0].formatted_close)
+      }
+    } else {
+      lastPriceData = {
+        open: floatToFixed(data?.chart_data[0].formatted_open),
+        high: floatToFixed(data?.chart_data[0].formatted_high),
+        low: floatToFixed(data?.chart_data[0].formatted_low),
+        close: floatToFixed(data?.chart_data[0].formatted_close)
+      }
+    }
+  }
 
   return lastPriceData
-    ? {
-        open: floatToFixed(lastPriceData.formatted_open),
-        high: floatToFixed(lastPriceData.formatted_high),
-        low: floatToFixed(lastPriceData.formatted_low),
-        close: floatToFixed(lastPriceData.formatted_close)
-      }
-    : {}
 }
 
 function mapVolumeData(data, volUpColor, volDownColor) {
@@ -163,15 +196,39 @@ function mapVolumeData(data, volUpColor, volDownColor) {
   return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
 }
 
-function getBidAskSpread(orderBook) {
-  const { buyOrders, sellOrders } = orderBook
+function mapAlgoVolumeData(data, volUpColor, volDownColor) {
+  const mappedData = data?.chart_data?.map(({ algoVolume, unixTime }) => {
+    const time = parseInt(unixTime)
+    return {
+      time: time,
+      value: algoVolume
+    }
+  })
+  const volumeColors = data?.chart_data.map(({ open, close }) =>
+    open > close ? volDownColor : volUpColor
+  )
+  return mappedData?.map((md, i) => ({ ...md, color: volumeColors[i] })) || []
+}
 
+function getBidAskSpread(orderBook, isStableAsset) {
+  const { buyOrders, sellOrders } = orderBook
   const bidPrice = buyOrders.sort((a, b) => b.asaPrice - a.asaPrice)?.[0]?.formattedPrice || 0
   const askPrice = sellOrders.sort((a, b) => a.asaPrice - b.asaPrice)?.[0]?.formattedPrice || 0
 
-  const bid = floatToFixed(bidPrice)
-  const ask = floatToFixed(askPrice)
-  const spread = floatToFixed(new Big(ask).minus(bid).abs())
+  let bid = floatToFixed(bidPrice)
+  let ask = floatToFixed(askPrice)
+  let spread = floatToFixed(new Big(ask).minus(bid).abs())
+
+  if (isStableAsset) {
+    bid = bidPrice === 0 ? 'Invalid Price' : floatToFixed(1 / bidPrice)
+    ask = askPrice === 0 ? 'Invalid Price' : floatToFixed(1 / askPrice)
+
+    if (Number(bidPrice) === 0 || Number(bidPrice) === 0) {
+      spread = 'Invalid Price'
+    } else {
+      spread = floatToFixed(new Big(ask).minus(bid).abs())
+    }
+  }
 
   return { bid, ask, spread }
 }
@@ -209,8 +266,6 @@ export function useAssetChartQuery({
     [assetOrders]
   )
 
-  const { bid, ask, spread } = useMemo(() => getBidAskSpread(orderBook), [orderBook])
-
   const {
     isLoading: isChartLoading,
     isError: isChartError,
@@ -218,12 +273,20 @@ export function useAssetChartQuery({
     ...rest
   } = useQuery(['assetChart', { id, interval }], () => fetchAssetChart(id, interval), options)
 
-  const priceData = useMemo(() => mapPriceData(data), [data])
+  const { bid, ask, spread } = useMemo(
+    () => getBidAskSpread(orderBook, asset.isStable),
+    [orderBook]
+  )
+  const priceData = useMemo(() => mapPriceData(data, asset.isStable), [data])
   const volumeData = useMemo(() => mapVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR), [data])
-  const ohlcOverlay = useMemo(() => getOhlc(data), [data])
+  const algoVolumeData = useMemo(
+    () => mapAlgoVolumeData(data, VOLUME_UP_COLOR, VOLUME_DOWN_COLOR),
+    [data]
+  )
+  const ohlcOverlay = useMemo(() => getOhlc(data, asset.isStable), [data])
 
   const volume = millify(data?.chart_data[data?.chart_data.length - 1]?.asaVolume || 0)
-
+  const algoVolume = millify(data?.chart_data[data?.chart_data.length - 1]?.algoVolume || 0)
   const isLoading = isOrdersLoading || isChartLoading
   const isError = isOrdersError || isChartError
 
@@ -232,9 +295,11 @@ export function useAssetChartQuery({
       overlay: {
         ohlc: ohlcOverlay,
         orderbook: { bid, ask, spread },
-        volume
+        volume,
+        algoVolume
       },
       volume: volumeData,
+      algoVolume: algoVolumeData,
       ohlc: priceData,
       isLoading,
       isError
@@ -251,7 +316,7 @@ export function useAssetChartQuery({
  * @param type
  * @returns {*}
  */
-function aggregateOrders(orders, asaDecimals, type) {
+function aggregateOrders(orders, asaDecimals, type, ascending) {
   const isBuyOrder = type === 'buy'
   let total = 0
 
@@ -304,7 +369,14 @@ function aggregateOrders(orders, asaDecimals, type) {
     return b.price - a.price
   }
 
-  return orders.sort(sortOrdersToAggregate).reduce(reduceAggregateData, []).sort(sortRowsByPrice)
+  const sortRowsByPriceInAscending = (a, b) => {
+    return a.price - b.price
+  }
+
+  return orders
+    .sort(sortOrdersToAggregate)
+    .reduce(reduceAggregateData, [])
+    .sort(ascending ? sortRowsByPriceInAscending : sortRowsByPrice)
 }
 
 /**
@@ -321,7 +393,7 @@ export function useAssetOrderbookQuery({
   }
 } = {}) {
   // console.log(`useAssetOrderbookQuery(${JSON.stringify({ asset })})`)
-  const { id, decimals } = asset
+  const { id, decimals, isStable } = asset
   const [sell, setSellOrders] = useState([])
   const [buy, setBuyOrders] = useState([])
 
@@ -340,8 +412,8 @@ export function useAssetOrderbookQuery({
       typeof data.sellASAOrdersInEscrow !== 'undefined' &&
       typeof data.buyASAOrdersInEscrow !== 'undefined'
     ) {
-      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, decimals, 'sell'))
-      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, decimals, 'buy'))
+      setSellOrders(aggregateOrders(data.sellASAOrdersInEscrow, decimals, 'sell', isStable && true))
+      setBuyOrders(aggregateOrders(data.buyASAOrdersInEscrow, decimals, 'buy', isStable && true))
     }
   }, [isLoading, data, setSellOrders, setBuyOrders, decimals])
 
@@ -480,16 +552,28 @@ const mapOpenOrdersData = (data, assetList = []) => {
   const buyOrders = buyOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
+    let pair = `${unitName}/ALGO`
+    let price = floatToFixed(formattedPrice) + ' (ALGO)'
+    let amount = formattedASAAmount + ` (${unitName}) `
+
+    if (StableAssets.includes(assetId)) {
+      pair = `ALGO/${unitName}`
+      amount = `${formattedPrice * formattedASAAmount} (ALGO) `
+      price =
+        formattedPrice !== 0
+          ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
+          : 'Invalid Price'
+    }
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       // date: moment(unix_time, 'YYYY-MM-DD HH:mm').format(),
       unix_time: unix_time,
-      price: floatToFixed(formattedPrice),
-      pair: `${unitName}/ALGO`,
+      price: price,
+      pair: pair,
       type: 'BUY',
       status: 'OPEN',
-      amount: formattedASAAmount,
+      amount: amount,
       metadata: order
     }
   })
@@ -497,21 +581,32 @@ const mapOpenOrdersData = (data, assetList = []) => {
   const sellOrders = sellOrdersData.map((order) => {
     const { assetId, formattedPrice, formattedASAAmount, unix_time } = order
     const unitName = assetsInfo[assetId]?.params['unit-name'] || unitNameMap.get(assetId)
+    let pair = `${unitName}/ALGO`
+    let price = floatToFixed(formattedPrice) + ' (ALGO)'
+    let amount = formattedASAAmount + ` (${unitName}) `
+
+    if (StableAssets.includes(assetId)) {
+      pair = `ALGO/${unitName}`
+      amount = `${formattedPrice * formattedASAAmount} (1ALGO) `
+      price =
+        formattedPrice !== 0
+          ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
+          : 'Invalid Price'
+    }
     return {
       asset: { id: assetId },
       date: dayjs.unix(unix_time).format('YYYY-MM-DD HH:mm:ss'),
       unix_time: unix_time,
-      price: floatToFixed(formattedPrice),
-      pair: `${unitName}/ALGO`,
+      price: price,
+      pair: pair,
       type: 'SELL',
       status: 'OPEN',
-      amount: formattedASAAmount,
+      amount: amount,
       metadata: order
     }
   })
   const allOrders = [...buyOrders, ...sellOrders]
   allOrders.sort((a, b) => (a.unix_time < b.unix_time ? 1 : -1))
-
   return allOrders
 }
 
@@ -551,7 +646,7 @@ export function useWalletTradeHistoryQuery({
   }
 }) {
   const { address } = wallet
-  const mapTradeHistoryData = (data) => {
+  const mapTradeHistoryData = (data, assetList = []) => {
     const buyText = 'BUY'
     const sellText = 'SELL'
     if (!data || !data.transactions || !data.allAssets) {
@@ -564,18 +659,35 @@ export function useWalletTradeHistoryQuery({
       allAssetsInfo[currentAssetInfo.index] = currentAssetInfo
       return allAssetsInfo
     }, {})
+    const unitNameMap =
+      Object.keys(assetsInfo).length === 0 ? getFormattedPairMap(assetList) : new Map()
     return tradeHistoryData.map(
       ({ unix_time, group_id, asset_id, tradeType, formattedPrice, formattedASAAmount }) => {
-        const side = tradeType === 'buyASA' ? buyText : sellText
+        let side = tradeType === 'buyASA' ? buyText : sellText
+        // const unitName = assetsInfo[asset_id]?.params['unit-name'] || unitNameMap.get(asset_id)
+        const unitName = assetsInfo[asset_id].params['unit-name']
+        let price = floatToFixed(formattedPrice) + ' (ALGO)'
+        let amount = formattedASAAmount + ` (${unitName}) `
+        let pair = `${unitName}/ALGO`
+
+        if (StableAssets.includes(asset_id)) {
+          pair = `ALGO/${unitName}`
+          amount = `${formattedPrice * formattedASAAmount} (ALGO) `
+          price =
+            formattedPrice !== 0
+              ? floatToFixed(1 / formattedPrice) + ` (${unitName}) `
+              : 'Invalid Price'
+          side = side === buyText ? sellText : buyText
+        }
 
         return {
           id: asset_id,
           groupId: encodeURIComponent(group_id),
           date: dayjs(unix_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-          price: floatToFixed(formattedPrice),
-          pair: `${assetsInfo[asset_id].params['unit-name']}/ALGO`,
+          price: price,
+          pair: pair,
           side,
-          amount: formattedASAAmount
+          amount: amount
         }
       }
     )
@@ -585,7 +697,9 @@ export function useWalletTradeHistoryQuery({
     () => fetchWalletTradeHistory(address),
     options
   )
-  const orders = useMemo(() => mapTradeHistoryData(data), [data])
+  const assetsList = useSearchResultsQuery()
+
+  const orders = useMemo(() => mapTradeHistoryData(data, assetsList), [data, assetsList])
   return { data: { orders }, ...rest }
 }
 /**

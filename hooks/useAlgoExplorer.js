@@ -1,7 +1,11 @@
-import { fetchAlgorandPrice, fetchExplorerAssetInfo } from 'services/algoexplorer'
+import {
+  fetchAlgorandPrice,
+  fetchExplorerAssetInfo,
+  fetchCurrentAssetPrices
+} from 'services/algoexplorer'
 
 import { routeQueryError } from './useAlgodex'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 
@@ -49,3 +53,44 @@ export const useAlgorandPriceQuery = ({
     refetchInterval: query === '' ? refetchInterval : 20000
   }
 } = {}) => useQuery(['fetchAlgorandPrice', { query }], () => fetchAlgorandPrice(query), options)
+
+/**
+ * Use Search Results Query
+ * Use Asset
+ * @param {Object} props The props of the parent
+ * @param {string} props.query Search Query
+ * @param {Object} [props.options] useQuery Options
+ * @returns {UseQueryResult<{assets: *}, unknown>}
+ */
+export const useCurrentAssetPricesQuery = ({
+  assetId = -1,
+  options = {
+    refetchInterval: 20000
+  }
+} = {}) =>
+  useQuery(
+    ['fetchCurrentAssetPrices', { assetId }],
+    () => fetchCurrentAssetPrices(assetId),
+    options
+  )
+
+/**
+ * Use Search Results Query
+ * @param {Object} props The props of the parent
+ * @param {Object} [props.options] useQuery Options
+ * @returns {UseQueryResult<{assets: *}, unknown>}
+ */
+// export function useCurrentAssetPricesQuery({ options = { refetchInterval: 30000 } }) {
+//   // return useQuery(['currentAssetPrices'], () => fetchCurrentAssetPrices(), options)
+//   const { data: _prices } = useQuery(
+//     ['currentAssetPrices'],
+//     () => fetchCurrentAssetPrices(),
+//     options
+//   )
+
+//   const currentPrices = useMemo(() => {
+//     return _prices
+//   }, [_prices])
+
+//   return currentPrices
+// }

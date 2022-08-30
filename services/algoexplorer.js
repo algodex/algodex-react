@@ -9,6 +9,8 @@ export const ALGO_EXPLORER_V1_API =
 export const ALGO_EXPLORER_V2_API =
   process.env.NEXT_PUBLIC_ALGO_EXPLORER_V2_API || 'https://indexer.testnet.algoexplorerapi.io'
 export const EXPLORER_ALGORAND_PRICE = 'https://price.algoexplorerapi.io/price/algo-usd'
+export const EXPLORER_CURRENT_ASSET_PRICES =
+  'https://testnet.analytics.tinyman.org/api/v1/current-asset-prices'
 
 // console.debug('NEXT_PUBLIC_EXPLORER_API: ' + process.env.NEXT_PUBLIC_EXPLORER_API)
 // console.debug('EXPLORER_API: ' + EXPLORER_API)
@@ -162,4 +164,21 @@ export async function fetchAssetInfoV2(id) {
 export async function fetchAlgorandPrice() {
   const { data } = await axios.get(`${EXPLORER_ALGORAND_PRICE}`)
   return { algoPrice: data.price }
+}
+
+/**
+ * Fetch Current Asset Prices and AlgorandPrice
+ * @see https://testnet.analytics.tinyman.org/api/v1/current-asset-prices
+ * @see https://mainnet.analytics.tinyman.org/api/v1/current-asset-prices
+ */
+export async function fetchCurrentAssetPrices(assetId) {
+  console.log('Env: ', process.env)
+  console.log('AssetId: ', assetId)
+  // console.debug(`fetchCurrentAssetPrices(): ${EXPLORER_CURRENT_ASSET_PRICES}`)
+  const { data } = await axios.get(`${EXPLORER_CURRENT_ASSET_PRICES}`)
+  console.debug(`fetchCurrentAssetPrices(): `, data?.[assetId]?.['price'] ?? 1)
+
+  return {
+    usdPrice: data?.[assetId]?.['price'] ?? 0.99
+  }
 }

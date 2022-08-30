@@ -1,10 +1,11 @@
-import { BodyCopyTiny } from 'components/Typography'
 import Icon from 'components/Icon'
+// import { Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import PropTypes from 'prop-types'
 
-export const PriceHeaderText = styled(BodyCopyTiny)`
+export const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   ${(props) => (props.textAlign === 'right' ? 'margin-left: auto' : 'margin: 0')};
@@ -14,19 +15,21 @@ export const PriceHeaderText = styled(BodyCopyTiny)`
   }
 `
 
-export const TablePriceHeader = ({ title, textAlign }) => {
+export const TablePriceHeader = ({ currencySymbol }) => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText data-testid="header-item" textAlign={textAlign}>
-      {t(title)}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+    <PriceHeaderText variant="body_tiny_cap" data-testid="header-item">
+      {t('price')}
+      {!currencySymbol && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
+      {currencySymbol && <span>&nbsp;{currencySymbol}</span>}
     </PriceHeaderText>
   )
 }
 
 TablePriceHeader.propTypes = {
   title: PropTypes.string.isRequired,
-  textAlign: PropTypes.string.isRequired
+  textAlign: PropTypes.string.isRequired,
+  currencySymbol: PropTypes.string
 }
 
 export default TablePriceHeader

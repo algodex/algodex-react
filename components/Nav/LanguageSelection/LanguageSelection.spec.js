@@ -7,7 +7,7 @@ expect.extend(matchers)
 
 jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
-describe('Language Selection Component', () => {
+describe.skip('Language Selection Component', () => {
   it('Should render Language Selection dropdown on click for mobile', () => {
     const { queryByTestId } = render(<LanguageSelection isMobile={true} />)
     fireEvent.click(queryByTestId('dropdown-button-mobile'))

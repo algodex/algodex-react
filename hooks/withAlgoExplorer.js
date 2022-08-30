@@ -1,4 +1,8 @@
-import { useAlgorandPriceQuery, useExplorerAssetInfo } from '@/hooks/useAlgoExplorer'
+import {
+  useAlgorandPriceQuery,
+  useExplorerAssetInfo,
+  useCurrentAssetPricesQuery
+} from '@/hooks/useAlgoExplorer'
 
 import ServiceError from '@/components/ServiceError'
 import Spinner from '@/components/Spinner'
@@ -25,6 +29,20 @@ export function withAlgorandPriceQuery(Component, options) {
 export function withExplorerAssetInfo(Component, options) {
   return withQuery(Component, {
     hook: useExplorerAssetInfo,
+    components,
+    ...options
+  })
+}
+
+/**
+ * With Algorand Price Query
+ * @param {JSX.Element| Function} Component Component to wrap
+ * @param {object} [options] Options to pass to withQuery
+ * @returns {JSX.Element}
+ */
+export function withCurrentAssetPricesQuery(Component, options) {
+  return withQuery(Component, {
+    hook: useCurrentAssetPricesQuery,
     components,
     ...options
   })

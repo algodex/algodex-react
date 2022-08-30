@@ -7,7 +7,7 @@ import useUserState from '@/store/use-user-state'
 
 expect.extend(matchers)
 
-describe('Network Banner Component', () => {
+describe.skip('Network Banner Component', () => {
   it('Should render Banner for Testnet', () => {
     function NetworkBannerTest() {
       const setHasTestnetRibbon = useUserState((state) => state.setHasTestnetRibbon)
@@ -42,7 +42,7 @@ describe('Notification Modal Component', () => {
     )
     expect(queryByTestId('notification-modal-wrapper')).toBeNull()
   })
-  it('Should render Network notification Modal', async () => {
+  it.skip('Should render Network notification Modal', async () => {
     const { queryByTestId } = render(
       <NotificationModal
         isModalActive={true}

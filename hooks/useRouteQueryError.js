@@ -20,3 +20,5 @@ export const useRouteQueryError = ({ isError, error, router, enabled = true }) =
     }
   }
 }
+
+export default useRouteQueryError

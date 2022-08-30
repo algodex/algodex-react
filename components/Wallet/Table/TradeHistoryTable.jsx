@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletTradeHistoryQuery } from '@/hooks/withAlgodex'
+import { withWalletTradeHistoryQuery } from '@algodex/algodex-hooks'
 
 const OrderHistoryContainer = styled.div`
   display: flex;
@@ -67,7 +67,7 @@ export function TradeHistoryTable({ orders }) {
       },
 
       {
-        Header: t('price') + ' (ALGO)',
+        Header: t('price'),
         accessor: 'price',
         Cell: DefaultCell
       },

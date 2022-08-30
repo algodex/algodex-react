@@ -2,7 +2,7 @@ import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
-import { floatToFixed } from 'services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
@@ -210,9 +210,16 @@ function ChartOverlay(props) {
               color={theme.palette.gray['500']}
             />
           )}
-          <div>
-            &nbsp;<span>{`${asset.name} `}</span> / ALGO
-          </div>
+          {!asset.isStable && (
+            <div>
+              &nbsp;<span>{`${asset.name} `}</span> / ALGO
+            </div>
+          )}
+          {asset.isStable && (
+            <div>
+              &nbsp;ALGO / <span>{`${asset.name} `}</span>
+            </div>
+          )}
           <div>
             <IconButton onClick={onClick} type="button">
               <Info />
@@ -239,6 +246,10 @@ function ChartOverlay(props) {
           <OhlcItem value={changeAmt}>
             <dd data-testid="dailyChange">{openCloseChange()}</dd>
           </OhlcItem>
+          <OhlcItem value={volume}>
+            <dt>Volume:</dt>
+            <dd data-testid="volume">{volume}</dd>
+          </OhlcItem>
         </OhlcList>
       </Header>
       <BidAskSpreadContainer>
@@ -249,7 +260,8 @@ function ChartOverlay(props) {
       <VolumeContainer>
         <Volume>
           <dt>Vol:</dt>
-          <dd>{`${volume} ${asset.name}`}</dd>
+          {asset.isStable && <dd>{`${volume} ALGO`}</dd>}
+          {!asset.isStable && <dd>{`${volume} ${asset.name}`}</dd>}
         </Volume>
       </VolumeContainer>
     </Container>
@@ -264,5 +276,4 @@ ChartOverlay.propTypes = {
   spread: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   volume: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
-
 export default ChartOverlay

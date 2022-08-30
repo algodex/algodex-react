@@ -179,11 +179,11 @@ export const Tabs = styled(_Tabs)`
   justify-content: flex-start;
 `
 
-export const LimitOrder = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-`
+// export const LimitOrder = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   margin-bottom: 1rem;
+// `
 
 // export const TxnFeeContainer = styled.div`
 //   margin-bottom: 0.75rem;

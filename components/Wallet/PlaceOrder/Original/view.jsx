@@ -86,8 +86,8 @@ function PlaceOrderView(props) {
    * Sell orders are enabled if active wallet has an ASA balance > 0
    */
   const enableOrder = {
-    buy: maxSpendableAlgo > 0,
-    sell: asaBalance > 0
+    buy: asset.isStable ? asaBalance > 0 : maxSpendableAlgo > 0,
+    sell: asset.isStable ? maxSpendableAlgo > 0 : asaBalance > 0
   }
 
   const order = useStore((state) => state.order)
@@ -203,7 +203,6 @@ function PlaceOrderView(props) {
     handleOptionsChange({
       target: { value: orderView === LIMIT_PANEL ? order.execution : 'market' }
     })
-    console.log('order submitted')
 
     e.preventDefault()
     setStatus((prev) => ({ ...prev, submitting: true }))
@@ -219,12 +218,57 @@ function PlaceOrderView(props) {
       toast.error(t('fund-wallet'))
       return
     }
+
     const orderData = {
       ...order,
       execution: orderView === LIMIT_PANEL ? order.execution : 'market',
       address: activeWalletAddress,
       asset
     }
+
+    console.log('Order Submitted: ', order)
+
+    // Adjust OrderData if it is stablecoin
+    if (asset.isStable) {
+      orderData.amount = order.price
+      orderData.price = order.amount
+      orderData.type = order.type === 'buy' ? 'sell' : 'buy'
+    }
+    //     amount: "0.999998"
+    // decimals: 6
+    // execution: "both"
+    // price: "1.000000"
+    // total: "0.999998"
+    // type: "buy"
+
+    // amount: "0.08973"
+    // decimals: 6
+    // execution: "both"
+    // price: "1"
+    // total: "0.08973"
+    // type: "sell"
+
+    // Changed
+    // address: "4VBQQU66PR2MOHJ5PXNQTBCRBNJ2WRLMIAX5O6EQWIZREAEKR4GSDG56N4"
+    // amount: "0.1"
+    // asset: {id: 37074699, deleted: false, txid: 'JGNZUFHKV6SANVFQBI5CBNCJZVQMR233TKQIVIII3RGYLMGRBT6Q', decimals: 6, name: 'USDC', …}
+    // decimals: 6
+    // execution: "both"
+    // price: "1.00"
+    // total: "0.1"
+    // type: "sell"
+
+    //Current
+    // address: "4VBQQU66PR2MOHJ5PXNQTBCRBNJ2WRLMIAX5O6EQWIZREAEKR4GSDG56N4"
+    // amount: "0.2"
+    // asset: {id: 15322902, deleted: false, txid: 'NOFSUK4EXHFFXJK3ZA6DZMGE6CAGQ7G5JT2X7FYTYQBSQEBZHY4Q', decimals: 6, name: 'LAMP', …}
+    // decimals: 6
+    // execution: "both"
+    // price: "0.1"
+    // total: "0.02"
+    // type: "sell"
+
+    console.log('Order Submitted: OrderData', orderData)
 
     Sentry.addBreadcrumb({
       category: 'order',
@@ -292,14 +336,18 @@ function PlaceOrderView(props) {
 
   const renderSubmit = () => {
     const buttonProps = {
-      buy: { variant: 'primary', text: `${t('buy')} ${asset.name}` },
-      sell: { variant: 'danger', text: `${t('sell')} ${asset.name}` }
+      buy: { variant: 'primary', text: `${t('buy')} ${asset.isStable ? 'ALGO' : asset.name}` },
+      sell: { variant: 'danger', text: `${t('sell')} ${asset.isStable ? 'ALGO' : asset.name}` }
     }
 
     const isBelowMinOrderAmount = () => {
-      if (order.type === 'buy') {
+      // if asset is stable invert sell/buy option
+      let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
+      if (_type === 'buy') {
+        console.log(`BuyCondition: isBelowMinOrderAmount: ${_type}: `, order.total)
         return new Big(order.total).lt(0.5)
       }
+      console.log(`BuyCondition: isBelowMinOrderAmount: ${_type}: `, order.total)
       return new Big(order.total).eq(0)
     }
 
@@ -308,10 +356,26 @@ function PlaceOrderView(props) {
     }
 
     const isBalanceExceeded = () => {
-      if (order.type === 'buy') {
-        return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+      // let _type = asset.isStable ? (order.type === 'buy' ? 'sell' : 'buy') : order.type
+      if (asset.isStable) {
+        if (order.type === 'sell') {
+          console.log('BuyCondition: order.price : ', order.price)
+          console.log('BuyCondition: order.amount : ', order.amount)
+          return new Big(order.amount).times(order.price).gt(maxSpendableAlgo)
+        }
+        console.log('BuyCondition: order.amount : ', order.amount)
+        console.log('BuyCondition: asaBalance : ', asaBalance)
+        return new Big(order.price).gt(asaBalance)
+      } else {
+        if (order.type === 'buy') {
+          console.log('BuyCondition: order.price : ', order.price)
+          console.log('BuyCondition: order.amount : ', order.amount)
+          return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+        }
+        console.log('BuyCondition: order.amount : ', order.amount)
+        console.log('BuyCondition: asaBalance : ', asaBalance)
+        return new Big(order.amount).gt(asaBalance)
       }
-      return new Big(order.amount).gt(asaBalance)
     }
 
     const isLessThanMicroAlgo = () => {
@@ -325,6 +389,13 @@ function PlaceOrderView(props) {
       isLessThanMicroAlgo() ||
       asset.isGeoBlocked ||
       status.submitting
+
+    console.log('BuyCondition: isBelowMinOrderAmount: ', isBelowMinOrderAmount())
+    console.log('BuyCondition: isInvalid: ', isInvalid())
+    // console.log('BuyCondition: isBalanceExceeded: ', isBalanceExceeded())
+    console.log('BuyCondition: isLessThanMicroAlgo: ', isLessThanMicroAlgo())
+    console.log('BuyCondition: asset.isGeoBlocked: ', asset.isGeoBlocked)
+    console.log('BuyCondition: status.submitting: ', status.submitting)
 
     return (
       <SubmitButton
@@ -340,160 +411,189 @@ function PlaceOrderView(props) {
     )
   }
 
-  const renderForm = () => {
-    return (
-      <Form onSubmit={handleSubmit} autocomplete="off">
-        <ToggleWrapper>
-          <ToggleInput
-            type="radio"
-            id="type-buy"
-            value="buy"
-            checked={order.type === 'buy'}
-            onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
-          />
-          <BuyButton>
-            <label htmlFor="type-buy">{t('buy')}</label>
-          </BuyButton>
-          <ToggleInput
-            type="radio"
-            id="type-sell"
-            value="sell"
-            checked={order.type === 'sell'}
-            onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
-          />
-          <SellButton>
-            <label htmlFor="type-sell">{t('sell')}</label>
-          </SellButton>
-        </ToggleWrapper>
+  const renderForm = () => (
+    <Form onSubmit={handleSubmit} autocomplete="off">
+      <ToggleWrapper>
+        <ToggleInput
+          type="radio"
+          id="type-buy"
+          value="buy"
+          checked={order.type === 'buy'}
+          onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
+        />
+        <BuyButton>
+          <label htmlFor="type-buy">{t('buy')}</label>
+        </BuyButton>
+        <ToggleInput
+          type="radio"
+          id="type-sell"
+          value="sell"
+          checked={order.type === 'sell'}
+          onChange={(e) => !asset.isGeoBlocked && handleChange(e, 'type')}
+        />
+        <SellButton>
+          <label htmlFor="type-sell">{t('sell')}</label>
+        </SellButton>
+      </ToggleWrapper>
 
-        <AvailableBalance>
-          <IconTextContainer style={{ marginBottom: '10px' }}>
-            <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
-            <Tooltip
-              renderButton={(setTriggerRef) => (
-                <IconButton ref={setTriggerRef} type="button">
-                  <Info />
-                </IconButton>
-              )}
-            >
-              <BalanceRow>
+      <AvailableBalance>
+        <IconTextContainer style={{ marginBottom: '10px' }}>
+          <BodyCopyTiny color="gray.500">{t('available-balance')}</BodyCopyTiny>
+          <Tooltip
+            renderButton={(setTriggerRef) => (
+              <IconButton ref={setTriggerRef} type="button">
+                <Info />
+              </IconButton>
+            )}
+          >
+            <BalanceRow>
+              <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                {t('orders:available')}:
+              </LabelMd>
+              <IconTextContainer>
                 <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                  {t('orders:available')}:
+                  {maxSpendableAlgo}
                 </LabelMd>
-                <IconTextContainer>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {maxSpendableAlgo}
-                  </LabelMd>
-                  <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
+                <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
+              </IconTextContainer>
+            </BalanceRow>
+            <BalanceRow>
+              <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
+                {t('total')}:
+              </LabelMd>
+              <IconTextContainer>
                 <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                  {t('total')}:
+                  {algoBalance}
                 </LabelMd>
-                <IconTextContainer>
-                  <LabelMd color="gray.300" fontWeight="500" letterSpacing="0.2em">
-                    {algoBalance}
-                  </LabelMd>
-                  <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
-                </IconTextContainer>
-              </BalanceRow>
-              <BalanceRow>
-                <LabelSm
-                  color="gray.300"
-                  fontWeight="400"
-                  textTransform="initial"
-                  lineHeight="0.9rem"
-                  letterSpacing="0.1em"
-                >
-                  &nbsp;*
-                  {t('max-spend-explanation', {
-                    amount: new Big(algoBalance)
-                      .minus(new Big(maxSpendableAlgo))
-                      .round(6)
-                      .toString()
-                  })}
+                <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
+              </IconTextContainer>
+            </BalanceRow>
+            <BalanceRow>
+              <LabelSm
+                color="gray.300"
+                fontWeight="400"
+                textTransform="initial"
+                lineHeight="0.9rem"
+                letterSpacing="0.1em"
+              >
+                &nbsp;*
+                {t('max-spend-explanation', {
+                  amount: new Big(algoBalance).minus(new Big(maxSpendableAlgo)).round(6).toString()
+                })}
+              </LabelSm>
+            </BalanceRow>
+          </Tooltip>
+        </IconTextContainer>
+
+        {asset.isStable && (
+          <>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                {asset.name}
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {asaBalance}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
                 </LabelSm>
-              </BalanceRow>
-            </Tooltip>
-          </IconTextContainer>
-          <BalanceRow className="text-right items-start">
-            <LabelMd color="gray.400" fontWeight="500">
-              ALGO
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {maxSpendableAlgo}
-              <br />
-              <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
-              </LabelSm>
-            </LabelMd>
-          </BalanceRow>
-          <BalanceRow className="text-right items-start">
-            <LabelMd color="gray.400" fontWeight="500">
-              {asset.name}
-            </LabelMd>
-            <LabelMd color="gray.300" fontWeight="500">
-              {asaBalance}
-              <br />
-              <LabelSm color="gray.500" fontWeight="500">
-                <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
-              </LabelSm>
-            </LabelMd>
-          </BalanceRow>
-        </AvailableBalance>
-
-        <Tabs>
-          <Tab
-            orderType={order.type}
-            isActive={orderView === LIMIT_PANEL}
-            onClick={() => {
-              !asset.isGeoBlocked && setOrderView(LIMIT_PANEL)
-              !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'both' } })
-            }}
-          >
-            {t('limit')}
-          </Tab>
-          <Tab
-            orderType={order.type}
-            isActive={orderView === MARKET_PANEL}
-            onClick={() => {
-              !asset.isGeoBlocked && setOrderView(MARKET_PANEL)
-              !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'market' } })
-            }}
-          >
-            {t('market')}
-          </Tab>
-        </Tabs>
-        {orderView === LIMIT_PANEL ? (
-          <LimitOrder
-            order={order}
-            handleChange={asset.isGeoBlocked ? () => {} : handleChange}
-            asset={asset}
-            maxSpendableAlgo={maxSpendableAlgo}
-            asaBalance={asaBalance}
-            handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
-            enableOrder={enableOrder}
-            handleOptionsChange={!asset.isGeoBlocked && handleOptionsChange}
-            newOrderSizeFilter={newOrderSizeFilter}
-            microAlgo={MICROALGO}
-            setNewOrderSizeFilter={setNewOrderSizeFilter}
-          />
-        ) : (
-          <MarketOrder
-            order={order}
-            handleChange={asset.isGeoBlocked ? () => {} : handleChange}
-            asset={asset}
-            maxSpendableAlgo={maxSpendableAlgo}
-            asaBalance={asaBalance}
-            handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
-            enableOrder={enableOrder}
-          />
+              </LabelMd>
+            </BalanceRow>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                ALGO
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {maxSpendableAlgo}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
+                </LabelSm>
+              </LabelMd>
+            </BalanceRow>
+          </>
         )}
-        {renderSubmit()}
-      </Form>
-    )
-  }
+
+        {!asset.isStable && (
+          <>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                ALGO
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {maxSpendableAlgo}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice priceToConvert={maxSpendableAlgo} currency="$" />
+                </LabelSm>
+              </LabelMd>
+            </BalanceRow>
+            <BalanceRow className="text-right items-start">
+              <LabelMd color="gray.400" fontWeight="500">
+                {asset.name}
+              </LabelMd>
+              <LabelMd color="gray.300" fontWeight="500">
+                {asaBalance}
+                <br />
+                <LabelSm color="gray.500" fontWeight="500">
+                  <USDPrice asaWorth={calcAsaWorth} priceToConvert={asaBalance} currency="$" />
+                </LabelSm>
+              </LabelMd>
+            </BalanceRow>
+          </>
+        )}
+      </AvailableBalance>
+
+      <Tabs>
+        <Tab
+          orderType={order.type}
+          isActive={orderView === LIMIT_PANEL}
+          onClick={() => {
+            !asset.isGeoBlocked && setOrderView(LIMIT_PANEL)
+            !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'both' } })
+          }}
+        >
+          {t('limit')}
+        </Tab>
+        <Tab
+          orderType={order.type}
+          isActive={orderView === MARKET_PANEL}
+          onClick={() => {
+            !asset.isGeoBlocked && setOrderView(MARKET_PANEL)
+            !asset.isGeoBlocked && handleOptionsChange({ target: { value: 'market' } })
+          }}
+        >
+          {t('market')}
+        </Tab>
+      </Tabs>
+      {orderView === LIMIT_PANEL ? (
+        <LimitOrder
+          order={order}
+          handleChange={asset.isGeoBlocked ? () => {} : handleChange}
+          asset={asset}
+          maxSpendableAlgo={maxSpendableAlgo}
+          asaBalance={asaBalance}
+          handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
+          enableOrder={enableOrder}
+          handleOptionsChange={!asset.isGeoBlocked && handleOptionsChange}
+          newOrderSizeFilter={newOrderSizeFilter}
+          microAlgo={MICROALGO}
+          setNewOrderSizeFilter={setNewOrderSizeFilter}
+        />
+      ) : (
+        <MarketOrder
+          order={order}
+          handleChange={asset.isGeoBlocked ? () => {} : handleChange}
+          asset={asset}
+          maxSpendableAlgo={maxSpendableAlgo}
+          asaBalance={asaBalance}
+          handleRangeChange={!asset.isGeoBlocked && handleRangeChange}
+          enableOrder={enableOrder}
+        />
+      )}
+      {renderSubmit()}
+    </Form>
+  )
 
   return (
     <Container data-testid="place-order">

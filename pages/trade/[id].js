@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { fetchAssetPrice, fetchAssets } from '@/services/algodex'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+// import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
 
+import AlgodexApi from '@algodex/algodex-sdk'
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Layout from '@/components/Layout/OriginalLayout'
@@ -13,19 +14,24 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
+import { WalletsContext } from '@/hooks/useWallets'
+import config from '@/config.json'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
-import { fetchExplorerAssetInfo } from '@/services/algoexplorer'
-import { useAssetPriceQuery } from '@/hooks/useAlgodex'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+import { useAssetPriceQuery } from '@algodex/algodex-hooks'
+// import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
+import { StableAssets } from '@/components/StableAssets'
 
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  const assets = await fetchAssets()
+  let api = new AlgodexApi(config)
+  const assets = await api.http.dexd.fetchAssets()
   const paths = assets
     .filter((asset) => asset.isTraded)
     .map((asset) => ({
@@ -43,8 +49,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
+  let api = new AlgodexApi(config)
   try {
-    staticExplorerAsset = await fetchExplorerAssetInfo(id)
+    staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -58,7 +65,7 @@ export async function getStaticProps({ params: { id } }) {
     getIsRestricted(id) && getAssetTotalStatus(staticExplorerAsset.total)
 
   try {
-    staticAssetPrice = await fetchAssetPrice(id)
+    staticAssetPrice = await api.http.dexd.fetchAssetPrice(id)
   } catch (error) {
     if (typeof staticAssetPrice.isTraded === 'undefined') {
       staticAssetPrice = {
@@ -70,6 +77,11 @@ export async function getStaticProps({ params: { id } }) {
 
   if (typeof staticAssetPrice.isTraded !== 'undefined') {
     staticExplorerAsset.price_info = staticAssetPrice
+  }
+
+  staticExplorerAsset.isStable = StableAssets.includes(parseInt(id))
+  if (typeof staticExplorerAsset.name === 'undefined') {
+    staticExplorerAsset.name = ''
   }
 
   return {
@@ -121,6 +133,33 @@ function TradePage({ staticExplorerAsset, deviceType }) {
 
   const { isFallback, query } = useRouter()
 
+  const [locStorage, setLocStorage] = useState([])
+  const myAlgoConnector = useRef(null)
+
+  useEffect(() => {
+    if (!myAlgoConnector.current) {
+      const reConnectMyAlgoWallet = async () => {
+        // '@randlabs/myalgo-connect' is imported dynamically
+        // because it uses the window object
+        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+        MyAlgoConnect.prototype.sign = signer
+        myAlgoConnector.current = new MyAlgoConnect()
+        myAlgoConnector.current.connected = true
+      }
+
+      reConnectMyAlgoWallet()
+    }
+  }, [])
+  const [addresses, setAddresses] = useContext(WalletsContext)
+
+  useEffect(() => {
+    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+
+    if (locStorage.length === 0 && storedAddrs?.length > 0) {
+      setLocStorage(storedAddrs)
+    }
+  }, [myAlgoConnector.current, addresses])
+
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
@@ -144,6 +183,22 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   )
 
   useEffect(() => {
+    if (addresses.length === 0 && locStorage.length > 0) {
+      const reHydratedAddresses = locStorage.map((wallet) => {
+        if (wallet.type === 'my-algo-wallet') {
+          return {
+            ...wallet,
+            connector: myAlgoConnector.current
+          }
+        } else {
+          return wallet
+        }
+      })
+      setAddresses(reHydratedAddresses)
+    }
+  }, [locStorage])
+
+  useEffect(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
       setAsset(data)
     }
@@ -159,7 +214,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   }, [asset, setAsset, staticExplorerAsset])
 
   const isTraded = useMemo(() => {
-    // console.log(asset, data)
     return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
   }, [asset, data])
 

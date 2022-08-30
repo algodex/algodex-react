@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 // Custom Styled Components
 import Button from 'components/Button'
 import Spinner from 'components/Spinner'
-import { createEngagement, createTicket, uploadSupportFile } from '@/services/algodex'
+import { createEngagement, createTicket, uploadSupportFile } from '@/services/cms'
 
 const SupportWrapper = styled.div`
   margin-top: 15vh;

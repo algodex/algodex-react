@@ -1,4 +1,4 @@
-import { color, fontSize } from 'styled-system'
+// import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
 import styled from '@emotion/styled'
@@ -12,8 +12,8 @@ export const NavTextLg = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -60,8 +60,8 @@ export const NavTextSm = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme, isActive }) => (isActive ? theme.palette.gray[100] : theme.palette.gray[500])};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -133,7 +133,6 @@ export const LanguagesContainer = styled.ul`
       position: absolute;
       display: block;
       top: 20px;
-      width: 100px;
     }
   }
 `
@@ -143,12 +142,24 @@ export const LanguageDropDown = styled.ul`
   display: none;
   max-height: 500px;
   overflow: scroll;
+  right: 2rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 `
 
 export const LanguageItem = styled.li`
   display: block;
   height: 50px;
-
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
   span {
     line-height: 50px;
   }

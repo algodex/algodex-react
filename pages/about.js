@@ -6,7 +6,7 @@ import { PartnerShip } from '@/components/About/PartnerShip'
 import { Features } from '@/components/About/Features'
 import { RoadMap } from '@/components/About/RoadMap'
 import BlogPreview from '@/components/About/blog'
-import { fetchBlogPosts } from '@/services/algodex'
+import { fetchBlogPosts } from '@/services/cms'
 import PropTypes from 'prop-types'
 import { FAQSection } from '@/components/About/FAQ'
 

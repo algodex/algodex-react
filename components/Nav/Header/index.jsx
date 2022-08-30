@@ -11,14 +11,19 @@ import {
   NetworkDropdownOption
 } from './header.css'
 
+import Button from '@mui/material/Button'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
+import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
+import { truncatedWalletAddress } from 'components/helpers'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
+import useWallets from '@/hooks/useWallets'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -27,8 +32,13 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
+  // const { wallet } = useAlgodex()
+  const wallet = useWallets()
+  // console.log(addresses, 'addresses updated')
+  const isMobile = useMobileDetect()
 
   /**
    * Route to other network
@@ -82,12 +92,16 @@ export function Header() {
         <NavActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </NavActiveLink>
-        {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
-          <NavTextLg>{t('header-docs')}</NavTextLg>
-        </NavActiveLink> */}
-        <NavActiveLink href="https://docs.algodex.com/">
+        <NavActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink>
+        {/*<a*/}
+        {/*  target="_blank"*/}
+        {/*  href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"*/}
+        {/*  rel="noreferrer"*/}
+        {/*>*/}
+        {/*  <NavTextLg>{t('header-docs')}</NavTextLg>*/}
+        {/*</a>*/}
         <NavActiveLink href="/support" matches={/^\/support/}>
           <NavTextLg>{t('header-support')}</NavTextLg>
         </NavActiveLink>
@@ -113,6 +127,20 @@ export function Header() {
         </NavIcon>
         <NavTextLg onClick={async () => await setLanguage("en")}>
         </NavIcon> */}
+        {!isMobile && (
+          <Button
+            onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
+            className="font-semibold hover:font-bold text-white border-white hover:border-white"
+            variant="outlined"
+          >
+            {wallet && wallet?.address
+              ? `${truncatedWalletAddress(wallet.address, 5)}`
+              : 'CONNECT A WALLET'}
+          </Button>
+        )}
+        {!isMobile && openWalletConnectDropdown && (
+          <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
+        )}
         <LanguageSelection isMobile={false} />
         <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
         <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
@@ -122,20 +150,15 @@ export function Header() {
           <NavActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSm>Trade</NavTextSm>
           </NavActiveLink>
-          <a
-            target="_blank"
-            href="https://docs.algodex.com/"
-            // href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"
-            rel="noreferrer"
-          >
+          <NavActiveLink target="_blank" href="https://docs.algodex.com/" rel="noreferrer">
             <NavTextSm>Docs</NavTextSm>
-          </a>
-          <a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
+          </NavActiveLink>
+          <NavActiveLink target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
-          </a>
-          <a target="_blank" href={MAILBOX_URL} rel="noreferrer">
+          </NavActiveLink>
+          <NavActiveLink target="_blank" href={MAILBOX_URL} rel="noreferrer">
             <NavTextSm>Mailbox</NavTextSm>
-          </a>
+          </NavActiveLink>
           {/*
           <ActiveLink href="/wallet">
             <NavTextSm>Wallet</NavTextSm>

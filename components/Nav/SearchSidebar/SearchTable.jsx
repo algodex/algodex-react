@@ -16,14 +16,16 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
-import { floatToFixed, floatToFixedDynamic } from '@/services/display'
+// import { floatToFixedDynamic } from '@/services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withSearchResultsQuery } from '@/hooks/withAlgodex'
+import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 
 /**
  * Map a Query Result to a Search Result
@@ -52,12 +54,13 @@ export const mapToSearchResults = ({
   unitName,
   isGeoBlocked,
   formattedASALiquidity,
-  formattedAlgoLiquidity
+  formattedAlgoLiquidity,
+  isStable
 }) => {
   const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
-    ? floatToFixedDynamic(priceChg24Pct, 2)
+    ? floatToFixed(priceChg24Pct, 2)
     : hasOrders
     ? '--'
     : null
@@ -72,7 +75,8 @@ export const mapToSearchResults = ({
     liquidityAlgo: formattedAlgoLiquidity,
     liquidityAsa: formattedASALiquidity,
     price,
-    change
+    change,
+    isStable
   }
 }
 
@@ -281,14 +285,26 @@ export const NavSearchTable = ({
                 style={{ minWidth: '0.75rem' }}
                 color={handleFavoritesFn(row?.original?.id)}
               />
-              <AssetNameBlock>
-                <AssetName>{value}</AssetName>
-                <PairSlash>{`/`}</PairSlash>
-                <NameVerifiedWrapper>
-                  ALGO
-                  {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
-                </NameVerifiedWrapper>
-              </AssetNameBlock>
+              {row?.original.isStable && (
+                <AssetNameBlock>
+                  <AssetName>ALGO</AssetName>
+                  <PairSlash>{`/`}</PairSlash>
+                  <NameVerifiedWrapper>
+                    {value}
+                    {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
+                  </NameVerifiedWrapper>
+                </AssetNameBlock>
+              )}
+              {!row?.original.isStable && (
+                <AssetNameBlock>
+                  <AssetName>{value}</AssetName>
+                  <PairSlash>{`/`}</PairSlash>
+                  <NameVerifiedWrapper>
+                    ALGO
+                    {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
+                  </NameVerifiedWrapper>
+                </AssetNameBlock>
+              )}
             </div>
             <br />
             <div className="flex item-center -mt-3">
