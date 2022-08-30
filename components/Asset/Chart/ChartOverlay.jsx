@@ -197,14 +197,13 @@ function ChartOverlay(props) {
         .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
         .toString()
     : '0'
+  const changePct = asset.price_info?.price24Change
+    ? new Big(asset.price_info?.price24Change)
+    : new Big(0)
+
   const openCloseChange = useMemo(() => {
-    // const changePct = asset.price_info?.price24Change
-    //   ? new Big(asset.price_info?.price24Change)
-    //   : new Big(0)
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-    // return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
-    // return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
-    return `${symbol}${floatToFixed(changeAmt)}`
+    return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
   }, [asset, changeAmt])
 
   const onClick = useCallback(() => {
