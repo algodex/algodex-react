@@ -6,7 +6,7 @@
   "modal-first-paragraph-mainnet": "Ön az Algodex Mainnet verziójával kereskedik. Kérjük, legyen óvatos a pénzeszközeivel, amikor bármilyen megbízást ad, mivel ezek a tranzakciók valós értékű mainnet eszközökkel zajlanak, és a kereskedések állandóak.",
   "modal-second-paragraph-mainnet": "Az Algodex biztonsági auditon esett át, azonban előre nem látható körülmények miatt előfordulhatnak veszteségek. Kérjük, olvassa el a felelősség kizárását és a dokumentációt, mielőtt folytatná.",
   "modal-subtitle-testnet": "Tesztelje az új funkciókat kockázatmentesen!",
-  "modal-first-paragraph-testnet": "Ön az Algodex Testnet verziójával kereskedik, amelyet új funkcióink tesztelésére és hibák felkutatására használnak. A Testnet minden kereskedése testnet algokat és valós érték nélküli eszközöket használ. Az alábbi Csaptelep linkről tesztelheti az Algos-t.",
+  "modal-first-paragraph-testnet": "Ön az Algodex Testnet verziójával kereskedik, amelyet új funkcióink tesztelésére és hibák felkutatására használnak. A Testnet minden kereskedése Testnet Algokat és valós érték nélküli eszközöket használ. Az alábbi Csaptelep linkről tesztelheti az Algos-t.",
   "modal-second-paragraph-testnet": "Kérjük, küldjön visszajelzést az esetleges hibákról vagy funkciókra vonatkozó kérésekről támogatási oldalunkra!",
   "network-name-mainnet": "MAINNET",
   "network-name-testnet": "TESTNET",

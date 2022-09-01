@@ -6,7 +6,7 @@
   "modal-first-paragraph-mainnet": "Bạn đang giao dịch trên phiên bản Mainnet của Algodex. Hãy cẩn thận với số tiền của bạn trong khi thực hiện bất kỳ đơn đặt hàng nào vì những giao dịch này là với tài sản mainnet có giá trị thực và giao dịch là vĩnh viễn.",
   "modal-second-paragraph-mainnet": "Algodex đã trải qua quá trình kiểm tra bảo mật, tuy nhiên có thể xảy ra tổn thất do các trường hợp không lường trước được. Vui lòng xem lại Tuyên bố từ chối trách nhiệm và Tài liệu của chúng tôi trước khi tiếp tục.",
   "modal-subtitle-testnet": "Thử nghiệm các tính năng mới không có rủi ro!",
-  "modal-first-paragraph-testnet": "Bạn đang giao dịch trên phiên bản Testnet của Algodex được sử dụng để kiểm tra các tính năng mới của chúng tôi và tìm lỗi. Tất cả các giao dịch trên Testnet sử dụng ALGOS testnet và tài sản không có giá trị thực. Bạn có thể tải ALGOS để kiểm tra từ liên kết Vòi bên dưới.",
+  "modal-first-paragraph-testnet": "Bạn đang giao dịch trên phiên bản Testnet của Algodex được sử dụng để kiểm tra các tính năng mới của chúng tôi và tìm lỗi. Tất cả các giao dịch trên Testnet sử dụng Algos Testnet và tài sản không có giá trị thực. Bạn có thể tải Algos để kiểm tra từ liên kết Vòi bên dưới.",
   "modal-second-paragraph-testnet": "Vui lòng gửi phản hồi về bất kỳ lỗi hoặc yêu cầu tính năng nào đến trang hỗ trợ của chúng tôi!",
   "network-name-mainnet": "CHÍNH",
   "network-name-testnet": "KIỂM TRA",

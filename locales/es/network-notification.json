@@ -6,7 +6,7 @@
   "modal-first-paragraph-mainnet": "YEstá operando en la versión Mainnet de Algodex. Tenga cuidado con sus fondos al realizar cualquier pedido, ya que estas transacciones son con activos de mainnet con valor real y las operaciones son permanentes.",
   "modal-second-paragraph-mainnet": "Algodex ha pasado por una auditoría de seguridad, sin embargo, pueden ocurrir pérdidas debido a circunstancias imprevistas. Revise nuestra Exención de responsabilidad y documentación antes de continuar.",
   "modal-subtitle-testnet": "¡Pruebe nuevas funciones sin riesgos!",
-  "modal-first-paragraph-testnet": "Está operando en la versión Testnet de Algodex que se utiliza para probar nuestras nuevas funciones y encontrar errores. Todas las operaciones en Testnet utilizan algoritmos y activos de TESTNET-ALGOS sin valor real. Puede obtener ALGOS para probar desde el enlace de Faucet a continuación.",
+  "modal-first-paragraph-testnet": "Está operando en la versión Testnet de Algodex que se utiliza para probar nuestras nuevas funciones y encontrar errores. Todas las operaciones en Testnet utilizan algoritmos y activos de Testnet Algos sin valor real. Puede obtener Algos para probar desde el enlace de Faucet a continuación.",
   "modal-second-paragraph-testnet": "¡Envíe sus comentarios sobre cualquier error o solicitud de funciones a nuestra página de soporte!",
   "network-name-mainnet": "RED PRINCIPAL",
   "network-name-testnet": "TESTNET",

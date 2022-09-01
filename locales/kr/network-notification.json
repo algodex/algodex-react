@@ -7,7 +7,7 @@
   "modal-second-paragraph-mainnet": "Algodex는 보안 감사를 받았지만 예상치 못한 상황으로 인해 손실이 발생할 수 있습니다. 계속하기 전에 면책 조항 및 문서를 검토하십시오.",
   
   "modal-subtitle-testnet": "새로운 기능을 위험 부담 없이 테스트하십시오!",
-  "modal-first-paragraph-testnet": "귀하는 새로운 기능을 테스트하고 버그를 찾는 데 사용되는 테스트넷 버전의 Algodex에서 거래하고 있습니다. Testnet의 모든 거래는 실제 가치가 없는 TESTNET-ALGOS 알고리즘과 자산을 사용합니다. 아래의 Faucet 링크에서 ALGOS를 테스트할 수 있습니다.",
+  "modal-first-paragraph-testnet": "귀하는 새로운 기능을 테스트하고 버그를 찾는 데 사용되는 테스트넷 버전의 Algodex에서 거래하고 있습니다. Testnet의 모든 거래는 실제 가치가 없는 Testnet Algos 알고리즘과 자산을 사용합니다. 아래의 Faucet 링크에서 Algos를 테스트할 수 있습니다.",
   "modal-second-paragraph-testnet": "버그나 기능 요청에 대한 피드백을 지원 페이지로 보내주세요!",
   
   "network-name-mainnet": "메인넷",

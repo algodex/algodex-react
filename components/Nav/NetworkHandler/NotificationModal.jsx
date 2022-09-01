@@ -77,7 +77,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
               path={data.path}
               title={data.title}
               size={0.8}
-              className="xs:mx-2 md:mx-3 cursor-pointer"
+              className="xs:mr-4 md:mr-6 cursor-pointer"
               color="#FFFFFF"
             />
           </a>
