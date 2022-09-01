@@ -36,6 +36,8 @@ export const TradingPair = styled.h3`
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
   font-weight: 600;
+  margin-block-start: 0;
+  margin-block-end: 0;
   color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
 
@@ -74,6 +76,11 @@ export const OhlcList = styled.dl`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  dd {
+    margin-inline-start: 0;
+  }
 `
 
 export const OhlcItem = styled.div`
@@ -153,6 +160,8 @@ export const VolumeContainer = styled.dl`
   display: flex;
   align-items: center;
   margin-left: 1.75rem;
+  margin-block-start: 0;
+  margin-block-end: 0;
 `
 
 export const Volume = styled.div`
@@ -170,6 +179,7 @@ export const Volume = styled.div`
 
   dd {
     color: ${({ theme }) => theme.palette.gray[100]};
+    margin-inline-start: 0px;
   }
 
   @media (min-width: 1024px) {
@@ -186,13 +196,14 @@ function ChartOverlay(props) {
         .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
         .toString()
     : '0'
-  const changePct = asset.price_info?.price24Change
-    ? new Big(asset.price_info?.price24Change)
-    : new Big(0)
+  // const changePct = asset.price_info?.price24Change
+  //   ? new Big(asset.price_info?.price24Change)
+  //   : new Big(0)
 
   const openCloseChange = () => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-    return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
+    // return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
+    return `${symbol}${floatToFixed(changeAmt)}`
   }
   const onClick = useCallback(() => {
     setShowAssetInfo(true)

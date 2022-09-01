@@ -54,7 +54,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { t } = useTranslation('place-order')
   const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   const { wallet } = useWallets(initialState)
-
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
 
@@ -72,18 +71,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
     return res
   }, [wallet])
-
-  // const assetBalance = useMemo(() => {
-  //   let res = 0
-  //   if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-  //     const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
-  //     if (filter.length > 0) {
-  //       res = fromBaseUnits(filter[0].amount, asset.decimals)
-  //     }
-  //   }
-
-  //   return res
-  // }, [wallet, asset])
 
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
@@ -282,7 +269,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         loading: t('awaiting-confirmation'),
         success: t('order-success'),
         error: (err) => {
-          console.log(err)
+          console.log(err, 'error occured')
           if (/PopupOpenError|blocked/.test(err)) {
             return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
           }

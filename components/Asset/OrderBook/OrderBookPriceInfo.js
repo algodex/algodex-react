@@ -32,7 +32,7 @@ export function OrderBookPriceInfo({ algoPrice, asset }) {
       )}
       <div className="flex items-center ml-4 text-gray-500">
         <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
-        <Typography variant="subtitle_medium_bold">
+        <Typography variant="subtitle_small_bold">
           ${formatUSDPrice(algoPrice * asaValue)}
         </Typography>
       </div>

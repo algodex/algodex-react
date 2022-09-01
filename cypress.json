@@ -8,7 +8,6 @@
     "viewportWidth": 1300,
     "viewportHeight": 1000,
     "defaultCommandTimeout": 10000,
-    "requestTimeout": 100000,
     "responseTimeout": 100000,
     "pageLoadTimeout": 100000,
     "video": true

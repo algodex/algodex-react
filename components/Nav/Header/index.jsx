@@ -92,7 +92,10 @@ export function Header() {
         <NavActiveLink href="/trade" matches={/^\/trade/}>
           <NavTextLg>{t('header-trade')}</NavTextLg>
         </NavActiveLink>
-        <NavActiveLink href="/docs" matches={/^\/docs/}>
+        {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
+          <NavTextLg>{t('header-docs')}</NavTextLg>
+        </NavActiveLink> */}
+        <NavActiveLink href="https://docs.algodex.com/">
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink>
         {/*<a*/}

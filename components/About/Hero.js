@@ -1,12 +1,14 @@
-/* eslint-disable max-len */
-import React from 'react'
+import { AboutContainer, AboutTitle } from './styles.css'
+
+import Button from 'components/Button'
 import Image from 'next/image'
 import Link from 'next/link'
-import useTranslation from 'next-translate/useTranslation'
-import styled from '@emotion/styled'
+/* eslint-disable max-len */
+import React from 'react'
 import { ReactSVG } from 'react-svg'
-import Button from 'components/Button'
-import { AboutContainer, AboutTitle } from './styles.css'
+import { Typography } from '@mui/material'
+import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 
 const HeroSection = styled.div`
   min-height: calc(100vh - 80px);
@@ -25,6 +27,8 @@ const LaunchBtn = styled(Button)`
   background-color: transparent;
   font-size: 1.1rem;
   font-weight: 500;
+  height: 2.5rem;
+  width: 12rem;
 `
 
 const InlineLogo = styled(ReactSVG)`
@@ -57,12 +61,12 @@ export const Hero = () => {
           <hr />
         </div>
         <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
-          <p className="mb-6 leading-6">
+          <Typography className="mb-6 leading-6 gray-400" fontWeight="medium" color="gray.400">
             {t(
               'Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself'
             )}
             .
-          </p>
+          </Typography>
           <Link href="/trade">
             <LaunchBtn>{t('launch app')}</LaunchBtn>
           </Link>

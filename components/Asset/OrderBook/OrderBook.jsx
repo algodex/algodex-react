@@ -12,8 +12,8 @@ import ServiceError from '@/components/ServiceError'
 import { Stack } from '@mui/material'
 import SvgImage from '@/components/SvgImage'
 import TablePriceHeader from '@/components/Table/PriceHeader'
-import { assetVeryShortNameFn } from '@/components/helpers'
 import Typography from '@mui/material/Typography'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import { floatToFixedDynamic } from '@/services/display'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
@@ -322,6 +322,8 @@ export function OrderBook({ asset, orders, components }) {
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
   )
 
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
+
   useEffect(() => {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
   }, [asset])
@@ -400,8 +402,6 @@ export function OrderBook({ asset, orders, components }) {
     return orders.sell.reduce(reduceOrders, [])
   }, [orders.sell, selectedPrecision])
 
-  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
-
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
@@ -460,7 +460,7 @@ export function OrderBook({ asset, orders, components }) {
   return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
-        <Box className="p-4">
+        <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="subtitle_medium_cap_bold" color="gray.500">
               {t('order-book')}

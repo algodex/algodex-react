@@ -14,6 +14,7 @@ import React from 'react'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
+import { useEvent } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 
@@ -55,10 +56,22 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
-  const { algodex, wallet } = useAlgodex()
+  const { algodex, wallet, setWallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
+
+  useEvent('signOut', (data) => {
+    if (data.type === 'wallet') {
+      setWallet({
+        ...wallet,
+        connector: {
+          ...wallet.connector,
+          connected: false
+        }
+      })
+    }
+  })
 
   useEffect(() => {
     setOpenOrdersData(_orders)

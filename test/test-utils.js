@@ -19,7 +19,6 @@ import { Provider } from '@algodex/algodex-hooks'
 
 import AlgodexApi from '@algodex/algodex-sdk'
 
-
 const config = {
   config: {
     algod: {

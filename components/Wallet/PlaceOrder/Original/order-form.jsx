@@ -6,8 +6,8 @@ import OrderInput from './order-input'
 import OrderOptions from './order-options'
 import PropTypes from 'prop-types'
 import React from 'react'
-import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import StableAssetUSDPrice from '@/components/Wallet/PriceConversion/StableAssetUSDPrice'
+import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import useTranslation from 'next-translate/useTranslation'
 
 /**
@@ -179,7 +179,7 @@ export const OrderForm = ({
             <OrderOptions
               asset={asset}
               order={order}
-              onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
+              onChange={asset.isGeoBlocked ? () => console.log('Blocked') : handleOptionsChange}
               allowTaker={typeof asset !== 'undefined'}
               orderFilter={newOrderSizeFilter}
               setOrderFilter={setNewOrderSizeFilter}
@@ -259,7 +259,7 @@ export const OrderForm = ({
             <OrderOptions
               asset={asset}
               order={order}
-              onChange={asset.isGeoBlocked ? () => {} : handleOptionsChange}
+              onChange={asset.isGeoBlocked ? () => console.log('Blocked') : handleOptionsChange}
               allowTaker={typeof asset !== 'undefined'}
               orderFilter={newOrderSizeFilter}
               setOrderFilter={setNewOrderSizeFilter}

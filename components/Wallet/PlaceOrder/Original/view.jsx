@@ -569,7 +569,7 @@ function PlaceOrderView(props) {
       {orderView === LIMIT_PANEL ? (
         <LimitOrder
           order={order}
-          handleChange={asset.isGeoBlocked ? () => {} : handleChange}
+          handleChange={asset.isGeoBlocked ? () => console.log('Blocked') : handleChange}
           asset={asset}
           maxSpendableAlgo={maxSpendableAlgo}
           asaBalance={asaBalance}
@@ -583,7 +583,7 @@ function PlaceOrderView(props) {
       ) : (
         <MarketOrder
           order={order}
-          handleChange={asset.isGeoBlocked ? () => {} : handleChange}
+          handleChange={asset.isGeoBlocked ? () => console.log('Blocked') : handleChange}
           asset={asset}
           maxSpendableAlgo={maxSpendableAlgo}
           asaBalance={asaBalance}

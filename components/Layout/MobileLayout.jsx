@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -8,7 +8,9 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import { WalletsContext } from '@/hooks/useWallets'
 import { lighten } from 'polished'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
@@ -31,6 +33,7 @@ const ContentSection = styled.section`
   position: relative;
   height: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const AssetsSection = styled.section`
@@ -126,7 +129,11 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet } = useAlgodex()
+  const { wallet, setWallet } = useAlgodex()
+  const [addresses, setAddresses] = useContext(WalletsContext)
+  const [locStorage, setLocStorage] = useState([])
+  const myAlgoConnector = useRef()
+  // const [isConnectingWallet, setIsConnectingWallet] = useState(false)
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
@@ -140,6 +147,46 @@ function MainLayout({ asset, children }) {
    * This is only used to switch to MobileMenu Chart view
    * when the Next/Router navigates to a shallow route
    */
+  useEffect(() => {
+    if (!myAlgoConnector.current) {
+      const reConnectMyAlgoWallet = async () => {
+        // '@randlabs/myalgo-connect' is imported dynamically
+        // because it uses the window object
+        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+        MyAlgoConnect.prototype.sign = signer
+        myAlgoConnector.current = new MyAlgoConnect()
+        myAlgoConnector.current.connected = true
+      }
+
+      reConnectMyAlgoWallet()
+    }
+  }, [])
+
+  useEffect(() => {
+    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+
+    if (locStorage.length === 0 && storedAddrs?.length > 0) {
+      setLocStorage(storedAddrs)
+    }
+  }, [myAlgoConnector.current, addresses])
+
+  useEffect(() => {
+    if (addresses.length === 0 && locStorage.length > 0) {
+      const reHydratedAddresses = locStorage.map((wallet) => {
+        if (wallet.type === 'my-algo-wallet') {
+          return {
+            ...wallet,
+            connector: myAlgoConnector.current
+          }
+        } else {
+          return wallet
+        }
+      })
+      setAddresses(reHydratedAddresses)
+      setWallet(reHydratedAddresses[0])
+    }
+  }, [locStorage])
+
   useEvent('clicked', (data) => {
     if (data === 'asset') {
       setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)
@@ -151,12 +198,30 @@ function MainLayout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
-  // console.log(isMobile)
   return (
     <MainWrapper>
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
+            {/* <Box className="flex flex-col" width="100%" height="100%">
+              <Box>
+                <WalletOptionsMobile
+                  setIsConnectingWallet={setIsConnectingWallet}
+                  isConnectingWallet={isConnectingWallet}
+                />
+
+                <Box mx={2}>
+                  <Button
+                    className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+                    variant="contained"
+                    onClick={() => setIsConnectingWallet(true)}
+                  >
+                    CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+                  </Button>
+                </Box>
+              </Box>
+              <Wallet />
+            </Box> */}
             <Wallet />
           </WalletSection>
         )}
