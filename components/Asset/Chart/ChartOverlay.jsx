@@ -228,7 +228,7 @@ function ChartOverlay(props) {
           )}
           {asset.isStable && (
             <div>
-              &nbsp;ALGO / <span>{`${asset.name} `}</span>
+              <span>ALGO</span> / {`${asset.name} `}
             </div>
           )}
           <div>
@@ -257,10 +257,10 @@ function ChartOverlay(props) {
           <OhlcItem value={changeAmt}>
             <dd data-testid="dailyChange">{openCloseChange()}</dd>
           </OhlcItem>
-          <OhlcItem value={volume}>
+          {/* <OhlcItem value={volume}>
             <dt>Volume:</dt>
             <dd data-testid="volume">{volume}</dd>
-          </OhlcItem>
+          </OhlcItem> */}
         </OhlcList>
       </Header>
       <BidAskSpreadContainer>
@@ -271,6 +271,7 @@ function ChartOverlay(props) {
       <VolumeContainer>
         <Volume>
           <dt>Vol:</dt>
+          {/* <dd>{`${volume} ${asset.name}`}</dd> */}
           {asset.isStable && <dd>{`${volume} ALGO`}</dd>}
           {!asset.isStable && <dd>{`${volume} ${asset.name}`}</dd>}
         </Volume>

@@ -47,6 +47,34 @@ const IconButton = styled.button`
   }
 `
 
+const AsaBalance = ({ amount, asaName, type, decimal = 6 }) => {
+  // const _amount = amount
+  // const _price = price
+  // const _usdPrice = amount
+  return (
+    <Stack direction="row" justifyContent="space-between">
+      <Typography variant="body_small_cap_medium" color="gray.400">
+        {asaName}
+      </Typography>
+      <Stack direction="column" className="text-right">
+        <Typography className="leading-5" variant="body_small_medium" color="gray.300">
+          {fromBaseUnits(amount)}
+        </Typography>
+        <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
+          <USDPrice priceToConvert={fromBaseUnits(amount)} currency="$" />
+        </Typography>
+      </Stack>
+    </Stack>
+  )
+}
+
+AsaBalance.propTypes = {
+  amount: PropTypes.number,
+  asaName: PropTypes.string,
+  type: PropTypes.string,
+  decimal: PropTypes.number
+}
+
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
   const { address: activeWalletAddr } = wallet
@@ -135,13 +163,12 @@ export const AvailableBalance = ({ wallet, asset }) => {
       </Stack>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
         <Typography variant="body_small_cap_medium" color="gray.400">
-          <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
+          {/* <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} /> */}
           {asset.name || asset.id}
         </Typography>
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
             {fromBaseUnits(assetBalance, asset.decimals)}
-            {/* {assetBalance} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
             <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />

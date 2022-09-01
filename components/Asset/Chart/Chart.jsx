@@ -5,12 +5,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
 import PropTypes from 'prop-types'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import millify from 'millify'
 import styled from '@emotion/styled'
 import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
 import { withAssetChartQuery } from '@algodex/algodex-hooks'
-import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 
 const Container = styled.div`
   position: relative;
@@ -113,7 +113,6 @@ export function Chart({
   const [overlay, setOverlay] = useState(_overlay)
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
-
   // Update ohlc data when it is stable asset
   algoVolume = [...volume] // temporary solution: should be updated from backend
   if (asset.isStable) {
@@ -126,7 +125,7 @@ export function Chart({
   }
 
   useEffect(() => {
-    setOverlay(_overlay)
+    // setOverlay(_overlay)
     setCurrentLogical(ohlc.length - 1)
   }, [ohlc, _overlay, setOverlay])
 
@@ -178,7 +177,6 @@ export function Chart({
       const priceEntry = ohlc[logical]
       const volumeEntry = volume[logical]
       const algoVolumeEntry = algoVolume[logical]
-
       setOverlay({
         ...overlay,
         ohlc: priceEntry,
@@ -190,7 +188,12 @@ export function Chart({
   )
 
   const mouseOut = useCallback(() => {
-    setOverlay(_overlay)
+    if (asset.isStable) {
+      const __overlay = { ...overlay, ..._overlay }
+      setOverlay(__overlay)
+    } else {
+      setOverlay(_overlay)
+    }
   }, [setOverlay, _overlay])
 
   const mouseMove = useCallback(
@@ -204,19 +207,17 @@ export function Chart({
       const rect = ReactDOM.findDOMNode(ev.target).getBoundingClientRect()
       const x = ev.clientX - rect.left
       const logical = candleChart.timeScale().coordinateToLogical(x)
-
       if (asset.isStable) {
         if (logical >= ohlc.length || logical >= algoVolume.length) {
-          setOverlay(_overlay)
+          // setOverlay(_overlay)
           return
         }
       } else {
         if (logical >= ohlc.length || logical >= volume.length) {
-          setOverlay(_overlay)
+          // setOverlay(_overlay)
           return
         }
       }
-
       if (logical !== currentLogical) {
         setCurrentLogical(logical)
         updateHoverPrices(logical)

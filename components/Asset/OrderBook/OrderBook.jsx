@@ -479,10 +479,22 @@ export function OrderBook({ asset, orders, components }) {
           </Stack>
           <Header className="mt-4">
             <TablePriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            <Typography
+              variant="body_tiny_cap"
+              className="whitespace-nowrap"
+              color="gray.500"
+              textAlign="right"
+              m={0}
+            >
               {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            <Typography
+              variant="body_tiny_cap"
+              className="whitespace-nowrap"
+              color="gray.500"
+              textAlign="right"
+              m={0}
+            >
               {t('total')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
           </Header>
