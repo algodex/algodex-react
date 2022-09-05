@@ -13,12 +13,12 @@ import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import SearchFlyover from './SearchFlyover'
+import { StableAssets } from '@/components/StableAssets'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 // import { floatToFixedDynamic } from '@/services/display'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -212,6 +212,10 @@ export const NavSearchTable = ({
     },
     [favoritesState]
   )
+  const formattedStableAsa = {}
+  const formattedAssets = StableAssets.forEach(
+    (asa, index) => (formattedStableAsa[StableAssets[index]] = asa)
+  )
   /**
    * Handle Search Data
    * @type {Array}
@@ -285,7 +289,7 @@ export const NavSearchTable = ({
                 style={{ minWidth: '0.75rem' }}
                 color={handleFavoritesFn(row?.original?.id)}
               />
-              {row?.original.isStable && (
+              {formattedStableAsa[row?.original.id] && (
                 <AssetNameBlock>
                   <AssetName>ALGO</AssetName>
                   <PairSlash>{`/`}</PairSlash>
@@ -295,7 +299,7 @@ export const NavSearchTable = ({
                   </NameVerifiedWrapper>
                 </AssetNameBlock>
               )}
-              {!row?.original.isStable && (
+              {!formattedStableAsa[row?.original.id] && (
                 <AssetNameBlock>
                   <AssetName>{value}</AssetName>
                   <PairSlash>{`/`}</PairSlash>

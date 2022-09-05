@@ -18,6 +18,7 @@ import { floatToFixedDynamic } from '@/services/display'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
+import { orderBy } from 'lodash'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
@@ -402,6 +403,14 @@ export function OrderBook({ asset, orders, components }) {
     return orders.sell.reduce(reduceOrders, [])
   }, [orders.sell, selectedPrecision])
 
+  const sortedBuyOrder = useMemo(() => {
+    return aggregatedBuyOrder.sort((a, b) => b.price - a.price)
+  }, [aggregatedBuyOrder])
+
+  const sortedSellOrder = useMemo(() => {
+    return aggregatedSellOrder.sort((a, b) => a.price - b.price)
+  }, [aggregatedSellOrder])
+
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
@@ -502,7 +511,7 @@ export function OrderBook({ asset, orders, components }) {
 
         <SellOrders>
           <OrdersWrapper className="p-4">
-            {renderOrders(asset.isStable ? aggregatedBuyOrder : aggregatedSellOrder, 'sell')}
+            {renderOrders(asset.isStable ? sortedBuyOrder : aggregatedSellOrder, 'sell')}
           </OrdersWrapper>
         </SellOrders>
 
@@ -512,7 +521,7 @@ export function OrderBook({ asset, orders, components }) {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderOrders(asset.isStable ? aggregatedSellOrder : aggregatedBuyOrder, 'buy')}
+            {renderOrders(asset.isStable ? sortedSellOrder : aggregatedBuyOrder, 'buy')}
           </OrdersWrapper>
         </BuyOrders>
       </Container>

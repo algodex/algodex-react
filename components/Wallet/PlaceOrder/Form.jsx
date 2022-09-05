@@ -103,8 +103,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const buttonProps = useMemo(
     () => ({
-      buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
-      sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
+      buy: {
+        variant: 'primary',
+        text: `${t('buy')} ${(asset.isStable ? 'ALGO' : asset.name) || asset.id}`
+      },
+      sell: {
+        variant: 'danger',
+        text: `${t('sell')} ${(asset.isStable ? 'ALGO' : asset.name) || asset.id}`
+      }
     }),
     [asset]
   )
@@ -232,6 +238,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     (e) => {
       e.preventDefault()
       let orderPromise
+      const { isStable } = asset
+      const _order = { ...order, type: isStable && order.type === 'buy' ? 'sell' : 'buy' }
       if (typeof onSubmit === 'function') {
         orderPromise = onSubmit({
           ...order,
@@ -241,6 +249,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       } else {
         console.log(
           {
+            _order,
             ...order,
             address: wallet.address,
             wallet,
@@ -250,9 +259,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           },
           { wallet }
         )
-
         orderPromise = placeOrder(
           {
+            _order,
             ...order,
             address: wallet.address,
             wallet,
@@ -277,7 +286,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         }
       })
     },
-    [onSubmit, asset, order]
+    [onSubmit, asset, asset, order]
   )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
@@ -400,7 +409,8 @@ PlaceOrderForm.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
-    name: PropTypes.string
+    name: PropTypes.string,
+    isStable: PropTypes.bool
   }).isRequired,
   /**
    * Wallet to execute Orders from

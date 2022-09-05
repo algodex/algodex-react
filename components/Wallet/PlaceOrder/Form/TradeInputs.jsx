@@ -36,6 +36,77 @@ USDInputPrice.propTypes = {
   id: PropTypes.string
 }
 
+const OutlinedInputComp = ({
+  microAlgo,
+  value,
+  id,
+  name,
+  assetName,
+  errorMsgVisible,
+  executionType,
+  handleChange,
+  fieldName
+}) => {
+  const { t } = useTranslation('place-order')
+  return (
+    <>
+      <OutlinedInput
+        sx={{
+          backgroundColor:
+            name === 'price' && executionType === 'market'
+              ? theme.palette.gray['700']
+              : theme.palette.gray['900'],
+          border: name === 'price' && executionType === 'market' ? 0 : 2,
+          borderColor: theme.palette.gray['700']
+        }}
+        name={name}
+        id={id}
+        type="number"
+        readOnly={name === 'price' && executionType === 'market'}
+        pattern="\d*"
+        disabled={name === 'price' && executionType === 'market'}
+        value={value}
+        onChange={handleChange}
+        inputProps={{
+          decimals: 6,
+          min: '0',
+          step: '0.000001'
+        }}
+        startAdornment={
+          <MUIInputAdornment position="start">
+            <span className="text-sm font-bold text-gray-500">{fieldName}</span>
+          </MUIInputAdornment>
+        }
+        endAdornment={
+          <MUIInputAdornment position="end">
+            <span className="text-sm font-bold text-gray-500">{assetName}</span>
+          </MUIInputAdornment>
+        }
+        error={errorMsgVisible}
+      />
+      {errorMsgVisible && executionType !== 'market' ? (
+        <FormHelperText className="mt-0 mx-4 mb-4" error>
+          Price cannot be less than {microAlgo}
+        </FormHelperText>
+      ) : (
+        <USDInputPrice value={value} id="price" />
+      )}
+    </>
+  )
+}
+
+OutlinedInputComp.propTypes = {
+  microAlgo: PropTypes.number,
+  value: PropTypes.string,
+  assetName: PropTypes.string,
+  errorMsgVisible: PropTypes.bool,
+  executionType: PropTypes.string,
+  handleChange: PropTypes.func,
+  name: PropTypes.string,
+  id: PropTypes.string,
+  fieldName: PropTypes.string
+}
+
 export const TradeInputs = ({
   order,
   handleChange,
@@ -96,7 +167,7 @@ export const TradeInputs = ({
   }, [order, microAlgo])
   return (
     <MaterialBox className="flex flex-col mb-4">
-      <OutlinedInput
+      {/* <OutlinedInput
         sx={{
           backgroundColor:
             order.execution === 'market' ? theme.palette.gray['700'] : theme.palette.gray['900'],
@@ -133,9 +204,60 @@ export const TradeInputs = ({
         </FormHelperText>
       ) : (
         <USDInputPrice value={order.price} id="price" />
+      )} */}
+      {asset.isStable ? (
+        <>
+          <OutlinedInputComp
+            id="price"
+            name="price"
+            microAlgo={microAlgo}
+            value={order.price}
+            assetName={asset.name}
+            errorMsgVisible={isErrorMsgVisible}
+            executionType={order.execution}
+            handleChange={handleChange}
+            fieldName={t('price')}
+          />
+          <OutlinedInputComp
+            id="amount"
+            name="amount"
+            microAlgo={microAlgo}
+            value={order.amount}
+            assetName="ALGO"
+            errorMsgVisible={false}
+            executionType={order.execution}
+            handleChange={handleChange}
+            fieldName={t('amount')}
+          />
+        </>
+      ) : (
+        <>
+          <OutlinedInputComp
+            id="price"
+            name="price"
+            microAlgo={microAlgo}
+            value={order.price}
+            assetName="ALGO"
+            errorMsgVisible={isErrorMsgVisible}
+            executionType={order.execution}
+            handleChange={handleChange}
+            fieldName={t('price')}
+          />
+          <OutlinedInputComp
+            id="amount"
+            name="amount"
+            microAlgo={microAlgo}
+            value={order.amount}
+            assetName={asset.name}
+            errorMsgVisible={false}
+            executionType={order.execution}
+            handleChange={handleChange}
+            fieldName={t('amount')}
+          />
+        </>
       )}
 
-      <OutlinedInput
+      {/* <OutlinedInput
         id="amount"
         type="number"
         pattern="\d*"
@@ -161,7 +283,7 @@ export const TradeInputs = ({
             <span className="text-sm font-bold text-gray-500">{asset.name}</span>
           </MUIInputAdornment>
         }
-      />
+      /> */}
       <Slider
         sx={{
           margin: '0px 0.5rem',
@@ -192,7 +314,9 @@ export const TradeInputs = ({
         }
         endAdornment={
           <MUIInputAdornment position="end">
-            <span className="text-sm font-bold text-gray-500">ALGO</span>
+            <span className="text-sm font-bold text-gray-500">
+              {asset.isStable ? asset.name : 'ALGO'}
+            </span>
           </MUIInputAdornment>
         }
       />
