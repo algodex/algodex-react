@@ -76,23 +76,16 @@ AsaBalance.propTypes = {
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const { address: activeWalletAddr } = wallet
-  const storedAddrs =
-    JSON.parse(localStorage.getItem('addresses')) !== null &&
-    JSON.parse(localStorage.getItem('addresses')).length > 0 &&
-    JSON.parse(localStorage.getItem('addresses'))
-
-  const activeWallet = storedAddrs && storedAddrs.filter((a) => a.address == activeWalletAddr)[0]
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof activeWallet !== 'undefined' && Array.isArray(activeWallet.assets)) {
-      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = filter[0].amount
       }
     }
     return res
-  }, [storedAddrs, activeWallet])
+  }, [wallet, asset])
 
   return (
     <AvailableBalanceContainer>

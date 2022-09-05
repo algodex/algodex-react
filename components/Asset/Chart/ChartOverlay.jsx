@@ -1,3 +1,5 @@
+import { useCallback, useMemo } from 'react'
+
 import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
@@ -6,7 +8,6 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import { useCallback } from 'react'
 import { useUserStore } from 'store'
 
 export const Container = styled.div`
@@ -196,15 +197,15 @@ function ChartOverlay(props) {
         .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
         .toString()
     : '0'
-  // const changePct = asset.price_info?.price24Change
-  //   ? new Big(asset.price_info?.price24Change)
-  //   : new Big(0)
+  const changePct = asset.price_info?.price24Change
+    ? new Big(asset.price_info?.price24Change)
+    : new Big(0)
 
-  const openCloseChange = () => {
+  const openCloseChange = useMemo(() => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-    // return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
-    return `${symbol}${floatToFixed(changeAmt)}`
-  }
+    return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
+  }, [asset, changeAmt])
+
   const onClick = useCallback(() => {
     setShowAssetInfo(true)
   }, [asset])
@@ -255,7 +256,7 @@ function ChartOverlay(props) {
             <dd data-testid="close24hr">{ohlc.close}</dd>
           </OhlcItem>
           <OhlcItem value={changeAmt}>
-            <dd data-testid="dailyChange">{openCloseChange()}</dd>
+            <dd data-testid="dailyChange">{openCloseChange}</dd>
           </OhlcItem>
           {/* <OhlcItem value={volume}>
             <dt>Volume:</dt>

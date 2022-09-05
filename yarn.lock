@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/-/-/--0.0.1.tgz#db6db7cd866142880dd03e5b8781d1b4fac0e5bd"
   integrity sha512-3HfneK3DGAm05fpyj20sT3apkNcvPpCuccOThOPdzz8sY7GgQGe0l93XH9bt+YzibcTIgUAIMoyVJI740RtgyQ==
 
-"@algodex/algodex-hooks@^1.5.2":
-  version "1.5.2"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.5.2/eb7e016b4e1241d945694bcb5137bfbbb433c60ae52afc1ef5350a0348d93bfb#acba11cfd5b2ba427f9bdc92c2c42db4d68f4725"
-  integrity sha512-iez0mmRN+PZFJyhpRYxr6Hhus5fQviWcrcgsNSO+/SQQ95BoGeW+Q0juqksS0gJ7sXn3oxMiJdlABxUu+pCtpg==
+"@algodex/algodex-hooks@^1.5.3":
+  version "1.5.3"
+  resolved "https://npm.pkg.github.com/download/@algodex/algodex-hooks/1.5.3/019e5b2c418580f02d9f98146ba482ec4dab21fa#019e5b2c418580f02d9f98146ba482ec4dab21fa"
+  integrity sha512-21Y4rIZ0UmW5Mcz5mj7A1kF9js72FBcI6Amd0DvqUi5UFlQZ8ZYxT5AXvYzMJRUEELu5VQrPPEXNABOZDA/nEg==
   dependencies:
     lodash "^4.17.21"
     millify "^4.0.0"
