@@ -443,7 +443,7 @@ function WalletConnect() {
   // console.log(wallet, 'wallet here')
   useEffect(() => {
     if (addresses.length > 0) {
-      // console.log(addresses, 'addresses')
+      console.log(addresses, 'addresses')
       localStorage.setItem('addresses', JSON.stringify(addresses))
       setSignedIn(true)
       if (typeof wallet === 'undefined') {
