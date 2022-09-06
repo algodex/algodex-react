@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -8,7 +9,6 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import { WalletsContext } from '@/hooks/useWallets'
 import { lighten } from 'polished'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
@@ -129,8 +129,10 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet, setWallet } = useAlgodex()
+  const { wallet: initialState, setWallet } = useAlgodex()
+  const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
+  // console.log(addresses, 'addresses')
   const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef()
   // const [isConnectingWallet, setIsConnectingWallet] = useState(false)
@@ -156,8 +158,18 @@ function MainLayout({ asset, children }) {
         MyAlgoConnect.prototype.sign = signer
         myAlgoConnector.current = new MyAlgoConnect()
         myAlgoConnector.current.connected = true
+        const mappedAddresses = addresses.map((addr) => {
+          if (addr.type === 'my-algo-wallet') {
+            return {
+              ...addr,
+              connector: myAlgoConnector.current
+            }
+          } else {
+            return addr
+          }
+        })
+        setAddresses(mappedAddresses)
       }
-
       reConnectMyAlgoWallet()
     }
   }, [])
@@ -185,7 +197,7 @@ function MainLayout({ asset, children }) {
       setAddresses(reHydratedAddresses)
       setWallet(reHydratedAddresses[0])
     }
-  }, [locStorage])
+  }, [locStorage, myAlgoConnector.current])
 
   useEvent('clicked', (data) => {
     if (data === 'asset') {

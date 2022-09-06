@@ -434,6 +434,7 @@ WalletOptionsListComp.propTypes = {
  */
 function WalletConnect() {
   const { wallet, setWallet } = useAlgodex()
+  console.log(wallet, 'wallet')
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
@@ -467,6 +468,7 @@ function WalletConnect() {
             <Button
               className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
               variant="contained"
+              sx={{ minHeight: '2.5rem' }}
               onClick={() => setIsConnectingWallet(true)}
             >
               CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET

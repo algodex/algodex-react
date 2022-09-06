@@ -169,7 +169,7 @@ export const AboutFooter = () => {
             <FooterLinks target="_blank" href="https://github.com/algodex/">
               Github
             </FooterLinks>
-            <FooterLinks target="_blank" href="https://app.algodex.com/support">
+            <FooterLinks target="_blank" href="/support" matches={/^\/support/}>
               {t('support')}
             </FooterLinks>
 

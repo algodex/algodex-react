@@ -53,8 +53,9 @@ export const Form = styled.form`
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet, placeOrder, http, isConnected } = useAlgodex()
+  // const { wallet } = useWallets(initialState)
+  console.log(wallet, 'wallet here')
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
 

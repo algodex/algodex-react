@@ -1,9 +1,9 @@
 import Icon from 'components/Icon'
+import PropTypes from 'prop-types'
 // import { Typography } from 'components/Typography'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-import PropTypes from 'prop-types'
 
 export const PriceHeaderText = styled(Typography)`
   display: flex;
@@ -15,11 +15,11 @@ export const PriceHeaderText = styled(Typography)`
   }
 `
 
-export const TablePriceHeader = () => {
+export const TablePriceHeader = ({ title, textAlign }) => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText variant="body_tiny_cap" data-testid="header-item">
-      {t('price')}
+    <PriceHeaderText variant="body_tiny_cap" textAlign={textAlign} data-testid="header-item">
+      {t(title)}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
   )
