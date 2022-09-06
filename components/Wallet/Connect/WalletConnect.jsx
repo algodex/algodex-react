@@ -100,7 +100,7 @@ export function WalletView(props) {
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
-
+  console.log(addresses, 'addresses here')
   const dispatcher = useEventDispatch()
 
   const myAlgoDisconnect = (targetWallet) => {
@@ -442,11 +442,7 @@ function WalletConnect() {
 
   // console.log(wallet, 'wallet here')
   useEffect(() => {
-    console.log(addresses, 'addresses outsice')
     if (addresses.length > 0) {
-      console.log(addresses, 'addresses inside')
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-      console.log(JSON.parse(localStorage.getItem('addresses')), 'local storage')
       setSignedIn(true)
       if (typeof wallet === 'undefined') {
         setWallet(addresses[0])
