@@ -18,7 +18,6 @@ import { floatToFixedDynamic } from '@/services/display'
 // import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 // import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
-import { orderBy } from 'lodash'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
@@ -408,7 +407,7 @@ export function OrderBook({ asset, orders, components }) {
   }, [aggregatedBuyOrder])
 
   const sortedSellOrder = useMemo(() => {
-    return aggregatedSellOrder.sort((a, b) => a.price - b.price)
+    return aggregatedSellOrder.sort((a, b) => b.price - a.price)
   }, [aggregatedSellOrder])
 
   const renderOrders = (data, type) => {
