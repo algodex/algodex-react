@@ -44,7 +44,8 @@ const OrderCancelButton = styled.button`
   color: inherit;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.red['500']};
+    background: ${({ theme }) => theme.palette.blue['700']};
+    color: ${({ theme }) => theme.palette.gray['000']};
   }
 `
 
@@ -152,7 +153,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: DefaultCell
       },
       {
-        Header: '',
+        Header: t('cancel-all'),
         accessor: 'cancel',
         Cell: OrderCancelCell,
         disableSortBy: true
