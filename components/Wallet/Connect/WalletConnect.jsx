@@ -100,7 +100,6 @@ export function WalletView(props) {
   const { t } = useTranslation('wallet')
   const { peraConnect } = useWallets()
   const myAlgoConnector = useRef(null)
-  console.log(addresses, 'addresses here')
   const dispatcher = useEventDispatch()
 
   const myAlgoDisconnect = (targetWallet) => {
@@ -364,7 +363,7 @@ export function WalletOptionsListComp(props) {
      * We are setting addresses that already exists.
      */
     if (localStorageExists && addressesExist) {
-      // localStorage.setItem('addresses', JSON.stringify(addresses))
+      localStorage.setItem('addresses', JSON.stringify(addresses))
     }
     const walletDifference = difference(
       addresses.map((addr) => addr.address),
@@ -433,6 +432,8 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
+  // const { wallet setWallet } = useAlgodex()
+  // const { wallet } = useWallets(initialState)
   const { wallet, setWallet } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)

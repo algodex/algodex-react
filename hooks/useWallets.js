@@ -69,6 +69,12 @@ function useWallets(initialState) {
     }
   }, [onEvents])
 
+  useEffect(() => {
+    if (context[0]?.length) {
+      localStorage.setItem('addresses', JSON.stringify(_mergeAddresses(context[0], [])))
+    }
+  }, [context])
+
   // TODO: Account Info Query
   // Handle any Connection
   const handleConnect = useCallback(
@@ -154,12 +160,12 @@ function useWallets(initialState) {
   }, [setActiveWallet])
 
   // Fetch all wallet addresses from local storage
-  // useEffect(() => {
-  //   const res = localStorage.getItem('addresses')
-  //   if (res) {
-  //     setAddresses(_mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses))
-  //   }
-  // }, [])
+  useEffect(() => {
+    const res = localStorage.getItem('addresses')
+    if (res) {
+      setAddresses(_mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses))
+    }
+  }, [])
   //
   // useEffect(() => {
   //   localStorage.setItem('addresses', JSON.stringify(addresses))

@@ -192,6 +192,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
           return wallet
         }
       })
+      console.log(reHydratedAddresses, 'rehydrated addresses')
       setAddresses(reHydratedAddresses)
     }
   }, [locStorage])
