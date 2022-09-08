@@ -93,6 +93,7 @@ const Container = styled.div`
       line-height: 1.25;
       border-right: solid 1px ${({ theme }) => theme.palette.gray['700']};
       border-bottom: solid 1px ${({ theme }) => theme.palette.gray['700']};
+
       &:first-of-type {
         padding-left: 1.125rem;
         box-sizing: border-box;

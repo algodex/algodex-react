@@ -47,6 +47,33 @@ const IconButton = styled.button`
   }
 `
 
+const AsaBalance = ({ amount, asaName, type, decimal }) => {
+  const _amount = type === 'others' ? fromBaseUnits(amount, decimal) : fromBaseUnits(amount)
+  const _usdPrice = type === 'others' ? fromBaseUnits(amount, decimal) : fromBaseUnits(amount)
+  return (
+    <Stack direction="row" justifyContent="space-between">
+      <Typography variant="body_small_cap_medium" color="gray.400">
+        {asaName}
+      </Typography>
+      <Stack direction="column" className="text-right">
+        <Typography className="leading-5" variant="body_small_medium" color="gray.300">
+          {_amount}
+        </Typography>
+        <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
+          <USDPrice priceToConvert={_usdPrice} currency="$" />
+        </Typography>
+      </Stack>
+    </Stack>
+  )
+}
+
+AsaBalance.propTypes = {
+  amount: PropTypes.number,
+  asaName: PropTypes.string,
+  type: PropTypes.string,
+  decimal: PropTypes.number
+}
+
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
   const assetBalance = useMemo(() => {
@@ -113,34 +140,27 @@ export const AvailableBalance = ({ wallet, asset }) => {
           </BalanceRow>
         </Tooltip>
       </IconTextContainer>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="body_small_cap_medium" color="gray.400">
-          ALGO
-        </Typography>
-        <Stack direction="column" className="text-right">
-          <Typography className="leading-5" variant="body_small_medium" color="gray.300">
-            {fromBaseUnits(wallet.amount)}
-          </Typography>
-          <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice priceToConvert={fromBaseUnits(wallet.amount)} currency="$" />
-          </Typography>
-        </Stack>
-      </Stack>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Typography variant="body_small_cap_medium" color="gray.400">
-          <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
-          {asset.name || asset.id}
-        </Typography>
-        <Stack direction="column" className="text-right">
-          <Typography className="leading-5" variant="body_small_medium" color="gray.300">
-            {fromBaseUnits(assetBalance, asset.decimals)}
-            {/* {assetBalance} */}
-          </Typography>
-          <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />
-          </Typography>
-        </Stack>
-      </Stack>
+      {asset.isStable ? (
+        <>
+          <AsaBalance
+            asaName={asset.name || asset.id}
+            type="others"
+            decimal={asset.decimals}
+            amount={assetBalance}
+          />
+          <AsaBalance asaName="ALGO" type="algo" amount={wallet.amount} />
+        </>
+      ) : (
+        <>
+          <AsaBalance asaName="ALGO" type="algo" amount={wallet.amount} />
+          <AsaBalance
+            asaName={asset.name || asset.id}
+            type="others"
+            decimal={asset.decimals}
+            amount={assetBalance}
+          />
+        </>
+      )}
     </AvailableBalanceContainer>
   )
 }
@@ -148,7 +168,8 @@ AvailableBalance.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string,
-    decimals: PropTypes.number.isRequired
+    decimals: PropTypes.number.isRequired,
+    isStable: PropTypes.bool
   }),
   wallet: PropTypes.shape({
     address: PropTypes.string,

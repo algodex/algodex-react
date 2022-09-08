@@ -67,7 +67,7 @@ export function TradeHistoryTable({ orders }) {
       },
 
       {
-        Header: t('price') + ' (ALGO)',
+        Header: t('price'),
         accessor: 'price',
         Cell: DefaultCell
       },

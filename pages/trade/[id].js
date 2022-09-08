@@ -23,6 +23,7 @@ import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
+import { StableAssets } from '@/components/StableAssets'
 
 /**
  * Fetch Traded Asset Paths
@@ -78,6 +79,7 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.price_info = staticAssetPrice
   }
 
+  staticExplorerAsset.isStable = StableAssets.includes(parseInt(id))
   if (typeof staticExplorerAsset.name === 'undefined') {
     staticExplorerAsset.name = ''
   }

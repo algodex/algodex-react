@@ -108,14 +108,19 @@ const PriceHeaderText = styled(Typography)`
   }
 `
 
-const PriceHeader = () => {
+const PriceHeader = ({ currencySymbol }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!currencySymbol && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
+      {currencySymbol && <span>&nbsp;{currencySymbol}</span>}
     </PriceHeaderText>
   )
+}
+
+PriceHeader.propTypes = {
+  currencySymbol: PropTypes.string
 }
 
 /**
@@ -145,11 +150,14 @@ export function TradeHistory({ asset, orders: tradesData }) {
       })
       .map((row) => {
         const amount = new Big(row.amount)
-
+        if (row.price === 0) {
+          return
+        }
+        const price = asset.isStable ? 1 / row.price : row.price
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
             <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-              {floatToFixed(row.price)}
+              {floatToFixed(price)}
             </Typography>
             <Typography
               variant="body_tiny_cap"
@@ -184,9 +192,9 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {t('trade-history')}
           </Typography>
           <Header className="mt-4">
-            <PriceHeader />
+            <PriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({assetVeryShortName})
+              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}

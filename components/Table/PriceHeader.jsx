@@ -15,19 +15,21 @@ export const PriceHeaderText = styled(Typography)`
   }
 `
 
-export const TablePriceHeader = () => {
+export const TablePriceHeader = ({ currencySymbol }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText variant="body_tiny_cap" data-testid="header-item">
       {t('price')}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!currencySymbol && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
+      {currencySymbol && <span>&nbsp;{currencySymbol}</span>}
     </PriceHeaderText>
   )
 }
 
 TablePriceHeader.propTypes = {
   title: PropTypes.string.isRequired,
-  textAlign: PropTypes.string.isRequired
+  textAlign: PropTypes.string.isRequired,
+  currencySymbol: PropTypes.string
 }
 
 export default TablePriceHeader

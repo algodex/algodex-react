@@ -357,9 +357,23 @@ export function OrderBook({ asset, orders, components }) {
   }
 
   const reduceOrders = (result, order) => {
-    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+    /**
+     * We can implement inversion of price in custom hook
+     * But we can have more dynamic options here for some incidents
+     * For example hide when price is 0, to prevent division by 0
+     * Compare using double equal operator instead of triple equal operator
+     * because the value is string value
+     */
+    if (order.price == 0) {
+      return result
+    }
 
-    const _amount = order.amount
+    let _price = asset.isStable
+      ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
+      : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+
+    const _amount = asset.isStable ? order.amount * order.price : order.amount
+
     const index = result.findIndex(
       (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
     )
@@ -387,6 +401,14 @@ export function OrderBook({ asset, orders, components }) {
     if (typeof orders?.sell === 'undefined' && !Array.isArray(orders.sell)) return []
     return orders.sell.reduce(reduceOrders, [])
   }, [orders.sell, selectedPrecision])
+
+  const sortedBuyOrder = useMemo(() => {
+    return aggregatedBuyOrder.sort((a, b) => b.price - a.price)
+  }, [aggregatedBuyOrder])
+
+  const sortedSellOrder = useMemo(() => {
+    return aggregatedSellOrder.sort((a, b) => b.price - a.price)
+  }, [aggregatedSellOrder])
 
   const renderOrders = (data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
@@ -464,18 +486,32 @@ export function OrderBook({ asset, orders, components }) {
             </AggregatorSelector>
           </Stack>
           <Header className="mt-4">
-            <TablePriceHeader />
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({assetVeryShortName})
+            <TablePriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
+            <Typography
+              variant="body_tiny_cap"
+              className="whitespace-nowrap"
+              color="gray.500"
+              textAlign="right"
+              m={0}
+            >
+              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('total')}
+            <Typography
+              variant="body_tiny_cap"
+              className="whitespace-nowrap"
+              color="gray.500"
+              textAlign="right"
+              m={0}
+            >
+              {t('total')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
           </Header>
         </Box>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">
+            {renderOrders(asset.isStable ? sortedBuyOrder : aggregatedSellOrder, 'sell')}
+          </OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -484,7 +520,7 @@ export function OrderBook({ asset, orders, components }) {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderOrders(aggregatedBuyOrder, 'buy')}
+            {renderOrders(asset.isStable ? sortedSellOrder : aggregatedBuyOrder, 'buy')}
           </OrdersWrapper>
         </BuyOrders>
       </Container>
