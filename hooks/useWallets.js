@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
@@ -75,12 +75,14 @@ function useWallets(initialState) {
       const reConnectMyAlgoWallet = async () => {
         // '@randlabs/myalgo-connect' is imported dynamically
         // because it uses the window object
+        const myAlgoConnector = {}
         const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
         MyAlgoConnect.prototype.sign = signer
         myAlgoConnector.current = new MyAlgoConnect()
         myAlgoConnector.current.connected = true
         const mappedAddresses = context[0].map((addr) => {
           if (addr.type === 'my-algo-wallet') {
+            console.log('came here my algo', addr)
             return {
               ...addr,
               connector: myAlgoConnector.current

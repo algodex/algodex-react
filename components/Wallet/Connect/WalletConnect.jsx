@@ -441,7 +441,6 @@ function WalletConnect() {
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
 
-  // console.log(wallet, 'wallet here')
   useEffect(() => {
     if (addresses.length > 0) {
       setSignedIn(true)
