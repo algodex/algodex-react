@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 import PropTypes from 'prop-types'
+import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
@@ -29,8 +30,22 @@ function _mergeAddresses(a, b) {
 export const WalletsContext = createContext()
 export function WalletsProvider({ children }) {
   const [addresses, setAddresses] = useState([])
+  const walletConnect = useRef()
+  useEffect(() => {
+    const initWalletConnect = async () => {
+      const WalletConnect = (await import('@walletconnect/client')).default
+      walletConnect.current = new WalletConnect({
+        bridge: 'https://bridge.walletconnect.org', // Required
+        qrcodeModal: QRCodeModal
+      })
+      walletConnect.current.connected = false
+    }
+    initWalletConnect()
+  }, [])
   return (
-    <WalletsContext.Provider value={[addresses, setAddresses]}>{children}</WalletsContext.Provider>
+    <WalletsContext.Provider value={[addresses, setAddresses, walletConnect]}>
+      {children}
+    </WalletsContext.Provider>
   )
 }
 WalletsProvider.propTypes = {
@@ -88,7 +103,10 @@ function useWallets(initialState) {
               connector: myAlgoConnector.current
             }
           } else {
-            return addr
+            return {
+              ...addr,
+              connector: context[2]
+            }
           }
         })
         localStorage.setItem('addresses', JSON.stringify(_mergeAddresses(mappedAddresses, [])))
