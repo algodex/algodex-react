@@ -62,7 +62,7 @@ const MobileWalletRender = () => {
   // const { addresses, wallet, signedIn } = useWalletMgmt()
   const { wallet } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
-
+  console.log('came here 9')
   // const { addresses, wallet } = useAlgodex()
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)

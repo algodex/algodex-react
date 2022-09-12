@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -8,7 +9,6 @@ import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import { WalletsContext } from '@/hooks/useWallets'
 import { lighten } from 'polished'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
@@ -129,10 +129,14 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet, setWallet } = useAlgodex()
-  const [addresses, setAddresses] = useContext(WalletsContext)
-  // console.log(addresses, 'addresses')
+  const { wallet: initialState, setWallet } = useAlgodex()
+  const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
+  console.log(walletConnect, 'addressessdf')
   const [locStorage, setLocStorage] = useState([])
+  // const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
+  // const { placeOrder, http, isConnected } = useAlgodex()
+  console.log('came here 1')
+  const { wallet } = useWallets()
   const myAlgoConnector = useRef()
   // const [isConnectingWallet, setIsConnectingWallet] = useState(false)
 
@@ -164,7 +168,11 @@ function MainLayout({ asset, children }) {
               connector: myAlgoConnector.current
             }
           } else {
-            return addr
+            // return addr
+            return {
+              ...addr,
+              connector: walletConnect.current
+            }
           }
         })
         setAddresses(mappedAddresses)
@@ -183,6 +191,7 @@ function MainLayout({ asset, children }) {
 
   useEffect(() => {
     if (addresses.length === 0 && locStorage.length > 0) {
+      // console.log('hello here', wallet)
       const reHydratedAddresses = locStorage.map((wallet) => {
         if (wallet.type === 'my-algo-wallet') {
           return {
@@ -190,7 +199,11 @@ function MainLayout({ asset, children }) {
             connector: myAlgoConnector.current
           }
         } else {
-          return wallet
+          console.log('hello here upasdf', wallet)
+          return {
+            ...wallet,
+            connector: walletConnect.current
+          }
         }
       })
       setAddresses(reHydratedAddresses)
@@ -198,13 +211,13 @@ function MainLayout({ asset, children }) {
     }
   }, [locStorage, myAlgoConnector.current])
 
-  useEffect(() => {
-    if (addresses.length > 0) {
-      if (typeof wallet === 'undefined') {
-        setWallet(addresses[0])
-      }
-    }
-  }, [addresses])
+  // useEffect(() => {
+  //   if (addresses.length > 0) {
+  //     if (typeof wallet === 'undefined') {
+  //       setWallet(addresses[0])
+  //     }
+  //   }
+  // }, [addresses])
 
   useEvent('clicked', (data) => {
     if (data === 'asset') {

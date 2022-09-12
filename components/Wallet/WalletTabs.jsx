@@ -1,13 +1,13 @@
-import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
-
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import useWallets from '@/hooks/useWallets'
 
 const Tab = styled.div`
   display: flex;
@@ -90,6 +90,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const { wallet: initialState, isConnected } = useAlgodex()
   const { wallet } = useWallets(initialState)
+  console.log('came here 4')
   // const isConnected = typeof wallet?.address !== 'undefined'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'

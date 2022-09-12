@@ -58,7 +58,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet } = useWallets(initialState)
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
+  console.log('came here 10')
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,

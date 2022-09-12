@@ -98,10 +98,10 @@ const WalletsWrapper = styled.div`
 export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
   const { t } = useTranslation('wallet')
-  const { peraConnect } = useWallets()
+  const { wallet: initialState } = useAlgodex()
+  const { peraConnect } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-
   const myAlgoDisconnect = (targetWallet) => {
     const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
       return wallet.address !== targetWallet.address
@@ -323,7 +323,8 @@ export function WalletOptionsListComp(props) {
     closeFn,
     addressesRef
   } = props
-  const { peraConnect, myAlgoConnect } = useWallets()
+  const { wallet: initialState } = useAlgodex()
+  const { peraConnect, myAlgoConnect } = useWallets(initialState)
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
@@ -342,43 +343,43 @@ export function WalletOptionsListComp(props) {
     return peraAddr.length > 0
   }, [addresses])
 
-  useEffect(() => {
-    if (!addressesRef.current) {
-      // Initialize the ref after first checking to see what is in localStorage
-      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-      if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
-        setAddresses(storedAddrs)
-      }
-      addressesRef.current = addresses
-    }
+  // useEffect(() => {
+  //   if (!addressesRef.current) {
+  //     // Initialize the ref after first checking to see what is in localStorage
+  //     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+  //     if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
+  //       setAddresses(storedAddrs)
+  //     }
+  //     addressesRef.current = addresses
+  //   }
 
-    const localStorageExists =
-      JSON.parse(localStorage.getItem('addresses')) !== null &&
-      JSON.parse(localStorage.getItem('addresses')).length > 0
+  //   const localStorageExists =
+  //     JSON.parse(localStorage.getItem('addresses')) !== null &&
+  //     JSON.parse(localStorage.getItem('addresses')).length > 0
 
-    const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
+  //   const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
 
-    /**
-     * I will need more explanation on what this does
-     * We are setting addresses that already exists.
-     */
-    if (localStorageExists && addressesExist) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-    }
-    const walletDifference = difference(
-      addresses.map((addr) => addr.address),
-      addressesRef.current.map((addr) => addr.address)
-    )
-    if (walletDifference.length > 0) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-      addressesRef.current = addresses
-      closeFn()
-    }
-    // **Note** Can't put closeFn() in the onClicks because it will closeOut
-    // modal before wallet-connect finishes connecting leading to stale state.
-    // Creating a ref that persists between renders gives us a way to automatically close out
-    // modals only when a new address is added to the addresses array.
-  }, [addresses])
+  //   /**
+  //    * I will need more explanation on what this does
+  //    * We are setting addresses that already exists.
+  //    */
+  //   if (localStorageExists && addressesExist) {
+  //     localStorage.setItem('addresses', JSON.stringify(addresses))
+  //   }
+  //   const walletDifference = difference(
+  //     addresses.map((addr) => addr.address),
+  //     addressesRef.current.map((addr) => addr.address)
+  //   )
+  //   if (walletDifference.length > 0) {
+  //     localStorage.setItem('addresses', JSON.stringify(addresses))
+  //     addressesRef.current = addresses
+  //     closeFn()
+  //   }
+  //   // **Note** Can't put closeFn() in the onClicks because it will closeOut
+  //   // modal before wallet-connect finishes connecting leading to stale state.
+  //   // Creating a ref that persists between renders gives us a way to automatically close out
+  //   // modals only when a new address is added to the addresses array.
+  // }, [addresses])
 
   return (
     <>
@@ -432,23 +433,21 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
-  // const { wallet setWallet } = useAlgodex()
-  // const { wallet } = useWallets(initialState)
-  const { wallet, setWallet } = useAlgodex()
+  const { wallet: initialState, setWallet, isConnected } = useAlgodex()
+  const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
-  const [signedIn, setSignedIn] = useState(false)
+  const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
-
-  useEffect(() => {
-    if (addresses.length > 0) {
-      setSignedIn(true)
-      if (typeof wallet === 'undefined') {
-        setWallet(addresses[0])
-      }
-    }
-  }, [addresses])
+  console.log('came here 5')
+  // useEffect(() => {
+  //   if (addresses.length > 0) {
+  //     if (typeof wallet === 'undefined') {
+  //       setWallet(addresses[0])
+  //     }
+  //   }
+  // }, [addresses])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">

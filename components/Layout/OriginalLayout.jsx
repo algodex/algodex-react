@@ -1,4 +1,5 @@
-import React, { useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
 // import Button from '@/components/Button'
@@ -13,9 +14,9 @@ import TradeHistory from '@/components/Asset/TradeHistory'
 // import { Typography, Typography } from '@/components/Typography'
 // import Typography from '@mui/material/Typography'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
-
-// import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@algodex/algodex-hooks'
 
 // import useTranslation from 'next-translate/useTranslation'
 
@@ -172,13 +173,78 @@ const Main = styled.main`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  // const { wallet } = useAlgodex()
+  const { wallet: initialState, setWallet } = useAlgodex()
+  const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
+  const [locStorage, setLocStorage] = useState([])
+
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  console.log('came here 2')
+  const { wallet } = useWallets()
+  const myAlgoConnector = useRef()
   const gridRef = useRef()
   const searchTableRef = useRef()
+
+  useEffect(() => {
+    if (!myAlgoConnector.current) {
+      const reConnectMyAlgoWallet = async () => {
+        // '@randlabs/myalgo-connect' is imported dynamically
+        // because it uses the window object
+        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+        MyAlgoConnect.prototype.sign = signer
+        myAlgoConnector.current = new MyAlgoConnect()
+        myAlgoConnector.current.connected = true
+        const mappedAddresses = addresses.map((addr) => {
+          if (addr.type === 'my-algo-wallet') {
+            return {
+              ...addr,
+              connector: myAlgoConnector.current
+            }
+          } else {
+            // return addr
+            return {
+              ...addr,
+              connector: walletConnect.current
+            }
+          }
+        })
+        setAddresses(mappedAddresses)
+      }
+      reConnectMyAlgoWallet()
+    }
+  }, [])
+
+  useEffect(() => {
+    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+
+    if (locStorage.length === 0 && storedAddrs?.length > 0) {
+      setLocStorage(storedAddrs)
+    }
+  }, [myAlgoConnector.current, addresses])
+
+  useEffect(() => {
+    if (addresses.length === 0 && locStorage.length > 0) {
+      // console.log('hello here', wallet)
+      const reHydratedAddresses = locStorage.map((wallet) => {
+        if (wallet.type === 'my-algo-wallet') {
+          return {
+            ...wallet,
+            connector: myAlgoConnector.current
+          }
+        } else {
+          console.log('hello here upasdf', wallet)
+          return {
+            ...wallet,
+            connector: walletConnect.current
+          }
+        }
+      })
+      setAddresses(reHydratedAddresses)
+      setWallet(reHydratedAddresses[0])
+    }
+  }, [locStorage, myAlgoConnector.current])
 
   if (!asset) {
     return <Spinner flex={true} />
@@ -191,7 +257,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection>
-          <PlaceOrder asset={asset} />
+          <PlaceOrder wallet={wallet} asset={asset} />
           {/* {typeof wallet !== 'undefined' && <PlaceOrder asset={asset} />} */}
         </PlaceOrderSection>
         <SearchAndChartSection>

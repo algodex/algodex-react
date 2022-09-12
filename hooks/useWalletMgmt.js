@@ -7,13 +7,13 @@ import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
 
 function useWalletMgmt() {
-  const { wallet, setWallet, isConnected } = useAlgodex()
+  const { wallet: initialState, setWallet, isConnected } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(false)
-  const { peraConnect } = useWallets()
+  const { wallet, peraConnect } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-
+  console.log('came here 11')
   useEffect(() => {
     if (addresses.length > 0) {
       setSignedIn(true)
