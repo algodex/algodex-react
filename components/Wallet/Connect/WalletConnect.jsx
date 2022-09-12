@@ -434,6 +434,7 @@ WalletOptionsListComp.propTypes = {
  */
 function WalletConnect() {
   const { wallet: initialState, setWallet, isConnected } = useAlgodex()
+  console.log
   const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(isConnected)
@@ -444,10 +445,14 @@ function WalletConnect() {
   // useEffect(() => {
   //   if (addresses.length > 0) {
   //     if (typeof wallet === 'undefined') {
-  //       setWallet(addresses[0])
+  //       setSignedIn(true)
   //     }
   //   }
   // }, [addresses])
+
+  useEffect(() => {
+    setSignedIn(isConnected)
+  }, [isConnected])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">
