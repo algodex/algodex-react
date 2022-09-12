@@ -106,7 +106,6 @@ export const WalletsList = ({
       }
     )
   }
-  console.log(addresses, 'adsfasdfsadfaaaa first')
   return addresses.map((wallet) => (
     <Container key={wallet.address}>
       <WalletRow

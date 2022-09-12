@@ -90,7 +90,6 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const { wallet: initialState, isConnected } = useAlgodex()
   const { wallet } = useWallets(initialState)
-  console.log('came here 4')
   // const isConnected = typeof wallet?.address !== 'undefined'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'

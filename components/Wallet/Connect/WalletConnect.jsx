@@ -441,7 +441,6 @@ function WalletConnect() {
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
-  console.log('came here 5')
   // useEffect(() => {
   //   if (addresses.length > 0) {
   //     if (typeof wallet === 'undefined') {

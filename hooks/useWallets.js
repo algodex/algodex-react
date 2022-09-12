@@ -221,7 +221,6 @@ function useWallets(initialState) {
     const res = localStorage.getItem('addresses')
     if (res) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
-      console.log('loaded', initialState, _addresses)
       if (initialState) {
         setAlgodexWallet(initialState)
         setWallet(initialState)

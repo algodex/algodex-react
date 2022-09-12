@@ -29,7 +29,6 @@ const InactiveWalletsList = ({ walletsList }) => {
   wallet
   // const { addresses } = useWallets()
   // console.log(addresses, 'addresses updated again')
-  console.log('came here 7')
   const isWalletActive = (addr) => {
     return wallet.address === addr
   }

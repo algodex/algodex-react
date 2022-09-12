@@ -13,7 +13,6 @@ function useWalletMgmt() {
   const { wallet, peraConnect } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-  console.log('came here 11')
   useEffect(() => {
     if (addresses.length > 0) {
       setSignedIn(true)

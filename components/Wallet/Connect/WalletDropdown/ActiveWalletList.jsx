@@ -18,7 +18,6 @@ const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
-  console.log('came here 6')
   const type = wallet?.type
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': myAlgoDisconnect,

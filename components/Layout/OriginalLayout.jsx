@@ -181,7 +181,6 @@ function MainLayout({ asset, children }) {
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  console.log('came here 2')
   const { wallet } = useWallets()
   const myAlgoConnector = useRef()
   const gridRef = useRef()
@@ -226,7 +225,6 @@ function MainLayout({ asset, children }) {
 
   useEffect(() => {
     if (addresses.length === 0 && locStorage.length > 0) {
-      // console.log('hello here', wallet)
       const reHydratedAddresses = locStorage.map((wallet) => {
         if (wallet.type === 'my-algo-wallet') {
           return {
@@ -234,7 +232,6 @@ function MainLayout({ asset, children }) {
             connector: myAlgoConnector.current
           }
         } else {
-          console.log('hello here upasdf', wallet)
           return {
             ...wallet,
             connector: walletConnect.current

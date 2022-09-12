@@ -130,7 +130,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
-  console.log('came here 12')
   const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef(null)
   const { wallet: initialState, setWallet } = useAlgodex()
@@ -183,9 +182,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   )
 
   useEffect(() => {
-    console.log('how are you', addresses, locStorage)
     if (addresses.length === 0 && locStorage.length > 0) {
-      // console.log(addresses, 'wallet')
       const reHydratedAddresses = locStorage.map((wallet) => {
         if (wallet.type === 'my-algo-wallet') {
           return {
@@ -193,7 +190,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
             connector: myAlgoConnector.current
           }
         } else {
-          console.log(walletConnect.current, 'walletConnect.current asdf')
           return {
             ...wallet,
             connector: walletConnect.current

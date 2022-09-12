@@ -135,7 +135,6 @@ function MainLayout({ asset, children }) {
   const [locStorage, setLocStorage] = useState([])
   // const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   // const { placeOrder, http, isConnected } = useAlgodex()
-  console.log('came here 1')
   const { wallet } = useWallets()
   const myAlgoConnector = useRef()
   // const [isConnectingWallet, setIsConnectingWallet] = useState(false)
@@ -191,7 +190,6 @@ function MainLayout({ asset, children }) {
 
   useEffect(() => {
     if (addresses.length === 0 && locStorage.length > 0) {
-      // console.log('hello here', wallet)
       const reHydratedAddresses = locStorage.map((wallet) => {
         if (wallet.type === 'my-algo-wallet') {
           return {
@@ -199,7 +197,6 @@ function MainLayout({ asset, children }) {
             connector: myAlgoConnector.current
           }
         } else {
-          console.log('hello here upasdf', wallet)
           return {
             ...wallet,
             connector: walletConnect.current
