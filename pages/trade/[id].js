@@ -200,7 +200,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       setAddresses(reHydratedAddresses)
       setWallet(reHydratedAddresses[0])
     }
-  }, [locStorage, myAlgoConnector.current, walletConnect.current])
+  }, [locStorage, myAlgoConnector.current])
 
   useEffect(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {

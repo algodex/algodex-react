@@ -131,7 +131,6 @@ function MainLayout({ asset, children }) {
 
   const { wallet: initialState, setWallet } = useAlgodex()
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-  console.log(walletConnect, 'addressessdf')
   const [locStorage, setLocStorage] = useState([])
   // const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   // const { placeOrder, http, isConnected } = useAlgodex()

@@ -187,7 +187,7 @@ function MainLayout({ asset, children }) {
   const searchTableRef = useRef()
 
   useEffect(() => {
-    if (!myAlgoConnector.current || !walletConnect.current) {
+    if (!myAlgoConnector.current) {
       const reConnectMyAlgoWallet = async () => {
         // '@randlabs/myalgo-connect' is imported dynamically
         // because it uses the window object
@@ -241,7 +241,7 @@ function MainLayout({ asset, children }) {
       setAddresses(reHydratedAddresses)
       setWallet(reHydratedAddresses[0])
     }
-  }, [locStorage, myAlgoConnector.current, walletConnect.current])
+  }, [locStorage, myAlgoConnector.current])
 
   if (!asset) {
     return <Spinner flex={true} />
