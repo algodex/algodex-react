@@ -121,7 +121,6 @@ function useWallets(initialState) {
         // setAlgodexWallet(addresses[0])
         if (_activeWallet.type === 'wallet-connect') {
           _activeWallet.connector = context[2].current
-          console.log(context[2].current, 'context[2].current')
           setAlgodexWallet(_activeWallet)
           setWallet(_activeWallet)
         } else {
@@ -185,6 +184,7 @@ function useWallets(initialState) {
             connected: false
           }
         }
+        console.log(remainingAddresses, 'remainingAddresses')
         setAlgodexWallet(
           remainingAddresses.length > 0 ? remainingAddresses[0] : disconnectedActiveWallet
         )

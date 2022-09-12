@@ -38,7 +38,6 @@ export function Header() {
   const { t } = useTranslation('common')
   const { wallet: initialState } = useAlgodex()
   const { wallet } = useWallets(initialState)
-  // console.log(addresses, 'addresses updated')
   const isMobile = useMobileDetect()
 
   /**
@@ -137,7 +136,7 @@ export function Header() {
             className="font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
-            {wallet && wallet?.address
+            {wallet && wallet?.connector?.connected && wallet?.address
               ? `${truncatedWalletAddress(wallet.address, 5)}`
               : 'CONNECT A WALLET'}
           </Button>
@@ -157,7 +156,7 @@ export function Header() {
           <NavActiveLink target="_blank" href="https://docs.algodex.com/" rel="noreferrer">
             <NavTextSm>Docs</NavTextSm>
           </NavActiveLink>
-          <NavActiveLink target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
+          <NavActiveLink target="_blank" href="/about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
           </NavActiveLink>
           <NavActiveLink target="_blank" href={MAILBOX_URL} rel="noreferrer">

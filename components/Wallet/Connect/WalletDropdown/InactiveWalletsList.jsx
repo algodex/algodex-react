@@ -27,8 +27,6 @@ const InactiveWalletsList = ({ walletsList }) => {
 
   // const { wallet } = useAlgodex()
   wallet
-  // const { addresses } = useWallets()
-  // console.log(addresses, 'addresses updated again')
   const isWalletActive = (addr) => {
     return wallet.address === addr
   }

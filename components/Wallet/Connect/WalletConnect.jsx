@@ -99,7 +99,7 @@ export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
   const { t } = useTranslation('wallet')
   const { wallet: initialState } = useAlgodex()
-  const { peraConnect } = useWallets(initialState)
+  const { peraConnect, peraDisconnect: _peraDisconnect } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
   const myAlgoDisconnect = (targetWallet) => {
@@ -137,6 +137,7 @@ export function WalletView(props) {
     if (typeof targetWallet.connector.killSession !== 'undefined')
       targetWallet.connector.killSession()
     localStorage.removeItem('walletconnect')
+    _peraDisconnect()
   }
 
   const myAlgoConnect = () => {
@@ -434,7 +435,6 @@ WalletOptionsListComp.propTypes = {
  */
 function WalletConnect() {
   const { wallet: initialState, setWallet, isConnected } = useAlgodex()
-  console.log
   const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(isConnected)
