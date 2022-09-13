@@ -96,7 +96,6 @@ function useWallets(initialState) {
   //       myAlgoConnector.current.connected = true
   //       const mappedAddresses = context[0].map((addr) => {
   //         if (addr.type === 'my-algo-wallet') {
-  //           console.log('came here my algo', addr)
   //           return {
   //             ...addr,
   //             connector: myAlgoConnector.current
@@ -160,6 +159,11 @@ function useWallets(initialState) {
             // merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
           })
           setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+          localStorage.setItem(
+            'addresses',
+            JSON.stringify(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
+          )
+          // setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
         }
         dispatcher('signIn', { type: 'wallet' })
       }
@@ -176,21 +180,21 @@ function useWallets(initialState) {
         ) || []
       setAddresses(remainingAddresses)
 
-      if (typeof activeWallet !== 'undefined') {
+      if (typeof wallet !== 'undefined') {
         const disconnectedActiveWallet = {
-          ...activeWallet,
+          ...wallet,
           connector: {
-            ...activeWallet.connector,
+            ...wallet.connector,
             connected: false
           }
         }
-        console.log(remainingAddresses, 'remainingAddresses')
         setAlgodexWallet(
           remainingAddresses.length > 0 ? remainingAddresses[0] : disconnectedActiveWallet
         )
       }
 
       localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+      setAddresses(remainingAddresses)
       console.error('Handle removing from storage', _addresses)
     },
     [setAddresses, addresses]

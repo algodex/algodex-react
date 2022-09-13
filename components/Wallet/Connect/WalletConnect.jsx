@@ -99,9 +99,14 @@ export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
   const { t } = useTranslation('wallet')
   const { wallet: initialState } = useAlgodex()
-  const { peraConnect, peraDisconnect: _peraDisconnect } = useWallets(initialState)
+  const {
+    peraConnect,
+    peraDisconnect: _peraDisconnect,
+    myAlgoDisconnect: _myAlgoDisconnect
+  } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
+
   const myAlgoDisconnect = (targetWallet) => {
     const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
       return wallet.address !== targetWallet.address
@@ -117,6 +122,7 @@ export function WalletView(props) {
     } else {
       setActiveWallet(remainingAddresses[0])
     }
+    _myAlgoDisconnect(targetWallet)
   }
 
   const peraDisconnect = (targetWallet) => {
@@ -137,7 +143,7 @@ export function WalletView(props) {
     if (typeof targetWallet.connector.killSession !== 'undefined')
       targetWallet.connector.killSession()
     localStorage.removeItem('walletconnect')
-    _peraDisconnect()
+    _peraDisconnect(targetWallet)
   }
 
   const myAlgoConnect = () => {
@@ -324,7 +330,7 @@ export function WalletOptionsListComp(props) {
     closeFn,
     addressesRef
   } = props
-  const { wallet: initialState } = useAlgodex()
+  const { wallet: initialState, isConnected } = useAlgodex()
   const { peraConnect, myAlgoConnect } = useWallets(initialState)
 
   const WALLETS_CONNECT_MAP = {
@@ -340,7 +346,7 @@ export function WalletOptionsListComp(props) {
     WALLETS_CONNECT_MAP['pera-connect']()
   }
   const isPeraConnected = useMemo(() => {
-    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
+    const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
     return peraAddr.length > 0
   }, [addresses])
 
@@ -473,7 +479,7 @@ function WalletConnect() {
               sx={{ minHeight: '2.5rem' }}
               onClick={() => setIsConnectingWallet(true)}
             >
-              CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+              CONNECT {signedIn && addresses && addresses.length > 0 && 'ANOTHER'} WALLET
             </Button>
           </Box>
         </>

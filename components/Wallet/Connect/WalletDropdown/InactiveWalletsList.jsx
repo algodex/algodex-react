@@ -38,10 +38,6 @@ const InactiveWalletsList = ({ walletsList }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(addresses, 'hello')
-  }, [addresses])
-
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': myAlgoDisconnect,
     'wallet-connect': peraDisconnect

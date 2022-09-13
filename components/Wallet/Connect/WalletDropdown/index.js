@@ -35,7 +35,7 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const { wallet: initialState } = useAlgodex()
+  const { wallet: initialState, isConnected } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
   const addressesRef = useRef(null)
@@ -52,7 +52,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     WALLETS_CONNECT_MAP['pera-connect']()
   }
   const isPeraConnected = useMemo(() => {
-    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
+    const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
     return peraAddr.length > 0
   }, [addresses])
 

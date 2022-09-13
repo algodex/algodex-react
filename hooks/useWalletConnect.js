@@ -29,6 +29,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       }
 
       if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
+        console.log('Starting Session again', walletConnect)
         walletConnect.current = await initWalletConnect()
         walletConnect.current.connected = false
         walletConnect.current.sessionStarted = true
@@ -91,7 +92,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     (err) => {
       console.log('DISCONNECTED')
       if (err) throw err
-
+      walletConnect.current.sessionStarted = false
       onDisconnect(walletConnect.current['_accounts'])
     },
     [onDisconnect]
