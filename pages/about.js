@@ -9,7 +9,9 @@ import BlogPreview from '@/components/About/blog'
 import { fetchBlogPosts } from '@/services/cms'
 import PropTypes from 'prop-types'
 import { FAQSection } from '@/components/About/FAQ'
+import { logError } from 'services/logRemote'
 
+import { useEffect } from 'react'
 /**
  * About Page
  *
@@ -17,6 +19,10 @@ import { FAQSection } from '@/components/About/FAQ'
  * @constructor
  */
 const AboutPage = ({ staticBlogPosts }) => {
+  useEffect(() => {
+    logError('This is my error message')
+  })
+
   return (
     <>
       <Head>
@@ -50,5 +56,6 @@ export async function getStaticProps() {
 AboutPage.propTypes = {
   staticBlogPosts: PropTypes.array
 }
+
 
 export default AboutPage
