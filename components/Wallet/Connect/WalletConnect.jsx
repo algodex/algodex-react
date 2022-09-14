@@ -143,7 +143,7 @@ export function WalletView(props) {
     if (typeof targetWallet.connector.killSession !== 'undefined')
       targetWallet.connector.killSession()
     localStorage.removeItem('walletconnect')
-    _peraDisconnect(targetWallet)
+    _peraDisconnect()
   }
 
   const myAlgoConnect = () => {

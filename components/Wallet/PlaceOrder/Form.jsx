@@ -13,6 +13,7 @@ import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import { logInfo } from 'services/logRemote'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
@@ -73,6 +74,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet])
 
+  console.log(wallet, 'wallet')
+
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
   // }
@@ -123,11 +126,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
+      logInfo(`On sign out : ${data}`)
       setShowForm(false)
     }
   })
   useEvent('signIn', (data) => {
     if (data.type === 'wallet') {
+      logInfo(`On sign in : ${data}`)
       setShowForm(true)
     }
   })
@@ -266,15 +271,24 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       }
 
       // TODO add events
+      logInfo('Submitting order', {
+        ...order,
+        address: wallet.address,
+        wallet,
+        asset,
+        appId: order.type === 'sell' ? 22045522 : 22045503,
+        version: 6
+      })
       toast.promise(orderPromise, {
         loading: t('awaiting-confirmation'),
         success: t('order-success'),
         error: (err) => {
+          logInfo(`Error occured : ${err}`)
           console.log(err, 'error occured')
           if (/PopupOpenError|blocked/.test(err)) {
             return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
           }
-          return t('error-placing-order')
+          return `${t('error-placing-order')} ${err}`
         }
       })
     },
