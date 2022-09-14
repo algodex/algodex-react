@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
+import { logInfo } from 'services/logRemote'
 
 const ERROR = {
-  FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
-  FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
+  FAILED_TO_INIT: 'Wallet connect failed to initialize.',
+  FAILED_TO_CONNECT: 'Wallet connect failed to connect.'
 }
 
 /**
@@ -30,7 +31,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
       if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
         console.log('Starting Session again', walletConnect)
-        walletConnect.current = await initWalletConnect()
         walletConnect.current.connected = false
         walletConnect.current.sessionStarted = true
         walletConnect.current.createSession()
@@ -68,6 +68,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
   const initWalletConnect = async () => {
     try {
+      logInfo(`Initializing wallet connect useWalletConnect`)
       const WalletConnect = (await import('@walletconnect/client')).default
       WalletConnect.prototype.sign = (
         await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
@@ -92,7 +93,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     (err) => {
       console.log('DISCONNECTED')
       if (err) throw err
-      walletConnect.current.sessionStarted = false
+      logInfo('Disconnnect wallet connect')
       onDisconnect(walletConnect.current['_accounts'])
     },
     [onDisconnect]
@@ -119,6 +120,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     }))
     console.log('connected here')
     onConnect(_addresses)
+    logInfo('Connect wallet connect')
     QRCodeModal.close()
   }
   useEffect(() => {

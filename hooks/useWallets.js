@@ -33,6 +33,7 @@ export function WalletsProvider({ children }) {
   const [addresses, setAddresses] = useState([])
   const walletConnect = useRef()
   useEffect(() => {
+    logInfo(`Initializing wallet connect Wallets Provider`)
     const initWalletConnect = async () => {
       const WalletConnect = (await import('@walletconnect/client')).default
       walletConnect.current = new WalletConnect({
@@ -43,6 +44,7 @@ export function WalletsProvider({ children }) {
     }
     initWalletConnect()
   }, [])
+
   return (
     <WalletsContext.Provider value={[addresses, setAddresses, walletConnect]}>
       {children}
