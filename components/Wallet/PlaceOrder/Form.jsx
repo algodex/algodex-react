@@ -74,8 +74,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet])
 
-  console.log(wallet, 'wallet')
-
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
   // }
@@ -280,8 +278,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         version: 6
       })
       toast.promise(orderPromise, {
-        loading: t('awaiting-confirmation'),
-        success: t('order-success'),
+        loading: (e) => {
+          logInfo(e, 'loading...')
+          return t('awaiting-confirmation')
+        },
+        success: (e) => {
+          logInfo(e, 'success...')
+          return t('order-success')
+        },
         error: (err) => {
           logInfo(`Error occured : ${err}`)
           console.log(err, 'error occured')
