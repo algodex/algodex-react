@@ -12,6 +12,7 @@ import React from 'react'
 // import { Typography } from '@/components/Typography'
 // import OrderService from '@/services/order'
 import Typography from '@mui/material/Typography'
+import { logInfo } from 'services/logRemote'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from '@/hooks/useEvents'
@@ -105,7 +106,11 @@ export function OpenOrdersTable({ orders: _orders }) {
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
         const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
-
+        console.log('Cancel Wallet Data:', wallet)
+        logInfo('Cancel Wallet Data:', wallet)
+        const _walletConnectionDB = JSON.parse(localStorage.getItem('walletconnect'))
+        console.log('Cancel Wallet Connect:', _walletConnectionDB)
+        logInfo('Cancel Wallet Connect:', _walletConnectionDB)
         const cancelOrderPromise = closeOrder({
           address: ownerAddress,
           version,

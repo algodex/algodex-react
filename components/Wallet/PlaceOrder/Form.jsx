@@ -254,7 +254,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           },
           { wallet }
         )
-
+        console.log('Wallet Data:', wallet)
+        const _walletConnectionDB = JSON.parse(localStorage.getItem('walletconnect'))
+        console.log('Wallet Connect:', _walletConnectionDB)
         orderPromise = placeOrder(
           {
             ...order,
