@@ -31,19 +31,7 @@ function _mergeAddresses(a, b) {
 export const WalletsContext = createContext()
 export function WalletsProvider({ children }) {
   const [addresses, setAddresses] = useState([])
-  const walletConnect = useRef()
-  useEffect(() => {
-    logInfo(`Initializing wallet connect Wallets Provider`)
-    const initWalletConnect = async () => {
-      const WalletConnect = (await import('@walletconnect/client')).default
-      walletConnect.current = new WalletConnect({
-        bridge: 'https://bridge.walletconnect.org', // Required
-        qrcodeModal: QRCodeModal
-      })
-      walletConnect.current.connected = false
-    }
-    initWalletConnect()
-  }, [])
+  const { connector: walletConnect } = useWalletConnect()
 
   return (
     <WalletsContext.Provider value={[addresses, setAddresses, walletConnect]}>
@@ -212,10 +200,18 @@ function useWallets(initialState) {
     disconnect: myAlgoDisconnect
   } = useMyAlgoConnect(handleConnect, handleDisconnect)
   // Pera Connect/Disconnect
-  const { connect: peraConnect, disconnect: peraDisconnect } = useWalletConnect(
-    handleConnect,
-    handleDisconnect
-  )
+  const {
+    connect: peraConnect,
+    disconnect: peraDisconnect,
+    connector: _peraConnector
+  } = useWalletConnect(handleConnect, handleDisconnect)
+
+  // const peraConnect = () => {
+  //   console.log('pera', context[2])
+  // }
+  // const peraDisconnect = () => {
+  //   console.log('pera')
+  // }
 
   // Fetch active wallet from local storage
   useEffect(() => {
@@ -226,17 +222,17 @@ function useWallets(initialState) {
   }, [setActiveWallet])
 
   // Fetch all wallet addresses from local storage
-  useEffect(() => {
-    const res = localStorage.getItem('addresses')
-    if (res) {
-      const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
-      if (initialState) {
-        setAlgodexWallet(initialState)
-        setWallet(initialState)
-      }
-      setAddresses(_addresses)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const res = localStorage.getItem('addresses')
+  //   if (res) {
+  //     const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
+  //     if (initialState) {
+  //       setAlgodexWallet(initialState)
+  //       setWallet(initialState)
+  //     }
+  //     setAddresses(_addresses)
+  //   }
+  // }, [])
   //
   // useEffect(() => {
   //   localStorage.setItem('addresses', JSON.stringify(addresses))

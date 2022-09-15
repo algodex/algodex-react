@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useContext, useEffect, useRef } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
+import { WalletsContext } from './useWallets'
 import { logInfo } from 'services/logRemote'
 
 const ERROR = {
@@ -24,24 +25,40 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     console.log('Connecting')
     try {
       // Something went wrong!
+      // if (!walletConnect.current) {
+      //   console.error(ERROR.FAILED_TO_INIT)
+      //   return
+      // }
+
+      // if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
+      //   console.log('Starting Session again', walletConnect)
+      //   walletConnect.current.connected = false
+      //   walletConnect.current.sessionStarted = true
+      //   walletConnect.current.createSession()
+      // } else if (!walletConnect.current.connected) {
+      //   console.log('Creating Session', walletConnect)
+      //   // create new session
+      //   await walletConnect.current.createSession()
+      //   walletConnect.current.sessionStarted = true
+      // } else {
+      //   console.log('Already Connected')
+      //   QRCodeModal.close()
+      // }
+
       if (!walletConnect.current) {
         console.error(ERROR.FAILED_TO_INIT)
         return
       }
-
-      if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
-        console.log('Starting Session again', walletConnect)
-        walletConnect.current.connected = false
-        walletConnect.current.sessionStarted = true
-        walletConnect.current.createSession()
-      } else if (!walletConnect.current.connected) {
-        console.log('Creating Session', walletConnect)
+      // Check if connection is already established
+      if (!walletConnect.current.connected) {
+        console.log('Creating Session')
         // create new session
-        await walletConnect.current.createSession()
-        walletConnect.current.sessionStarted = true
+        walletConnect.current.createSession()
       } else {
-        console.log('Already Connected')
-        QRCodeModal.close()
+        walletConnect.current.killSession()
+        setTimeout(() => {
+          walletConnect.current.createSession()
+        }, 1000)
       }
 
       // Map the connector to the address list
@@ -83,10 +100,12 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   }
 
   useEffect(() => {
-    ;(async () => {
-      walletConnect.current = await initWalletConnect()
-      walletConnect.current.connected = false
-    })()
+    if (walletConnect === undefined || walletConnect.current === undefined) {
+      ;(async () => {
+        walletConnect.current = await initWalletConnect()
+        walletConnect.current.connected = false
+      })()
+    }
   }, [])
 
   const handleDisconnect = useCallback(
@@ -143,5 +162,5 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       }
     }
   }, [walletConnect.current])
-  return { connect, disconnect, connector: walletConnect.current }
+  return { connect, disconnect, connector: walletConnect }
 }

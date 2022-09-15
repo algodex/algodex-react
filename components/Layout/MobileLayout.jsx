@@ -137,6 +137,7 @@ function MainLayout({ asset, children }) {
   const { wallet } = useWallets()
   const myAlgoConnector = useRef()
   // const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+  // console.log(wallet, 'wallet here')
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**

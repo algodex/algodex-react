@@ -176,12 +176,12 @@ function MainLayout({ asset, children }) {
   const { wallet: initialState, setWallet } = useAlgodex()
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
   const [locStorage, setLocStorage] = useState([])
-
+  console.log(addresses, 'addrersses')
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet } = useWallets()
+  const { wallet } = useWallets(initialState)
   const myAlgoConnector = useRef()
   const gridRef = useRef()
   const searchTableRef = useRef()

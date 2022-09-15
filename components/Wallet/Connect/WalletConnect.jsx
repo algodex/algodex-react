@@ -99,11 +99,7 @@ export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
   const { t } = useTranslation('wallet')
   const { wallet: initialState } = useAlgodex()
-  const {
-    peraConnect,
-    peraDisconnect: _peraDisconnect,
-    myAlgoDisconnect: _myAlgoDisconnect
-  } = useWallets(initialState)
+  const { peraConnect, peraDisconnect: _peraDisconnect } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
 
@@ -122,10 +118,11 @@ export function WalletView(props) {
     } else {
       setActiveWallet(remainingAddresses[0])
     }
-    _myAlgoDisconnect(targetWallet)
+    // _myAlgoDisconnect(targetWallet)
   }
 
   const peraDisconnect = (targetWallet) => {
+    console.log(targetWallet, 'target wallet')
     const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
       return wallet.address !== targetWallet.address
     })
@@ -143,7 +140,7 @@ export function WalletView(props) {
     if (typeof targetWallet.connector.killSession !== 'undefined')
       targetWallet.connector.killSession()
     localStorage.removeItem('walletconnect')
-    _peraDisconnect()
+    _peraDisconnect(targetWallet)
   }
 
   const myAlgoConnect = () => {
@@ -161,13 +158,19 @@ export function WalletView(props) {
   }
 
   const walletReconnectorMap = {
-    'my-algo-wallet': myAlgoConnect,
-    'wallet-connect': peraConnect
+    'my-algo-wallet': () => myAlgoConnect(),
+    'wallet-connect': () => peraConnect()
   }
 
   const walletDisconnectMap = {
-    'my-algo-wallet': myAlgoDisconnect,
-    'wallet-connect': peraDisconnect
+    'my-algo-wallet': (wallet) => {
+      console.log(wallet, 'myalgo wallet to disconnect')
+      myAlgoDisconnect(wallet)
+    },
+    'wallet-connect': (wallet) => {
+      console.log(wallet, 'pera wallet to disconnect')
+      peraDisconnect(wallet)
+    }
   }
 
   // const getButtonVariant = () => {
@@ -218,7 +221,7 @@ export function WalletView(props) {
 
   useEffect(() => {
     if (rehyrdateWallet) {
-      walletReconnectorMap[activeWallet.type]()
+      walletReconnectorMap[activeWallet.type]
     }
   }, [activeWallet])
 
@@ -334,16 +337,18 @@ export function WalletOptionsListComp(props) {
   const { peraConnect, myAlgoConnect } = useWallets(initialState)
 
   const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': myAlgoConnect,
-    'pera-connect': peraConnect
+    'my-algo-wallet': () => myAlgoConnect(),
+    'pera-connect': () => peraConnect()
   }
 
   const myAlgoOnClick = () => {
-    WALLETS_CONNECT_MAP['my-algo-wallet']()
+    WALLETS_CONNECT_MAP['my-algo-wallet']
+    // WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
     WALLETS_CONNECT_MAP['pera-connect']()
+    // WALLETS_CONNECT_MAP['pera-connect']
   }
   const isPeraConnected = useMemo(() => {
     const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
@@ -410,7 +415,7 @@ export function WalletOptionsListComp(props) {
                 setIsConnectingAddress={setIsConnectingWallet}
                 addresses={addresses}
                 myAlgoOnClick={myAlgoOnClick}
-                peraConnectOnClick={peraConnectOnClick}
+                peraConnectOnClick={() => peraConnectOnClick()}
                 isPeraConnected={isPeraConnected}
               />
             </Box>

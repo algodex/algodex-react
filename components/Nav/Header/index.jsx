@@ -36,8 +36,9 @@ export function Header() {
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
-  const { wallet: initialState } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet } = useAlgodex()
+  // const { wallet: initialState } = useAlgodex()
+  // const { wallet } = useWallets()
   const isMobile = useMobileDetect()
 
   /**

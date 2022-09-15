@@ -279,11 +279,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       })
       toast.promise(orderPromise, {
         loading: (e) => {
-          logInfo(e, 'loading...')
+          logInfo({ type: 'loading', message: e })
+          console.log(e, 'loading...')
           return t('awaiting-confirmation')
         },
         success: (e) => {
-          logInfo(e, 'success...')
+          logInfo({ type: 'success', message: e })
+          console.log(e, 'success...')
           return t('order-success')
         },
         error: (err) => {
