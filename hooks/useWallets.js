@@ -165,9 +165,11 @@ function useWallets(initialState) {
   const handleDisconnect = useCallback(
     (_addresses) => {
       const remainingAddresses =
-        JSON.parse(localStorage.getItem('addresses')).filter(
-          (wallet) => wallet.address !== _addresses[0]
-        ) || []
+        JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
+          if (_addresses[0]) {
+            return wallet.address !== _addresses[0]
+          }
+        }) || []
       setAddresses(remainingAddresses)
 
       if (typeof wallet !== 'undefined') {
