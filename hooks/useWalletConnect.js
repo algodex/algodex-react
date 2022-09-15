@@ -77,6 +77,10 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   }
 
   const initWalletConnect = async () => {
+    if (!walletConnect === undefined || !walletConnect.current === undefined) {
+      logInfo(`Wallet already initialized, returning early from initWalletConnect`)
+      return
+    }
     try {
       logInfo(`Initializing wallet connect useWalletConnect`)
       const WalletConnect = (await import('@walletconnect/client')).default

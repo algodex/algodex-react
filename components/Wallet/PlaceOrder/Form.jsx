@@ -272,12 +272,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
       // TODO add events
       logInfo('Submitting order', {
-        ...order,
-        address: wallet.address,
-        wallet,
-        asset,
-        appId: order.type === 'sell' ? 22045522 : 22045503,
-        version: 6
+        wallet
       })
       toast.promise(orderPromise, {
         loading: (e) => {

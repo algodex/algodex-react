@@ -125,8 +125,8 @@ function useWallets(initialState) {
   // Handle any Connection
   const handleConnect = useCallback(
     async (_addresses) => {
-      logInfo('Handling Connect')
       if (_addresses.length > 0) {
+        logInfo('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
         const otherWalletClients =
           addresses.filter((wallet) => wallet.type !== _addresses[0].type) || []

@@ -9,7 +9,6 @@ import { PartnerShip } from '@/components/About/PartnerShip'
 import PropTypes from 'prop-types'
 import { RoadMap } from '@/components/About/RoadMap'
 import { fetchBlogPosts } from '@/services/cms'
-import { logError } from 'services/logRemote'
 import { useEffect } from 'react'
 
 /**
@@ -19,10 +18,6 @@ import { useEffect } from 'react'
  * @constructor
  */
 const AboutPage = ({ staticBlogPosts }) => {
-  useEffect(() => {
-    logError('This is my error message')
-  })
-
   return (
     <>
       <Head>
