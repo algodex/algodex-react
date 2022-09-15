@@ -132,8 +132,8 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const { isFallback, query } = useRouter()
   const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef(null)
-  const { wallet: initialState, setWallet } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { setWallet } = useAlgodex()
+  // const { wallet } = useWallets(initialState)
 
   useEffect(() => {
     if (!myAlgoConnector.current) {
