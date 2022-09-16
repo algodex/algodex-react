@@ -59,9 +59,9 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         throttleLog('Already Connected')
         QRCodeModal.close()
         walletConnect.current.killSession()
-        // setTimeout(() => {
-        //   walletConnect.current.createSession()
-        // }, 1000)
+        setTimeout(() => {
+          walletConnect.current.createSession()
+        }, 1000)
 
         // CANCEL wcReqAF to free up CPU
         stopReqAF() // if ticking...
