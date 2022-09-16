@@ -88,7 +88,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     if (isBrowser() && isMobile()) {
       throttleLog('Start action to Keep wallet connection alive')
       const keepAlive = () => {
-        throttleLog('Keep alive function')
+        // throttleLog('Keep alive function')
         wcReqAF = requestAnimationFrame(keepAlive)
       }
       requestAnimationFrame(keepAlive)
