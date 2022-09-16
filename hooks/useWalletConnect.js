@@ -34,37 +34,53 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         return
       }
 
-      if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
-        console.log('Reinitializing wallet session again', walletConnect)
-        throttleLog('Reinitializing wallet session again', walletConnect)
-        walletConnect.current = await initWalletConnect()
-        walletConnect.current.connected = false
-        walletConnect.current.sessionStarted = true
-        walletConnect.current.createSession()
-        startReqAF()
-      } else if (!walletConnect.current.connected) {
-        console.log('Creating Session', walletConnect)
-        throttleLog('Creating Session', walletConnect)
+      // if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
+      //   console.log('Reinitializing wallet session again', walletConnect)
+      //   throttleLog('Reinitializing wallet session again', walletConnect)
+      //   walletConnect.current = await initWalletConnect()
+      //   walletConnect.current.connected = false
+      //   walletConnect.current.sessionStarted = true
+      //   walletConnect.current.createSession()
+      //   startReqAF()
+      // } else if (!walletConnect.current.connected) {
+      //   console.log('Creating Session', walletConnect)
+      //   throttleLog('Creating Session', walletConnect)
+      //   // create new session
+      //   walletConnect.current.sessionStarted = true
+      //   walletConnect.current.connected = false
+      //   await walletConnect.current.createSession()
+      //   // setInterva(async () => {
+      //   //   console.log
+      //   // }, 5000)
+      //   // await walletConnect.current.createSession()
+      //   startReqAF()
+      // } else {
+      //   // console.log('Already Connected')
+      //   // throttleLog('Already Connected')
+      //   // QRCodeModal.close()
+      //   // walletConnect.current.killSession()
+      //   // setTimeout(() => {
+      //   //   walletConnect.current.createSession()
+      //   // }, 1000)
+      //   walletConnect.current.killSession()
+      //   setTimeout(() => {
+      //     walletConnect.current.createSession()
+      //   }, 1000)
+
+      //   // CANCEL wcReqAF to free up CPU
+      //   stopReqAF() // if ticking...
+      // }
+
+      // Check if connection is already established
+      if (!walletConnect.current.connected) {
+        console.log('Creating Session')
         // create new session
-        walletConnect.current.sessionStarted = true
-        walletConnect.current.connected = false
-        await walletConnect.current.createSession()
-        // setInterva(async () => {
-        //   console.log
-        // }, 5000)
-        // await walletConnect.current.createSession()
-        startReqAF()
+        walletConnect.current.createSession()
       } else {
-        console.log('Already Connected')
-        throttleLog('Already Connected')
-        QRCodeModal.close()
         walletConnect.current.killSession()
         setTimeout(() => {
           walletConnect.current.createSession()
         }, 1000)
-
-        // CANCEL wcReqAF to free up CPU
-        stopReqAF() // if ticking...
       }
 
       // Map the connector to the address list
