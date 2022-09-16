@@ -89,9 +89,11 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // keeps some background tasks running while navigating to Pera Wallet to approve wc session link handshake
     if (isBrowser() && isMobile()) {
       throttleLog('Start action to Keep wallet connection alive')
-      intervalId = setInterval(() => {
-        console.log('keep alive')
-      }, 2000)
+      if (!intervalId) {
+        intervalId = setInterval(() => {
+          console.log('keep alive')
+        }, 2000)
+      }
       const keepAlive = () => {
         // throttleLog('Keep alive function')
         wcReqAF = requestAnimationFrame(keepAlive)
@@ -106,6 +108,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     throttleLog('Close live connection')
     if (wcReqAF) {
       clearInterval(intervalId)
+      intervalId = null
       cancelAnimationFrame(wcReqAF)
       wcReqAF = 0 // reset
     } else {
