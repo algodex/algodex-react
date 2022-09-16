@@ -86,6 +86,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       logInfo('Start action to Keep wallet connection alive')
       const keepAlive = () => {
         // console.log('keepAlive');
+        logInfo('Keep alive function')
         wcReqAF = requestAnimationFrame(keepAlive)
       }
       requestAnimationFrame(keepAlive)
