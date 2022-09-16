@@ -24,6 +24,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
   // fix for wallectconnect websocket issue when backgrounded on mobile (uses request animation frame)
   let wcReqAF = 0
+  let intervalId
   const connect = async () => {
     console.log('Connecting')
     try {
@@ -47,9 +48,10 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         // create new session
         walletConnect.current.sessionStarted = true
         walletConnect.current.connected = false
-        setTimeout(async () => {
-          await walletConnect.current.createSession()
-        }, 1000)
+        await walletConnect.current.createSession()
+        // setInterva(async () => {
+        //   console.log
+        // }, 5000)
         // await walletConnect.current.createSession()
         startReqAF()
       } else {
@@ -87,6 +89,9 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // keeps some background tasks running while navigating to Pera Wallet to approve wc session link handshake
     if (isBrowser() && isMobile()) {
       throttleLog('Start action to Keep wallet connection alive')
+      intervalId = setInterval(() => {
+        console.log('keep alive')
+      }, 2000)
       const keepAlive = () => {
         // throttleLog('Keep alive function')
         wcReqAF = requestAnimationFrame(keepAlive)
@@ -100,6 +105,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // CANCEL wcReqAF to free up CPU
     throttleLog('Close live connection')
     if (wcReqAF) {
+      clearInterval(intervalId)
       cancelAnimationFrame(wcReqAF)
       wcReqAF = 0 // reset
     } else {
