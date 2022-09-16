@@ -83,6 +83,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // console.log('startReqAF');
     // keeps some background tasks running while navigating to Pera Wallet to approve wc session link handshake
     if (isBrowser() && isMobile()) {
+      logInfo('Start action to Keep wallet connection alive')
       const keepAlive = () => {
         // console.log('keepAlive');
         wcReqAF = requestAnimationFrame(keepAlive)
