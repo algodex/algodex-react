@@ -13,8 +13,8 @@ import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
-import { logInfo } from 'services/logRemote'
 import styled from '@emotion/styled'
+import { throttleLog } from 'services/logRemote'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
@@ -124,13 +124,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
-      logInfo(`On sign out : ${data}`)
+      throttleLog(`On sign out : ${data}`)
       setShowForm(false)
     }
   })
   useEvent('signIn', (data) => {
     if (data.type === 'wallet') {
-      logInfo(`On sign in : ${data}`)
+      throttleLog(`On sign in : ${data}`)
       setShowForm(true)
     }
   })
@@ -271,22 +271,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       }
 
       // TODO add events
-      logInfo('Submitting order', {
+      throttleLog('Submitting order', {
         wallet
       })
       toast.promise(orderPromise, {
         loading: (e) => {
-          logInfo({ type: 'loading', message: e })
+          throttleLog({ type: 'loading', message: e })
           console.log(e, 'loading...')
           return t('awaiting-confirmation')
         },
         success: (e) => {
-          logInfo({ type: 'success', message: e })
+          throttleLog({ type: 'success', message: e })
           console.log(e, 'success...')
           return t('order-success')
         },
         error: (err) => {
-          logInfo(`Error occured : ${err}`)
+          throttleLog(`Error occured : ${err}`)
           console.log(err, 'error occured')
           if (/PopupOpenError|blocked/.test(err)) {
             return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')

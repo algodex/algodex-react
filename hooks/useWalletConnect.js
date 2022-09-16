@@ -2,7 +2,7 @@ import { isBrowser, isMobile } from '@walletconnect/utils'
 import { useCallback, useEffect, useRef } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
-import { logInfo } from 'services/logRemote'
+import { throttleLog } from 'services/logRemote'
 
 const ERROR = {
   FAILED_TO_INIT: 'Wallet connect failed to initialize.',
@@ -35,7 +35,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
       if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
         console.log('Reinitializing wallet session again', walletConnect)
-        logInfo('Reinitializing wallet session again', walletConnect)
+        throttleLog('Reinitializing wallet session again', walletConnect)
         walletConnect.current = await initWalletConnect()
         walletConnect.current.connected = false
         walletConnect.current.sessionStarted = true
@@ -43,23 +43,26 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         startReqAF()
       } else if (!walletConnect.current.connected) {
         console.log('Creating Session', walletConnect)
-        logInfo('Creating Session', walletConnect)
+        throttleLog('Creating Session', walletConnect)
         // create new session
         walletConnect.current.sessionStarted = true
         walletConnect.current.connected = false
-        await walletConnect.current.createSession()
+        setTimeout(async () => {
+          await walletConnect.current.createSession()
+        }, 1000)
+        // await walletConnect.current.createSession()
         startReqAF()
       } else {
         console.log('Already Connected')
-        logInfo('Already Connected')
+        throttleLog('Already Connected')
         QRCodeModal.close()
         walletConnect.current.killSession()
-        // CANCEL wcReqAF to free up CPU
-        stopReqAF() // if ticking...
-
         // setTimeout(() => {
         //   walletConnect.current.createSession()
         // }, 1000)
+
+        // CANCEL wcReqAF to free up CPU
+        stopReqAF() // if ticking...
       }
 
       // Map the connector to the address list
@@ -79,14 +82,13 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     }
   }
   const startReqAF = () => {
-    logInfo('Keep wallet connection alive')
+    throttleLog('Keep wallet connection alive')
     // console.log('startReqAF');
     // keeps some background tasks running while navigating to Pera Wallet to approve wc session link handshake
     if (isBrowser() && isMobile()) {
-      logInfo('Start action to Keep wallet connection alive')
+      throttleLog('Start action to Keep wallet connection alive')
       const keepAlive = () => {
-        // console.log('keepAlive');
-        logInfo('Keep alive function')
+        throttleLog('Keep alive function')
         wcReqAF = requestAnimationFrame(keepAlive)
       }
       requestAnimationFrame(keepAlive)
@@ -96,7 +98,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   const stopReqAF = () => {
     // console.log('stopReqAF');
     // CANCEL wcReqAF to free up CPU
-    logInfo('Close live connection')
+    throttleLog('Close live connection')
     if (wcReqAF) {
       cancelAnimationFrame(wcReqAF)
       wcReqAF = 0 // reset
@@ -113,11 +115,11 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
   const initWalletConnect = async () => {
     if (!walletConnect === undefined || !walletConnect.current === undefined) {
-      logInfo(`Wallet already initialized, returning early from initWalletConnect`)
+      throttleLog(`Wallet already initialized, returning early from initWalletConnect`)
       return
     }
     try {
-      logInfo(`Initializing wallet connect useWalletConnect`)
+      throttleLog(`Initializing wallet connect useWalletConnect`)
       const WalletConnect = (await import('@walletconnect/client')).default
       WalletConnect.prototype.sign = (
         await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
@@ -144,7 +146,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     (err) => {
       console.log('DISCONNECTED')
       if (err) throw err
-      logInfo('Disconnnect wallet connect')
+      throttleLog('Disconnnect wallet connect')
       onDisconnect(walletConnect.current['_accounts'])
       // CANCEL wcReqAF to free up CPU
       stopReqAF() // if ticking...
@@ -159,7 +161,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     }
 
     let accounts = []
-    logInfo('Connect wallet connect')
+    throttleLog('Connect wallet connect')
     // Get provided accounts
     if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
       accounts = payload.params[0].accounts

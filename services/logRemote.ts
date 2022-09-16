@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { throttle } from 'lodash'
 
 export type Severity = 'Error' | 'Info' | 'Debug'
 
@@ -18,6 +19,11 @@ export const logInfo = async (message: string) => {
 }
 export const logDebug = async (message: string) => {
   logRemote('Debug', message)
+}
+
+export const throttleLog = (message) => {
+  const _message = throttle(() => logInfo(message), 2000)
+  return _message()
 }
 
 const logRemote = async (severity: Severity, message: string) => {
