@@ -119,7 +119,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   }
 
   const stopReqAF = () => {
-    // console.log('stopReqAF');
     // CANCEL wcReqAF to free up CPU
     throttleLog('Close live connection')
     if (wcReqAF) {
