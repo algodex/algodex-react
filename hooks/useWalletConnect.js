@@ -2,7 +2,9 @@ import { isBrowser, isMobile } from '@walletconnect/utils'
 import { useCallback, useEffect, useRef } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
+import finishedSound from '/public/finished'
 import { throttleLog } from 'services/logRemote'
+import waitSound from '/public/lowtone'
 
 const ERROR = {
   FAILED_TO_INIT: 'Wallet connect failed to initialize.',
@@ -24,6 +26,11 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
   // fix for wallectconnect websocket issue when backgrounded on mobile (uses request animation frame)
   let wcReqAF = 0
+  let wcS
+  let wcSDone
+
+  let waitSound
+  let finishedSound
   let intervalId
   const connect = async () => {
     console.log('Connecting')
@@ -76,7 +83,9 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         console.log('Creating Session')
         // create new session
         walletConnect.current.createSession()
+        startReqAF()
       } else {
+        stopReqAF()
         walletConnect.current.killSession()
         setTimeout(() => {
           walletConnect.current.createSession()
@@ -100,32 +109,73 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     }
   }
   const startReqAF = () => {
-    throttleLog('Keep wallet connection alive')
-    // console.log('startReqAF');
-    // keeps some background tasks running while navigating to Pera Wallet to approve wc session link handshake
-    if (isBrowser() && isMobile()) {
-      throttleLog('Start action to Keep wallet connection alive')
-      if (!intervalId) {
-        intervalId = setInterval(() => {
-          console.log('keep alive')
-        }, 2000)
-      }
+    // throttleLog('Keep wallet connection alive')
+    // // console.log('startReqAF');
+    // // keeps some background tasks running while navigating to Pera Wallet to approve wc session link handshake
+    // if (isBrowser() && isMobile()) {
+    //   throttleLog('Start action to Keep wallet connection alive')
+    //   if (!intervalId) {
+    //     intervalId = setInterval(() => {
+    //       console.log('keep alive')
+    //     }, 2000)
+    //   }
+    //   const keepAlive = () => {
+    //     // throttleLog('Keep alive function')
+    //     wcReqAF = requestAnimationFrame(keepAlive)
+    //   }
+    //   requestAnimationFrame(keepAlive)
+    // }
+    if (isBrowser()) {
+      // if (isBrowser() && isMobile()) {
+      // reqaf fix
       const keepAlive = () => {
-        // throttleLog('Keep alive function')
+        // console.log('keepAlive');
+        const qrIsOpen = document.querySelector('#walletconnect-qrcode-modal')
+        if (!qrIsOpen) {
+          this.stopReqAF()
+          return
+        }
         wcReqAF = requestAnimationFrame(keepAlive)
       }
       requestAnimationFrame(keepAlive)
+      // wcReqAF = 1;
+      // audio fix
+      wcS = new Audio()
+      wcS.src = waitSound // the base64 string of the sound
+      wcS.autoplay = true
+      wcS.volume = 0.6
+      wcS.loop = true
+      wcS.play()
+      wcSDone = new Audio()
+      wcSDone.src = finishedSound // the base64 string of the sound
+      wcSDone.volume = 0.1
+      wcSDone.play()
+      wcSDone.pause()
     }
   }
 
-  const stopReqAF = () => {
+  const stopReqAF = (playSound) => {
     // CANCEL wcReqAF to free up CPU
-    throttleLog('Close live connection')
+    // throttleLog('Close live connection')
+    // if (wcReqAF) {
+    //   // clearInterval(intervalId)
+    //   // intervalId = null
+    //   cancelAnimationFrame(wcReqAF)
+    //   wcReqAF = 0 // reset
+    // } else {
+    //   console.log('no wcReqAF to cancel') // is this the browser?
+    // }
+    // console.log('stopReqAF', wcReqAF);
+    // CANCEL wcReqAF to free up CPU
     if (wcReqAF) {
-      clearInterval(intervalId)
-      intervalId = null
       cancelAnimationFrame(wcReqAF)
       wcReqAF = 0 // reset
+      // TODO make audio end gracefully + upon return to dapp
+      // audio fix
+      wcS.pause()
+      if (playSound) {
+        wcSDone.play()
+      }
     } else {
       console.log('no wcReqAF to cancel') // is this the browser?
     }
