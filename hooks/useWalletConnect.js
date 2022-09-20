@@ -23,7 +23,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
    * Instance reference
    */
   const walletConnect = useRef()
-
   // fix for wallectconnect websocket issue when backgrounded on mobile (uses request animation frame)
   let wcReqAF = 0
   let wcS
@@ -31,9 +30,20 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
   let waitSound
   let finishedSound
+  let forceOpen
   let intervalId
+  const getAddress = () => {
+    // ;(async () => {
+    //   walletConnect.current = await initWalletConnect()
+    //   walletConnect.current.connected = false
+    // })()
+    console.log(walletConnect.current.accounts, 'wallet get addresses account')
+    const [account] = walletConnect.current.accounts
+    return account
+  }
   const connect = async () => {
     console.log('Connecting')
+    let setForceOpen = false
     try {
       // Something went wrong!
       if (!walletConnect.current) {
@@ -41,43 +51,77 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         return
       }
 
-      if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
-        console.log('Reinitializing wallet session again', walletConnect)
-        throttleLog('Reinitializing wallet session again', walletConnect)
-        walletConnect.current = await initWalletConnect()
-        // walletConnect.current.connected = false
-        walletConnect.current.sessionStarted = true
-        walletConnect.current.createSession()
-        startReqAF()
-      } else if (!walletConnect.current.connected) {
-        console.log('Creating Session', walletConnect)
-        throttleLog('Creating Session', walletConnect)
-        // create new session
-        walletConnect.current.sessionStarted = true
-        // walletConnect.current.connected = false
+      if (!walletConnect.current.connected) {
         await walletConnect.current.createSession()
-        // setInterva(async () => {
-        //   console.log
-        // }, 5000)
-        // await walletConnect.current.createSession()
-        startReqAF()
-      } else {
-        // console.log('Already Connected')
-        // throttleLog('Already Connected')
-        // QRCodeModal.close()
-        // walletConnect.current.killSession()
-        // setTimeout(() => {
-        //   walletConnect.current.createSession()
-        // }, 1000)
-        stopReqAF()
-        walletConnect.current.killSession()
-        setTimeout(() => {
-          walletConnect.current.createSession()
-        }, 1000)
-
-        // CANCEL wcReqAF to free up CPU
-        stopReqAF() // if ticking...
+        setForceOpen = true
       }
+
+      // else {
+      //   stopReqAF()
+      //   walletConnect.current.killSession()
+      //   setTimeout(() => {
+      //     walletConnect.current.createSession()
+      //   }, 1000)
+      // }
+
+      // https://github.com/NoahZinsmeister/web3-react/issues/376
+      if (forceOpen) {
+        // Modal has already been opened once, force it to open
+        walletConnect.current._qrcodeModal.open(
+          walletConnect.current.uri,
+          walletConnect.current._qrcodeModalOptions
+        )
+      } else if (setForceOpen) {
+        // Modal opened for the first time, force on future attempts
+        forceOpen = true
+      }
+
+      const ob = new MutationObserver(([event]) => {
+        // Check if the wallet connect wrapper was removed
+        const removed = [...event.removedNodes].find((el) => el.id === 'walletconnect-wrapper')
+        if (!removed) return
+        ob.disconnect() // kill observer
+        return walletConnect.current.connected ? getAddress() : []
+      })
+      ob.observe(document.querySelector('body'), { childList: true })
+
+      // if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
+      //   console.log('Reinitializing wallet session again', walletConnect)
+      //   throttleLog('Reinitializing wallet session again', walletConnect)
+      //   walletConnect.current = await initWalletConnect()
+      //   // walletConnect.current.connected = false
+      //   walletConnect.current.sessionStarted = true
+      //   walletConnect.current.createSession()
+      //   startReqAF()
+      // } else if (!walletConnect.current.connected) {
+      //   console.log('Creating Session', walletConnect)
+      //   throttleLog('Creating Session', walletConnect)
+      //   // create new session
+      //   walletConnect.current.sessionStarted = true
+      //   // walletConnect.current.connected = false
+      //   await walletConnect.current.createSession()
+      //   // setInterva(async () => {
+      //   //   console.log
+      //   // }, 5000)
+      //   // await walletConnect.current.createSession()
+      //   startReqAF()
+      // } else {
+      //   // console.log('Already Connected')
+      //   // throttleLog('Already Connected')
+      //   // QRCodeModal.close()
+      //   // walletConnect.current.killSession()
+      //   // setTimeout(() => {
+      //   //   walletConnect.current.createSession()
+      //   // }, 1000)
+      //   stopReqAF()
+      //   walletConnect.current.killSession()
+      //   setTimeout(() => {
+      //     walletConnect.current.createSession()
+      //   }, 1000)
+
+      //   // CANCEL wcReqAF to free up CPU
+      //   stopReqAF() // if ticking...
+      // }
 
       // Check if connection is already established
       // if (!walletConnect.current.connected) {
@@ -133,7 +177,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         // console.log('keepAlive');
         const qrIsOpen = document.querySelector('#walletconnect-qrcode-modal')
         if (!qrIsOpen) {
-          this.stopReqAF()
+          stopReqAF()
           return
         }
         wcReqAF = requestAnimationFrame(keepAlive)
@@ -182,10 +226,15 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     }
   }
 
-  const disconnect = () => {
+  const disconnect = async (wallet) => {
+    console.log(walletConnect.current, wallet, 'asdfasdfasdfsss')
     if (walletConnect.current.connected) {
-      walletConnect.current.killSession()
+      await walletConnect.current.killSession()
+      // localStorage.removeItem('walletconnect')
     }
+    // console.log(walletConnect.current, 'asdfasdfasdfsss')
+    // if (typeof walletConnect.current.killSession !== 'undefined')
+    //   walletConnect.current.killSession()
   }
 
   const initWalletConnect = async () => {
@@ -199,6 +248,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       WalletConnect.prototype.sign = (
         await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
       ).default
+      forceOpen = false
       return new WalletConnect({
         bridge: 'https://bridge.walletconnect.org', // Required
         qrcodeModal: QRCodeModal
@@ -218,11 +268,19 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   }, [])
 
   const handleDisconnect = useCallback(
-    (err) => {
+    async (err) => {
       console.log('DISCONNECTED')
       if (err) throw err
       throttleLog('Disconnnect wallet connect')
-      onDisconnect(walletConnect.current['_accounts'])
+      console.log(walletConnect.current, 'asdf')
+      const walletAccount = walletConnect?.current?._accounts
+      console.log(walletConnect?.current?._accounts, 'first')
+      // disconnect()
+      if (walletConnect?.current?._accounts) {
+        await onDisconnect(walletAccount)
+      }
+      console.log(walletAccount, 'second')
+      // disconnect()
       // CANCEL wcReqAF to free up CPU
       stopReqAF() // if ticking...
     },
@@ -248,8 +306,9 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       connector: walletConnect.current,
       address: acct
     }))
-    console.log('connected here')
+    console.log(walletConnect, 'connected here')
     onConnect(_addresses)
+    // dispatcher('signIn', { type: 'wallet' })
     QRCodeModal.close()
   }
   useEffect(() => {

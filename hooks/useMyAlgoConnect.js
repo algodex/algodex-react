@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
+
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
@@ -15,8 +17,8 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
   // Instance reference
   const myAlgoWallet = useRef()
 
-  const disconnect = () => {
-    onDisconnect()
+  const disconnect = (wallet) => {
+    onDisconnect([wallet.address])
   }
   const connect = async () => {
     try {

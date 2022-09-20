@@ -125,6 +125,7 @@ function useWallets(initialState) {
   // Handle any Connection
   const handleConnect = useCallback(
     async (_addresses) => {
+      console.log(_addresses, 'addresses to connect')
       if (_addresses.length > 0) {
         throttleLog('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
@@ -133,7 +134,6 @@ function useWallets(initialState) {
 
         const accounts = await http.indexer.fetchAccounts(_addresses)
         const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
-
         if (sameWalletClient.length > _addresses.length) {
           // disconnect even occured for atleast one address
           setAddresses(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
@@ -150,9 +150,13 @@ function useWallets(initialState) {
             // merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
           })
           const allAddresses = _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
-          setAddresses(allAddresses)
-          throttleLog(`Connected Successfully with : ${allAddresses.length} addresses`)
-          localStorage.setItem('addresses', JSON.stringify(allAddresses))
+          const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
+          const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses)
+          console.log(_allAddresses, accounts, addresses, 'asdfas')
+          setAddresses(_allAddresses)
+          throttleLog(`Connected Successfully with : ${_allAddresses.length} addresses`)
+          localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+          setAlgodexWallet(_allAddresses[0])
           // setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
         }
         dispatcher('signIn', { type: 'wallet' })
@@ -164,33 +168,95 @@ function useWallets(initialState) {
   // Handle any Disconnect
   const handleDisconnect = useCallback(
     (_addresses) => {
+      console.log(_addresses, 'addrersses')
       const remainingAddresses =
         JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
-          if (_addresses[0]) {
+          if (_addresses && _addresses[0]) {
             return wallet.address !== _addresses[0]
           }
         }) || []
-      setAddresses(remainingAddresses)
-
-      if (typeof wallet !== 'undefined') {
-        const disconnectedActiveWallet = {
-          ...wallet,
-          connector: {
-            ...wallet.connector,
-            connected: false
+      let _remainingAddresses = [...remainingAddresses]
+      if (_remainingAddresses.length > 0) {
+        _remainingAddresses = _remainingAddresses.map((wallet) => {
+          if (wallet.type === 'wallet-connect') {
+            console.log(context[2].current, wallet, 'context[2].current')
+            return {
+              ...wallet,
+              connector: {
+                ...context[2].current,
+                ...wallet.connector,
+                _accounts: wallet.connector._accounts,
+                _connected: wallet.connector._connected,
+                connected: wallet.connector._connected
+              }
+            }
           }
+          return wallet
+        })
+        setAlgodexWallet(_remainingAddresses[0])
+      } else {
+        if (typeof wallet !== 'undefined') {
+          let disconnectedActiveWallet = {}
+          console.log(context[2].current, 'has wallet context[2].current')
+          if (wallet.type === 'wallet-connect') {
+            disconnectedActiveWallet = {
+              ...wallet,
+              connector: {
+                ...context[2].current,
+                _connected: false,
+                connected: false
+              }
+            }
+          } else {
+            disconnectedActiveWallet = {
+              ...wallet,
+              connector: {
+                ...wallet.connector,
+                connected: false
+              }
+            }
+          }
+          setAlgodexWallet(disconnectedActiveWallet)
         }
-        setAlgodexWallet(
-          remainingAddresses.length > 0 ? remainingAddresses[0] : disconnectedActiveWallet
-        )
       }
+      // if (typeof wallet !== 'undefined') {
+      //   let disconnectedActiveWallet = {}
+      //   console.log(context[2].current, 'has wallet context[2].current')
+      //   if (wallet.type === 'wallet-connect') {
+      //     disconnectedActiveWallet = {
+      //       ...wallet,
+      //       connector: {
+      //         ...context[2].current,
+      //         _connected: false,
+      //         connected: false
+      //       }
+      //     }
+      //   } else {
+      //     disconnectedActiveWallet = {
+      //       ...wallet,
+      //       connector: {
+      //         ...wallet.connector,
+      //         connected: false
+      //       }
+      //     }
+      //   }
+      //   setAlgodexWallet(
+      //     _remainingAddresses.length > 0 ? _remainingAddresses[0] : disconnectedActiveWallet
+      //   )
+      // }
+
+      // if (_remainingAddresses.length === 0) {
+      //   dispatcher('signOut', {
+      //     type: 'wallet'
+      //   })
+      // }
+      // dispatcher('signOut', { type: 'wallet' })
       throttleLog(
-        `Disconnected Successfully with : ${_addresses} removed and ${remainingAddresses.length} remaining`
+        `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
-      localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
-      setAddresses(remainingAddresses)
+      localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
+      setAddresses(_remainingAddresses)
       console.error('Handle removing from storage', _addresses)
-      dispatcher('signOut', { type: 'wallet' })
     },
     [setAddresses, addresses]
   )
@@ -224,17 +290,17 @@ function useWallets(initialState) {
   }, [setActiveWallet])
 
   // Fetch all wallet addresses from local storage
-  // useEffect(() => {
-  //   const res = localStorage.getItem('addresses')
-  //   if (res) {
-  //     const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
-  //     if (initialState) {
-  //       setAlgodexWallet(initialState)
-  //       setWallet(initialState)
-  //     }
-  //     setAddresses(_addresses)
-  //   }
-  // }, [])
+  useEffect(() => {
+    const res = localStorage.getItem('addresses')
+    if (res) {
+      const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
+      if (initialState) {
+        setAlgodexWallet(initialState)
+        setWallet(initialState)
+      }
+      setAddresses(_addresses)
+    }
+  }, [])
   //
   // useEffect(() => {
   //   localStorage.setItem('addresses', JSON.stringify(addresses))
