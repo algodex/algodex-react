@@ -29,12 +29,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         return
       }
 
-      if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
-        // throttleLog('Reinitializing wallet session again', walletConnect)
-        console.log('Reinitializing wallet session again', walletConnect)
-        walletConnect.current = await initWalletConnect()
-        walletConnect.current.createSession()
-      } else if (!walletConnect.current.connected) {
+      if (!walletConnect.current.connected) {
         // create new session
         console.log('Creating Session', walletConnect)
         walletConnect.current.sessionStarted = true
