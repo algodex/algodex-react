@@ -51,9 +51,18 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         return
       }
 
-      if (!walletConnect.current.connected) {
+      if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
+        console.log('Reinitializing wallet session again', walletConnect)
+        // throttleLog('Reinitializing wallet session again', walletConnect)
+        walletConnect.current = await initWalletConnect()
+        // walletConnect.current.connected = false
+        walletConnect.current.sessionStarted = true
+        walletConnect.current.createSession()
+      } else if (!walletConnect.current.connected) {
         await walletConnect.current.createSession()
+        walletConnect.current.sessionStarted = true
         setForceOpen = true
+        // startReqAF()
       }
 
       // else {
@@ -66,6 +75,8 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
       // https://github.com/NoahZinsmeister/web3-react/issues/376
       if (forceOpen) {
+        walletConnect.current = await initWalletConnect()
+        walletConnect.current.createSession()
         // Modal has already been opened once, force it to open
         walletConnect.current._qrcodeModal.open(
           walletConnect.current.uri,
