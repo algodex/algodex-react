@@ -106,12 +106,50 @@ export function WalletView(props) {
   } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-
+  const context = useContext(WalletsContext)
+  // console.log(context, 'wallet connect')
   const myAlgoDisconnect = (targetWallet) => {
+    // _myAlgoDisconnect(targetWallet)
+    // const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
+    //   return wallet.address !== targetWallet.address
+    // })
+    // //You may want to filter by active address array to avoid rehydration?
+    // localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+    // setAddresses(remainingAddresses)
+    // if (remainingAddresses.length === 0) {
+    //   console.log('came here')
+    //   dispatcher('signOut', {
+    //     type: 'wallet'
+    //   })
+    //   setSignedIn(false)
+    //   setActiveWallet()
+    // } else {
+    //   setActiveWallet(remainingAddresses[0])
+    // }
     _myAlgoDisconnect(targetWallet)
   }
 
   const peraDisconnect = (targetWallet) => {
+    // console.log(targetWallet, 'target wallet')
+    // const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
+    //   return wallet.address !== targetWallet.address
+    // })
+
+    // localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
+    // setAddresses(remainingAddresses)
+    // if (remainingAddresses.length === 0) {
+    //   // dispatcher('signOut', {
+    //   //   type: 'wallet'
+    //   // })
+    //   setSignedIn(false)
+    // } else {
+    //   setActiveWallet(remainingAddresses[0])
+    // }
+    // if (typeof targetWallet.connector.killSession !== 'undefined')
+    // if (targetWallet.connector.connected || targetWallet.connector._connected)
+    //   context[2].current.killSession()
+    // localStorage.removeItem('walletconnect')
+    console.log('came here', targetWallet)
     _peraDisconnect(targetWallet)
   }
 
@@ -136,8 +174,15 @@ export function WalletView(props) {
   }
 
   const walletDisconnectMap = {
-    'my-algo-wallet': (wallet) => myAlgoDisconnect(wallet),
+    'my-algo-wallet': (wallet) => {
+      console.log(wallet, 'myalgo wallet to disconnect')
+      myAlgoDisconnect(wallet)
+    },
     'wallet-connect': (wallet) => peraDisconnect(wallet)
+    // 'wallet-connect': (wallet) => {
+    //   console.log(wallet, 'pera wallet to disconnect')
+    //   peraDisconnect(wallet)
+    // }
   }
 
   // const getButtonVariant = () => {
@@ -309,11 +354,13 @@ export function WalletOptionsListComp(props) {
   }
 
   const myAlgoOnClick = () => {
+    // WALLETS_CONNECT_MAP['my-algo-wallet']
     WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
     WALLETS_CONNECT_MAP['pera-connect']()
+    // WALLETS_CONNECT_MAP['pera-connect']
   }
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
@@ -420,6 +467,13 @@ function WalletConnect() {
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
+  // useEffect(() => {
+  //   if (addresses.length > 0) {
+  //     if (typeof wallet === 'undefined') {
+  //       setSignedIn(true)
+  //     }
+  //   }
+  // }, [addresses])
 
   useEffect(() => {
     setSignedIn(isConnected)
