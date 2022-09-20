@@ -309,13 +309,11 @@ export function WalletOptionsListComp(props) {
   }
 
   const myAlgoOnClick = () => {
-    // WALLETS_CONNECT_MAP['my-algo-wallet']
     WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
     WALLETS_CONNECT_MAP['pera-connect']()
-    // WALLETS_CONNECT_MAP['pera-connect']
   }
   const isPeraConnected = useMemo(() => {
     if (isConnected) {

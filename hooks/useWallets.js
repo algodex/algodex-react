@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 import PropTypes from 'prop-types'
-import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
@@ -125,7 +124,6 @@ function useWallets(initialState) {
   // Handle any Connection
   const handleConnect = useCallback(
     async (_addresses) => {
-      console.log(_addresses, 'addresses to connect')
       if (_addresses.length > 0) {
         throttleLog('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
@@ -152,7 +150,6 @@ function useWallets(initialState) {
           const allAddresses = _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
           const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
           const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses)
-          console.log(_allAddresses, accounts, addresses, 'asdfas')
           setAddresses(_allAddresses)
           throttleLog(`Connected Successfully with : ${_allAddresses.length} addresses`)
           localStorage.setItem('addresses', JSON.stringify(_allAddresses))
@@ -179,7 +176,6 @@ function useWallets(initialState) {
       if (_remainingAddresses.length > 0) {
         _remainingAddresses = _remainingAddresses.map((wallet) => {
           if (wallet.type === 'wallet-connect') {
-            console.log(context[2].current, wallet, 'context[2].current')
             return {
               ...wallet,
               connector: {
@@ -197,7 +193,6 @@ function useWallets(initialState) {
       } else {
         if (typeof wallet !== 'undefined') {
           let disconnectedActiveWallet = {}
-          console.log(context[2].current, 'has wallet context[2].current')
           if (wallet.type === 'wallet-connect') {
             disconnectedActiveWallet = {
               ...wallet,
@@ -219,41 +214,6 @@ function useWallets(initialState) {
           setAlgodexWallet(disconnectedActiveWallet)
         }
       }
-      // if (typeof wallet !== 'undefined') {
-      //   let disconnectedActiveWallet = {}
-      //   console.log(context[2].current, 'has wallet context[2].current')
-      //   if (wallet.type === 'wallet-connect') {
-      //     disconnectedActiveWallet = {
-      //       ...wallet,
-      //       connector: {
-      //         ...context[2].current,
-      //         _connected: false,
-      //         connected: false
-      //       }
-      //     }
-      //   } else {
-      //     disconnectedActiveWallet = {
-      //       ...wallet,
-      //       connector: {
-      //         ...wallet.connector,
-      //         connected: false
-      //       }
-      //     }
-      //   }
-      //   setAlgodexWallet(
-      //     _remainingAddresses.length > 0 ? _remainingAddresses[0] : disconnectedActiveWallet
-      //   )
-      // }
-
-      // if (_remainingAddresses.length === 0) {
-      //   dispatcher('signOut', {
-      //     type: 'wallet'
-      //   })
-      // }
-      // dispatcher('signOut', { type: 'wallet' })
-      throttleLog(
-        `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
-      )
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
       console.error('Handle removing from storage', _addresses)
@@ -273,13 +233,6 @@ function useWallets(initialState) {
     disconnect: peraDisconnect,
     connector: _peraConnector
   } = useWalletConnect(handleConnect, handleDisconnect)
-
-  // const peraConnect = () => {
-  //   console.log('pera', context[2])
-  // }
-  // const peraDisconnect = () => {
-  //   console.log('pera')
-  // }
 
   // Fetch active wallet from local storage
   useEffect(() => {
