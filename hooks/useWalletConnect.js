@@ -150,7 +150,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
       // Map the connector to the address list
       const _addresses = walletConnect.current.accounts.map((acct) => {
-        console.log(acct)
+        console.log(acct, 'here')
         return {
           name: 'WalletConnect',
           address: acct,
@@ -236,12 +236,19 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       console.log('no wcReqAF to cancel') // is this the browser?
     }
   }
-
+  let activeWallet = {}
   const disconnect = async (wallet) => {
     console.log(walletConnect.current, wallet, 'asdfasdfasdfsss')
     if (walletConnect.current.connected) {
+      localStorage.removeItem('walletconnect')
       await walletConnect.current.killSession()
-      // localStorage.removeItem('walletconnect')
+      localStorage.removeItem('walletconnect')
+    } else if (wallet.connector.connected) {
+      activeWallet = { ...wallet }
+      wallet.connector.killSession()
+      localStorage.removeItem('walletconnect')
+    } else {
+      return
     }
     // console.log(walletConnect.current, 'asdfasdfasdfsss')
     // if (typeof walletConnect.current.killSession !== 'undefined')
@@ -273,7 +280,8 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     if (walletConnect === undefined || walletConnect.current === undefined) {
       ;(async () => {
         walletConnect.current = await initWalletConnect()
-        walletConnect.current.connected = false
+        console.log(walletConnect, 'wallet connect ooo')
+        // walletConnect.current.connected = false
       })()
     }
   }, [])
@@ -284,11 +292,22 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       if (err) throw err
       throttleLog('Disconnnect wallet connect')
       console.log(walletConnect.current, 'asdf')
-      const walletAccount = walletConnect?.current?._accounts
+      const walletAccount =
+        walletConnect.current._accounts.length > 0
+          ? walletConnect.current._accounts
+          : activeWallet?.connector._accounts
       console.log(walletConnect?.current?._accounts, 'first')
       // disconnect()
-      if (walletConnect?.current?._accounts) {
+      // if (walletConnect?.current?._accounts) {
+      //   await onDisconnect(walletAccount)
+      // }
+
+      if (walletConnect.current._accounts) {
         await onDisconnect(walletAccount)
+      } else if (activeWallet.connector._accounts) {
+        await onDisconnect(walletAccount)
+      } else {
+        return
       }
       console.log(walletAccount, 'second')
       // disconnect()

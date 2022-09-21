@@ -141,6 +141,7 @@ function useWallets(initialState) {
             'addresses',
             JSON.stringify(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
           )
+          console.log(_mergeAddresses(otherWalletClients, mergedPrivateAddresses), 'came tp secpmd')
         } else {
           console.log({
             accounts,
@@ -295,6 +296,7 @@ function useWallets(initialState) {
     if (res) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
       if (initialState) {
+        console.log(initialState, 'iitial state')
         setAlgodexWallet(initialState)
         setWallet(initialState)
       }

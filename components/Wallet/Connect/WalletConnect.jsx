@@ -106,7 +106,7 @@ export function WalletView(props) {
   } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-  const context = useContext(WalletsContext)
+  // const context = useContext(WalletsContext)
   // console.log(context, 'wallet connect')
   const myAlgoDisconnect = (targetWallet) => {
     // _myAlgoDisconnect(targetWallet)
