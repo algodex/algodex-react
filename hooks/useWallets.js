@@ -152,12 +152,21 @@ function useWallets(initialState) {
           })
           const allAddresses = _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
           const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
-          const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses)
+          const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses).map(
+            (wallet) => {
+              if (wallet.type === 'wallet-connect' && context[2].current.connected) {
+                return wallet
+              }
+              return wallet
+            }
+          )
+          if (_allAddresses.length > 0) {
+            setAlgodexWallet(_allAddresses[0])
+          }
           console.log(_allAddresses, accounts, addresses, 'asdfas')
           setAddresses(_allAddresses)
           throttleLog(`Connected Successfully with : ${_allAddresses.length} addresses`)
           localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-          setAlgodexWallet(_allAddresses[0])
           // setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
         }
         dispatcher('signIn', { type: 'wallet' })

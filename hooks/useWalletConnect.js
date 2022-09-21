@@ -63,6 +63,11 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         walletConnect.current.sessionStarted = true
         setForceOpen = true
         // startReqAF()
+      } else {
+        walletConnect.current.killSession()
+        setTimeout(() => {
+          walletConnect.current.createSession()
+        }, 1000)
       }
 
       // else {
@@ -95,7 +100,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
         return walletConnect.current.connected ? getAddress() : []
       })
       ob.observe(document.querySelector('body'), { childList: true })
-
+      console.log(ob, 'ob observer')
       // if (!walletConnect.current.connected && walletConnect.current.sessionStarted) {
       //   console.log('Reinitializing wallet session again', walletConnect)
       //   throttleLog('Reinitializing wallet session again', walletConnect)
@@ -150,7 +155,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
       // Map the connector to the address list
       const _addresses = walletConnect.current.accounts.map((acct) => {
-        console.log(acct, 'here')
+        console.log(acct, walletConnect, 'here')
         return {
           name: 'WalletConnect',
           address: acct,
@@ -158,8 +163,8 @@ export default function useWalletConnect(onConnect, onDisconnect) {
           connector: walletConnect.current
         }
       })
-      // setAddresses(_addresses);
-      onConnect(_addresses)
+      console.log(_addresses, 'hey ooo')
+      // onConnect(_addresses)
     } catch (e) {
       console.error(ERROR.FAILED_TO_CONNECT, e)
     }
@@ -332,6 +337,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
     // Map the connector to the address list
     const _addresses = accounts.map((acct) => ({
+      name: 'WalletConnect',
       type: 'wallet-connect',
       connector: walletConnect.current,
       address: acct
