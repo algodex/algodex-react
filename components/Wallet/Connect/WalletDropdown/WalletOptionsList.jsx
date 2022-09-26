@@ -22,7 +22,7 @@ const WalletsOptions = ({
       >
         <Box className="flex justify-between items-center">
           <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
-          {isConnectingAddress && (
+          {/* {isConnectingAddress && (
             <Button
               className="cursor-pointer text-white"
               variant="text"
@@ -31,7 +31,7 @@ const WalletsOptions = ({
             >
               Go back
             </Button>
-          )}
+          )} */}
         </Box>
         <Box className="mt-4 ml-4">
           <Stack
