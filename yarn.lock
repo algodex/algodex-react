@@ -9,8 +9,8 @@
 
 "@algodex/algodex-sdk@^1.1.17":
   version "1.1.17"
-  resolved "https://npm.pkg.github.com/download/@algodex/algodex-sdk/1.1.17/807b6f766773360cdc4b68277206fa6304e9d47be640ea58f6aefc8bff811f1a#6f7ec459d56a6b2ac7a313469186e524fb98e765"
-  integrity sha512-8Vs0tv80smDIAztT35bCUkGFubg9zZ0KHQbhVlfwWQuaHA4NTS1JxogmVUm2xXhISOWubMUW7EykQMn/ePc37g==
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-1.1.17.tgz#308ce294364739346e89ebb9939320fe48301dbe"
+  integrity sha512-H2/DS3OCzhYO0Q/QeR6//shmNEoTZcp5uAbN0imlTnyroIwlIsHmFwHdEcA93SFPiNw/jIxkVy4VtO44JJqMAA==
   dependencies:
     "@json-rpc-tools/utils" "^1.7.6"
     "@randlabs/myalgo-connect" "^1.0.1"
