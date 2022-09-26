@@ -200,12 +200,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   }
 
   const isDisabled =
-    isBelowMinOrderAmount() ||
-    isInvalid() ||
-    isBalanceExceeded() ||
-    isLessThanMicroAlgo() ||
-    // asset.isGeoBlocked ||
-    status.submitting
+    isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || isLessThanMicroAlgo()
+  // asset.isGeoBlocked ||
+  // status.submitting
 
   const handleSlider = useCallback(
     (e, value) => {
