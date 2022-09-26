@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import { throttleLog } from 'services/logRemote'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from './useEvents'
@@ -72,34 +73,34 @@ function useWallets(initialState) {
     }
   }, [onEvents])
 
-  // useEffect(() => {
-  //   if (context[0]?.length) {
-  //     const reConnectMyAlgoWallet = async () => {
-  //       // '@randlabs/myalgo-connect' is imported dynamically
-  //       // because it uses the window object
-  //       const myAlgoConnector = {}
-  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //       MyAlgoConnect.prototype.sign = signer
-  //       myAlgoConnector.current = new MyAlgoConnect()
-  //       myAlgoConnector.current.connected = true
-  //       const mappedAddresses = context[0].map((addr) => {
-  //         if (addr.type === 'my-algo-wallet') {
-  //           return {
-  //             ...addr,
-  //             connector: myAlgoConnector.current
-  //           }
-  //         } else {
-  //           return {
-  //             ...addr,
-  //             connector: context[2]
-  //           }
-  //         }
-  //       })
-  //       localStorage.setItem('addresses', JSON.stringify(_mergeAddresses(mappedAddresses, [])))
-  //     }
-  //     reConnectMyAlgoWallet()
-  //   }
-  // }, [context])
+  useEffect(() => {
+    if (context[0]?.length) {
+      const reConnectMyAlgoWallet = async () => {
+        // '@randlabs/myalgo-connect' is imported dynamically
+        // because it uses the window object
+        const myAlgoConnector = {}
+        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+        MyAlgoConnect.prototype.sign = signer
+        myAlgoConnector.current = new MyAlgoConnect()
+        myAlgoConnector.current.connected = true
+        const mappedAddresses = context[0].map((addr) => {
+          if (addr.type === 'my-algo-wallet') {
+            return {
+              ...addr,
+              connector: myAlgoConnector.current
+            }
+          } else {
+            return {
+              ...addr,
+              connector: context[2]
+            }
+          }
+        })
+        localStorage.setItem('addresses', JSON.stringify(_mergeAddresses(mappedAddresses, [])))
+      }
+      reConnectMyAlgoWallet()
+    }
+  }, [context])
 
   useEffect(() => {
     if (addresses.length > 0) {

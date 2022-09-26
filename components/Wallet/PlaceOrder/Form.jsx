@@ -3,6 +3,7 @@ import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
+import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
@@ -59,6 +60,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet } = useWallets(initialState)
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false
+  })
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -168,7 +173,39 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return false
   }, [order, wallet])
 
-  // const MICROALGO = 0.000001
+  const MICROALGO = 0.000001
+
+  const isBelowMinOrderAmount = () => {
+    if (order.type === 'buy') {
+      return new Big(order.total).lt(0.5)
+    }
+    return new Big(order.total).eq(0)
+  }
+
+  const isInvalid = () => {
+    return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
+  }
+
+  const isBalanceExceeded = () => {
+    const maxSpendableAlgo = fromBaseUnits(wallet.amount)
+    const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
+    if (order.type === 'buy') {
+      return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+    }
+    return new Big(order.amount).gt(asaBalance)
+  }
+
+  const isLessThanMicroAlgo = () => {
+    return order.price < MICROALGO
+  }
+
+  const isDisabled =
+    isBelowMinOrderAmount() ||
+    isInvalid() ||
+    isBalanceExceeded() ||
+    isLessThanMicroAlgo() ||
+    // asset.isGeoBlocked ||
+    status.submitting
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -235,6 +272,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
+      setStatus((prev) => ({ ...prev, submitting: true }))
       let orderPromise
       if (typeof onSubmit === 'function') {
         orderPromise = onSubmit({
@@ -390,7 +428,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            disabled={!hasBalance || order.total === 0}
+            disabled={isDisabled}
+            // disabled={!hasBalance || order.total === 0}
           >
             {buttonProps[order.type || 'buy']?.text}
           </Button>
@@ -412,7 +451,8 @@ PlaceOrderForm.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
-    name: PropTypes.string
+    name: PropTypes.string,
+    isGeoBlocked: PropTypes.bool
   }).isRequired,
   /**
    * Wallet to execute Orders from
