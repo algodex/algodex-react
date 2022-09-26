@@ -254,9 +254,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           },
           { wallet }
         )
-        console.log('Wallet Data:', wallet)
-        const _walletConnectionDB = JSON.parse(localStorage.getItem('walletconnect'))
-        console.log('Wallet Connect:', _walletConnectionDB)
         orderPromise = placeOrder(
           {
             ...order,
@@ -277,17 +274,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       toast.promise(orderPromise, {
         loading: (e) => {
           throttleLog({ type: 'loading', message: e })
-          console.log(e, 'loading...')
           return t('awaiting-confirmation')
         },
         success: (e) => {
           throttleLog({ type: 'success', message: e })
-          console.log(e, 'success...')
           return t('order-success')
         },
         error: (err) => {
           throttleLog(`Error occured : ${err}`)
-          console.log(err, 'error occured')
           if (/PopupOpenError|blocked/.test(err)) {
             return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
           }

@@ -129,15 +129,13 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet: initialState, setWallet } = useAlgodex()
+  const { setWallet } = useAlgodex()
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
   const [locStorage, setLocStorage] = useState([])
-  // const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
-  // const { placeOrder, http, isConnected } = useAlgodex()
+
   const { wallet } = useWallets()
   const myAlgoConnector = useRef()
-  // const [isConnectingWallet, setIsConnectingWallet] = useState(false)
-  // console.log(wallet, 'wallet here')
+
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**

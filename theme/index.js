@@ -1,7 +1,7 @@
 import { lighten, opacify } from 'polished'
 
 import { createTheme } from '@mui/material/styles'
-import { opacity } from 'styled-system'
+// import { opacity } from 'styled-system'
 import { experimental_sx as sx } from '@mui/material/styles'
 
 /**

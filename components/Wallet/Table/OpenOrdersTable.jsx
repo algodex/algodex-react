@@ -106,10 +106,8 @@ export function OpenOrdersTable({ orders: _orders }) {
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
 
         const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
-        console.log('Cancel Wallet Data:', wallet)
         throttleLog('Cancel Wallet Data:', wallet)
         const _walletConnectionDB = JSON.parse(localStorage.getItem('walletconnect'))
-        console.log('Cancel Wallet Connect:', _walletConnectionDB)
         throttleLog('Cancel Wallet Connect:', _walletConnectionDB)
         const cancelOrderPromise = closeOrder({
           address: ownerAddress,

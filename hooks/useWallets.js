@@ -1,10 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import PropTypes from 'prop-types'
-import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import { throttleLog } from 'services/logRemote'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from './useEvents'
@@ -19,7 +17,6 @@ import useWalletConnect from './useWalletConnect'
  * @private
  */
 function _mergeAddresses(a, b) {
-  // console.log(`ab`, a, b)
   if (!Array.isArray(a) || !Array.isArray(b)) {
     throw new TypeError('Must be an array of addresses!')
   }
@@ -125,7 +122,6 @@ function useWallets(initialState) {
   // Handle any Connection
   const handleConnect = useCallback(
     async (_addresses) => {
-      console.log(_addresses, 'addresses to connect')
       if (_addresses.length > 0) {
         throttleLog('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
@@ -141,15 +137,7 @@ function useWallets(initialState) {
             'addresses',
             JSON.stringify(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
           )
-          console.log(_mergeAddresses(otherWalletClients, mergedPrivateAddresses), 'came tp secpmd')
         } else {
-          console.log({
-            accounts,
-            _addresses,
-            addresses,
-            mergedPrivateAddresses
-            // merge: _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
-          })
           const allAddresses = _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
           const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
           const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses).map(
@@ -163,11 +151,8 @@ function useWallets(initialState) {
           if (_allAddresses.length > 0) {
             setAlgodexWallet(_allAddresses[0])
           }
-          console.log(_allAddresses, accounts, addresses, 'asdfas')
           setAddresses(_allAddresses)
-          throttleLog(`Connected Successfully with : ${_allAddresses.length} addresses`)
           localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-          // setAddresses(_mergeAddresses(addresses, _mergeAddresses(_addresses, accounts)))
         }
         dispatcher('signIn', { type: 'wallet' })
       }
@@ -178,7 +163,6 @@ function useWallets(initialState) {
   // Handle any Disconnect
   const handleDisconnect = useCallback(
     (_addresses) => {
-      console.log(_addresses, 'addrersses')
       const remainingAddresses =
         JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
           if (_addresses && _addresses[0]) {
@@ -189,7 +173,6 @@ function useWallets(initialState) {
       if (_remainingAddresses.length > 0) {
         _remainingAddresses = _remainingAddresses.map((wallet) => {
           if (wallet.type === 'wallet-connect') {
-            console.log(context[2].current, wallet, 'context[2].current')
             return {
               ...wallet,
               connector: {
@@ -207,7 +190,6 @@ function useWallets(initialState) {
       } else {
         if (typeof wallet !== 'undefined') {
           let disconnectedActiveWallet = {}
-          console.log(context[2].current, 'has wallet context[2].current')
           if (wallet.type === 'wallet-connect') {
             disconnectedActiveWallet = {
               ...wallet,
@@ -305,7 +287,6 @@ function useWallets(initialState) {
     if (res) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
       if (initialState) {
-        console.log(initialState, 'iitial state')
         setAlgodexWallet(initialState)
         setWallet(initialState)
       }

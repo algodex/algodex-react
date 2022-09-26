@@ -10,7 +10,6 @@ import { Section } from '@/components/Layout/Section'
 import Typography from '@mui/material/Typography'
 import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
 import WalletsList from './WalletConnect/WalletsList'
-import { difference } from 'lodash'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
@@ -337,14 +336,7 @@ WalletView.defaultProps = {
 }
 
 export function WalletOptionsListComp(props) {
-  const {
-    setIsConnectingWallet,
-    isConnectingWallet,
-    addresses,
-    setAddresses,
-    closeFn,
-    addressesRef
-  } = props
+  const { setIsConnectingWallet, isConnectingWallet, addresses } = props
   const { wallet: initialState, isConnected } = useAlgodex()
   const { peraConnect, myAlgoConnect } = useWallets(initialState)
 
@@ -354,13 +346,11 @@ export function WalletOptionsListComp(props) {
   }
 
   const myAlgoOnClick = () => {
-    // WALLETS_CONNECT_MAP['my-algo-wallet']
     WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
     WALLETS_CONNECT_MAP['pera-connect']()
-    // WALLETS_CONNECT_MAP['pera-connect']
   }
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
@@ -447,10 +437,7 @@ export function WalletOptionsListComp(props) {
 WalletOptionsListComp.propTypes = {
   setIsConnectingWallet: PropTypes.func,
   isConnectingWallet: PropTypes.bool,
-  addresses: PropTypes.array,
-  setAddresses: PropTypes.func,
-  closeFn: PropTypes.func,
-  addressesRef: PropTypes.object
+  addresses: PropTypes.array
 }
 
 /**

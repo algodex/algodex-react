@@ -5,7 +5,6 @@ import {
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import AlgodexApi from '@algodex/algodex-sdk'
 import AssetInfo from '@/components/Asset/Asset'
@@ -15,6 +14,7 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
+import { WalletsContext } from '@/hooks/useWallets'
 import config from '@/config.json'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
