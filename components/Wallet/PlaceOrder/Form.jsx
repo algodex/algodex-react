@@ -244,6 +244,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const handleChange = useCallback(
     (e, _key, _value) => {
+      if (asset.isGeoBlocked) {
+        toast.error('Asset is not available for trading')
+        return
+      }
+
       const key = _key || e.target.name
       let value = _value || e.target.value
 
