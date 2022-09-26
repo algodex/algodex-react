@@ -104,7 +104,7 @@ function useWalletMgmt() {
       })
 
       setAddresses(mappedAddresses)
-      //Below is commented out because setting localstorage breaks with myAlgo Popup
+      // Below is commented out because setting localstorage breaks with myAlgo Popup
       // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
     }
   }, [walletsQuery.data])

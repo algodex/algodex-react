@@ -266,13 +266,6 @@ function useWallets(initialState) {
     connector: _peraConnector
   } = useWalletConnect(handleConnect, handleDisconnect)
 
-  // const peraConnect = () => {
-  //   console.log('pera', context[2])
-  // }
-  // const peraDisconnect = () => {
-  //   console.log('pera')
-  // }
-
   // Fetch active wallet from local storage
   useEffect(() => {
     const res = localStorage.getItem('activeWallet')
