@@ -95,7 +95,7 @@ const WalletsWrapper = styled.div`
   right: 0;
 `
 export function WalletView(props) {
-  const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses, setSignedIn } = props
+  const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses } = props
   const { t } = useTranslation('wallet')
   const { wallet: initialState } = useAlgodex()
   const {
@@ -105,50 +105,12 @@ export function WalletView(props) {
   } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-  // const context = useContext(WalletsContext)
-  // console.log(context, 'wallet connect')
+
   const myAlgoDisconnect = (targetWallet) => {
-    // _myAlgoDisconnect(targetWallet)
-    // const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
-    //   return wallet.address !== targetWallet.address
-    // })
-    // //You may want to filter by active address array to avoid rehydration?
-    // localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
-    // setAddresses(remainingAddresses)
-    // if (remainingAddresses.length === 0) {
-    //   console.log('came here')
-    //   dispatcher('signOut', {
-    //     type: 'wallet'
-    //   })
-    //   setSignedIn(false)
-    //   setActiveWallet()
-    // } else {
-    //   setActiveWallet(remainingAddresses[0])
-    // }
     _myAlgoDisconnect(targetWallet)
   }
 
   const peraDisconnect = (targetWallet) => {
-    // console.log(targetWallet, 'target wallet')
-    // const remainingAddresses = JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
-    //   return wallet.address !== targetWallet.address
-    // })
-
-    // localStorage.setItem('addresses', JSON.stringify(remainingAddresses))
-    // setAddresses(remainingAddresses)
-    // if (remainingAddresses.length === 0) {
-    //   // dispatcher('signOut', {
-    //   //   type: 'wallet'
-    //   // })
-    //   setSignedIn(false)
-    // } else {
-    //   setActiveWallet(remainingAddresses[0])
-    // }
-    // if (typeof targetWallet.connector.killSession !== 'undefined')
-    // if (targetWallet.connector.connected || targetWallet.connector._connected)
-    //   context[2].current.killSession()
-    // localStorage.removeItem('walletconnect')
-    console.log('came here', targetWallet)
     _peraDisconnect(targetWallet)
   }
 
@@ -174,19 +136,10 @@ export function WalletView(props) {
 
   const walletDisconnectMap = {
     'my-algo-wallet': (wallet) => {
-      console.log(wallet, 'myalgo wallet to disconnect')
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': (wallet) => peraDisconnect(wallet)
-    // 'wallet-connect': (wallet) => {
-    //   console.log(wallet, 'pera wallet to disconnect')
-    //   peraDisconnect(wallet)
-    // }
   }
-
-  // const getButtonVariant = () => {
-  //   return signedIn ? 'default' : 'primary'
-  // }
 
   const isWalletActive = (addr) => {
     return activeWallet?.address === addr
@@ -324,7 +277,6 @@ WalletView.propTypes = {
   setAddresses: PropTypes.func.isRequired,
   activeWallet: PropTypes.object,
   signedIn: PropTypes.bool,
-  setSignedIn: PropTypes.func,
   setActiveWallet: PropTypes.func.isRequired,
   area: PropTypes.string,
   setIsConnectingWallet: PropTypes.func,

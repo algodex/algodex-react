@@ -53,7 +53,6 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   }
   const isPeraConnected = useMemo(() => {
     const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
-    console.log(addresses, peraAddr, 'hello here')
     return peraAddr.length > 0
   }, [addresses])
 
