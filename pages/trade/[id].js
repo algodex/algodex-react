@@ -5,6 +5,7 @@ import {
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import AlgodexApi from '@algodex/algodex-sdk'
 import AssetInfo from '@/components/Asset/Asset'
@@ -14,7 +15,6 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import { WalletsContext } from '@/hooks/useWallets'
 import config from '@/config.json'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
@@ -133,10 +133,9 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef(null)
   const { setWallet } = useAlgodex()
-  // const { wallet } = useWallets(initialState)
 
   useEffect(() => {
-    if (!myAlgoConnector.current) {
+    if (myAlgoConnector.current === null) {
       const reConnectMyAlgoWallet = async () => {
         // '@randlabs/myalgo-connect' is imported dynamically
         // because it uses the window object
@@ -182,9 +181,9 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   )
 
   useEffect(() => {
-    if (addresses.length === 0 && locStorage.length > 0) {
+    if (locStorage.length > 0) {
       const reHydratedAddresses = locStorage.map((wallet) => {
-        if (wallet.type === 'my-algo-wallet') {
+        if (wallet.type === 'my-algo-wallet' && myAlgoConnector.current) {
           return {
             ...wallet,
             connector: myAlgoConnector.current

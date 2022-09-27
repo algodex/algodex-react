@@ -38,7 +38,6 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
         acct.connector.connected = true
         return acct
       })
-      console.debug('Setting Address form myAlgoConnect', _addresses)
       // Set Addresses
       onConnect(_addresses)
     } catch (e) {
