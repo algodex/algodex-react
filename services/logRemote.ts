@@ -22,8 +22,9 @@ export const logDebug = async (message: string) => {
 }
 
 export const throttleLog = (message) => {
-  const _message = throttle(() => logInfo(message), 2000)
-  return _message()
+  // const _message = throttle(() => logInfo(message), 2000)
+  // return _message()
+  return
 }
 
 const logRemote = async (severity: Severity, message: string) => {

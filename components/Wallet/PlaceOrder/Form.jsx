@@ -175,32 +175,27 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const MICROALGO = 0.000001
 
-  const isBelowMinOrderAmount = () => {
+  const isBelowMinOrderAmount = useMemo(() => {
     if (order.type === 'buy') {
       return new Big(order.total).lt(0.5)
     }
     return new Big(order.total).eq(0)
-  }
+  }, [order])
 
-  const isInvalid = () => {
-    return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
-  }
+  // const isInvalid = () => {
+  //   return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
+  // }
 
-  const isBalanceExceeded = () => {
-    const maxSpendableAlgo = fromBaseUnits(wallet.amount)
-    const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
-    if (order.type === 'buy') {
-      return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
-    }
-    return new Big(order.amount).gt(asaBalance)
-  }
+  // const isBalanceExceeded = () => {
+  //   const maxSpendableAlgo = fromBaseUnits(wallet.amount)
+  //   const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
+  //   if (order.type === 'buy') {
+  //     return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+  //   }
+  //   return new Big(order.amount).gt(asaBalance)
+  // }
 
-  const isLessThanMicroAlgo = () => {
-    return order.price < MICROALGO
-  }
-
-  const isDisabled =
-    isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded() || isLessThanMicroAlgo()
+  // const isDisabled = isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded()
   // asset.isGeoBlocked ||
   // status.submitting
 
@@ -430,8 +425,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            disabled={isDisabled}
-            // disabled={!hasBalance || order.total === 0}
+            disabled={!hasBalance || order.total === 0 || isBelowMinOrderAmount}
           >
             {buttonProps[order.type || 'buy']?.text}
           </Button>
