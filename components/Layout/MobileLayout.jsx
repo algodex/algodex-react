@@ -129,9 +129,10 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { setWallet } = useAlgodex()
-  const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-  const [locStorage, setLocStorage] = useState([])
+  // const { setWallet } = useAlgodex()
+  const [addresses, setAddresses] = useContext(WalletsContext)
+  // const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
+  // const [locStorage, setLocStorage] = useState([])
   const context = useContext(WalletsContext)
 
   const { wallet } = useWallets()

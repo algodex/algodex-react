@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+// import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import { throttleLog } from 'services/logRemote'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from './useEvents'
