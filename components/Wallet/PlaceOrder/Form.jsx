@@ -270,8 +270,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     (e) => {
       e.preventDefault()
       setStatus((prev) => ({ ...prev, submitting: true }))
+      let lastToastId = undefined
       let orderPromise
+      const notifier = (msg) => {
+        if (lastToastId) {
+          toast.dismiss(lastToastId)
+        }
+        lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+      }
       if (typeof onSubmit === 'function') {
+        // What is the purpose of this conditional?
+        // I have checked everywhere in the codebase and no other componenet passes an onSubmit prop to this component
         orderPromise = onSubmit({
           ...order,
           wallet,
@@ -289,39 +298,36 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           },
           { wallet }
         )
-        orderPromise = placeOrder(
-          {
-            ...order,
-            address: wallet.address,
-            wallet,
-            asset,
-            appId: order.type === 'sell' ? 22045522 : 22045503,
-            version: 6
-          },
-          { wallet }
-        )
+
+        const awaitPlaceOrder = async () => {
+          try {
+            await placeOrder(
+              {
+                ...order,
+                address: wallet.address,
+                wallet,
+                asset,
+                appId: order.type === 'sell' ? 22045522 : 22045503,
+                version: 6
+              },
+              { wallet },
+              notifier
+            )
+            toast.success(t('order-success'), {
+              id: lastToastId,
+              duration: 3000
+            })
+          } catch (e) {
+            toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
+          }
+        }
+
+        awaitPlaceOrder()
       }
 
       // TODO add events
       throttleLog('Submitting order', {
         wallet
-      })
-      toast.promise(orderPromise, {
-        loading: (e) => {
-          throttleLog({ type: 'loading', message: e })
-          return t('awaiting-confirmation')
-        },
-        success: (e) => {
-          throttleLog({ type: 'success', message: e })
-          return t('order-success')
-        },
-        error: (err) => {
-          throttleLog(`Error occured : ${err}`)
-          if (/PopupOpenError|blocked/.test(err)) {
-            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-          }
-          return `${t('error-placing-order')} ${err}`
-        }
       })
     },
     [onSubmit, asset, order]

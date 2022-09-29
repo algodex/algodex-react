@@ -104,39 +104,55 @@ export function OpenOrdersTable({ orders: _orders }) {
           )
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
+        let lastToastId = undefined
+        const notifier = (msg) => {
+          if (lastToastId) {
+            toast.dismiss(lastToastId)
+          }
+          lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+        }
 
         const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
         throttleLog('Cancel Wallet Data:', wallet)
         const _walletConnectionDB = JSON.parse(localStorage.getItem('walletconnect'))
         throttleLog('Cancel Wallet Connect:', _walletConnectionDB)
-        const cancelOrderPromise = closeOrder({
-          address: ownerAddress,
-          version,
-          price: Number(formattedPrice),
-          amount: Number(formattedASAAmount),
-          total: Number(formattedPrice) * Number(formattedASAAmount),
-          asset: { id: assetId, decimals },
-          assetId,
-          type: cellData.type.toLowerCase(),
-          appId,
-          contract: {
-            creator: ownerAddress,
-            escrow: cellData.metadata.escrowAddress,
-            N: cellData.metadata.assetLimitPriceN,
-            D: cellData.metadata.assetLimitPriceD,
-            entry: orderbookEntry
-          },
-          wallet
-        })
 
-        toast.promise(cancelOrderPromise, {
-          loading: t('awaiting-confirmation'),
-          success: t('order-cancelled'),
-          error: t('error-cancelling')
-        })
+        const awaitCancelOrder = async () => {
+          try {
+            await closeOrder(
+              {
+                address: ownerAddress,
+                version,
+                price: Number(formattedPrice),
+                amount: Number(formattedASAAmount),
+                total: Number(formattedPrice) * Number(formattedASAAmount),
+                asset: { id: assetId, decimals },
+                assetId,
+                type: cellData.type.toLowerCase(),
+                appId,
+                contract: {
+                  creator: ownerAddress,
+                  escrow: cellData.metadata.escrowAddress,
+                  N: cellData.metadata.assetLimitPriceN,
+                  D: cellData.metadata.assetLimitPriceD,
+                  entry: orderbookEntry
+                },
+                wallet
+              },
+              notifier
+            )
 
+            toast.success(t('order-cancelled'), {
+              id: lastToastId,
+              duration: 3000
+            })
+          } catch (e) {
+            toast.error(`${t('error-cancelling')} ${e}`, { id: lastToastId, duration: 5000 })
+          }
+        }
         try {
-          const result = await cancelOrderPromise
+          // const result = await cancelOrderPromise
+          const result = awaitCancelOrder()
           setOpenOrdersData(updateOrderStatus('CANCELLED'))
           console.log('Order successfully cancelled', result)
         } catch (err) {
