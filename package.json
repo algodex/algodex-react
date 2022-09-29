@@ -29,8 +29,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@algodex/algodex-hooks": "^1.5.3",
-    "@algodex/algodex-sdk": "^2.0.6",
+    "@algodex/algodex-hooks": "^1.5.4",
+    "@algodex/algodex-sdk": "^2.0.9",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
