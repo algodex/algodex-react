@@ -301,7 +301,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
         const awaitPlaceOrder = async () => {
           try {
-            notifier('Intializing order')
+            notifier('Initializing order')
             await placeOrder(
               {
                 ...order,
