@@ -178,33 +178,33 @@ function MainLayout({ asset, children }) {
     }
   }, [])
 
-  // useEffect(() => {
-  //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+  useEffect(() => {
+    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
 
-  //   if (locStorage.length === 0 && storedAddrs?.length > 0) {
-  //     setLocStorage(storedAddrs)
-  //   }
-  // }, [myAlgoConnector.current, addresses])
+    if (locStorage.length === 0 && storedAddrs?.length > 0) {
+      setLocStorage(storedAddrs)
+    }
+  }, [myAlgoConnector.current, addresses])
 
-  // useEffect(() => {
-  //   if (addresses.length === 0 && locStorage.length > 0) {
-  //     const reHydratedAddresses = locStorage.map((wallet) => {
-  //       if (wallet.type === 'my-algo-wallet') {
-  //         return {
-  //           ...wallet,
-  //           connector: myAlgoConnector.current
-  //         }
-  //       } else {
-  //         return {
-  //           ...wallet,
-  //           connector: walletConnect.current
-  //         }
-  //       }
-  //     })
-  //     setWallet(reHydratedAddresses[0])
-  //     setAddresses(reHydratedAddresses)
-  //   }
-  // }, [locStorage, myAlgoConnector.current])
+  useEffect(() => {
+    if (addresses.length === 0 && locStorage.length > 0) {
+      const reHydratedAddresses = locStorage.map((wallet) => {
+        if (wallet.type === 'my-algo-wallet') {
+          return {
+            ...wallet,
+            connector: myAlgoConnector.current
+          }
+        } else {
+          return {
+            ...wallet,
+            connector: walletConnect.current
+          }
+        }
+      })
+      setWallet(reHydratedAddresses[0])
+      setAddresses(reHydratedAddresses)
+    }
+  }, [locStorage, myAlgoConnector.current])
 
   // useEffect(() => {
   //   if (addresses.length > 0) {
