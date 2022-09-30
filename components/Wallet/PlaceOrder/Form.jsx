@@ -1,6 +1,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -19,7 +20,6 @@ import { throttleLog } from 'services/logRemote'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
 
 export const Form = styled.form`
   ::-webkit-scrollbar {
@@ -57,7 +57,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { t } = useTranslation('place-order')
   const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   // const { placeOrder, http, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet } = useWallets()
+
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
   const [status, setStatus] = useState({
@@ -269,6 +270,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
+      console.log('wallet here ooo', wallet, initialState)
       setStatus((prev) => ({ ...prev, submitting: true }))
       let lastToastId = undefined
       let orderPromise

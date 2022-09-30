@@ -300,7 +300,8 @@ function useWallets(initialState) {
     peraConnect,
     peraDisconnect,
     myAlgoDisconnect,
-    myAlgoConnector
+    myAlgoConnector,
+    peraConnector: _peraConnector
   }
 }
 

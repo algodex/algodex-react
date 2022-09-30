@@ -1,5 +1,5 @@
-import { difference, filter, find } from 'lodash'
-import { useContext, useEffect, useMemo, useRef } from 'react'
+import { filter, find } from 'lodash'
+import { useContext, useMemo } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import DropdownBody from './DropdownBody'
@@ -36,9 +36,11 @@ const Container = styled.div`
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const { wallet: initialState, isConnected } = useAlgodex()
-  const [addresses, setAddresses] = useContext(WalletsContext)
+  const [addresses] = useContext(WalletsContext)
+  console.log(addresses, 'addrerssessd her')
+  // const [addresses, setAddresses] = useContext(WalletsContext)
   const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
-  const addressesRef = useRef(null)
+  // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect
@@ -52,43 +54,47 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     WALLETS_CONNECT_MAP['pera-connect']()
   }
   const isPeraConnected = useMemo(() => {
-    const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
-    return peraAddr.length > 0
-  }, [addresses])
-
-  useEffect(() => {
-    if (!addressesRef.current) {
-      // Initialize the ref after first checking to see what is in localStorage
-      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-      if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
-        setAddresses(storedAddrs)
-      }
-      addressesRef.current = addresses
+    console.log(addresses, isConnected, 'addresses here')
+    const peraAddr = isConnected && addresses.filter((wallet) => wallet.type === 'wallet-connect')
+    console.log(peraAddr, 'perra')
+    if (peraAddr && peraAddr.length) {
+      return peraAddr.length > 0
     }
+  }, [isConnected, addresses])
 
-    const localStorageExists =
-      JSON.parse(localStorage.getItem('addresses')) !== null &&
-      JSON.parse(localStorage.getItem('addresses')).length > 0
+  // useEffect(() => {
+  //   if (!addressesRef.current) {
+  //     // Initialize the ref after first checking to see what is in localStorage
+  //     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+  //     if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
+  //       setAddresses(storedAddrs)
+  //     }
+  //     addressesRef.current = addresses
+  //   }
 
-    const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
+  //   const localStorageExists =
+  //     JSON.parse(localStorage.getItem('addresses')) !== null &&
+  //     JSON.parse(localStorage.getItem('addresses')).length > 0
 
-    if (localStorageExists && addressesExist) {
-      // localStorage.setItem('addresses', JSON.stringify(addresses))
-    }
-    const walletDifference = difference(
-      addresses.map((addr) => addr.address),
-      addressesRef.current.map((addr) => addr.address)
-    )
-    if (walletDifference.length > 0) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-      addressesRef.current = addresses
-      closeDropdown()
-    }
-    // **Note** Can't put closeFn() in the onClicks because it will closeOut
-    // modal before wallet-connect finishes connecting leading to stale state.
-    // Creating a ref that persists between renders gives us a way to automatically close out
-    // modals only when a new address is added to the addresses array.
-  }, [addresses])
+  //   const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
+
+  //   if (localStorageExists && addressesExist) {
+  //     // localStorage.setItem('addresses', JSON.stringify(addresses))
+  //   }
+  //   const walletDifference = difference(
+  //     addresses.map((addr) => addr.address),
+  //     addressesRef.current.map((addr) => addr.address)
+  //   )
+  //   if (walletDifference.length > 0) {
+  //     localStorage.setItem('addresses', JSON.stringify(addresses))
+  //     addressesRef.current = addresses
+  //     closeDropdown()
+  //   }
+  //   // **Note** Can't put closeFn() in the onClicks because it will closeOut
+  //   // modal before wallet-connect finishes connecting leading to stale state.
+  //   // Creating a ref that persists between renders gives us a way to automatically close out
+  //   // modals only when a new address is added to the addresses array.
+  // }, [addresses])
 
   const sortedWalletsList = useMemo(() => {
     if (addresses) {

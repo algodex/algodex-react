@@ -151,6 +151,7 @@ export function WalletView(props) {
   }
 
   const handleWalletClick = async (addr) => {
+    console.log(addr, 'addr to update')
     !isWalletActive(addr) && setActiveWallet(addr)
   }
 
@@ -193,7 +194,10 @@ export function WalletView(props) {
   useEffect(() => {
     if (typeof activeWallet !== 'undefined' && addresses.length > 0) {
       const targetWallet = addresses.filter((addr) => addr.address === activeWallet.address)[0]
-      if (typeof targetWallet?.connector?.sign !== 'undefined') setActiveWallet(targetWallet)
+      if (typeof targetWallet?.connector?.sign !== 'undefined') {
+        console.log(targetWallet, 'wallet')
+        setActiveWallet(targetWallet)
+      }
     }
   }, [addresses])
 
@@ -305,6 +309,7 @@ export function WalletOptionsListComp(props) {
   const peraConnectOnClick = () => {
     WALLETS_CONNECT_MAP['pera-connect']()
   }
+
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
       const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
