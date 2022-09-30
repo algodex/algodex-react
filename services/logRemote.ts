@@ -12,19 +12,22 @@ export interface LogMessage {
 }
 
 export const logError = async (message: string) => {
-  logRemote('Error', message)
+  // logRemote('Error', message)
+  console.error(message)
 }
 export const logInfo = async (message: string) => {
-  logRemote('Info', message)
+  // logRemote('Info', message)
+  console.info(message)
 }
 export const logDebug = async (message: string) => {
-  logRemote('Debug', message)
+  // logRemote('Debug', message)
+  console.debug(message)
 }
 
+const _message = throttle((message) => logInfo(message), 100)
+
 export const throttleLog = (message) => {
-  // const _message = throttle(() => logInfo(message), 2000)
-  // return _message()
-  return
+  return _message(message)
 }
 
 const logRemote = async (severity: Severity, message: string) => {
