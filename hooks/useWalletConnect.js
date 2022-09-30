@@ -97,6 +97,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       wallet.connector.killSession()
       localStorage.removeItem('walletconnect')
     } else {
+      console.error('Wallet was never connected! Returning')
       return
     }
   }
