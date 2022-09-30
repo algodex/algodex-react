@@ -119,6 +119,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
         const awaitCancelOrder = async () => {
           try {
+            notifier('Initializing cancel')
             await closeOrder(
               {
                 address: ownerAddress,
