@@ -119,6 +119,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       })
     } catch (error) {
       console.log(error, 'error occured')
+      throw error
     }
   }
 
