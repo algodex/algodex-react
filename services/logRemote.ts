@@ -24,7 +24,7 @@ export const logDebug = async (message: string) => {
   console.debug(message)
 }
 
-const _message = throttle((message) => logInfo(message), 100)
+const _message = throttle((message) => logInfo(message), 50)
 
 export const throttleLog = (message) => {
   return _message(message)

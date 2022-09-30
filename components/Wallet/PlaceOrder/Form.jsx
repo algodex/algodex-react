@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import { throttleLog } from 'services/logRemote'
+import { logInfo, throttleLog } from 'services/logRemote'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
@@ -130,7 +130,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
-      throttleLog(`On sign out : ${data}`)
+      logInfo(`On sign out : ${data}`)
       setShowForm(false)
     }
   })

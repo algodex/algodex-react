@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import QRCodeModal from 'algorand-walletconnect-qrcode-modal'
-import { throttleLog } from 'services/logRemote'
+import { logInfo } from 'services/logRemote'
 
 const ERROR = {
   FAILED_TO_INIT: 'Wallet connect failed to initialize.',
@@ -98,17 +98,18 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       wallet.connector.killSession()
       localStorage.removeItem('walletconnect')
     } else {
+      console.error('Wallet was never connected! Returning')
       return
     }
   }
 
   const initWalletConnect = async () => {
     if (!walletConnect === undefined || !walletConnect.current === undefined) {
-      throttleLog(`Wallet already initialized, returning early from initWalletConnect`)
+      logInfo(`Wallet already initialized, returning early from initWalletConnect`)
       return
     }
     try {
-      throttleLog(`Initializing wallet connect useWalletConnect`)
+      logInfo(`Initializing wallet connect useWalletConnect`)
       const WalletConnect = (await import('@walletconnect/client')).default
       WalletConnect.prototype.sign = (
         await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
@@ -120,6 +121,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       })
     } catch (error) {
       console.log(error, 'error occured')
+      throw error
     }
   }
 
@@ -135,7 +137,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     async (err) => {
       console.log('DISCONNECTED')
       if (err) throw err
-      throttleLog('Disconnnect wallet connect')
+      logInfo('Disconnnect wallet connect')
       const walletAccount =
         walletConnect.current._accounts.length > 0
           ? walletConnect.current._accounts
@@ -146,6 +148,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       } else if (activeWallet.connector._accounts) {
         await onDisconnect(walletAccount)
       } else {
+        logInfo('Nothing to disconnect, returning early')
         return
       }
     },
@@ -159,10 +162,12 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     }
 
     let accounts = []
-    throttleLog('Connect wallet connect')
+    logInfo('Connect wallet connect')
     // Get provided accounts
     if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
       accounts = payload.params[0].accounts
+    } else {
+      throw new Error('incorrect payload')
     }
 
     // Map the connector to the address list
@@ -184,6 +189,8 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       walletConnect.current.on('modal_closed', () => {
         QRCodeModal.close()
       })
+    } else {
+      throw new Error('unexpected walletConnect state: ', walletConnect)
     }
     return () => {
       if (typeof walletConnect.current !== 'undefined') {
