@@ -146,6 +146,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       } else if (activeWallet.connector._accounts) {
         await onDisconnect(walletAccount)
       } else {
+        throttleLog('Nothing to disconnect, returning early')
         return
       }
     },
