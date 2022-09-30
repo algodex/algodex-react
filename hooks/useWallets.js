@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 // import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-import { throttleLog } from 'services/logRemote'
+import { logInfo } from 'services/logRemote'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
@@ -124,7 +124,7 @@ function useWallets(initialState) {
   const handleConnect = useCallback(
     async (_addresses) => {
       if (_addresses.length > 0) {
-        throttleLog('Handling Connect')
+        logInfo('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
         const otherWalletClients =
           addresses.filter((wallet) => wallet.type !== _addresses[0].type) || []
@@ -244,7 +244,7 @@ function useWallets(initialState) {
       //   })
       // }
       // dispatcher('signOut', { type: 'wallet' })
-      throttleLog(
+      logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
