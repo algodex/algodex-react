@@ -294,7 +294,7 @@ function useWallets(initialState) {
 
   return {
     wallet,
-    setWallet,
+    setWallet: setAlgodexWallet,
     addresses,
     myAlgoConnect,
     peraConnect,

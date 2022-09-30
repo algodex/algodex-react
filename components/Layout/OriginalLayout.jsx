@@ -176,7 +176,6 @@ function MainLayout({ asset, children }) {
   const { wallet: initialState, setWallet } = useAlgodex()
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
   const [locStorage, setLocStorage] = useState([])
-  // console.log(addresses, 'addrersses')
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')

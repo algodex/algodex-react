@@ -58,7 +58,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
   // const { placeOrder, http, isConnected } = useAlgodex()
   const { wallet } = useWallets()
-
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
   const [status, setStatus] = useState({
@@ -270,7 +269,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      console.log('wallet here ooo', wallet, initialState)
       setStatus((prev) => ({ ...prev, submitting: true }))
       let lastToastId = undefined
       let orderPromise
@@ -333,7 +331,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         wallet
       })
     },
-    [onSubmit, asset, order]
+    [onSubmit, asset, order, wallet]
   )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)

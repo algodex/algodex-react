@@ -94,7 +94,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       localStorage.removeItem('walletconnect')
     } else if (wallet.connector.connected) {
       activeWallet = { ...wallet }
-      console.log(wallet, 'wallet connectorr here')
       wallet.connector.killSession()
       localStorage.removeItem('walletconnect')
     } else {
