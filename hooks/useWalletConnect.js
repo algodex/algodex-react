@@ -164,6 +164,8 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // Get provided accounts
     if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
       accounts = payload.params[0].accounts
+    } else {
+      throw new Error('incorrect payload')
     }
 
     // Map the connector to the address list
@@ -185,6 +187,8 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       walletConnect.current.on('modal_closed', () => {
         QRCodeModal.close()
       })
+    } else {
+      throw new Error('unexpected walletConnect state: ', walletConnect)
     }
     return () => {
       if (typeof walletConnect.current !== 'undefined') {
