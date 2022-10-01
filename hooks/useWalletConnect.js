@@ -94,10 +94,14 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       localStorage.removeItem('walletconnect')
     } else if (wallet.connector.connected) {
       activeWallet = { ...wallet }
+      console.log(wallet.connector, 'wallet connector')
       wallet.connector.killSession()
       localStorage.removeItem('walletconnect')
     } else {
-      console.error('Wallet was never connected! Returning')
+      console.error('Wallet was never connected! Remove address and Return')
+      // await walletConnect.current.killSession()
+      // wallet.connector.killSession()
+      await onDisconnect([wallet.address])
       return
     }
   }
@@ -188,8 +192,6 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       walletConnect.current.on('modal_closed', () => {
         QRCodeModal.close()
       })
-    } else {
-      throw new Error('unexpected walletConnect state: ', walletConnect)
     }
     return () => {
       if (typeof walletConnect.current !== 'undefined') {

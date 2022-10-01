@@ -150,13 +150,13 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   }, [])
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
 
-  useEffect(() => {
-    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
+  // useEffect(() => {
+  //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
 
-    if (locStorage.length === 0 && storedAddrs?.length > 0) {
-      setLocStorage(storedAddrs)
-    }
-  }, [myAlgoConnector.current, addresses])
+  //   if (locStorage.length === 0 && storedAddrs?.length > 0) {
+  //     setLocStorage(storedAddrs)
+  //   }
+  // }, [myAlgoConnector.current, addresses])
 
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
@@ -180,26 +180,26 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     [setInterval, interval]
   )
 
-  useEffect(() => {
-    if (locStorage.length > 0) {
-      const reHydratedAddresses = locStorage.map((wallet) => {
-        if (wallet.type === 'my-algo-wallet' && myAlgoConnector.current) {
-          return {
-            ...wallet,
-            connector: myAlgoConnector.current
-          }
-        } else {
-          return {
-            ...wallet,
-            connector: walletConnect.current
-          }
-          // return wallet
-        }
-      })
-      setAddresses(reHydratedAddresses)
-      setWallet(reHydratedAddresses[0])
-    }
-  }, [locStorage, myAlgoConnector.current])
+  // useEffect(() => {
+  //   if (locStorage.length > 0) {
+  //     const reHydratedAddresses = locStorage.map((wallet) => {
+  //       if (wallet.type === 'my-algo-wallet' && myAlgoConnector.current) {
+  //         return {
+  //           ...wallet,
+  //           connector: myAlgoConnector.current
+  //         }
+  //       } else {
+  //         return {
+  //           ...wallet,
+  //           connector: walletConnect.current
+  //         }
+  //         // return wallet
+  //       }
+  //     })
+  //     setAddresses(reHydratedAddresses)
+  //     setWallet(reHydratedAddresses[0])
+  //   }
+  // }, [locStorage, myAlgoConnector.current])
 
   useEffect(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {

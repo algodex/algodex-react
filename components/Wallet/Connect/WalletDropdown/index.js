@@ -52,11 +52,18 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const peraConnectOnClick = () => {
     WALLETS_CONNECT_MAP['pera-connect']()
   }
+  // const isPeraConnected = useMemo(() => {
+  //   const peraAddr = isConnected && addresses.filter((wallet) => wallet.type === 'wallet-connect')
+  //   if (peraAddr && peraAddr.length) {
+  //     return peraAddr.length > 0
+  //   }
+  // }, [isConnected, addresses])
   const isPeraConnected = useMemo(() => {
-    const peraAddr = isConnected && addresses.filter((wallet) => wallet.type === 'wallet-connect')
-    if (peraAddr && peraAddr.length) {
+    if (isConnected) {
+      const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
       return peraAddr.length > 0
     }
+    return false
   }, [isConnected, addresses])
 
   // useEffect(() => {

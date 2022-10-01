@@ -150,34 +150,34 @@ function MainLayout({ asset, children }) {
    * This is only used to switch to MobileMenu Chart view
    * when the Next/Router navigates to a shallow route
    */
-  useEffect(() => {
-    if (!myAlgoConnector.current) {
-      const reConnectMyAlgoWallet = async () => {
-        // '@randlabs/myalgo-connect' is imported dynamically
-        // because it uses the window object
-        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-        MyAlgoConnect.prototype.sign = signer
-        myAlgoConnector.current = new MyAlgoConnect()
-        myAlgoConnector.current.connected = true
-        const mappedAddresses = addresses.map((addr) => {
-          if (addr.type === 'my-algo-wallet') {
-            return {
-              ...addr,
-              connector: myAlgoConnector.current
-            }
-          } else {
-            // return addr
-            return {
-              ...addr,
-              connector: context[2].current
-            }
-          }
-        })
-        setAddresses(mappedAddresses)
-      }
-      reConnectMyAlgoWallet()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (!myAlgoConnector.current) {
+  //     const reConnectMyAlgoWallet = async () => {
+  //       // '@randlabs/myalgo-connect' is imported dynamically
+  //       // because it uses the window object
+  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+  //       MyAlgoConnect.prototype.sign = signer
+  //       myAlgoConnector.current = new MyAlgoConnect()
+  //       myAlgoConnector.current.connected = true
+  //       const mappedAddresses = addresses.map((addr) => {
+  //         if (addr.type === 'my-algo-wallet') {
+  //           return {
+  //             ...addr,
+  //             connector: myAlgoConnector.current
+  //           }
+  //         } else {
+  //           // return addr
+  //           return {
+  //             ...addr,
+  //             connector: context[2].current
+  //           }
+  //         }
+  //       })
+  //       setAddresses(mappedAddresses)
+  //     }
+  //     reConnectMyAlgoWallet()
+  //   }
+  // }, [])
 
   // useEffect(() => {
   //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))

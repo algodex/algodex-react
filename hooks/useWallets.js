@@ -52,16 +52,18 @@ function useWallets(initialState) {
     throw new Error('Must be inside of a Wallets Provider')
   }
   const [wallet, setWallet] = useState(initialState)
-  const [activeWallet, setActiveWallet] = useState()
+
+  // const [activeWallet, setActiveWallet] = useState()
   const [addresses, setAddresses] = context
-  const { http, setWallet: setAlgodexWallet } = useAlgodex()
+  const { http, wallet: _wallet, setWallet: setAlgodexWallet } = useAlgodex()
+  // console.log(wallet, context, 'wallet here')
 
   const onEvents = useCallback(
     (props) => {
       const { type, wallet: _wallet } = props
       if (type === 'change' && !isEqual(wallet, _wallet)) {
         setWallet(_wallet)
-        setActiveWallet(_wallet.address)
+        // setActiveWallet(_wallet.address)
       }
     },
     [setWallet, wallet]
@@ -110,10 +112,10 @@ function useWallets(initialState) {
         if (_activeWallet.type === 'wallet-connect') {
           _activeWallet.connector = context[2].current
           setAlgodexWallet(_activeWallet)
-          setWallet(_activeWallet)
+          // setWallet(_activeWallet)
         } else {
           setAlgodexWallet(_activeWallet)
-          setWallet(_activeWallet)
+          // setWallet(_activeWallet)
         }
       }
     }
@@ -247,6 +249,7 @@ function useWallets(initialState) {
       logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
+      console.log(_remainingAddresses, 'again end')
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
       console.error('Handle removing from storage', _addresses)
@@ -268,12 +271,12 @@ function useWallets(initialState) {
   } = useWalletConnect(handleConnect, handleDisconnect)
 
   // Fetch active wallet from local storage
-  useEffect(() => {
-    const res = localStorage.getItem('activeWallet')
-    if (res && res !== activeWallet) {
-      setActiveWallet(localStorage.getItem('activeWallet'))
-    }
-  }, [setActiveWallet])
+  // useEffect(() => {
+  //   const res = localStorage.getItem('activeWallet')
+  //   if (res && res !== activeWallet) {
+  //     setActiveWallet(localStorage.getItem('activeWallet'))
+  //   }
+  // }, [setActiveWallet])
 
   // Fetch all wallet addresses from local storage
   useEffect(() => {
@@ -282,7 +285,6 @@ function useWallets(initialState) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
       if (initialState) {
         setAlgodexWallet(initialState)
-        setWallet(initialState)
       }
       setAddresses(_addresses)
     }
@@ -293,7 +295,7 @@ function useWallets(initialState) {
   // }, [addresses])
 
   return {
-    wallet,
+    wallet: _wallet,
     setWallet: setAlgodexWallet,
     addresses,
     myAlgoConnect,

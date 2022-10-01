@@ -100,13 +100,14 @@ export function WalletView(props) {
   const { t } = useTranslation('wallet')
   const { wallet: initialState } = useAlgodex()
   const {
+    peraConnector,
+    // myAlgoConnector,
     peraConnect,
     peraDisconnect: _peraDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
   } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-
   const myAlgoDisconnect = (targetWallet) => {
     _myAlgoDisconnect(targetWallet)
   }
@@ -115,25 +116,25 @@ export function WalletView(props) {
     _peraDisconnect(targetWallet)
   }
 
-  const myAlgoConnect = () => {
-    const mappedAddresses = addresses.map((addr) => {
-      if (addr.type === 'my-algo-wallet') {
-        return {
-          ...addr,
-          connector: myAlgoConnector.current
-        }
-      } else {
-        return addr
-      }
-    })
-    setAddresses(mappedAddresses)
-    dispatcher('signIn', { type: 'wallet' })
-  }
+  // const myAlgoConnect = () => {
+  //   const mappedAddresses = addresses.map((addr) => {
+  //     if (addr.type === 'my-algo-wallet') {
+  //       return {
+  //         ...addr,
+  //         connector: myAlgoConnector.current
+  //       }
+  //     } else {
+  //       return addr
+  //     }
+  //   })
+  //   setAddresses(mappedAddresses)
+  //   dispatcher('signIn', { type: 'wallet' })
+  // }
 
-  const walletReconnectorMap = {
-    'my-algo-wallet': () => myAlgoConnect(),
-    'wallet-connect': () => peraConnect()
-  }
+  // const walletReconnectorMap = {
+  //   'my-algo-wallet': () => myAlgoConnect(),
+  //   'wallet-connect': () => peraConnect()
+  // }
 
   const walletDisconnectMap = {
     'my-algo-wallet': (wallet) => {
@@ -151,26 +152,30 @@ export function WalletView(props) {
   }
 
   const handleWalletClick = async (addr) => {
-    !isWalletActive(addr) && setActiveWallet(addr)
+    const _addr = {
+      ...addr,
+      connector: addr.type === 'wallet-connect' ? peraConnector.current : myAlgoConnector.current
+    }
+    !isWalletActive(addr) && setActiveWallet(_addr)
   }
 
   const walletsQuery = useAccountsInfo(addresses)
 
-  useEffect(() => {
-    if (walletsQuery.data) {
-      const mappedAddresses = addresses.map((wallet, idx) => {
-        return { ...wallet, ...walletsQuery.data[idx] }
-      })
+  // useEffect(() => {
+  //   if (walletsQuery.data) {
+  //     const mappedAddresses = addresses.map((wallet, idx) => {
+  //       return { ...wallet, ...walletsQuery.data[idx] }
+  //     })
 
-      setAddresses(mappedAddresses)
-      //Below is commented out because setting localstorage breaks with myAlgo Popup
-      // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
-    }
-  }, [walletsQuery.data])
+  //     setAddresses(mappedAddresses)
+  //     //Below is commented out because setting localstorage breaks with myAlgo Popup
+  //     // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
+  //   }
+  // }, [walletsQuery.data])
 
-  const rehyrdateWallet =
-    typeof activeWallet !== 'undefined' && //activeWallet exists &
-    typeof activeWallet?.connector?.sign === 'undefined' // does not have a signing method
+  // const rehyrdateWallet =
+  //   typeof activeWallet !== 'undefined' && //activeWallet exists &
+  //   typeof activeWallet?.connector?.sign === 'undefined' // does not have a signing method
 
   useEffect(() => {
     const reConnectMyAlgoWallet = async () => {
@@ -184,20 +189,20 @@ export function WalletView(props) {
     reConnectMyAlgoWallet()
   }, [])
 
-  useEffect(() => {
-    if (rehyrdateWallet) {
-      walletReconnectorMap[activeWallet.type]
-    }
-  }, [activeWallet])
+  // useEffect(() => {
+  //   if (rehyrdateWallet) {
+  //     walletReconnectorMap[activeWallet.type]
+  //   }
+  // }, [activeWallet])
 
-  useEffect(() => {
-    if (typeof activeWallet !== 'undefined' && addresses.length > 0) {
-      const targetWallet = addresses.filter((addr) => addr.address === activeWallet.address)[0]
-      if (typeof targetWallet?.connector?.sign !== 'undefined') {
-        setActiveWallet(targetWallet)
-      }
-    }
-  }, [addresses])
+  // useEffect(() => {
+  //   if (typeof activeWallet !== 'undefined' && addresses.length > 0) {
+  //     const targetWallet = addresses.filter((addr) => addr.address === activeWallet.address)[0]
+  //     if (typeof targetWallet?.connector?.sign !== 'undefined') {
+  //       setActiveWallet(targetWallet)
+  //     }
+  //   }
+  // }, [addresses])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -405,7 +410,7 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
-  const { wallet: initialState, setWallet, isConnected } = useAlgodex()
+  const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
   const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(isConnected)
@@ -413,6 +418,7 @@ function WalletConnect() {
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
 
+  // console.log(algodex, isConnected, wallet, 'is conected')
   useEffect(() => {
     setSignedIn(isConnected)
   }, [addresses, isConnected])
