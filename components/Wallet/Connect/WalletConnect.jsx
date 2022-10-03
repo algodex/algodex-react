@@ -101,14 +101,14 @@ const WalletsWrapper = styled.div`
 export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses } = props
   const { t } = useTranslation('wallet')
-  const { wallet: initialState } = useAlgodex()
+  // const { wallet: initialState } = useAlgodex()
   const {
     peraConnector,
     // myAlgoConnector,
     peraConnect,
     peraDisconnect: _peraDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
-  } = useWallets(initialState)
+  } = useWallets(activeWallet)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
   const myAlgoDisconnect = (targetWallet) => {
@@ -118,26 +118,6 @@ export function WalletView(props) {
   const peraDisconnect = (targetWallet) => {
     _peraDisconnect(targetWallet)
   }
-
-  // const myAlgoConnect = () => {
-  //   const mappedAddresses = addresses.map((addr) => {
-  //     if (addr.type === 'my-algo-wallet') {
-  //       return {
-  //         ...addr,
-  //         connector: myAlgoConnector.current
-  //       }
-  //     } else {
-  //       return addr
-  //     }
-  //   })
-  //   setAddresses(mappedAddresses)
-  //   dispatcher('signIn', { type: 'wallet' })
-  // }
-
-  // const walletReconnectorMap = {
-  //   'my-algo-wallet': () => myAlgoConnect(),
-  //   'wallet-connect': () => peraConnect()
-  // }
 
   const walletDisconnectMap = {
     'my-algo-wallet': (wallet) => {
@@ -163,49 +143,6 @@ export function WalletView(props) {
   }
 
   const walletsQuery = useAccountsInfo(addresses)
-
-  // useEffect(() => {
-  //   if (walletsQuery.data) {
-  //     const mappedAddresses = addresses.map((wallet, idx) => {
-  //       return { ...wallet, ...walletsQuery.data[idx] }
-  //     })
-
-  //     setAddresses(mappedAddresses)
-  //     //Below is commented out because setting localstorage breaks with myAlgo Popup
-  //     // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
-  //   }
-  // }, [walletsQuery.data])
-
-  // const rehyrdateWallet =
-  //   typeof activeWallet !== 'undefined' && //activeWallet exists &
-  //   typeof activeWallet?.connector?.sign === 'undefined' // does not have a signing method
-
-  // useEffect(() => {
-  //   const reConnectMyAlgoWallet = async () => {
-  //     // '@randlabs/myalgo-connect' is imported dynamically
-  //     // because it uses the window object
-  //     const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //     MyAlgoConnect.prototype.sign = signer
-  //     myAlgoConnector.current = new MyAlgoConnect()
-  //     myAlgoConnector.current.connected = true
-  //   }
-  //   reConnectMyAlgoWallet()
-  // }, [])
-
-  // useEffect(() => {
-  //   if (rehyrdateWallet) {
-  //     walletReconnectorMap[activeWallet.type]
-  //   }
-  // }, [activeWallet])
-
-  // useEffect(() => {
-  //   if (typeof activeWallet !== 'undefined' && addresses.length > 0) {
-  //     const targetWallet = addresses.filter((addr) => addr.address === activeWallet.address)[0]
-  //     if (typeof targetWallet?.connector?.sign !== 'undefined') {
-  //       setActiveWallet(targetWallet)
-  //     }
-  //   }
-  // }, [addresses])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -427,13 +364,13 @@ WalletOptionsListComp.propTypes = {
  */
 function WalletConnect() {
   const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
-  const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
   const { addressesNew, setAddressesNew, signedIn, activeWallet } = useContext(WalletReducerContext)
+  // const { wallet } = useWallets(activeWallet)
 
-  useEffect(() => {
-    if (typeof activeWallet !== 'undefined') setWallet(activeWallet)
-  }, [activeWallet])
+  // useEffect(() => {
+  //   if (typeof activeWallet !== 'undefined') setWallet(activeWallet)
+  // }, [activeWallet])
 
   // const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
@@ -473,7 +410,7 @@ function WalletConnect() {
       <WalletView
         addresses={addressesNew}
         setAddresses={setAddressesNew}
-        activeWallet={wallet}
+        activeWallet={activeWallet}
         signedIn={signedIn}
         setSignedIn={() => console.log('setSignedINcalled')}
         setActiveWallet={setWallet}

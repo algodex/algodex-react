@@ -1,3 +1,5 @@
+import { useAlgodex } from '@algodex/algodex-hooks'
+
 export const initialState = {
   addresses: [],
   activeWallet: null,
@@ -8,12 +10,16 @@ export function walletReducer(state, { action, payload }) {
     case 'getActiveWallet':
       return activeWallet
     case 'setActiveWallet':
-      return { ...state, activeWallet: payload }
+      // const { setWallet } = useAlgodex()
+      // useAlgodex.setWallet(payload)
+      // setWallet(payload)
+
+      return { ...state, signedIn: true, activeWallet: payload }
     case 'setAddresses':
-      if (state.activeWallet === null) {
-        state.activeWallet = payload[0]
-        state.signedIn = true
-      }
+      // if (state.activeWallet === null) {
+      //   state.activeWallet = payload[0]
+      //   state.signedIn = true
+      // }
       return { ...state, addresses: [...payload] }
   }
 }

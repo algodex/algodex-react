@@ -1,7 +1,7 @@
 import { filter, find, reduceRight } from 'lodash'
 import { useContext, useMemo, useReducer } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
-import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
+import { WalletReducerContext, mergeAddresses } from '../../../../hooks/WalletsReducerProvider'
 
 import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
@@ -41,9 +41,10 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const { wallet: initialState, isConnected } = useAlgodex()
+  const { wallet: initialState, isConnected, http } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
-  const { addressesNew, setAddressesNew } = useContext(WalletReducerContext)
+  const { addressesNew, setAddressesNew, activeWallet, setActiveWallet } =
+    useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
   const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
   // const addressesRef = useRef(null)
@@ -59,25 +60,14 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     // const { connect: newConnect } = useMyAlgoConnectNew()
     // const _myAlgoAddresses = newConnect()
     const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
-    console.log('addressesNewBefore')
-    console.log(addressesNew)
+    const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
 
-    setAddressesNew(_myAlgoAddresses)
+    setAddressesNew(mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses))
+
+    if (!activeWallet) setActiveWallet(_myAlgoAddresses[0])
 
     console.log('addresses new adter')
     console.log(addressesNew)
-
-    // console.log(_myAlgoAddresses)
-    // console.log('walletState before ')
-    // console.log(walletState)
-    // dispatch({
-    //   action: 'setAddresses',
-    //   payload: _myAlgoAddresses
-    // })
-
-    // console.log('wallet state after')
-
-    // console.log(walletState)
   }
 
   const peraConnectOnClick = () => {
