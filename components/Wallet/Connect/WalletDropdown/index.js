@@ -1,6 +1,7 @@
-import { filter, find } from 'lodash'
-import { useContext, useMemo } from 'react'
+import { filter, find, reduceRight } from 'lodash'
+import { useContext, useMemo, useReducer } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
 
 import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
@@ -9,6 +10,11 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { connect as newConnect } from '../../../../hooks/useMyAlgoConnectNew'
+import {
+  initialState as reducerInitialState,
+  walletReducer
+} from '../../../../hooks/walletsReducer'
 
 const styleReset = css`
   margin: 0;
@@ -37,6 +43,7 @@ const Container = styled.div`
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const { wallet: initialState, isConnected } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
+  const { addressesNew, setAddressesNew } = useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
   const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
   // const addressesRef = useRef(null)
@@ -44,9 +51,33 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect
   }
+  // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
 
-  const myAlgoOnClick = () => {
-    WALLETS_CONNECT_MAP['my-algo-wallet']()
+  const myAlgoOnClick = async () => {
+    console.log('myAlogOnClick')
+    console.log('hit')
+    // const { connect: newConnect } = useMyAlgoConnectNew()
+    // const _myAlgoAddresses = newConnect()
+    const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
+    console.log('addressesNewBefore')
+    console.log(addressesNew)
+
+    setAddressesNew(_myAlgoAddresses)
+
+    console.log('addresses new adter')
+    console.log(addressesNew)
+
+    // console.log(_myAlgoAddresses)
+    // console.log('walletState before ')
+    // console.log(walletState)
+    // dispatch({
+    //   action: 'setAddresses',
+    //   payload: _myAlgoAddresses
+    // })
+
+    // console.log('wallet state after')
+
+    // console.log(walletState)
   }
 
   const peraConnectOnClick = () => {
@@ -119,7 +150,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
           activeWalletAddress={wallet?.address}
           sortedWalletsList={sortedWalletsList}
           closeFn={closeDropdown}
-          addresses={addresses}
+          addresses={addressesNew}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
           isPeraConnected={isPeraConnected}

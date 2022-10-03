@@ -1,6 +1,8 @@
 import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import useMyAlgoConnect from '../../../hooks/useMyAlgoConnect'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
 
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
@@ -18,6 +20,7 @@ import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
+import { init } from '@sentry/nextjs'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -177,17 +180,17 @@ export function WalletView(props) {
   //   typeof activeWallet !== 'undefined' && //activeWallet exists &
   //   typeof activeWallet?.connector?.sign === 'undefined' // does not have a signing method
 
-  useEffect(() => {
-    const reConnectMyAlgoWallet = async () => {
-      // '@randlabs/myalgo-connect' is imported dynamically
-      // because it uses the window object
-      const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-      MyAlgoConnect.prototype.sign = signer
-      myAlgoConnector.current = new MyAlgoConnect()
-      myAlgoConnector.current.connected = true
-    }
-    reConnectMyAlgoWallet()
-  }, [])
+  // useEffect(() => {
+  //   const reConnectMyAlgoWallet = async () => {
+  //     // '@randlabs/myalgo-connect' is imported dynamically
+  //     // because it uses the window object
+  //     const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+  //     MyAlgoConnect.prototype.sign = signer
+  //     myAlgoConnector.current = new MyAlgoConnect()
+  //     myAlgoConnector.current.connected = true
+  //   }
+  //   reConnectMyAlgoWallet()
+  // }, [])
 
   // useEffect(() => {
   //   if (rehyrdateWallet) {
@@ -301,12 +304,25 @@ export function WalletOptionsListComp(props) {
   const { peraConnect, myAlgoConnect } = useWallets(initialState)
 
   const WALLETS_CONNECT_MAP = {
-    'my-algo-wallet': myAlgoConnect,
+    // 'my-algo-wallet': myAlgoConnect,
     'pera-connect': () => peraConnect()
   }
 
   const myAlgoOnClick = () => {
-    WALLETS_CONNECT_MAP['my-algo-wallet']()
+    console.log('myAlogOnClick')
+    console.log('hit')
+    // const {connect: newConnect} = useMyAlgoConnect
+    // const _myAlgoAddresses = newConnect()
+    // console.log(_myAlgoAddresses)
+    // const [walletState, dispatch] = walletsReducer()
+    // console.log(walletState)
+    // dispatch({
+    //   action:'setWallet',
+    //   payload: _myAlgoAddresses
+    // })
+
+    console.log(walletState)
+    // WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
@@ -380,7 +396,7 @@ export function WalletOptionsListComp(props) {
                 isConnectingAddress={isConnectingWallet}
                 setIsConnectingAddress={setIsConnectingWallet}
                 addresses={addresses}
-                myAlgoOnClick={myAlgoOnClick}
+                // myAlgoOnClick={myAlgoOnClick}
                 peraConnectOnClick={() => peraConnectOnClick()}
                 isPeraConnected={isPeraConnected}
               />
@@ -413,15 +429,21 @@ function WalletConnect() {
   const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
   const { wallet } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
-  const [signedIn, setSignedIn] = useState(isConnected)
+  const { addressesNew, setAddressesNew, signedIn, activeWallet } = useContext(WalletReducerContext)
+
+  useEffect(() => {
+    if (typeof activeWallet !== 'undefined') setWallet(activeWallet)
+  }, [activeWallet])
+
+  // const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
 
   // console.log(algodex, isConnected, wallet, 'is conected')
-  useEffect(() => {
-    setSignedIn(isConnected)
-  }, [addresses, isConnected])
+  // useEffect(() => {
+  //   setSignedIn(isConnected)
+  // }, [addresses, isConnected])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">
@@ -449,11 +471,11 @@ function WalletConnect() {
         </>
       )}
       <WalletView
-        addresses={addresses}
-        setAddresses={setAddresses}
+        addresses={addressesNew}
+        setAddresses={setAddressesNew}
         activeWallet={wallet}
         signedIn={signedIn}
-        setSignedIn={setSignedIn}
+        setSignedIn={() => console.log('setSignedINcalled')}
         setActiveWallet={setWallet}
         setIsConnectingWallet={setIsConnectingWallet}
         addressesRef={addressesRef}
