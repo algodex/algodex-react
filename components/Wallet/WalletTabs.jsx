@@ -2,12 +2,14 @@ import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
+import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
+
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import { useState } from 'react'
+// import { useAlgodex } from '@algodex/algodex-hooks'
+import { useState, useContext } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
+// import useWallets from '@/hooks/useWallets'
 
 const Tab = styled.div`
   display: flex;
@@ -88,9 +90,9 @@ export const WalletOrdersSection = styled.section`
 `
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
-  const { wallet: initialState, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
-  // const isConnected = typeof wallet?.address !== 'undefined'
+
+  const { activeWallet: wallet, signedIn: isConnected } = useContext(WalletReducerContext)
+
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'

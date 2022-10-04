@@ -135,11 +135,11 @@ export function WalletView(props) {
   }
 
   const handleWalletClick = async (addr) => {
-    const _addr = {
-      ...addr,
-      connector: addr.type === 'wallet-connect' ? peraConnector.current : myAlgoConnector.current
-    }
-    !isWalletActive(addr) && setActiveWallet(_addr)
+    // const _addr = {
+    //   ...addr,
+    //   connector: addr.type === 'wallet-connect' ? peraConnector.current : myAlgoConnector.current
+    // }
+    !isWalletActive(addr) && setActiveWallet(addr)
   }
 
   const walletsQuery = useAccountsInfo(addresses)

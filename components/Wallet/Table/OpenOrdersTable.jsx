@@ -5,7 +5,8 @@ import Table, {
   OrderTypeCell
 } from '@/components/Table'
 import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useContext, useState } from 'react'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
 
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -57,10 +58,12 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
-  const { algodex, wallet, setWallet } = useAlgodex()
+  const { algodex } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
+
+  const { activeWallet: wallet, setActiveWallet: setWallet } = useContext(WalletReducerContext)
 
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
