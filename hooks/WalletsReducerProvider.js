@@ -20,22 +20,23 @@ export const WalletsReducerProvider = ({ children }) => {
     addressesNew: walletState.addresses,
     signedIn: walletState.signedIn,
     activeWallet: walletState.activeWallet,
+    peraWallet: walletState.peraWallet,
+    myAlgoAddresses: walletState.myAlgoAddresses,
     setActiveWallet: (address) => {
       dispatch({ action: 'setActiveWallet', payload: address })
     },
-    setAddressesNew: (addresses) => {
-      dispatch({ action: 'setAddresses', payload: addresses })
+    setAddressesNew: ({ type, addresses }) => {
+      dispatch({ action: 'setAddresses', payload: { type, addresses } })
+    },
+    setMyAlgoAddresses: (addresses) => {
+      dispatch({ action: 'setMyAlgoAddresses', payload: addresses })
+    },
+    setPeraWallet: (address) => {
+      dispatch({ action: 'setPeraWallet', payload: address })
     },
     signIn: () => {
       dispatch({ action: 'signIn' })
     }
-
-    // removeTodoItem: (todoItemId) => {
-    //   dispatch({ type: actions.REMOVE_TODO_ITEM, todoItemId })
-    // },
-    // markAsCompleted: (todoItemId) => {
-    //   dispatch({ type: actions.TOGGLE_COMPLETED, todoItemId })
-    // }
   }
 
   return <WalletReducerContext.Provider value={value}>{children}</WalletReducerContext.Provider>

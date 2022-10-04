@@ -1,27 +1,33 @@
-import { useAlgodex } from '@algodex/algodex-hooks'
-
 export const initialState = {
   addresses: [],
   activeWallet: null,
-  signedIn: false
+  signedIn: false,
+  peraWallet: null,
+  myAlgoAddresses: []
 }
 export function walletReducer(state, { action, payload }) {
   switch (action) {
-    case 'getActiveWallet':
-      return activeWallet
     case 'setActiveWallet':
-      // const { setWallet } = useAlgodex()
-      // useAlgodex.setWallet(payload)
-      // setWallet(payload)
       if (!state.signedIn) state.signedIn = true
-
       return { ...state, activeWallet: payload }
     case 'setAddresses':
-      // if (state.activeWallet === null) {
-      //   state.activeWallet = payload[0]
-      //   state.signedIn = true
-      // }
-      return { ...state, addresses: [...payload] }
+      const { type, addresses } = payload
+      switch (type) {
+        case 'myAlgo':
+          const _addrs = state.peraWallet === null ? addresses : [...addresses, peraWallet] // We don't want to concat peraWallet if it is null
+          // arranged so myAlgoAddresses are first in address array since it triggered the event.
+          return { ...state, addresses: [..._addrs] }
+
+        case 'peraWallet':
+          return { ...state, addresses: [...addresses, ...state.myAlgoAddresses] }
+        // arrange it so peraWallet is first in the array since it triggered the event
+      }
+    // const _arr = (type === 'myAlgo && state.peraWallet !== null)' ? [...addresses, state.peraWallet] :
+    // return { ...state, addresses: [...payload] }
+    case 'setPeraWallet':
+      return { ...state, peraWallet: payload }
+    case 'setMyAlgoAddresses':
+      return { ...state, myAlgoAddresses: [...payload] }
   }
 }
 

@@ -3,13 +3,15 @@
 // import InactiveWalletsList from './InactiveWalletsList'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
+import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
 import theme from 'theme'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 // import { WalletContext } from '../../WalletContext'
 
 // const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
 const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+
   return (
     <div
       className="p-2"
@@ -25,29 +27,6 @@ const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConn
         peraConnectOnClick={peraConnectOnClick}
         isPeraConnected={isPeraConnected}
       />
-      {/* {(!activeWalletAddress || isConnectingAddress) && (
-        <WalletOptionsList
-          isConnectingAddress={isConnectingAddress}
-          setIsConnectingAddress={setIsConnectingAddress}
-          closeFn={closeFn}
-        />
-      )} */}
-      {/* {activeWalletAddress && !isConnectingAddress && (
-        <>
-          <ActiveWalletList wallet={sortedWalletsList?.activeWallet} />
-          <InactiveWalletsList walletsList={sortedWalletsList?.inactiveWallet} />
-          <Button
-            className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
-            variant="contained"
-            style={{
-              backgroundColor: theme.colors.gray['700']
-            }}
-            onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-          >
-            CONNECT ANOTHER WALLET
-          </Button>
-        </>
-      )} */}
     </div>
   )
 }

@@ -43,8 +43,14 @@ const Container = styled.div`
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const { wallet: initialState, isConnected, http } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
-  const { addressesNew, setAddressesNew, activeWallet, setActiveWallet } =
-    useContext(WalletReducerContext)
+  const {
+    addressesNew,
+    setAddressesNew,
+    activeWallet,
+    setActiveWallet,
+    myAlgoAddresses,
+    setMyAlgoAddresses
+  } = useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
   const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
   // const addressesRef = useRef(null)
@@ -63,7 +69,8 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
     const _mergedAlgoAddresses = mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses)
 
-    setAddressesNew(_mergedAlgoAddresses)
+    setMyAlgoAddresses(_mergedAlgoAddresses)
+    setAddressesNew({ type: 'myAlgo', addresses: _mergedAlgoAddresses })
 
     if (!activeWallet) setActiveWallet(_mergedAlgoAddresses[0])
 
