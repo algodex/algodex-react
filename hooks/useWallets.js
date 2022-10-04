@@ -53,7 +53,7 @@ function useWallets(initialState, closeDropdown) {
     throw new Error('Must be inside of a Wallets Provider')
   }
   const [wallet, setWallet] = useState(initialState)
-  const { setPeraWallet, setActiveWallet, setAddressesNew, disconnectWallet } =
+  const { setPeraWallet, setActiveWallet, setAddressesNew, disconnectWallet, myAlgoAddresses } =
     useContext(WalletReducerContext)
 
   // const [activeWallet, setActiveWallet] = useState()
@@ -117,6 +117,16 @@ function useWallets(initialState, closeDropdown) {
     if (_addresses[0]?.type === 'wallet-connect') {
       disconnectWallet({ type: 'peraWallet', address: _addresses[0] })
       setAddressesNew({ type: 'peraWallet', addresses: [] })
+    }
+
+    if (_addresses[0].type === 'my-algo-wallet') {
+      disconnectWallet({ type: 'myAlgo', address: _addresses[0] })
+      //myAlgoAddresses has state before wallet disconnected
+      const _remainingAddresses = myAlgoAddresses.filter((wallet) => {
+        return wallet.address !== _addresses[0].address
+      })
+
+      setAddressesNew({ type: 'myAlgo', addresses: _remainingAddresses })
     }
 
     logInfo(`Disconnected Successfully with : ${_addresses}`)

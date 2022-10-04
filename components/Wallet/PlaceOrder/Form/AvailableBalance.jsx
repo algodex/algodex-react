@@ -49,6 +49,8 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  console.log('available Balance')
+  console.log({ wallet })
   const assetBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {

@@ -41,6 +41,25 @@ export function walletReducer(state, { action, payload }) {
             state.activeWallet = null
           }
           return { ...state }
+        case 'myAlgo':
+          //if triggering this event there must be atleast one item in the array
+          if (state.myAlgoAddresses.length > 1) {
+            const _remainingAddresses = state.myAlgoAddresses.filter((wallet) => {
+              return wallet.address !== address.address
+            })
+            state.myAlgoAddresses = [..._remainingAddresses]
+            state.activeWallet = { ..._remainingAddresses[0] }
+            return { ...state }
+          } else {
+            // if there are no more algoWallets check pera
+            if (state.peraWallet !== null) {
+              state.activeWallet = { ...state.peraWallet }
+              return { ...state }
+            } else {
+              state.activeWallet = null
+              return { ...state }
+            }
+          }
       }
   }
 }

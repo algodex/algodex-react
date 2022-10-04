@@ -89,6 +89,8 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     // setAddressesNew({ type: 'peraWallet', addresses: _peraWallet })
   }
 
+  const isPeraConnected = peraWallet !== null
+
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
@@ -111,7 +113,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
           addresses={addressesNew}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
-          isPeraConnected={false}
+          isPeraConnected={isPeraConnected}
         />
         <DropdownFooter />
       </div>

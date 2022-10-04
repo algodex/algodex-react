@@ -365,8 +365,10 @@ WalletOptionsListComp.propTypes = {
 function WalletConnect() {
   const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
-  const { addressesNew, setAddressesNew, signedIn, activeWallet, setActiveWallet } =
+  const { addressesNew, setAddressesNew, activeWallet, setActiveWallet } =
     useContext(WalletReducerContext)
+
+  const signedIn = activeWallet !== null
   // const { wallet } = useWallets(activeWallet)
 
   // useEffect(() => {
