@@ -87,24 +87,32 @@ function useWallets(initialState) {
     const res = localStorage.getItem('addresses')
     if (res) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
+      // console.log(initialState, 'iitialState')
       if (initialState !== undefined) {
-        console.log(initialState, 'iitialState')
+        // console.log(initialState, 'iitialState')
         // setAlgodexWallet(initialState)
       }
-      console.log(_addresses, 'console.log(res)')
+      console.log(_addresses, initialState, typeof initialState, 'console.log(res)')
       // setAlgodexWallet(_addresses[0])
 
       // Ensure there no request update of addresses.
-      // setAddresses(_addresses)
+      setAddresses(_addresses)
 
       /**
        * If initialState (wallet) is set, don't set addresses
        * You can work with initial state
        */
-      console.log(wallet, 'check wallet')
-      if (typeof wallet === 'undefined') {
-        setAddresses(_addresses)
-      }
+      // if (initialState === 'undefined') {
+      //   setAddresses(_addresses)
+      //   console.log('is undefined')
+      // } else {
+      //   console.log('is defined')
+      //   setAlgodexWallet(initialState)
+      // }
+      // console.log(wallet, 'check wallet')
+      // if (typeof wallet === 'undefined') {
+      //   setAddresses(_addresses)
+      // }
     }
   }, [])
 
@@ -157,6 +165,11 @@ function useWallets(initialState) {
         if (mappedAddresses.length) {
           console.log(mappedAddresses, filterConnectedWallet(mappedAddresses), 'pea new address')
           const _activeWallet = filterConnectedWallet(mappedAddresses)
+          // if (initialState === undefined && _activeWallet) {
+          //   console.log(initialState, 'setting initial tate')
+          //   setAlgodexWallet(_activeWallet)
+          //   // return initialState
+          // }
           if (_activeWallet) {
             setAlgodexWallet(_activeWallet)
           }

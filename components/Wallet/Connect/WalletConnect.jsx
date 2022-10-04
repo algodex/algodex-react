@@ -107,7 +107,7 @@ export function WalletView(props) {
     peraConnect,
     peraDisconnect: _peraDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
-  } = useWallets()
+  } = useWallets(initialState)
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
   const myAlgoDisconnect = (targetWallet) => {

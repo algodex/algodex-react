@@ -129,13 +129,13 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  // const { setWallet } = useAlgodex()
+  const { wallet: initialState } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
   // const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
   // const [locStorage, setLocStorage] = useState([])
   const context = useContext(WalletsContext)
 
-  const { wallet } = useWallets()
+  const { wallet } = useWallets(initialState)
   const myAlgoConnector = useRef()
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
