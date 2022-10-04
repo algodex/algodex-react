@@ -14,7 +14,7 @@ export function walletReducer(state, { action, payload }) {
       const { type, addresses } = payload
       switch (type) {
         case 'myAlgo':
-          const _addrs = state.peraWallet === null ? addresses : [...addresses, peraWallet] // We don't want to concat peraWallet if it is null
+          const _addrs = state.peraWallet === null ? addresses : [...addresses, state.peraWallet] // We don't want to concat peraWallet if it is null
           // arranged so myAlgoAddresses are first in address array since it triggered the event.
           return { ...state, addresses: [..._addrs] }
 

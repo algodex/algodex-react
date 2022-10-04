@@ -1,5 +1,5 @@
 import { filter, find, reduceRight } from 'lodash'
-import { useContext, useMemo, useReducer } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../../hooks/WalletsReducerProvider'
 
@@ -48,11 +48,13 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     setAddressesNew,
     activeWallet,
     setActiveWallet,
+    peraWallet,
+    setPeraWallet,
     myAlgoAddresses,
     setMyAlgoAddresses
   } = useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
-  const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
+  const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState, closeDropdown)
   // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
@@ -79,15 +81,23 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     closeDropdown()
   }
 
-  const peraConnectOnClick = () => {
-    WALLETS_CONNECT_MAP['pera-connect']()
+  const peraConnectOnClick = async () => {
+    await WALLETS_CONNECT_MAP['pera-connect']()
+    // closeDropdown()
+
+    // setPeraWallet(_peraWallet[0])
+    // setAddressesNew({ type: 'peraWallet', addresses: _peraWallet })
   }
-  // const isPeraConnected = useMemo(() => {
-  //   const peraAddr = isConnected && addresses.filter((wallet) => wallet.type === 'wallet-connect')
-  //   if (peraAddr && peraAddr.length) {
-  //     return peraAddr.length > 0
+
+  // useEffect(() => {
+  //   let firstTim
+  //   const peraWalletSignInEvent = peraWallet !== null && activeWallet?.type === peraWallet?.type
+  //   if (peraWalletSignInEvent) {
+  //     closeDropdown()
+  //     hasOcurred = true
   //   }
-  // }, [isConnected, addresses])
+  // }, [peraWallet, activeWallet])
+
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
       const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')

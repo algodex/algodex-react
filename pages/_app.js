@@ -103,16 +103,16 @@ function Algodex(props) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Global styles={styles} />
-              <WalletsProvider>
-                <WalletsReducerProvider>
+              <WalletsReducerProvider>
+                <WalletsProvider>
                   <Provider dex={makeApi()}>
                     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     <Toaster />
                     <ReactQueryDevtools initialIsOpen={false} />
                     <Component {...pageProps} />
                   </Provider>
-                </WalletsReducerProvider>
-              </WalletsProvider>
+                </WalletsProvider>
+              </WalletsReducerProvider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>
