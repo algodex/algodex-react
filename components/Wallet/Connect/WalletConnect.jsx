@@ -163,11 +163,21 @@ export function WalletView(props) {
     (wallet) => {
       if (wallet.type === 'wallet-connect') {
         try {
-          return peraConnector.current
+          console.log(peraConnector.current, wallet.addr, 'peraConnector.current')
+          if (peraConnector.current.connected) {
+            return peraConnector.current
+          }
+          const connector = {
+            ...peraConnector.current,
+            _accounts: [],
+            _connected: false,
+            connected: true
+          }
+          toast.error('Pera session expired. Disconnect you wallet and try again.')
+          return connector
         } catch (error) {
           console.log(error, 'error while handling pera connection')
           toast.error('Pera session expired. Disconnect you wallet and try again.')
-          return wallet.addr.connector
         }
       } else {
         return myAlgoConnector.current
@@ -177,19 +187,23 @@ export function WalletView(props) {
   )
 
   const handleWalletClick = async (addr) => {
+    const connector = handleConnectionStatus(addr)
     const _addr = {
       ...addr,
-      connector: handleConnectionStatus(addr)
+      connector
     }
-    // console.log(
-    //   handlePeraConnection(addr),
-    //   addr,
-    //   _addr,
-    //   context,
-    //   'new address',
-    //   peraConnector.current
-    // )
-    !isWalletActive(addr) && setActiveWallet(_addr)
+    console.log(
+      // handleConnectionStatus(addr),
+      connector,
+      addr,
+      _addr,
+      context,
+      'new address',
+      peraConnector.current
+    )
+    if (_addr.connector && _addr.connector._connected) {
+      !isWalletActive(addr) && setActiveWallet(_addr)
+    }
   }
 
   const walletsQuery = useAccountsInfo(addresses)

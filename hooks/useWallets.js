@@ -93,7 +93,12 @@ function useWallets(initialState) {
       }
       console.log(_addresses, 'console.log(res)')
       // setAlgodexWallet(_addresses[0])
+
+      // Ensure there no request update of addresses.
       setAddresses(_addresses)
+      // if (addresses.length < 1) {
+      //   setAddresses(_addresses)
+      // }
     }
   }, [])
 

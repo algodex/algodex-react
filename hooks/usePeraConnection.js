@@ -10,7 +10,7 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
     peraWallet
       .reconnectSession()
       .then((accounts) => {
-        // peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
+        peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
         console.log(accounts, 'accounts')
         // sessionUpdate(sessionUpdate)
         if (accounts.length) {
