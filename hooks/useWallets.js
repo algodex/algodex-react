@@ -215,6 +215,93 @@ function useWallets(initialState) {
   //   console.log(addresses, 'addresses updated')
   // }, [addresses])
 
+  const addNewWalletToAddressesList = async (sameClient, newAddress) => {
+    const otherWalletClients =
+      addresses.filter((wallet) => wallet.type !== newAddress[0].type) || []
+
+    const accounts = await http.indexer.fetchAccounts(newAddress)
+    const mergedPrivateAddresses = _mergeAddresses(newAddress, accounts)
+    const _allAddresses = _mergeAddresses(otherWalletClients, mergedPrivateAddresses)
+    if (sameClient.length > newAddress.length) {
+      setAddresses(_allAddresses)
+      localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+      if (_allAddresses.length > 0) {
+        const _activeWallet = filterConnectedWallet(_allAddresses)
+        setAlgodexWallet(_activeWallet)
+      }
+    }
+  }
+
+  const replaceWalletInAddressList = (newAddress, accounts) => {
+    const allAddresses = _mergeAddresses(addresses, _mergeAddresses(newAddress, accounts))
+    const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
+    const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses).map((wallet) => {
+      if (wallet.type === 'wallet-connect') {
+        return {
+          ...wallet,
+          connector: peraWalletConnector.connector
+        }
+      }
+      return wallet
+    })
+    setAddresses(_allAddresses)
+    localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+    const _activeWallet = filterConnectedWallet(_allAddresses)
+    setAlgodexWallet(_activeWallet)
+  }
+
+  const removeFromExistingList = (filteredAddressesList) => {
+    if (filteredAddressesList.length > 0) {
+      filteredAddressesList = filteredAddressesList.map((wallet) => {
+        console.log(wallet, peraWalletConnector, 'wallet ooo hsdfsse')
+        if (wallet.type === 'wallet-connect') {
+          return {
+            ...wallet,
+            connector: peraWalletConnector.connector
+          }
+        }
+        return wallet
+      })
+      setAlgodexWallet(filteredAddressesList[0])
+    }
+  }
+
+  const removeLastWalletFromList = (addressesList) => {
+    const _wallet = addressesList[0]
+
+    if (typeof wallet !== 'undefined') {
+      let disconnectedActiveWallet = {}
+      if (wallet.type === 'wallet-connect') {
+        disconnectedActiveWallet = {
+          ..._wallet,
+          connector: {
+            _connected: false,
+            connected: false
+          }
+        }
+      } else {
+        disconnectedActiveWallet = {
+          ..._wallet,
+          connector: {
+            ..._wallet.connector,
+            connected: false
+          }
+        }
+      }
+      setAlgodexWallet(disconnectedActiveWallet)
+    } else {
+      let disconnectedActiveWallet = {}
+      disconnectedActiveWallet = {
+        ..._wallet,
+        connector: {
+          ..._wallet.connector,
+          connected: false
+        }
+      }
+      setAlgodexWallet(disconnectedActiveWallet)
+    }
+  }
+
   /**
    * Handles Connection with wallet
    */
