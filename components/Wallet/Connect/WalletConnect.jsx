@@ -173,11 +173,11 @@ export function WalletView(props) {
             _connected: false,
             connected: true
           }
-          toast.error('Pera session expired. Disconnect you wallet and try again.')
+          toast.error('Pera session expired. Disconnect wallet and try again.')
           return connector
         } catch (error) {
           console.log(error, 'error while handling pera connection')
-          toast.error('Pera session expired. Disconnect you wallet and try again.')
+          toast.error('Pera session expired. Disconnect wallet and try again.')
         }
       } else {
         return myAlgoConnector.current
@@ -192,15 +192,15 @@ export function WalletView(props) {
       ...addr,
       connector
     }
-    console.log(
-      // handleConnectionStatus(addr),
-      connector,
-      addr,
-      _addr,
-      context,
-      'new address',
-      peraConnector.current
-    )
+    // console.log(
+    //   // handleConnectionStatus(addr),
+    //   connector,
+    //   addr,
+    //   _addr,
+    //   context,
+    //   'new address',
+    //   peraConnector.current
+    // )
     if (_addr.connector && _addr.connector._connected) {
       !isWalletActive(addr) && setActiveWallet(_addr)
     }

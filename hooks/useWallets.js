@@ -95,10 +95,10 @@ function useWallets(initialState) {
       // setAlgodexWallet(_addresses[0])
 
       // Ensure there no request update of addresses.
-      setAddresses(_addresses)
-      // if (addresses.length < 1) {
-      //   setAddresses(_addresses)
-      // }
+      // setAddresses(_addresses)
+      if (addresses.length < 1) {
+        setAddresses(_addresses)
+      }
     }
   }, [])
 
@@ -151,7 +151,9 @@ function useWallets(initialState) {
         if (mappedAddresses.length) {
           console.log(mappedAddresses, filterConnectedWallet(mappedAddresses), 'pea new address')
           const _activeWallet = filterConnectedWallet(mappedAddresses)
-          setAlgodexWallet(_activeWallet)
+          if (_activeWallet) {
+            setAlgodexWallet(_activeWallet)
+          }
         }
         // setAddresses(mappedAddresses)
       }
