@@ -64,7 +64,6 @@ function useWallets(initialState) {
       const { type, wallet: _wallet } = props
       if (type === 'change' && !isEqual(wallet, _wallet)) {
         setWallet(_wallet)
-        // setActiveWallet(_wallet.address)
       }
     },
     [setWallet, wallet]
@@ -195,6 +194,34 @@ function useWallets(initialState) {
     return _filteredList[0]
   }, [])
 
+  const setActiveWallet = (addressesList) => {
+    const _connectedWallet = filterConnectedWallet(addressesList)
+    const _activeWallet = handleWalletUpdate(_connectedWallet)
+    setAlgodexWallet(_activeWallet)
+  }
+
+  const handleWalletUpdate = (wallet, action) => {
+    // Update current wallet
+    // Set new wallet
+    if (!wallet) {
+      console.error('No wallet provided')
+      return
+    }
+
+    if (initialState === undefined) {
+      return wallet
+    }
+
+    switch (action) {
+      case 'update':
+        return initialState
+      case 'new':
+        return wallet
+      default:
+        return initialState
+    }
+  }
+
   /**
    * IMPORTANT
    * If for any reason Pera does not have an active connection
@@ -226,8 +253,11 @@ function useWallets(initialState) {
       setAddresses(_allAddresses)
       localStorage.setItem('addresses', JSON.stringify(_allAddresses))
       if (_allAddresses.length > 0) {
-        const _activeWallet = filterConnectedWallet(_allAddresses)
-        setAlgodexWallet(_activeWallet)
+        // const _connectedWallet = filterConnectedWallet(_allAddresses)
+        // const _activeWallet = handleWalletUpdate(_connectedWallet)
+        // setAlgodexWallet(_activeWallet)
+
+        setActiveWallet(_allAddresses)
       }
     }
   }
@@ -246,8 +276,9 @@ function useWallets(initialState) {
     })
     setAddresses(_allAddresses)
     localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-    const _activeWallet = filterConnectedWallet(_allAddresses)
-    setAlgodexWallet(_activeWallet)
+    setActiveWallet(_allAddresses)
+    // const _activeWallet = filterConnectedWallet(_allAddresses)
+    // setAlgodexWallet(_activeWallet)
   }
 
   const removeFromExistingList = (filteredAddressesList) => {
@@ -262,7 +293,8 @@ function useWallets(initialState) {
         }
         return wallet
       })
-      setAlgodexWallet(filteredAddressesList[0])
+      setActiveWallet(filteredAddressesList)
+      // setAlgodexWallet(filteredAddressesList[0])
     }
   }
 
@@ -288,7 +320,8 @@ function useWallets(initialState) {
           }
         }
       }
-      setAlgodexWallet(disconnectedActiveWallet)
+      setActiveWallet([disconnectedActiveWallet])
+      // setAlgodexWallet(disconnectedActiveWallet)
     } else {
       let disconnectedActiveWallet = {}
       disconnectedActiveWallet = {
@@ -298,7 +331,8 @@ function useWallets(initialState) {
           connected: false
         }
       }
-      setAlgodexWallet(disconnectedActiveWallet)
+      setActiveWallet([disconnectedActiveWallet])
+      // setAlgodexWallet(disconnectedActiveWallet)
     }
   }
 
