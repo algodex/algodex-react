@@ -45,20 +45,21 @@ const WalletsOptions = ({
           >
             {isPeraConnected ? (
               <Box width={50} height={50}>
-                <Image
+                {/* <Image
                   src="/Wallet-Connect-icon.svg"
                   alt="Algorand Mobile Wallet"
                   width="100%"
                   height="100%"
-                />
+                /> */}
               </Box>
             ) : (
-              <Image
-                src="/Wallet-Connect-icon.svg"
-                alt="Algorand Mobile Wallet"
-                width={25}
-                height={25}
-              />
+              <></>
+              // <Image
+              //   src="/Wallet-Connect-icon.svg"
+              //   alt="Algorand Mobile Wallet"
+              //   width={25}
+              //   height={25}
+              // />
             )}
 
             <Stack>

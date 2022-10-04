@@ -1,4 +1,5 @@
 import { Button, ButtonGroup } from '@mui/material'
+import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
@@ -16,7 +17,6 @@ import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import { logInfo, throttleLog } from 'services/logRemote'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
@@ -136,6 +136,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   useEvent('signIn', (data) => {
     if (data.type === 'wallet') {
       throttleLog(`On sign in : ${data}`)
+      console.log(`On sign in : `, data)
       setShowForm(true)
     }
   })

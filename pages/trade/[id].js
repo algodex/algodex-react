@@ -131,23 +131,24 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
   const [locStorage, setLocStorage] = useState([])
+  const context = useContext(WalletsContext)
   const myAlgoConnector = useRef(null)
-  const { setWallet } = useAlgodex()
+  const { setWallet, wallet } = useAlgodex()
 
-  useEffect(() => {
-    if (myAlgoConnector.current === null) {
-      const reConnectMyAlgoWallet = async () => {
-        // '@randlabs/myalgo-connect' is imported dynamically
-        // because it uses the window object
-        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-        MyAlgoConnect.prototype.sign = signer
-        myAlgoConnector.current = new MyAlgoConnect()
-        myAlgoConnector.current.connected = true
-      }
+  // useEffect(() => {
+  //   if (myAlgoConnector.current === null) {
+  //     const reConnectMyAlgoWallet = async () => {
+  //       // '@randlabs/myalgo-connect' is imported dynamically
+  //       // because it uses the window object
+  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+  //       MyAlgoConnect.prototype.sign = signer
+  //       myAlgoConnector.current = new MyAlgoConnect()
+  //       myAlgoConnector.current.connected = true
+  //     }
 
-      reConnectMyAlgoWallet()
-    }
-  }, [])
+  //     reConnectMyAlgoWallet()
+  //   }
+  // }, [])
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
 
   // useEffect(() => {
@@ -165,7 +166,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     staticExplorerAsset.isGeoBlocked =
       getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   }
-
+  // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
   const isMobile = useMobileDetect(deviceType === 'mobile')
@@ -228,6 +229,57 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
   }
+
+  // useEffect(() => {
+  //   const reConnectMyAlgoWallet = async () => {
+  //     // '@randlabs/myalgo-connect' is imported dynamically
+  //     // because it uses the window object
+  //     const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+  //     MyAlgoConnect.prototype.sign = signer
+  //     myAlgoConnector.current = new MyAlgoConnect()
+  //     myAlgoConnector.current.connected = true
+  //     const mappedAddresses = addresses.map((addr) => {
+  //       if (addr.type === 'my-algo-wallet') {
+  //         return {
+  //           ...addr,
+  //           connector: myAlgoConnector.current
+  //         }
+  //       } else {
+  //         // return addr
+  //         return {
+  //           ...addr,
+  //           connector: walletConnect.current
+  //         }
+  //       }
+  //     })
+  //     if (mappedAddresses.length && !wallet?.connector) {
+  //       console.log(mappedAddresses[0], 'hello hereeee')
+  //       // setWallet(mappedAddresses[0])
+  //     }
+  //   }
+  //   reConnectMyAlgoWallet()
+  // }, [myAlgoConnector.current, walletConnect.current])
+
+  // console.log(wallet, 'please update')
+  // useEffect(() => {
+  //   if (addresses.length === 0 && locStorage.length > 0) {
+  //     const reHydratedAddresses = locStorage.map((wallet) => {
+  //       if (wallet.type === 'my-algo-wallet') {
+  //         return {
+  //           ...wallet,
+  //           connector: myAlgoConnector.current
+  //         }
+  //       } else {
+  //         return {
+  //           ...wallet,
+  //           connector: walletConnect.current
+  //         }
+  //       }
+  //     })
+  //     setAddresses(reHydratedAddresses)
+  //     setWallet(reHydratedAddresses[0])
+  //   }
+  // }, [locStorage, myAlgoConnector.current])
 
   return (
     <Page

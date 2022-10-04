@@ -45,6 +45,7 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
     }
   }
   useEffect(() => {
+    console.log('Initialize MyAlgo Connect')
     const initMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
       // because it uses the window object

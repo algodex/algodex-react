@@ -99,13 +99,14 @@ export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses } = props
   const { t } = useTranslation('wallet')
   const { wallet: initialState } = useAlgodex()
+  const context = useContext(WalletsContext)
   const {
     peraConnector,
     // myAlgoConnector,
     peraConnect,
     peraDisconnect: _peraDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
-  } = useWallets(initialState)
+  } = useWallets()
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
   const myAlgoDisconnect = (targetWallet) => {
@@ -154,8 +155,9 @@ export function WalletView(props) {
   const handleWalletClick = async (addr) => {
     const _addr = {
       ...addr,
-      connector: addr.type === 'wallet-connect' ? peraConnector.current : myAlgoConnector.current
+      connector: addr.type === 'wallet-connect' ? addr.connector : myAlgoConnector.current
     }
+    console.log(addr, _addr, context, 'new address', peraConnector.current)
     !isWalletActive(addr) && setActiveWallet(_addr)
   }
 
@@ -410,18 +412,17 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
-  const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet: initialState, setWallet, isConnected } = useAlgodex()
+  const { wallet, addresses: _addresses } = useWallets(initialState)
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
-
-  // console.log(algodex, isConnected, wallet, 'is conected')
+  // console.log(isConnected, addresses, setAddresses, 'both')
   useEffect(() => {
     setSignedIn(isConnected)
-  }, [addresses, isConnected])
+  }, [_addresses, isConnected])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">

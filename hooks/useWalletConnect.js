@@ -14,7 +14,7 @@ const ERROR = {
  * @param {Function} onDisconnect On Disconnect Callback
  * @return {object}
  */
-export default function useWalletConnect(onConnect, onDisconnect) {
+export default function useWalletConnect(onConnect, onDisconnect, sessionUpdate) {
   /**
    * Instance reference
    */
@@ -90,6 +90,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
   let activeWallet = {}
   const disconnect = async (wallet) => {
     if (walletConnect.current.connected) {
+      console.log(wallet, walletConnect.current, 'wallet')
       await walletConnect.current.killSession()
       localStorage.removeItem('walletconnect')
     } else if (wallet.connector.connected) {
@@ -146,14 +147,15 @@ export default function useWalletConnect(onConnect, onDisconnect) {
           ? walletConnect.current._accounts
           : activeWallet?.connector._accounts
 
-      if (walletConnect.current._accounts) {
-        await onDisconnect(walletAccount)
-      } else if (activeWallet.connector._accounts) {
-        await onDisconnect(walletAccount)
-      } else {
-        logInfo('Nothing to disconnect, returning early')
-        return
-      }
+      console.log(walletAccount, walletConnect, 'wallet connect')
+      // if (walletConnect.current._accounts) {
+      //   await onDisconnect(walletAccount)
+      // } else if (activeWallet.connector._accounts) {
+      //   await onDisconnect(walletAccount)
+      // } else {
+      //   logInfo('Nothing to disconnect, returning early')
+      //   return
+      // }
     },
     [onDisconnect]
   )
@@ -180,14 +182,42 @@ export default function useWalletConnect(onConnect, onDisconnect) {
       connector: walletConnect.current,
       address: acct
     }))
+    console.log(_addresses, 'session_update')
     onConnect(_addresses)
+    QRCodeModal.close()
+  }
+
+  const handleSessionUpdated = (err, payload) => {
+    console.log('CONNECTED', err)
+    if (err) {
+      throw err
+    }
+
+    let accounts = []
+    logInfo('Connect wallet connect')
+    // Get provided accounts
+    if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
+      accounts = payload.params[0].accounts
+    } else {
+      throw new Error('incorrect payload')
+    }
+
+    // Map the connector to the address list
+    const _addresses = accounts.map((acct) => ({
+      name: 'WalletConnect',
+      type: 'wallet-connect',
+      connector: walletConnect.current,
+      address: acct
+    }))
+    console.log(_addresses, 'session_update')
+    sessionUpdate(_addresses)
     QRCodeModal.close()
   }
   useEffect(() => {
     // let listener;
     if (typeof walletConnect.current !== 'undefined') {
       walletConnect.current.on('connect', handleConnected)
-      walletConnect.current.on('session_update', handleConnected)
+      walletConnect.current.on('session_update', handleSessionUpdated)
       walletConnect.current.on('disconnect', handleDisconnect)
       walletConnect.current.on('modal_closed', () => {
         QRCodeModal.close()

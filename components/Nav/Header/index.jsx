@@ -137,7 +137,7 @@ export function Header() {
             className="font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
-            {wallet && wallet?.connector?.connected && wallet?.address
+            {wallet && wallet?.connector?.connected
               ? `${truncatedWalletAddress(wallet.address, 5)}`
               : 'CONNECT A WALLET'}
           </Button>

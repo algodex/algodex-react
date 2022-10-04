@@ -175,44 +175,52 @@ function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const { wallet: initialState, setWallet } = useAlgodex()
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
+  const context = useContext(WalletsContext)
   const [locStorage, setLocStorage] = useState([])
   // const isConnected =
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet } = useWallets(initialState)
+  const { wallet } = useWallets()
   const myAlgoConnector = useRef()
   const gridRef = useRef()
   const searchTableRef = useRef()
+  // console.log(addresses, wallet, 'addresses')
+  // useEffect(() => {
+  //   const reConnectMyAlgoWallet = async () => {
+  //     // '@randlabs/myalgo-connect' is imported dynamically
+  //     // because it uses the window object
+  //     const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+  //     MyAlgoConnect.prototype.sign = signer
+  //     myAlgoConnector.current = new MyAlgoConnect()
+  //     myAlgoConnector.current.connected = true
+  //     const mappedAddresses = addresses.map((addr) => {
+  //       if (addr.type === 'my-algo-wallet') {
+  //         return {
+  //           ...addr,
+  //           connector: myAlgoConnector.current
+  //         }
+  //       } else {
+  //         // return addr
+  //         return {
+  //           ...addr,
+  //           connector: context[2].current
+  //         }
+  //       }
+  //     })
+  //     if (mappedAddresses.length) {
+  //       setWallet(mappedAddresses[0])
+  //     }
+  //   }
+  //   reConnectMyAlgoWallet()
+  // }, [myAlgoConnector.current, walletConnect.current])
 
   // useEffect(() => {
-  //   if (!myAlgoConnector.current) {
-  //     const reConnectMyAlgoWallet = async () => {
-  //       // '@randlabs/myalgo-connect' is imported dynamically
-  //       // because it uses the window object
-  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //       MyAlgoConnect.prototype.sign = signer
-  //       myAlgoConnector.current = new MyAlgoConnect()
-  //       myAlgoConnector.current.connected = true
-  //       const mappedAddresses = addresses.map((addr) => {
-  //         if (addr.type === 'my-algo-wallet') {
-  //           return {
-  //             ...addr,
-  //             connector: myAlgoConnector.current
-  //           }
-  //         } else {
-  //           // return addr
-  //           return {
-  //             ...addr,
-  //             connector: walletConnect.current
-  //           }
-  //         }
-  //       })
-  //       setAddresses(mappedAddresses)
-  //     }
-  //     reConnectMyAlgoWallet()
+  //   if (addresses.length && !wallet?.connector) {
+  //     console.log(walletConnect, addresses[0], 'asdfasd')
+  //     setWallet(addresses[0])
   //   }
-  // }, [])
+  // }, [context, addresses])
 
   // useEffect(() => {
   //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
@@ -254,7 +262,6 @@ function MainLayout({ asset, children }) {
         </WalletSection>
         <PlaceOrderSection>
           <PlaceOrder wallet={wallet} asset={asset} />
-          {/* {typeof wallet !== 'undefined' && <PlaceOrder asset={asset} />} */}
         </PlaceOrderSection>
         <SearchAndChartSection>
           <AssetsSection ref={searchTableRef}>
