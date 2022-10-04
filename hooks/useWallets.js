@@ -76,7 +76,13 @@ function useWallets(initialState) {
     }
   }, [onEvents])
 
-  // Fetch all wallet addresses from local storage
+  /**
+   * Fetches all Addresses from Local storage
+   * and populate addresses list.
+   *
+   * Ensures there is no duplicate race conndition while
+   * settting addresses.
+   */
   useEffect(() => {
     const res = localStorage.getItem('addresses')
     if (res) {
@@ -87,13 +93,15 @@ function useWallets(initialState) {
       }
       console.log(_addresses, 'console.log(res)')
       // setAlgodexWallet(_addresses[0])
-      // setAddresses(_addresses)
+      setAddresses(_addresses)
     }
   }, [])
 
   /**
    * Get Hydrated Addresses
    * Ensures addresses are properly Hydrated at all times
+   *
+   * Watches for changes in Addresses and Pera Connection.
    */
   useEffect(() => {
     const res = localStorage.getItem('addresses')
@@ -136,17 +144,30 @@ function useWallets(initialState) {
         )
         // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
         if (mappedAddresses.length) {
-          setAlgodexWallet(mappedAddresses[0])
+          console.log(mappedAddresses, filterConnectedWallet(mappedAddresses), 'pea new address')
+          const _activeWallet = filterConnectedWallet(mappedAddresses)
+          setAlgodexWallet(_activeWallet)
         }
         // setAddresses(mappedAddresses)
       }
       _reHydratedWallet()
     }
-    //  else {
-    //   localStorage.setItem('addresses', JSON.stringify([]))
-    //   setAddresses([])
-    // }
   }, [addresses, peraWalletConnector])
+
+  /**
+   * Returns the first occurence of connected wallets is a list of addresses.
+   *
+   * This is used to ensure consistency in activeWallet
+   */
+  const filterConnectedWallet = useCallback((addressesList) => {
+    console.log(addressesList, 'hey ooo')
+    const _filteredList = addressesList.filter((wallet) => {
+      return wallet.connector && wallet.connector.connected
+    })
+    console.log(_filteredList, 'aothehr ooo')
+    dispatcher('signIn', { type: 'wallet' })
+    return _filteredList[0]
+  }, [])
 
   /**
    * IMPORTANT
@@ -168,61 +189,9 @@ function useWallets(initialState) {
   //   console.log(addresses, 'addresses updated')
   // }, [addresses])
 
-  // useEffect(() => {
-  //   if (addresses.length > 0) {
-  //     let _activeWallet = { ...addresses[0] }
-
-  //     const _reHydratedWallet = async () => {
-  //       const myAlgoConnector = {}
-  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //       MyAlgoConnect.prototype.sign = signer
-  //       myAlgoConnector.current = new MyAlgoConnect()
-  //       myAlgoConnector.current.connected = true
-  //       const mappedAddresses = [_activeWallet].map((addr) => {
-  //         if (addr.type === 'my-algo-wallet') {
-  //           return {
-  //             ...addr,
-  //             connector: myAlgoConnector.current
-  //           }
-  //         }
-  //         if (addr.type === 'wallet-connect') {
-  //           return {
-  //             ...addr,
-  //             connector: {
-  //               accounts: addr.connector._accounts,
-  //               connected: addr.connector._connected,
-  //               _connected: addr.connector._connected
-  //             }
-  //           }
-  //           // return {
-  //           //   ...addr,
-  //           //   connector: peraWalletConnector.connector
-  //           // }
-  //         }
-  //       })
-
-  //       if (typeof wallet === 'undefined') {
-  //         setAlgodexWallet(mappedAddresses[0])
-  //         // setAlgodexWallet(mappedAddresses[0])
-  //         // if (
-  //         //   _activeWallet.type === 'wallet-connect'
-  //         // ) {
-  //         //   setAlgodexWallet(mappedAddresses[0])
-  //         // }
-  //         // if (
-  //         //   _activeWallet.type === 'my-algo-wallet' &&
-  //         //   _activeWallet?.connector?.connected === false
-  //         // ) {
-  //         //   setAlgodexWallet(mappedAddresses[0])
-  //         // }
-  //       }
-  //     }
-  //     _reHydratedWallet()
-  //   }
-  // }, [addresses])
-
-  // TODO: Account Info Query
-  // Handle any Connection
+  /**
+   * Handles Connection with wallet
+   */
   const handleConnect = useCallback(
     async (_addresses) => {
       if (_addresses.length > 0) {

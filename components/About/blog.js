@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import useTranslation from 'next-translate/useTranslation'
-import PropTypes from 'prop-types'
-import { fetchBlogMedia } from '@/services/cms'
-
 //Styled components
 import { AboutContainer, AboutTitle } from './styles.css'
+import React, { useState } from 'react'
+
 import Button from 'components/Button'
+import PropTypes from 'prop-types'
+import { fetchBlogMedia } from '@/services/cms'
 import moment from 'moment'
+import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 
 const BlogSection = styled.section`
   background-color: ${({ theme }) => theme.palette.gray[800]};

@@ -20,7 +20,6 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
               address: acct,
               connector: peraWallet.connector
             }
-            _account.connector.connected = true
             return _account
           })
           console.log(_addresses, 'nside pera connectonn')
