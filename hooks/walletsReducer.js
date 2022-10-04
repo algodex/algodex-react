@@ -28,6 +28,20 @@ export function walletReducer(state, { action, payload }) {
       return { ...state, peraWallet: payload }
     case 'setMyAlgoAddresses':
       return { ...state, myAlgoAddresses: [...payload] }
+    case 'disconnectWallet':
+      const { type: walletType, address } = payload
+      switch (walletType) {
+        case 'peraWallet':
+          state.peraWallet = null
+          if (state.myAlgoAddresses.length > 0) {
+            if (state?.activeWallet.type === address.type) {
+              state.activeWallet = state.myAlgoAddresses[0]
+            }
+          } else {
+            state.activeWallet = null
+          }
+          return { ...state }
+      }
   }
 }
 

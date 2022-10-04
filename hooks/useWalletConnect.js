@@ -54,46 +54,57 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // return addresses
   }
 
-  const handleDisconnect = useCallback(
-    async (err) => {
-      console.log('DISCONNECTED')
-      if (err) throw err
-      logInfo('Disconnnect wallet connect')
-      const walletAccount =
-        walletConnect.current._accounts.length > 0
-          ? walletConnect.current._accounts
-          : activeWallet?.connector._accounts
+  const handleDisconnect = async (err, payload) => {
+    console.log('DISCONNECTED')
+    console.log(payload)
+    if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
+      onDisconnect([{ ...payload.params[0].accounts, type: 'wallet-connect' }])
+    }
+    // let accounts = []
+    // logInfo('Connect wallet connect')
+    // // Get provided accounts
+    // if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
+    //   accounts = payload.params[0].accounts
+    // } else {
+    //   throw new Error('incorrect payload')
+    // }
+    // if (err) throw err
+    // logInfo('Disconnnect wallet connect')
+    // const walletAccount =
+    //   walletConnect.current._accounts.length > 0
+    //     ? walletConnect.current._accounts
+    //     : activeWallet?.connector._accounts
 
-      if (walletConnect.current._accounts) {
-        await onDisconnect(walletAccount)
-      } else if (activeWallet.connector._accounts) {
-        await onDisconnect(walletAccount)
-      } else {
-        logInfo('Nothing to disconnect, returning early')
-        return
-      }
-    },
-    [onDisconnect]
-  )
+    // if (walletConnect.current._accounts) {
+    //   await onDisconnect(walletAccount)
+    // } else if (activeWallet.connector._accounts) {
+    //   await onDisconnect(walletAccount)
+    // } else {
+    //   logInfo('Nothing to disconnect, returning early')
+    //   return
+    // }
+  }
 
   let activeWallet = {}
 
   const disconnect = async (wallet) => {
-    if (walletConnect.current.connected) {
-      await walletConnect.current.killSession()
-      localStorage.removeItem('walletconnect')
-    } else if (wallet.connector.connected) {
-      activeWallet = { ...wallet }
-      console.log(wallet.connector, 'wallet connector')
-      wallet.connector.killSession()
-      localStorage.removeItem('walletconnect')
-    } else {
-      console.error('Wallet was never connected! Remove address and Return')
-      // await walletConnect.current.killSession()
-      // wallet.connector.killSession()
-      await onDisconnect([wallet.address])
-      return
-    }
+    onDisconnect([wallet])
+    wallet.connector.killSession()
+    // if (walletConnect.current.connected) {
+    //   await walletConnect.current.killSession()
+    //   localStorage.removeItem('walletconnect')
+    // } else if (wallet.connector.connected) {
+    //   activeWallet = { ...wallet }
+    //   console.log(wallet.connector, 'wallet connector')
+    //   wallet.connector.killSession()
+    //   localStorage.removeItem('walletconnect')
+    // } else {
+    //   console.error('Wallet was never connected! Remove address and Return')
+    //   // await walletConnect.current.killSession()
+    //   // wallet.connector.killSession()
+    //   await onDisconnect([wallet.address])
+    //   return
+    // }
   }
   const initWalletConnect = async () => {
     if (!walletConnect === undefined || !walletConnect.current === undefined) {

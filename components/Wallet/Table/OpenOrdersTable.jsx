@@ -65,17 +65,17 @@ export function OpenOrdersTable({ orders: _orders }) {
 
   const { activeWallet: wallet, setActiveWallet: setWallet } = useContext(WalletReducerContext)
 
-  useEvent('signOut', (data) => {
-    if (data.type === 'wallet') {
-      setWallet({
-        ...wallet,
-        connector: {
-          ...wallet.connector,
-          connected: false
-        }
-      })
-    }
-  })
+  // useEvent('signOut', (data) => {
+  //   if (data.type === 'wallet') {
+  //     setWallet({
+  //       ...wallet,
+  //       connector: {
+  //         ...wallet.connector,
+  //         connected: false
+  //       }
+  //     })
+  //   }
+  // })
 
   useEffect(() => {
     setOpenOrdersData(_orders)

@@ -36,6 +36,9 @@ export const WalletsReducerProvider = ({ children }) => {
     },
     signIn: () => {
       dispatch({ action: 'signIn' })
+    },
+    disconnectWallet: ({ type, address }) => {
+      dispatch({ action: 'disconnectWallet', payload: { type, address } })
     }
   }
 

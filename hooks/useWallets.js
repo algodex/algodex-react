@@ -53,7 +53,8 @@ function useWallets(initialState, closeDropdown) {
     throw new Error('Must be inside of a Wallets Provider')
   }
   const [wallet, setWallet] = useState(initialState)
-  const { setPeraWallet, setActiveWallet, setAddressesNew } = useContext(WalletReducerContext)
+  const { setPeraWallet, setActiveWallet, setAddressesNew, disconnectWallet } =
+    useContext(WalletReducerContext)
 
   // const [activeWallet, setActiveWallet] = useState()
   const [addresses, setAddresses] = context
@@ -110,96 +111,20 @@ function useWallets(initialState, closeDropdown) {
   }
 
   // Handle any Disconnect
-  const handleDisconnect = useCallback(
-    (_addresses) => {
-      console.log(_addresses)
-      // const remainingAddresses =
-      //   JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
-      //     if (_addresses && _addresses[0]) {
-      //       return wallet.address !== _addresses[0]
-      //     }
-      //   }) || []
-      // let _remainingAddresses = [...remainingAddresses]
-      // if (_remainingAddresses.length > 0) {
-      //   _remainingAddresses = _remainingAddresses.map((wallet) => {
-      //     if (wallet.type === 'wallet-connect') {
-      //       return {
-      //         ...wallet,
-      //         connector: {
-      //           ...context[2].current,
-      //           ...wallet.connector,
-      //           _accounts: wallet.connector._accounts,
-      //           _connected: wallet.connector._connected,
-      //           connected: wallet.connector._connected
-      //         }
-      //       }
-      //     }
-      //     return wallet
-      //   })
-      //   setAlgodexWallet(_remainingAddresses[0])
-      // } else {
-      //   if (typeof wallet !== 'undefined') {
-      //     let disconnectedActiveWallet = {}
-      //     if (wallet.type === 'wallet-connect') {
-      //       disconnectedActiveWallet = {
-      //         ...wallet,
-      //         connector: {
-      //           ...context[2].current,
-      //           _connected: false,
-      //           connected: false
-      //         }
-      //       }
-      //     } else {
-      //       disconnectedActiveWallet = {
-      //         ...wallet,
-      //         connector: {
-      //           ...wallet.connector,
-      //           connected: false
-      //         }
-      //       }
-      //     }
-      //     setAlgodexWallet(disconnectedActiveWallet)
-      //   }
-      // }
-      // // if (typeof wallet !== 'undefined') {
-      // //   let disconnectedActiveWallet = {}
-      // //   console.log(context[2].current, 'has wallet context[2].current')
-      // //   if (wallet.type === 'wallet-connect') {
-      // //     disconnectedActiveWallet = {
-      // //       ...wallet,
-      // //       connector: {
-      // //         ...context[2].current,
-      // //         _connected: false,
-      // //         connected: false
-      // //       }
-      // //     }
-      // //   } else {
-      // //     disconnectedActiveWallet = {
-      // //       ...wallet,
-      // //       connector: {
-      // //         ...wallet.connector,
-      // //         connected: false
-      // //       }
-      // //     }
-      // //   }
-      // //   setAlgodexWallet(
-      // //     _remainingAddresses.length > 0 ? _remainingAddresses[0] : disconnectedActiveWallet
-      // //   )
-      // // }
-      // // if (_remainingAddresses.length === 0) {
-      // //   dispatcher('signOut', {
-      // //     type: 'wallet'
-      // //   })
-      // // }
-      // // dispatcher('signOut', { type: 'wallet' })
-      logInfo(`Disconnected Successfully with : ${_addresses}`)
-      // console.log(_remainingAddresses, 'again end')
-      // localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
-      // setAddresses(_remainingAddresses)
-      // console.error('Handle removing from storage', _addresses)
-    },
-    [setAddresses, addresses]
-  )
+  const handleDisconnect = (_addresses) => {
+    console.log(_addresses)
+
+    if (_addresses[0]?.type === 'wallet-connect') {
+      disconnectWallet({ type: 'peraWallet', address: _addresses[0] })
+      setAddressesNew({ type: 'peraWallet', addresses: [] })
+    }
+
+    logInfo(`Disconnected Successfully with : ${_addresses}`)
+    // console.log(_remainingAddresses, 'again end')
+    // localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
+    // setAddresses(_remainingAddresses)
+    // console.error('Handle removing from storage', _addresses)
+  }
 
   // My Algo Connect/Disconnect
   const {

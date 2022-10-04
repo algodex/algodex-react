@@ -91,7 +91,8 @@ export const WalletOrdersSection = styled.section`
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
 
-  const { activeWallet: wallet, signedIn: isConnected } = useContext(WalletReducerContext)
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+  const isConnected = wallet !== null
 
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'

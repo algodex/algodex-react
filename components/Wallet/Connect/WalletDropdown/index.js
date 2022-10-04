@@ -89,23 +89,6 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     // setAddressesNew({ type: 'peraWallet', addresses: _peraWallet })
   }
 
-  // useEffect(() => {
-  //   let firstTim
-  //   const peraWalletSignInEvent = peraWallet !== null && activeWallet?.type === peraWallet?.type
-  //   if (peraWalletSignInEvent) {
-  //     closeDropdown()
-  //     hasOcurred = true
-  //   }
-  // }, [peraWallet, activeWallet])
-
-  const isPeraConnected = useMemo(() => {
-    if (isConnected) {
-      const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
-      return peraAddr.length > 0
-    }
-    return false
-  }, [isConnected, addresses])
-
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
       const activeWallet = find(addresses, (o) => o.address === wallet?.address)
@@ -128,7 +111,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
           addresses={addressesNew}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
-          isPeraConnected={isPeraConnected}
+          isPeraConnected={false}
         />
         <DropdownFooter />
       </div>
