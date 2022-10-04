@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
@@ -13,6 +13,7 @@ import WalletsList from './WalletConnect/WalletsList'
 // import { difference } from 'lodash'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
+import toast from 'react-hot-toast'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
@@ -152,12 +153,36 @@ export function WalletView(props) {
     return isWalletActive(addr) ? -1 : 0
   }
 
+  const handlePeraConnection = useCallback(
+    (wallet) => {
+      if (wallet.type === 'wallet-connect') {
+        try {
+          return peraConnector.current
+        } catch (error) {
+          console.log(error, 'error while handling pera connection')
+          toast.error('Pera session expired. Disconnect you wallet and try again.')
+          return wallet.addr.connector
+        }
+      } else {
+        return myAlgoConnector.current
+      }
+    },
+    [peraConnector]
+  )
+
   const handleWalletClick = async (addr) => {
     const _addr = {
       ...addr,
-      connector: addr.type === 'wallet-connect' ? addr.connector : myAlgoConnector.current
+      connector: handlePeraConnection(addr)
     }
-    console.log(addr, _addr, context, 'new address', peraConnector.current)
+    // console.log(
+    //   handlePeraConnection(addr),
+    //   addr,
+    //   _addr,
+    //   context,
+    //   'new address',
+    //   peraConnector.current
+    // )
     !isWalletActive(addr) && setActiveWallet(_addr)
   }
 
