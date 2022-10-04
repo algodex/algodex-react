@@ -308,78 +308,14 @@ function useWallets(initialState) {
   const handleConnect = useCallback(
     async (_addresses) => {
       if (_addresses.length > 0) {
-        console.log(_addresses, 'new address')
         logInfo('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
-        const otherWalletClients =
-          addresses.filter((wallet) => wallet.type !== _addresses[0].type) || []
-
         const accounts = await http.indexer.fetchAccounts(_addresses)
-        const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
-        console.log(accounts, mergedPrivateAddresses, 'alls direasses')
-        // Get data to populate
-        // Merge to existing data
-        // Update local storage
-        // Update addresses list
-        // if (sameWalletClient.length > _addresses.length) {
-        //   // disconnect even occured for atleast one address
-        //   console.log(
-        //     _mergeAddresses(otherWalletClients, mergedPrivateAddresses),
-        //     'furst kubj nerged'
-        //   )
-        //   setAddresses(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
-        //   localStorage.setItem(
-        //     'addresses',
-        //     JSON.stringify(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
-        //   )
-        //   const _allAddresses = _mergeAddresses(otherWalletClients, mergedPrivateAddresses)
-        //   if (_allAddresses.length > 0) {
-        //     setAlgodexWallet(_allAddresses[0])
-        //   }
         if (sameWalletClient.length > _addresses.length) {
           addNewWalletToAddressesList(sameWalletClient, _addresses)
         } else {
           replaceWalletInAddressList(_addresses, accounts)
         }
-        // } else {
-        // const allAddresses = _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
-        // const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
-        // // const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses)
-        // const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses).map(
-        //   (wallet) => {
-        //     if (wallet.type === 'wallet-connect') {
-        //       console.log(wallet, _addresses, 'wallet connect ooo')
-        //       return {
-        //         ...wallet,
-        //         connector: peraWalletConnector.connector
-        //         // connector: {
-        //         //   // peraWalletConnector.connector
-        //         //   ...wallet.connector,
-        //         //   accounts: wallet.connector._accounts,
-        //         //   connected: wallet.connector._connected,
-        //         //   _connected: wallet.connector._connected
-        //         // }
-        //       }
-        //     }
-        //     return wallet
-        //   }
-        // )
-        // // if (_allAddresses.length > 0) {
-        // const _activeWallet = filterConnectedWallet(_allAddresses)
-        // setAlgodexWallet(_activeWallet)
-        // // }
-        // console.log(
-        //   _mergeAddresses(otherWalletClients, mergedPrivateAddresses),
-        //   _allAddresses,
-        //   'second slintt kubj nerged'
-        // )
-        // setAddresses(_allAddresses)
-        // localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-        // // if (_allAddresses.length > 0) {
-        // // const _activeWallet = filterConnectedWallet(_allAddresses)
-        // // setAlgodexWallet(_activeWallet)
-        // // }
-        // }
         dispatcher('signIn', { type: 'wallet' })
       }
     },
@@ -391,10 +327,8 @@ function useWallets(initialState) {
     (_addresses) => {
       const locStorageAddr = JSON.parse(localStorage.getItem('addresses'))
       const addressesList = locStorageAddr.length > 0 ? locStorageAddr : addresses || []
-      console.log(addressesList, _addresses, 'addressesList')
       const remainingAddresses =
         addressesList.filter((wallet) => {
-          console.log(wallet, 'wallet outside')
           if (_addresses && _addresses[0]) {
             console.log(
               wallet.address,
@@ -402,108 +336,18 @@ function useWallets(initialState) {
               wallet.address !== _addresses[0],
               'wallet inside'
             )
-            // if (wallet.address !== _addresses[0]) {
-            //   return wallet
-            // }
             return wallet.address !== _addresses[0]
           }
         }) || []
       let _remainingAddresses = [...remainingAddresses]
-      console.log(_remainingAddresses, remainingAddresses, '_remainingAddresses')
       if (_remainingAddresses.length > 0) {
         removeFromExistingList(remainingAddresses)
       } else {
         removeLastWalletFromList(addressesList)
       }
-      // if (_remainingAddresses.length > 0) {
-      //   _remainingAddresses = _remainingAddresses.map((wallet) => {
-      //     console.log(wallet, peraWalletConnector, 'wallet ooo hsdfsse')
-      //     if (wallet.type === 'wallet-connect') {
-      //       return {
-      //         ...wallet,
-      //         connector: peraWalletConnector.connector
-
-      //         // connector: {
-      //         //   ...peraWalletConnector.connector,
-      //         //   ...wallet.connector,
-      //         //   _accounts: wallet.connector._accounts,
-      //         //   _connected: wallet.connector._connected,
-      //         //   connected: wallet.connector._connected
-      //         // }
-      //       }
-      //     }
-      //     return wallet
-      //   })
-      //   console.log(_remainingAddresses[0], 'okay thak you ooo')
-      //   setAlgodexWallet(_remainingAddresses[0])
-      // } else {
-      //   const _wallet = addressesList[0]
-      //   console.log(
-      //     wallet,
-      //     _wallet,
-      //     addressesList,
-      //     _remainingAddresses,
-      //     'wallet udpate oo',
-      //     'disconnectedActiveWallet sdfs'
-      //   )
-      //   if (typeof wallet !== 'undefined') {
-      //     let disconnectedActiveWallet = {}
-      //     if (wallet.type === 'wallet-connect') {
-      //       disconnectedActiveWallet = {
-      //         ..._wallet,
-      //         connector: {
-      //           _connected: false,
-      //           connected: false
-      //         }
-      //       }
-      //     } else {
-      //       disconnectedActiveWallet = {
-      //         ..._wallet,
-      //         connector: {
-      //           ..._wallet.connector,
-      //           connected: false
-      //         }
-      //       }
-      //     }
-      //     console.log(disconnectedActiveWallet, 'disconnectedActiveWallet sdfs')
-      //     setAlgodexWallet(disconnectedActiveWallet)
-      //   } else {
-      //     let disconnectedActiveWallet = {}
-      //     disconnectedActiveWallet = {
-      //       ..._wallet,
-      //       connector: {
-      //         ..._wallet.connector,
-      //         connected: false
-      //       }
-      //     }
-      //     console.log(_wallet, wallet, 'wallet is undefined sdfs')
-      //     setAlgodexWallet(disconnectedActiveWallet)
-      //   }
-      //   // if (typeof wallet !== 'undefined') {
-      //   // let disconnectedActiveWallet = {}
-      //   // if (wallet.type === 'wallet-connect') {
-      //   //   disconnectedActiveWallet = {
-      //   //     ..._wallet,
-      //   //     connector: null
-      //   //   }
-      //   // } else {
-      //   //   disconnectedActiveWallet = {
-      //   //     ..._wallet,
-      //   //     connector: null
-      //   //   }
-      //   // }
-      //   // console.log(disconnectedActiveWallet, 'new to discover sdfs')
-      //   // setAlgodexWallet(disconnectedActiveWallet)
-      //   // } else {
-      //   //   console.log(wallet, 'unndefied wallet')
-      //   //   // setAlgodexWallet()
-      //   // }
-      // }
-
       logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
-      console.log(_remainingAddresses, 'again end')
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
       dispatcher('signOut', { type: 'wallet' })
