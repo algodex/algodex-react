@@ -56,15 +56,18 @@ export const Form = styled.form`
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
+  const { placeOrder, http } = useAlgodex()
+
   // const { placeOrder, http, isConnected } = useAlgodex()
-  const { wallet } = useWallets()
+  // const { wallet } = useWallets()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
   const [status, setStatus] = useState({
     submitted: false,
     submitting: false
   })
+
+  const { activeWallet, signedIn: isConnected } = useContext(WalletReducerContext)
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -74,11 +77,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   })
   const algoBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-      res = fromBaseUnits(wallet.amount)
+    if (activeWallet !== null && typeof activeWallet.amount === 'number') {
+      res = fromBaseUnits(activeWallet.amount)
     }
     return res
-  }, [wallet])
+  }, [activeWallet])
 
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
@@ -143,15 +146,15 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (activeWallet != null && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = fromBaseUnits(filter[0].amount, asset.decimals)
       }
     }
 
     return res
-  }, [wallet, asset])
+  }, [activeWallet, asset])
 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
@@ -172,7 +175,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return algoBalance > 0
     }
     return false
-  }, [order, wallet])
+  }, [order, activeWallet])
 
   const MICROALGO = 0.000001
 
@@ -284,20 +287,20 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         // I have checked everywhere in the codebase and no other componenet passes an onSubmit prop to this component
         orderPromise = onSubmit({
           ...order,
-          wallet,
+          activeWallet,
           asset
         })
       } else {
         console.log(
           {
             ...order,
-            address: wallet.address,
-            wallet,
+            address: activeWallet.address,
+            activeWallet,
             asset,
             appId: order.type === 'sell' ? 22045522 : 22045503,
             version: 6
           },
-          { wallet }
+          { wallet: activeWallet }
         )
 
         const awaitPlaceOrder = async () => {
@@ -306,13 +309,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             await placeOrder(
               {
                 ...order,
-                address: wallet.address,
-                wallet,
+                address: activeWallet.address,
+                activeWallet,
                 asset,
                 appId: order.type === 'sell' ? 22045522 : 22045503,
                 version: 6
               },
-              { wallet },
+              { wallet: activeWallet },
               notifier
             )
             toast.success(t('order-success'), {
@@ -329,10 +332,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
       // TODO add events
       throttleLog('Submitting order', {
-        wallet
+        activeWallet
       })
     },
-    [onSubmit, asset, order, wallet]
+    [onSubmit, asset, order, activeWallet]
   )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
@@ -346,7 +349,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     })
   }
 
-  const isActive = typeof wallet === 'undefined'
+  const isActive = activeWallet != null
   if (isLoading || isError) {
     return <Spinner />
   }
@@ -373,7 +376,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           )}
         </header>
       )}
-      {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && showForm && (
+      {typeof order !== 'undefined' && activeWallet !== null && isConnected && showForm && (
         <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
@@ -401,7 +404,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               {t('sell')}
             </MaterialButton>
           </ButtonGroup>
-          <AvailableBalance wallet={wallet} asset={asset} />
+          <AvailableBalance wallet={activeWallet} asset={asset} />
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"

@@ -258,7 +258,7 @@ export function WalletOptionsListComp(props) {
     //   payload: _myAlgoAddresses
     // })
 
-    console.log(walletState)
+    // console.log(walletState)
     // WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
@@ -365,7 +365,8 @@ WalletOptionsListComp.propTypes = {
 function WalletConnect() {
   const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
   const [addresses, setAddresses] = useContext(WalletsContext)
-  const { addressesNew, setAddressesNew, signedIn, activeWallet } = useContext(WalletReducerContext)
+  const { addressesNew, setAddressesNew, signedIn, activeWallet, setActiveWallet } =
+    useContext(WalletReducerContext)
   // const { wallet } = useWallets(activeWallet)
 
   // useEffect(() => {
@@ -413,7 +414,7 @@ function WalletConnect() {
         activeWallet={activeWallet}
         signedIn={signedIn}
         setSignedIn={() => console.log('setSignedINcalled')}
-        setActiveWallet={setWallet}
+        setActiveWallet={setActiveWallet}
         setIsConnectingWallet={setIsConnectingWallet}
         addressesRef={addressesRef}
       />

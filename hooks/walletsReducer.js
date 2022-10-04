@@ -13,8 +13,9 @@ export function walletReducer(state, { action, payload }) {
       // const { setWallet } = useAlgodex()
       // useAlgodex.setWallet(payload)
       // setWallet(payload)
+      if (!state.signedIn) state.signedIn = true
 
-      return { ...state, signedIn: true, activeWallet: payload }
+      return { ...state, activeWallet: payload }
     case 'setAddresses':
       // if (state.activeWallet === null) {
       //   state.activeWallet = payload[0]
