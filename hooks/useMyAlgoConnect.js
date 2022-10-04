@@ -18,7 +18,7 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
   const myAlgoWallet = useRef()
 
   const disconnect = (wallet) => {
-    onDisconnect([wallet.address])
+    onDisconnect([wallet])
   }
   const connect = async () => {
     try {

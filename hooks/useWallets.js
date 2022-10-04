@@ -9,6 +9,7 @@ import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import useWalletConnect from './useWalletConnect'
+import { WalletReducerContext } from './WalletsReducerProvider'
 
 /**
  *
@@ -45,13 +46,15 @@ WalletsProvider.propTypes = {
  * @param {Object} initialState Wallet Initial State
  * @return {*}
  */
-function useWallets(initialState) {
+function useWallets(initialState, closeDropdown) {
   const dispatcher = useEventDispatch()
   const context = useContext(WalletsContext)
   if (context === undefined) {
     throw new Error('Must be inside of a Wallets Provider')
   }
   const [wallet, setWallet] = useState(initialState)
+  const { setPeraWallet, setActiveWallet, setAddressesNew, disconnectWallet, myAlgoAddresses } =
+    useContext(WalletReducerContext)
 
   // const [activeWallet, setActiveWallet] = useState()
   const [addresses, setAddresses] = context
@@ -75,35 +78,6 @@ function useWallets(initialState) {
     }
   }, [onEvents])
 
-  // useEffect(() => {
-  //   if (context[0]?.length) {
-  //     const reConnectMyAlgoWallet = async () => {
-  //       // '@randlabs/myalgo-connect' is imported dynamically
-  //       // because it uses the window object
-  //       const myAlgoConnector = {}
-  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //       MyAlgoConnect.prototype.sign = signer
-  //       myAlgoConnector.current = new MyAlgoConnect()
-  //       myAlgoConnector.current.connected = true
-  //       const mappedAddresses = context[0].map((addr) => {
-  //         if (addr.type === 'my-algo-wallet') {
-  //           return {
-  //             ...addr,
-  //             connector: myAlgoConnector.current
-  //           }
-  //         } else {
-  //           return {
-  //             ...addr,
-  //             connector: context[2]
-  //           }
-  //         }
-  //       })
-  //       localStorage.setItem('addresses', JSON.stringify(_mergeAddresses(mappedAddresses, [])))
-  //     }
-  //     reConnectMyAlgoWallet()
-  //   }
-  // }, [context])
-
   useEffect(() => {
     if (addresses.length > 0) {
       let _activeWallet = { ...addresses[0] }
@@ -123,139 +97,44 @@ function useWallets(initialState) {
 
   // TODO: Account Info Query
   // Handle any Connection
-  const handleConnect = useCallback(
-    async (_addresses) => {
-      if (_addresses.length > 0) {
-        logInfo('Handling Connect')
-        const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
-        const otherWalletClients =
-          addresses.filter((wallet) => wallet.type !== _addresses[0].type) || []
+  const handleConnect = async (_addresses) => {
+    if (_addresses.length > 0) {
+      logInfo('Handling Connect')
 
-        const accounts = await http.indexer.fetchAccounts(_addresses)
-        const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
-        if (sameWalletClient.length > _addresses.length) {
-          // disconnect even occured for atleast one address
-          setAddresses(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
-          localStorage.setItem(
-            'addresses',
-            JSON.stringify(_mergeAddresses(otherWalletClients, mergedPrivateAddresses))
-          )
-        } else {
-          const allAddresses = _mergeAddresses(addresses, _mergeAddresses(_addresses, accounts))
-          const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
-          const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses).map(
-            (wallet) => {
-              if (wallet.type === 'wallet-connect' && context[2].current.connected) {
-                return wallet
-              }
-              return wallet
-            }
-          )
-          if (_allAddresses.length > 0) {
-            setAlgodexWallet(_allAddresses[0])
-          }
-          setAddresses(_allAddresses)
-          localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-        }
-        dispatcher('signIn', { type: 'wallet' })
-      }
-    },
-    [setAddresses, addresses]
-  )
+      const accounts = await http.indexer.fetchAccounts(_addresses)
+      const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
+      setPeraWallet(mergedPrivateAddresses[0])
+      setAddressesNew({ type: 'peraWallet', addresses: mergedPrivateAddresses })
+      setActiveWallet(mergedPrivateAddresses[0])
+      closeDropdown()
+    }
+  }
 
   // Handle any Disconnect
-  const handleDisconnect = useCallback(
-    (_addresses) => {
-      const remainingAddresses =
-        JSON.parse(localStorage.getItem('addresses')).filter((wallet) => {
-          if (_addresses && _addresses[0]) {
-            return wallet.address !== _addresses[0]
-          }
-        }) || []
-      let _remainingAddresses = [...remainingAddresses]
-      if (_remainingAddresses.length > 0) {
-        _remainingAddresses = _remainingAddresses.map((wallet) => {
-          if (wallet.type === 'wallet-connect') {
-            return {
-              ...wallet,
-              connector: {
-                ...context[2].current,
-                ...wallet.connector,
-                _accounts: wallet.connector._accounts,
-                _connected: wallet.connector._connected,
-                connected: wallet.connector._connected
-              }
-            }
-          }
-          return wallet
-        })
-        setAlgodexWallet(_remainingAddresses[0])
-      } else {
-        if (typeof wallet !== 'undefined') {
-          let disconnectedActiveWallet = {}
-          if (wallet.type === 'wallet-connect') {
-            disconnectedActiveWallet = {
-              ...wallet,
-              connector: {
-                ...context[2].current,
-                _connected: false,
-                connected: false
-              }
-            }
-          } else {
-            disconnectedActiveWallet = {
-              ...wallet,
-              connector: {
-                ...wallet.connector,
-                connected: false
-              }
-            }
-          }
-          setAlgodexWallet(disconnectedActiveWallet)
-        }
-      }
-      // if (typeof wallet !== 'undefined') {
-      //   let disconnectedActiveWallet = {}
-      //   console.log(context[2].current, 'has wallet context[2].current')
-      //   if (wallet.type === 'wallet-connect') {
-      //     disconnectedActiveWallet = {
-      //       ...wallet,
-      //       connector: {
-      //         ...context[2].current,
-      //         _connected: false,
-      //         connected: false
-      //       }
-      //     }
-      //   } else {
-      //     disconnectedActiveWallet = {
-      //       ...wallet,
-      //       connector: {
-      //         ...wallet.connector,
-      //         connected: false
-      //       }
-      //     }
-      //   }
-      //   setAlgodexWallet(
-      //     _remainingAddresses.length > 0 ? _remainingAddresses[0] : disconnectedActiveWallet
-      //   )
-      // }
+  const handleDisconnect = (_addresses) => {
+    console.log(_addresses)
 
-      // if (_remainingAddresses.length === 0) {
-      //   dispatcher('signOut', {
-      //     type: 'wallet'
-      //   })
-      // }
-      // dispatcher('signOut', { type: 'wallet' })
-      logInfo(
-        `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
-      )
-      console.log(_remainingAddresses, 'again end')
-      localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
-      setAddresses(_remainingAddresses)
-      console.error('Handle removing from storage', _addresses)
-    },
-    [setAddresses, addresses]
-  )
+    if (_addresses[0]?.type === 'wallet-connect') {
+      disconnectWallet({ type: 'peraWallet', address: _addresses[0] })
+      setAddressesNew({ type: 'peraWallet', addresses: [] })
+    }
+
+    if (_addresses[0].type === 'my-algo-wallet') {
+      disconnectWallet({ type: 'myAlgo', address: _addresses[0] })
+      //myAlgoAddresses has state before wallet disconnected
+      const _remainingAddresses = myAlgoAddresses.filter((wallet) => {
+        return wallet.address !== _addresses[0].address
+      })
+
+      setAddressesNew({ type: 'myAlgo', addresses: _remainingAddresses })
+    }
+
+    logInfo(`Disconnected Successfully with : ${_addresses}`)
+    // console.log(_remainingAddresses, 'again end')
+    // localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
+    // setAddresses(_remainingAddresses)
+    // console.error('Handle removing from storage', _addresses)
+  }
 
   // My Algo Connect/Disconnect
   const {

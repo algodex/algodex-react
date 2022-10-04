@@ -67,7 +67,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     submitting: false
   })
 
-  const { activeWallet, signedIn: isConnected } = useContext(WalletReducerContext)
+  const { activeWallet } = useContext(WalletReducerContext)
+  const isConnected = activeWallet !== null
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
