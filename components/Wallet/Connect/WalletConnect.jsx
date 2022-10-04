@@ -153,7 +153,13 @@ export function WalletView(props) {
     return isWalletActive(addr) ? -1 : 0
   }
 
-  const handlePeraConnection = useCallback(
+  /**
+   * Handle active connector while placing order
+   *
+   * Ensures the right connector or message is used
+   * when wallet change or updates
+   */
+  const handleConnectionStatus = useCallback(
     (wallet) => {
       if (wallet.type === 'wallet-connect') {
         try {
@@ -173,7 +179,7 @@ export function WalletView(props) {
   const handleWalletClick = async (addr) => {
     const _addr = {
       ...addr,
-      connector: handlePeraConnection(addr)
+      connector: handleConnectionStatus(addr)
     }
     // console.log(
     //   handlePeraConnection(addr),
