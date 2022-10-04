@@ -163,12 +163,12 @@ export function WalletView(props) {
     (wallet) => {
       if (wallet.type === 'wallet-connect') {
         try {
-          console.log(peraConnector.current, wallet.addr, 'peraConnector.current')
-          if (peraConnector.current.connected) {
-            return peraConnector.current
+          console.log(peraConnector.connector, wallet.addr, 'peraConnector.current')
+          if (peraConnector.connector.connected) {
+            return peraConnector.connector
           }
           const connector = {
-            ...peraConnector.current,
+            ...peraConnector.connector,
             _accounts: [],
             _connected: false,
             connected: true
@@ -192,16 +192,20 @@ export function WalletView(props) {
       ...addr,
       connector
     }
-    // console.log(
-    //   // handleConnectionStatus(addr),
-    //   connector,
-    //   addr,
-    //   _addr,
-    //   context,
-    //   'new address',
-    //   peraConnector.current
-    // )
-    if (_addr.connector && _addr.connector._connected) {
+    console.log(
+      // handleConnectionStatus(addr),
+      connector,
+      addr,
+      _addr,
+      context,
+      'new address',
+      peraConnector.connector
+    )
+    // if (_addr.type === 'wallet connect' && _addr.connector._connected)
+    //   isWalletActive(addr) && setActiveWallet(_addr)
+    // if (_addr.type === 'my-algo-wallet' && _addr.connector.connected)
+    //   isWalletActive(addr) && setActiveWallet(_addr)
+    if (_addr.connector && (_addr.connector._connected || _addr.connector.connected)) {
       !isWalletActive(addr) && setActiveWallet(_addr)
     }
   }

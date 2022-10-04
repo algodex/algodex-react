@@ -96,7 +96,13 @@ function useWallets(initialState) {
 
       // Ensure there no request update of addresses.
       // setAddresses(_addresses)
-      if (addresses.length < 1) {
+
+      /**
+       * If initialState (wallet) is set, don't set addresses
+       * You can work with initial state
+       */
+      console.log(wallet, 'check wallet')
+      if (typeof wallet === 'undefined') {
         setAddresses(_addresses)
       }
     }
@@ -441,7 +447,8 @@ function useWallets(initialState) {
     // peraDisconnect,
     myAlgoDisconnect,
     myAlgoConnector,
-    peraConnector: _peraConnector
+    // peraConnector: _peraConnector
+    peraConnector: peraWalletConnector
   }
 }
 
