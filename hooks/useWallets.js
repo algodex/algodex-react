@@ -238,20 +238,22 @@ function useWallets(initialState) {
                 console.log(wallet, _addresses, 'wallet connect ooo')
                 return {
                   ...wallet,
-                  connector: {
-                    // peraWalletConnector.connector
-                    ...wallet.connector,
-                    accounts: wallet.connector._accounts,
-                    connected: wallet.connector._connected,
-                    _connected: wallet.connector._connected
-                  }
+                  connector: peraWalletConnector.connector
+                  // connector: {
+                  //   // peraWalletConnector.connector
+                  //   ...wallet.connector,
+                  //   accounts: wallet.connector._accounts,
+                  //   connected: wallet.connector._connected,
+                  //   _connected: wallet.connector._connected
+                  // }
                 }
               }
               return wallet
             }
           )
           // if (_allAddresses.length > 0) {
-          setAlgodexWallet(_allAddresses[0])
+          const _activeWallet = filterConnectedWallet(_allAddresses)
+          setAlgodexWallet(_activeWallet)
           // }
           console.log(
             _mergeAddresses(otherWalletClients, mergedPrivateAddresses),
@@ -260,6 +262,10 @@ function useWallets(initialState) {
           )
           setAddresses(_allAddresses)
           localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+          // if (_allAddresses.length > 0) {
+          // const _activeWallet = filterConnectedWallet(_allAddresses)
+          // setAlgodexWallet(_activeWallet)
+          // }
         }
         dispatcher('signIn', { type: 'wallet' })
       }
