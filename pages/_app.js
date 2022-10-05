@@ -69,6 +69,10 @@ const styles = css`
   ::-webkit-scrollbar-corner {
     background: ${theme.palette.gray[700]};
   }
+  .tv-lightweight-charts {
+    top: -0rem;
+    position: absolute;
+  }
 `
 
 function Algodex(props) {
