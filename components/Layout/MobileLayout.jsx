@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+// import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -15,6 +15,7 @@ import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -129,14 +130,9 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  // const { setWallet } = useAlgodex()
-  const [addresses, setAddresses] = useContext(WalletsContext)
-  // const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-  // const [locStorage, setLocStorage] = useState([])
-  const context = useContext(WalletsContext)
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
 
-  const { wallet } = useWallets()
-  const myAlgoConnector = useRef()
+  // const { wallet } = useWallets()
 
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
@@ -231,25 +227,6 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            {/* <Box className="flex flex-col" width="100%" height="100%">
-              <Box>
-                <WalletOptionsMobile
-                  setIsConnectingWallet={setIsConnectingWallet}
-                  isConnectingWallet={isConnectingWallet}
-                />
-
-                <Box mx={2}>
-                  <Button
-                    className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
-                    variant="contained"
-                    onClick={() => setIsConnectingWallet(true)}
-                  >
-                    CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
-                  </Button>
-                </Box>
-              </Box>
-              <Wallet />
-            </Box> */}
             <Wallet />
           </WalletSection>
         )}

@@ -19,12 +19,13 @@ import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
-import { useAlgodex } from '@algodex/algodex-hooks'
+// import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
-import useWallets from '@/hooks/useWallets'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+// import useWallets from '@/hooks/useWallets'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -37,8 +38,8 @@ export function Header() {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
   // const { wallet } = useAlgodex()
-  const { wallet: initialState } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+
   const isMobile = useMobileDetect()
 
   /**

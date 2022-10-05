@@ -14,7 +14,7 @@ import placeOrderEN from '../locales/en/place-order.json'
 import { render } from '@testing-library/react'
 import theme from '../theme'
 import walletEN from '../locales/en/wallet.json'
-import { WalletsProvider } from '@/hooks/useWallets'
+// import { WalletsProvider } from '@/hooks/useWallets'
 import { Provider } from '@algodex/algodex-hooks'
 
 import AlgodexApi from '@algodex/algodex-sdk'
@@ -72,9 +72,9 @@ const Providers = ({ children }) => (
             wallet: walletEN
           }}
         >
-          <WalletsProvider>
-            <Provider dex={makeApi()}>{children}</Provider>
-          </WalletsProvider>
+          {/* <WalletsProvider> */}
+          <Provider dex={makeApi()}>{children}</Provider>
+          {/* </WalletsProvider> */}
         </I18nProvider>
       </QueryClientProvider>
     </ThemeProvider>

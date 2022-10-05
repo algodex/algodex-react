@@ -16,9 +16,10 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary'
 // import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import { WalletsContext } from '@/hooks/useWallets'
+import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+// import { useAlgodex } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   width: 100%;
@@ -60,15 +61,18 @@ const ModalContainer = styled.div`
 
 const MobileWalletRender = () => {
   // const { addresses, wallet, signedIn } = useWalletMgmt()
-  const { wallet, isConnected } = useAlgodex()
-  const [addresses] = useContext(WalletsContext)
+  // const { wallet, isConnected } = useAlgodex()
+  // const [addresses] = useContext(WalletsContext)
   // const { addresses, wallet } = useAlgodex()
+  const { activeWallet: wallet, addresses } = useContext(WalletReducerContext)
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const [isDisconnectingWallet, setIsDisconnectingWallet] = useState(false)
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
+
+  const isConnected = wallet !== null
 
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
