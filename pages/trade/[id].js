@@ -14,11 +14,11 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import { WalletsContext } from '@/hooks/useWallets'
+// import { WalletsContext } from '@/hooks/useWallets'
 import config from '@/config.json'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-import { useAlgodex } from '@algodex/algodex-hooks'
+// import { useAlgodex } from '@algodex/algodex-hooks'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
@@ -130,9 +130,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
-  const [locStorage, setLocStorage] = useState([])
   const myAlgoConnector = useRef(null)
-  const { setWallet } = useAlgodex()
 
   useEffect(() => {
     if (myAlgoConnector.current === null) {
@@ -148,15 +146,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       reConnectMyAlgoWallet()
     }
   }, [])
-  const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-
-  // useEffect(() => {
-  //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-
-  //   if (locStorage.length === 0 && storedAddrs?.length > 0) {
-  //     setLocStorage(storedAddrs)
-  //   }
-  // }, [myAlgoConnector.current, addresses])
 
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
@@ -179,27 +168,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     },
     [setInterval, interval]
   )
-
-  // useEffect(() => {
-  //   if (locStorage.length > 0) {
-  //     const reHydratedAddresses = locStorage.map((wallet) => {
-  //       if (wallet.type === 'my-algo-wallet' && myAlgoConnector.current) {
-  //         return {
-  //           ...wallet,
-  //           connector: myAlgoConnector.current
-  //         }
-  //       } else {
-  //         return {
-  //           ...wallet,
-  //           connector: walletConnect.current
-  //         }
-  //         // return wallet
-  //       }
-  //     })
-  //     setAddresses(reHydratedAddresses)
-  //     setWallet(reHydratedAddresses[0])
-  //   }
-  // }, [locStorage, myAlgoConnector.current])
 
   useEffect(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {

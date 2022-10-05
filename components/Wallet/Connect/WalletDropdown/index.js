@@ -41,8 +41,8 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const { wallet: initialState, isConnected, http } = useAlgodex()
-  const [addresses] = useContext(WalletsContext)
+  const { http } = useAlgodex()
+  // const [addresses] = useContext(WalletsContext)
   const {
     addressesNew,
     setAddressesNew,
@@ -54,7 +54,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     setMyAlgoAddresses
   } = useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
-  const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState, closeDropdown)
+  const { wallet, peraConnect, myAlgoConnect } = useWallets(closeDropdown)
   // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
@@ -92,15 +92,16 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const isPeraConnected = peraWallet !== null
 
   const sortedWalletsList = useMemo(() => {
-    if (addresses) {
-      const activeWallet = find(addresses, (o) => o.address === wallet?.address)
-      const inactiveWallet = filter(addresses, (o) => o.address !== wallet?.address)
+    if (addressesNew) {
+      //**may need to change */
+      const activeWallet = find(addressesNew, (o) => o.address === wallet?.address)
+      const inactiveWallet = filter(addressesNew, (o) => o.address !== wallet?.address)
       return {
         activeWallet,
         inactiveWallet
       }
     }
-  }, [addresses, wallet])
+  }, [addressesNew, wallet])
 
   return (
     <Container className="">

@@ -8,25 +8,21 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { find } from 'lodash'
 import theme from 'theme'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import { useEffect } from 'react'
-// import { useAlgodex } from '@algodex/algodex-hooks'
-// import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
+import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
+import { useContext } from 'react'
 import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 
-// import useWalletConnect from '@/hooks/useWalletConnect'
-
-// import useUserStore from 'store/use-user-state'
-
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  const { wallet: initialState, setWallet } = useAlgodex()
-  const { wallet, addresses, peraDisconnect, myAlgoDisconnect } = useWallets(initialState)
-  // const {  } = useWallets(wallet)
+  // const { wallet: initialState, setWallet } = useAlgodex()
+  const {
+    activeWallet: wallet,
+    setActiveWallet: setWallet,
+    addresses
+  } = useContext(WalletReducerContext)
+  const { peraDisconnect, myAlgoDisconnect } = useWallets()
 
-  // const { wallet } = useAlgodex()
-  wallet
   const isWalletActive = (addr) => {
     return wallet.address === addr
   }

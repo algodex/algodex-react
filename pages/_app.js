@@ -20,7 +20,6 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 // Material UI
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
-import { WalletsProvider } from '@/hooks/useWallets'
 import { WalletsReducerProvider } from '../hooks/WalletsReducerProvider'
 // import AlgodexApi from '@algodex/algodex-sdk'
 // import { Provider } from '@algodex/algodex-hooks'
@@ -104,14 +103,12 @@ function Algodex(props) {
               <CssBaseline />
               <Global styles={styles} />
               <WalletsReducerProvider>
-                <WalletsProvider>
-                  <Provider dex={makeApi()}>
-                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                    <Toaster />
-                    <ReactQueryDevtools initialIsOpen={false} />
-                    <Component {...pageProps} />
-                  </Provider>
-                </WalletsProvider>
+                <Provider dex={makeApi()}>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <Toaster />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                  <Component {...pageProps} />
+                </Provider>
               </WalletsReducerProvider>
             </ThemeProvider>
           </CacheProvider>

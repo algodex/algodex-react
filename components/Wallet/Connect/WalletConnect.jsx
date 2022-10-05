@@ -1,7 +1,6 @@
 import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
-import useMyAlgoConnect from '../../../hooks/useMyAlgoConnect'
+import useWallets from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../hooks/WalletsReducerProvider'
 
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
@@ -12,15 +11,11 @@ import { Section } from '@/components/Layout/Section'
 import Typography from '@mui/material/Typography'
 import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
 import WalletsList from './WalletConnect/WalletsList'
-// import { difference } from 'lodash'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
-import { init } from '@sentry/nextjs'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -101,16 +96,12 @@ const WalletsWrapper = styled.div`
 export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses } = props
   const { t } = useTranslation('wallet')
-  // const { wallet: initialState } = useAlgodex()
   const {
-    peraConnector,
     // myAlgoConnector,
-    peraConnect,
     peraDisconnect: _peraDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
   } = useWallets(activeWallet)
-  const myAlgoConnector = useRef(null)
-  const dispatcher = useEventDispatch()
+
   const myAlgoDisconnect = (targetWallet) => {
     _myAlgoDisconnect(targetWallet)
   }
@@ -135,10 +126,6 @@ export function WalletView(props) {
   }
 
   const handleWalletClick = async (addr) => {
-    // const _addr = {
-    //   ...addr,
-    //   connector: addr.type === 'wallet-connect' ? peraConnector.current : myAlgoConnector.current
-    // }
     !isWalletActive(addr) && setActiveWallet(addr)
   }
 
@@ -245,19 +232,19 @@ export function WalletOptionsListComp(props) {
     setActiveWallet,
     setMyAlgoAddresses
   } = props
-  const { wallet: initialState, isConnected, http } = useAlgodex()
-  const { peraConnect, myAlgoConnect } = useWallets(initialState)
+  const { http } = useAlgodex()
+  const { peraConnect, myAlgoConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': () => myAlgoConnect(),
     'pera-connect': () => peraConnect()
   }
 
+  const isConnected = activeWallet !== null
+
   const myAlgoOnClick = async () => {
     console.log('myAlogOnClick')
     console.log('hit')
-    // const { connect: newConnect } = useMyAlgoConnectNew()
-    // const _myAlgoAddresses = newConnect()
     const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
     const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
     const _mergedAlgoAddresses = mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses)
@@ -266,7 +253,6 @@ export function WalletOptionsListComp(props) {
     setAddresses({ type: 'myAlgo', addresses: _mergedAlgoAddresses })
 
     if (!activeWallet) setActiveWallet(_mergedAlgoAddresses[0])
-    // await WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
@@ -339,21 +325,10 @@ function WalletConnect() {
     useContext(WalletReducerContext)
 
   const signedIn = activeWallet !== null
-  // const { wallet } = useWallets(activeWallet)
 
-  // useEffect(() => {
-  //   if (typeof activeWallet !== 'undefined') setWallet(activeWallet)
-  // }, [activeWallet])
-
-  // const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
-
-  // console.log(algodex, isConnected, wallet, 'is conected')
-  // useEffect(() => {
-  //   setSignedIn(isConnected)
-  // }, [addresses, isConnected])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">
