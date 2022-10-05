@@ -38,7 +38,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const { wallet: initialState, isConnected } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
-  const { wallet, peraConnect, myAlgoConnect } = useWallets(initialState)
+  const { wallet, peraConnect, myAlgoConnect } = useWallets()
   // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,

@@ -38,7 +38,7 @@ export function Header() {
   const { t } = useTranslation('common')
   // const { wallet } = useAlgodex()
   const { wallet: initialState } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet } = useWallets()
   const isMobile = useMobileDetect()
 
   /**

@@ -89,7 +89,7 @@ export const WalletOrdersSection = styled.section`
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const { wallet: initialState, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet } = useWallets()
   // const isConnected = typeof wallet?.address !== 'undefined'
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'

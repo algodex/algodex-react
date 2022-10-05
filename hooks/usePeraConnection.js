@@ -66,12 +66,10 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
     // Fetch Address to disconnect
     const locStorageAddr = localStorage.getItem('addresses')
     console.log(locStorageAddr, 'locStorageAddr')
-    // setHasError(false)
     if (locStorageAddr) {
       const _formattedAddr = JSON.parse(locStorageAddr)
       const _peraAddr = _formattedAddr.filter((addr) => addr.type === 'wallet-connect')
-      console.log([_peraAddr[0]?.address], _peraAddr, 'pera address')
-      onDisconnect([_peraAddr[0].address])
+      _peraAddr.length && onDisconnect([_peraAddr[0]?.address])
     }
   }
 

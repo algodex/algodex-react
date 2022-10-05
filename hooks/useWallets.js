@@ -86,18 +86,19 @@ function useWallets(initialState) {
     const res = localStorage.getItem('addresses')
     if (res) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
-
+      console.log(_wallet, 'current set in local storage')
       /**
        * If initialState (wallet) is set, don't set addresses
        * You can work with initial state
        */
-      if (typeof initialState === 'undefined') {
+      if (typeof _wallet === 'undefined') {
         setAddresses(_addresses)
         // console.log('is undefined')
       } else {
-        // console.log('is defined')
-        setActiveWallet([initialState])
+        console.log('is defined', _wallet, 'connected wallet')
+        setActiveWallet([_wallet], 'update')
       }
+      // setAddresses(_addresses)
     }
   }, [])
 
@@ -139,8 +140,10 @@ function useWallets(initialState) {
           peraWalletConnector.connector,
           'mapped addresses'
         )
-        if (mappedAddresses.length) {
-          setActiveWallet(mappedAddresses)
+        if (mappedAddresses.length && _wallet === undefined) {
+          setActiveWallet(mappedAddresses, 'new')
+        } else {
+          setActiveWallet(mappedAddresses, 'update')
         }
       }
       _reHydratedWallet()
@@ -158,14 +161,22 @@ function useWallets(initialState) {
       return wallet.connector && wallet.connector.connected
     })
     console.log(_filteredList, 'aothehr ooo')
-    dispatcher('signIn', { type: 'wallet' })
     return _filteredList[0]
   }, [])
 
-  const setActiveWallet = (addressesList) => {
+  const setActiveWallet = (addressesList, action) => {
     const _connectedWallet = filterConnectedWallet(addressesList)
-    const _activeWallet = handleWalletUpdate(_connectedWallet)
-    setAlgodexWallet(_activeWallet)
+    console.log(_connectedWallet, action, 'connected wallet')
+    const _activeWallet = handleWalletUpdate(_connectedWallet, action)
+    console.log(_activeWallet, 'active wallet')
+    // if(_wallet === undefined) {
+    //   setAlgodexWallet(_activeWallet)
+    //   return
+    // }
+    if (_activeWallet) {
+      setAlgodexWallet(_activeWallet)
+      return
+    }
   }
 
   const handleWalletUpdate = (wallet, action) => {
@@ -176,17 +187,16 @@ function useWallets(initialState) {
       return
     }
 
-    if (initialState === undefined) {
-      return wallet
-    }
-
     switch (action) {
       case 'update':
-        return initialState
+        return _wallet
       case 'new':
         return wallet
       default:
-        return initialState
+        if (_wallet === undefined) {
+          return wallet
+        }
+        return _wallet
     }
   }
 
@@ -206,7 +216,7 @@ function useWallets(initialState) {
    * Update Addresses when rehydration happes
    */
 
-  const addNewWalletToAddressesList = async (sameClient, newAddress) => {
+  const addNewWalletToAddressesList = async (sameClient, newAddress, actionType = 'new') => {
     const otherWalletClients =
       addresses.filter((wallet) => wallet.type !== newAddress[0].type) || []
 
@@ -214,15 +224,16 @@ function useWallets(initialState) {
     const mergedPrivateAddresses = _mergeAddresses(newAddress, accounts)
     const _allAddresses = _mergeAddresses(otherWalletClients, mergedPrivateAddresses)
     if (sameClient.length > newAddress.length) {
+      if (_allAddresses.length > 0) {
+        setActiveWallet(_allAddresses, actionType)
+      }
+      console.log('came here, addNewWalletToAddressesList', _allAddresses)
       setAddresses(_allAddresses)
       localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-      if (_allAddresses.length > 0) {
-        setActiveWallet(_allAddresses)
-      }
     }
   }
 
-  const replaceWalletInAddressList = (newAddress, accounts) => {
+  const replaceWalletInAddressList = (newAddress, accounts, actionType = 'new') => {
     const allAddresses = _mergeAddresses(addresses, _mergeAddresses(newAddress, accounts))
     const _otherAddresses = JSON.parse(localStorage.getItem('addresses'))
     const _allAddresses = _mergeAddresses(_otherAddresses || [], allAddresses).map((wallet) => {
@@ -234,32 +245,32 @@ function useWallets(initialState) {
       }
       return wallet
     })
+    setActiveWallet(_allAddresses, actionType)
+    console.log('came here, replaceWalletInAddressList', _allAddresses)
     setAddresses(_allAddresses)
     localStorage.setItem('addresses', JSON.stringify(_allAddresses))
-    setActiveWallet(_allAddresses)
     // const _activeWallet = filterConnectedWallet(_allAddresses)
     // setAlgodexWallet(_activeWallet)
   }
 
   const removeFromExistingList = (filteredAddressesList) => {
-    if (filteredAddressesList.length > 0) {
-      filteredAddressesList = filteredAddressesList.map((wallet) => {
-        console.log(wallet, peraWalletConnector, 'wallet ooo hsdfsse')
-        if (wallet.type === 'wallet-connect') {
-          return {
-            ...wallet,
-            connector: peraWalletConnector.connector
-          }
+    const _filteredAddressesList = filteredAddressesList.map((wallet) => {
+      console.log(wallet, peraWalletConnector, 'wallet ooo hsdfsse')
+      if (wallet.type === 'wallet-connect') {
+        return {
+          ...wallet,
+          connector: peraWalletConnector.connector
         }
-        return wallet
-      })
-      setActiveWallet(filteredAddressesList)
-    }
+      }
+      return wallet
+    })
+    console.log(_filteredAddressesList, 'filtered list')
+    setActiveWallet(_filteredAddressesList, 'new')
   }
 
   const removeLastWalletFromList = (addressesList) => {
     const _wallet = addressesList[0]
-
+    console.log(_wallet, addressesList, 'during remove last wallet')
     if (typeof wallet !== 'undefined') {
       let disconnectedActiveWallet = {}
       if (wallet.type === 'wallet-connect') {
@@ -279,7 +290,7 @@ function useWallets(initialState) {
           }
         }
       }
-      setActiveWallet([disconnectedActiveWallet])
+      setActiveWallet([disconnectedActiveWallet], 'new')
     } else {
       let disconnectedActiveWallet = {}
       disconnectedActiveWallet = {
@@ -289,8 +300,9 @@ function useWallets(initialState) {
           connected: false
         }
       }
-      setActiveWallet([disconnectedActiveWallet])
+      setActiveWallet([disconnectedActiveWallet], 'new')
     }
+    dispatcher('signOut', { type: 'wallet' })
   }
 
   /**
@@ -331,33 +343,37 @@ function useWallets(initialState) {
           }
         }) || []
       let _remainingAddresses = [...remainingAddresses]
+      console.log(addressesList, 'local storage')
       if (_remainingAddresses.length > 0) {
-        removeFromExistingList(remainingAddresses)
+        removeFromExistingList(_remainingAddresses)
       } else {
-        removeLastWalletFromList(addressesList)
+        addressesList.length && removeLastWalletFromList(addressesList)
       }
       logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
-      dispatcher('signOut', { type: 'wallet' })
       console.error('Handle removing from storage', _addresses)
     },
     [setAddresses]
   )
 
   const sessionUpdate = useCallback(
-    (addresses) => {
-      // const _updatedAddresses = addresses.map((wallet) => {
-      //   return {
-      //     ...wallet,
-      //     connector: {
-      //       connected: true
-      //     }
-      //   }
-      // })
-      // console.log('addresses after session update', addresses)
+    async (_addresses) => {
+      console.log('updating session')
+      if (_addresses.length > 0) {
+        logInfo('Handling Reconnecting session')
+        const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
+        const accounts = await http.indexer.fetchAccounts(_addresses)
+        console.log(sameWalletClient, _addresses, 'all here')
+        if (sameWalletClient.length > _addresses.length) {
+          addNewWalletToAddressesList(sameWalletClient, _addresses, 'update')
+        } else {
+          replaceWalletInAddressList(_addresses, accounts, 'update')
+        }
+        dispatcher('signIn', { type: 'wallet' })
+      }
     },
     [setAddresses]
   )
