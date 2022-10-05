@@ -73,6 +73,10 @@ const styles = css`
     top: -0rem;
     position: absolute;
   }
+  #pera-wallet-connect-modal-wrapper {
+    position: fixed;
+    z-index: 9999;
+  }
 `
 
 function Algodex(props) {
