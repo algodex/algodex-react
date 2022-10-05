@@ -322,7 +322,10 @@ WalletOptionsListComp.propTypes = {
   isConnectingWallet: PropTypes.bool,
   addresses: PropTypes.array,
   setAddresses: PropTypes.func,
-  addressesRef: PropTypes.object
+  addressesRef: PropTypes.object,
+  activeWallet: PropTypes.object,
+  setActiveWallet: PropTypes.func,
+  setMyAlgoAddresses: PropTypes.func
 }
 
 /**
