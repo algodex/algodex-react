@@ -106,7 +106,8 @@ function useWallets(initialState, closeDropdown) {
       setPeraWallet(mergedPrivateAddresses[0])
       setAddressesNew({ type: 'peraWallet', addresses: mergedPrivateAddresses })
       setActiveWallet(mergedPrivateAddresses[0])
-      closeDropdown()
+
+      if (typeof closeDropdown === 'function') closeDropdown()
     }
   }
 
