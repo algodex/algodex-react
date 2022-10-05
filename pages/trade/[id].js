@@ -155,6 +155,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     ) {
       const _rehyrdratedPeraWallet = { ..._peraWallet, connector: peraConnector.current }
       setPeraWallet(_rehyrdratedPeraWallet)
+      setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
       setActiveWallet(_rehyrdratedPeraWallet)
     }
 
