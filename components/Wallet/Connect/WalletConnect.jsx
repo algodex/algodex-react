@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import useMyAlgoConnect from '../../../hooks/useMyAlgoConnect'
-import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+import { WalletReducerContext, mergeAddresses } from '../../../hooks/WalletsReducerProvider'
 
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
@@ -236,30 +236,37 @@ WalletView.defaultProps = {
 }
 
 export function WalletOptionsListComp(props) {
-  const { setIsConnectingWallet, isConnectingWallet, addresses, setAddresses, addressesRef } = props
-  const { wallet: initialState, isConnected } = useAlgodex()
+  const {
+    setIsConnectingWallet,
+    isConnectingWallet,
+    addresses,
+    setAddresses,
+    activeWallet,
+    setActiveWallet,
+    setMyAlgoAddresses
+  } = props
+  const { wallet: initialState, isConnected, http } = useAlgodex()
   const { peraConnect, myAlgoConnect } = useWallets(initialState)
 
   const WALLETS_CONNECT_MAP = {
-    // 'my-algo-wallet': myAlgoConnect,
+    'my-algo-wallet': () => myAlgoConnect(),
     'pera-connect': () => peraConnect()
   }
 
-  const myAlgoOnClick = () => {
+  const myAlgoOnClick = async () => {
     console.log('myAlogOnClick')
     console.log('hit')
-    // const {connect: newConnect} = useMyAlgoConnect
+    // const { connect: newConnect } = useMyAlgoConnectNew()
     // const _myAlgoAddresses = newConnect()
-    // console.log(_myAlgoAddresses)
-    // const [walletState, dispatch] = walletsReducer()
-    // console.log(walletState)
-    // dispatch({
-    //   action:'setWallet',
-    //   payload: _myAlgoAddresses
-    // })
+    const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
+    const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
+    const _mergedAlgoAddresses = mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses)
 
-    // console.log(walletState)
-    // WALLETS_CONNECT_MAP['my-algo-wallet']()
+    setMyAlgoAddresses(_mergedAlgoAddresses)
+    setAddresses({ type: 'myAlgo', addresses: _mergedAlgoAddresses })
+
+    if (!activeWallet) setActiveWallet(_mergedAlgoAddresses[0])
+    // await WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
@@ -273,44 +280,6 @@ export function WalletOptionsListComp(props) {
     }
     return false
   }, [isConnected, addresses])
-
-  // useEffect(() => {
-  //   if (!addressesRef.current) {
-  //     // Initialize the ref after first checking to see what is in localStorage
-  //     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-  //     if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
-  //       setAddresses(storedAddrs)
-  //     }
-  //     addressesRef.current = addresses
-  //   }
-
-  //   const localStorageExists =
-  //     JSON.parse(localStorage.getItem('addresses')) !== null &&
-  //     JSON.parse(localStorage.getItem('addresses')).length > 0
-
-  //   const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
-
-  //   /**
-  //    * I will need more explanation on what this does
-  //    * We are setting addresses that already exists.
-  //    */
-  //   if (localStorageExists && addressesExist) {
-  //     localStorage.setItem('addresses', JSON.stringify(addresses))
-  //   }
-  //   const walletDifference = difference(
-  //     addresses.map((addr) => addr.address),
-  //     addressesRef.current.map((addr) => addr.address)
-  //   )
-  //   if (walletDifference.length > 0) {
-  //     localStorage.setItem('addresses', JSON.stringify(addresses))
-  //     addressesRef.current = addresses
-  //     // closeFn()
-  //   }
-  //   // **Note** Can't put closeFn() in the onClicks because it will closeOut
-  //   // modal before wallet-connect finishes connecting leading to stale state.
-  //   // Creating a ref that persists between renders gives us a way to automatically close out
-  //   // modals only when a new address is added to the addresses array.
-  // }, [addresses, addressesRef, setAddresses])
 
   return (
     <>
@@ -333,7 +302,7 @@ export function WalletOptionsListComp(props) {
                 isConnectingAddress={isConnectingWallet}
                 setIsConnectingAddress={setIsConnectingWallet}
                 addresses={addresses}
-                // myAlgoOnClick={myAlgoOnClick}
+                myAlgoOnClick={myAlgoOnClick}
                 peraConnectOnClick={() => peraConnectOnClick()}
                 isPeraConnected={isPeraConnected}
               />
@@ -363,9 +332,7 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
-  const { wallet: initialState, setWallet, isConnected, algodex } = useAlgodex()
-  const [addresses, setAddresses] = useContext(WalletsContext)
-  const { addressesNew, setAddressesNew, activeWallet, setActiveWallet } =
+  const { addressesNew, setAddressesNew, activeWallet, setActiveWallet, setMyAlgoAddresses } =
     useContext(WalletReducerContext)
 
   const signedIn = activeWallet !== null
@@ -392,10 +359,13 @@ function WalletConnect() {
           <WalletOptionsListComp
             setIsConnectingWallet={setIsConnectingWallet}
             isConnectingWallet={isConnectingWallet}
-            addresses={addresses}
-            setAddresses={setAddresses}
+            addresses={addressesNew}
+            setAddresses={setAddressesNew}
             closeFn={() => setIsConnectingWallet(false)}
             addressesRef={addressesRef}
+            activeWallet={activeWallet}
+            setActiveWallet={setActiveWallet}
+            setMyAlgoAddresses={setMyAlgoAddresses}
           />
 
           <Box mx={2}>
@@ -405,7 +375,7 @@ function WalletConnect() {
               sx={{ minHeight: '2.5rem' }}
               onClick={() => setIsConnectingWallet(true)}
             >
-              CONNECT {signedIn && addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+              CONNECT {signedIn && addressesNew && addressesNew.length > 0 && 'ANOTHER'} WALLET
             </Button>
           </Box>
         </>
