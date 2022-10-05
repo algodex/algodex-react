@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+// import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
 
 import { AvailableBalance } from './Form/AvailableBalance'
