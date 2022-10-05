@@ -28,8 +28,11 @@ export function walletReducer(state, { action, payload }) {
     // const _arr = (type === 'myAlgo && state.peraWallet !== null)' ? [...addresses, state.peraWallet] :
     // return { ...state, addresses: [...payload] }
     case 'setPeraWallet':
+      localStorage.setItem('peraWallet', JSON.stringify(payload))
       return { ...state, peraWallet: payload }
     case 'setMyAlgoAddresses':
+      localStorage.setItem('myAlgoAddresses', JSON.stringify(payload))
+
       return { ...state, myAlgoAddresses: [...payload] }
     case 'disconnectWallet':
       const { type: walletType, address } = payload
@@ -52,16 +55,21 @@ export function walletReducer(state, { action, payload }) {
             })
             state.myAlgoAddresses = [..._remainingAddresses]
             state.activeWallet = { ..._remainingAddresses[0] }
+            localStorage.setItem('myAlgoAddresses', JSON.stringify(_remainingAddresses))
             return { ...state }
           } else {
             // if there are no more algoWallets check pera
             if (state.peraWallet !== null) {
               state.activeWallet = { ...state.peraWallet }
               state.myAlgoAddresses = []
+              localStorage.setItem('myAlgoAddresses', JSON.stringify([]))
+
               return { ...state }
             } else {
               state.activeWallet = null
               state.myAlgoAddresses = []
+              localStorage.setItem('myAlgoAddresses', JSON.stringify([]))
+
               return { ...state }
             }
           }
