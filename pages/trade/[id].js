@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
@@ -14,11 +14,8 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import { WalletsContext } from '@/hooks/useWallets'
 import config from '@/config.json'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-import { useAlgodex } from '@algodex/algodex-hooks'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
@@ -130,34 +127,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
-  const [locStorage, setLocStorage] = useState([])
-  const context = useContext(WalletsContext)
-  const myAlgoConnector = useRef(null)
-  const { setWallet, wallet } = useAlgodex()
-
-  // useEffect(() => {
-  //   if (myAlgoConnector.current === null) {
-  //     const reConnectMyAlgoWallet = async () => {
-  //       // '@randlabs/myalgo-connect' is imported dynamically
-  //       // because it uses the window object
-  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //       MyAlgoConnect.prototype.sign = signer
-  //       myAlgoConnector.current = new MyAlgoConnect()
-  //       myAlgoConnector.current.connected = true
-  //     }
-
-  //     reConnectMyAlgoWallet()
-  //   }
-  // }, [])
-  const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-
-  // useEffect(() => {
-  //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-
-  //   if (locStorage.length === 0 && storedAddrs?.length > 0) {
-  //     setLocStorage(storedAddrs)
-  //   }
-  // }, [myAlgoConnector.current, addresses])
 
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
@@ -180,27 +149,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     },
     [setInterval, interval]
   )
-
-  // useEffect(() => {
-  //   if (locStorage.length > 0) {
-  //     const reHydratedAddresses = locStorage.map((wallet) => {
-  //       if (wallet.type === 'my-algo-wallet' && myAlgoConnector.current) {
-  //         return {
-  //           ...wallet,
-  //           connector: myAlgoConnector.current
-  //         }
-  //       } else {
-  //         return {
-  //           ...wallet,
-  //           connector: walletConnect.current
-  //         }
-  //         // return wallet
-  //       }
-  //     })
-  //     setAddresses(reHydratedAddresses)
-  //     setWallet(reHydratedAddresses[0])
-  //   }
-  // }, [locStorage, myAlgoConnector.current])
 
   useEffect(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
@@ -229,57 +177,6 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
   }
-
-  // useEffect(() => {
-  //   const reConnectMyAlgoWallet = async () => {
-  //     // '@randlabs/myalgo-connect' is imported dynamically
-  //     // because it uses the window object
-  //     const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //     MyAlgoConnect.prototype.sign = signer
-  //     myAlgoConnector.current = new MyAlgoConnect()
-  //     myAlgoConnector.current.connected = true
-  //     const mappedAddresses = addresses.map((addr) => {
-  //       if (addr.type === 'my-algo-wallet') {
-  //         return {
-  //           ...addr,
-  //           connector: myAlgoConnector.current
-  //         }
-  //       } else {
-  //         // return addr
-  //         return {
-  //           ...addr,
-  //           connector: walletConnect.current
-  //         }
-  //       }
-  //     })
-  //     if (mappedAddresses.length && !wallet?.connector) {
-  //       console.log(mappedAddresses[0], 'hello hereeee')
-  //       // setWallet(mappedAddresses[0])
-  //     }
-  //   }
-  //   reConnectMyAlgoWallet()
-  // }, [myAlgoConnector.current, walletConnect.current])
-
-  // console.log(wallet, 'please update')
-  // useEffect(() => {
-  //   if (addresses.length === 0 && locStorage.length > 0) {
-  //     const reHydratedAddresses = locStorage.map((wallet) => {
-  //       if (wallet.type === 'my-algo-wallet') {
-  //         return {
-  //           ...wallet,
-  //           connector: myAlgoConnector.current
-  //         }
-  //       } else {
-  //         return {
-  //           ...wallet,
-  //           connector: walletConnect.current
-  //         }
-  //       }
-  //     })
-  //     setAddresses(reHydratedAddresses)
-  //     setWallet(reHydratedAddresses[0])
-  //   }
-  // }, [locStorage, myAlgoConnector.current])
 
   return (
     <Page

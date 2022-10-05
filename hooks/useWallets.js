@@ -86,32 +86,18 @@ function useWallets(initialState) {
     const res = localStorage.getItem('addresses')
     if (res) {
       const _addresses = _mergeAddresses(JSON.parse(localStorage.getItem('addresses')), addresses)
-      // console.log(initialState, 'iitialState')
-      if (initialState !== undefined) {
-        // console.log(initialState, 'iitialState')
-        // setAlgodexWallet(initialState)
-      }
-      console.log(_addresses, initialState, typeof initialState, 'console.log(res)')
-      // setAlgodexWallet(_addresses[0])
-
-      // Ensure there no request update of addresses.
-      setAddresses(_addresses)
 
       /**
        * If initialState (wallet) is set, don't set addresses
        * You can work with initial state
        */
-      // if (initialState === 'undefined') {
-      //   setAddresses(_addresses)
-      //   console.log('is undefined')
-      // } else {
-      //   console.log('is defined')
-      //   setAlgodexWallet(initialState)
-      // }
-      // console.log(wallet, 'check wallet')
-      // if (typeof wallet === 'undefined') {
-      //   setAddresses(_addresses)
-      // }
+      if (typeof initialState === 'undefined') {
+        setAddresses(_addresses)
+        // console.log('is undefined')
+      } else {
+        // console.log('is defined')
+        setActiveWallet([initialState])
+      }
     }
   }, [])
 
@@ -144,13 +130,6 @@ function useWallets(initialState) {
             return {
               ...addr,
               connector: peraWalletConnector.connector
-              // connector: {
-              //   // ...peraWalletConnector.connector,
-              //   ...addr.connector,
-              //   _accounts: addr.connector._accounts,
-              //   _connected: addr.connector._connected,
-              //   connected: addr.connector._connected
-              // }
             }
           }
         })
@@ -160,20 +139,9 @@ function useWallets(initialState) {
           peraWalletConnector.connector,
           'mapped addresses'
         )
-        // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
         if (mappedAddresses.length) {
-          console.log(mappedAddresses, filterConnectedWallet(mappedAddresses), 'pea new address')
-          const _activeWallet = filterConnectedWallet(mappedAddresses)
-          // if (initialState === undefined && _activeWallet) {
-          //   console.log(initialState, 'setting initial tate')
-          //   setAlgodexWallet(_activeWallet)
-          //   // return initialState
-          // }
-          if (_activeWallet) {
-            setAlgodexWallet(_activeWallet)
-          }
+          setActiveWallet(mappedAddresses)
         }
-        // setAddresses(mappedAddresses)
       }
       _reHydratedWallet()
     }
@@ -237,10 +205,6 @@ function useWallets(initialState) {
    * Update Addresses from local storage
    * Update Addresses when rehydration happes
    */
-  // useEffect(() => {
-  //   // setAlgodexWallet(addresses[0])
-  //   console.log(addresses, 'addresses updated')
-  // }, [addresses])
 
   const addNewWalletToAddressesList = async (sameClient, newAddress) => {
     const otherWalletClients =
@@ -253,10 +217,6 @@ function useWallets(initialState) {
       setAddresses(_allAddresses)
       localStorage.setItem('addresses', JSON.stringify(_allAddresses))
       if (_allAddresses.length > 0) {
-        // const _connectedWallet = filterConnectedWallet(_allAddresses)
-        // const _activeWallet = handleWalletUpdate(_connectedWallet)
-        // setAlgodexWallet(_activeWallet)
-
         setActiveWallet(_allAddresses)
       }
     }
@@ -294,7 +254,6 @@ function useWallets(initialState) {
         return wallet
       })
       setActiveWallet(filteredAddressesList)
-      // setAlgodexWallet(filteredAddressesList[0])
     }
   }
 
@@ -321,7 +280,6 @@ function useWallets(initialState) {
         }
       }
       setActiveWallet([disconnectedActiveWallet])
-      // setAlgodexWallet(disconnectedActiveWallet)
     } else {
       let disconnectedActiveWallet = {}
       disconnectedActiveWallet = {
@@ -332,7 +290,6 @@ function useWallets(initialState) {
         }
       }
       setActiveWallet([disconnectedActiveWallet])
-      // setAlgodexWallet(disconnectedActiveWallet)
     }
   }
 
@@ -400,7 +357,7 @@ function useWallets(initialState) {
       //     }
       //   }
       // })
-      console.log('addresses after session update', addresses)
+      // console.log('addresses after session update', addresses)
     },
     [setAddresses]
   )

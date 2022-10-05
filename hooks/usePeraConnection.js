@@ -23,7 +23,8 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
             return _account
           })
           console.log(_addresses, 'nside pera connectonn')
-          onConnect(_addresses)
+          // onConnect(_addresses)
+          sessionUpdate(_addresses)
         }
       })
       .catch((e) => {

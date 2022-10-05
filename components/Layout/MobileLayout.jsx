@@ -1,5 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { useRef, useState } from 'react'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -10,11 +9,11 @@ import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import { lighten } from 'polished'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import useWallets from '@/hooks/useWallets'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -130,14 +129,7 @@ function MainLayout({ asset, children }) {
   }
 
   const { wallet: initialState } = useAlgodex()
-  const [addresses, setAddresses] = useContext(WalletsContext)
-  // const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-  // const [locStorage, setLocStorage] = useState([])
-  const context = useContext(WalletsContext)
-
   const { wallet } = useWallets(initialState)
-  const myAlgoConnector = useRef()
-
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**
@@ -150,70 +142,6 @@ function MainLayout({ asset, children }) {
    * This is only used to switch to MobileMenu Chart view
    * when the Next/Router navigates to a shallow route
    */
-  // useEffect(() => {
-  //   if (!myAlgoConnector.current) {
-  //     const reConnectMyAlgoWallet = async () => {
-  //       // '@randlabs/myalgo-connect' is imported dynamically
-  //       // because it uses the window object
-  //       const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-  //       MyAlgoConnect.prototype.sign = signer
-  //       myAlgoConnector.current = new MyAlgoConnect()
-  //       myAlgoConnector.current.connected = true
-  //       const mappedAddresses = addresses.map((addr) => {
-  //         if (addr.type === 'my-algo-wallet') {
-  //           return {
-  //             ...addr,
-  //             connector: myAlgoConnector.current
-  //           }
-  //         } else {
-  //           // return addr
-  //           return {
-  //             ...addr,
-  //             connector: context[2].current
-  //           }
-  //         }
-  //       })
-  //       setAddresses(mappedAddresses)
-  //     }
-  //     reConnectMyAlgoWallet()
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-
-  //   if (locStorage.length === 0 && storedAddrs?.length > 0) {
-  //     setLocStorage(storedAddrs)
-  //   }
-  // }, [myAlgoConnector.current, addresses])
-
-  // useEffect(() => {
-  //   if (addresses.length === 0 && locStorage.length > 0) {
-  //     const reHydratedAddresses = locStorage.map((wallet) => {
-  //       if (wallet.type === 'my-algo-wallet') {
-  //         return {
-  //           ...wallet,
-  //           connector: myAlgoConnector.current
-  //         }
-  //       } else {
-  //         return {
-  //           ...wallet,
-  //           connector: walletConnect.current
-  //         }
-  //       }
-  //     })
-  //     setWallet(reHydratedAddresses[0])
-  //     setAddresses(reHydratedAddresses)
-  //   }
-  // }, [locStorage, myAlgoConnector.current])
-
-  // useEffect(() => {
-  //   if (addresses.length > 0) {
-  //     if (typeof wallet === 'undefined') {
-  //       setWallet(addresses[0])
-  //     }
-  //   }
-  // }, [addresses])
 
   useEvent('clicked', (data) => {
     if (data === 'asset') {
@@ -231,32 +159,12 @@ function MainLayout({ asset, children }) {
       <Main ref={gridRef}>
         {activeMobile === TABS.WALLET && (
           <WalletSection>
-            {/* <Box className="flex flex-col" width="100%" height="100%">
-              <Box>
-                <WalletOptionsMobile
-                  setIsConnectingWallet={setIsConnectingWallet}
-                  isConnectingWallet={isConnectingWallet}
-                />
-
-                <Box mx={2}>
-                  <Button
-                    className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
-                    variant="contained"
-                    onClick={() => setIsConnectingWallet(true)}
-                  >
-                    CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
-                  </Button>
-                </Box>
-              </Box>
-              <Wallet />
-            </Box> */}
             <Wallet />
           </WalletSection>
         )}
         {activeMobile === TABS.TRADE && (
           <PlaceOrderSection>
             <PlaceOrder wallet={wallet} asset={asset} />
-            {/* {typeof wallet !== 'undefined' && <PlaceOrder asset={asset} />} */}
           </PlaceOrderSection>
         )}
         {activeMobile === TABS.CHART && (
