@@ -134,23 +134,30 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
   // const myAlgoConnector = useRef(null)
-  const { setMyAlgoAddresses, setAddressesNew, setActiveWallet, addressesNew } =
-    useContext(WalletReducerContext)
-  const { myAlgoConnector } = useWallets()
+  const {
+    setMyAlgoAddresses,
+    setAddressesNew,
+    setActiveWallet,
+    addressesNew,
+    peraWallet,
+    setPeraWallet
+  } = useContext(WalletReducerContext)
+  const { myAlgoConnector, peraConnector } = useWallets()
 
   useEffect(() => {
     const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
-    // if (myAlgoConnector.current === null) {
-    //   const reConnectMyAlgoWallet = async () => {
-    //     // '@randlabs/myalgo-connect' is imported dynamically
-    //     // because it uses the window object
-    //     const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-    //     MyAlgoConnect.prototype.sign = signer
-    //     myAlgoConnector.current = new MyAlgoConnect()
-    //     myAlgoConnector.current.connected = true
-    //   }
+    const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
 
-    // reConnectMyAlgoWallet()
+    if (
+      _peraWallet?.type === 'wallet-connect' &&
+      peraWallet === null &&
+      typeof peraConnector.current !== 'undefined'
+    ) {
+      const _rehyrdratedPeraWallet = { ..._peraWallet, connector: peraConnector.current }
+      setPeraWallet(_rehyrdratedPeraWallet)
+      setActiveWallet(_rehyrdratedPeraWallet)
+    }
+
     if (
       addressesNew.length === 0 &&
       Array.isArray(_myAlgoAddresses) &&
@@ -164,7 +171,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
       setActiveWallet(_rehydratedMyAlgo[0])
     }
-  }, [myAlgoConnector])
+  }, [myAlgoConnector, peraConnector])
 
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation

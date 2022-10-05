@@ -39,6 +39,7 @@ export function walletReducer(state, { action, payload }) {
       switch (walletType) {
         case 'peraWallet':
           state.peraWallet = null
+          localStorage.removeItem('peraWallet')
           if (state.myAlgoAddresses.length > 0) {
             if (state?.activeWallet.type === address.type) {
               state.activeWallet = state.myAlgoAddresses[0]
