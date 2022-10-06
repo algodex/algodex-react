@@ -195,11 +195,12 @@ export function WalletView(props) {
     console.log(
       // handleConnectionStatus(addr),
       connector,
-      addr,
-      _addr,
-      context,
+      // addr,
+      initialState,
       'new address',
-      peraConnector.connector
+      _addr
+      // context,
+      // peraConnector.connector
     )
     // if (_addr.type === 'wallet connect' && _addr.connector._connected)
     //   isWalletActive(addr) && setActiveWallet(_addr)

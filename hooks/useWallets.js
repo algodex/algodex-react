@@ -5,6 +5,7 @@ import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 import { logInfo } from 'services/logRemote'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
@@ -62,6 +63,7 @@ function useWallets(initialState) {
     (props) => {
       const { type, wallet: _wallet } = props
       if (type === 'change' && !isEqual(wallet, _wallet)) {
+        console.log(wallet, 'a change occured in wallet')
         setWallet(_wallet)
       }
     },
@@ -90,13 +92,15 @@ function useWallets(initialState) {
        * You can work with initial state
        */
       if (typeof _wallet === 'undefined') {
+        setIsRehydrating(true)
         setAddresses(_addresses)
       } else {
         setActiveWallet([_wallet], 'update')
       }
-      // setAddresses(_addresses)
     }
   }, [])
+
+  const [isRehydrating, setIsRehydrating] = useState(false)
 
   /**
    * Get Hydrated Addresses
@@ -107,8 +111,9 @@ function useWallets(initialState) {
   useEffect(() => {
     const res = localStorage.getItem('addresses')
     // Check if addresses exist in local storage
-    if (res && res.length) {
+    if (res && res.length && isRehydrating) {
       const _reHydratedWallet = async () => {
+        setIsRehydrating(true)
         // '@randlabs/myalgo-connect' is imported dynamically
         // because it uses the window object
         const myAlgoConnector = {}
@@ -136,8 +141,28 @@ function useWallets(initialState) {
         }
       }
       _reHydratedWallet()
+      setIsRehydrating(false)
     }
   }, [addresses, peraWalletConnector])
+
+  /**
+   * Do rehydration when new data is fetched, during
+   *
+   */
+
+  const walletsQuery = useAccountsInfo(addresses)
+
+  // useEffect(() => {
+  //   if (walletsQuery.data && !isRehydrating) {
+  //     const mappedAddresses = addresses.map((wallet, idx) => {
+  //       return { ...wallet, ...walletsQuery.data[idx] }
+  //     })
+  //     console.log(mappedAddresses, 'mapped addresses data fetching')
+  //     setAddresses(mappedAddresses)
+  //     // Below is commented out because setting localstorage breaks with myAlgo Popup
+  //     // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
+  //   }
+  // }, [walletsQuery.data])
 
   /**
    * Returns the first occurence of connected wallets is a list of addresses.
@@ -208,8 +233,9 @@ function useWallets(initialState) {
       if (_allAddresses.length > 0) {
         setActiveWallet(_allAddresses, actionType)
       }
-      setAddresses(_allAddresses)
+      setIsRehydrating(true)
       localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+      setAddresses(_allAddresses)
     }
   }
 
@@ -225,9 +251,10 @@ function useWallets(initialState) {
       }
       return wallet
     })
+    setIsRehydrating(true)
+    localStorage.setItem('addresses', JSON.stringify(_allAddresses))
     setActiveWallet(_allAddresses, actionType)
     setAddresses(_allAddresses)
-    localStorage.setItem('addresses', JSON.stringify(_allAddresses))
     // const _activeWallet = filterConnectedWallet(_allAddresses)
     // setAlgodexWallet(_activeWallet)
   }
@@ -290,6 +317,7 @@ function useWallets(initialState) {
         logInfo('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
         const accounts = await http.indexer.fetchAccounts(_addresses)
+        console.log(accounts, 'asset account here')
         if (sameWalletClient.length > _addresses.length) {
           addNewWalletToAddressesList(sameWalletClient, _addresses)
         } else {
@@ -321,6 +349,7 @@ function useWallets(initialState) {
       logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
+      setIsRehydrating(true)
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
       console.error('Handle removing from storage', _addresses)
