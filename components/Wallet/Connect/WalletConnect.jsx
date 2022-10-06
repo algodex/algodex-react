@@ -192,38 +192,10 @@ export function WalletView(props) {
       ...addr,
       connector
     }
-    console.log(
-      // handleConnectionStatus(addr),
-      connector,
-      // addr,
-      initialState,
-      'new address',
-      _addr
-      // context,
-      // peraConnector.connector
-    )
-    // if (_addr.type === 'wallet connect' && _addr.connector._connected)
-    //   isWalletActive(addr) && setActiveWallet(_addr)
-    // if (_addr.type === 'my-algo-wallet' && _addr.connector.connected)
-    //   isWalletActive(addr) && setActiveWallet(_addr)
     if (_addr.connector && (_addr.connector._connected || _addr.connector.connected)) {
       !isWalletActive(addr) && setActiveWallet(_addr)
     }
   }
-
-  const walletsQuery = useAccountsInfo(addresses)
-
-  // useEffect(() => {
-  //   if (walletsQuery.data) {
-  //     const mappedAddresses = addresses.map((wallet, idx) => {
-  //       return { ...wallet, ...walletsQuery.data[idx] }
-  //     })
-
-  //     setAddresses(mappedAddresses)
-  //     //Below is commented out because setting localstorage breaks with myAlgo Popup
-  //     // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
-  //   }
-  // }, [walletsQuery.data])
 
   // const rehyrdateWallet =
   //   typeof activeWallet !== 'undefined' && //activeWallet exists &
