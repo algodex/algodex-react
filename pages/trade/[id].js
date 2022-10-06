@@ -21,6 +21,7 @@ import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
+import useWallets from '@/hooks/useWallets'
 
 /**
  * Fetch Traded Asset Paths
@@ -127,7 +128,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
-
+  const { wallet } = useWallets()
   const [asset, setAsset] = useState(staticExplorerAsset)
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
