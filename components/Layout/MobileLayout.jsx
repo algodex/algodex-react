@@ -128,8 +128,8 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet: initialState } = useAlgodex()
-  const { wallet } = useWallets()
+  const { wallet } = useAlgodex()
+  // const { wallet } = useWallets()
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**

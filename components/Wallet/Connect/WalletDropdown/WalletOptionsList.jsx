@@ -53,13 +53,13 @@ const WalletsOptions = ({
                 /> */}
               </Box>
             ) : (
-              <></>
-              // <Image
-              //   src="/Wallet-Connect-icon.svg"
-              //   alt="Algorand Mobile Wallet"
-              //   width={25}
-              //   height={25}
-              // />
+              // <></>
+              <Image
+                src="/Wallet-Connect-icon.svg"
+                alt="Algorand Mobile Wallet"
+                width={25}
+                height={25}
+              />
             )}
 
             <Stack>

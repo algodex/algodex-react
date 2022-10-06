@@ -173,7 +173,7 @@ const Main = styled.main`
  */
 function MainLayout({ asset, children }) {
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet: initialState, setWallet } = useAlgodex()
+  const { wallet } = useAlgodex()
   const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
   const context = useContext(WalletsContext)
   const [locStorage, setLocStorage] = useState([])
@@ -181,7 +181,7 @@ function MainLayout({ asset, children }) {
   //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
   // const { t } = useTranslation('common')
   // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  const { wallet } = useWallets()
+  // const { wallet } = useWallets()
   const myAlgoConnector = useRef()
   const gridRef = useRef()
   const searchTableRef = useRef()

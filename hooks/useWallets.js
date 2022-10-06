@@ -63,7 +63,7 @@ function useWallets(initialState) {
     (props) => {
       const { type, wallet: _wallet } = props
       if (type === 'change' && !isEqual(wallet, _wallet)) {
-        console.log(wallet, 'a change occured in wallet')
+        // console.log(wallet, 'a change occured in wallet')
         setWallet(_wallet)
       }
     },
@@ -152,17 +152,24 @@ function useWallets(initialState) {
 
   const walletsQuery = useAccountsInfo(addresses)
 
-  // useEffect(() => {
-  //   if (walletsQuery.data && !isRehydrating) {
-  //     const mappedAddresses = addresses.map((wallet, idx) => {
-  //       return { ...wallet, ...walletsQuery.data[idx] }
-  //     })
-  //     console.log(mappedAddresses, 'mapped addresses data fetching')
-  //     setAddresses(mappedAddresses)
-  //     // Below is commented out because setting localstorage breaks with myAlgo Popup
-  //     // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
-  //   }
-  // }, [walletsQuery.data])
+  useEffect(() => {
+    if (walletsQuery.data && !isRehydrating) {
+      const mappedAddresses = addresses.map((wallet, idx) => {
+        if (_wallet.address === wallet.address) {
+          setAlgodexWallet({
+            ..._wallet,
+            ...walletsQuery.data[idx]
+          })
+        }
+        return { ...wallet, ...walletsQuery.data[idx] }
+      })
+      setAddresses(mappedAddresses)
+      // console.log(mappedAddresses, wallet, 'wallet')
+
+      // Below is commented out because setting localstorage breaks with myAlgo Popup
+      // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
+    }
+  }, [walletsQuery.data])
 
   /**
    * Returns the first occurence of connected wallets is a list of addresses.

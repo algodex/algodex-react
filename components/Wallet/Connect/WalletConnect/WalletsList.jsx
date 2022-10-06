@@ -117,12 +117,12 @@ export const WalletsList = ({
         onKeyDown={(e) => handleKeyDown(e, wallet.address)}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {/* <Image
+          <Image
             src={getWalletLogo(wallet)}
             alt="Algorand Wallet Client Image"
             width={18}
             height={18}
-          /> */}
+          />
           &nbsp;
           <Typography variant="body_small" fontWeight="bold" title={wallet.address}>
             {truncatedWalletAddress(wallet.address, 4)}
