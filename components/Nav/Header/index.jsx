@@ -37,8 +37,8 @@ export function Header() {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
   // const { wallet } = useAlgodex()
-  const { wallet } = useAlgodex()
-  // const { wallet } = useWallets()
+  // const { wallet } = useAlgodex()
+  const { wallet } = useWallets()
   const isMobile = useMobileDetect()
 
   /**
