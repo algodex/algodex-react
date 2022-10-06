@@ -153,7 +153,7 @@ function useWallets(initialState) {
   const walletsQuery = useAccountsInfo(addresses)
 
   useEffect(() => {
-    if (walletsQuery.data && !isRehydrating) {
+    if (_wallet && walletsQuery.data && !isRehydrating) {
       const mappedAddresses = addresses.map((wallet, idx) => {
         if (_wallet.address === wallet.address) {
           setAlgodexWallet({
@@ -387,11 +387,11 @@ function useWallets(initialState) {
     handleDisconnect
   )
   // My Algo/Disconnect
-  const {
-    connect: peraConnect,
-    disconnect: peraDisconnect,
-    connector: _peraConnector
-  } = useWalletConnect(handleConnect, handleDisconnect, sessionUpdate)
+  // const {
+  //   connect: peraConnect,
+  //   disconnect: peraDisconnect,
+  //   connector: _peraConnector
+  // } = useWalletConnect(handleConnect, handleDisconnect, sessionUpdate)
   // Pera Connect/Disconnect
 
   const { connect: peraConnectOriginal, disconnect: peraDisconnectOriginal } = usePeraConnection(
