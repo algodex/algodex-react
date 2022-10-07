@@ -8,6 +8,7 @@ import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
+import MaterialIcon from '@mdi/react'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
@@ -16,9 +17,11 @@ import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import { mdiAlertCircleOutline } from '@mdi/js'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
@@ -64,6 +67,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     submitted: false,
     submitting: false
   })
+  const { query } = useRouter()
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -107,6 +111,25 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
     // }, [orderBook, setSellOrders, asset])
   }, [orderBook, setSellOrders, setBuyOrders, asset])
+
+  const updateInitialState = () => {
+    if (order?.type === 'buy') {
+      setOrder({
+        ...order,
+        price: parseFloat(sellOrders?.length ? sellOrders[sellOrders.length - 1].price : '0.00')
+      })
+    }
+    if (order?.type === 'sell') {
+      setOrder({
+        ...order,
+        price: parseFloat(buyOrders?.length ? buyOrders[0].price : '0.00')
+      })
+    }
+  }
+
+  useEffect(() => {
+    updateInitialState()
+  }, [order.type])
 
   const buttonProps = useMemo(
     () => ({
@@ -382,7 +405,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'buy' ? 'primary' : 'default'}
               color="buy"
               fullWidth
-              onClick={handleChange}
+              onClick={!asset.isGeoBlocked && handleChange}
               name="type"
               value="buy"
             >
@@ -394,7 +417,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'sell' ? 'sell' : 'default'}
               color="sell"
               fullWidth
-              onClick={handleChange}
+              onClick={!asset.isGeoBlocked && handleChange}
               name="type"
               value="sell"
             >
@@ -405,6 +428,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
+            tabType={order.type === 'buy' ? 'buy' : 'sell'}
             onChange={(e, value) => handleMarketTabSwitching(e, value)}
             value={tabSwitch}
           >
@@ -438,6 +462,25 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             {buttonProps[order.type || 'buy']?.text}
           </Button>
         </Form>
+      )}
+      {asset.isGeoBlocked && (
+        <div className="px-4 flex">
+          <MaterialIcon
+            path={mdiAlertCircleOutline}
+            title="Verified asset"
+            height="1.5rem"
+            width="4rem"
+            color={'500'}
+          />{' '}
+          &nbsp;
+          <div className="flex flex-col">
+            <p className="text-white text-xs font-medium">
+              This asset is not able to be traded in your country ({query.cc}) for legal reasons.
+              You can view the chart and book but will not be able to place trades for this asset.
+            </p>
+            {/* <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p> */}
+          </div>
+        </div>
       )}
     </Box>
   )

@@ -82,8 +82,8 @@ const WalletsOptions = ({
               </Typography>
               {isPeraConnected && (
                 <Typography className="italic color-white ml-2 mt-2" variant="body_tiny">
-                  There is a wallet currently connected with Wallet Connect. You must disonnect this
-                  wallet to connect another.
+                  There is a wallet currently connected with Wallet Connect. You must disconnect
+                  this wallet to connect another.
                 </Typography>
               )}
             </Stack>

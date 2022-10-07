@@ -115,7 +115,12 @@ export const TradeInputs = ({
           decimals: 6,
           min: '0',
           step: '0.000001',
-          placeholder: '0.00'
+          placeholder: '0.00',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         startAdornment={
           <MUIInputAdornment position="start">
@@ -193,6 +198,13 @@ export const TradeInputs = ({
         disabled
         sx={{
           backgroundColor: theme.colors.gray['700']
+        }}
+        inputProps={{
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         startAdornment={
           <MUIInputAdornment position="start">
