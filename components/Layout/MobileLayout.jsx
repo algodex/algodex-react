@@ -201,7 +201,7 @@ function MainLayout({ asset, children }) {
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)}
                 active={activeMobile === TABS.CHART}
-                // variant="third"
+                variant="third"
               >
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
@@ -212,7 +212,7 @@ function MainLayout({ asset, children }) {
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.BOOK), delaySwitch)}
                 active={activeMobile === TABS.BOOK}
-                // variant="third"
+                variant="third"
               >
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
@@ -223,7 +223,7 @@ function MainLayout({ asset, children }) {
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.TRADE), delaySwitch)}
                 active={activeMobile === TABS.TRADE}
-                // variant="third"
+                variant="third"
               >
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
@@ -234,7 +234,7 @@ function MainLayout({ asset, children }) {
                 type="button"
                 onClick={() => setTimeout(() => setActiveMobile(TABS.ORDERS), delaySwitch)}
                 active={activeMobile === TABS.ORDERS}
-                // variant="third"
+                variant="third"
               >
                 {t('mobilefooter-ORDERS')}
               </MobileMenuButton>
@@ -253,7 +253,7 @@ function MainLayout({ asset, children }) {
                 characterLength={t('mobilefooter-WALLET').length}
                 onClick={() => setTimeout(() => setActiveMobile(TABS.WALLET), delaySwitch)}
                 active={activeMobile === TABS.WALLET}
-                // variant="third"
+                variant="third"
               >
                 {t('mobilefooter-WALLET')}
               </MobileMenuButton>
