@@ -179,11 +179,16 @@ export function WalletView(props) {
           // })
           // return connector
         } catch (error) {
+          console.log(error, 'error while handling pera connection')
+          toast.error(
+            `Wallet ${wallet.address.substring(
+              0,
+              6
+            )}... has been removed due to the Pera bridge session disconnecting`
+          )
           dispatcher('bridge-disconnected', {
             activeWallet: wallet
           })
-          console.log(error, 'error while handling pera connection')
-          toast.error('Pera session expired. Disconnect wallet and try again.')
         }
       } else {
         return myAlgoConnector.current
