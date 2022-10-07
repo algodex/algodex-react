@@ -4,12 +4,13 @@
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import theme from 'theme'
-import { useState } from 'react'
 // import { WalletContext } from '../../WalletContext'
+import { useState } from 'react'
 
 // const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
 const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+
   return (
     <div
       className="p-2"

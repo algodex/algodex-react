@@ -167,15 +167,21 @@ export function WalletView(props) {
           if (peraConnector.connector.connected) {
             return peraConnector.connector
           }
-          const connector = {
-            ...peraConnector.connector,
-            _accounts: [],
-            _connected: false,
-            connected: true
-          }
-          toast.error('Pera session expired. Disconnect wallet and try again.')
-          return connector
+          // const connector = {
+          //   ...peraConnector.connector,
+          //   _accounts: [],
+          //   _connected: false,
+          //   connected: true
+          // }
+          // toast.error('Pera session expired. Disconnect wallet and try again.')
+          // dispatcher('bridge-disconnected', {
+          //   activeWallet: wallet
+          // })
+          // return connector
         } catch (error) {
+          dispatcher('bridge-disconnected', {
+            activeWallet: wallet
+          })
           console.log(error, 'error while handling pera connection')
           toast.error('Pera session expired. Disconnect wallet and try again.')
         }
@@ -240,7 +246,7 @@ export function WalletView(props) {
     }
     switch (wallet.type) {
       case 'wallet-connect':
-        return '/Wallet-Connect-icon.svg'
+        return '/Pera-logo.png'
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
     }
@@ -445,6 +451,17 @@ function WalletConnect() {
   useEffect(() => {
     setSignedIn(isConnected)
   }, [_addresses, isConnected])
+
+  // useEvent('connect-wallet', (data) => {
+  //   if (data.isClosed === 'order') {
+  //     setOrder({
+  //       ...order,
+  //       amount: data.payload.amount,
+  //       price: Number(data.payload.price),
+  //       type: data.payload.type
+  //     })
+  //   }
+  // })
 
   return (
     <Box className="flex flex-col justify-center" width="100%">

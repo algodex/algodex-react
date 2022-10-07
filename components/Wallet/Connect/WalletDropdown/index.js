@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEventDispatch } from '@/hooks/useEvents'
 
 const styleReset = css`
   margin: 0;
@@ -37,6 +38,7 @@ const Container = styled.div`
 const WalletConnectDropdown = ({ closeDropdown }) => {
   const { wallet: initialState, isConnected } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
+  const dispatcher = useEventDispatch()
   // const [addresses, setAddresses] = useContext(WalletsContext)
   const { wallet, peraConnect, myAlgoConnect } = useWallets()
   // const addressesRef = useRef(null)
@@ -45,11 +47,19 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     'pera-connect': peraConnect
   }
 
+  const handleConnectionDropdown = (closeDropdown) => {
+    dispatcher('connecting-wallet', {
+      isOpen: closeDropdown
+    })
+  }
+
   const myAlgoOnClick = () => {
+    handleConnectionDropdown(false)
     WALLETS_CONNECT_MAP['my-algo-wallet']()
   }
 
   const peraConnectOnClick = () => {
+    handleConnectionDropdown(false)
     WALLETS_CONNECT_MAP['pera-connect']()
   }
   // const isPeraConnected = useMemo(() => {

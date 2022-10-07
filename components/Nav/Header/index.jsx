@@ -20,6 +20,8 @@ import PropTypes from 'prop-types'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEvent } from 'hooks/useEvents'
+import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -40,6 +42,12 @@ export function Header() {
   // const { wallet } = useAlgodex()
   const { wallet } = useWallets()
   const isMobile = useMobileDetect()
+
+  useEvent('connecting-wallet', (data) => {
+    if (data.isOpen === false) {
+      setOpenWalletConnectDropdown(false)
+    }
+  })
 
   /**
    * Route to other network
@@ -133,7 +141,9 @@ export function Header() {
         </NavIcon> */}
         {!isMobile && (
           <Button
-            onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
+            onClick={() => {
+              setOpenWalletConnectDropdown(!openWalletConnectDropdown)
+            }}
             className="font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >

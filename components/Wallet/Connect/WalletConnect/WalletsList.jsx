@@ -120,6 +120,7 @@ export const WalletsList = ({
           <Image
             src={getWalletLogo(wallet)}
             alt="Algorand Wallet Client Image"
+            style={{ borderRadius: '50%' }}
             width={18}
             height={18}
           />

@@ -7,6 +7,7 @@ import { logInfo } from 'services/logRemote'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEvent } from 'hooks/useEvents'
 import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import usePeraConnection from './usePeraConnection'
@@ -75,6 +76,23 @@ function useWallets(initialState) {
       events.off('wallet', onEvents)
     }
   }, [onEvents])
+
+  const handleRemoveWallet = (disconnectedWallet) => {
+    const res = localStorage.getItem('addresses')
+    if (res) {
+      const _connectedAddresses = JSON.parse(res).filter(
+        (wallet) => wallet.address !== disconnectedWallet.address
+      )
+      localStorage.setItem('addresses', JSON.stringify(_connectedAddresses))
+      setIsRehydrating(true)
+      setAddresses(_connectedAddresses)
+    }
+  }
+
+  useEvent('bridge-disconnected', (data) => {
+    handleRemoveWallet(data.activeWallet)
+    console.log(data.activeWallet, 'active wallet to dsiconnect')
+  })
 
   /**
    * Fetches all Addresses from Local storage

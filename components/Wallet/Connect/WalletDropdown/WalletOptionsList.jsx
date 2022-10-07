@@ -40,7 +40,7 @@ const WalletsOptions = ({
             role="button"
             tabIndex="0"
             className="cursor-pointer mb-2"
-            onClick={peraConnectOnClick}
+            onClick={!isPeraConnected && peraConnectOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
             {isPeraConnected ? (
@@ -51,11 +51,19 @@ const WalletsOptions = ({
                   width="100%"
                   height="100%"
                 /> */}
+                <Image
+                  style={{ borderRadius: '50%' }}
+                  src="/Pera-logo.png"
+                  alt="Algorand Mobile Wallet"
+                  width={25}
+                  height={25}
+                />
               </Box>
             ) : (
               // <></>
               <Image
-                src="/Wallet-Connect-icon.svg"
+                style={{ borderRadius: '50%' }}
+                src="/Pera-logo.png"
                 alt="Algorand Mobile Wallet"
                 width={25}
                 height={25}
@@ -70,7 +78,7 @@ const WalletsOptions = ({
                 className="underline ml-2"
                 variant="body_small_bold"
               >
-                Wallet Connect (Pera or Defly)
+                Pera Wallet
               </Typography>
               {isPeraConnected && (
                 <Typography className="italic color-white ml-2 mt-2" variant="body_tiny">
