@@ -1,17 +1,10 @@
 import { Box, Stack, Typography } from '@mui/material'
 
-// import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 
-const WalletsOptions = ({
-  // isConnectingAddress,
-  // setIsConnectingAddress,
-  myAlgoOnClick,
-  peraConnectOnClick,
-  isPeraConnected
-}) => {
+const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   return (
     <>
       <Box

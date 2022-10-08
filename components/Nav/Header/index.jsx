@@ -19,9 +19,7 @@ import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
-import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
-import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -38,8 +36,6 @@ export function Header() {
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
-  // const { wallet } = useAlgodex()
-  // const { wallet } = useAlgodex()
   const { wallet } = useWallets()
   const isMobile = useMobileDetect()
 

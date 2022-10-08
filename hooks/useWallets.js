@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
@@ -64,7 +64,6 @@ function useWallets(initialState) {
     (props) => {
       const { type, wallet: _wallet } = props
       if (type === 'change' && !isEqual(wallet, _wallet)) {
-        // console.log(wallet, 'a change occured in wallet')
         setWallet(_wallet)
       }
     },

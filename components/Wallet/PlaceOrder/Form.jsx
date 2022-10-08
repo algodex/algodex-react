@@ -1,8 +1,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -15,7 +14,6 @@ import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import { mdiAlertCircleOutline } from '@mdi/js'
 import styled from '@emotion/styled'
@@ -31,12 +29,6 @@ export const Form = styled.form`
   }
 `
 
-// function _minDecimalValue(decimals) {
-//   if (typeof decimals !== 'number') {
-//     throw new Error('Must be a valid decimals!')
-//   }
-//   return parseFloat(`0.${new Array(decimals).join('0')}1`)
-// }
 /**
  * # 📝 Place Order Form
  *
@@ -59,8 +51,6 @@ export const Form = styled.form`
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
-  // const { placeOrder, http, isConnected } = useAlgodex()
-  // const { wallet } = useWallets()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
   const [status, setStatus] = useState({
@@ -109,7 +99,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-    // }, [orderBook, setSellOrders, asset])
   }, [orderBook, setSellOrders, setBuyOrders, asset])
 
   const updateInitialState = () => {
@@ -478,7 +467,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               This asset is not able to be traded in your country ({query.cc}) for legal reasons.
               You can view the chart and book but will not be able to place trades for this asset.
             </p>
-            {/* <p className="text-green-600 text-xs font-medium mt-3 mb-4">Learn More Here</p> */}
           </div>
         </div>
       )}

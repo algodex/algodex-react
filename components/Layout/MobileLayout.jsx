@@ -13,7 +13,6 @@ import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -129,7 +128,6 @@ function MainLayout({ asset, children }) {
   }
 
   const { wallet } = useAlgodex()
-  // const { wallet } = useWallets()
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**

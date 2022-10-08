@@ -31,7 +31,7 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
     peraWallet
       .connect()
       .then((newAccounts) => {
-        // peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
+        peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
 
         const _addresses = newAccounts.map((acct) => {
           const _account = {
@@ -42,14 +42,11 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
           _account.connector.connected = true
           return _account
         })
-        // setHasError(false)
         onConnect(_addresses)
       })
       .catch((error) => {
         if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {
           console.log(error)
-          // setHasError(true)
-          // toast.error(error)
         }
       })
   }

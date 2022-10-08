@@ -1,29 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import React, { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
-// import Button from '@/components/Button'
-// import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
-// import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
-// import { Typography, Typography } from '@/components/Typography'
-// import Typography from '@mui/material/Typography'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
 
-// import useTranslation from 'next-translate/useTranslation'
-
-// import { Typography, Typography } from '@/components/Typography'
-// import Typography from '@mui/material/Typography'
-// import useWallets from '@/hooks/useWallets'
-// Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -172,17 +159,7 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   const { wallet } = useAlgodex()
-  const [addresses, setAddresses, walletConnect] = useContext(WalletsContext)
-  const context = useContext(WalletsContext)
-  const [locStorage, setLocStorage] = useState([])
-  // const isConnected =
-  //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
-  // const { t } = useTranslation('common')
-  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
-  // const { wallet } = useWallets()
-  const myAlgoConnector = useRef()
   const gridRef = useRef()
   const searchTableRef = useRef()
 

@@ -10,11 +10,9 @@ import { Section } from '@/components/Layout/Section'
 import Typography from '@mui/material/Typography'
 import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
 import WalletsList from './WalletConnect/WalletsList'
-// import { difference } from 'lodash'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import useAccountsInfo from '@/hooks/useAccountsInfo'
 import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
@@ -97,10 +95,8 @@ const WalletsWrapper = styled.div`
   right: 0;
 `
 export function WalletView(props) {
-  const { activeWallet, signedIn, addresses, setActiveWallet, setAddresses } = props
+  const { activeWallet, signedIn, addresses, setActiveWallet } = props
   const { t } = useTranslation('wallet')
-  const { wallet: initialState } = useAlgodex()
-  const context = useContext(WalletsContext)
   const {
     peraConnector,
     // myAlgoConnector,
@@ -117,26 +113,6 @@ export function WalletView(props) {
   const peraDisconnect = (targetWallet) => {
     _peraDisconnect(targetWallet)
   }
-
-  // const myAlgoConnect = () => {
-  //   const mappedAddresses = addresses.map((addr) => {
-  //     if (addr.type === 'my-algo-wallet') {
-  //       return {
-  //         ...addr,
-  //         connector: myAlgoConnector.current
-  //       }
-  //     } else {
-  //       return addr
-  //     }
-  //   })
-  //   setAddresses(mappedAddresses)
-  //   dispatcher('signIn', { type: 'wallet' })
-  // }
-
-  // const walletReconnectorMap = {
-  //   'my-algo-wallet': () => myAlgoConnect(),
-  //   'wallet-connect': () => peraConnect()
-  // }
 
   const walletDisconnectMap = {
     'my-algo-wallet': (wallet) => {
@@ -167,17 +143,6 @@ export function WalletView(props) {
           if (peraConnector.connector.connected) {
             return peraConnector.connector
           }
-          // const connector = {
-          //   ...peraConnector.connector,
-          //   _accounts: [],
-          //   _connected: false,
-          //   connected: true
-          // }
-          // toast.error('Pera session expired. Disconnect wallet and try again.')
-          // dispatcher('bridge-disconnected', {
-          //   activeWallet: wallet
-          // })
-          // return connector
         } catch (error) {
           console.log(error, 'error while handling pera connection')
           toast.error(
@@ -208,10 +173,6 @@ export function WalletView(props) {
     }
   }
 
-  // const rehyrdateWallet =
-  //   typeof activeWallet !== 'undefined' && //activeWallet exists &
-  //   typeof activeWallet?.connector?.sign === 'undefined' // does not have a signing method
-
   useEffect(() => {
     const reConnectMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
@@ -223,21 +184,6 @@ export function WalletView(props) {
     }
     reConnectMyAlgoWallet()
   }, [])
-
-  // useEffect(() => {
-  //   if (rehyrdateWallet) {
-  //     walletReconnectorMap[activeWallet.type]
-  //   }
-  // }, [activeWallet])
-
-  // useEffect(() => {
-  //   if (typeof activeWallet !== 'undefined' && addresses.length > 0) {
-  //     const targetWallet = addresses.filter((addr) => addr.address === activeWallet.address)[0]
-  //     if (typeof targetWallet?.connector?.sign !== 'undefined') {
-  //       setActiveWallet(targetWallet)
-  //     }
-  //   }
-  // }, [addresses])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -331,8 +277,8 @@ WalletView.defaultProps = {
 }
 
 export function WalletOptionsListComp(props) {
-  const { setIsConnectingWallet, isConnectingWallet, addresses, setAddresses, addressesRef } = props
-  const { wallet: initialState, isConnected } = useAlgodex()
+  const { setIsConnectingWallet, isConnectingWallet, addresses } = props
+  const { isConnected } = useAlgodex()
   const { peraConnect, myAlgoConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
@@ -355,44 +301,6 @@ export function WalletOptionsListComp(props) {
     }
     return false
   }, [isConnected, addresses])
-
-  // useEffect(() => {
-  //   if (!addressesRef.current) {
-  //     // Initialize the ref after first checking to see what is in localStorage
-  //     const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-  //     if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
-  //       setAddresses(storedAddrs)
-  //     }
-  //     addressesRef.current = addresses
-  //   }
-
-  //   const localStorageExists =
-  //     JSON.parse(localStorage.getItem('addresses')) !== null &&
-  //     JSON.parse(localStorage.getItem('addresses')).length > 0
-
-  //   const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
-
-  //   /**
-  //    * I will need more explanation on what this does
-  //    * We are setting addresses that already exists.
-  //    */
-  //   if (localStorageExists && addressesExist) {
-  //     localStorage.setItem('addresses', JSON.stringify(addresses))
-  //   }
-  //   const walletDifference = difference(
-  //     addresses.map((addr) => addr.address),
-  //     addressesRef.current.map((addr) => addr.address)
-  //   )
-  //   if (walletDifference.length > 0) {
-  //     localStorage.setItem('addresses', JSON.stringify(addresses))
-  //     addressesRef.current = addresses
-  //     // closeFn()
-  //   }
-  //   // **Note** Can't put closeFn() in the onClicks because it will closeOut
-  //   // modal before wallet-connect finishes connecting leading to stale state.
-  //   // Creating a ref that persists between renders gives us a way to automatically close out
-  //   // modals only when a new address is added to the addresses array.
-  // }, [addresses, addressesRef, setAddresses])
 
   return (
     <>
@@ -445,28 +353,16 @@ WalletOptionsListComp.propTypes = {
  * @constructor
  */
 function WalletConnect() {
-  const { wallet: initialState, setWallet, isConnected } = useAlgodex()
+  const { setWallet, isConnected } = useAlgodex()
   const { wallet, addresses: _addresses } = useWallets()
   const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
-  // console.log(isConnected, addresses, setAddresses, 'both')
   useEffect(() => {
     setSignedIn(isConnected)
   }, [_addresses, isConnected])
-
-  // useEvent('connect-wallet', (data) => {
-  //   if (data.isClosed === 'order') {
-  //     setOrder({
-  //       ...order,
-  //       amount: data.payload.amount,
-  //       price: Number(data.payload.price),
-  //       type: data.payload.type
-  //     })
-  //   }
-  // })
 
   return (
     <Box className="flex flex-col justify-center" width="100%">
