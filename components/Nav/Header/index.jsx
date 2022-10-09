@@ -15,8 +15,10 @@ import Button from '@mui/material/Button'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
+import Select from '@mui/material/Select'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
@@ -74,7 +76,7 @@ export function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown
+      {/* <NetworkDropdown
         data-testid="header-network-dropdown-element"
         className="font-bold"
         value={activeNetwork}
@@ -86,7 +88,17 @@ export function Header() {
         <NetworkDropdownOption value="mainnet" enableLinks={ENABLE_NETWORK_SELECTION}>
           MAINNET
         </NetworkDropdownOption>
-      </NetworkDropdown>
+      </NetworkDropdown> */}
+      <Select
+        data-testid="header-network-dropdown-element"
+        labelId="demo-select-small"
+        id="demo-select-small"
+        value={activeNetwork}
+        onChange={(e) => handleNetworkChangeFn(e.target.value)}
+      >
+        <MenuItem value="testnet">TESTNET</MenuItem>
+        <MenuItem value="mainnet">MAINNET</MenuItem>
+      </Select>
       <Navigation data-testid="header-navigation-element">
         <NavActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
