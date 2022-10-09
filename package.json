@@ -59,6 +59,7 @@
     "dayjs": "^1.11.0",
     "framer-motion": "^6.3.0",
     "immer": "^9.0.12",
+    "jest-canvas-mock": "^2.4.0",
     "lightweight-charts": "^3.8.0",
     "lodash": "^4.17.21",
     "millify": "^4.0.0",

@@ -57,7 +57,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     submitted: false,
     submitting: false
   })
-  const { query } = useRouter()
+  // const { query } = useRouter()
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -464,8 +464,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           &nbsp;
           <div className="flex flex-col">
             <p className="text-white text-xs font-medium">
-              This asset is not able to be traded in your country ({query.cc}) for legal reasons.
-              You can view the chart and book but will not be able to place trades for this asset.
+              This asset is not able to be traded in your country for legal reasons. You can view
+              the chart and book but will not be able to place trades for this asset.
             </p>
           </div>
         </div>

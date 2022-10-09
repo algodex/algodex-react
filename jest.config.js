@@ -1,6 +1,6 @@
 module.exports = {
   globalSetup: './jest.setup.js',
-  setupFilesAfterEnv: ['./jest.setup.after-env.js'],
+  setupFilesAfterEnv: ['./jest.setup.after-env.js', 'jest-canvas-mock'],
   moduleDirectories: ['node_modules', '<rootDir>'],
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
