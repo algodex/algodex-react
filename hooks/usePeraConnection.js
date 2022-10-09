@@ -11,15 +11,24 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
       .then((accounts) => {
         peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
         if (accounts.length) {
-          const _addresses = accounts.map((acct) => {
-            const _account = {
-              type: 'wallet-connect',
-              address: acct,
-              connector: peraWallet.connector
+          // Disconnect if wallet with Address already exists
+          const res = localStorage.getItem('addresses')
+          if (res) {
+            const _hasAddress = JSON.parse(res).filter((wallet) => wallet.address === accounts[0])
+            if (_hasAddress && _hasAddress.length && _hasAddress[0].type !== 'wallet-connect') {
+              peraWallet.disconnect()
+            } else {
+              const _addresses = accounts.map((acct) => {
+                const _account = {
+                  type: 'wallet-connect',
+                  address: acct,
+                  connector: peraWallet.connector
+                }
+                return _account
+              })
+              sessionUpdate(_addresses)
             }
-            return _account
-          })
-          sessionUpdate(_addresses)
+          }
         }
       })
       .catch((e) => {

@@ -263,7 +263,6 @@ export function WalletView(props) {
 
 WalletView.propTypes = {
   addresses: PropTypes.array.isRequired,
-  setAddresses: PropTypes.func.isRequired,
   activeWallet: PropTypes.object,
   signedIn: PropTypes.bool,
   setActiveWallet: PropTypes.func.isRequired,
@@ -342,7 +341,6 @@ WalletOptionsListComp.propTypes = {
   setIsConnectingWallet: PropTypes.func,
   isConnectingWallet: PropTypes.bool,
   addresses: PropTypes.array,
-  setAddresses: PropTypes.func,
   addressesRef: PropTypes.object
 }
 
@@ -354,15 +352,15 @@ WalletOptionsListComp.propTypes = {
  */
 function WalletConnect() {
   const { setWallet, isConnected } = useAlgodex()
-  const { wallet, addresses: _addresses } = useWallets()
-  const [addresses, setAddresses] = useContext(WalletsContext)
+  const { wallet, addresses } = useWallets()
+  // const [addresses, setAddresses] = useContext(WalletsContext)
   const [signedIn, setSignedIn] = useState(isConnected)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
   useEffect(() => {
     setSignedIn(isConnected)
-  }, [_addresses, isConnected])
+  }, [addresses, isConnected])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">
@@ -372,7 +370,6 @@ function WalletConnect() {
             setIsConnectingWallet={setIsConnectingWallet}
             isConnectingWallet={isConnectingWallet}
             addresses={addresses}
-            setAddresses={setAddresses}
             closeFn={() => setIsConnectingWallet(false)}
             addressesRef={addressesRef}
           />
@@ -391,7 +388,6 @@ function WalletConnect() {
       )}
       <WalletView
         addresses={addresses}
-        setAddresses={setAddresses}
         activeWallet={wallet}
         signedIn={signedIn}
         setSignedIn={setSignedIn}

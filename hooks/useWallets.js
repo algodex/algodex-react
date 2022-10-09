@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { find, intersectionBy } from 'lodash'
 
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
@@ -170,7 +171,8 @@ function useWallets(initialState) {
   const walletsQuery = useAccountsInfo(addresses)
 
   useEffect(() => {
-    if (_wallet && walletsQuery.data && !isRehydrating) {
+    const res = localStorage.getItem('addresses')
+    if (res && _wallet && walletsQuery.data && !isRehydrating) {
       const mappedAddresses = addresses.map((wallet, idx) => {
         if (_wallet.address === wallet.address) {
           setAlgodexWallet({
@@ -180,8 +182,8 @@ function useWallets(initialState) {
         }
         return { ...wallet, ...walletsQuery.data[idx] }
       })
-      setAddresses(mappedAddresses)
-      // console.log(mappedAddresses, wallet, 'wallet')
+      const _mappedAddresses = mappedAddresses.filter((wallet) => Object.keys(wallet).length)
+      setAddresses(_mappedAddresses)
 
       // Below is commented out because setting localstorage breaks with myAlgo Popup
       // localStorage.setItem('addresses', JSON.stringify(mappedAddresses))
@@ -341,7 +343,6 @@ function useWallets(initialState) {
         logInfo('Handling Connect')
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
         const accounts = await http.indexer.fetchAccounts(_addresses)
-        console.log(accounts, 'asset account here')
         if (sameWalletClient.length > _addresses.length) {
           addNewWalletToAddressesList(sameWalletClient, _addresses)
         } else {
@@ -356,6 +357,7 @@ function useWallets(initialState) {
   // Handle any Disconnect
   const handleDisconnect = useCallback(
     (_addresses) => {
+      setIsRehydrating(true)
       const locStorageAddr = JSON.parse(localStorage.getItem('addresses'))
       const addressesList = locStorageAddr.length > 0 ? locStorageAddr : addresses || []
       const remainingAddresses =
@@ -373,7 +375,7 @@ function useWallets(initialState) {
       logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
       )
-      setIsRehydrating(true)
+      // setIsRehydrating(true)
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
       console.error('Handle removing from storage', _addresses)
@@ -385,6 +387,7 @@ function useWallets(initialState) {
     async (_addresses) => {
       if (_addresses.length > 0) {
         logInfo('Handling Reconnecting session')
+        setIsRehydrating(true)
         const sameWalletClient = addresses.filter((wallet) => wallet.type === _addresses[0].type)
         const accounts = await http.indexer.fetchAccounts(_addresses)
         if (sameWalletClient.length > _addresses.length) {
