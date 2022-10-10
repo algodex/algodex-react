@@ -5,6 +5,6 @@
   "balance": "Saldo",
   "start-by": "Comience conectando una billetera Algorand usando el botón en el encabezado",
   "once-connected": "Una vez que haya conectado una billetera, puede comenzar a operar y verá sus billeteras conectadas aquí",
-  "copy-success": "¡Copié la dirección de la billetera al portapapeles!",
-  "copy-fail": "Error al copiar la dirección de la billetera al portapapeles"
+  "copy-success":"¡Copié la dirección de la billetera al portapapeles!",
+  "copy-fail":"Error al copiar la dirección de la billetera al portapapeles"
 }

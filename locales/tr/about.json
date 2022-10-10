@@ -1,8 +1,8 @@
 {
-  "A Decentralized": "Merkezi Olmayan",
+  "A Decentralized": "Merkezi Olmayan" ,
   "Marketplace": "pazar yeri",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex, tamamen Algorand blok zincirinin kendisinde sipariş defteri ile oldukça merkezi olmayan bir pazar yeridir.",
-  "NOTE": "NOT",
+  "NOTE":"NOT",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "ABD ve Kanada'daki kullanıcıların şu anda bazı Mainnet varlıklarının ticaretini yapması yasaklanmıştır. Testnet, platformu şu adreste deneyen herkes için de mevcuttur:",
   "blog": "blog",
   "View More Posts": "Daha Fazla Gönderi Görüntüle",
@@ -37,6 +37,6 @@
   "Algodex rewards and fee system": "Algodex ödül ve ücret sistemi",
   "Launch of trading bot for Algodex": "Algodex için ticaret botunun lansmanı",
   "Launch of Algodex NFT marketplace": "Algodex NFT pazarının lansmanı",
-  "Launch of trading SDK for Algodex": "Algodex için alım satım SDK'sının lansmanı",
-  "launch app": "uygulamayı başlat"
+  "Launch of trading SDK for Algodex":"Algodex için alım satım SDK'sının lansmanı",
+  "launch app":"uygulamayı başlat"
 }

@@ -5,6 +5,6 @@
   "balance": "Balans",
   "start-by": "Zacznij od podłączenia portfela Algorand za pomocą przycisku w nagłówku",
   "once-connected": "Po podłączeniu portfela możesz rozpocząć handel i zobaczysz tutaj swoje połączone portfele",
-  "copy-success": "Skopiowano adres portfela do schowka!",
-  "copy-fail": "Nie udało się skopiować adresu portfela do schowka"
+  "copy-success":"Skopiowano adres portfela do schowka!",
+  "copy-fail":"Nie udało się skopiować adresu portfela do schowka"
 }

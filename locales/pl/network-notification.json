@@ -5,11 +5,11 @@
   "modal-subtitle-mainnet": "Bądź świadomy potencjalnego ryzyka -",
   "modal-first-paragraph-mainnet": "Inwestujesz w Algodex w wersji Mainnet. Zachowaj ostrożność ze swoimi środkami podczas składania zamówień, ponieważ transakcje te dotyczą aktywów mainnet o rzeczywistej wartości, a transakcje są trwałe.",
   "modal-second-paragraph-mainnet": "Algodex przeszedł audyt bezpieczeństwa, jednak w wyniku nieprzewidzianych okoliczności mogą wystąpić straty. Przed kontynuowaniem zapoznaj się z naszym Zastrzeżeniem i dokumentacją.",
-
+  
   "modal-subtitle-testnet": "Testuj nowe funkcje bez ryzyka!",
   "modal-first-paragraph-testnet": "Inwestujesz w Algodex w wersji Testnet, używanej do testowania naszych nowych funkcji i znajdowania błędów. Wszystkie transakcje w Testnet wykorzystują algorytmy i aktywa testnetowe bez rzeczywistej wartości. Możesz przetestować Algos z poniższego linku do kranu.",
   "modal-second-paragraph-testnet": "Prosimy o przesyłanie opinii o wszelkich błędach lub prośbach o nowe funkcje!",
-
+  
   "network-name-mainnet": "SIEĆ GŁÓWNA",
   "network-name-testnet": "SIEĆ TESTOWA",
 

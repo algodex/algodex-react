@@ -2,7 +2,7 @@
   "A Decentralized": "لامركزية",
   "Marketplace": "المتجر",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "يعد Algodex سوقًا لامركزيًا بدرجة كبيرة مع وجود دفتر الطلبات بالكامل على سلسلة Algorand blockchain نفسها",
-  "NOTE": "ملاحظة",
+  "NOTE":"ملاحظة",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "يُحظر حاليًا على المستخدمين في الولايات المتحدة الأمريكية وكندا تداول بعض أصول Mainnet. يتوفر Testnet أيضًا لأي شخص يجرب النظام الأساسي في",
   "blog": "مقالات",
   "View More Posts": "عرض المزيد من المشاركات",
@@ -37,6 +37,6 @@
   "Algodex rewards and fee system": "نظام المكافآت والرسوم من Algodex",
   "Launch of trading bot for Algodex": "إطلاق روبوت تجاري لشركة Algodex",
   "Launch of Algodex NFT marketplace": "إطلاق سوق Algodex NFT",
-  "Launch of trading SDK for Algodex": "إطلاق SDK للتداول لصالح شركة Algodex",
-  "launch app": "إطلاق التطبيق"
+  "Launch of trading SDK for Algodex":"إطلاق SDK للتداول لصالح شركة Algodex",
+  "launch app":"إطلاق التطبيق"
 }

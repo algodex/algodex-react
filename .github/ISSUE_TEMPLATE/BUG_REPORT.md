@@ -15,13 +15,11 @@ assignees: ''
 <!--- Pin any related issues -->
 
 ### 💻 System Configuration
-
 <!-- Tell us more about your system and -->
-
 - Operating System:
-  - Edition: <!-- Windows 10 Home -->
-  - Version: <!-- 21H1 -->
-  - Build: <!-- 19043.1415 -->
+    - Edition: <!-- Windows 10 Home -->
+    - Version: <!-- 21H1 -->
+    - Build: <!-- 19043.1415 -->
 - Browser:
-  - Type: <!-- Chrome -->
-  - Version: <!-- 96.0.4664.110 (Official Build) (64-bit) (cohort: Stable) -->
+    - Type: <!-- Chrome -->
+    - Version: <!-- 96.0.4664.110 (Official Build) (64-bit) (cohort: Stable) -->

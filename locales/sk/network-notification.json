@@ -5,11 +5,11 @@
   "modal-subtitle-mainnet": "Buďte si vedomí možných rizík -",
   "modal-first-paragraph-mainnet": "Obchodujete na Mainnetovej verzii Algodexu. Pri vytváraní objednávok buďte opatrní so svojimi finančnými prostriedkami, pretože tieto transakcie sú s aktívami hlavnej siete so skutočnou hodnotou a obchody sú trvalé.",
   "modal-second-paragraph-mainnet": "Algodex prešiel bezpečnostným auditom, avšak v dôsledku nepredvídaných okolností môže dôjsť k stratám. Pred pokračovaním si prečítajte naše Vyhlásenie a dokumentáciu.",
-
+  
   "modal-subtitle-testnet": "Testujte nové funkcie bez rizika!",
   "modal-first-paragraph-testnet": "Obchodujete na Testnet verzii Algodex, ktorá sa používa na testovanie našich nových funkcií a hľadanie chýb. Všetky obchody na Testnet používajú testnetové algoritmy a aktíva bez skutočnej hodnoty. Algos môžete otestovať pomocou odkazu na faucet nižšie.",
   "modal-second-paragraph-testnet": "Pošlite spätnú väzbu o akýchkoľvek chybách alebo požiadavkách na funkcie!",
-
+  
   "network-name-mainnet": "HLAVNÁ SIEŤ",
   "network-name-testnet": "TESTNET",
 

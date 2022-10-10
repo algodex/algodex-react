@@ -1,14 +1,14 @@
 {
-  "search": "ค้นหา",
-  "pair": "PAIR (คู่ซื้อขาย)",
-  "price": "ราคา",
-  "change": "เปลี่ยน",
-  "24-hr-change": "เปลี่ยน 24 ชม.",
-  "liquidity": "สภาพคล่อง",
-  "loading": "กำลังโหลด...",
-  "back-to-chart": "กลับไปที่แผนภูมิ",
-  "description": "คำอธิบาย",
-  "circulating-supply": "อุปทานหมุนเวียน",
-  "total-supply": "อุปทานทั้งหมด",
-  "view-verified-asset": "ดูสินทรัพย์ที่ตรวจสอบแล้วเท่านั้น"
+    "search": "ค้นหา",
+    "pair": "PAIR (คู่ซื้อขาย)",
+    "price": "ราคา",
+    "change": "เปลี่ยน",
+    "24-hr-change": "เปลี่ยน 24 ชม.",
+    "liquidity": "สภาพคล่อง",
+    "loading": "กำลังโหลด...",
+    "back-to-chart": "กลับไปที่แผนภูมิ",
+    "description": "คำอธิบาย",
+    "circulating-supply": "อุปทานหมุนเวียน",
+    "total-supply": "อุปทานทั้งหมด",
+    "view-verified-asset": "ดูสินทรัพย์ที่ตรวจสอบแล้วเท่านั้น"
 }

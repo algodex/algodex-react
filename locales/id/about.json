@@ -2,7 +2,7 @@
   "A Decentralized": "Sebuah Terdesentralisasi",
   "Marketplace": "pasar",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex adalah pasar yang sangat terdesentralisasi dengan buku pesanan sepenuhnya di blockchain Algorand itu sendiri",
-  "NOTE": "CATATAN",
+  "NOTE":"CATATAN",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "Pengguna di AS dan Kanada saat ini dilarang memperdagangkan beberapa aset Mainnet. Testnet juga tersedia untuk siapa saja yang mencoba platform di",
   "blog": "blog",
   "View More Posts": "Lihat Lebih Banyak Posting",
@@ -37,6 +37,6 @@
   "Algodex rewards and fee system": "Penghargaan dan sistem biaya Algodex",
   "Launch of trading bot for Algodex": "Peluncuran bot perdagangan untuk Algodex",
   "Launch of Algodex NFT marketplace": "Peluncuran pasar Algodex NFT",
-  "Launch of trading SDK for Algodex": "Peluncuran SDK perdagangan untuk Algodex",
-  "launch app": "luncurkan aplikasi"
+  "Launch of trading SDK for Algodex":"Peluncuran SDK perdagangan untuk Algodex",
+  "launch app":"luncurkan aplikasi"
 }

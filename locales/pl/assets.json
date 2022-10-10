@@ -1,14 +1,14 @@
 {
-  "search": "Szukaj",
-  "pair": "Rynek",
-  "price": "Ostatnia cena",
-  "change": "Zmiana",
-  "24-hr-change": "Zmiana ceny 24h",
-  "liquidity": "Wykres głęb.",
-  "loading": "ŁADOWANIE...",
-  "back-to-chart": "Powrót do wykresu",
-  "description": "Opis",
-  "circulating-supply": "Podaż w obiegu",
-  "total-supply": "Całkowita podaż",
-  "view-verified-asset": "Wyświetl tylko zweryfikowane zasoby"
+    "search": "Szukaj",
+    "pair": "Rynek",
+    "price": "Ostatnia cena",
+    "change": "Zmiana",
+    "24-hr-change": "Zmiana ceny 24h",
+    "liquidity": "Wykres głęb.",
+    "loading": "ŁADOWANIE...",
+    "back-to-chart": "Powrót do wykresu",
+    "description": "Opis",
+    "circulating-supply": "Podaż w obiegu",
+    "total-supply": "Całkowita podaż",
+    "view-verified-asset": "Wyświetl tylko zweryfikowane zasoby"
 }

@@ -5,6 +5,6 @@
   "balance": "BAKİYE",
   "start-by": "Başlıktaki düğmeyi kullanarak bir Algorand Cüzdanı bağlayarak başlayın",
   "once-connected": "Bir cüzdan bağladıktan sonra ticarete başlayabilir ve bağlı cüzdanlarınızı burada görebilirsiniz.",
-  "copy-success": "Cüzdan adresi panoya kopyalandı!",
-  "copy-fail": "M-cüzdan adresi panoya kopyalanamadı"
+  "copy-success":"Cüzdan adresi panoya kopyalandı!",
+  "copy-fail":"M-cüzdan adresi panoya kopyalanamadı"
 }

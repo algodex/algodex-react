@@ -1,14 +1,14 @@
 {
-  "baseUrl": "http://localhost:3000",
-  "env": {
-    "cypress-react-selector": {
-      "root": "#__next"
-    }
-  },
-  "viewportWidth": 1300,
-  "viewportHeight": 1000,
-  "defaultCommandTimeout": 10000,
-  "responseTimeout": 100000,
-  "pageLoadTimeout": 100000,
-  "video": true
+    "baseUrl": "http://localhost:3000",
+    "env": {
+        "cypress-react-selector": {
+          "root": "#__next"
+        }
+      },
+    "viewportWidth": 1300,
+    "viewportHeight": 1000,
+    "defaultCommandTimeout": 10000,
+    "responseTimeout": 100000,
+    "pageLoadTimeout": 100000,
+    "video": true
 }

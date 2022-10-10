@@ -5,6 +5,6 @@
   "balance": "Saldo",
   "start-by": "Begin door een Algorand Wallet aan te sluiten via de knop in de kop",
   "once-connected": "Zodra u een portemonnee heeft gekoppeld, kunt u beginnen met handelen en ziet u hier uw gekoppelde portemonnee",
-  "copy-success": "Brieftaschenadresse in die Zwischenablage kopiert!",
-  "copy-fail": "Wallet-Adresse konnte nicht in die Zwischenablage kopiert werden"
+  "copy-success":"Brieftaschenadresse in die Zwischenablage kopiert!",
+  "copy-fail":"Wallet-Adresse konnte nicht in die Zwischenablage kopiert werden"
 }

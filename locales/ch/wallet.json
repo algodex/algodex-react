@@ -5,6 +5,6 @@
   "balance": "余额",
   "start-by": "首先使用标题中的按钮连接 Algorand 钱包",
   "once-connected": "连接钱包后，您可以开始交易，并会在此处看到您连接的钱包",
-  "copy-success": "将钱包地址复制到剪贴板！",
-  "copy-fail": "未能将钱包地址复制到剪贴板"
+  "copy-success":"将钱包地址复制到剪贴板！",
+  "copy-fail":"未能将钱包地址复制到剪贴板"
 }

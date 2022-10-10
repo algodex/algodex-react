@@ -1,14 +1,14 @@
 {
-  "search": "Search",
-  "pair": "Pair",
-  "price": "Price",
-  "change": "Change",
-  "24-hr-change": "24 Hr Change",
-  "liquidity": "Liquidity",
-  "loading": "loading",
-  "back-to-chart": "Back to Chart",
-  "description": "Description",
-  "circulating-supply": "Circulating Supply",
-  "total-supply": "Total Supply",
-  "view-verified-asset": "View Verified Assets Only"
+    "search": "Search",
+    "pair": "Pair",
+    "price": "Price",
+    "change": "Change",
+    "24-hr-change": "24 Hr Change",
+    "liquidity": "Liquidity",
+    "loading": "loading",
+    "back-to-chart": "Back to Chart",
+    "description": "Description",
+    "circulating-supply": "Circulating Supply",
+    "total-supply": "Total Supply",
+    "view-verified-asset": "View Verified Assets Only"
 }

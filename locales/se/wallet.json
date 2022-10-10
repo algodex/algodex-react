@@ -1,10 +1,11 @@
 {
-  "connect-wallet-button": "ANSLUT PLÅNBOK",
-  "connect-another-wallet-button": "Anslut en annan plånbok",
-  "wallet": "Plånbok",
-  "balance": "Saldo",
-  "start-by": "Börja med att ansluta en Algorand Wallet med knappen i rubriken",
-  "once-connected": "När du har anslutit en plånbok kan du börja handla och kommer att se dina anslutna plånböcker här",
-  "copy-success": "Kopierade plånboksadress till urklipp!",
-  "copy-fail": "Det gick inte att kopiera plånboksadress till urklipp"
-}
+    "connect-wallet-button": "ANSLUT PLÅNBOK",
+    "connect-another-wallet-button": "Anslut en annan plånbok",
+    "wallet": "Plånbok",
+    "balance": "Saldo",
+    "start-by": "Börja med att ansluta en Algorand Wallet med knappen i rubriken",
+    "once-connected": "När du har anslutit en plånbok kan du börja handla och kommer att se dina anslutna plånböcker här",
+    "copy-success":"Kopierade plånboksadress till urklipp!",
+    "copy-fail":"Det gick inte att kopiera plånboksadress till urklipp"
+  }
+  

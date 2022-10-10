@@ -1,14 +1,14 @@
 {
-  "search": "खोज",
-  "pair": "जोड़ी (व्यापारिक जोड़ी)",
-  "price": "कीमत",
-  "change": "परिवर्तन",
-  "24-hr-change": "24 घंटे बदलें",
-  "liquidity": "लिक्विडिटी",
-  "loading": "लोड हो रहा है...",
-  "back-to-chart": "चार्ट पर वापस जाएं",
-  "description": "विवरण",
-  "circulating-supply": "परिसंचारी आपूर्ति",
-  "total-supply": "कुल आपूर्ति",
-  "view-verified-asset": "केवल सत्यापित संपत्ति देखें"
+    "search": "खोज",
+    "pair": "जोड़ी (व्यापारिक जोड़ी)",
+    "price": "कीमत",
+    "change": "परिवर्तन",
+    "24-hr-change": "24 घंटे बदलें",
+    "liquidity": "लिक्विडिटी",
+    "loading": "लोड हो रहा है...",
+    "back-to-chart": "चार्ट पर वापस जाएं",
+    "description": "विवरण",
+    "circulating-supply": "परिसंचारी आपूर्ति",
+    "total-supply": "कुल आपूर्ति",
+    "view-verified-asset": "केवल सत्यापित संपत्ति देखें"
 }

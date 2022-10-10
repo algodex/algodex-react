@@ -14,9 +14,9 @@
   "mobilefooter-TRADE": "交易",
   "mobilefooter-ORDERS": "订单",
   "mobilefooter-WALLET": "钱包",
-  "trade-history": "贸易历史",
-  "order-book": "订单簿",
-  "place-maker-description": "下一个制造商买/卖订单以增加该交易对的流动性",
-  "connect-wallet-liquidity": "连接您的钱包并下订单以增加该交易对的流动性",
-  "place-first": "放置第一个限价单"
+  "trade-history":"贸易历史",
+  "order-book":"订单簿",
+  "place-maker-description":"下一个制造商买/卖订单以增加该交易对的流动性",
+  "connect-wallet-liquidity":"连接您的钱包并下订单以增加该交易对的流动性",
+  "place-first":"放置第一个限价单"
 }

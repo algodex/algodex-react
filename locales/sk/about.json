@@ -2,7 +2,7 @@
   "A Decentralized": "A Decentralizované",
   "Marketplace": "Trhovisko",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex je vysoko decentralizovaný trh s knihou objednávok úplne na samotnom blockchaine Algorand",
-  "NOTE": "POZNÁMKA",
+  "NOTE":"POZNÁMKA",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "Používatelia v USA a Kanade majú v súčasnosti zakázané obchodovať s niektorými aktívami siete Mainnet. Testnet je tiež dostupný pre každého, kto vyskúša platformu na",
   "blog": "blog",
   "View More Posts": "Zobraziť viac príspevkov",
@@ -37,6 +37,6 @@
   "Algodex rewards and fee system": "Systém odmien a poplatkov Algodex",
   "Launch of trading bot for Algodex": "Spustenie obchodného bota pre Algodex",
   "Launch of Algodex NFT marketplace": "Spustenie trhu Algodex NFT",
-  "Launch of trading SDK for Algodex": "Spustenie obchodnej súpravy SDK pre Algodex",
-  "launch app": "spustiť aplikáciu"
+  "Launch of trading SDK for Algodex":"Spustenie obchodnej súpravy SDK pre Algodex",
+  "launch app":"spustiť aplikáciu"
 }

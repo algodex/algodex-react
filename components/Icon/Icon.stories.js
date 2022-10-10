@@ -44,7 +44,7 @@ export default {
   parameters: { layout: 'fullscreen' },
   args: {
     use: 'algoLogo',
-    size: 10
+    size: 10,
     // color: 'gray'
   },
   argTypes: {

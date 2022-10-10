@@ -1,14 +1,14 @@
 {
-  "search": "جستجو",
-  "pair": "جفت ارز",
-  "price": "قیمت",
-  "change": "تغییر",
-  "24-hr-change": "تغییر در ۲۴ ساعت",
-  "liquidity": "نقدینگی",
-  "loading": "بارگذاری",
-  "back-to-chart": "بازگشت به چارت",
-  "description": "توضیحات",
-  "circulating-supply": "مقدار در گردش",
-  "total-supply": "عرضه کل",
-  "view-verified-asset": "فقط دارایی های تایید شده را مشاهده کنید"
+    "search": "جستجو",
+    "pair": "جفت ارز",
+    "price": "قیمت",
+    "change": "تغییر",
+    "24-hr-change": "تغییر در ۲۴ ساعت",
+    "liquidity": "نقدینگی",
+    "loading": "بارگذاری",
+    "back-to-chart": "بازگشت به چارت",
+    "description": "توضیحات",
+    "circulating-supply": "مقدار در گردش",
+    "total-supply": "عرضه کل",
+    "view-verified-asset": "فقط دارایی های تایید شده را مشاهده کنید"
 }

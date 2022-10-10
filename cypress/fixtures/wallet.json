@@ -1,14 +1,14 @@
 {
-  "state": {
-    "wallets": [
-      {
-        "address": "MO6EBOY5NLQPKLN267T7G6YS2XBDR4DESDJW3UOLOFSXFY7T2ZADTYYNXA",
-        "name": "MO6E...YNXA",
-        "balance": 20,
-        "assets": {}
-      }
-    ],
-    "activeWalletAddress": "MO6EBOY5NLQPKLN267T7G6YS2XBDR4DESDJW3UOLOFSXFY7T2ZADTYYNXA"
-  },
-  "version": 3
+    "state": {
+        "wallets": [
+            {
+                "address": "MO6EBOY5NLQPKLN267T7G6YS2XBDR4DESDJW3UOLOFSXFY7T2ZADTYYNXA",
+                "name": "MO6E...YNXA",
+                "balance": 20,
+                "assets": {}
+            }
+        ],
+        "activeWalletAddress": "MO6EBOY5NLQPKLN267T7G6YS2XBDR4DESDJW3UOLOFSXFY7T2ZADTYYNXA"
+    },
+    "version": 3
 }

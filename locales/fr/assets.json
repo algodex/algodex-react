@@ -1,14 +1,14 @@
 {
-  "search": "Rechercher",
-  "pair": "PAIRE",
-  "price": "PRIX",
-  "change": "Variation",
-  "24-hr-change": "Variation 24h",
-  "liquidity": "Liquidité",
-  "loading": "CHARGEMENT...",
-  "back-to-chart": "Retour au Graphique",
-  "description": "Description",
-  "circulating-supply": "Offre en Circulation",
-  "total-supply": "Offre Totale",
-  "view-verified-asset": "Afficher uniquement les actifs vérifiés"
+    "search": "Rechercher",
+    "pair": "PAIRE",
+    "price": "PRIX",
+    "change": "Variation",
+    "24-hr-change": "Variation 24h",
+    "liquidity": "Liquidité",
+    "loading": "CHARGEMENT...",
+    "back-to-chart": "Retour au Graphique",
+    "description": "Description",
+    "circulating-supply": "Offre en Circulation",
+    "total-supply": "Offre Totale",
+    "view-verified-asset": "Afficher uniquement les actifs vérifiés"
 }
