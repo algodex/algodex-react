@@ -1,14 +1,14 @@
 {
-    "search": "Carian",
-    "pair": "PASANGAN",
-    "price": "HARGA",
-    "change": "Perubahan",
-    "24-hr-change": "Perubahan 24H",
-    "liquidity": "Kecairan",
-    "loading": "KEMASKINI...",
-    "back-to-chart": "Kembali ke Carta",
-    "description": "Keterangan",
-    "circulating-supply": "Bekalan Teredar",
-    "total-supply": "Jumlah Bekalan",
-    "view-verified-asset": "Lihat Aset Disahkan Sahaja"
+  "search": "Carian",
+  "pair": "PASANGAN",
+  "price": "HARGA",
+  "change": "Perubahan",
+  "24-hr-change": "Perubahan 24H",
+  "liquidity": "Kecairan",
+  "loading": "KEMASKINI...",
+  "back-to-chart": "Kembali ke Carta",
+  "description": "Keterangan",
+  "circulating-supply": "Bekalan Teredar",
+  "total-supply": "Jumlah Bekalan",
+  "view-verified-asset": "Lihat Aset Disahkan Sahaja"
 }

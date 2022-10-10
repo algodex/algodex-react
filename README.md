@@ -24,11 +24,14 @@ Copy and save the secret.
 In a Linux terminal (git-bash on Windows):
 
 create an ~/.npmrc file with the following contents:
+
 ```
 //npm.pkg.github.com/:_authToken=tokensecretgoeshere
 @algodex:registry=https://npm.pkg.github.com/
 ```
+
 or you can use npm login with your token
+
 ```
 $ npm login --scope=@algodex --registry=https://npm.pkg.github.com
 > Username: USERNAME
@@ -75,19 +78,13 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-
 ## How to add additional languages
+
 How to add additional languages:
 
 1. Edit i18n.json to add additional supported locales under key "locales".
-`
-{
-  "locales": ["en", "es"], // < --- add new locales to this array
-   ...
-}
-`
+   `{ "locales": ["en", "es"], // < --- add new locales to this array ... }`
 2. Copy the json files inside locales/en into another folder per locale
 3. JSON files are separated by section mostly
 4. Change the text to language of choice per json file, key names must stay the same
 5. In components/header/index.jsx, update localeToFlags with the appropriate locale key to flag country code. Country codes will display flags according to the react-country-flag library
-

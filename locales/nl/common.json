@@ -14,9 +14,9 @@
   "mobilefooter-TRADE": "Handelen",
   "mobilefooter-ORDERS": "Orders",
   "mobilefooter-WALLET": "Portemonee",
-  "trade-history":"handelshistorie",
-  "order-book":"bestelboek",
-  "place-maker-description":"Afgiv en købs-/salgsordre for at tilføje likviditet til dette handelspar",
-  "connect-wallet-liquidity":"Tilslut din tegnebog og afgiv en ordre for at tilføje likviditet til dette handelspar",
-  "place-first":"Afgiv den første grænseordre for"
+  "trade-history": "handelshistorie",
+  "order-book": "bestelboek",
+  "place-maker-description": "Afgiv en købs-/salgsordre for at tilføje likviditet til dette handelspar",
+  "connect-wallet-liquidity": "Tilslut din tegnebog og afgiv en ordre for at tilføje likviditet til dette handelspar",
+  "place-first": "Afgiv den første grænseordre for"
 }

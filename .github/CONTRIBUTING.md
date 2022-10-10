@@ -10,11 +10,14 @@ Copy and save the secret.
 In a Linux terminal (git-bash on Windows):
 
 create an ~/.npmrc file with the following contents:
+
 ```
 //npm.pkg.github.com/:_authToken=tokensecretgoeshere
 @algodex:registry=https://npm.pkg.github.com/
 ```
+
 or you can use npm login with your token
+
 ```
 $ npm login --scope=@algodex --registry=https://npm.pkg.github.com
 > Username: USERNAME

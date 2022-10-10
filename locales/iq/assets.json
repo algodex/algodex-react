@@ -1,14 +1,14 @@
 {
-    "search": "گەڕان",
-    "pair": "نرخ",
-    "price": "نرخ",
-    "change": "گۆڕان",
-    "24-hr-change": "گۆڕان لە ماوەی ٢٤ کاتژمێر",
-    "liquidity": "liquidity",
-    "loading": "بارکردن",
-    "back-to-chart": "گەرانەوە بۆ چارت",
-    "description": "Terîf",
-    "circulating-supply": "Circulating Supply",
-    "total-supply": "Tevahiya Pêşkêşiya",
-    "view-verified-asset": "عرض الأصول التي تم التحقق منها فقط"
+  "search": "گەڕان",
+  "pair": "نرخ",
+  "price": "نرخ",
+  "change": "گۆڕان",
+  "24-hr-change": "گۆڕان لە ماوەی ٢٤ کاتژمێر",
+  "liquidity": "liquidity",
+  "loading": "بارکردن",
+  "back-to-chart": "گەرانەوە بۆ چارت",
+  "description": "Terîf",
+  "circulating-supply": "Circulating Supply",
+  "total-supply": "Tevahiya Pêşkêşiya",
+  "view-verified-asset": "عرض الأصول التي تم التحقق منها فقط"
 }

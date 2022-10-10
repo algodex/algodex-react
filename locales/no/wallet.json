@@ -5,6 +5,6 @@
   "balance": "BALANSERE",
   "start-by": "Start med å koble til en Algorand Wallet ved å bruke knappen i overskriften",
   "once-connected": "Når du har koblet til en lommebok, kan du begynne å handle og vil se dine tilkoblede lommebøker her",
-  "copy-success":"Kopierte lommebokadressen til utklippstavlen!",
-  "copy-fail":"Kunne ikke kopiere lommebokadressen til utklippstavlen"
+  "copy-success": "Kopierte lommebokadressen til utklippstavlen!",
+  "copy-fail": "Kunne ikke kopiere lommebokadressen til utklippstavlen"
 }

@@ -1,5 +1,5 @@
 ---
-name: 🎨 Design New Feature 
+name: 🎨 Design New Feature
 about: Design a new feature(🎨) for the project
 title: '🎨 Feature: '
 labels: 'design'

@@ -2,7 +2,7 @@
   "A Decentralized": "กระจายอำนาจ",
   "Marketplace": "ตลาดกลาง",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex เป็นตลาดที่มีการกระจายอำนาจสูงโดยมีคำสั่งซื้อทั้งหมดบนบล็อกเชนของ Algorand เอง",
-  "NOTE":"บันทึก",
+  "NOTE": "บันทึก",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "ผู้ใช้ในสหรัฐอเมริกาและแคนาดาถูกจำกัดไม่ให้ซื้อขายสินทรัพย์ Mainnet บางส่วน Testnet ยังมีให้สำหรับทุกคนที่ลองใช้แพลตฟอร์มที่",
   "blog": "บล็อก",
   "View More Posts": "ดูกระทู้เพิ่มเติม",
@@ -37,6 +37,6 @@
   "Algodex rewards and fee system": "ระบบรางวัลและค่าธรรมเนียมของ Algodex",
   "Launch of trading bot for Algodex": "เปิดตัวบอทซื้อขายสำหรับ Algodex",
   "Launch of Algodex NFT marketplace": "เปิดตัวตลาด Algodex NFT",
-  "Launch of trading SDK for Algodex":"เปิดตัว SDK การซื้อขายสำหรับ Algodex",
-  "launch app":"เปิดแอพ"
+  "Launch of trading SDK for Algodex": "เปิดตัว SDK การซื้อขายสำหรับ Algodex",
+  "launch app": "เปิดแอพ"
 }

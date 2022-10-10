@@ -2,7 +2,7 @@
   "A Decentralized": "탈중앙화",
   "Marketplace": "시장",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex는 Algorand 블록체인 자체에 완전히 오더북이 있는 고도로 분산된 시장입니다.",
-  "NOTE":"노트",
+  "NOTE": "노트",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "현재 미국 및 캐나다 사용자는 일부 메인넷 자산을 거래할 수 없습니다. 테스트넷은 플랫폼을 시도하는 모든 사람도 사용할 수 있습니다.",
   "blog": "블로그",
   "View More Posts": "더 많은 게시물 보기",
@@ -37,6 +37,6 @@
   "Algodex rewards and fee system": "Algodex 보상 및 수수료 시스템",
   "Launch of trading bot for Algodex": "알고덱스 트레이딩 봇 런칭",
   "Launch of Algodex NFT marketplace": "Algodex NFT 마켓플레이스 출시",
-  "Launch of trading SDK for Algodex":"Algodex용 트레이딩 SDK 출시",
-  "launch app":"앱 실행"
+  "Launch of trading SDK for Algodex": "Algodex용 트레이딩 SDK 출시",
+  "launch app": "앱 실행"
 }

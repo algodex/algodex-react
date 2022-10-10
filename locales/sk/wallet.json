@@ -5,6 +5,6 @@
   "balance": "Zostatok",
   "start-by": "Začnite pripojením Algorand Wallet pomocou tlačidla v hlavičke",
   "once-connected": "Po pripojení peňaženky môžete začať obchodovať a tu uvidíte svoje pripojené peňaženky",
-  "copy-success":"Adresa peňaženky bola skopírovaná do schránky!",
-  "copy-fail":"Nepodarilo sa skopírovať adresu peňaženky do schránky"
+  "copy-success": "Adresa peňaženky bola skopírovaná do schránky!",
+  "copy-fail": "Nepodarilo sa skopírovať adresu peňaženky do schránky"
 }

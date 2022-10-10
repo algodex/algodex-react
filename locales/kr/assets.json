@@ -1,14 +1,14 @@
 {
-    "search": "검색",
-    "pair": "거래 쌍",
-    "price": "가격",
-    "change": "변동률",
-    "24-hr-change": "24시간 변동률",
-    "liquidity": "유동성",
-    "loading": "로딩 중..",
-    "back-to-chart": "차트로 돌아가기",
-    "description": "설명",
-    "circulating-supply": "유통 공급량",
-    "total-supply": "총 공급량",
-    "view-verified-asset": "확인된 자산만 보기"
+  "search": "검색",
+  "pair": "거래 쌍",
+  "price": "가격",
+  "change": "변동률",
+  "24-hr-change": "24시간 변동률",
+  "liquidity": "유동성",
+  "loading": "로딩 중..",
+  "back-to-chart": "차트로 돌아가기",
+  "description": "설명",
+  "circulating-supply": "유통 공급량",
+  "total-supply": "총 공급량",
+  "view-verified-asset": "확인된 자산만 보기"
 }
