@@ -57,7 +57,9 @@ let api
  */
 function makeApi() {
   if (typeof api === 'undefined') {
-    api = new AlgodexApi(config)
+    const configEnv =
+      process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
+    api = new AlgodexApi({ config: configEnv })
   }
   return api
 }
