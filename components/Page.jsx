@@ -1,9 +1,8 @@
-import React from 'react'
-
 import Head from 'next/head'
 import Header from '@/components/Nav/Header'
 import NetworkHandler from '@/components/Nav/NetworkHandler'
 import PropTypes from 'prop-types'
+import React from 'react'
 import styled from '@emotion/styled'
 import theme from '../theme/index'
 

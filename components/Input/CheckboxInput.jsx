@@ -14,6 +14,7 @@ const CheckboxInput = ({ isChecked, onChange, classProps }) => {
       type="checkbox"
       checked={isChecked}
       onChange={onChange}
+      data-testid="checkbox"
       className={`${classProps} ${
         !isChecked ? 'appearance-none' : ''
       } cursor-pointer border-solid border-3 border-gray-700 w-3.5 h-3.5 checked:bg-blue-600 checked:border-transparent`}

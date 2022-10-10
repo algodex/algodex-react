@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react'
 import { ReactSVG } from 'react-svg'
 import Spinner from '../Spinner'
 import styled from '@emotion/styled'
-import { submitHubspotForm } from '@/services/algodex'
+import { submitHubspotForm } from '@/services/cms'
 import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -159,34 +159,34 @@ export const AboutFooter = () => {
           </div>
           <div className="col-span-1">
             <Title className="mb-6">{t('RESOURCES')}</Title>
-            <FooterLinks target="_blanc" href="https://about.algodex.com/disclaimers/">
+            <FooterLinks target="_blank" href="https://about.algodex.com/disclaimers/">
               {t('disclaimers')}
             </FooterLinks>
 
-            <FooterLinks target="_blanc" href="https://docs.algodex.com/">
+            <FooterLinks target="_blank" href="https://docs.algodex.com/">
               {t('docs')}
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://github.com/algodex/">
+            <FooterLinks target="_blank" href="https://github.com/algodex/">
               Github
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://app.algodex.com/support">
+            <FooterLinks target="_blank" href="/support" matches={/^\/support/}>
               {t('support')}
             </FooterLinks>
 
             <FooterLinks
-              target="_blanc"
+              target="_blank"
               href="https://github.com/algodex/algodex-public-documents/blob/master/Algodex%20Whitepaper%201.0.pdf"
             >
               {t('white paper')}
             </FooterLinks>
             <FooterLinks
-              target="_blanc"
+              target="_blank"
               href="https://github.com/algodex/algodex-public-documents/blob/master/Algodex%20Tokenomics.pdf"
             >
               {t('tokenomics')}
             </FooterLinks>
             <FooterLinks
-              target="_blanc"
+              target="_blank"
               href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
               className="leading-5"
             >

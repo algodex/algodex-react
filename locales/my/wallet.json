@@ -3,8 +3,8 @@
   "connect-another-wallet-button": " Sambung Wallet Lain",
   "wallet": "Wallet",
   "balance": "BAKI",
-  "start-by": "  Mula sambungan wallet Algo  ",
-  "once-connected": "Setelah dihubungkan dengan MyAlgo wallet anda boleh mula berdagang ",
+  "start-by": "Mulailah dengan menghubungkan Dompet Algorand menggunakan tombol di header",
+  "once-connected": "Setelah Anda menghubungkan dompet, Anda dapat mulai berdagang dan akan melihat dompet Anda yang terhubung di sini",
   "copy-success":"Salin alamat dompet ke papan klip!",
   "copy-fail":"Gagal menyalin alamat dompet ke papan klip"
 }

@@ -1,15 +1,16 @@
 import { useRef, useState } from 'react'
 
-import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
+import NavButton from '@/components/Button/NavButton'
 import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -30,6 +31,7 @@ const ContentSection = styled.section`
   position: relative;
   height: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const AssetsSection = styled.section`
@@ -92,7 +94,7 @@ const MobileMenu = styled.nav`
   z-index: 99;
 `
 
-const MobileMenuButton = styled(Button)`
+const MobileMenuButton = styled(NavButton)`
   height: 100%;
   width: 100%;
   // background-color: ${({ theme }) => theme.colors.gray['800']};
@@ -125,6 +127,7 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
+  const { wallet } = useAlgodex()
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**
@@ -137,6 +140,7 @@ function MainLayout({ asset, children }) {
    * This is only used to switch to MobileMenu Chart view
    * when the Next/Router navigates to a shallow route
    */
+
   useEvent('clicked', (data) => {
     if (data === 'asset') {
       setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)
@@ -148,7 +152,6 @@ function MainLayout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
-  // console.log(isMobile)
   return (
     <MainWrapper>
       <Main ref={gridRef}>
@@ -159,7 +162,7 @@ function MainLayout({ asset, children }) {
         )}
         {activeMobile === TABS.TRADE && (
           <PlaceOrderSection>
-            <PlaceOrder asset={asset} />
+            <PlaceOrder wallet={wallet} asset={asset} />
           </PlaceOrderSection>
         )}
         {activeMobile === TABS.CHART && (
@@ -189,8 +192,8 @@ function MainLayout({ asset, children }) {
         )}
 
         <MobileMenu>
-          <ul>
-            <li>
+          <ul className="mt-0 p-0 list-none">
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-CHART').length}
                 type="button"
@@ -201,7 +204,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-BOOK').length}
                 type="button"
@@ -212,7 +215,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-TRADE').length}
                 type="button"
@@ -223,7 +226,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
@@ -242,7 +245,7 @@ function MainLayout({ asset, children }) {
               </MobileMenuButton>
             </li>
             */}
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 type="button"
                 characterLength={t('mobilefooter-WALLET').length}

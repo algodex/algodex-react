@@ -32,6 +32,7 @@ module.exports = {
       "@/components": path.resolve(__dirname, "../components"),
       "@/hooks": path.resolve(__dirname, "../hooks"),
       "@/store": path.resolve(__dirname, "../store"),
+      "@/theme": path.resolve(__dirname, "../theme"),
       "@/services": path.resolve(__dirname, "../services"),
       "@/utils": path.resolve(__dirname, "../utils"),
       "@emotion/core": getPackageDir("@emotion/react"),

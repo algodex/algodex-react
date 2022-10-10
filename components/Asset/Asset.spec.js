@@ -3,6 +3,8 @@ import React from 'react'
 import { AssetData as asset } from '../../spec/Asset'
 import { render } from 'test/test-utils'
 
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
+
 const ASA_NAME = 'asset-info-asa-name'
 const ASA_DESC = 'asset-info-desc'
 const ASA_CIRC_SUPPLY = 'asset-info-circ-supply'

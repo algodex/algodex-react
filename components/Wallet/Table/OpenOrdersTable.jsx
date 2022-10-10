@@ -4,16 +4,18 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
+import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { BrightGraySpan } from '@/components/Typography'
-import OrderService from '@/services/order'
 import PropTypes from 'prop-types'
+import React from 'react'
+import Typography from '@mui/material/Typography'
+import { logInfo } from 'services/logRemote'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
+import { useEvent } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletOrdersQuery } from '@/hooks/withAlgodex'
 
 const OpenOrdersContainer = styled.div`
   display: flex;
@@ -44,15 +46,31 @@ const OrderCancelButton = styled.button`
   color: inherit;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.red['500']};
+    background: ${({ theme }) => theme.palette.blue['700']};
+    color: ${({ theme }) => theme.palette.gray['000']};
   }
 `
 
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  // console.log(_orders, 'orders')
   const [openOrdersData, setOpenOrdersData] = useState(_orders)
+  const { algodex, wallet, setWallet } = useAlgodex()
+  function closeOrder() {
+    return algodex.closeOrder.apply(algodex, arguments)
+  }
+
+  useEvent('signOut', (data) => {
+    if (data.type === 'wallet') {
+      setWallet({
+        ...wallet,
+        connector: {
+          ...wallet.connector,
+          connected: false
+        }
+      })
+    }
+  })
 
   useEffect(() => {
     setOpenOrdersData(_orders)
@@ -68,14 +86,15 @@ export function OpenOrdersTable({ orders: _orders }) {
         const cellData = data[cellIndex]
 
         const {
-          escrowAddress,
           ownerAddress,
-          assetLimitPriceN,
-          assetLimitPriceD,
           assetId,
-          version
+          version,
+          formattedASAAmount,
+          decimals,
+          formattedPrice,
+          appId
         } = cellData.metadata
-        const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
+        // const orderBookEntry = `${assetLimitPriceN}-${assetLimitPriceD}-0-${assetId}`
 
         const updateOrderStatus = (statusMsg) =>
           openOrdersData.map((order, index) =>
@@ -83,22 +102,56 @@ export function OpenOrdersTable({ orders: _orders }) {
           )
 
         setOpenOrdersData(updateOrderStatus('CANCELLING'))
+        let lastToastId = undefined
+        const notifier = (msg) => {
+          if (lastToastId) {
+            toast.dismiss(lastToastId)
+          }
+          lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+        }
 
-        const cancelOrderPromise = OrderService.closeOrder(
-          escrowAddress,
-          ownerAddress,
-          orderBookEntry,
-          version
-        )
+        const orderbookEntry = `${cellData.metadata.assetLimitPriceN}-${cellData.metadata.assetLimitPriceD}-0-${cellData.metadata.assetId}`
+        logInfo('Cancel Wallet Data:', wallet)
+        const _walletConnectionDB = JSON.parse(localStorage.getItem('walletconnect'))
+        logInfo('Cancel Wallet Connect:', _walletConnectionDB)
 
-        toast.promise(cancelOrderPromise, {
-          loading: t('awaiting-confirmation'),
-          success: t('order-cancelled'),
-          error: t('error-cancelling')
-        })
+        const awaitCancelOrder = async () => {
+          try {
+            notifier('Initializing cancel')
+            await closeOrder(
+              {
+                address: ownerAddress,
+                version,
+                price: Number(formattedPrice),
+                amount: Number(formattedASAAmount),
+                total: Number(formattedPrice) * Number(formattedASAAmount),
+                asset: { id: assetId, decimals },
+                assetId,
+                type: cellData.type.toLowerCase(),
+                appId,
+                contract: {
+                  creator: ownerAddress,
+                  escrow: cellData.metadata.escrowAddress,
+                  N: cellData.metadata.assetLimitPriceN,
+                  D: cellData.metadata.assetLimitPriceD,
+                  entry: orderbookEntry
+                },
+                wallet
+              },
+              notifier
+            )
 
+            toast.success(t('order-cancelled'), {
+              id: lastToastId,
+              duration: 3000
+            })
+          } catch (e) {
+            toast.error(`${t('error-cancelling')} ${e}`, { id: lastToastId, duration: 5000 })
+          }
+        }
         try {
-          const result = await cancelOrderPromise
+          // const result = await cancelOrderPromise
+          const result = awaitCancelOrder()
           setOpenOrdersData(updateOrderStatus('CANCELLED'))
           console.log('Order successfully cancelled', result)
         } catch (err) {
@@ -108,12 +161,12 @@ export function OpenOrdersTable({ orders: _orders }) {
       }
 
       return (
-        <BrightGraySpan data-testid="cancel-order-button">
-          <OrderCancelButton onClick={handleCancelOrder}>Cancel</OrderCancelButton>
-        </BrightGraySpan>
+        <Typography variant="body_small" color="gray.000" data-testid="cancel-order-button">
+          <OrderCancelButton onClick={handleCancelOrder}>{t('cancel')}</OrderCancelButton>
+        </Typography>
       )
     },
-    [t, openOrdersData]
+    [t, openOrdersData, wallet]
   )
 
   const columns = useMemo(
@@ -152,7 +205,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: DefaultCell
       },
       {
-        Header: '',
+        Header: t('cancel-all'),
         accessor: 'cancel',
         Cell: OrderCancelCell,
         disableSortBy: true

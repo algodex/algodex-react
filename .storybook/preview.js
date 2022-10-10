@@ -14,12 +14,18 @@ import assetsEN from '../locales/en/assets.json'
 import placeOrderEN from '../locales/en/place-order.json'
 import walletEN from '../locales/en/wallet.json'
 import chartEN from '../locales/en/chart.json'
-
+import { Provider } from '@algodex/algodex-hooks'
 const queryClient = new QueryClient()
 import * as NextImage from "next/image";
 import {INITIAL_VIEWPORTS} from '@storybook/addon-viewport';
+import AlgodexApi from "@algodex/algodex-sdk";
 
 const OriginalNextImage = NextImage.default;
+/**
+ *
+ * @type {APIProperties}
+ */
+const properties = require('../config.json')
 
 Object.defineProperty(NextImage, "default", {
     configurable: true,
@@ -33,61 +39,27 @@ Object.defineProperty(NextImage, "default", {
     ),
 });
 const base = css`
-  html, body, div, span, applet, object, iframe,
-  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-  a, abbr, acronym, address, big, cite, code,
-  del, dfn, em, img, ins, kbd, q, s, samp,
-  small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
-  dl, dt, dd, ol, ul, li,
-  fieldset, form, label, legend,
-  table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, canvas, details, embed, 
-  figure, figcaption, footer, header, hgroup, 
-  menu, nav, output, ruby, section, summary,
-  time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+  #__next,
+  body,
+  html {
+    height: 100%;
   }
-  /* HTML5 display-role reset for older browsers */
-  article, aside, details, figcaption, figure, 
-  footer, header, hgroup, menu, nav, section {
-    display: block;
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 5px;
   }
-  body {
-    line-height: 1;
+  ::-webkit-scrollbar-track {
+    background: ${theme.palette.gray[900]};
   }
-  ol, ul {
-    list-style: none;
+  ::-webkit-scrollbar-thumb {
+    background: ${theme.palette.gray[600]};
+    border-radius: 3px;
   }
-  blockquote, q {
-    quotes: none;
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${theme.palette.gray[500]};
   }
-  blockquote:before, blockquote:after,
-  q:before, q:after {
-    content: '';
-    content: none;
-  }
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-
-  html,
-  body {
-    box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    /* background: ${theme.palette.background.dark}; */
-    color: ${theme.palette.gray['400']};
-  }
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
+  ::-webkit-scrollbar-corner {
+    background: ${theme.palette.gray[700]};
   }
 `
 
@@ -108,11 +80,24 @@ export const parameters = {
         Provider: RouterContext.Provider
     }
 }
+let api
+
+/**
+ *
+ * @return {AlgodexApi}
+ */
+function makeApi() {
+    if (typeof api === 'undefined') {
+        api = new AlgodexApi(properties)
+    }
+    return api
+}
 
 export const decorators = [
     jsxDecorator,
     (Story) => (
         <div>
+            <Provider dex={makeApi()}>
             <ThemeProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
                     <I18nProvider
@@ -130,6 +115,7 @@ export const decorators = [
                     </I18nProvider>
                 </QueryClientProvider>
             </ThemeProvider>
+            </Provider>
         </div>
     ),
     (Story) => (
