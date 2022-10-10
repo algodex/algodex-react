@@ -11,9 +11,6 @@
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@algodex/algodex-hooks/-/algodex-hooks-1.5.4.tgz#b353497e6e0a97b0400121f2494dded51b8f78b2"
   integrity sha512-vuRL0tkl0p2OQ1NHcLvwAdKhbIQBEvTImDys/3wd9lxX0xOQq0vGaucPB2+HLxjqVyU6Bzc2fRUuv08deOUhog==
-  dependencies:
-    lodash "^4.17.21"
-    millify "^4.0.0"
 
 "@algodex/algodex-sdk@^2.0.9":
   version "2.0.9"
