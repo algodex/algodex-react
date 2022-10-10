@@ -19,7 +19,7 @@
     "badge": "jest && jest-coverage-badges output ./assets",
     "jest": "jest --watch",
     "lint": "eslint --fix .",
-    "format": "prettier --write './**/*.{js,jsx,css,md,json}' --config ./.prettierrc.json",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx}' --config ./.prettierrc.json",
     "storybook": "cross-env NODE_ENV=test start-storybook -p 6006 --no-dll -s ./public",
     "build-storybook": "build-storybook",
     "cypress": "cypress open",
