@@ -57,7 +57,7 @@ describe('Checks if order book renders and is visible on Mobile view on Differen
         cy.visit('/en/about')
         clear()
         cy.visit('/en/trade/15322902')
-        cy.get('[data-testid=modal-accept]')
+        cy.get('[data-testid=modal-accept]', { timeout: 50000 })
           .contains('ACCEPT')
           .scrollIntoView()
           .should('be.visible')
