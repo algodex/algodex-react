@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // This file sets a custom webpack configuration to use your Next.js app
 // with Sentry.
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
@@ -11,15 +12,22 @@ const getDefaultAsset = () => {
 }
 
 const PUBLIC_API = process.env.NEXT_PUBLIC_API
+const ALGODEX_API_V2 = process.env.ALGODEX_API_V2
 
 if (typeof PUBLIC_API === 'undefined') throw new Error('Must have Public API!')
+if (typeof ALGODEX_API_V2 === 'undefined') throw new Error('Must have ALGODEX_API_V2!')
 
 const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
 const nextPWA = require('next-pwa')
-
+console.log({ ALGODEX_API_V2 })
 const moduleExports = nextPWA(
   nextTranslate({
+    // experimental: {
+    //   // this will allow nextjs to resolve files (js, ts, css)
+    //   // outside packages/app directory.
+    //   externalDir: true
+    // },
     reactStrictMode: true,
     pwa: {
       dest: 'public',
@@ -43,6 +51,10 @@ const moduleExports = nextPWA(
           {
             source: '/support/ticket',
             destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+          },
+          {
+            source: '/api/v2/:path*',
+            destination: `${ALGODEX_API_V2}/:path*`
           }
         ]
       }

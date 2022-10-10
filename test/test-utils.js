@@ -14,6 +14,44 @@ import placeOrderEN from '../locales/en/place-order.json'
 import { render } from '@testing-library/react'
 import theme from '../theme'
 import walletEN from '../locales/en/wallet.json'
+import { WalletsProvider } from '@/hooks/useWallets'
+import { Provider } from '@algodex/algodex-hooks'
+
+import AlgodexApi from '@algodex/algodex-sdk'
+
+const config = {
+  config: {
+    algod: {
+      uri: 'https://node.testnet.algoexplorerapi.io',
+      token: ''
+    },
+    indexer: {
+      uri: 'https://algoindexer.testnet.algoexplorerapi.io',
+      token: '',
+      port: 443
+    },
+    explorer: {
+      uri: 'https://indexer.testnet.algoexplorerapi.io',
+      port: ''
+    },
+    dexd: {
+      uri: 'https://testnet.algodex.com/algodex-backend',
+      token: ''
+    },
+    tinyman: {
+      uri: 'https://testnet.analytics.tinyman.org',
+      token: ''
+    }
+  }
+}
+let api = new AlgodexApi(config)
+
+function makeApi() {
+  if (typeof api === 'undefined') {
+    api = new AlgodexApi(config)
+  }
+  return api
+}
 
 const queryClient = new QueryClient()
 const clientSideEmotionCache = createEmotionCache()
@@ -34,7 +72,9 @@ const Providers = ({ children }) => (
             wallet: walletEN
           }}
         >
-          {children}
+          <WalletsProvider>
+            <Provider dex={makeApi()}>{children}</Provider>
+          </WalletsProvider>
         </I18nProvider>
       </QueryClientProvider>
     </ThemeProvider>

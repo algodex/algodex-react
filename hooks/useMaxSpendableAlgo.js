@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import Big from 'big.js'
-import { useStorePersisted } from 'store/use-store'
-import { useWalletMinBalanceQuery } from 'hooks/useAlgodex'
+import { useAlgodex } from '@algodex/algodex-hooks'
+import { useWalletMinBalanceQuery } from '@algodex/algodex-hooks'
 
 export const useMaxSpendableAlgo = () => {
-  const wallets = useStorePersisted((state) => state.wallets)
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const activeWallet = wallets.find((wallet) => wallet.address === activeWalletAddress)
-  const algoBalance = activeWallet?.balance || 0
+  const { wallet } = useAlgodex()
+  const algoBalance = wallet?.amount || 0
   const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
 
   const {
@@ -16,7 +14,7 @@ export const useMaxSpendableAlgo = () => {
     isLoading: isWalletBalanceLoading,
     isError: isWalletBalanceError
   } = useWalletMinBalanceQuery({
-    wallet: wallets.find((wallet) => wallet.address === activeWalletAddress)
+    wallet
   })
 
   useEffect(() => {

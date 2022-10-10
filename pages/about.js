@@ -1,14 +1,15 @@
+import { AboutFooter } from '@/components/About/Footer'
+import BlogPreview from '@/components/About/blog'
+import { FAQSection } from '@/components/About/FAQ'
+import { Features } from '@/components/About/Features'
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
 import { Hero } from '@/components/About/Hero'
-import { AboutFooter } from '@/components/About/Footer'
 import { PartnerShip } from '@/components/About/PartnerShip'
-import { Features } from '@/components/About/Features'
-import { RoadMap } from '@/components/About/RoadMap'
-import BlogPreview from '@/components/About/blog'
-import { fetchBlogPosts } from '@/services/algodex'
 import PropTypes from 'prop-types'
-import { FAQSection } from '@/components/About/FAQ'
+import { RoadMap } from '@/components/About/RoadMap'
+import { fetchBlogPosts } from '@/services/cms'
+import { useEffect } from 'react'
 
 /**
  * About Page

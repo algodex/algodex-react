@@ -8,7 +8,7 @@ import TextInput from './TextInput'
 import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import useDebounce from 'hooks/useDebounce'
+import useDebounce from '@/hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
@@ -83,7 +83,11 @@ export const Search = forwardRef(
 
     return (
       <div>
-        <Container isActive={isActive} className="flex items-center ml-4 mr-4 mt-2 mb-2">
+        <Container
+          data-testid="asa-table-search-input"
+          isActive={isActive}
+          className="flex items-center ml-4 mr-4 mt-2 mb-2"
+        >
           <Icon
             path={mdiMagnify}
             className="ml-2"
@@ -97,7 +101,6 @@ export const Search = forwardRef(
             className="focus:outline-none"
             ref={ref}
             value={value}
-            data-testid="asa-table-search-input"
             onKeyDown={handleKeyDown}
             {...props}
           />
@@ -197,6 +200,7 @@ export function SearchInput(props) {
       placeholder={`${t('search')}`}
       isListingVerifiedAssets={isListingVerifiedAssets}
       setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+      data-testid="search-input"
     />
   )
 }

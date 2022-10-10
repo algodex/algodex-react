@@ -1,12 +1,13 @@
+import { useCallback, useMemo } from 'react'
+
 import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
-import { floatToFixed } from 'services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import { useCallback } from 'react'
 import { useUserStore } from 'store'
 
 export const Container = styled.div`
@@ -36,6 +37,8 @@ export const TradingPair = styled.h3`
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
   font-weight: 600;
+  margin-block-start: 0;
+  margin-block-end: 0;
   color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
 
@@ -74,6 +77,11 @@ export const OhlcList = styled.dl`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  dd {
+    margin-inline-start: 0;
+  }
 `
 
 export const OhlcItem = styled.div`
@@ -153,6 +161,8 @@ export const VolumeContainer = styled.dl`
   display: flex;
   align-items: center;
   margin-left: 1.75rem;
+  margin-block-start: 0;
+  margin-block-end: 0;
 `
 
 export const Volume = styled.div`
@@ -170,6 +180,7 @@ export const Volume = styled.div`
 
   dd {
     color: ${({ theme }) => theme.palette.gray[100]};
+    margin-inline-start: 0px;
   }
 
   @media (min-width: 1024px) {
@@ -190,10 +201,11 @@ function ChartOverlay(props) {
     ? new Big(asset.price_info?.price24Change)
     : new Big(0)
 
-  const openCloseChange = () => {
+  const openCloseChange = useMemo(() => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
-  }
+  }, [asset, changeAmt])
+
   const onClick = useCallback(() => {
     setShowAssetInfo(true)
   }, [asset])
@@ -237,7 +249,7 @@ function ChartOverlay(props) {
             <dd data-testid="close24hr">{ohlc.close}</dd>
           </OhlcItem>
           <OhlcItem value={changeAmt}>
-            <dd data-testid="dailyChange">{openCloseChange()}</dd>
+            <dd data-testid="dailyChange">{openCloseChange}</dd>
           </OhlcItem>
         </OhlcList>
       </Header>

@@ -47,6 +47,8 @@ const ToggleBtn = styled(Button)`
   margin: 0;
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
+  min-width: 48px;
+  line-height: 1;
   background-color: ${({ theme }) => theme.palette.gray['900']};
   label {
     cursor: pointer;
@@ -119,7 +121,7 @@ function ChartSettings(props) {
           checked={i === interval}
           onChange={onChange}
         />
-        <ToggleBtn size="small">
+        <ToggleBtn variant="default" size="small">
           <label htmlFor={`time-${i}`}>{i}</label>
         </ToggleBtn>
       </Fragment>
@@ -137,7 +139,7 @@ function ChartSettings(props) {
           checked={mode === 'candle'}
           onChange={onChange}
         />
-        <ToggleBtn size="small">
+        <ToggleBtn variant="default" size="small">
           <label htmlFor="mode-candle">{t('candle')}</label>
         </ToggleBtn>
         <ToggleInput
@@ -148,7 +150,7 @@ function ChartSettings(props) {
           checked={mode === 'area'}
           onChange={onChange}
         />
-        <ToggleBtn size="small">
+        <ToggleBtn variant="default" size="small">
           <label htmlFor="mode-area">{t('area')}</label>
         </ToggleBtn>
       </ToggleWrapper>
