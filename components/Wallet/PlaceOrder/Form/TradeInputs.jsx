@@ -105,6 +105,7 @@ export const TradeInputs = ({
         }}
         name="price"
         type="number"
+        min="0"
         readOnly={order.execution === 'market'}
         pattern="\d*"
         disabled={order.execution === 'market'}
@@ -113,7 +114,13 @@ export const TradeInputs = ({
         inputProps={{
           decimals: 6,
           min: '0',
-          step: '0.000001'
+          step: '0.000001',
+          placeholder: '0.00',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         startAdornment={
           <MUIInputAdornment position="start">
@@ -140,6 +147,12 @@ export const TradeInputs = ({
         type="number"
         pattern="\d*"
         name="amount"
+        inputProps={{
+          decimals: asset.decimals,
+          min: '0',
+          step: '0.000001',
+          placeholder: '0.00'
+        }}
         sx={{
           backgroundColor: theme.colors.gray['900'],
           border: 2,
@@ -177,6 +190,7 @@ export const TradeInputs = ({
       />
       <OutlinedInput
         id="total"
+        min="0"
         name="total"
         type="number"
         value={order.total}
@@ -184,6 +198,13 @@ export const TradeInputs = ({
         disabled
         sx={{
           backgroundColor: theme.colors.gray['700']
+        }}
+        inputProps={{
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         startAdornment={
           <MUIInputAdornment position="start">

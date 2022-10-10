@@ -464,13 +464,11 @@ export function OrderBook({ asset, orders, components }) {
             </AggregatorSelector>
           </Stack>
           <Header className="mt-4">
-            <TablePriceHeader />
+            <TablePriceHeader title="price" textAlign="left" />
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </Typography>
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('total')}
-            </Typography>
+            <TablePriceHeader title="total" textAlign="right" />
           </Header>
         </Box>
 

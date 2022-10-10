@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
+
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
@@ -15,8 +17,8 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
   // Instance reference
   const myAlgoWallet = useRef()
 
-  const disconnect = () => {
-    onDisconnect()
+  const disconnect = (wallet) => {
+    onDisconnect([wallet.address])
   }
   const connect = async () => {
     try {
@@ -36,7 +38,6 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
         acct.connector.connected = true
         return acct
       })
-      console.debug('Setting Address form myAlgoConnect', _addresses)
       // Set Addresses
       onConnect(_addresses)
     } catch (e) {
@@ -44,6 +45,7 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
     }
   }
   useEffect(() => {
+    console.log('Initialize MyAlgo Connect')
     const initMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
       // because it uses the window object

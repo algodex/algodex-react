@@ -1,11 +1,10 @@
-import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
-
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -88,16 +87,13 @@ export const WalletOrdersSection = styled.section`
 `
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
-  const { wallet: initialState, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
-  // const isConnected = typeof wallet?.address !== 'undefined'
+  const { wallet, isConnected } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
   const OPEN_ORDERS_PANEL = 'open-orders'
   const ORDER_HISTORY_PANEL = 'order-history'
   const ASSETS_PANEL = 'assets'
 
   const renderPanel = (panelName) => {
-    // if (!isSignedIn) return <div></div>
     if (!isConnected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
@@ -138,7 +134,6 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
           </Tab>
         </Header>
         <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper>
-        {/* {renderPanel(selectedPanel)} */}
       </Container>
     </Section>
   )

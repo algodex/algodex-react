@@ -11,7 +11,8 @@ import theme from 'theme'
 import useUserStore from 'store/use-user-state'
 // import useWalletConnect from '@/hooks/useWalletConnect'
 // import useUserStore from 'store/use-user-state'
-import { useWallets } from '@algodex/algodex-hooks'
+// import { useWallets } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
 
 const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)

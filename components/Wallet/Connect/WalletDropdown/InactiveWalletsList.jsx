@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
 
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
@@ -9,10 +8,12 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { find } from 'lodash'
 import theme from 'theme'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEffect } from 'react'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 // import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
+import useWallets from '@/hooks/useWallets'
 
 // import useWalletConnect from '@/hooks/useWalletConnect'
 
@@ -20,15 +21,12 @@ import useUserStore from 'store/use-user-state'
 
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = useUserStore((state) => state.activeNetwork)
-  const { wallet, setWallet } = useAlgodex()
-  const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
-  const { addresses } = useWallets()
+  const { wallet: initialState, setWallet } = useAlgodex()
+  const { wallet, addresses, peraDisconnect, myAlgoDisconnect } = useWallets(initialState)
+  // const {  } = useWallets(wallet)
 
   // const { wallet } = useAlgodex()
   wallet
-  // const { addresses } = useWallets()
-  // console.log(addresses, 'addresses updated again')
-
   const isWalletActive = (addr) => {
     return wallet.address === addr
   }
@@ -39,10 +37,6 @@ const InactiveWalletsList = ({ walletsList }) => {
       setWallet(_wallet, { validate: false, merge: true })
     }
   }
-
-  useEffect(() => {
-    console.log(addresses, 'hello')
-  }, [addresses])
 
   const WALLETS_DISCONNECT_MAP = {
     'my-algo-wallet': myAlgoDisconnect,

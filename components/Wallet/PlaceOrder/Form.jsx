@@ -1,23 +1,26 @@
 import { Button, ButtonGroup } from '@mui/material'
+import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
+import Big from 'big.js'
 import Box from '@mui/material/Box'
 import { default as MaterialButton } from '@mui/material/Button'
+import MaterialIcon from '@mdi/react'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Tab from '@/components/Tab'
 import Tabs from '@/components/Tabs'
 import { TradeInputs } from './Form/TradeInputs'
 import Typography from '@mui/material/Typography'
-import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import { mdiAlertCircleOutline } from '@mdi/js'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
 
 export const Form = styled.form`
   ::-webkit-scrollbar {
@@ -26,12 +29,6 @@ export const Form = styled.form`
   }
 `
 
-// function _minDecimalValue(decimals) {
-//   if (typeof decimals !== 'number') {
-//     throw new Error('Must be a valid decimals!')
-//   }
-//   return parseFloat(`0.${new Array(decimals).join('0')}1`)
-// }
 /**
  * # 📝 Place Order Form
  *
@@ -53,11 +50,14 @@ export const Form = styled.form`
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
   const { t } = useTranslation('place-order')
-  const { wallet: initialState, placeOrder, http, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
+  const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false
+  })
+  // const { query } = useRouter()
   const [order, setOrder] = useState({
     type: 'buy',
     price: 0,
@@ -99,8 +99,26 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   useEffect(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-    // }, [orderBook, setSellOrders, asset])
   }, [orderBook, setSellOrders, setBuyOrders, asset])
+
+  const updateInitialState = () => {
+    if (order?.type === 'buy') {
+      setOrder({
+        ...order,
+        price: parseFloat(sellOrders?.length ? sellOrders[sellOrders.length - 1].price : '0.00')
+      })
+    }
+    if (order?.type === 'sell') {
+      setOrder({
+        ...order,
+        price: parseFloat(buyOrders?.length ? buyOrders[0].price : '0.00')
+      })
+    }
+  }
+
+  useEffect(() => {
+    updateInitialState()
+  }, [order.type])
 
   const buttonProps = useMemo(
     () => ({
@@ -123,11 +141,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
+      logInfo(`On sign out : ${data}`)
       setShowForm(false)
     }
   })
   useEvent('signIn', (data) => {
     if (data.type === 'wallet') {
+      throttleLog(`On sign in : ${data}`)
+      console.log(`On sign in : `, data)
       setShowForm(true)
     }
   })
@@ -165,7 +186,31 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return false
   }, [order, wallet])
 
-  // const MICROALGO = 0.000001
+  const MICROALGO = 0.000001
+
+  const isBelowMinOrderAmount = useMemo(() => {
+    if (order.type === 'buy') {
+      return new Big(order.total).lt(0.5)
+    }
+    return new Big(order.total).eq(0)
+  }, [order])
+
+  // const isInvalid = () => {
+  //   return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
+  // }
+
+  // const isBalanceExceeded = () => {
+  //   const maxSpendableAlgo = fromBaseUnits(wallet.amount)
+  //   const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
+  //   if (order.type === 'buy') {
+  //     return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+  //   }
+  //   return new Big(order.amount).gt(asaBalance)
+  // }
+
+  // const isDisabled = isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded()
+  // asset.isGeoBlocked ||
+  // status.submitting
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -207,6 +252,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const handleChange = useCallback(
     (e, _key, _value) => {
+      if (asset.isGeoBlocked) {
+        toast.error('Asset is not available for trading')
+        return
+      }
+
       const key = _key || e.target.name
       let value = _value || e.target.value
 
@@ -232,8 +282,18 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
+      setStatus((prev) => ({ ...prev, submitting: true }))
+      let lastToastId = undefined
       let orderPromise
+      const notifier = (msg) => {
+        if (lastToastId) {
+          toast.dismiss(lastToastId)
+        }
+        lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+      }
       if (typeof onSubmit === 'function') {
+        // What is the purpose of this conditional?
+        // I have checked everywhere in the codebase and no other componenet passes an onSubmit prop to this component
         orderPromise = onSubmit({
           ...order,
           wallet,
@@ -252,33 +312,39 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           { wallet }
         )
 
-        orderPromise = placeOrder(
-          {
-            ...order,
-            address: wallet.address,
-            wallet,
-            asset,
-            appId: order.type === 'sell' ? 22045522 : 22045503,
-            version: 6
-          },
-          { wallet }
-        )
+        const awaitPlaceOrder = async () => {
+          try {
+            notifier('Initializing order')
+            await placeOrder(
+              {
+                ...order,
+                address: wallet.address,
+                wallet,
+                asset,
+                appId: order.type === 'sell' ? 22045522 : 22045503,
+                version: 6
+              },
+              { wallet },
+              notifier
+            )
+            toast.success(t('order-success'), {
+              id: lastToastId,
+              duration: 3000
+            })
+          } catch (e) {
+            toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
+          }
+        }
+
+        awaitPlaceOrder()
       }
 
       // TODO add events
-      toast.promise(orderPromise, {
-        loading: t('awaiting-confirmation'),
-        success: t('order-success'),
-        error: (err) => {
-          console.log(err, 'error occured')
-          if (/PopupOpenError|blocked/.test(err)) {
-            return detectMobileDisplay() ? t('disable-popup-mobile') : t('disable-popup')
-          }
-          return t('error-placing-order')
-        }
+      throttleLog('Submitting order', {
+        wallet
       })
     },
-    [onSubmit, asset, order]
+    [onSubmit, asset, order, wallet]
   )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
@@ -328,7 +394,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'buy' ? 'primary' : 'default'}
               color="buy"
               fullWidth
-              onClick={handleChange}
+              onClick={!asset.isGeoBlocked && handleChange}
               name="type"
               value="buy"
             >
@@ -340,7 +406,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'sell' ? 'sell' : 'default'}
               color="sell"
               fullWidth
-              onClick={handleChange}
+              onClick={!asset.isGeoBlocked && handleChange}
               name="type"
               value="sell"
             >
@@ -351,6 +417,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
+            tabType={order.type === 'buy' ? 'buy' : 'sell'}
             onChange={(e, value) => handleMarketTabSwitching(e, value)}
             value={tabSwitch}
           >
@@ -379,11 +446,29 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            disabled={!hasBalance || order.total === 0}
+            disabled={!hasBalance || order.total === 0 || isBelowMinOrderAmount}
           >
             {buttonProps[order.type || 'buy']?.text}
           </Button>
         </Form>
+      )}
+      {asset.isGeoBlocked && (
+        <div className="px-4 flex">
+          <MaterialIcon
+            path={mdiAlertCircleOutline}
+            title="Verified asset"
+            height="1.5rem"
+            width="4rem"
+            color={'500'}
+          />{' '}
+          &nbsp;
+          <div className="flex flex-col">
+            <p className="text-white text-xs font-medium">
+              This asset is not able to be traded in your country for legal reasons. You can view
+              the chart and book but will not be able to place trades for this asset.
+            </p>
+          </div>
+        </div>
       )}
     </Box>
   )
@@ -401,13 +486,15 @@ PlaceOrderForm.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
-    name: PropTypes.string
+    name: PropTypes.string,
+    isGeoBlocked: PropTypes.bool
   }).isRequired,
   /**
    * Wallet to execute Orders from
    */
   wallet: PropTypes.shape({
     amount: PropTypes.number,
+    address: PropTypes.string,
     assets: PropTypes.arrayOf(PropTypes.shape({ amount: PropTypes.number })),
     connector: PropTypes.object
   }),

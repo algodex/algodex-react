@@ -60,9 +60,8 @@ const ModalContainer = styled.div`
 
 const MobileWalletRender = () => {
   // const { addresses, wallet, signedIn } = useWalletMgmt()
-  const { wallet } = useAlgodex()
+  const { wallet, isConnected } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
-
   // const { addresses, wallet } = useAlgodex()
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
@@ -223,7 +222,7 @@ const MobileWalletRender = () => {
                   variant="contained"
                   onClick={() => setIsConnectingWallet(true)}
                 >
-                  CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+                  CONNECT {isConnected && addresses && addresses.length > 0 && 'ANOTHER'} WALLET
                 </Button>
               </Box>
             </Box>
@@ -248,7 +247,7 @@ const MobileWalletRender = () => {
                   </Typography>
                 </Box>
               )}
-              {addresses && addresses.length > 0 && renderWalletAddresses()}
+              {isConnected && addresses && addresses.length > 0 && renderWalletAddresses()}
             </Box>
           </Box>
           <Box className="flex">

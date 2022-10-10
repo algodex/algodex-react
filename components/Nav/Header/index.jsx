@@ -12,13 +12,17 @@ import {
 } from './header.css'
 
 import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
+import Select from '@mui/material/Select'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
+import { useEvent } from 'hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
@@ -35,10 +39,14 @@ export function Header() {
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
   const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
-  // const { wallet } = useAlgodex()
-  const wallet = useWallets()
-  // console.log(addresses, 'addresses updated')
+  const { wallet } = useWallets()
   const isMobile = useMobileDetect()
+
+  useEvent('connecting-wallet', (data) => {
+    if (data.isOpen === false) {
+      setOpenWalletConnectDropdown(false)
+    }
+  })
 
   /**
    * Route to other network
@@ -69,7 +77,7 @@ export function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown
+      {/* <NetworkDropdown
         data-testid="header-network-dropdown-element"
         className="font-bold"
         value={activeNetwork}
@@ -81,7 +89,54 @@ export function Header() {
         <NetworkDropdownOption value="mainnet" enableLinks={ENABLE_NETWORK_SELECTION}>
           MAINNET
         </NetworkDropdownOption>
-      </NetworkDropdown>
+      </NetworkDropdown> */}
+      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <Select
+          variant="filled"
+          data-testid="header-network-dropdown-element"
+          labelId="demo-select-small"
+          id="demo-select-small"
+          value={activeNetwork}
+          onChange={(e) => handleNetworkChangeFn(e.target.value)}
+          sx={{
+            color: activeNetwork == 'mainnet' ? 'blue.500' : 'green.500',
+            borderRadius: '3px',
+            border: 0,
+            outline: '2px solid',
+            padding: '0.3rem',
+            fontSize: '14px',
+            fontWeight: 'bolder',
+            '& .MuiSelect-icon': {
+              fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
+              color: `unset !important`
+            }
+          }}
+          inputProps={{
+            sx: {
+              padding: '0.3rem',
+              fontSize: '14px',
+              fontWeight: 'bolder'
+            }
+          }}
+        >
+          <MenuItem
+            sx={{
+              color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
+            }}
+            value="testnet"
+          >
+            TESTNET
+          </MenuItem>
+          <MenuItem
+            sx={{
+              color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
+            }}
+            value="mainnet"
+          >
+            MAINNET
+          </MenuItem>
+        </Select>
+      </FormControl>
       <Navigation data-testid="header-navigation-element">
         <NavActiveLink href="/about" matches={/^\/about/}>
           <NavTextLg>{t('header-about')}</NavTextLg>
@@ -132,11 +187,13 @@ export function Header() {
         </NavIcon> */}
         {!isMobile && (
           <Button
-            onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
+            onClick={() => {
+              setOpenWalletConnectDropdown(!openWalletConnectDropdown)
+            }}
             className="font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
-            {wallet && wallet?.address
+            {wallet && wallet?.connector?.connected && wallet?.address
               ? `${truncatedWalletAddress(wallet.address, 5)}`
               : 'CONNECT A WALLET'}
           </Button>
@@ -156,7 +213,7 @@ export function Header() {
           <NavActiveLink target="_blank" href="https://docs.algodex.com/" rel="noreferrer">
             <NavTextSm>Docs</NavTextSm>
           </NavActiveLink>
-          <NavActiveLink target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
+          <NavActiveLink target="_blank" href="/about.algodex.com/support/" rel="noreferrer">
             <NavTextSm>Support</NavTextSm>
           </NavActiveLink>
           <NavActiveLink target="_blank" href={MAILBOX_URL} rel="noreferrer">
