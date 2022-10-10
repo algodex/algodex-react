@@ -1,5 +1,5 @@
 {
-  "config": {
+  "testnet": {
     "algod": {
       "uri": "https://node.testnet.algoexplorerapi.io",
       "token": ""
@@ -15,6 +15,25 @@
     },
     "dexd": {
       "uri": "https://testnet.algodex.com/algodex-backend",
+      "token": ""
+    }
+  },
+  "mainnet": {
+    "algod": {
+      "uri": "https://node.algoexplorerapi.io",
+      "token": ""
+    },
+    "indexer": {
+      "uri": "https://algoindexer.algoexplorerapi.io",
+      "token": "",
+      "port": 443
+    },
+    "explorer": {
+      "uri": "https://indexer.algoexplorerapi.io",
+      "port": ""
+    },
+    "dexd": {
+      "uri": "https://app.algodex.com/algodex-backend",
       "token": ""
     }
   }

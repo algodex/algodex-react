@@ -28,7 +28,9 @@ import useWallets from '@/hooks/useWallets'
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  let api = new AlgodexApi(config)
+  const configEnv =
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
+  const api = new AlgodexApi({ config: configEnv })
   const assets = await api.http.dexd.fetchAssets()
   const paths = assets
     .filter((asset) => asset.isTraded)
@@ -47,7 +49,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let staticAssetPrice = {}
-  let api = new AlgodexApi(config)
+  const configEnv =
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
+  const api = new AlgodexApi({ config: configEnv })
   try {
     staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
   } catch ({ response: { status } }) {

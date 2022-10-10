@@ -25,7 +25,9 @@ const OriginalNextImage = NextImage.default;
  *
  * @type {APIProperties}
  */
-const properties = require('../config.json')
+const config = require('../config.json')
+const properties =
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
 
 Object.defineProperty(NextImage, "default", {
     configurable: true,
@@ -87,8 +89,9 @@ let api
  * @return {AlgodexApi}
  */
 function makeApi() {
+    console.log({properties});
     if (typeof api === 'undefined') {
-        api = new AlgodexApi(properties)
+        api = new AlgodexApi({ config: properties })
     }
     return api
 }
