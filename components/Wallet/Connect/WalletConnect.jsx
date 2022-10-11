@@ -15,8 +15,7 @@
  */
 
 import { Box, Button } from '@mui/material'
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
@@ -33,6 +32,7 @@ import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
+import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
   flex: 1 1 0%;

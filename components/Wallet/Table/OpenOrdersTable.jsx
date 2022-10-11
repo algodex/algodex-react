@@ -221,7 +221,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: DefaultCell
       },
       {
-        Header: t('cancel-all'),
+        Header: t('cancel'),
         accessor: 'cancel',
         Cell: OrderCancelCell,
         disableSortBy: true
