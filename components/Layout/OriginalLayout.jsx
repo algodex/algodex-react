@@ -1,14 +1,48 @@
-import { useRef } from 'react'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
+
+export const Container = styled.div`
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.background.dark};
+  overflow: hidden scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+// Offline PlaceOrder Header
+export const Header = styled.header`
+  padding: 1.125rem;
+`
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -31,6 +65,7 @@ const ContentSection = styled.section`
   position: relative;
   height: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const AssetsSection = styled.section`
@@ -114,7 +149,6 @@ const Main = styled.main`
       border: 1px dotted rgba(255, 255, 255, 0.125);
     }
   }
-  
 
   @media (min-width: 1024px) {
     grid-template-columns: 2fr 1fr 1fr;
@@ -133,8 +167,6 @@ const Main = styled.main`
       'chart chart book trade'
       'orders orders history trade';
   }
-
-}
 `
 /**
  * @param asset
@@ -143,7 +175,7 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const { wallet } = useAlgodex()
   const gridRef = useRef()
   const searchTableRef = useRef()
 
@@ -158,7 +190,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection>
-          <PlaceOrder asset={asset} />
+          <PlaceOrder wallet={wallet} asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection>
           <AssetsSection ref={searchTableRef}>

@@ -1,26 +1,45 @@
-import { BodyCopyTiny, HeaderCaps } from 'components/Typography'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 import Big from 'big.js'
+import { Box } from '@mui/material'
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
+// import { Typography, Typography } from 'components/Typography'
+import Typography from '@mui/material/Typography'
+import { assetVeryShortNameFn } from '@/components/helpers'
 import dayjs from 'dayjs'
-import { floatToFixed } from 'services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { withAssetTradeHistoryQuery } from '@/hooks/withAlgodex'
+import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
 dayjs.extend(localizedFormat)
 
 const Container = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
-  padding: 0.75rem 0.625rem 1rem;
+  // padding: 0.75rem 0.625rem 1rem;
   padding: ${({ isMobile }) => (isMobile ? `0 0.625rem 1rem;` : '0.75rem 0.625rem 1rem;')};
 `
 
@@ -28,18 +47,18 @@ const gridStyles = `
   grid-template-columns: repeat(3, 1fr);
   column-gap: 0.25rem;
 `
-const HeaderWrapper = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
-`
+// const HeaderWrapper = styled.div`
+//   padding: ${({ isMobile }) => (isMobile ? `0 0.5rem 0rem` : '0.5rem 0.5rem 0.75rem')};
+// `
 
 const Header = styled.header`
-  flex-shrink: 0%;
+  flex-shrink: 0;
   display: grid;
   ${gridStyles}
 `
 
 const Trades = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
   /* width */
@@ -66,7 +85,7 @@ const Trades = styled.div`
 `
 
 const TradesWrapper = styled.div`
-  flex: 1 1 0%;
+  flex: 1 1 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -76,11 +95,10 @@ const TradesWrapper = styled.div`
 
 const TradesRow = styled.div`
   display: grid;
-  ${gridStyles}
   padding: 0 0.5rem;
   transition: background-color 150ms ease-out;
   cursor: pointer;
-
+  ${gridStyles}
   &:hover {
     background-color: ${({ theme, type }) => {
       const color = type === 'buyASA' ? 'green' : 'red'
@@ -88,14 +106,14 @@ const TradesRow = styled.div`
     }};
 
     p {
-      &:not(:first-child) {
+      &:not(:first-of-type) {
         color: ${({ theme }) => theme.palette.gray['000']};
       }
     }
   }
 `
 
-const PriceHeaderText = styled(BodyCopyTiny)`
+const PriceHeaderText = styled(Typography)`
   display: flex;
   align-items: center;
   margin: 0;
@@ -109,7 +127,7 @@ const PriceHeaderText = styled(BodyCopyTiny)`
 const PriceHeader = () => {
   const { t } = useTranslation('common')
   return (
-    <PriceHeaderText>
+    <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
       <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
     </PriceHeaderText>
@@ -125,9 +143,11 @@ const PriceHeader = () => {
  * @returns {JSX.Element}
  * @constructor
  */
-export function TradeHistory({ isMobile, asset, orders: tradesData }) {
+export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
+
+  const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
   const renderHistory = () => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
@@ -144,15 +164,11 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
-            <BodyCopyTiny
-              fontFamily="'Roboto Mono', monospace"
-              color={getColor(row.type)}
-              title={row.price}
-              m={0}
-            >
+            <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
               {floatToFixed(row.price)}
-            </BodyCopyTiny>
-            <BodyCopyTiny
+            </Typography>
+            <Typography
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -160,8 +176,9 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
               m={0}
             >
               {amount.toFixed(Math.min(3, asset.decimals))}
-            </BodyCopyTiny>
-            <BodyCopyTiny
+            </Typography>
+            <Typography
+              variant="body_tiny_cap"
               fontFamily="'Roboto Mono', monospace"
               color="gray.400"
               textAlign="right"
@@ -169,7 +186,7 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
               m={0}
             >
               {dayjs(row.timestamp).format('HH:mm:ss')}
-            </BodyCopyTiny>
+            </Typography>
           </TradesRow>
         )
       })
@@ -177,28 +194,36 @@ export function TradeHistory({ isMobile, asset, orders: tradesData }) {
 
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">
-      <Container isMobile={isMobile}>
-        <HeaderWrapper isMobile={isMobile}>
-          {!isMobile && <HeaderCaps color="gray.500">{t('trade-history')}</HeaderCaps>}
-          <br />
-          <Header>
+      <Container>
+        <Box className="p-2">
+          <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
+            {t('trade-history')}
+          </Typography>
+          <Header className="mt-4">
             <PriceHeader />
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
-              {t('amount')}
-            </BodyCopyTiny>
-            <BodyCopyTiny color="gray.500" textAlign="right" m={0}>
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')} ({assetVeryShortName})
+            </Typography>
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}
-            </BodyCopyTiny>
+            </Typography>
           </Header>
-        </HeaderWrapper>
+        </Box>
+
         <Trades>
           <TradesWrapper>
             {hasTradeHistory ? (
               renderHistory()
             ) : (
-              <BodyCopyTiny color="gray.600" textAlign="center" m={4}>
+              <Typography
+                variant="body_tiny_cap"
+                className="flex items-center justify-center"
+                color="gray.600"
+                textAlign="center"
+                m={4}
+              >
                 {t('no-trades-completed')}
-              </BodyCopyTiny>
+              </Typography>
             )}
           </TradesWrapper>
         </Trades>

@@ -3,8 +3,8 @@
   "connect-another-wallet-button": "Başka cüzdan bağla",
   "wallet": "Cüzdan",
   "balance": "BAKİYE",
-  "start-by": "Algorand cüzdanını bağlayarak başlayın",
-  "once-connected": "MyAlgo cüzdanınızı bağladıktan sonra alım-satım yapmaya başlayabilirisiniz",
+  "start-by": "Başlıktaki düğmeyi kullanarak bir Algorand Cüzdanı bağlayarak başlayın",
+  "once-connected": "Bir cüzdan bağladıktan sonra ticarete başlayabilir ve bağlı cüzdanlarınızı burada görebilirsiniz.",
   "copy-success":"Cüzdan adresi panoya kopyalandı!",
   "copy-fail":"M-cüzdan adresi panoya kopyalanamadı"
 }

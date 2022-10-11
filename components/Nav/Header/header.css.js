@@ -1,4 +1,20 @@
-import { color, fontSize } from 'styled-system'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
 import { ReactSVG } from 'react-svg'
@@ -18,7 +34,7 @@ export const Container = styled.div`
 
   @media (min-width: 1024px) {
     display: flex;
-    padding: 2rem;
+    // padding: 2rem;
   }
 `
 
@@ -74,8 +90,8 @@ export const NavTextLg = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -122,8 +138,8 @@ export const NavTextSm = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme, isActive }) => (isActive ? theme.palette.gray[100] : theme.palette.gray[500])};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -168,8 +184,8 @@ export const NavIcon = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -227,7 +243,7 @@ export const MenuButton = styled.button`
   padding: 0.5rem 1rem;
   transition: color 0.1s ease-in;
   cursor: pointer;
-  ${fontSize}
+  font-size: ${(fontSize) => fontSize}
 
   &:hover {
     color: ${({ theme }) => theme.palette.gray[100]};

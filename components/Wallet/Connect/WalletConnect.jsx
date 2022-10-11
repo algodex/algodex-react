@@ -1,17 +1,38 @@
-import { BodyCopySm, BodyCopyTiny, HeaderSm, LabelMd } from 'components/Typography'
-import { useEffect, useMemo } from 'react'
-import useStore, { useStorePersisted } from 'store/use-store'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
 
-import Button from 'components/Button'
-import Icon from 'components/Icon/Icon'
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { Box, Button } from '@mui/material'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
+import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
+import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
+import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
-import SvgImage from 'components/SvgImage'
+import Typography from '@mui/material/Typography'
+import WalletOptionsList from '@/components/Wallet/Connect/WalletDropdown/WalletOptionsList'
+import WalletsList from './WalletConnect/WalletsList'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
-import useMyAlgo from 'hooks/useMyAlgo'
+import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEventDispatch } from '@/hooks/useEvents'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
-import { useWalletsQuery } from 'hooks/useAlgodex'
+import useWallets from '@/hooks/useWallets'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -19,17 +40,19 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.background.dark};
-  padding: 0.875rem 0 1rem;
+  padding: 0rem 0 1rem;
+  @media (max-width: 1024px) {
+    // height: 70vh;
+  }
 `
 
-const ButtonContainer = styled.div`
-  flex-shrink: 0%;
-  display: flex;
-  width: 100%;
-
-  button {
-    flex-grow: 1;
-    margin: 0 1.125rem;
+const ModalContainer = styled.div`
+  transform: translate(-50%, -50%);
+  @media (max-width: 992px) {
+    width: 90%;
+    transform: translate(-50%, -65%);
+    overflow-y: auto;
+    max-height: 100%;
   }
 `
 
@@ -47,12 +70,6 @@ const EmptyState = styled.div`
 const gridStyles = `
   grid-template-columns: repeat(2, 1fr);
   column-gap: 0.25rem;
-`
-
-const Arrow = styled.div`
-  position: absolute;
-  top: 0.5rem;
-  left: 0.375rem;
 `
 
 const Header = styled.header`
@@ -93,192 +110,166 @@ const WalletsWrapper = styled.div`
   left: 0;
   right: 0;
 `
-
-const Balance = styled.p`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 0;
-  text-align: right;
-  font-weight: 500;
-  line-height: 1.5;
-
-  svg {
-    opacity: 0.5;
-  }
-
-  > span {
-    margin-left: 0.375rem;
-
-    > span {
-      opacity: 0.5;
-    }
-  }
-`
-
-const WalletRow = styled.div`
-  display: grid;
-  ${gridStyles}
-  margin: 0.375rem 0.75rem;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.125rem;
-  cursor: ${({ isActive }) => (isActive ? 'default' : 'pointer')};
-  transition: color 50ms ease-out;
-  color: ${({ theme, isActive }) =>
-    isActive ? theme.palette.gray['000'] : theme.palette.gray['500']};
-
-  span,
-  p {
-    color: inherit;
-    line-height: 1.25;
-  }
-
-  span {
-    display: inline-flex;
-    align-items: center;
-
-    svg {
-      margin-right: 0.375rem;
-    }
-  }
-
-  &:hover,
-  &:focus {
-    color: ${({ theme, isActive }) =>
-      isActive ? theme.palette.gray['000'] : theme.palette.gray['300']};
-  }
-
-  &:focus {
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(121, 255, 156, 0.5);
-  }
-
-  ${Balance} {
-    span {
-      > span {
-        opacity: ${({ isActive }) => (isActive ? 0.5 : 0.68)};
-      }
-    }
-  }
-`
 export function WalletView(props) {
-  const { wallets, activeWalletAddress, isSignedIn, onConnectClick, onSetActiveWallet } = props
-
+  const { activeWallet, signedIn, addresses, setActiveWallet } = props
   const { t } = useTranslation('wallet')
+  const {
+    peraConnector,
+    // myAlgoConnector,
+    peraConnect,
+    peraDisconnect: _peraDisconnect,
+    myAlgoDisconnect: _myAlgoDisconnect
+  } = useWallets()
+  const myAlgoConnector = useRef(null)
+  const dispatcher = useEventDispatch()
+  const myAlgoDisconnect = (targetWallet) => {
+    _myAlgoDisconnect(targetWallet)
+  }
 
-  const getButtonVariant = () => {
-    return isSignedIn ? 'secondary' : 'primary'
+  const peraDisconnect = (targetWallet) => {
+    _peraDisconnect(targetWallet)
+  }
+
+  const walletDisconnectMap = {
+    'my-algo-wallet': (wallet) => {
+      myAlgoDisconnect(wallet)
+    },
+    'wallet-connect': (wallet) => peraDisconnect(wallet)
   }
 
   const isWalletActive = (addr) => {
-    return activeWalletAddress === addr
+    return activeWallet?.address === addr
   }
 
   const isTabbable = (addr) => {
     return isWalletActive(addr) ? -1 : 0
   }
 
-  const handleWalletClick = (addr) => {
-    !isWalletActive(addr) && onSetActiveWallet(addr)
+  /**
+   * Handle active connector while placing order
+   *
+   * Ensures the right connector or message is used
+   * when wallet change or updates
+   */
+  const handleConnectionStatus = useCallback(
+    (wallet) => {
+      if (wallet.type === 'wallet-connect') {
+        try {
+          console.log(peraConnector.connector, wallet.addr, 'peraConnector.current')
+          if (peraConnector.connector.connected) {
+            return peraConnector.connector
+          }
+        } catch (error) {
+          console.log(error, 'error while handling pera connection')
+          toast.error(
+            `Wallet ${wallet.address.substring(
+              0,
+              6
+            )}... has been removed due to the Pera bridge session disconnecting`
+          )
+          dispatcher('bridge-disconnected', {
+            activeWallet: wallet
+          })
+        }
+      } else {
+        return myAlgoConnector.current
+      }
+    },
+    [peraConnector]
+  )
+
+  const handleWalletClick = async (addr) => {
+    const connector = handleConnectionStatus(addr)
+    const _addr = {
+      ...addr,
+      connector
+    }
+    if (_addr.connector && (_addr.connector._connected || _addr.connector.connected)) {
+      !isWalletActive(addr) && setActiveWallet(_addr)
+    }
   }
+
+  useEffect(() => {
+    const reConnectMyAlgoWallet = async () => {
+      // '@randlabs/myalgo-connect' is imported dynamically
+      // because it uses the window object
+      const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
+      MyAlgoConnect.prototype.sign = signer
+      myAlgoConnector.current = new MyAlgoConnect()
+      myAlgoConnector.current.connected = true
+    }
+    reConnectMyAlgoWallet()
+  }, [])
 
   const handleKeyDown = (e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      !isWalletActive(addr) && onSetActiveWallet(addr)
+      !isWalletActive(addr) && setActiveWallet(addr)
     }
   }
-  const copyAddress = (address) => {
-    navigator.clipboard.writeText(address).then(
-      () => {
-        toast.success('Copied wallet address to clipboard!')
-      },
-      () => {
-        toast.error('Failed to copy wallet address to clipboard')
-      }
-    )
+
+  const getWalletLogo = (wallet) => {
+    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
+      throw new TypeError('Must have a valid wallet!')
+    }
+    switch (wallet.type) {
+      case 'wallet-connect':
+        return '/Pera-logo.png'
+      case 'my-algo-wallet':
+        return '/My-Algo-Wallet-icon.svg'
+    }
   }
-
-  const renderBalance = (bal) => {
-    const split = bal.toFixed(6).split('.')
-
-    return (
-      <Balance>
-        <Icon color="gray" fillGradient="000" use="algoLogo" size={0.625} />
-        <LabelMd fontWeight="500">
-          {`${split[0]}.`}
-          <span>{split[1]}</span>
-        </LabelMd>
-      </Balance>
-    )
-  }
-
-  const renderWallets = () => {
-    return wallets.map((wallet) => (
-      <WalletRow
-        key={wallet.address}
-        tabIndex={isTabbable(wallet.address)}
-        role="button"
-        isActive={isWalletActive(wallet.address)}
-        onClick={() => handleWalletClick(wallet.address)}
-        onKeyDown={(e) => handleKeyDown(e, wallet.address)}
-      >
-        <LabelMd fontWeight="500" title={wallet.address}>
-          <Icon
-            color="gray"
-            fillGradient="000"
-            onClick={() => copyAddress(wallet.address)}
-            use="wallet"
-            size={0.75}
-          />
-          {wallet.name}
-        </LabelMd>
-        {renderBalance(wallet.balance)}
-      </WalletRow>
-    ))
-  }
-
-  const getButtonState = () => {
-    onConnectClick()
-  }
-
-  const WalletButtonText =
-    wallets.length > 0 ? t('connect-another-wallet-button') : t('connect-wallet-button')
 
   return (
     <Section area="topRight">
       <Container>
-        <ButtonContainer>
-          <Button
-            variant={getButtonVariant()}
-            onClick={getButtonState}
-            data-testid="connect-wallet-btn"
-          >
-            {WalletButtonText}
-          </Button>
-        </ButtonContainer>
-        {isSignedIn ? (
+        {signedIn ? (
           <>
             <Header>
-              <BodyCopyTiny color="gray.500">{t('wallet')}</BodyCopyTiny>
-              <BodyCopyTiny color="gray.500" textAlign="right">
+              <Typography
+                sx={{
+                  textTransform: 'uppercase'
+                }}
+                variant="body_tiny"
+                color="gray.500"
+              >
+                {t('wallet')}
+              </Typography>
+              <Typography
+                sx={{
+                  textTransform: 'uppercase'
+                }}
+                variant="body_tiny"
+                color="gray.500"
+                textAlign="right"
+              >
                 {t('balance')}
-              </BodyCopyTiny>
+              </Typography>
             </Header>
             <Wallets>
-              <WalletsWrapper>{renderWallets()}</WalletsWrapper>
+              <WalletsWrapper>
+                <WalletsList
+                  addresses={addresses}
+                  isTabbable={isTabbable}
+                  isWalletActive={isWalletActive}
+                  handleWalletClick={handleWalletClick}
+                  handleKeyDown={handleKeyDown}
+                  getWalletLogo={getWalletLogo}
+                  walletDisconnectMap={walletDisconnectMap}
+                />
+              </WalletsWrapper>
             </Wallets>
           </>
         ) : (
-          <EmptyState>
-            <Arrow>
+          <EmptyState p={3}>
+            {/* <Arrow>
               <SvgImage use="walletArrow" h={4} color="gray.600" />
-            </Arrow>
-            <HeaderSm color="gray.100" m={0} mb={16}>
+            </Arrow> */}
+            <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
               {t('start-by')}
-            </HeaderSm>
-            <BodyCopySm color="gray.500" m={0}>
+            </Typography>
+            <Typography variant="subtitle_small" color="gray.500" m={0}>
               {t('once-connected')}
-            </BodyCopySm>
+            </Typography>
           </EmptyState>
         )}
       </Container>
@@ -287,67 +278,140 @@ export function WalletView(props) {
 }
 
 WalletView.propTypes = {
-  wallets: PropTypes.array.isRequired,
-  activeWalletAddress: PropTypes.string.isRequired,
-  isSignedIn: PropTypes.bool,
-  onConnectClick: PropTypes.func.isRequired,
-  onSetActiveWallet: PropTypes.func.isRequired,
-  area: PropTypes.string
+  addresses: PropTypes.array.isRequired,
+  activeWallet: PropTypes.object,
+  signedIn: PropTypes.bool,
+  setActiveWallet: PropTypes.func.isRequired,
+  area: PropTypes.string,
+  setIsConnectingWallet: PropTypes.func,
+  addressesRef: PropTypes.object
 }
 
 WalletView.defaultProps = {
-  isSignedIn: false
+  signedIn: false
 }
 
-function WalletConnect(props) {
-  const { connect: onWalletConnect, addresses } = useMyAlgo()
+export function WalletOptionsListComp(props) {
+  const { setIsConnectingWallet, isConnectingWallet, addresses } = props
+  const { isConnected } = useAlgodex()
+  const { peraConnect, myAlgoConnect } = useWallets()
 
-  const wallets = useStorePersisted((state) => state.wallets)
-  const setWallets = useStorePersisted((state) => state.setWallets)
-  const activeWalletAddress = useStorePersisted((state) => state.activeWalletAddress)
-  const setActiveWalletAddress = useStorePersisted((state) => state.setActiveWalletAddress)
-  const isSignedIn = useStore((state) => state.isSignedIn)
-  const setIsSignedIn = useStore((state) => state.setIsSignedIn)
+  const WALLETS_CONNECT_MAP = {
+    'my-algo-wallet': myAlgoConnect,
+    'pera-connect': () => peraConnect()
+  }
 
-  const walletAddresses = useMemo(() => {
-    if (addresses) {
-      return addresses
+  const myAlgoOnClick = () => {
+    WALLETS_CONNECT_MAP['my-algo-wallet']()
+  }
+
+  const peraConnectOnClick = () => {
+    WALLETS_CONNECT_MAP['pera-connect']()
+  }
+
+  const isPeraConnected = useMemo(() => {
+    if (isConnected) {
+      const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
+      return peraAddr.length > 0
     }
-    return wallets ? wallets.map((w) => w.address) : []
-  }, [addresses, wallets])
+    return false
+  }, [isConnected, addresses])
 
-  // fetch wallet balances from blockchain
-  const walletsQuery = useWalletsQuery({ wallets: walletAddresses })
-  useEffect(() => {
-    if (walletsQuery.data?.wallets) {
-      setWallets(walletsQuery.data.wallets)
-
-      if (!isSignedIn) {
-        setIsSignedIn(true)
-      }
-
-      if (!walletAddresses.includes(activeWalletAddress)) {
-        setActiveWalletAddress(walletsQuery.data.wallets[0].address)
-      }
-    }
-  }, [
-    activeWalletAddress,
-    isSignedIn,
-    setActiveWalletAddress,
-    setIsSignedIn,
-    setWallets,
-    walletAddresses,
-    walletsQuery.data
-  ])
   return (
-    <WalletView
-      wallets={wallets}
-      activeWalletAddress={activeWalletAddress}
-      isSignedIn={isSignedIn}
-      onConnectClick={onWalletConnect}
-      onSetActiveWallet={setActiveWalletAddress}
-      {...props}
-    />
+    <>
+      {isConnectingWallet ? (
+        <Modal
+          onClick={() => {
+            setIsConnectingWallet(false)
+          }}
+          data-testid="notification-modal-wrapper"
+          isVisible={isConnectingWallet}
+        >
+          <ModalContainer
+            className="absolute top-2/4 left-2/4 bg-gray-700 text-white rounded-sm"
+            style={{ transform: 'translate(-50%, -50%)' }}
+          >
+            <DropdownHeader closeFn={() => setIsConnectingWallet(false)} />
+            <Box className="px-2 py-4 bg-gray-600">
+              {/* <WalletOptionsList /> */}
+              <WalletOptionsList
+                isConnectingAddress={isConnectingWallet}
+                setIsConnectingAddress={setIsConnectingWallet}
+                addresses={addresses}
+                myAlgoOnClick={myAlgoOnClick}
+                peraConnectOnClick={() => peraConnectOnClick()}
+                isPeraConnected={isPeraConnected}
+              />
+            </Box>
+            <DropdownFooter />
+          </ModalContainer>
+        </Modal>
+      ) : (
+        <></>
+      )}
+    </>
+  )
+}
+
+WalletOptionsListComp.propTypes = {
+  setIsConnectingWallet: PropTypes.func,
+  isConnectingWallet: PropTypes.bool,
+  addresses: PropTypes.array,
+  addressesRef: PropTypes.object
+}
+
+/**
+ * @todo Merge WalletView into WalletConnect
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function WalletConnect() {
+  const { setWallet, isConnected } = useAlgodex()
+  const { wallet, addresses } = useWallets()
+  // const [addresses, setAddresses] = useContext(WalletsContext)
+  const [signedIn, setSignedIn] = useState(isConnected)
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
+  const isMobile = useMobileDetect()
+  const addressesRef = useRef(null)
+  useEffect(() => {
+    setSignedIn(isConnected)
+  }, [addresses, isConnected])
+
+  return (
+    <Box className="flex flex-col justify-center" width="100%">
+      {isMobile && (
+        <>
+          <WalletOptionsListComp
+            setIsConnectingWallet={setIsConnectingWallet}
+            isConnectingWallet={isConnectingWallet}
+            addresses={addresses}
+            closeFn={() => setIsConnectingWallet(false)}
+            addressesRef={addressesRef}
+          />
+
+          <Box mx={2}>
+            <Button
+              className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+              variant="contained"
+              sx={{ minHeight: '2.5rem' }}
+              onClick={() => setIsConnectingWallet(true)}
+            >
+              CONNECT {signedIn && addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+            </Button>
+          </Box>
+        </>
+      )}
+      <WalletView
+        addresses={addresses}
+        activeWallet={wallet}
+        signedIn={signedIn}
+        setSignedIn={setSignedIn}
+        setActiveWallet={setWallet}
+        setIsConnectingWallet={setIsConnectingWallet}
+        addressesRef={addressesRef}
+      />
+    </Box>
   )
 }
 

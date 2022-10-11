@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 const sizes = [
   'iphone-6',
   'iphone-x',
@@ -24,23 +40,25 @@ describe('Landing Page In Potrait Mode', () => {
         clear()
         cy.visit('/en/trade/15322902')
         // cy.scrollTo(0, 500)
-        cy.get('[data-testid=modal-accept]')
+        cy.get('[data-testid=modal-accept]', { timeout: 50000 })
           .contains('ACCEPT')
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
-        cy.get('[data-testid=candleStickChart]').should('be.visible')
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
+        cy.get('[data-testid=candleStickChart]', { timeout: 50000 }).should('be.visible')
       } else {
         cy.viewport(size)
         cy.visit('/en/about')
         clear()
         cy.visit('/en/trade/15322902')
-        cy.get('[data-testid=modal-accept]')
+        cy.get('[data-testid=modal-accept]', { timeout: 50000 })
           .contains('ACCEPT')
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
-        cy.get('[data-testid=candleStickChart]').should('be.visible')
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
+        cy.get('[data-testid=candleStickChart]', { timeout: 50000 }).should('be.visible')
       }
     })
   })
@@ -56,23 +74,25 @@ describe('Landing Page In Landscape Mode', () => {
         cy.visit('/en/about')
         clear()
         cy.visit('/en/trade/15322902')
-        cy.get('[data-testid=modal-accept]')
+        cy.get('[data-testid=modal-accept]', { timeout: 50000 })
           .contains('ACCEPT')
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
-        cy.get('[data-testid=candleStickChart]').should('be.visible')
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
+        cy.get('[data-testid=candleStickChart]', { timeout: 50000 }).should('be.visible')
       } else {
         cy.viewport(size, 'landscape')
         cy.visit('/en/about')
         clear()
         cy.visit('/en/trade/15322902')
-        cy.get('[data-testid=modal-accept]')
+        cy.get('[data-testid=modal-accept]', { timeout: 50000 })
           .contains('ACCEPT')
           .scrollIntoView()
           .should('be.visible')
         cy.get('[data-testid=modal-accept]').contains('ACCEPT').click()
-        cy.get('[data-testid=candleStickChart]').should('be.visible')
+        cy.get('[data-testid=spinner-flex-container]').should('be.visible')
+        cy.get('[data-testid=candleStickChart]', { timeout: 50000 }).should('be.visible')
       }
     })
   })

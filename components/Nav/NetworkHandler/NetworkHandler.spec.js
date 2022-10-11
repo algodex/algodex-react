@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { fireEvent, render } from 'test/test-utils'
 
 import NetworkBanner from './NetworkBanner'
@@ -7,7 +23,7 @@ import useUserState from '@/store/use-user-state'
 
 expect.extend(matchers)
 
-describe('Network Banner Component', () => {
+describe.skip('Network Banner Component', () => {
   it('Should render Banner for Testnet', () => {
     function NetworkBannerTest() {
       const setHasTestnetRibbon = useUserState((state) => state.setHasTestnetRibbon)
@@ -42,7 +58,7 @@ describe('Notification Modal Component', () => {
     )
     expect(queryByTestId('notification-modal-wrapper')).toBeNull()
   })
-  it('Should render Network notification Modal', async () => {
+  it.skip('Should render Network notification Modal', async () => {
     const { queryByTestId } = render(
       <NotificationModal
         isModalActive={true}

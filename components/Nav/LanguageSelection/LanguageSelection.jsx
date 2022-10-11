@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import {
   Flag,
   LanguageButton,
@@ -9,7 +25,8 @@ import {
   NavTextSm
 } from './language-selection.css'
 
-import Link from 'next/link'
+// import Link from 'next/link'
+import Link from '@/components/Nav/Link'
 import PropTypes from 'prop-types'
 import i18n from 'i18n.json'
 import { useRouter } from 'next/router'
@@ -56,17 +73,15 @@ export const LanguageSelection = ({ isMobile }) => {
     const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
     return locales.map((localeCd, idx) => {
       return (
-        <Link key={idx} href={asPath} locale={localeCd}>
-          <a href="#top" data-testid="dropdown-item-mobile">
-            <NavTextSm
-              onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-              style={{ marginBottom: '0.4rem' }}
-              data-testid="dropdown-action-mobile"
-            >
-              {localeCd}{' '}
-              <Flag data-testid="flat-item-mobile" countryCode={localeToFlags[localeCd]} svg />
-            </NavTextSm>
-          </a>
+        <Link key={idx} href={asPath} locale={localeCd} data-testid="dropdown-item-mobile">
+          <NavTextSm
+            onClick={() => setIsLanguageOpen(!isLanguageOpen)}
+            style={{ marginBottom: '0.4rem' }}
+            data-testid="dropdown-action-mobile"
+          >
+            {localeCd}{' '}
+            <Flag data-testid="flat-item-mobile" countryCode={localeToFlags[localeCd]} svg />
+          </NavTextSm>
         </Link>
       )
     })
@@ -96,22 +111,19 @@ export const LanguageSelection = ({ isMobile }) => {
   const renderForWeb = () => {
     return (
       <LanguagesContainer>
-        <Link href={asPath} locale={locale}>
-          <a href="#top" data-testid="dropdown-button-web">
-            <NavTextLg>
-              {locale} <Flag countryCode={localeToFlags[locale]} svg />
-            </NavTextLg>
-          </a>
+        <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
+          <NavTextLg>
+            {locale}
+            <Flag countryCode={localeToFlags[locale]} svg />
+          </NavTextLg>
         </Link>
 
         <LanguageDropDown data-testid="dropdown-container-web">
           <LanguageItem key={locale}>
             <Link href={asPath} locale={locale}>
-              <a href="#top">
-                <NavTextLg>
-                  {locale} <Flag countryCode={localeToFlags[locale]} svg />
-                </NavTextLg>
-              </a>
+              <NavTextLg>
+                {locale} <Flag countryCode={localeToFlags[locale]} svg />
+              </NavTextLg>
             </Link>
           </LanguageItem>
           {i18n.locales
@@ -119,11 +131,9 @@ export const LanguageSelection = ({ isMobile }) => {
             .map((localeCd) => (
               <LanguageItem key={localeCd} data-testid="dropdown-item-web">
                 <Link href={asPath} locale={localeCd}>
-                  <a href="#top">
-                    <NavTextLg>
-                      {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                    </NavTextLg>
-                  </a>
+                  <NavTextLg>
+                    {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+                  </NavTextLg>
                 </Link>
               </LanguageItem>
             ))}

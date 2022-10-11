@@ -1,17 +1,34 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { useRef, useState } from 'react'
 
-import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
-import Button from '@/components/Button'
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
+import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
+import NavButton from '@/components/Button/NavButton'
 import Orders from '@/components/Wallet/WalletTabs'
-import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
+import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
+import { lighten } from 'polished'
 import styled from '@emotion/styled'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { lighten } from 'polished'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -30,6 +47,7 @@ const ContentSection = styled.section`
   position: relative;
   height: auto;
   overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 const AssetsSection = styled.section`
@@ -92,7 +110,7 @@ const MobileMenu = styled.nav`
   z-index: 99;
 `
 
-const MobileMenuButton = styled(Button)`
+const MobileMenuButton = styled(NavButton)`
   height: 100%;
   width: 100%;
   // background-color: ${({ theme }) => theme.colors.gray['800']};
@@ -113,7 +131,7 @@ const MobileMenuButton = styled(Button)`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  console.debug(`Main Mobile Layout Render ${asset?.id || 'Missing'}`)
+  // console.debug(`Main Mobile Layout Render ${asset?.id || 'Missing'}`)
   const { t } = useTranslation('common')
   const gridRef = useRef()
   const searchTableRef = useRef()
@@ -125,6 +143,7 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
+  const { wallet } = useAlgodex()
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
 
   /**
@@ -137,6 +156,7 @@ function MainLayout({ asset, children }) {
    * This is only used to switch to MobileMenu Chart view
    * when the Next/Router navigates to a shallow route
    */
+
   useEvent('clicked', (data) => {
     if (data === 'asset') {
       setTimeout(() => setActiveMobile(TABS.CHART), delaySwitch)
@@ -148,7 +168,6 @@ function MainLayout({ asset, children }) {
   if (!asset) {
     return <Spinner flex={true} />
   }
-  // console.log(isMobile)
   return (
     <MainWrapper>
       <Main ref={gridRef}>
@@ -159,7 +178,7 @@ function MainLayout({ asset, children }) {
         )}
         {activeMobile === TABS.TRADE && (
           <PlaceOrderSection>
-            <PlaceOrder asset={asset} />
+            <PlaceOrder wallet={wallet} asset={asset} />
           </PlaceOrderSection>
         )}
         {activeMobile === TABS.CHART && (
@@ -189,8 +208,8 @@ function MainLayout({ asset, children }) {
         )}
 
         <MobileMenu>
-          <ul>
-            <li>
+          <ul className="mt-0 p-0 list-none">
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-CHART').length}
                 type="button"
@@ -201,7 +220,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-CHART')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-BOOK').length}
                 type="button"
@@ -212,7 +231,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-BOOK')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-TRADE').length}
                 type="button"
@@ -223,7 +242,7 @@ function MainLayout({ asset, children }) {
                 {t('mobilefooter-TRADE')}
               </MobileMenuButton>
             </li>
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 characterLength={t('mobilefooter-ORDERS').length}
                 type="button"
@@ -242,7 +261,7 @@ function MainLayout({ asset, children }) {
               </MobileMenuButton>
             </li>
             */}
-            <li>
+            <li className="list-none">
               <MobileMenuButton
                 type="button"
                 characterLength={t('mobilefooter-WALLET').length}

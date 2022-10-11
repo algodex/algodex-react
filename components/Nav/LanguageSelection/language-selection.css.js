@@ -1,4 +1,20 @@
-import { color, fontSize } from 'styled-system'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
 import styled from '@emotion/styled'
@@ -12,8 +28,8 @@ export const NavTextLg = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme }) => theme.palette.gray[500]};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -60,8 +76,8 @@ export const NavTextSm = styled.span`
   letter-spacing: 0.2rem;
   color: ${({ theme, isActive }) => (isActive ? theme.palette.gray[100] : theme.palette.gray[500])};
   font-weight: 600;
-  ${fontSize}
-  ${color}
+  font-size: ${(fontSize) => fontSize}
+  color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
 
@@ -133,7 +149,6 @@ export const LanguagesContainer = styled.ul`
       position: absolute;
       display: block;
       top: 20px;
-      width: 100px;
     }
   }
 `
@@ -143,12 +158,24 @@ export const LanguageDropDown = styled.ul`
   display: none;
   max-height: 500px;
   overflow: scroll;
+  right: 2rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 `
 
 export const LanguageItem = styled.li`
   display: block;
   height: 50px;
-
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
   span {
     line-height: 50px;
   }

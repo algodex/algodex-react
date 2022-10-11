@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import '../styles/global.css'
 
 import * as React from 'react'
@@ -6,173 +22,54 @@ import { CacheProvider, Global, css } from '@emotion/react'
 // React Query
 import { QueryClient, QueryClientProvider } from 'react-query'
 
+import AlgodexApi from '@algodex/algodex-sdk'
 import CssBaseline from '@mui/material/CssBaseline'
 import { EventEmitter } from '@/hooks/useEvents'
 import Head from 'next/head'
 import { Hydrate } from 'react-query/hydration'
+import NextApp from 'next/app'
 import PropTypes from 'prop-types'
+import { Provider } from '@algodex/algodex-hooks'
 // Algodex
 import ReactGA from 'react-ga'
 import { ReactQueryDevtools } from 'react-query/devtools'
 // Material UI
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
+import { WalletsProvider } from '@/hooks/useWallets'
+// import AlgodexApi from '@algodex/algodex-sdk'
+// import { Provider } from '@algodex/algodex-hooks'
+import config from '@/config.json'
+// import AlgodexApi from '@algodex/algodex-sdk'
+// import { Provider } from '@algodex/algodex-hooks'
 import createEmotionCache from '@/utils/createEmotionCache'
-import theme from '../theme/index'
-import useStore from '@/store/use-store'
-import useUserStore from '@/store/use-user-state'
-import NextApp from 'next/app'
 import parser from 'ua-parser-js'
+import theme from '../theme/index'
+import useUserStore from '@/store/use-user-state'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
+let api
+
+/**
+ *
+ * @return {AlgodexApi}
+ */
+function makeApi() {
+  if (typeof api === 'undefined') {
+    const configEnv =
+      process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
+    api = new AlgodexApi({ config: configEnv })
+  }
+  return api
+}
+
 const styles = css`
-  html,
+  #__next,
   body,
-  div,
-  span,
-  applet,
-  object,
-  iframe,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  blockquote,
-  pre,
-  a,
-  abbr,
-  acronym,
-  address,
-  big,
-  cite,
-  code,
-  del,
-  dfn,
-  em,
-  img,
-  ins,
-  kbd,
-  q,
-  s,
-  samp,
-  small,
-  strike,
-  strong,
-  sub,
-  sup,
-  tt,
-  var,
-  b,
-  u,
-  i,
-  center,
-  dl,
-  dt,
-  dd,
-  ol,
-  ul,
-  li,
-  fieldset,
-  form,
-  label,
-  legend,
-  table,
-  caption,
-  tbody,
-  tfoot,
-  thead,
-  tr,
-  th,
-  td,
-  article,
-  aside,
-  canvas,
-  details,
-  embed,
-  figure,
-  figcaption,
-  footer,
-  header,
-  hgroup,
-  menu,
-  nav,
-  output,
-  ruby,
-  section,
-  summary,
-  time,
-  mark,
-  audio,
-  video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-  }
-  /* HTML5 display-role reset for older browsers */
-  article,
-  aside,
-  details,
-  figcaption,
-  figure,
-  footer,
-  header,
-  hgroup,
-  menu,
-  nav,
-  section {
-    display: block;
-  }
-  body {
-    line-height: 1;
-  }
-  ol,
-  ul {
-    list-style: none;
-  }
-  blockquote,
-  q {
-    quotes: none;
-  }
-  blockquote:before,
-  blockquote:after,
-  q:before,
-  q:after {
-    content: '';
-    content: none;
-  }
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-  #__next {
+  html {
     height: 100%;
   }
-  html,
-  body {
-    height: 100%;
-    box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-      Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background: ${theme.palette.background.dark};
-    color: ${theme.palette.gray['400']};
-  }
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
@@ -190,17 +87,16 @@ const styles = css`
   ::-webkit-scrollbar-corner {
     background: ${theme.palette.gray[700]};
   }
-
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  .tv-lightweight-charts {
+    top: -0rem;
+    position: absolute;
   }
-  button {
-    background-color: transparent;
-    border: none;
+  #pera-wallet-connect-modal-wrapper {
+    position: fixed;
+    z-index: 9999;
   }
 `
+
 function Algodex(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const TRACKING_ID = 'UA-195819772-1'
@@ -219,13 +115,10 @@ function Algodex(props) {
   // Lift stores and cache for tests
   if (typeof window !== 'undefined' && window.Cypress) {
     window.userStore = useUserStore
-    window.store = useStore
     window.queryClient = queryClient
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <CssBaseline />
-      <Global styles={styles} />
       <Hydrate state={pageProps.dehydratedState}>
         <EventEmitter>
           <CacheProvider value={emotionCache}>
@@ -233,10 +126,16 @@ function Algodex(props) {
               <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
             <ThemeProvider theme={theme}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <Toaster />
-              <ReactQueryDevtools initialIsOpen={false} />
-              <Component {...pageProps} />
+              <CssBaseline />
+              <Global styles={styles} />
+              <WalletsProvider>
+                <Provider dex={makeApi()}>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <Toaster />
+                  <ReactQueryDevtools initialIsOpen={false} />
+                  <Component {...pageProps} />
+                </Provider>
+              </WalletsProvider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>

@@ -1,5 +1,28 @@
-import { createTheme } from '@mui/material'
-import { lighten } from 'polished'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { lighten, opacify } from 'polished'
+
+import { createTheme } from '@mui/material/styles'
+// import { opacity } from 'styled-system'
+import { experimental_sx as sx } from '@mui/material/styles'
+
+/**
+ * Design System Name: Lucid 0.0.1
+ */
 
 const colors = {
   white: '#FFFFFF',
@@ -68,140 +91,146 @@ const colors = {
 }
 
 const fontFamilies = {
-  heading: `'Alliance No.1', Inter, sans-serif`,
-  body: 'Inter, sans-serif',
+  heading: `'Inter', 'Alliance No.1', sans-serif`,
+  body: `'Inter', 'Alliance No.1'`,
   monospace: `'Roboto Mono', monospace`
 }
 
-const fontSizes = [10, 12, 14, 16, 20, 24, 32, 40, 48, 64]
+const fontSizes = [
+  '10px',
+  '12px',
+  '14px',
+  '16px',
+  '20px',
+  '24px',
+  '32px',
+  '34px',
+  '40px',
+  '48px',
+  '60px',
+  '64px',
+  '96px'
+]
 
-const breakpoints = ['40em', '48em']
+// const breakpoints = ['40em', '48em']
 
-const textStyles = {
-  title: {
-    as: 'h1',
-    fontFamily: fontFamilies.heading,
-    fontSize: [fontSizes[7], fontSizes[8], fontSizes[9]],
-    fontWeight: 700,
-    lineHeight: '0.9',
-    letterSpacing: '-0.04em'
-  },
-  headerLg: {
-    as: 'h2',
-    fontFamily: fontFamilies.heading,
-    fontSize: [fontSizes[5], fontSizes[6], fontSizes[7]],
-    fontWeight: 700,
-    lineHeight: ['2rem', '2.25rem', '2.5rem'],
-    letterSpacing: '-0.03em'
-  },
-  headerSm: {
-    as: 'h3',
-    fontFamily: fontFamilies.heading,
-    fontSize: [fontSizes[5], fontSizes[4], fontSizes[5]],
-    fontWeight: 700,
-    lineHeight: ['1.75rem', '1.75rem', '2rem'],
-    letterSpacing: '-0.02em'
-  },
-  headerSmInter: {
-    as: 'h3',
-    fontFamily: fontFamilies.body,
-    fontSize: [fontSizes[5], fontSizes[4], fontSizes[5]],
-    fontWeight: 700,
-    lineHeight: ['1.75rem', '1.75rem', '2rem'],
-    letterSpacing: '-0.02em'
-  },
-  headerCaps: {
-    as: 'h3',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[3],
-    fontWeight: 700,
-    lineHeight: '1.25rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.12em'
-  },
-  subtitle: {
-    as: 'p',
-    fontFamily: fontFamilies.body,
-    fontSize: [fontSizes[4], fontSizes[4], fontSizes[5]],
-    fontWeight: 500,
-    lineHeight: ['1.75rem', '1.75rem', '2rem']
-  },
-  bodyCopyLg: {
-    as: 'p',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[4],
-    fontWeight: 500,
-    lineHeight: '1.75rem'
-  },
-  bodyCopy: {
-    as: 'p',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[3],
-    fontWeight: 500,
-    lineHeight: '1.5rem'
-  },
-  bodyCopySm: {
-    as: 'p',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[2],
-    fontWeight: 500,
-    lineHeight: '1.25rem'
-  },
-  bodyCopyTiny: {
-    as: 'p',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[0],
-    fontWeight: 400,
-    lineHeight: '1rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.04em'
-  },
-  preTitle: {
-    as: 'h2',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[2],
-    fontWeight: 700,
-    lineHeight: '1.25rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.025em'
-  },
-  labelLg: {
-    as: 'span',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[2],
-    fontWeight: 700,
-    lineHeight: '1.25rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.025em'
-  },
-  labelMd: {
-    as: 'span',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[1],
-    fontWeight: 700,
-    lineHeight: '1.125rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em'
-  },
-  labelSm: {
-    as: 'span',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[0],
-    fontWeight: 700,
-    lineHeight: '1rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.04em'
-  },
-  navLabel: {
-    as: 'li',
-    fontFamily: fontFamilies.body,
-    fontSize: fontSizes[1],
-    fontWeight: 600,
-    lineHeight: '1.125rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.2em'
-  }
-}
+// const textStyles = {
+//   title: {
+//     as: 'h1',
+//     fontFamily: fontFamilies.heading,
+//     fontSize: [fontSizes[7], fontSizes[8], fontSizes[9]],
+//     fontWeight: 700,
+//     lineHeight: '0.9',
+//     letterSpacing: '-0.04em'
+//   },
+//   headerLg: {
+//     as: 'h2',
+//     fontFamily: fontFamilies.heading,
+//     fontSize: [fontSizes[5], fontSizes[6], fontSizes[7]],
+//     fontWeight: 700,
+//     lineHeight: ['2rem', '2.25rem', '2.5rem'],
+//     letterSpacing: '-0.03em'
+//   },
+//   headerSm: {
+//     as: 'h3',
+//     fontFamily: fontFamilies.heading,
+//     fontSize: [fontSizes[5], fontSizes[4], fontSizes[5]],
+//     fontWeight: 700,
+//     lineHeight: ['1.75rem', '1.75rem', '2rem'],
+//     letterSpacing: '-0.02em'
+//   },
+//   headerCaps: {
+//     as: 'h3',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[3],
+//     fontWeight: 700,
+//     lineHeight: '1.25rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.12em'
+//   },
+//   subtitle: {
+//     as: 'p',
+//     fontFamily: fontFamilies.body,
+//     fontSize: [fontSizes[4], fontSizes[4], fontSizes[5]],
+//     fontWeight: 500,
+//     lineHeight: ['1.75rem', '1.75rem', '2rem']
+//   },
+//   bodyCopyLg: {
+//     as: 'p',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[4],
+//     fontWeight: 500,
+//     lineHeight: '1.75rem'
+//   },
+//   bodyCopy: {
+//     as: 'p',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[3],
+//     fontWeight: 500,
+//     lineHeight: '1.5rem'
+//   },
+//   bodyCopySm: {
+//     as: 'p',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[2],
+//     fontWeight: 500,
+//     lineHeight: '1.25rem'
+//   },
+//   bodyCopyTiny: {
+//     as: 'p',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[0],
+//     fontWeight: 400,
+//     lineHeight: '1rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.04em'
+//   },
+//   preTitle: {
+//     as: 'h2',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[2],
+//     fontWeight: 700,
+//     lineHeight: '1.25rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.025em'
+//   },
+//   labelLg: {
+//     as: 'span',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[2],
+//     fontWeight: 700,
+//     lineHeight: '1.25rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.025em'
+//   },
+//   labelMd: {
+//     as: 'span',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[1],
+//     fontWeight: 700,
+//     lineHeight: '1.125rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.05em'
+//   },
+//   labelSm: {
+//     as: 'span',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[0],
+//     fontWeight: 700,
+//     lineHeight: '1rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.04em'
+//   },
+//   navLabel: {
+//     as: 'li',
+//     fontFamily: fontFamilies.body,
+//     fontSize: fontSizes[1],
+//     fontWeight: 600,
+//     lineHeight: '1.125rem',
+//     textTransform: 'uppercase',
+//     letterSpacing: '0.2em'
+//   }
+// }
 
 export const buttons = {
   primary: {
@@ -241,27 +270,385 @@ export const buttons = {
 export const parseThemeColor = (str) => {
   return str.split('.').reduce((o, i) => o[i], colors)
 }
-
-const theme = createTheme({
-  background: colors.gray['800'],
-  textStyles,
-  fontSizes,
+const muiTheme = createTheme()
+const theme = {
+  ...muiTheme,
+  // TODO: remove fontfamilies
   fontFamilies,
   buttons,
+  typography: {
+    ...muiTheme.typography,
+    h1: {
+      fontFamily: fontFamilies.heading,
+      fontSize: fontSizes[12],
+      [muiTheme.breakpoints.up('xs')]: {
+        // fontSize: '0.1rem'
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        // fontSize: '0.625rem'
+      },
+      fontWeight: 700,
+      lineHeight: '0.9',
+      letterSpacing: '-0.04em'
+    },
+    h2: {
+      fontFamily: fontFamilies.heading,
+      fontSize: fontSizes[8],
+      fontWeight: 700,
+      lineHeight: ['2rem', '2.25rem', '2.5rem'],
+      letterSpacing: '-0.03em'
+    },
+    h3: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[7],
+      [muiTheme.breakpoints.up('xs')]: {
+        fontSize: fontSizes[5]
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        fontSize: fontSizes[7]
+      },
+      fontWeight: 700,
+      lineHeight: '1.25rem',
+      letterSpacing: '0.025em'
+    },
+    h4: {
+      fontFamily: fontFamilies.heading,
+      fontSize: fontSizes[6],
+      fontWeight: 700,
+      lineHeight: ['1.75rem', '1.75rem', '2rem'],
+      letterSpacing: '-0.02em'
+    },
+    h5: {
+      fontFamily: fontFamilies.heading,
+      fontWeight: 700,
+      fontSize: fontSizes[5],
+      lineHeight: 1.334,
+      letterSpacing: '-0.02em'
+    },
+    h6: {
+      fontFamily: fontFamilies.heading,
+      fontWeight: 500,
+      fontSize: fontSizes[4],
+      lineHeight: 1.6,
+      letterSpacing: '0.0075em'
+    },
+    // Subtitles
+    subtitle: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[3],
+      lineHeight: 1.75,
+      letterSpacing: '0.00938em'
+    },
+    subtitle_tiny: {},
+    subtitle_small: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 500,
+      fontSize: fontSizes[2],
+      lineHeight: 1.57,
+      letterSpacing: '0.00714em'
+    },
+    subtitle_small_bold: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[2]
+    },
+    subtitle_medium: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 500,
+      fontSize: fontSizes[3],
+      lineHeight: 1.57
+    },
+    subtitle_medium_bold: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[3],
+      lineHeight: 1.75,
+      letterSpacing: '0.1em'
+    },
+    subtitle_medium_cap_bold: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 700,
+      fontSize: fontSizes[3],
+      lineHeight: 1.75,
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase'
+    },
+    subtitle_large: {},
+
+    // Body
+    body: {
+      fontFamily: 'Inter',
+      fontSize: fontSizes[3],
+      lineHeight: '0.9',
+      letterSpacing: '-0.04em'
+    },
+    body_tiny: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 400,
+      letterSpacing: '0.03em'
+    },
+    body_tiny_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      letterSpacing: '0.03em'
+    },
+    body_tiny_cap_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      lineHeight: '1.5rem',
+      letterSpacing: '0.03em'
+    },
+    body_tiny_cap: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[0],
+      fontWeight: 400,
+      textTransform: 'uppercase'
+    },
+    body_small: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 500,
+      lineHeight: '1.5'
+    },
+    body_small_medium: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 500
+    },
+    body_small_cap_medium: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 500,
+      textTransform: 'uppercase',
+      lineHeight: '1.5rem',
+      letterSpacing: '0.05em'
+    },
+    body_small_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      letterSpacing: '0.05em'
+    },
+    body_small_cap_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[1],
+      fontWeight: 700,
+      lineHeight: '1.5rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em'
+    },
+    body_medium: {},
+    body_large: {},
+    body_caps_medium: {},
+
+    // Caption
+    caption: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 1.66,
+      letterSpacing: '0.03333em'
+    },
+
+    // Overline
+    overline: {
+      fontFamily: fontFamilies.body,
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 2.66,
+      letterSpacing: '0.08333em',
+      textTransform: 'uppercase'
+    },
+
+    // Labels
+    label_regular: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[2],
+      fontWeight: 400
+    },
+    label_regular_bold: {
+      fontFamily: fontFamilies.body,
+      fontSize: fontSizes[2],
+      fontWeight: 700
+    },
+    label_tiny: {},
+    label_medium: {},
+    label_large: {},
+    label_caps: {},
+
+    // Button
+    button_regular: {},
+    button_tiny: {},
+    button_medium: {},
+    button_large: {},
+    button_caps: {},
+
+    price: {
+      fontFamily: fontFamilies.monospace,
+      fontWeight: 400,
+      [muiTheme.breakpoints.up('xs')]: {
+        fontSize: fontSizes[0]
+      },
+      // [muiTheme.breakpoints.up('md')]: {
+      //   fontSize: '0.625rem'
+      // },
+      lineHeight: '1rem',
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase'
+    }
+  },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: sx({
+          lineHeight: '1rem'
+        })
+      }
+    },
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'tertiary' },
+          style: {
+            color: colors.gray['900'],
+            border: '1px solid transparent',
+            backgroundColor: colors.gray['000'],
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.gray['100'])
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 700,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
+          props: { variant: 'primary' },
+          style: {
+            color: colors.gray['000'],
+            border: '1px solid transparent',
+            backgroundColor: colors.green['500'],
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.green['500'])
+            },
+            '&.Mui-disabled': {
+              color: colors.gray['000'],
+              opacity: '0.3'
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
+          props: { variant: 'disconnect-wallet' },
+          style: {
+            color: colors.gray['400'],
+            border: `1px solid ${colors.gray['400']}`,
+            backgroundColor: 'none',
+            height: '2rem',
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[1],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
+          props: { variant: 'default' },
+          style: {
+            color: colors.gray['000'],
+            border: '1px solid transparent',
+            backgroundColor: colors.gray['700'],
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.gray['700'])
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        },
+        {
+          props: { variant: 'sell' },
+          style: {
+            color: colors.gray['000'],
+            border: '1px solid transparent',
+            backgroundColor: colors.red['500'],
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: lighten(0.05, colors.red['500'])
+            },
+            '&.Mui-disabled': {
+              color: colors.gray['000'],
+              opacity: '0.3'
+            },
+            textTransform: 'uppercase',
+            fontFamily: fontFamilies.body,
+            fontWeight: 600,
+            fontSize: fontSizes[2],
+            letterSpacing: '0.05em'
+          }
+        }
+      ],
+      styleOverrides: ({ ownerState }) => ({
+        ...(ownerState.size === 'small' && {
+          height: '2rem'
+        })
+      })
+    }
+  },
   palette: {
+    ...muiTheme.palette,
     primary: {
-      main: colors.gray['800']
+      main: colors.gray['800'],
+      light: colors.gray['400'],
+      dark: colors.gray['900'],
+      contrastText: 'white'
+    },
+    secondary: {
+      main: colors.gray['100'],
+      light: colors.gray['100'],
+      dark: colors.gray['100'],
+      contrastText: 'white'
+    },
+    buy: {
+      main: colors.green['500'],
+      light: colors.green['400'],
+      dark: colors.green['900'],
+      contrastText: 'white'
+    },
+    sell: {
+      main: colors.red['500'],
+      light: colors.red['400'],
+      dark: colors.red['900'],
+      contrastText: 'white'
     },
     background: {
-      light: colors.gray['000'],
-      dark: colors.gray['800']
+      paper: colors.gray['800'],
+      default: colors.gray['800']
     },
+    // TODO: Remove focus
     focus: {
       green: '#4b9064',
       red: '#b23639'
     },
+    // TODO: Remove colors
     ...colors
   },
+  // TODO: Remove colors
   colors: {
     ...colors,
     background: {
@@ -273,7 +660,7 @@ const theme = createTheme({
       red: '#b23639'
     }
   }
-})
+}
 
-theme.breakpoints = breakpoints
+// theme.breakpoints = breakpoints
 export default theme

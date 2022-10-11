@@ -1,9 +1,25 @@
-import React from 'react'
-import useTranslation from 'next-translate/useTranslation'
-import styled from '@emotion/styled'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 // Custom Styled Components
 import { AboutContainer } from './styles.css'
+import React from 'react'
+import { Typography } from '@mui/material'
+import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 
 const SubTitle = styled.h4`
   font-size: 1.5rem;
@@ -36,7 +52,9 @@ export const Features = () => {
         >
           <Number className="mb-4">{number}.</Number>
           <SubTitle className="mb-9">{t(title)}</SubTitle>
-          <p className="mb-4">{t(sub)}.</p>
+          <Typography color="gray.400" className="mb-4">
+            {t(sub)}.
+          </Typography>
         </div>
         <div
           className={`${

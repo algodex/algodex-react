@@ -1,18 +1,37 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { ArrowLeft, ExternalLink } from 'react-feather'
-import { BodyCopy, BodyCopyTiny, HeaderLg } from '@/components/Typography'
+// import { Typography, Typography, Typography } from '@/components/Typography'
 import { Fragment, useCallback } from 'react'
 
+import Button from 'components/Button'
 import Image from 'next/image'
+import Link from '@/components/Nav/Link'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import SvgImage from '@/components/SvgImage'
-import { convertFromBaseUnits } from '@/services/convert'
-import { floatToFixed } from '@/services/display'
+import Typography from '@mui/material/Typography'
+import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withAssetPriceQuery } from '@/hooks/withAlgodex'
+import { withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -25,25 +44,9 @@ const InfoContainer = styled.div`
   position: absolute;
 `
 
-const ButtonText = styled.button`
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  display: flex;
-  align-content: center;
-  cursor: pointer;
-  color: ${({ theme }) => theme.palette.gray[400]};
-  padding: 5px 0;
-
-  div {
-    line-height: 24px;
-    margin-left: 5px;
-  }
-`
-
 const HeaderContainer = styled.div`
   padding-bottom: 2rem;
-
+  margin-top: 1rem;
   h2 {
     > span {
       white-space: nowrap;
@@ -56,7 +59,7 @@ const HeaderContainer = styled.div`
   }
 `
 
-const AssetUrl = styled.p`
+const AssetUrl = styled.div`
   a {
     color: ${({ theme }) => theme.palette.gray[400]};
     text-decoration: none;
@@ -68,7 +71,7 @@ const AssetUrl = styled.p`
   }
 `
 
-const InfoList = styled.dl`
+const InfoList = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
@@ -85,28 +88,10 @@ const ExternalLinkIcon = styled(ExternalLink)`
 `
 
 const AlgoExplorerLink = styled.div`
-  margin-top: 1.25rem;
-
-  a {
-    display: inline-flex;
-    align-items: center;
-
-    img {
-      opacity: 0.75;
-      transition: opacity 100ms;
-    }
-
-    &:hover {
-      img {
-        opacity: 1;
-      }
-    }
-
-    ${ExternalLinkIcon} {
-      position: relative;
-      top: -0.1875rem;
-      margin-left: 0.5rem;
-    }
+  ${ExternalLinkIcon} {
+    position: relative;
+    top: -0.1875rem;
+    margin-left: 0.5rem;
   }
 `
 export function AssetInfo({ asset }) {
@@ -148,11 +133,11 @@ export function AssetInfo({ asset }) {
     if (asset.url && regex.test(asset.url)) {
       return (
         <AssetUrl>
-          <a href={asset.url} target="_blank" rel="noreferrer">
-            <BodyCopy data-testid="asset-url" as="span">
+          <Link href={asset.url} target="_blank" rel="noreferrer" color="gray.100">
+            <Typography variant="subtitle_medium" data-testid="asset-url">
               {asset.url}
-            </BodyCopy>
-          </a>
+            </Typography>
+          </Link>
         </AssetUrl>
       )
     }
@@ -163,92 +148,80 @@ export function AssetInfo({ asset }) {
     <Container>
       <InfoContainer>
         {asset?.price_info?.isTraded ? (
-          <button data-testid="asset-info-back-btn" onClick={onClick}>
-            <ButtonText type="button">
-              <ArrowLeft />
-              <div>{t('back-to-chart')}</div>
-            </ButtonText>
-          </button>
+          <Button
+            data-testid="asset-info-back-btn"
+            color="secondary"
+            variant="text"
+            onClick={onClick}
+          >
+            <ArrowLeft />
+            <div>{t('back-to-chart')}</div>
+          </Button>
         ) : null}
         <HeaderContainer>
-          <HeaderLg data-testid="asset-info-asa-name" color="gray.100" mb={2}>
+          <Typography variant="h3" data-testid="asset-info-asa-name" color="gray.100" mb={2}>
             {renderName()}
-          </HeaderLg>
+          </Typography>
           {renderLink()}
         </HeaderContainer>
         <InfoList>
           <InfoItem>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               {t('description')}
-            </BodyCopyTiny>
-            <BodyCopy
-              data-testid="asset-info-desc"
-              as="dd"
-              fontFamily={theme.fontFamilies.heading}
-              fontWeight="400"
-            >
+            </Typography>
+            <Typography variant="h6" color="gray.400" data-testid="asset-info-desc">
               {description}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               {t('circulating-supply')}
-            </BodyCopyTiny>
-            <BodyCopy
-              data-testid="asset-info-circ-supply"
-              as="dd"
-              fontFamily={theme.fontFamilies.monospace}
-              fontSize="1.25rem"
-            >
+            </Typography>
+            <Typography data-testid="asset-info-circ-supply" variant="h6" color="gray.400">
               {asset.circulating || 'NA'}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem halfWidth>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               {t('total-supply')}
-            </BodyCopyTiny>
-            <BodyCopy
-              data-testid="asset-info-total-supply"
-              as="dd"
-              fontFamily={theme.fontFamilies.monospace}
-              fontSize="1.25rem"
-            >
+            </Typography>
+            <Typography data-testid="asset-info-total-supply" variant="h6" color="gray.400">
               {asset.total}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           <InfoItem>
-            <BodyCopyTiny as="dt" color="gray.500">
+            <Typography variant="body_tiny_cap" color="gray.500">
               ASA ID
-            </BodyCopyTiny>
-            <BodyCopy
+            </Typography>
+            <Typography
               data-testid="asset-info-asa-id"
-              as="dd"
               fontFamily={theme.fontFamilies.monospace}
-              fontSize="1.25rem"
+              variant="h6"
+              color="gray.400"
             >
               {asset.id}
-            </BodyCopy>
+            </Typography>
           </InfoItem>
           {/*<InfoItem>*/}
-          {/*  <BodyCopyTiny as="dt" color="gray.500">*/}
+          {/*  <Typography as="dt" color="gray.500">*/}
           {/*    {t('total-transactions')}*/}
-          {/*  </BodyCopyTiny>*/}
-          {/*  <BodyCopy as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
+          {/*  </Typography>*/}
+          {/*  <Typography as="dd" fontFamily={theme.fontFamilies.monospace} fontSize="1.25rem">*/}
           {/*    {asset.txns}*/}
-          {/*  </BodyCopy>*/}
+          {/*  </Typography>*/}
           {/*</InfoItem>*/}
           {/* TODO: Verified Info */}
           {asset?.price_info?.isTraded ? (
             <Fragment>
               <InfoItem>
-                <BodyCopyTiny as="dt" color="gray.500">
+                <Typography variant="body_tiny_cap" color="gray.500">
                   Price
-                </BodyCopyTiny>
-                <BodyCopy
+                </Typography>
+                <Typography
                   data-testid="asset-info-price"
-                  as="dd"
+                  variant="h6"
+                  color="gray.400"
                   fontFamily={theme.fontFamilies.monospace}
-                  fontSize="1.25rem"
                 >
                   {floatToFixed(
                     asset?.decimals !== 6
@@ -256,27 +229,27 @@ export function AssetInfo({ asset }) {
                       : asset?.price_info.price
                   )}{' '}
                   ALGO
-                </BodyCopy>
+                </Typography>
               </InfoItem>
               <InfoItem>
-                <BodyCopyTiny as="dt" color="gray.500">
+                <Typography variant="body_tiny_cap" color="gray.500">
                   Change
-                </BodyCopyTiny>
-                <BodyCopy
+                </Typography>
+                <Typography
+                  variant="h6"
+                  color="gray.400"
                   data-testid="asset-info-pct-change"
-                  as="dd"
                   fontFamily={theme.fontFamilies.monospace}
-                  fontSize="1.25rem"
                 >
                   {asset?.price_info.price24Change}%
-                </BodyCopy>
+                </Typography>
               </InfoItem>
             </Fragment>
           ) : null}
         </InfoList>
         <AlgoExplorerLink>
           {/*TODO: Accredit Explorer for Information Provided*/}
-          <a href={`${explorerURL}${asset.id}`} target="_blank" rel="noreferrer">
+          <Link href={`${explorerURL}${asset.id}`} target="_blank" rel="noreferrer">
             <Image
               src="/algo-explorer.png"
               alt="View asset on Algo Explorer"
@@ -284,7 +257,7 @@ export function AssetInfo({ asset }) {
               height="15"
             />
             <ExternalLinkIcon />
-          </a>
+          </Link>
         </AlgoExplorerLink>
       </InfoContainer>
     </Container>

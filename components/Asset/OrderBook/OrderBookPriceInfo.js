@@ -1,28 +1,48 @@
-import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
-import { convertFromAsaUnits } from '@/services/convert'
-import { floatToFixed } from '@/services/display'
+import Typography from '@mui/material/Typography'
+import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
-import { withAlgorandPriceQuery } from 'hooks/withAlgoExplorer'
-
+import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
   return (
     <>
-      <HeaderSmInter color="white">{asaValue}</HeaderSmInter>
+      <Typography variant="h5" color="white">
+        {asaValue}
+      </Typography>
       {asset && asset.price_info && (
-        <BodyCopy data-testid="price-info" as="span">
+        <Typography className="ml-3" data-testid="price-info">
           {(asset?.price_info?.price24Change &&
             `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
             '0.00%'}
-        </BodyCopy>
+        </Typography>
       )}
       <div className="flex items-center ml-4 text-gray-500">
         <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
-        <LabelLg as="p">${formatUSDPrice(algoPrice * asaValue)}</LabelLg>
+        <Typography variant="subtitle_small_bold">
+          ${formatUSDPrice(algoPrice * asaValue)}
+        </Typography>
       </div>
     </>
   )

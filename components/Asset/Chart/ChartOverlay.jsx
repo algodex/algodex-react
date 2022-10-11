@@ -1,12 +1,29 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { useCallback, useMemo } from 'react'
+
 import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
 import PropTypes from 'prop-types'
-import { floatToFixed } from 'services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import { useCallback } from 'react'
 import { useUserStore } from 'store'
 
 export const Container = styled.div`
@@ -36,6 +53,8 @@ export const TradingPair = styled.h3`
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
   font-weight: 600;
+  margin-block-start: 0;
+  margin-block-end: 0;
   color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
 
@@ -74,6 +93,11 @@ export const OhlcList = styled.dl`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  dd {
+    margin-inline-start: 0;
+  }
 `
 
 export const OhlcItem = styled.div`
@@ -153,6 +177,8 @@ export const VolumeContainer = styled.dl`
   display: flex;
   align-items: center;
   margin-left: 1.75rem;
+  margin-block-start: 0;
+  margin-block-end: 0;
 `
 
 export const Volume = styled.div`
@@ -170,6 +196,7 @@ export const Volume = styled.div`
 
   dd {
     color: ${({ theme }) => theme.palette.gray[100]};
+    margin-inline-start: 0px;
   }
 
   @media (min-width: 1024px) {
@@ -180,17 +207,21 @@ export const Volume = styled.div`
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
-  const currentPrice = asset.price ? new Big(asset.price) : new Big(0)
-  const changeAmt = asset.priceChange24hr
-    ? currentPrice.sub(currentPrice.div(new Big(1 + asset.priceChange24hr / 100))).toString()
+  const currentPrice = asset.price_info?.price ? new Big(asset.price_info?.price) : new Big(0)
+  const changeAmt = asset.price_info?.price24Change
+    ? currentPrice
+        .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
+        .toString()
     : '0'
-  const changePct = asset.priceChange24hr ? new Big(asset.priceChange24hr) : new Big(0)
+  const changePct = asset.price_info?.price24Change
+    ? new Big(asset.price_info?.price24Change)
+    : new Big(0)
 
-  const openCloseChange = () => {
+  const openCloseChange = useMemo(() => {
     const symbol = new Big(changeAmt).gt(0) ? '+' : ''
-
     return `${symbol}${floatToFixed(changeAmt)} (${symbol}${floatToFixed(changePct, 2)}%)`
-  }
+  }, [asset, changeAmt])
+
   const onClick = useCallback(() => {
     setShowAssetInfo(true)
   }, [asset])
@@ -234,7 +265,7 @@ function ChartOverlay(props) {
             <dd data-testid="close24hr">{ohlc.close}</dd>
           </OhlcItem>
           <OhlcItem value={changeAmt}>
-            <dd data-testid="dailyChange">{openCloseChange()}</dd>
+            <dd data-testid="dailyChange">{openCloseChange}</dd>
           </OhlcItem>
         </OhlcList>
       </Header>

@@ -1,9 +1,26 @@
-import { BodyCopy, BodyCopyTiny, HeaderSm } from 'components/Typography'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// import { Typography, Typography, Typography } from 'components/Typography'
 import { lighten, rgba } from 'polished'
 
 import Icon from 'components/Icon'
 import PropTypes from 'prop-types'
 import SvgImage from 'components/SvgImage'
+import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
@@ -27,7 +44,7 @@ const HeaderContainer = styled.div`
   }
 `
 
-const InfoList = styled.dl`
+const InfoList = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
@@ -36,7 +53,7 @@ const InfoItem = styled.div`
   flex: ${({ halfWidth }) => (halfWidth ? '50%' : '100%')};
 
   &:not(:last-child) {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.1rem;
   }
 `
 
@@ -71,12 +88,17 @@ export function SearchFlyover(props) {
 
     return (
       <InfoItem halfWidth>
-        <BodyCopyTiny as="dt" color="gray.500">
+        <Typography variant="body_tiny_cap" color="gray.500">
           {t('24-hr-change')}
-        </BodyCopyTiny>
-        <BodyCopy as="dd" fontFamily="'Roboto Mono', monospace" fontSize="1.125rem" color={color}>
+        </Typography>
+        <Typography
+          variant="h6"
+          fontFamily="'Roboto Mono', monospace"
+          fontSize="1.125rem"
+          color={color}
+        >
           {display}
-        </BodyCopy>
+        </Typography>
       </InfoItem>
     )
   }
@@ -86,39 +108,43 @@ export function SearchFlyover(props) {
       {row && (
         <>
           <HeaderContainer>
-            <HeaderSm color="gray.100" mb={3} data-testid="flyover-asa-name">
+            <Typography variant="h5" color="gray.100" mb={3} data-testid="flyover-asa-name">
               {renderName()}
-            </HeaderSm>
+            </Typography>
           </HeaderContainer>
           <InfoList>
             <InfoItem>
-              <BodyCopyTiny as="dt" color="gray.500">
+              <Typography variant="body_tiny_cap" color="gray.500">
                 ASA ID
-              </BodyCopyTiny>
-              <BodyCopy
+              </Typography>
+              <Typography
+                variant="h6"
+                color="gray.400"
                 data-testid="flyover-asa-id"
-                as="dd"
                 fontFamily="'Roboto Mono', monospace"
-                fontSize="1.125rem"
               >
                 {row.id}
-              </BodyCopy>
+              </Typography>
             </InfoItem>
 
             {row.price?.length > 0 && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500" className="flex items-center">
+                  <Typography
+                    variant="body_tiny_cap"
+                    color="gray.500"
+                    className="flex items-center"
+                  >
                     {t('price')} <Algos use="algoLogo" size={0.625} />
-                  </BodyCopyTiny>
-                  <BodyCopy
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="gray.400"
                     data-testid="flyover-asa-price"
-                    as="dd"
                     fontFamily="'Roboto Mono', monospace"
-                    fontSize="1.125rem"
                   >
                     {row.price}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
                 {renderChange()}
               </>
@@ -127,30 +153,30 @@ export function SearchFlyover(props) {
             {row.hasBeenOrdered && (
               <>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography variant="body_tiny_cap" color="gray.500">
                     {t('liquidity')} (Algos)
-                  </BodyCopyTiny>
-                  <BodyCopy
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="gray.400"
                     data-testid="flyover-algo-liquidity"
-                    as="dd"
                     fontFamily="'Roboto Mono', monospace"
-                    fontSize="1.125rem"
                   >
                     {row.liquidityAlgo}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
                 <InfoItem halfWidth>
-                  <BodyCopyTiny as="dt" color="gray.500">
+                  <Typography variant="body_tiny_cap" color="gray.500">
                     {`${t('liquidity')} (${row.name})`}
-                  </BodyCopyTiny>
-                  <BodyCopy
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="gray.400"
                     data-testid="flyover-asa-liqidity"
-                    as="dd"
                     fontFamily="'Roboto Mono', monospace"
-                    fontSize="1.125rem"
                   >
                     {row.liquidityAsa}
-                  </BodyCopy>
+                  </Typography>
                 </InfoItem>
               </>
             )}

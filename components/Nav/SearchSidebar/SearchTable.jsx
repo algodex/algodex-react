@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import {
   AssetId,
   AssetName,
@@ -16,14 +32,16 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
-import { floatToFixed, floatToFixedDynamic } from '@/services/display'
+// import { floatToFixedDynamic } from '@/services/display'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withSearchResultsQuery } from '@/hooks/withAlgodex'
+import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 
 /**
  * Map a Query Result to a Search Result
@@ -57,7 +75,7 @@ export const mapToSearchResults = ({
   const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
-    ? floatToFixedDynamic(priceChg24Pct, 2)
+    ? floatToFixed(priceChg24Pct, 2)
     : hasOrders
     ? '--'
     : null

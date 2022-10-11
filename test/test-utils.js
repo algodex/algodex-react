@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { CacheProvider } from '@emotion/react'
@@ -14,6 +30,44 @@ import placeOrderEN from '../locales/en/place-order.json'
 import { render } from '@testing-library/react'
 import theme from '../theme'
 import walletEN from '../locales/en/wallet.json'
+import { WalletsProvider } from '@/hooks/useWallets'
+import { Provider } from '@algodex/algodex-hooks'
+
+import AlgodexApi from '@algodex/algodex-sdk'
+
+const config = {
+  config: {
+    algod: {
+      uri: 'https://node.testnet.algoexplorerapi.io',
+      token: ''
+    },
+    indexer: {
+      uri: 'https://algoindexer.testnet.algoexplorerapi.io',
+      token: '',
+      port: 443
+    },
+    explorer: {
+      uri: 'https://indexer.testnet.algoexplorerapi.io',
+      port: ''
+    },
+    dexd: {
+      uri: 'https://testnet.algodex.com/algodex-backend',
+      token: ''
+    },
+    tinyman: {
+      uri: 'https://testnet.analytics.tinyman.org',
+      token: ''
+    }
+  }
+}
+let api = new AlgodexApi(config)
+
+function makeApi() {
+  if (typeof api === 'undefined') {
+    api = new AlgodexApi(config)
+  }
+  return api
+}
 
 const queryClient = new QueryClient()
 const clientSideEmotionCache = createEmotionCache()
@@ -34,7 +88,9 @@ const Providers = ({ children }) => (
             wallet: walletEN
           }}
         >
-          {children}
+          <WalletsProvider>
+            <Provider dex={makeApi()}>{children}</Provider>
+          </WalletsProvider>
         </I18nProvider>
       </QueryClientProvider>
     </ThemeProvider>

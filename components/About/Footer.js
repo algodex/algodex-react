@@ -1,18 +1,33 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /* eslint-disable max-len */
 import React, { useState } from 'react'
-import useTranslation from 'next-translate/useTranslation'
-import { ReactSVG } from 'react-svg'
-import styled from '@emotion/styled'
-import toast from 'react-hot-toast'
 
-//Iconify icon
-import { Icon } from '@iconify/react'
-
+import { AboutContainer } from './styles.css'
 // Custom Styled Components
 import Button from 'components/Button'
-import { AboutContainer } from './styles.css'
-import { submitHubspotForm } from '@/services/algodex'
+//Iconify icon
+import { Icon } from '@iconify/react'
+import { ReactSVG } from 'react-svg'
 import Spinner from '../Spinner'
+import styled from '@emotion/styled'
+import { submitHubspotForm } from '@/services/cms'
+import toast from 'react-hot-toast'
+import useTranslation from 'next-translate/useTranslation'
 
 const FooterWrapper = styled.div`
   background-color: ${({ theme }) => theme.palette.gray[500]};
@@ -160,34 +175,34 @@ export const AboutFooter = () => {
           </div>
           <div className="col-span-1">
             <Title className="mb-6">{t('RESOURCES')}</Title>
-            <FooterLinks target="_blanc" href="https://about.algodex.com/disclaimers/">
+            <FooterLinks target="_blank" href="https://about.algodex.com/disclaimers/">
               {t('disclaimers')}
             </FooterLinks>
 
-            <FooterLinks target="_blanc" href="https://about.algodex.com/docs/">
+            <FooterLinks target="_blank" href="https://docs.algodex.com/">
               {t('docs')}
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://github.com/algodex/">
+            <FooterLinks target="_blank" href="https://github.com/algodex/">
               Github
             </FooterLinks>
-            <FooterLinks target="_blanc" href="https://about.algodex.com/support/">
+            <FooterLinks target="_blank" href="/support" matches={/^\/support/}>
               {t('support')}
             </FooterLinks>
 
             <FooterLinks
-              target="_blanc"
+              target="_blank"
               href="https://github.com/algodex/algodex-public-documents/blob/master/Algodex%20Whitepaper%201.0.pdf"
             >
               {t('white paper')}
             </FooterLinks>
             <FooterLinks
-              target="_blanc"
+              target="_blank"
               href="https://github.com/algodex/algodex-public-documents/blob/master/Algodex%20Tokenomics.pdf"
             >
               {t('tokenomics')}
             </FooterLinks>
             <FooterLinks
-              target="_blanc"
+              target="_blank"
               href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
               className="leading-5"
             >

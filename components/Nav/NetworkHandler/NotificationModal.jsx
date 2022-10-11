@@ -1,18 +1,36 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { mdiDiscord, mdiReddit, mdiSend, mdiTwitter } from '@mdi/js'
 
+import ButtonEl from 'components/Button'
 import Icon from '@mdi/react'
-import Link from 'next/link'
+import Link from '@/components/Nav/Link'
 import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import styled from '@emotion/styled'
 
-export const Button = styled.button`
-  width: 100%;
-  background: white;
-  color: black;
-  padding: 9% 3%;
-  border-radius: 3px;
-`
+// export const Button = styled.Button`
+//   width: 100%;
+//   background: white;
+//   color: black;
+//   padding: 9% 3%;
+//   border-radius: 3px;
+// `
 
 const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
@@ -90,32 +108,36 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
         style={{ transform: 'translate(-50%, -50%)' }}
       >
         <ModalBody className="flex flex-col justify-between">
-          <ModalTitle className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
+          <Typography className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
             {content.title}
-          </ModalTitle>
-          <ModalSubtitle className="xs:mb-4 md:mb-6 italic font-medium text-lg">
+          </Typography>
+          {/* <ModalTitle className="xs:mb-4 md:mb-6 xs:text-lg md:text-2xl font-bold">
+            
+          </ModalTitle> */}
+          <Typography className="xs:mb-4 md:mb-6 italic font-medium text-lg">
             {content.subTitle}
-          </ModalSubtitle>
-          <ModalMain className="xs:mb-4 md:mb-6 text-sm">{content.paragraphone}</ModalMain>
-          <ModalClosingMessage className="xs:mb-4 md:mb-6 text-sm">
+          </Typography>
+          {/* <ModalSubtitle className="xs:mb-4 md:mb-6 italic font-medium text-lg">
+            {content.subTitle}
+          </ModalSubtitle> */}
+          <Typography className="xs:mb-4 md:mb-6 text-sm">{content.paragraphone}</Typography>
+          {/* <ModalMain className="xs:mb-4 md:mb-6 text-sm">{content.paragraphone}</ModalMain> */}
+          <Typography className="xs:mb-4 md:mb-6 text-sm">{content.paragraphTwo}</Typography>
+          {/* <ModalClosingMessage className="xs:mb-4 md:mb-6 text-sm">
             {content.paragraphTwo}
-          </ModalClosingMessage>
+          </ModalClosingMessage> */}
           <ModalContentFooter className="md:w-1/2">
             <hr />
-            <Link href={content.linkAddressOne}>
-              <a>
-                <ModalExternalLink className="text-white xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
-                  {content.linkTextOne}
-                </ModalExternalLink>
-              </a>
+            <Link underline="none" href={content.linkAddressOne}>
+              <Typography className="text-white xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+                {content.linkTextOne}
+              </Typography>
             </Link>
             <hr />
-            <Link href={content.linkAddressTwo}>
-              <a>
-                <ModalExternalLink className="text-white xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
-                  {content.linkTextTwo}
-                </ModalExternalLink>
-              </a>
+            <Link underline="none" href={content.linkAddressTwo}>
+              <Typography className="text-white xs:text-lg md:text-2xl xs:my-2 md:my-3 italic font-medium">
+                {content.linkTextTwo}
+              </Typography>
             </Link>
             <hr />
             <div className="flex my-2 mx-2">
@@ -131,9 +153,9 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
             onClick={closeModal}
             onKeyDown={closeModal}
           >
-            <Button data-testid="modal-accept" className="cursor-pointer font-bold">
+            <ButtonEl sx={{ width: '10rem' }} variant="tertiary" data-testid="modal-accept">
               {content.button}
-            </Button>
+            </ButtonEl>
           </div>
         </ModalFooter>
       </ModalContainer>

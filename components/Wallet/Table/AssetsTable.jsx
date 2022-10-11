@@ -1,14 +1,32 @@
-import PropTypes from 'prop-types'
-import { useCallback, useMemo } from 'react'
-import styled from '@emotion/styled'
-import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
-import { BrightGraySpan } from '@/components/Typography'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
-import Table, { DefaultCell, AssetNameCell } from '@/components/Table'
-import useUserStore from '@/store/use-user-state'
+import Table, { AssetNameCell, DefaultCell } from '@/components/Table'
+import { useCallback, useMemo } from 'react'
+
+import Link from 'next/link'
+import PropTypes from 'prop-types'
+// import { Typography } from '@/components/Typography'
+import Typography from '@mui/material/Typography'
+import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import { withWalletAssetsQuery } from '@/hooks/withAlgodex'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from '@/store/use-user-state'
+import { withWalletAssetsQuery } from '@algodex/algodex-hooks'
 
 const Container = styled.div`
   display: flex;
@@ -36,13 +54,17 @@ export const AssetCoinCell = (props) => {
   }, [dispatcher])
   return (
     <Link href={`/trade/${props.row.original.id}`}>
-      <button onClick={onClick}>
-        <AssetNameBlock className="text-left" data-testid="asset-coin-cell">
-          <BrightGraySpan>{props.value}</BrightGraySpan>
-          <br />
-          <AssetId>{props.row.original.id}</AssetId>
-        </AssetNameBlock>
-      </button>
+      <AssetNameBlock
+        onClick={onClick}
+        className="cursor-pointer text-left"
+        data-testid="asset-coin-cell"
+      >
+        <Typography variant="body_small" color="gray.000">
+          {props.value}
+        </Typography>
+        <br />
+        <AssetId>{props.row.original.id}</AssetId>
+      </AssetNameBlock>
     </Link>
   )
 }
