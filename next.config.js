@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 // This file sets a custom webpack configuration to use your Next.js app
 // with Sentry.
@@ -42,15 +58,15 @@ const moduleExports = nextPWA(
           },
           {
             source: '/support/upload',
-            destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+            destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.HUBSPOT_APIKEY}`
           },
           {
             source: '/support/engagement',
-            destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+            destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.HUBSPOT_APIKEY}`
           },
           {
             source: '/support/ticket',
-            destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+            destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.HUBSPOT_APIKEY}`
           },
           {
             source: '/api/v2/:path*',
