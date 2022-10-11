@@ -106,7 +106,7 @@ export function Header() {
           MAINNET
         </NetworkDropdownOption>
       </NetworkDropdown> */}
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
         <Select
           variant="filled"
           data-testid="header-network-dropdown-element"
@@ -119,9 +119,9 @@ export function Header() {
             borderRadius: '3px',
             border: 0,
             outline: '2px solid',
-            padding: '0.3rem',
-            fontSize: '14px',
-            fontWeight: 'bolder',
+            // padding: '0.3rem',
+            // fontSize: '14px',
+            // fontWeight: 'bolder',
             '& .MuiSelect-icon': {
               fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
               color: `unset !important`
@@ -129,7 +129,7 @@ export function Header() {
           }}
           inputProps={{
             sx: {
-              padding: '0.3rem',
+              padding: '0.1rem 0.4rem',
               fontSize: '14px',
               fontWeight: 'bolder'
             }
@@ -181,6 +181,9 @@ export function Header() {
         </NavActiveLink>
         <NavActiveLink href={MAILBOX_URL}>
           <NavTextLg>{t('header-mailbox')}</NavTextLg>
+        </NavActiveLink>
+        <NavActiveLink href="https://rewards.algodex.com/">
+          <NavTextLg>{t('header-rewards')}</NavTextLg>
         </NavActiveLink>
         {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
@@ -234,6 +237,9 @@ export function Header() {
           </NavActiveLink>
           <NavActiveLink target="_blank" href={MAILBOX_URL} rel="noreferrer">
             <NavTextSm>Mailbox</NavTextSm>
+          </NavActiveLink>
+          <NavActiveLink target="_blank" href="https://rewards.algodex.com/" rel="noreferrer">
+            <NavTextSm>Rewards</NavTextSm>
           </NavActiveLink>
           {/*
           <ActiveLink href="/wallet">

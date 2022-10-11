@@ -7,18 +7,18 @@
   resolved "https://registry.yarnpkg.com/-/-/--0.0.1.tgz#db6db7cd866142880dd03e5b8781d1b4fac0e5bd"
   integrity sha512-3HfneK3DGAm05fpyj20sT3apkNcvPpCuccOThOPdzz8sY7GgQGe0l93XH9bt+YzibcTIgUAIMoyVJI740RtgyQ==
 
-"@algodex/algodex-hooks@^1.5.5":
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/@algodex/algodex-hooks/-/algodex-hooks-1.5.5.tgz#0a781ecde959cde5bda9fe5f401a1f41dc565839"
-  integrity sha512-Rzl9loFWX0Ha9Q74+DA7BoZ37Hsm5aH3EgmzjTOKsU2Ffn/ouBKCUOe91s0dm8uAoP1FIJTDy56pvFQL0lEY1Q==
+"@algodex/algodex-hooks@^1.5.6":
+  version "1.5.6"
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-hooks/-/algodex-hooks-1.5.6.tgz#894ae3f079fb20eed96b531a0c04c794ab91e13a"
+  integrity sha512-IjZjjrysJ6rvmLrYsP94yOTj3FaBz9CAfc3QU5wjpArB+UiBtiHP6y2Oz8YzpuFRFOqVr3pkYEwD9vg9aI3gOg==
   dependencies:
     lodash "^4.17.21"
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.1.2.tgz#bd686782408befd0f419b77a5522303f1306c5a3"
-  integrity sha512-qG4EoaXjQCkksddDzzb2EDytj52iGWWNqYxI1oBhXquU/W1o3KY+Zoctt7O5xn6KJA8CJ2vySgVarK6ghOlF6w==
+"@algodex/algodex-sdk@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.1.3.tgz#5f0da24b38678878191ea88f9fd907ff32f8264e"
+  integrity sha512-MDnNkHbb+yFWLjlv05y1R1VXyHbDGjLtgrAqJmugIzSLb13h/0fVVY12V80tskRUJg941UIWgg8c8/ctcHhYjg==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"

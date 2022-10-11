@@ -462,7 +462,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            disabled={!hasBalance || order.total === 0 || isBelowMinOrderAmount}
+            disabled={
+              asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount
+            }
           >
             {buttonProps[order.type || 'buy']?.text}
           </Button>
@@ -475,7 +477,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             title="Verified asset"
             height="1.5rem"
             width="4rem"
-            color={'500'}
+            color="#FFFFFF"
           />{' '}
           &nbsp;
           <div className="flex flex-col">

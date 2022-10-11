@@ -24,7 +24,7 @@ import { NextResponse } from 'next/server'
  */
 export function middleware(request) {
   const url = new URL(request.url)
-  const country = request.geo.country || 'GB'
+  const country = request.geo.country || process.env.NEXT_PUBLIC_GEO_COUNTRY || 'GB'
 
   // Check for if this is the appropriate page
   if (
