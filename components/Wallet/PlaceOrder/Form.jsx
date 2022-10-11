@@ -477,7 +477,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             title="Verified asset"
             height="1.5rem"
             width="4rem"
-            color={'500'}
+            color="#FFFFFF"
           />{' '}
           &nbsp;
           <div className="flex flex-col">
