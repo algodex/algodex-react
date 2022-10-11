@@ -26,6 +26,7 @@ import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import { withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
@@ -65,12 +66,13 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const assetBalance = useMemo(() => {
+  const price_info = asset?.price_info
+  const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
-        res = filter[0].amount
+        res = price_info ? filter[0].amount  * (price_info.price) : filter[0].amount
       }
     }
     return res
@@ -149,11 +151,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
         </Typography>
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
-            {fromBaseUnits(assetBalance, asset.decimals)}
-            {/* {assetBalance} */}
+            {fromBaseUnits(assetValue, asset.decimals)}
+            {/* {assetValue} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice priceToConvert={fromBaseUnits(assetBalance, asset.decimals)} currency="$" />
+            <USDPrice priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
       </Stack>
@@ -164,7 +166,8 @@ AvailableBalance.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string,
-    decimals: PropTypes.number.isRequired
+    decimals: PropTypes.number.isRequired,
+    price_info: PropTypes.object
   }),
   wallet: PropTypes.shape({
     address: PropTypes.string,
@@ -176,4 +179,4 @@ AvailableBalance.propTypes = {
     )
   })
 }
-export default AvailableBalance
+export default withAssetPriceQuery(AvailableBalance)
