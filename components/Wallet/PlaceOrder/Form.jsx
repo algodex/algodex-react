@@ -329,6 +329,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         )
 
         const awaitPlaceOrder = async () => {
+          try {
             notifier('Initializing order')
             await placeOrder(
               {
@@ -346,7 +347,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               id: lastToastId,
               duration: 3000
             })
-          
+          } catch (e) {
+            toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
+          }
         }
 
         awaitPlaceOrder()
