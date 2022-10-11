@@ -17,11 +17,19 @@
 const unrestrictedAssets = {
   31566704: 'USDC', //USDC
   465865291: 'STBL', //STBL
+  841126810: 'STBL2', //STBL2
   386192725: 'goBTC', //goBTC
   386195940: 'goETH', //goETH
   793124631: 'gALGO', //gALGO
   441139422: 'goMINT', //goMINT
   312769: 'USDt', //USDt
+  684649988: 'GARD', //GARD
+  744665252: 'pBTC', //pTokens BTC
+  792313023: 'xSOL', //xSOL
+  672913181: 'goUSD', //goUSD
+  694432641: 'gALGO3', //gALGO3
+  2757561: 'rUSD', //realioUSD
+  320259224: 'wALGO', //Wrapped Algo
   19386452: 'goETH Testet',
   15322902: 'LAMP', // LAMP Testnet
   26707058: 'SEDU', // SEDU Testnet
