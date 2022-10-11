@@ -462,7 +462,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             type="submit"
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
-            disabled={!hasBalance || order.total === 0 || isBelowMinOrderAmount}
+            disabled={
+              asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount
+            }
           >
             {buttonProps[order.type || 'buy']?.text}
           </Button>
