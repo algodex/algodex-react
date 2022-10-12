@@ -120,17 +120,16 @@ export const TradeInputs = ({
           borderColor: theme.palette.gray['700']
         }}
         name="price"
-        type="number"
-        min="0"
-        readOnly={order.execution === 'market'}
         pattern="\d*"
-        disabled={order.execution === 'market'}
-        value={order.price}
+        value={order.price.toString()}
         onChange={handleChange}
+        placeholder='0.00'
         inputProps={{
+          type:"number",
           decimals: 6,
           min: '0',
           step: '0.000001',
+          // step:"any",
           placeholder: '0.00',
           sx: {
             '&.Mui-disabled': {
@@ -150,6 +149,7 @@ export const TradeInputs = ({
         }
         error={isErrorMsgVisible}
       />
+
       {isErrorMsgVisible && order.execution !== 'market' ? (
         <FormHelperText className="mt-0 mx-4 mb-4" error>
           Price cannot be less than {microAlgo}
@@ -163,6 +163,8 @@ export const TradeInputs = ({
         type="number"
         pattern="\d*"
         name="amount"
+        placeholder='0.00'
+        value={order.amount !== '' && order.amount}
         inputProps={{
           decimals: asset.decimals,
           min: '0',
@@ -175,7 +177,6 @@ export const TradeInputs = ({
           borderColor: theme.colors.gray['700'],
           marginBottom: '1rem'
         }}
-        value={order.amount}
         onChange={handleChange}
         step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}
