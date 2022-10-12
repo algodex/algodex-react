@@ -245,18 +245,18 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [order]
   )
 
-  const formatFloat = (price) => {
-    const splited = price.toString().split('.')
+  const formatFloat = (value, decimal=6) => {
+    const splited = value.toString().split('.')
     if (splited[1] && splited[1].length > 6) {
-      return price.toFixed(6)
+      return value.toFixed(decimal)
     }
-    return price
+    return value
   }
 
   // Fix Precision
   useEffect(() => {
     let _fixedPrice = order.price ? formatFloat(parseFloat(order.price)) : ''
-    let _fixedAmount = order.amount ? parseFloat(order.amount.toFixed(asset.decimals)) : ''
+    let _fixedAmount = order.amount ? formatFloat(parseFloat(order.amount), asset.decimals) : ''
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
     if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
       _fixedAmount = algoBalance / _fixedPrice
@@ -280,7 +280,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         toast.error('Asset is not available for trading')
         return
       }
-      console.log(e, _key, _value, 'e values here')
       const key = _key || e.target.name
       let value = _value || e.target.value
 
