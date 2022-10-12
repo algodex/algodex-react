@@ -20,6 +20,7 @@ import {
   InlineLogo,
   MobileNavContainer,
   MobileNavigation,
+  NavTextLg,
   NavTextSm,
   Navigation,
   NetworkDropdown,
@@ -90,6 +91,11 @@ const NavTextLgSec = ({children, fontSize, color, isActive, border}) => {
         '@media (min-width: 1024px)': {
           color: `${isActive ? 'gray.100' : 'gray.500'}`
         }
+      },
+      '@media (min-width: 1024px)': {
+        // color: theme.palette.gray[500]};
+        display: 'flex',
+        margin: '0 15px'
       }
     }}
   >
@@ -162,7 +168,7 @@ export function Header() {
           MAINNET
         </NetworkDropdownOption>
       </NetworkDropdown> */}
-      {/* <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+      <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
         <Select
           variant="filled"
           data-testid="header-network-dropdown-element"
@@ -205,22 +211,22 @@ export function Header() {
             MAINNET
           </MenuItem>
         </Select>
-      </FormControl> */}
+      </FormControl>
       <Navigation data-testid="header-navigation-element">
         <NavLink href="/about" matches={/^\/about/}>
-          <NavTextLgSec>{t('header-about')}</NavTextLgSec>
+          <NavTextLg>{t('header-about')}</NavTextLg>
         </NavLink>
         {/*<a target="_blank" href="//about.algodex.com" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-about')}</NavTextLg>*/}
         {/*</a>*/}
         <NavLink href="/trade" matches={/^\/trade/}>
-          <NavTextLgSec>{t('header-trade')}</NavTextLgSec>
+          <NavTextLg>{t('header-trade')}</NavTextLg>
         </NavLink>
         {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink> */}
         <NavLink href="https://docs.algodex.com/">
-          <NavTextLgSec>{t('header-docs')}</NavTextLgSec>
+          <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavLink>
         {/*<a*/}
         {/*  target="_blank"*/}
@@ -230,13 +236,13 @@ export function Header() {
         {/*  <NavTextLg>{t('header-docs')}</NavTextLg>*/}
         {/*</a>*/}
         <NavLink href="/support" matches={/^\/support/}>
-          <NavTextLgSec>{t('header-support')}</NavTextLgSec>
+          <NavTextLg>{t('header-support')}</NavTextLg>
         </NavLink>
         {/* <NavLink href={MAILBOX_URL}>
-          <NavTextLgSec>{t('header-mailbox')}</NavTextLgSec>
+          <NavTextLg>{t('header-mailbox')}</NavTextLg>
         </NavLink> */}
         <NavLink href="https://rewards.algodex.com/">
-          <NavTextLgSec>{t('header-rewards')}</NavTextLgSec>
+          <NavTextLg>{t('header-rewards')}</NavTextLg>
         </NavLink>
         {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}

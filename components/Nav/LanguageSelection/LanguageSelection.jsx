@@ -175,56 +175,86 @@ export const LanguageSelection = ({ isMobile }) => {
 
   const renderForWeb = () => {
     return (
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <Select
-          value={locale}
-          variant="outlined"
-          MenuProps={MenuProps}
-          input={<OutlinedInput label="Name" />}
-          sx={{
-            '.MuiOutlinedInput-notchedOutline': {
-              border: 'none'
-            },
-            '.MuiSelect-iconOutlined': {
-              display: 'none'
-            }
-          }}
-        >
-          <MenuItem value={locale}
-            sx={{
-              '&:first-child': {
-                marginTop: '-2rem',
-              }
-            }}
-          >
-            <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
+      <LanguagesContainer style={{ display: 'flex'}}>
+        <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
+          <NavTextLg>
+            {locale}
+            <Flag countryCode={localeToFlags[locale]} svg />
+          </NavTextLg>
+        </Link>
+
+        <LanguageDropDown data-testid="dropdown-container-web">
+          <LanguageItem key={locale}>
+            <Link href={asPath} locale={locale}>
               <NavTextLg>
-                {locale}
-                <Flag countryCode={localeToFlags[locale]} svg />
+                {locale} <Flag countryCode={localeToFlags[locale]} svg />
               </NavTextLg>
             </Link>
-          </MenuItem>
-          {i18n.locales
+          </LanguageItem>
+            {i18n.locales
             .filter((localeCd) => localeCd !== locale)
             .map((localeCd) => (
-              <MenuItem
-                sx={{ 
-                  paddingLeft: '0.6rem',
-                  height: '50px',
-                  lineHeight: '50px'
-                }} 
-                key={localeCd}
-                data-testid="dropdown-item-web"
-              >
-                  <Link href={asPath} locale={localeCd}>
-                    <NavTextLg>
-                      {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                    </NavTextLg>
-                  </Link>
-              </MenuItem>
+              <LanguageItem key={localeCd} data-testid="dropdown-item-web">
+                <Link href={asPath} locale={localeCd}>
+                  <NavTextLg>
+                    {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+                  </NavTextLg>
+                </Link>
+              </LanguageItem>
             ))}
-        </Select>
-      </FormControl>
+          
+        </LanguageDropDown>
+      </LanguagesContainer>
+      // <FormControl sx={{ m: 1, minWidth: 120 }}>
+      //   <Select
+      //     value={locale}
+      //     variant="outlined"
+      //     MenuProps={MenuProps}
+      //     input={<OutlinedInput label="Name" />}
+      //     sx={{
+      //       '.MuiOutlinedInput-notchedOutline': {
+      //         border: 'none'
+      //       },
+      //       '.MuiSelect-iconOutlined': {
+      //         display: 'none'
+      //       }
+      //     }}
+      //   >
+      //     <MenuItem value={locale}
+      //       sx={{
+      //         '&:first-child': {
+      //           marginTop: '-2rem',
+      //         }
+      //       }}
+      //     >
+      //       <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
+      //         <NavTextLg>
+      //           {locale}
+      //           <Flag countryCode={localeToFlags[locale]} svg />
+      //         </NavTextLg>
+      //       </Link>
+      //     </MenuItem>
+      //     {i18n.locales
+      //       .filter((localeCd) => localeCd !== locale)
+      //       .map((localeCd) => (
+      //         <MenuItem
+      //           sx={{ 
+      //             paddingLeft: '0.6rem',
+      //             height: '50px',
+      //             lineHeight: '50px'
+      //           }} 
+      //           key={localeCd}
+      //           data-testid="dropdown-item-web"
+      //         >
+      //             <Link href={asPath} locale={localeCd}>
+      //               <NavTextLg>
+      //                 {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
+      //               </NavTextLg>
+      //             </Link>
+      //         </MenuItem>
+      //       ))}
+      //   </Select>
+      // </FormControl>
     )
   }
 
