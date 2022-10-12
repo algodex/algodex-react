@@ -255,23 +255,23 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   // Fix Precision
   useEffect(() => {
-    let _fixedPrice = order.price ? formatFloat(parseFloat(order.price)) : ''
-    let _fixedAmount = order.amount ? parseFloat(order.amount.toFixed(asset.decimals)) : ''
-    let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
-    if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
-      _fixedAmount = algoBalance / _fixedPrice
-    }
-    if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-      _fixedAmount = assetBalance
-    }
-    if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
-      setOrder({
-        ...order,
-        price: _fixedPrice !== order.price ? _fixedPrice : order.price,
-        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-        total: _total !== order.total ? _total : order.total
-      })
-    }
+    // let _fixedPrice = order.price ? formatFloat(parseFloat(order.price)) : ''
+    // let _fixedAmount = order.amount ? parseFloat(order.amount.toFixed(asset.decimals)) : ''
+    // let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
+    // if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
+    //   _fixedAmount = algoBalance / _fixedPrice
+    // }
+    // if (order.type === 'sell' && _fixedAmount >= assetBalance) {
+    //   _fixedAmount = assetBalance
+    // }
+    // if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
+    //   setOrder({
+    //     ...order,
+    //     price: _fixedPrice !== order.price ? _fixedPrice : order.price,
+    //     amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
+    //     total: _total !== order.total ? _total : order.total
+    //   })
+    // }
   }, [order, asset])
 
   const handleChange = useCallback(

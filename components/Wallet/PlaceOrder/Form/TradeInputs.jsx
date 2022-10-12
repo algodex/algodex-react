@@ -120,15 +120,9 @@ export const TradeInputs = ({
           borderColor: theme.palette.gray['700']
         }}
         name="price"
-        // pattern='^[0-9]*.?[0-9]*$'
-        // readOnly={order.execution === 'market'}
-        // disabled={order.execution === 'market'}
+        pattern="\d*"
         value={order.price.toString()}
         onChange={handleChange}
-        // onChange={(e) => {
-        //   console.log(e.target.value, 'taeget.value')
-        //   handleChange(e, 'price', e.target.value)
-        // }}
         placeholder='0.00'
         inputProps={{
           type:"number",
@@ -155,13 +149,6 @@ export const TradeInputs = ({
         }
         error={isErrorMsgVisible}
       />
-      {/* <input
-        value={order.price}
-        onChange={(e) => {
-          handleChange(e, 'price', e.target.value)
-        }} 
-        type="number" id="tentacles" name="tentacles"
-       min="10" max="100"/> */}
 
       {isErrorMsgVisible && order.execution !== 'market' ? (
         <FormHelperText className="mt-0 mx-4 mb-4" error>
