@@ -125,8 +125,9 @@ export const TradeInputs = ({
         readOnly={order.execution === 'market'}
         pattern="\d*"
         disabled={order.execution === 'market'}
-        value={order.price}
+        value={order.price !== '' && order.price}
         onChange={handleChange}
+        placeholder='0.00'
         inputProps={{
           decimals: 6,
           min: '0',
@@ -163,6 +164,8 @@ export const TradeInputs = ({
         type="number"
         pattern="\d*"
         name="amount"
+        placeholder='0.00'
+        value={order.amount !== '' && order.amount}
         inputProps={{
           decimals: asset.decimals,
           min: '0',
@@ -175,7 +178,6 @@ export const TradeInputs = ({
           borderColor: theme.colors.gray['700'],
           marginBottom: '1rem'
         }}
-        value={order.amount}
         onChange={handleChange}
         step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}

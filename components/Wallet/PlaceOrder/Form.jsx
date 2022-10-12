@@ -76,8 +76,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // const { query } = useRouter()
   const [order, setOrder] = useState({
     type: 'buy',
-    price: 0,
-    amount: 0,
+    price: '',
+    amount: '',
     total: 0,
     execution: 'both'
   })
@@ -184,7 +184,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell' && assetBalance !== 0) {
-      return (order.amount / assetBalance) * 100
+      return (order?.amount / assetBalance) * 100
     }
     if (order.type === 'buy' && algoBalance !== 0) {
       return (order.total / algoBalance) * 100
@@ -230,12 +230,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const handleSlider = useCallback(
     (e, value) => {
-      let _price = order.price || 0
+      let _price = order?.price || ''
       let _balance = order.type === 'sell' ? assetBalance : algoBalance
       let _percent = (value / 100) * _balance
       const _amount = order.type === 'sell' ? _percent : _percent / _price
 
-      if (order.amount !== _amount) {
+      if (order?.amount !== _amount) {
         setOrder({
           ...order,
           amount: _amount
@@ -247,8 +247,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   // Fix Precision
   useEffect(() => {
-    let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
-    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
+    let _fixedPrice = order.price && typeof order.price === 'number' ? parseFloat(order.price.toFixed(6)) : ''
+    let _fixedAmount = order.amount && typeof order.amount === 'number' ? parseFloat(order.amount.toFixed(asset.decimals)) : ''
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
     if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
       _fixedAmount = algoBalance / _fixedPrice
