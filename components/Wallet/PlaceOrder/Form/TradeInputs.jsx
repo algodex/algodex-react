@@ -219,7 +219,7 @@ export const TradeInputs = ({
         inputProps={{
           sx: {
             '&.Mui-disabled': {
-              color: 'white'
+              color: `${order.total ? 'white !important' : 'gray.500'}`
             }
           }
         }}
