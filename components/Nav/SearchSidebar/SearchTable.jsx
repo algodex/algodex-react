@@ -34,7 +34,6 @@ import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 // import { floatToFixedDynamic } from '@/services/display'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -308,8 +307,8 @@ export const NavSearchTable = ({
                 </NameVerifiedWrapper>
               </AssetNameBlock>
             </div>
-            <br />
-            <div className="flex item-center -mt-3">
+            {/* <br /> */}
+            <div className="flex item-center -mt-0">
               <div className="ml-3">
                 <AssetId>{row.original.id}</AssetId>
               </div>

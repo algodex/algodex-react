@@ -186,6 +186,8 @@ const SellOrders = styled.div`
   display: flex;
   flex-direction: column-reverse;
   /* width */
+  scrollbar-width: none;
+  scrollbar-display: none;
   ::-webkit-scrollbar {
     width: 0;
     display: none;
@@ -200,6 +202,8 @@ const BuyOrders = styled.div`
     right: 0;
   }
   /* width */
+  scrollbar-width: none;
+  scrollbar-display: none;
   ::-webkit-scrollbar {
     width: 0;
     display: none;

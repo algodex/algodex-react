@@ -20,12 +20,12 @@ import {
   InlineLogo,
   MobileNavContainer,
   MobileNavigation,
-  NavTextLg,
   NavTextSm,
   Navigation,
   NetworkDropdown,
   NetworkDropdownOption
 } from './header.css'
+import { color, fontSize } from 'styled-system'
 
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
@@ -34,8 +34,10 @@ import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
 import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
+import NavLink from '@/components/Nav/Link'
 import PropTypes from 'prop-types'
 import Select from '@mui/material/Select'
+import { Typography } from '@mui/material'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
@@ -50,6 +52,60 @@ const ENABLE_NETWORK_SELECTION =
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
+const NavTextLgSec = ({children, fontSize, color, isActive, border}) => {
+  return <Typography
+    variant="subtitle_medium_bold"
+    sx={{
+      // display: 'none',
+      // justifyContent: 'center',
+      // alignItems: 'center',
+      textAlign: 'center',
+      textTransform: 'uppercase',
+      // letterSpacing: '0.2rem',
+      // fontWeight: '600',
+      // fontSize: `${fontSize}`,
+      color: 'gray.500',
+      // color: `${color}`,
+      cursor: 'pointer',
+      transition: 'color 0.1s ease-in',
+      '&:hover': {
+        color: 'gray.100',
+      },
+      '& > a': {
+        color: 'gray.100',
+        padding: '1rem 0',
+    
+        textDecoration: 'none',
+        borderBottom: 
+          `${isActive && border ? '6px inset green.500' : '6px inset transparent'}`,
+    
+        '&:hover': {
+          color: 'gray.100',
+        },
+    
+        '&:active': {
+          color: 'gray.100',
+        },
+    
+        '@media (min-width: 1024px)': {
+          color: `${isActive ? 'gray.100' : 'gray.500'}`
+        }
+      }
+    }}
+  >
+    {children}
+  </Typography>
+}
+
+NavTextLgSec.propTypes = {
+  // router: PropTypes.object
+  text: PropTypes.string,
+  fontSize: PropTypes.string,
+  color: PropTypes.string,
+  isActive: PropTypes.bool,
+  border: PropTypes.string,
+  children: PropTypes.string
+}
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
@@ -106,7 +162,7 @@ export function Header() {
           MAINNET
         </NetworkDropdownOption>
       </NetworkDropdown> */}
-      <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+      {/* <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
         <Select
           variant="filled"
           data-testid="header-network-dropdown-element"
@@ -119,9 +175,6 @@ export function Header() {
             borderRadius: '3px',
             border: 0,
             outline: '2px solid',
-            // padding: '0.3rem',
-            // fontSize: '14px',
-            // fontWeight: 'bolder',
             '& .MuiSelect-icon': {
               fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
               color: `unset !important`
@@ -152,23 +205,23 @@ export function Header() {
             MAINNET
           </MenuItem>
         </Select>
-      </FormControl>
+      </FormControl> */}
       <Navigation data-testid="header-navigation-element">
-        <NavActiveLink href="/about" matches={/^\/about/}>
-          <NavTextLg>{t('header-about')}</NavTextLg>
-        </NavActiveLink>
+        <NavLink href="/about" matches={/^\/about/}>
+          <NavTextLgSec>{t('header-about')}</NavTextLgSec>
+        </NavLink>
         {/*<a target="_blank" href="//about.algodex.com" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-about')}</NavTextLg>*/}
         {/*</a>*/}
-        <NavActiveLink href="/trade" matches={/^\/trade/}>
-          <NavTextLg>{t('header-trade')}</NavTextLg>
-        </NavActiveLink>
+        <NavLink href="/trade" matches={/^\/trade/}>
+          <NavTextLgSec>{t('header-trade')}</NavTextLgSec>
+        </NavLink>
         {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
           <NavTextLg>{t('header-docs')}</NavTextLg>
         </NavActiveLink> */}
-        <NavActiveLink href="https://docs.algodex.com/">
-          <NavTextLg>{t('header-docs')}</NavTextLg>
-        </NavActiveLink>
+        <NavLink href="https://docs.algodex.com/">
+          <NavTextLgSec>{t('header-docs')}</NavTextLgSec>
+        </NavLink>
         {/*<a*/}
         {/*  target="_blank"*/}
         {/*  href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"*/}
@@ -176,15 +229,15 @@ export function Header() {
         {/*>*/}
         {/*  <NavTextLg>{t('header-docs')}</NavTextLg>*/}
         {/*</a>*/}
-        <NavActiveLink href="/support" matches={/^\/support/}>
-          <NavTextLg>{t('header-support')}</NavTextLg>
-        </NavActiveLink>
-        <NavActiveLink href={MAILBOX_URL}>
-          <NavTextLg>{t('header-mailbox')}</NavTextLg>
-        </NavActiveLink>
-        <NavActiveLink href="https://rewards.algodex.com/">
-          <NavTextLg>{t('header-rewards')}</NavTextLg>
-        </NavActiveLink>
+        <NavLink href="/support" matches={/^\/support/}>
+          <NavTextLgSec>{t('header-support')}</NavTextLgSec>
+        </NavLink>
+        {/* <NavLink href={MAILBOX_URL}>
+          <NavTextLgSec>{t('header-mailbox')}</NavTextLgSec>
+        </NavLink> */}
+        <NavLink href="https://rewards.algodex.com/">
+          <NavTextLgSec>{t('header-rewards')}</NavTextLgSec>
+        </NavLink>
         {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
         {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
         {/*</a>*/}

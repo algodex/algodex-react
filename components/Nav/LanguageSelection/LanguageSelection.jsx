@@ -21,13 +21,13 @@ import {
   LanguageDropdownContainerMob,
   LanguageItem,
   LanguagesContainer,
-  NavTextLg,
   NavTextSm
 } from './language-selection.css'
 
 // import Link from 'next/link'
 import Link from '@/components/Nav/Link'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import i18n from 'i18n.json'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -62,6 +62,61 @@ const localeToFlags = {
   kr: 'KR',
   fr: 'FR',
   pl: 'PL'
+}
+
+const NavTextLg = ({children, isActive, border}) => {
+  return <Typography
+    variant="subtitle_medium_bold"
+    sx={{
+      // display: 'none',
+      // justifyContent: 'center',
+      // alignItems: 'center',
+      textAlign: 'center',
+      textTransform: 'uppercase',
+      // letterSpacing: '0.2rem',
+      // fontWeight: '600',
+      // fontSize: `${fontSize}`,
+      color: 'gray.500',
+      // color: `${color}`,
+      cursor: 'pointer',
+      transition: 'color 0.1s ease-in',
+      '&:hover': {
+        color: 'gray.100',
+      },
+      '& > a': {
+        color: 'gray.100',
+        padding: '1rem 0',
+    
+        textDecoration: 'none',
+        borderBottom: 
+          `${isActive && border ? '6px inset green.500' : '6px inset transparent'}`,
+    
+        '&:hover': {
+          color: 'gray.100',
+        },
+    
+        '&:active': {
+          color: 'gray.100',
+        },
+    
+        '@media (min-width: 1024px)': {
+          color: `${isActive ? 'gray.100' : 'gray.500'}`
+        }
+      }
+    }}
+  >
+    {children}
+  </Typography>
+}
+
+NavTextLg.propTypes = {
+  // router: PropTypes.object
+  text: PropTypes.string,
+  fontSize: PropTypes.string,
+  color: PropTypes.string,
+  isActive: PropTypes.bool,
+  border: PropTypes.string,
+  children: PropTypes.string
 }
 
 export const LanguageSelection = ({ isMobile }) => {

@@ -140,6 +140,9 @@ const Container = styled.div`
       }
     }
     tbody {
+      scrollbar-width: none;
+      scrollbar-display: none;
+      top: 37px;
       tr {
         border: 0;
       }

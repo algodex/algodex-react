@@ -76,8 +76,8 @@ export const Flag = styled(ReactCountryFlag)`
 
 export const Navigation = styled.nav`
   display: flex;
-  justify-content: flex-end;
-  width: 75%;
+  justify-content: space-between;
+  width: 50%;
   align-items: center;
 `
 
