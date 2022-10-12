@@ -175,36 +175,6 @@ export const LanguageSelection = ({ isMobile }) => {
 
   const renderForWeb = () => {
     return (
-      // <LanguagesContainer style={{ display: 'flex'}}>
-      //   <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
-      //     <NavTextLg>
-      //       {locale}
-      //       <Flag countryCode={localeToFlags[locale]} svg />
-      //     </NavTextLg>
-      //   </Link>
-
-      //   <LanguageDropDown data-testid="dropdown-container-web">
-      //     <LanguageItem key={locale}>
-      //       <Link href={asPath} locale={locale}>
-      //         <NavTextLg>
-      //           {locale} <Flag countryCode={localeToFlags[locale]} svg />
-      //         </NavTextLg>
-      //       </Link>
-      //     </LanguageItem>
-      //       {i18n.locales
-      //       .filter((localeCd) => localeCd !== locale)
-      //       .map((localeCd) => (
-      //         <LanguageItem key={localeCd} data-testid="dropdown-item-web">
-      //           <Link href={asPath} locale={localeCd}>
-      //             <NavTextLg>
-      //               {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-      //             </NavTextLg>
-      //           </Link>
-      //         </LanguageItem>
-      //       ))}
-          
-      //   </LanguageDropDown>
-      // </LanguagesContainer>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
         <Select
           value={locale}
