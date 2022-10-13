@@ -481,8 +481,9 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       {asset.isGeoBlocked && (
         <div className="px-4 flex">
           <MaterialIcon
+            className='mt-2'
             path={mdiAlertCircleOutline}
-            title="Verified asset"
+            title="Warning icon"
             height="1.5rem"
             width="4rem"
             color="#FFFFFF"
