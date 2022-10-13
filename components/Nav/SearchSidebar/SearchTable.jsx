@@ -20,6 +20,7 @@ import {
   AssetNameBlock,
   NameVerifiedWrapper
 } from '@/components/Asset/Typography'
+import { getAssetTotalStatus, getIsRestricted, getIsRestrictedCountry } from '../../../utils/restrictedAssets'
 import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -34,11 +35,11 @@ import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 // import { floatToFixedDynamic } from '@/services/display'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
@@ -185,6 +186,8 @@ export const NavSearchTable = ({
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const searchTableRef = useRef()
+  const router = useRouter()
+  // console.log(router, 'router')
   const { t } = useTranslation('assets')
 
   const filterByFavoritesFn = useCallback(
@@ -211,7 +214,7 @@ export const NavSearchTable = ({
     handleResize()
 
     return () => removeEventListener('resize', handleResize)
-  }, [searchTableRef, setSearchTableSize])
+  }, [searchTableRef, setSearchTableSize, gridSize, setSearchTableSize])
 
   const toggleFavoritesFn = useCallback(
     (assetId) => {
@@ -226,6 +229,24 @@ export const NavSearchTable = ({
     },
     [favoritesState]
   )
+
+  const handleRestrictedAsset = (assetsList) => {
+    if (typeof assetsList !== 'undefined') {
+      return {
+        assets: assetsList.map((asset) => {
+          const isRestricted =
+            getIsRestricted(`${asset.assetId}`) && getAssetTotalStatus(asset.total)
+          return {
+            ...asset,
+            isRestricted,
+            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted
+          }
+        })
+      }
+    } else {
+      return assetsList
+    }
+  }
   /**
    * Handle Search Data
    * @type {Array}
@@ -236,9 +257,15 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
+    // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: true })
+    
 
+    // 
+    const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
+    
+    // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {

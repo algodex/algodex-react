@@ -1,3 +1,13 @@
+import Big from 'big.js'
+import Icon from '@/components/Icon'
+import { Info } from 'react-feather'
+import PropTypes from 'prop-types'
+import { Stack } from '@mui/material'
+import Tooltip from '@/components/Tooltip'
+import Typography from '@mui/material/Typography'
+import USDPrice from '../../PriceConversion/USDPrice'
+import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 /* 
  * Algodex Frontend (algodex-react) 
  * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
@@ -13,21 +23,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import Big from 'big.js'
-import Icon from '@/components/Icon'
-import { Info } from 'react-feather'
-import PropTypes from 'prop-types'
-import { Stack } from '@mui/material'
-import Tooltip from '@/components/Tooltip'
-import Typography from '@mui/material/Typography'
-import USDPrice from '../../PriceConversion/USDPrice'
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetPriceQuery } from '@algodex/algodex-hooks'
-
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
   display: flex;
@@ -66,17 +66,24 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const price_info = asset?.price_info
   const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
-        res = price_info ? filter[0].amount  * (price_info.price) : filter[0].amount
+        return filter[0].amount
       }
     }
     return res
   }, [wallet, asset])
+
+  const calcAsaWorth = useMemo(
+    () => {
+      const _calcAsaWorth = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+      return _calcAsaWorth
+    },
+    [asset]
+  )
 
   return (
     <AvailableBalanceContainer>
@@ -155,7 +162,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             {/* {assetValue} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
+            <USDPrice asaWorth={calcAsaWorth} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
       </Stack>
