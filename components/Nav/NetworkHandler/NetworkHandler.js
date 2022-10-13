@@ -19,13 +19,15 @@ import { useEffect, useMemo } from 'react'
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
 import useUserStore from '@/store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 const NetworkHandler = () => {
   const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
   const hasTestnetRibbon = useUserStore((state) => state.hasTestnetRibbon)
   const hasMainnetNotificationModal = useUserStore((state) => state.hasMainnetNotificationModal)
   const hasTestnetNotificationModal = useUserStore((state) => state.hasTestnetNotificationModal)
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+
+  const activeNetwork = getActiveNetwork()
   const setHasMainnetRibbon = useUserStore((state) => state.setHasMainnetRibbon)
   const setHasTestnetRibbon = useUserStore((state) => state.setHasTestnetRibbon)
   const setHasMainnetNotificationModal = useUserStore(
