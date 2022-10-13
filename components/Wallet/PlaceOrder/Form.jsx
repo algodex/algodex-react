@@ -76,8 +76,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // const { query } = useRouter()
   const [order, setOrder] = useState({
     type: 'buy',
-    price: 0,
-    amount: 0,
+    price: '',
+    amount: '',
     total: 0,
     execution: 'both'
   })
@@ -245,10 +245,18 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [order]
   )
 
+  const formatFloat = (value, decimal=6) => {
+    const splited = value.toString().split('.')
+    if (splited[1] && splited[1].length > 6) {
+      return value.toFixed(decimal)
+    }
+    return value
+  }
+
   // Fix Precision
   useEffect(() => {
-    let _fixedPrice = parseFloat(order.price.toFixed(6)) || 0
-    let _fixedAmount = parseFloat(order.amount.toFixed(asset.decimals)) || 0
+    let _fixedPrice = order.price ? formatFloat(parseFloat(order.price)) : ''
+    let _fixedAmount = order.amount ? formatFloat(parseFloat(order.amount), asset.decimals) : ''
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
     if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
       _fixedAmount = algoBalance / _fixedPrice
@@ -272,7 +280,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         toast.error('Asset is not available for trading')
         return
       }
-
       const key = _key || e.target.name
       let value = _value || e.target.value
 
@@ -283,9 +290,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         throw new Error('Must have a valid value!')
       }
 
-      if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
-        value = parseFloat(value)
-      }
+      // if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
+      //   value = parseFloat(value)
+      //   // value = value
+      // }
       if (order[key] !== value) {
         setOrder({
           ...order,
