@@ -44,6 +44,7 @@ import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
+import { getActiveNetwork } from 'services/environment'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -53,8 +54,9 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
+  const activeNetwork = getActiveNetwork()
+
   const { wallet } = useWallets()
   const isMobile = useMobileDetect()
 

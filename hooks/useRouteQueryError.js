@@ -15,6 +15,7 @@
  */
 
 import useUserStore from 'store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 /**
  * Route based on Error
@@ -24,7 +25,7 @@ import useUserStore from 'store/use-user-state'
  * @returns {function(): boolean}
  */
 export const useRouteQueryError = ({ isError, error, router, enabled = true }) => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
   if (enabled) {
     if (isError && error.message.match(404)) {
       router.push('/404')
