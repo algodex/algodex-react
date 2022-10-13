@@ -231,7 +231,7 @@ export const NavSearchTable = ({
   )
 
   const handleRestrictedAsset = (assetsList) => {
-    if (typeof assetsList !== 'undefined' && typeof assetsList !== 'undefined') {
+    if (typeof assetsList !== 'undefined') {
       return {
         assets: assetsList.map((asset) => {
           const isRestricted =
