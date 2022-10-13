@@ -32,6 +32,7 @@ import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { getActiveNetwork } from 'services/environment'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -99,7 +100,7 @@ export function AssetInfo({ asset }) {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork();
 
   const explorerURL =
     activeNetwork === 'testnet'

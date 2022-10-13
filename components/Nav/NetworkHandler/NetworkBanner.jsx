@@ -19,11 +19,12 @@ import { mdiWindowClose } from '@mdi/js'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 const NetworkBanner = () => {
   const { t } = useTranslation('network-notification')
 
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
   const hasTestnetRibbon = useUserStore((state) => state.hasTestnetRibbon)
