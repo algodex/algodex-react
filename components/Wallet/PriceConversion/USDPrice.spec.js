@@ -15,8 +15,8 @@
  */
 
 import React from 'react'
-import { render } from 'test/test-utils'
 import { USDPrice } from './USDPrice'
+import { render } from 'test/test-utils'
 
 const algoPrice = 2.3423
 
