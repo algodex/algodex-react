@@ -34,7 +34,7 @@ const unrestrictedAssets = {
   15322902: 'LAMP', // LAMP Testnet
   26707058: 'SEDU', // SEDU Testnet
   15921880: 'HEAP', // HEAP Testnet
-  23156562: 'CHAIR' // HEAP Testnet
+  23156562: 'CHAIR' // CHAIR Testnet
 }
 
 const NETWORK_TYPE = process.env.NEXT_PUBLIC_ALGORAND_NETWORK
