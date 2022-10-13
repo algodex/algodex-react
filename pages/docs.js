@@ -17,6 +17,7 @@
 import Head from 'next/head'
 import Header from 'components/Nav/Header'
 import { useUserStore } from '../store'
+import { getActiveNetwork } from 'services/environment'
 
 /**
  * Documentation Landing Page
@@ -25,7 +26,7 @@ import { useUserStore } from '../store'
  * @constructor
  */
 const DocsPage = () => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   return (
     <>

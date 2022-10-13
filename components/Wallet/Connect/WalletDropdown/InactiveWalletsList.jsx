@@ -30,13 +30,14 @@ import { useEffect } from 'react'
 // import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
 import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
+import { getActiveNetwork } from 'services/environment'
 
 // import useWalletConnect from '@/hooks/useWalletConnect'
 
 // import useUserStore from 'store/use-user-state'
 
 const InactiveWalletsList = ({ walletsList }) => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
   const { wallet: initialState, setWallet } = useAlgodex()
   const { wallet, addresses, peraDisconnect, myAlgoDisconnect } = useWallets(initialState)
   // const {  } = useWallets(wallet)

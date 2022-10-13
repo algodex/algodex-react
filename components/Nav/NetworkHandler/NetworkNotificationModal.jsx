@@ -19,10 +19,11 @@ import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 const NetworkNotificationModal = () => {
   const { t } = useTranslation('network-notification')
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   const hasMainnetNotificationModal = useUserStore((state) => state.hasMainnetNotificationModal)
   const hasTestnetNotificationModal = useUserStore((state) => state.hasTestnetNotificationModal)

@@ -29,9 +29,10 @@ import useUserStore from 'store/use-user-state'
 // import useUserStore from 'store/use-user-state'
 // import { useWallets } from '@algodex/algodex-hooks'
 import useWallets from '@/hooks/useWallets'
+import { getActiveNetwork } from 'services/environment'
 
 const ActiveWalletList = ({ wallet }) => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
   const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
   const type = wallet?.type

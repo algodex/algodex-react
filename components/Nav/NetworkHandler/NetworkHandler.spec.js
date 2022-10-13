@@ -20,6 +20,7 @@ import NetworkBanner from './NetworkBanner'
 import NotificationModal from './NotificationModal'
 import { matchers } from '@emotion/jest'
 import useUserState from '@/store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 expect.extend(matchers)
 
@@ -38,7 +39,7 @@ describe.skip('Network Banner Component', () => {
 
   it('Should render Banner for Mainnet', () => {
     function NetworkBannerTest() {
-      const setActiveNetwork = useUserState((state) => state.setActiveNetwork)
+      const setActiveNetwork = getActiveNetwork()
       const setHasMainnetRibbon = useUserState((state) => state.setHasMainnetRibbon)
       setHasMainnetRibbon(true)
       setActiveNetwork('mainnet')
