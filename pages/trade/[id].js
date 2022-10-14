@@ -35,7 +35,7 @@ import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 
@@ -144,7 +144,7 @@ function useMobileDetect(isMobileSSR = false) {
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   // console.debug(`TradePage(`, staticExplorerAsset, `)`)
-  const router = useRouter()
+  // const router = useRouter()
 
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
@@ -160,12 +160,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   }
   // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
-  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
-
-  if (query.id !== _asset.id) {
-    // Not supposed to happen, but just in case
-    router.reload(window.location.pathname)
-  }
+  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: parseInt(query.id) }
 
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
