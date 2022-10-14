@@ -206,7 +206,6 @@ export const NavSearchTable = ({
       setTimeout(() => {
         if (searchTableRef?.current) {
           const { width, height } = searchTableRef.current.getBoundingClientRect()
-          console.log('Search height:', height)
           setSearchTableSize({ width, height })
         }
       })

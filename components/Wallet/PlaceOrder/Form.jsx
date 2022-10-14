@@ -88,17 +88,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     submitting: false
   })
 
-  const formatFloat = (value, decimal=6) => {
+  const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
     const _decimals = decimal > 6 ? 6 : decimal
     if (splited[1] && splited[1].length > _decimals) {
       return parseFloat(value).toFixed(_decimals)
     }
     return parseFloat(value)
-  }
+  })
 
   const [order, setOrder] = useReducer((currentState, order) => {
-    const origState = {...currentState}
+    const origState = { ...currentState }
     if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
       order.price = 0
     }
@@ -109,22 +109,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     Object.keys(order).forEach(key => {
       currentState[key] = order[key]
     });
-    
+
     // Set Order Price and Amount precision
     currentState.price = formatFloat(currentState.price, asset.decimals) || ''
     currentState.amount = formatFloat(currentState.amount, asset.decimals) || ''
-    
+
     const amount = currentState.amount || 0
     const price = currentState.price || 0
     const total = parseFloat(amount) * parseFloat(price)
-    
+
     // Set Order Total precision
     currentState.total = formatFloat(total, asset.decimals)
 
     if (shallowEqual(currentState, origState)) {
       return currentState
     } else {
-      return {...currentState}
+      return { ...currentState }
     }
   }, {
     type: 'buy',
@@ -244,7 +244,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
     return 0
   }, [order.price, order.amount, algoBalance, assetBalance])
-  
+
   const hasBalance = useMemo(() => {
     if (order.type === 'sell') {
       return assetBalance > 0
@@ -322,7 +322,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         [key]: value
       }
       // if (order[key] !== value) {
-        setOrder(neworder)
+      setOrder(neworder)
       // }
     },
     [asset.isGeoBlocked]
