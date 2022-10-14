@@ -160,7 +160,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
   const _asset = useMemo(() => {
-    if (staticExplorerAsset && staticExplorerAsset.id !== parseInt(query.id)) {
+    if (typeof staticExplorerAsset !== 'undefined' && staticExplorerAsset.id !== parseInt(query.id)) {
       console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
     }
 
