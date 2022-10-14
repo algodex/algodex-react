@@ -27,12 +27,12 @@ import SvgImage from '@/components/SvgImage'
 import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import { getActiveNetwork } from 'services/environment'
 import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withAssetPriceQuery } from '@algodex/algodex-hooks'
-import { getActiveNetwork } from 'services/environment'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -170,7 +170,7 @@ export function AssetInfo({ asset }) {
             <Typography variant="body_tiny_cap" color="gray.500">
               {t('description')}
             </Typography>
-            <Typography variant="h6" color="gray.400" data-testid="asset-info-desc">
+            <Typography className="leading-normal" variant="h6" color="gray.400" data-testid="asset-info-desc">
               {description}
             </Typography>
           </InfoItem>
