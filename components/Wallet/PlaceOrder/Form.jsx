@@ -112,6 +112,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     
     // Set price precision
     currentState.price = formatFloat(currentState.price, asset.decimals) || ''
+    currentState.amount = formatFloat(currentState.amount, asset.decimals) || ''
     
     const amount = currentState.amount || 0
     const price = currentState.price || 0
@@ -224,21 +225,25 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         res = fromBaseUnits(filter[0].amount, asset.decimals)
       }
     }
-
     return res
   }, [wallet, asset])
 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell' && assetBalance !== 0) {
-      return (order.amount / assetBalance) * 100
+      const _value = (order.amount / assetBalance) * 100
+      console.log(_value, parseFloat((order.amount / assetBalance) * 100), 'first fiels')
+      return _value
     }
     if (order.type === 'buy' && algoBalance !== 0) {
-      return (order.total / algoBalance) * 100
+      const _value = (order.total / algoBalance) * 100
+      console.log(_value, parseFloat((order.total / algoBalance) * 100), 'secod field')
+      return _value
     }
 
     return 0
-  }, [order, algoBalance, assetBalance])
+  }, [order.price, order.amount, algoBalance, assetBalance])
+  
   const hasBalance = useMemo(() => {
     if (order.type === 'sell') {
       return assetBalance > 0
@@ -315,9 +320,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const neworder = {
         [key]: value
       }
-
-      // console.log('setting neworder', neworder)
-
       // if (order[key] !== value) {
         setOrder(neworder)
       // }
