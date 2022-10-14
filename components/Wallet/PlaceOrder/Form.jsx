@@ -45,6 +45,20 @@ export const Form = styled.form`
   }
 `
 
+function shallowEqual(object1, object2) {
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+  for (let key of keys1) {
+    if (object1[key] !== object2[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /**
  * # 📝 Place Order Form
  *
@@ -76,6 +90,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const [order, setOrder] = useReducer((currentState, order) => {
     console.log('in reducer', currentState, order)
+    const origState = {...currentState}
     if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
       order.price = 0
     }
@@ -93,8 +108,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     currentState.total = parseFloat(amount) * parseFloat(price)
 
     console.log('state is now', currentState)
-
-    return currentState
+    if (shallowEqual(currentState, origState)) {
+      return currentState
+    } else {
+      return {...currentState}
+    }
   }, {
     type: 'buy',
     price: '',
