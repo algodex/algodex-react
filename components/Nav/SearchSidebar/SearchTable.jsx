@@ -214,7 +214,7 @@ export const NavSearchTable = ({
     handleResize()
 
     return () => removeEventListener('resize', handleResize)
-  }, [searchTableRef, setSearchTableSize, gridSize, setSearchTableSize])
+  }, [searchTableRef, setSearchTableSize, gridSize])
 
   const toggleFavoritesFn = useCallback(
     (assetId) => {
