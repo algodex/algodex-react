@@ -17,7 +17,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useReducer, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -88,8 +88,16 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     submitting: false
   })
 
+  const formatFloat = (value, decimal=6) => {
+    const splited = value.toString().split('.')
+    const _decimals = decimal > 6 ? 6 : decimal
+    if (splited[1] && splited[1].length > _decimals) {
+      return parseFloat(value).toFixed(_decimals)
+    }
+    return parseFloat(value)
+  }
+
   const [order, setOrder] = useReducer((currentState, order) => {
-    // console.log('in reducer', currentState, order)
     const origState = {...currentState}
     if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
       order.price = 0
@@ -101,13 +109,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     Object.keys(order).forEach(key => {
       currentState[key] = order[key]
     });
-
+    
+    // Set price precision
+    currentState.price = formatFloat(currentState.price, asset.decimals) || ''
+    
     const amount = currentState.amount || 0
     const price = currentState.price || 0
 
     currentState.total = parseFloat(amount) * parseFloat(price)
-
-    // console.log('state is now', currentState)
     if (shallowEqual(currentState, origState)) {
       return currentState
     } else {
@@ -281,33 +290,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     },
     [order.price, order.type, algoBalance, order.amount, assetBalance]
   )
-
-  const formatFloat = (value, decimal=6) => {
-    const splited = value.toString().split('.')
-    if (splited[1] && splited[1].length > 6) {
-      return value.toFixed(decimal)
-    }
-    return value
-  }
-
-  // Fix Precision
-  useEffect(() => {
-    let _fixedPrice = order.price ? formatFloat(parseFloat(order.price)) : ''
-    let _fixedAmount = order.amount ? formatFloat(parseFloat(order.amount), asset.decimals) : ''
-    let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))
-    if (order.type === 'buy' && _total >= algoBalance && _fixedPrice !== 0) {
-      _fixedAmount = algoBalance / _fixedPrice
-    }
-    if (order.type === 'sell' && _fixedAmount >= assetBalance) {
-      _fixedAmount = assetBalance
-    }
-    if (_fixedPrice !== order.price || _fixedAmount !== order.amount) {
-      setOrder({
-        price: _fixedPrice !== order.price ? _fixedPrice : order.price,
-        amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-      })
-    }
-  }, [order.price, order.amount, order.type, algoBalance, assetBalance, asset])
 
   const handleChange = useCallback(
     (e, _key, _value) => {
