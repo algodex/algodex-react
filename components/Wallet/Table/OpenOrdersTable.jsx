@@ -88,7 +88,7 @@ export function OpenOrdersTable({ orders: _orders }) {
     }
   })
 
-  useEffect(() => {
+  useMemo(() => {
     setOpenOrdersData(_orders)
   }, [_orders, setOpenOrdersData])
 

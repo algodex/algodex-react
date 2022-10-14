@@ -374,9 +374,9 @@ function WalletConnect() {
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
-  useEffect(() => {
+  useMemo(() => {
     setSignedIn(isConnected)
-  }, [addresses, isConnected])
+  }, [isConnected])
 
   return (
     <Box className="flex flex-col justify-center" width="100%">

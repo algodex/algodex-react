@@ -152,10 +152,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   if (typeof sellOrders !== 'undefined' && sellOrders?.length === -1) {
     console.debug(sellOrders?.length, buyOrders?.length)
   }
-  useEffect(() => {
+  useMemo(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  }, [orderBook, setSellOrders, setBuyOrders, asset])
+  }, [orderBook, setSellOrders, setBuyOrders, http.dexd, asset])
 
   useMemo(() => {
     if (order?.type === 'buy') {
@@ -291,7 +291,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   }
 
   // Fix Precision
-  useEffect(() => {
+  useMemo(() => {
     let _fixedPrice = order.price ? formatFloat(parseFloat(order.price)) : ''
     let _fixedAmount = order.amount ? formatFloat(parseFloat(order.amount), asset.decimals) : ''
     let _total = parseFloat((_fixedPrice * _fixedAmount).toFixed(6))

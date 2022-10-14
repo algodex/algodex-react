@@ -45,7 +45,7 @@ const NetworkHandler = () => {
     return activeNetwork === 'testnet' ? hasTestnetNotificationModal : hasMainnetNotificationModal
   }, [activeNetwork, hasTestnetNotificationModal, hasMainnetNotificationModal])
 
-  useEffect(() => {
+  useMemo(() => {
     hasMainnetRibbon === null && setHasMainnetRibbon(true)
     hasTestnetRibbon === null && setHasTestnetRibbon(true)
     hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
