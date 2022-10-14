@@ -235,12 +235,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell' && assetBalance !== 0) {
       const _value = (order.amount / assetBalance) * 100
-      console.log(_value, parseFloat((order.amount / assetBalance) * 100), 'first fiels')
       return _value
     }
     if (order.type === 'buy' && algoBalance !== 0) {
       const _value = (order.total / algoBalance) * 100
-      console.log(_value, parseFloat((order.total / algoBalance) * 100), 'secod field')
       return _value
     }
 
