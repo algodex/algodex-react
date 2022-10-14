@@ -35,7 +35,7 @@ import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { useAssetPriceQuery } from '@algodex/algodex-hooks'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 
