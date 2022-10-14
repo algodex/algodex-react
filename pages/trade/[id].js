@@ -144,6 +144,8 @@ function useMobileDetect(isMobileSSR = false) {
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   // console.debug(`TradePage(`, staticExplorerAsset, `)`)
+  const router = useRouter()
+
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
@@ -159,6 +161,12 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
   const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+
+  if (query.id !== _asset.id) {
+    // Not supposed to happen, but just in case
+    router.reload(window.location.pathname)
+  }
+
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
   const { data } = useAssetPriceQuery({ asset: _asset })
