@@ -144,7 +144,6 @@ function useMobileDetect(isMobileSSR = false) {
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   // console.debug(`TradePage(`, staticExplorerAsset, `)`)
-  // const router = useRouter()
 
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
