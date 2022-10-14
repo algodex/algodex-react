@@ -17,7 +17,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useReducer, useEffect, useMemo, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -44,6 +44,20 @@ export const Form = styled.form`
     display: none;
   }
 `
+
+function shallowEqual(object1, object2) {
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+  for (let key of keys1) {
+    if (object1[key] !== object2[key]) {
+      return false;
+    }
+  }
+  return true;
+}
 
 /**
  * # 📝 Place Order Form
@@ -73,14 +87,40 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     submitted: false,
     submitting: false
   })
-  // const { query } = useRouter()
-  const [order, setOrder] = useState({
+
+  const [order, setOrder] = useReducer((currentState, order) => {
+    // console.log('in reducer', currentState, order)
+    const origState = {...currentState}
+    if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
+      order.price = 0
+    }
+    if (order.amount !== undefined && order.amount !== '' && isNaN(order.amount)) {
+      order.amount = 0
+    }
+
+    Object.keys(order).forEach(key => {
+      currentState[key] = order[key]
+    });
+
+    const amount = currentState.amount || 0
+    const price = currentState.price || 0
+
+    currentState.total = parseFloat(amount) * parseFloat(price)
+
+    // console.log('state is now', currentState)
+    if (shallowEqual(currentState, origState)) {
+      return currentState
+    } else {
+      return {...currentState}
+    }
+  }, {
     type: 'buy',
     price: '',
     amount: '',
     total: 0,
     execution: 'both'
   })
+
   const algoBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
@@ -117,24 +157,21 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
   }, [orderBook, setSellOrders, setBuyOrders, asset])
 
-  const updateInitialState = () => {
+  useMemo(() => {
     if (order?.type === 'buy') {
       setOrder({
-        ...order,
         price: parseFloat(sellOrders?.length ? sellOrders[sellOrders.length - 1].price : '0.00')
       })
-    }
-    if (order?.type === 'sell') {
+    } else if (order?.type === 'sell') {
       setOrder({
-        ...order,
         price: parseFloat(buyOrders?.length ? buyOrders[0].price : '0.00')
       })
     }
-  }
+  }, [order?.type])
 
-  useEffect(() => {
-    updateInitialState()
-  }, [order.type])
+  // useEffect(() => {
+  //   updateInitialState()
+  // }, [order.type, updateInitialState])
 
   const buttonProps = useMemo(
     () => ({
@@ -146,12 +183,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
-      setOrder({
-        ...order,
+      const order = {
         amount: data.payload.amount,
         price: Number(data.payload.price),
         type: data.payload.type
-      })
+      }
+
+      setOrder(order)
     }
   })
 
@@ -237,12 +275,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
       if (order.amount !== _amount) {
         setOrder({
-          ...order,
           amount: _amount
         })
       }
     },
-    [order]
+    [order.price, order.type, algoBalance, order.amount, assetBalance]
   )
 
   const formatFloat = (value, decimal=6) => {
@@ -264,18 +301,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     if (order.type === 'sell' && _fixedAmount >= assetBalance) {
       _fixedAmount = assetBalance
     }
-    if (_fixedPrice !== order.price || _fixedAmount !== order.amount || _total !== order.total) {
+    if (_fixedPrice !== order.price || _fixedAmount !== order.amount) {
       setOrder({
-        ...order,
         price: _fixedPrice !== order.price ? _fixedPrice : order.price,
         amount: _fixedAmount !== order.amount ? _fixedAmount : order.amount,
-        total: _total !== order.total ? _total : order.total
       })
     }
-  }, [order, asset])
+  }, [order.price, order.amount, order.type, algoBalance, assetBalance, asset])
 
   const handleChange = useCallback(
     (e, _key, _value) => {
+
       if (asset.isGeoBlocked) {
         toast.error('Asset is not available for trading')
         return
@@ -294,15 +330,19 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       //   value = parseFloat(value)
       //   // value = value
       // }
-      if (order[key] !== value) {
-        setOrder({
-          ...order,
-          [key]: value
-        })
+      const neworder = {
+        [key]: value
       }
+
+      // console.log('setting neworder', neworder)
+
+      // if (order[key] !== value) {
+        setOrder(neworder)
+      // }
     },
-    [setOrder, order]
+    [asset.isGeoBlocked]
   )
+
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
@@ -373,7 +413,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
     setOrder({
-      ...order,
       price:
         order.type === 'buy'
           ? parseFloat(sellOrders[sellOrders?.length - 1]?.price)
