@@ -405,7 +405,6 @@ export function OrderBook({ asset, orders, components }) {
   }, [orders.sell, reduceOrders])
 
   const renderOrders = useCallback((data, type) => {
-    console.log('rendering orders')
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
@@ -457,12 +456,10 @@ export function OrderBook({ asset, orders, components }) {
   },[calculatedAmountFn, decimals, dispatcher])
 
   const renderedSellOrders = useMemo( () => {
-    console.log('calling renderOrders sell')
     return renderOrders(aggregatedSellOrder, 'sell')
   },[aggregatedSellOrder, renderOrders]);
 
   const renderedBuyOrders = useMemo( () => {
-    console.log('calling renderOrders buy')
     return renderOrders(aggregatedBuyOrder, 'buy')
   },[aggregatedBuyOrder, renderOrders]);
   
