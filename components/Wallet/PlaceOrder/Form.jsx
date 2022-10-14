@@ -165,10 +165,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   if (typeof sellOrders !== 'undefined' && sellOrders?.length === -1) {
     console.debug(sellOrders?.length, buyOrders?.length)
   }
-  useEffect(() => {
+  useMemo(() => {
     setSellOrders(http.dexd.aggregateOrders(orderBook.sellOrders, asset.decimals, 'sell'))
     setBuyOrders(http.dexd.aggregateOrders(orderBook.buyOrders, asset.decimals, 'buy'))
-  }, [orderBook, setSellOrders, setBuyOrders, asset])
+  }, [orderBook, setSellOrders, setBuyOrders, http.dexd, asset])
 
   useMemo(() => {
     if (order?.type === 'buy') {

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import useDebounce from '@/hooks/useDebounce'
@@ -32,7 +32,7 @@ export default function useMobileDetect() {
     handleResize()
 
     return () => window.removeEventListener('resize', handleResize)
-  }, [debounceIsMobile])
+  }, [])
 
   return isMobile
 }
