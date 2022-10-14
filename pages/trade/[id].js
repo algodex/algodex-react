@@ -160,7 +160,12 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   }
   // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
-  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: parseInt(query.id) }
+  const _asset = typeof staticExplorerAsset !== 'undefined' && (staticExplorerAsset.id === parseInt(query.id))
+    ? staticExplorerAsset : { id: parseInt(query.id) }
+  
+  if (staticExplorerAsset && staticExplorerAsset.id !== parseInt(query.id)) {
+    console.error('ID mismatch! ', staticExplorerAsset, parseInt(query.id))
+  }
 
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
