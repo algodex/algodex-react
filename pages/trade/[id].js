@@ -163,7 +163,7 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     ? staticExplorerAsset : { id: parseInt(query.id) }
   
   if (staticExplorerAsset && staticExplorerAsset.id !== parseInt(query.id)) {
-    console.error('ID mismatch! ', staticExplorerAsset, parseInt(query.id))
+    console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
   }
 
   const isMobile = useMobileDetect(deviceType === 'mobile')
