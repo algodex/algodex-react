@@ -159,12 +159,16 @@ function TradePage({ staticExplorerAsset, deviceType }) {
   }
   // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
-  const _asset = typeof staticExplorerAsset !== 'undefined' && (staticExplorerAsset.id === parseInt(query.id))
-    ? staticExplorerAsset : { id: parseInt(query.id) }
-  
-  if (staticExplorerAsset && staticExplorerAsset.id !== parseInt(query.id)) {
-    console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
-  }
+  const _asset = useMemo(() => {
+    if (staticExplorerAsset && staticExplorerAsset.id !== parseInt(query.id)) {
+      console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
+    }
+
+    if (typeof staticExplorerAsset !== 'undefined' && (staticExplorerAsset.id === parseInt(query.id))) {
+      return staticExplorerAsset
+    }
+    return  { id: parseInt(query.id) }  
+  }, [query.id, staticExplorerAsset])
 
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
@@ -178,21 +182,17 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     [setInterval, interval]
   )
 
-  useEffect(() => {
+  useMemo(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
       setAsset(data)
-    }
-  }, [data, setAsset, staticExplorerAsset])
-
-  useEffect(() => {
-    if (
-      typeof staticExplorerAsset !== 'undefined' &&
-      typeof staticExplorerAsset.id !== 'undefined' &&
-      staticExplorerAsset.id !== asset?.id
-    ) {
-      setAsset(staticExplorerAsset)
-    }
-  }, [asset, setAsset, staticExplorerAsset])
+    } else if (
+        typeof staticExplorerAsset !== 'undefined' &&
+        typeof staticExplorerAsset.id !== 'undefined' &&
+        staticExplorerAsset.id !== asset?.id
+      ) {
+        setAsset(staticExplorerAsset)
+      }
+  }, [data, setAsset, asset?.id, staticExplorerAsset])
 
   const isTraded = useMemo(() => {
     return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
