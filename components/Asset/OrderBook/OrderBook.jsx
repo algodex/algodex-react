@@ -15,7 +15,7 @@
  */
 
 import { ArrowDown, ArrowUp } from 'react-feather'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect,useCallback, useMemo, useState } from 'react'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
@@ -318,14 +318,14 @@ export function OrderBook({ asset, orders, components }) {
   const isSignedIn = isConnected
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-  const DECIMALS_MAP = {
+  const DECIMALS_MAP = useMemo( () => {return {
     0.000001: 6,
     0.00001: 5,
     0.0001: 4,
     0.001: 3,
     0.01: 2,
     0.1: 1
-  }
+  }}, []);
   const onAggrSelectorChange = (e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
@@ -340,9 +340,9 @@ export function OrderBook({ asset, orders, components }) {
 
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
-  useEffect(() => {
+  useMemo(() => {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
-  }, [asset])
+  }, [asset, DECIMALS_MAP, cachedSelectedPrecision])
 
   const dispatcher = useEventDispatch()
   const maxSpendableAlgo = useMaxSpendableAlgo()
@@ -356,7 +356,7 @@ export function OrderBook({ asset, orders, components }) {
    * @param {String} type
    * @return {Number}
    */
-  const calculatedAmountFn = (price, ordersList, index, type) => {
+  const calculatedAmountFn = useCallback((price, ordersList, index, type) => {
     const _price = parseFloat(price)
     let slicedList = []
     if (type === 'sell') slicedList = ordersList.slice(index)
@@ -370,9 +370,9 @@ export function OrderBook({ asset, orders, components }) {
     } else {
       return compoundedAmount
     }
-  }
+  },[asset.decimals, maxSpendableAlgo])
 
-  const reduceOrders = (result, order) => {
+  const reduceOrders = useCallback((result, order) => {
     const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     const _amount = order.amount
@@ -392,19 +392,20 @@ export function OrderBook({ asset, orders, components }) {
       total: _amount * _price
     })
     return result
-  }
+  }, [])
 
   const aggregatedBuyOrder = useMemo(() => {
     if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
     return orders.buy.reduce(reduceOrders, [])
-  }, [orders.buy, selectedPrecision])
+  }, [orders.buy, reduceOrders])
 
   const aggregatedSellOrder = useMemo(() => {
     if (typeof orders?.sell === 'undefined' && !Array.isArray(orders.sell)) return []
     return orders.sell.reduce(reduceOrders, [])
-  }, [orders.sell, selectedPrecision])
+  }, [orders.sell, reduceOrders])
 
-  const renderOrders = (data, type) => {
+  const renderOrders = useCallback((data, type) => {
+    console.log('rendering orders')
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
@@ -453,7 +454,18 @@ export function OrderBook({ asset, orders, components }) {
         </BookRow>
       )
     })
-  }
+  },[calculatedAmountFn, decimals, dispatcher])
+
+  const renderedSellOrders = useMemo( () => {
+    console.log('calling renderOrders sell')
+    return renderOrders(aggregatedSellOrder, 'sell')
+  },[aggregatedSellOrder, renderOrders]);
+
+  const renderedBuyOrders = useMemo( () => {
+    console.log('calling renderOrders buy')
+    return renderOrders(aggregatedBuyOrder, 'buy')
+  },[aggregatedBuyOrder, renderOrders]);
+  
   if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
     if (orders.sell.length === 0 && orders.buy.length === 0) {
       return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
@@ -489,7 +501,7 @@ export function OrderBook({ asset, orders, components }) {
         </Box>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -498,7 +510,7 @@ export function OrderBook({ asset, orders, components }) {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderOrders(aggregatedBuyOrder, 'buy')}
+            {renderedBuyOrders}
           </OrdersWrapper>
         </BuyOrders>
       </Container>

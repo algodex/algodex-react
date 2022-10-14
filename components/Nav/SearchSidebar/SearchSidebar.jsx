@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
@@ -104,7 +104,7 @@ export function NavSearchSidebar({
    * The active (focused) element is blurred so an asset row can't remain
    * focused when flyout is hidden.
    */
-  useEffect(() => {
+  useMemo(() => {
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
     const isMobile = window.matchMedia('(max-width: 996px)').matches
 
