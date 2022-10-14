@@ -75,6 +75,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   })
 
   const [order, setOrder] = useReducer((currentState, order) => {
+    console.log('in reducer', currentState, order)
     if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
       order.price = 0
     }
@@ -90,6 +91,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     const price = currentState.price || 0
 
     currentState.total = parseFloat(amount) * parseFloat(price)
+
+    console.log('state is now', currentState)
 
     return currentState
   }, {
@@ -146,7 +149,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         price: parseFloat(buyOrders?.length ? buyOrders[0].price : '0.00')
       })
     }
-  }, [order?.type, sellOrders, buyOrders])
+  }, [order?.type])
 
   // useEffect(() => {
   //   updateInitialState()
@@ -312,6 +315,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const neworder = {
         [key]: value
       }
+
+      console.log('setting neworder', neworder)
 
       // if (order[key] !== value) {
         setOrder(neworder)
