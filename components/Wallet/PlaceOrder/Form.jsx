@@ -110,14 +110,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       currentState[key] = order[key]
     });
     
-    // Set price precision
+    // Set Order Price and Amount precision
     currentState.price = formatFloat(currentState.price, asset.decimals) || ''
     currentState.amount = formatFloat(currentState.amount, asset.decimals) || ''
     
     const amount = currentState.amount || 0
     const price = currentState.price || 0
+    const total = parseFloat(amount) * parseFloat(price)
+    
+    // Set Order Total precision
+    currentState.total = formatFloat(total, asset.decimals)
 
-    currentState.total = parseFloat(amount) * parseFloat(price)
     if (shallowEqual(currentState, origState)) {
       return currentState
     } else {
