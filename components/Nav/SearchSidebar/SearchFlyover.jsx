@@ -71,7 +71,7 @@ export function SearchFlyover(props) {
     if (row.verified) {
       return (
         <>
-          {`${row.fullName} `}
+          {`${row.fullName || row.name} `}
           <span>
             {`(${row.name}) `}
             <SvgImage use="verified" w={1.5} h={1.5} />
@@ -79,7 +79,7 @@ export function SearchFlyover(props) {
         </>
       )
     }
-    return <>{`${row.fullName} (${row.name})`}</>
+    return <>{`${row.fullName || row.name} (${row.name})`}</>
   }
 
   const renderChange = () => {
