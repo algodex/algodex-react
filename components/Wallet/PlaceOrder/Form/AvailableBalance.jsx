@@ -71,7 +71,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
-        return filter[0].amount
+        return parseFloat(filter[0].amount)
       }
     }
     return res
