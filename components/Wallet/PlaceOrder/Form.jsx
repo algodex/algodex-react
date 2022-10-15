@@ -153,7 +153,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     const total = parseFloat(amount) * parseFloat(price)
 
     // Set Order Total precision
-    currentState.total = formatFloat(total, asset.decimals)
+    currentState.total = formatFloat(total, 6)
 
     if (shallowEqual(currentState, origStateCopy)) {
       return currentState
