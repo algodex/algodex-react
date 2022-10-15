@@ -20,7 +20,7 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
-import useMemo from 'react'
+import { useMemo } from 'react'
 
 export function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
   return theme.palette[color][fillGradient]
