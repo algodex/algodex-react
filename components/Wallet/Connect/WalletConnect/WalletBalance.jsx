@@ -19,7 +19,7 @@ import { Box, Typography } from '@mui/material'
 import Icon from 'components/Icon/Icon'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-
+import { useMemo } from 'react'
 const Balance = styled.div`
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ const Balance = styled.div`
   }
 `
 export const WalletBalance = ({ balance }) => {
-  const split = balance.toFixed(6).split('.')
+  const split = useMemo(() => balance.toFixed(6).split('.'), [balance])
 
   return (
     <Balance>

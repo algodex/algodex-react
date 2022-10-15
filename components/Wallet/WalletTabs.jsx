@@ -21,7 +21,7 @@ import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 const Tab = styled.div`
@@ -101,15 +101,17 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
+const OPEN_ORDERS_PANEL = 'open-orders'
+const ORDER_HISTORY_PANEL = 'order-history'
+const ASSETS_PANEL = 'assets'
+
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const { wallet, isConnected } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-  const OPEN_ORDERS_PANEL = 'open-orders'
-  const ORDER_HISTORY_PANEL = 'order-history'
-  const ASSETS_PANEL = 'assets'
 
-  const renderPanel = (panelName) => {
+
+  const renderPanel = useCallback((panelName) => {
     if (!isConnected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
@@ -121,7 +123,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
       default:
         return null
     }
-  }
+  }, [isConnected, wallet])
 
   return (
     <Section area={area} borderColor="blue" border="dashed">

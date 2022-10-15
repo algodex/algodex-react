@@ -18,7 +18,7 @@ import OrderBook from '@/components/Asset/OrderBook'
 import PropTypes from 'prop-types'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 const Tab = styled.div`
@@ -71,7 +71,7 @@ function HistoryAndOrderBook({ asset, isMobile }) {
   const ORDER_BOOK_PANEL = 'order-book'
   const TRADE_HISTORY_PANEL = 'trade-history'
 
-  const renderPanel = (panelName) => {
+  const renderPanel = useCallback((panelName) => {
     switch (panelName) {
       case ORDER_BOOK_PANEL:
         return <OrderBook isMobile={isMobile} asset={asset} />
@@ -80,7 +80,7 @@ function HistoryAndOrderBook({ asset, isMobile }) {
       default:
         return null
     }
-  }
+  }, [asset, isMobile])
 
   return (
     <Container>

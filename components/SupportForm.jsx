@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { createEngagement, createTicket, uploadSupportFile } from '@/services/cms'
 
 // Custom Styled Components
@@ -112,20 +112,23 @@ const Label = styled.label`
     }
   }
 `
+
+const initialValues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  product: '',
+  subject: '',
+  detail: '',
+  transactionId: '',
+  messageType: 'new-feature',
+  expectedFunctionality: '',
+  upload: ''
+}
+
 export const SupportForm = () => {
   const [loading, setLoading] = useState(false)
-  const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    product: '',
-    subject: '',
-    detail: '',
-    transactionId: '',
-    messageType: 'new-feature',
-    expectedFunctionality: '',
-    upload: ''
-  }
+
   const [formData, setFormData] = useState(initialValues)
   const {
     email,
@@ -144,7 +147,7 @@ export const SupportForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const sendFile = async (file) => {
+  const sendFile = useCallback(async (file) => {
     const payload = new FormData()
     payload.append('file', file)
     const res = await uploadSupportFile(payload)
@@ -157,7 +160,7 @@ export const SupportForm = () => {
       // return file metadata
       return res.objects
     }
-  }
+  }, [])
 
   const onSubmit = async (e) => {
     e.preventDefault()

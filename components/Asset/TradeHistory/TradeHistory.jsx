@@ -27,7 +27,7 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
@@ -149,7 +149,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
 
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
-  const renderHistory = () => {
+  const renderHistory = useCallback(() => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
     return tradesData
@@ -190,7 +190,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
           </TradesRow>
         )
       })
-  }
+  }, [asset.decimals, tradesData])
 
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">

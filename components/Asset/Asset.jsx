@@ -111,7 +111,7 @@ export function AssetInfo({ asset }) {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
 
-  const renderName = () => {
+  const renderName = useCallback(() => {
     if (asset.verified) {
       return (
         <>
@@ -124,9 +124,9 @@ export function AssetInfo({ asset }) {
       )
     }
     return <>{`${asset.fullName} (${asset.name})`}</>
-  }
+  }, [asset.fullName, asset.name, asset.verified])
 
-  const renderLink = () => {
+  const renderLink = useCallback(() => {
     const expression =
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,7}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
     const regex = new RegExp(expression)
@@ -143,7 +143,7 @@ export function AssetInfo({ asset }) {
       )
     }
     return null
-  }
+  }, [asset.url])
 
   return (
     <Container>

@@ -18,6 +18,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 import { parseThemeColor } from 'theme'
+import { useMemo } from 'react'
 
 const rotate = keyframes`
   100% {
@@ -89,7 +90,7 @@ Svg.defaultProps = {
  * @constructor
  */
 function Spinner({ size, color, flex, ...rest }) {
-  return flex ? (
+  const retval = useMemo(() => flex ? (
     <FlexContainer data-testid="spinner-flex-container">
       <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
         <circle cx="25" cy="25" r="20" />
@@ -99,7 +100,8 @@ function Spinner({ size, color, flex, ...rest }) {
     <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
       <circle cx="25" cy="25" r="20" />
     </Svg>
-  )
+  ), [color, flex, rest, size])
+  return retval
 }
 
 Spinner.propTypes = {
