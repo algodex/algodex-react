@@ -95,10 +95,40 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return parseFloat(value).toFixed(_decimals)
     }
     return parseFloat(value)
-  })
+  }, [])
+
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = fromBaseUnits(filter[0].amount, asset.decimals)
+      }
+    }
+    return res
+  }, [wallet, asset])
+
+  const algoBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
+      res = fromBaseUnits(wallet.amount)
+    }
+    return res
+  }, [wallet])
+
+  const getAdjOrderAmount = useCallback(({amount, type, price}) => {
+    let adjAmount = amount || 0
+    let total = adjAmount * price
+    if (type === 'buy' && total > algoBalance) {
+      adjAmount = algoBalance / Math.max(price, 0.000001)
+    } else if (type === 'sell' && adjAmount > assetBalance) {
+      adjAmount = assetBalance
+    }
+    return adjAmount
+  }, [algoBalance, assetBalance])
 
   const [order, setOrder] = useReducer((currentState, order) => {
-    const origState = { ...currentState }
+    const origStateCopy = { ...currentState }
     if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
       order.price = 0
     }
@@ -112,16 +142,19 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
     // Set Order Price and Amount precision
     currentState.price = formatFloat(currentState.price, asset.decimals) || ''
-    currentState.amount = formatFloat(currentState.amount, asset.decimals) || ''
 
-    const amount = currentState.amount || 0
+    const amount = getAdjOrderAmount(currentState)
+    // console.log('adj amount: ' + amount)
+    currentState.amount = formatFloat(amount, asset.decimals) || ''
+
     const price = currentState.price || 0
+
     const total = parseFloat(amount) * parseFloat(price)
 
     // Set Order Total precision
     currentState.total = formatFloat(total, asset.decimals)
 
-    if (shallowEqual(currentState, origState)) {
+    if (shallowEqual(currentState, origStateCopy)) {
       return currentState
     } else {
       return { ...currentState }
@@ -133,14 +166,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     total: 0,
     execution: 'both'
   })
-
-  const algoBalance = useMemo(() => {
-    let res = 0
-    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-      res = fromBaseUnits(wallet.amount)
-    }
-    return res
-  }, [wallet])
 
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
@@ -220,17 +245,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
   })
 
-  const assetBalance = useMemo(() => {
-    let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
-      if (filter.length > 0) {
-        res = fromBaseUnits(filter[0].amount, asset.decimals)
-      }
-    }
-    return res
-  }, [wallet, asset])
-
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell' && assetBalance !== 0) {
@@ -253,7 +267,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return algoBalance > 0
     }
     return false
-  }, [order, wallet])
+  }, [order, algoBalance, assetBalance])
 
   const MICROALGO = 0.000001
 
