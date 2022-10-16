@@ -230,7 +230,7 @@ export const NavSearchTable = ({
     [favoritesState]
   )
 
-  const handleRestrictedAsset = (assetsList) => {
+  const handleRestrictedAsset = useCallback((assetsList) => {
     if (typeof assetsList !== 'undefined') {
       return {
         assets: assetsList.map((asset) => {
@@ -246,7 +246,8 @@ export const NavSearchTable = ({
     } else {
       return assetsList
     }
-  }
+  }, [router.query])
+  
   /**
    * Handle Search Data
    * @type {Array}
@@ -281,7 +282,7 @@ export const NavSearchTable = ({
       // If there is data, use it
       return filteredList.map(mapToSearchResults)
     }
-  }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
+  }, [assets, handleRestrictedAsset, isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
