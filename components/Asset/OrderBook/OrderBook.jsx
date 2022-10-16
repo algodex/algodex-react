@@ -392,7 +392,7 @@ export function OrderBook({ asset, orders, components }) {
       total: _amount * _price
     })
     return result
-  }, [])
+  }, [selectedPrecision])
 
   const aggregatedBuyOrder = useMemo(() => {
     if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
