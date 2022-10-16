@@ -326,14 +326,14 @@ export function OrderBook({ asset, orders, components }) {
     0.01: 2,
     0.1: 1
   }}, []);
-  const onAggrSelectorChange = (e) => {
+  const onAggrSelectorChange = useCallback((e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
       [asset.id]: e.target.value
     })
     setSelectedPrecision(DECIMALS_MAP[e.target.value])
-  }
-
+  }, [DECIMALS_MAP, asset.id, cachedSelectedPrecision, setCachedSelectedPrecision])
+  
   const [selectedPrecision, setSelectedPrecision] = useState(
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
   )
@@ -463,12 +463,15 @@ export function OrderBook({ asset, orders, components }) {
     return renderOrders(aggregatedBuyOrder, 'buy')
   },[aggregatedBuyOrder, renderOrders]);
   
-  if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
-    if (orders.sell.length === 0 && orders.buy.length === 0) {
-      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+
+  return useMemo(() => {
+    if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
+      if (orders.sell.length === 0 && orders.buy.length === 0) {
+        return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+      }
     }
-  }
-  return useMemo(() => (
+    
+    return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
@@ -512,7 +515,8 @@ export function OrderBook({ asset, orders, components }) {
         </BuyOrders>
       </Container>
     </Section>
-  ), [DECIMALS_MAP, PriceDisplay, asset, assetVeryShortName, onAggrSelectorChange,
+  )}, [DECIMALS_MAP, PriceDisplay, asset, assetVeryShortName, isSignedIn,
+      onAggrSelectorChange, orders.buy, orders.sell,
       renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
 }
 
