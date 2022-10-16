@@ -299,6 +299,16 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
     ServiceError: ServiceError
   }
 })
+
+const DECIMALS_MAP = {
+  0.000001: 6,
+  0.00001: 5,
+  0.0001: 4,
+  0.001: 3,
+  0.01: 2,
+  0.1: 1
+};
+
 /**
  * Recipe: Orderbook Component
  *
@@ -318,21 +328,14 @@ export function OrderBook({ asset, orders, components }) {
   const isSignedIn = isConnected
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-  const DECIMALS_MAP = useMemo( () => {return {
-    0.000001: 6,
-    0.00001: 5,
-    0.0001: 4,
-    0.001: 3,
-    0.01: 2,
-    0.1: 1
-  }}, []);
+
   const onAggrSelectorChange = useCallback((e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
       [asset.id]: e.target.value
     })
     setSelectedPrecision(DECIMALS_MAP[e.target.value])
-  }, [DECIMALS_MAP, asset.id, cachedSelectedPrecision, setCachedSelectedPrecision])
+  }, [asset.id, cachedSelectedPrecision, setCachedSelectedPrecision])
   
   const [selectedPrecision, setSelectedPrecision] = useState(
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
@@ -342,7 +345,7 @@ export function OrderBook({ asset, orders, components }) {
 
   useMemo(() => {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
-  }, [asset, DECIMALS_MAP, cachedSelectedPrecision])
+  }, [asset, cachedSelectedPrecision])
 
   const dispatcher = useEventDispatch()
   const maxSpendableAlgo = useMaxSpendableAlgo()
@@ -515,7 +518,7 @@ export function OrderBook({ asset, orders, components }) {
         </BuyOrders>
       </Container>
     </Section>
-  )}, [DECIMALS_MAP, PriceDisplay, asset, assetVeryShortName, isSignedIn,
+  )}, [PriceDisplay, asset, assetVeryShortName, isSignedIn,
       onAggrSelectorChange, orders.buy, orders.sell,
       renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
 }
