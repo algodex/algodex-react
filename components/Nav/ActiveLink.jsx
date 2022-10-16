@@ -17,7 +17,7 @@
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import React, { Children } from 'react'
+import React, { useMemo, Children } from 'react'
 
 /**
  * NavActiveLink
@@ -36,7 +36,9 @@ const NavActiveLink = ({ children, matches, ...props }) => {
   const { asPath } = useRouter()
   const child = Children.only(children)
 
-  const isActive = matches ? matches.test(asPath) : asPath === props.href
+  const isActive = useMemo(() => {
+    return matches ? matches.test(asPath) : asPath === props.href
+  }, [asPath, matches, props.href])
 
   return (
     <Link {...props}>

@@ -16,13 +16,17 @@
 
 import PropTypes from 'prop-types'
 import { isUndefined } from 'lodash/lang'
+import { useMemo } from 'react'
 
 function InfoFlyover({ row, components, children, isActive }) {
   const { Root } = components
 
-  const isChildren = isActive && !isUndefined(children)
-  const isRow = !isChildren && Object.keys(row).length > 0
-  const isEmpty = !isRow && !isChildren
+  const {isChildren, isRow, isEmpty} = useMemo(() => {
+    const isChildren = isActive && !isUndefined(children)
+    const isRow = !isChildren && Object.keys(row).length > 0
+    const isEmpty = !isRow && !isChildren
+    return {isChildren, isRow, isEmpty}
+  }, [children, isActive, row])
 
   return (
     <Root>

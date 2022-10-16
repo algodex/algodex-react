@@ -50,12 +50,10 @@ const NetworkHandler = () => {
     hasTestnetRibbon === null && setHasTestnetRibbon(true)
     hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
     hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
-  }, [
-    hasMainnetRibbon,
-    hasTestnetRibbon,
-    setHasTestnetNotificationModal,
-    setHasMainnetNotificationModal
-  ])
+  }, [hasMainnetRibbon, setHasMainnetRibbon, hasTestnetRibbon,
+    setHasTestnetRibbon, hasMainnetNotificationModal,
+    setHasMainnetNotificationModal, hasTestnetNotificationModal,
+    setHasTestnetNotificationModal])
 
   return (
     <section>
