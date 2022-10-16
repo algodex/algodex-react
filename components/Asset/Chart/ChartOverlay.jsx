@@ -224,7 +224,7 @@ function ChartOverlay(props) {
 
   const onClick = useCallback(() => {
     setShowAssetInfo(true)
-  }, [asset])
+  }, [setShowAssetInfo])
 
   return (
     <Container>

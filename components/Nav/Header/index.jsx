@@ -40,7 +40,7 @@ import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
@@ -70,7 +70,7 @@ export function Header() {
    * Route to other network
    * @type {(function(*): void)|*}
    */
-  const handleNetworkChangeFn = (value) => {
+  const handleNetworkChangeFn = useCallback((value) => {
     if (!ENABLE_NETWORK_SELECTION) {
       return
     }
@@ -79,7 +79,7 @@ export function Header() {
     } else {
       window.location = TESTNET_LINK
     }
-  }
+  }, [])
 
   const MAILBOX_URL =
     activeNetwork === 'testnet'

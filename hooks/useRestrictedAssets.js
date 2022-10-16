@@ -63,6 +63,6 @@ export function useSearchResultsQuery({
     } else {
       return queryData
     }
-  }, [queryData])
+  }, [queryData, router.query])
   return { data, isError, error, ...rest }
 }

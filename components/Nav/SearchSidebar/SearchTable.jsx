@@ -147,7 +147,7 @@ const Algos = styled(AlgoIcon)`
 `
 
 export const AssetChangeCell = ({ value, row }) => {
-  const displayChange = () => {
+  const displayChange = useCallback(() => {
     if (value === null) {
       return ''
     }
@@ -159,7 +159,7 @@ export const AssetChangeCell = ({ value, row }) => {
         className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
       >{`${value}%`}</span>
     )
-  }
+  }, [row?.original?.isGeoBlocked, value])
   return (
     <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
       {displayChange()}
@@ -247,7 +247,7 @@ export const NavSearchTable = ({
       return assetsList
     }
   }, [router.query])
-  
+
   /**
    * Handle Search Data
    * @type {Array}
@@ -282,7 +282,9 @@ export const NavSearchTable = ({
       // If there is data, use it
       return filteredList.map(mapToSearchResults)
     }
-  }, [assets, handleRestrictedAsset, isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
+
+  }, [assets, handleRestrictedAsset,
+      isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
@@ -467,7 +469,7 @@ export const NavSearchTable = ({
         assetClick(row)
       }
     }
-  }),[assetClick])
+  }), [assetClick])
 
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>

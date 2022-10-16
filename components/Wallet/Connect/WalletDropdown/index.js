@@ -15,7 +15,7 @@
  */
 
 import { filter, find } from 'lodash'
-import { useContext, useMemo } from 'react'
+import { useContext, useMemo, useCallback } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import DropdownBody from './DropdownBody'
@@ -56,26 +56,26 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const [addresses] = useContext(WalletsContext)
   const dispatcher = useEventDispatch()
   const { wallet, peraConnect, myAlgoConnect } = useWallets()
-  const WALLETS_CONNECT_MAP = {
+  const WALLETS_CONNECT_MAP = useMemo(() => ({
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect
-  }
+  }), [myAlgoConnect, peraConnect])
 
-  const handleConnectionDropdown = (closeDropdown) => {
+  const handleConnectionDropdown = useCallback((closeDropdown) => {
     dispatcher('connecting-wallet', {
       isOpen: closeDropdown
     })
-  }
+  }, [dispatcher])
 
-  const myAlgoOnClick = () => {
+  const myAlgoOnClick = useCallback(() => {
     handleConnectionDropdown(false)
     WALLETS_CONNECT_MAP['my-algo-wallet']()
-  }
+  }, [WALLETS_CONNECT_MAP, handleConnectionDropdown])
 
-  const peraConnectOnClick = () => {
+  const peraConnectOnClick = useCallback(() => {
     handleConnectionDropdown(false)
     WALLETS_CONNECT_MAP['pera-connect']()
-  }
+  }, [WALLETS_CONNECT_MAP, handleConnectionDropdown])
 
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
