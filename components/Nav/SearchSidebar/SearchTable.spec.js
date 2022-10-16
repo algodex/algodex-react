@@ -14,9 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { AssetChangeCell, NavSearchTable } from './SearchTable'
+
 import { render } from 'test/test-utils'
 import useUserStore from 'store/use-user-state'
-import { NavSearchTable, AssetChangeCell } from './SearchTable'
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 const assets = [
   {
