@@ -468,7 +468,7 @@ export function OrderBook({ asset, orders, components }) {
       return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
     }
   }
-  return (
+  return useMemo(() => (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
@@ -512,7 +512,8 @@ export function OrderBook({ asset, orders, components }) {
         </BuyOrders>
       </Container>
     </Section>
-  )
+  ), [DECIMALS_MAP, PriceDisplay, asset, assetVeryShortName, onAggrSelectorChange,
+      renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
 }
 
 OrderBook.propTypes = {
