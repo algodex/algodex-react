@@ -457,7 +457,7 @@ export const NavSearchTable = ({
    * @param row
    * @returns {*}
    */
-  const getRowProps = (row) => ({
+  const getRowProps = useCallback((row) => ({
     role: 'button',
     className: 'cursor-pointer',
     onClick: () => assetClick(row),
@@ -466,7 +466,7 @@ export const NavSearchTable = ({
         assetClick(row)
       }
     }
-  })
+  }),[assetClick])
 
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
