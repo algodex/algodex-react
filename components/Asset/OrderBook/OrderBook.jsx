@@ -87,7 +87,7 @@ const PairSlash = styled.span`
 export function FirstOrderMsg(props) {
   const { asset, isSignedIn } = props
 
-  const renderMessage = () => {
+  const renderMessage = useCallback(() => {
     if (isSignedIn) {
       return (
         <Typography color="gray.500" m={0}>
@@ -100,7 +100,7 @@ export function FirstOrderMsg(props) {
         Connect your wallet and place an order to add liquidity for this trading&nbsp;pair
       </Typography>
     )
-  }
+  }, [isSignedIn])
 
   return (
     <FirstOrderContainer>
@@ -235,7 +235,7 @@ export function OrderBookPrice({ asset }) {
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
-  function NoPriceInfo() {
+  const NoPriceInfo = useCallback(() => {
     return (
       <Fragment>
         --
@@ -244,7 +244,7 @@ export function OrderBookPrice({ asset }) {
         </Typography>
       </Fragment>
     )
-  }
+  }, [])
 
   // function PriceInfo() {
   //   return (

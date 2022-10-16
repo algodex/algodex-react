@@ -23,7 +23,7 @@ import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 import styled from '@emotion/styled'
-
+import { useCallback } from 'react'
 // export const Button = styled.Button`
 //   width: 100%;
 //   background: white;
@@ -60,30 +60,32 @@ export const ModalContentFooter = styled.div``
 
 export const IconWrapper = styled.div``
 
+const socialData = [
+  {
+    title: 'Telegram',
+    url: 'https://t.me/algodex',
+    path: mdiSend
+  },
+  {
+    title: 'Twitter',
+    url: 'https://twitter.com/AlgodexOfficial',
+    path: mdiTwitter
+  },
+  {
+    title: 'Reddit',
+    url: 'https://www.reddit.com/r/Algodex/',
+    path: mdiReddit
+  },
+  {
+    title: 'Discord',
+    url: 'https://discord.com/invite/ngNzV8bBhy',
+    path: mdiDiscord
+  }
+]
+
 const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
-  const socialData = [
-    {
-      title: 'Telegram',
-      url: 'https://t.me/algodex',
-      path: mdiSend
-    },
-    {
-      title: 'Twitter',
-      url: 'https://twitter.com/AlgodexOfficial',
-      path: mdiTwitter
-    },
-    {
-      title: 'Reddit',
-      url: 'https://www.reddit.com/r/Algodex/',
-      path: mdiReddit
-    },
-    {
-      title: 'Discord',
-      url: 'https://discord.com/invite/ngNzV8bBhy',
-      path: mdiDiscord
-    }
-  ]
-  const renderSocialIcons = () => {
+
+  const renderSocialIcons = useCallback(() => {
     return socialData.map((data, idx) => {
       return (
         <Link key={idx} href={data.url}>
@@ -100,7 +102,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
         </Link>
       )
     })
-  }
+  }, [])
   return (
     <Modal data-testid="notification-modal-wrapper" isVisible={isModalActive}>
       <ModalContainer

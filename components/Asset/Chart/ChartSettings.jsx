@@ -15,7 +15,7 @@
  */
 
 import Button from 'components/Button'
-import { Fragment } from 'react'
+import { Fragment, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
@@ -125,7 +125,7 @@ function ChartSettings(props) {
   const { mode, onChange, interval } = props
   const { t } = useTranslation('chart')
 
-  const renderTimeIntervals = () => {
+  const renderTimeIntervals = useCallback(() => {
     // @todo: should be handled in view and passed as props when supported
     return ['1m', '5m', '15m', '1h', '4h', '1d'].map((i) => (
       <Fragment key={i}>
@@ -142,7 +142,7 @@ function ChartSettings(props) {
         </ToggleBtn>
       </Fragment>
     ))
-  }
+  }, [interval, onChange])
 
   return (
     <Container>

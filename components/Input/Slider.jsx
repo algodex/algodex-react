@@ -16,10 +16,11 @@
 
 import MUISlider from '@mui/material/Slider'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 
 export const Slider = styled(MUISlider)(({ theme, type }) => {
-  const muiStyle =
-    type === 'line-marks'
+  const muiStyle = useMemo(() => { 
+    return type === 'line-marks'
       ? {
           '& .MuiSlider-valueLabel': {
             fontSize: 12,
@@ -70,6 +71,7 @@ export const Slider = styled(MUISlider)(({ theme, type }) => {
             color: theme.palette.white
           }
         }
+      }, [theme.palette.gray, theme.palette.white, type])
 
   return {
     '&.Mui-disabled': {

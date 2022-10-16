@@ -122,28 +122,28 @@ export function WalletView(props) {
   } = useWallets()
   const myAlgoConnector = useRef(null)
   const dispatcher = useEventDispatch()
-  const myAlgoDisconnect = (targetWallet) => {
+  const myAlgoDisconnect = useCallback((targetWallet) => {
     _myAlgoDisconnect(targetWallet)
-  }
+  }, [_myAlgoDisconnect])
 
-  const peraDisconnect = (targetWallet) => {
+  const peraDisconnect = useCallback((targetWallet) => {
     _peraDisconnect(targetWallet)
-  }
+  }, [_peraDisconnect])
 
-  const walletDisconnectMap = {
+  const walletDisconnectMap = useMemo(() => ({
     'my-algo-wallet': (wallet) => {
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': (wallet) => peraDisconnect(wallet)
-  }
+  }), [myAlgoDisconnect, peraDisconnect])
 
-  const isWalletActive = (addr) => {
+  const isWalletActive = useCallback((addr) => {
     return activeWallet?.address === addr
-  }
+  }, [activeWallet?.address])
 
-  const isTabbable = (addr) => {
+  const isTabbable = useCallback((addr) => {
     return isWalletActive(addr) ? -1 : 0
-  }
+  }, [isWalletActive])
 
   /**
    * Handle active connector while placing order
@@ -175,10 +175,10 @@ export function WalletView(props) {
         return myAlgoConnector.current
       }
     },
-    [peraConnector]
+    [dispatcher, peraConnector.connector]
   )
 
-  const handleWalletClick = async (addr) => {
+  const handleWalletClick = useCallback(async (addr) => {
     const connector = handleConnectionStatus(addr)
     const _addr = {
       ...addr,
@@ -187,7 +187,7 @@ export function WalletView(props) {
     if (_addr.connector && (_addr.connector._connected || _addr.connector.connected)) {
       !isWalletActive(addr) && setActiveWallet(_addr)
     }
-  }
+  }, [handleConnectionStatus, isWalletActive, setActiveWallet])
 
   useEffect(() => {
     const reConnectMyAlgoWallet = async () => {
@@ -201,13 +201,13 @@ export function WalletView(props) {
     reConnectMyAlgoWallet()
   }, [])
 
-  const handleKeyDown = (e, addr) => {
+  const handleKeyDown = useCallback((e, addr) => {
     if (e.key === 'Enter' || e.key === ' ') {
       !isWalletActive(addr) && setActiveWallet(addr)
     }
-  }
+  }, [isWalletActive, setActiveWallet])
 
-  const getWalletLogo = (wallet) => {
+  const getWalletLogo = useCallback((wallet) => {
     if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
       throw new TypeError('Must have a valid wallet!')
     }
@@ -217,7 +217,7 @@ export function WalletView(props) {
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
     }
-  }
+  }, [])
 
   return (
     <Section area="topRight">
@@ -296,18 +296,18 @@ export function WalletOptionsListComp(props) {
   const { isConnected } = useAlgodex()
   const { peraConnect, myAlgoConnect } = useWallets()
 
-  const WALLETS_CONNECT_MAP = {
+  const WALLETS_CONNECT_MAP = useMemo(() => ({
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': () => peraConnect()
-  }
+  }), [myAlgoConnect, peraConnect])
 
-  const myAlgoOnClick = () => {
+  const myAlgoOnClick = useCallback(() => {
     WALLETS_CONNECT_MAP['my-algo-wallet']()
-  }
+  }, [WALLETS_CONNECT_MAP])
 
-  const peraConnectOnClick = () => {
+  const peraConnectOnClick = useCallback(() => {
     WALLETS_CONNECT_MAP['pera-connect']()
-  }
+  }, [WALLETS_CONNECT_MAP])
 
   const isPeraConnected = useMemo(() => {
     if (isConnected) {

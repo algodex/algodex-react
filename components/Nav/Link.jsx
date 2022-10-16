@@ -22,7 +22,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-
+import { useMemo } from 'react'
 // Next Components
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -125,8 +125,9 @@ const Link = React.forwardRef(function Link(props, ref) {
     [activeClassName]: router.pathname === pathname && activeClassName
   })
 
-  const isExternal =
-    typeof href === 'string' && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0)
+  const isExternal = useMemo(() => {
+    return typeof href === 'string' && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0)
+  }, [href])
 
   if (isExternal) {
     if (noLinkStyle) {

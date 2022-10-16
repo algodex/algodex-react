@@ -18,8 +18,8 @@ import { useEffect, useMemo } from 'react'
 
 import NetworkBanner from './NetworkBanner'
 import NetworkNotificationModal from './NetworkNotificationModal'
-import useUserStore from '@/store/use-user-state'
 import { getActiveNetwork } from 'services/environment'
+import useUserStore from '@/store/use-user-state'
 
 const NetworkHandler = () => {
   const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
@@ -45,17 +45,15 @@ const NetworkHandler = () => {
     return activeNetwork === 'testnet' ? hasTestnetNotificationModal : hasMainnetNotificationModal
   }, [activeNetwork, hasTestnetNotificationModal, hasMainnetNotificationModal])
 
-  useMemo(() => {
+  useEffect(() => {
     hasMainnetRibbon === null && setHasMainnetRibbon(true)
     hasTestnetRibbon === null && setHasTestnetRibbon(true)
     hasMainnetNotificationModal === null && setHasMainnetNotificationModal(true)
     hasTestnetNotificationModal === null && setHasTestnetNotificationModal(true)
-  }, [
-    hasMainnetRibbon,
-    hasTestnetRibbon,
-    setHasTestnetNotificationModal,
-    setHasMainnetNotificationModal
-  ])
+  }, [hasMainnetRibbon, setHasMainnetRibbon, hasTestnetRibbon,
+    setHasTestnetRibbon, hasMainnetNotificationModal,
+    setHasMainnetNotificationModal, hasTestnetNotificationModal,
+    setHasTestnetNotificationModal])
 
   return (
     <section>
