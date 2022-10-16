@@ -309,7 +309,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="cursor-pointer flex flex-col">
+        <div className="flex flex-col">
           <div
             className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
           >
@@ -459,6 +459,7 @@ export const NavSearchTable = ({
    */
   const getRowProps = (row) => ({
     role: 'button',
+    className: 'cursor-pointer',
     onClick: () => assetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
