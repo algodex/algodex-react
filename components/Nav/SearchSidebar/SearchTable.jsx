@@ -463,9 +463,13 @@ export const NavSearchTable = ({
   const getRowProps = useCallback((row) => ({
     role: 'button',
     className: 'cursor-pointer',
-    onClick: () => assetClick(row),
+    onClick: (e) => {
+      e.preventDefault()
+      assetClick(row)
+    },
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault()
         assetClick(row)
       }
     }
