@@ -178,7 +178,6 @@ function MainLayout({ asset, children }) {
   const { wallet } = useAlgodex()
   const gridRef = useRef()
   const searchTableRef = useRef()
-  console.log('in main layout')
   if (!asset) {
     return <Spinner flex={true} />
   }
