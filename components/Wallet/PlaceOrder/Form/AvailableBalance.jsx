@@ -28,6 +28,8 @@ import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
   display: flex;
@@ -66,6 +68,7 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  const maxSpendableAlgo = useMaxSpendableAlgo()
   const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
@@ -108,7 +111,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </Typography>
             <IconTextContainer>
               <Typography variant="body_small_cap_medium" color="gray.300">
-                {fromBaseUnits(wallet.amount)}
+                {fromBaseUnits(maxSpendableAlgo)}
               </Typography>
               <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
