@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+// import '@/wdyr';
 
 import { ArrowDown, ArrowUp } from 'react-feather'
 import { Fragment, useEffect,useCallback, useMemo, useState } from 'react'
@@ -320,7 +321,7 @@ const DECIMALS_MAP = {
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBook({ asset, orders, components }) {
+ export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
@@ -328,7 +329,6 @@ export function OrderBook({ asset, orders, components }) {
   const isSignedIn = isConnected
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-
   const onAggrSelectorChange = useCallback((e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
@@ -564,5 +564,7 @@ OrderBook.defaultProps = {
     PriceDisplay: DefaultOrderBookPrice
   }
 }
+
+// OrderBook.whyDidYouRender = true
 
 export default withAssetOrderbookQuery(OrderBook)

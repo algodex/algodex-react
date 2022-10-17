@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+// import '@/wdyr';
 import React, { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
@@ -178,7 +178,6 @@ function MainLayout({ asset, children }) {
   const { wallet } = useAlgodex()
   const gridRef = useRef()
   const searchTableRef = useRef()
-
   if (!asset) {
     return <Spinner flex={true} />
   }
@@ -217,8 +216,10 @@ function MainLayout({ asset, children }) {
     </MainWrapper>
   )
 }
+// MainLayout.whyDidYouRender = true
 MainLayout.propTypes = {
   asset: PropTypes.object,
   children: PropTypes.any
 }
+
 export default MainLayout
