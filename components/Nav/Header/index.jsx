@@ -9,9 +9,7 @@ import {
   MobileNavigation,
   NavTextLgWrapper,
   NavTextSmWrapper,
-  Navigation,
-  NetworkDropdown,
-  NetworkDropdownOption
+  Navigation
 } from './header.css'
 import { useCallback, useState } from 'react'
 
