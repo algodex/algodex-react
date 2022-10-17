@@ -364,6 +364,7 @@ const DECIMALS_MAP = {
    * @return {Number}
    */
   const calculatedAmountFn = useCallback((price, ordersList, index, type) => {
+    // console.log('in calculatedAmountFn')
     const _price = parseFloat(price)
     let slicedList = []
     if (type === 'sell') slicedList = ordersList.slice(index)
@@ -373,8 +374,12 @@ const DECIMALS_MAP = {
     const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
     if (determinedTotal > maxSpendableAlgo) {
       // Deducted a Microalgo because of rounding in use-store while setting total
-      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+      // FIXME: look into  - (asset.decimals ? 0.000001 : 1)
+      const retval = parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+      // console.log('yreturning ' + retval)
+      return retval
     } else {
+      // console.log('zreturning ' + compoundedAmount)
       return compoundedAmount
     }
   },[asset.decimals, maxSpendableAlgo])
@@ -417,13 +422,14 @@ const DECIMALS_MAP = {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
+        const payload = {
+          price: row.price,
+          type: type === 'buy' ? 'sell' : 'buy',
+          amount: calculatedAmountFn(row.price, data, index, type)
+        }
         dispatcher('clicked', {
           type: 'order',
-          payload: {
-            price: row.price,
-            type: type === 'buy' ? 'sell' : 'buy',
-            amount: calculatedAmountFn(row.price, data, index, type)
-          }
+          payload
         })
       }
 
