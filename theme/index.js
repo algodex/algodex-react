@@ -490,6 +490,37 @@ const theme = {
     button_large: {},
     button_caps: {},
 
+    navTextLg: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      textTransform: 'uppercase',
+      letterSpacing: '0.2rem',
+      color: 'inherit',
+      fontWeight: '600',
+      cursor: 'pointer',
+      '&:hover': {
+        color: colors.gray['100'],
+      },
+      '& > a': {
+        padding: '1rem 0',
+        textDecoration: 'none',
+        '&:hover': {
+          color: colors.gray['100'],
+        },
+        '&:active': {
+          color: colors.gray['100'],
+        },
+        [muiTheme.breakpoints.up('xs')]: {
+          display: 'flex',
+          margin:' 0 15px'
+        },
+        [muiTheme.breakpoints.up('sm')]: {},
+        [muiTheme.breakpoints.up('md')]: {},
+        [muiTheme.breakpoints.up('lg')]: {},
+        [muiTheme.breakpoints.up('xl')]: {}
+      }
+    },
     price: {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,

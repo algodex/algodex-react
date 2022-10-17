@@ -250,7 +250,7 @@
 
 // import Button from '@mui/material/Button'
 // import FormControl from '@mui/material/FormControl'
-import {Button, FormControl, MenuItem, Select, Stack} from '@mui/material'
+import { Button, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material'
 import {
   Container,
   IconLogo,
@@ -331,7 +331,7 @@ export function Header() {
           </a>
         </Link>
         &nbsp;
-        <FormControl className='ml-4 sm:ml-4 md:ml-6 lg:ml-12'  sx={{ minWidth: 100 }} size="small">
+        <FormControl className='ml-4 sm:ml-4 md:ml-6 lg:ml-12' sx={{ minWidth: 100 }} size="small">
           <Select
             variant="filled"
             data-testid="header-network-dropdown-element"
@@ -379,25 +379,37 @@ export function Header() {
           </Select>
         </FormControl>
       </Stack>
-      
+
       <Navigation data-testid="header-navigation-element">
         <NavActiveLink href="/about" matches={/^\/about/}>
-          <NavTextLg>{t('header-about')}</NavTextLg>
+          <NavTextLg>
+            <Typography variant="navTextLg">{t('header-about')}</Typography>
+          </NavTextLg>
         </NavActiveLink>
         <NavActiveLink href="/trade" matches={/^\/trade/}>
-          <NavTextLg>{t('header-trade')}</NavTextLg>
+          <NavTextLg>
+            <Typography variant="navTextLg">{t('header-trade')}</Typography>
+          </NavTextLg>
         </NavActiveLink>
         <NavActiveLink href="https://docs.algodex.com/">
-          <NavTextLg>{t('header-docs')}</NavTextLg>
+          <NavTextLg>
+            <Typography variant="navTextLg">{t('header-docs')}</Typography>
+          </NavTextLg>
         </NavActiveLink>
         <NavActiveLink href="/support" matches={/^\/support/}>
-          <NavTextLg>{t('header-support')}</NavTextLg>
+          <NavTextLg>
+            <Typography variant="navTextLg">{t('header-support')}</Typography>
+          </NavTextLg>
         </NavActiveLink>
         <NavActiveLink href={MAILBOX_URL}>
-          <NavTextLg>{t('header-mailbox')}</NavTextLg>
+          <NavTextLg>
+            <Typography variant="navTextLg">{t('header-mailbox')}</Typography>
+          </NavTextLg>
         </NavActiveLink>
         <NavActiveLink href="https://rewards.algodex.com/">
-          <NavTextLg>{t('header-rewards')}</NavTextLg>
+          <NavTextLg>
+            <Typography variant="navTextLg">{t('header-rewards')}</Typography>
+          </NavTextLg>
         </NavActiveLink>
         {!isMobile && (
           <Button
