@@ -21,14 +21,13 @@ import {
   LanguageDropdownContainerMob,
   LanguageItem,
   LanguagesContainer,
-  NavTextLg,
-  NavTextSm
 } from './language-selection.css'
 import { useCallback, useState } from 'react'
 
 // import Link from 'next/link'
 import Link from '@/components/Nav/Link'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import i18n from 'i18n.json'
 import { useRouter } from 'next/router'
 
@@ -74,14 +73,14 @@ export const LanguageSelection = ({ isMobile }) => {
     return locales.map((localeCd, idx) => {
       return (
         <Link key={idx} href={asPath} locale={localeCd} data-testid="dropdown-item-mobile">
-          <NavTextSm
+          <Typography sx={{ lineHeight: '2rem', color: 'gray.500' }} variant="navText"
             onClick={() => setIsLanguageOpen(!isLanguageOpen)}
             style={{ marginBottom: '0.4rem' }}
             data-testid="dropdown-action-mobile"
           >
             {localeCd}{' '}
             <Flag data-testid="flat-item-mobile" countryCode={localeToFlags[localeCd]} svg />
-          </NavTextSm>
+          </Typography>
         </Link>
       )
     })
@@ -95,9 +94,10 @@ export const LanguageSelection = ({ isMobile }) => {
           role="button"
           onClick={() => setIsLanguageOpen(!isLanguageOpen)}
         >
-          <NavTextSm>
-            {locale} <Flag countryCode={localeToFlags[locale]} svg />
-          </NavTextSm>
+          <Typography sx={{ color: 'gray.500' }} variant="navText">
+            {locale}
+            <Flag countryCode={localeToFlags[locale]} svg />
+          </Typography>
         </LanguageButton>
         {isLanguageOpen && (
           <LanguageDropdownContainerMob data-testid="dropdown-container-mobile">
@@ -110,36 +110,37 @@ export const LanguageSelection = ({ isMobile }) => {
 
   const renderForWeb = () => {
     return (
-      <></>
-      // <LanguagesContainer>
-      //   <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
-      //     <NavTextLg>
-      //       {locale}
-      //       <Flag countryCode={localeToFlags[locale]} svg />
-      //     </NavTextLg>
-      //   </Link>
+      <LanguagesContainer>
+        <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
+          <Typography sx={{ color: 'gray.500' }} variant="navText">
+            {locale}
+            <Flag countryCode={localeToFlags[locale]} svg />
+          </Typography>
+        </Link>
 
-      //   <LanguageDropDown data-testid="dropdown-container-web">
-      //     <LanguageItem key={locale}>
-      //       <Link href={asPath} locale={locale}>
-      //         <NavTextLg>
-      //           {locale} <Flag countryCode={localeToFlags[locale]} svg />
-      //         </NavTextLg>
-      //       </Link>
-      //     </LanguageItem>
-      //     {i18n.locales
-      //       .filter((localeCd) => localeCd !== locale)
-      //       .map((localeCd) => (
-      //         <LanguageItem key={localeCd} data-testid="dropdown-item-web">
-      //           <Link href={asPath} locale={localeCd}>
-      //             <NavTextLg>
-      //               {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-      //             </NavTextLg>
-      //           </Link>
-      //         </LanguageItem>
-      //       ))}
-      //   </LanguageDropDown>
-      // </LanguagesContainer>
+        <LanguageDropDown data-testid="dropdown-container-web">
+          <LanguageItem key={locale}>
+            <Link href={asPath} locale={locale}>
+              <Typography sx={{ color: 'gray.500' }} variant="navText">
+                {locale}
+                <Flag countryCode={localeToFlags[locale]} svg />
+              </Typography>
+            </Link>
+          </LanguageItem>
+          {i18n.locales
+            .filter((localeCd) => localeCd !== locale)
+            .map((localeCd) => (
+              <LanguageItem key={localeCd} data-testid="dropdown-item-web">
+                <Link href={asPath} locale={localeCd}>
+                  <Typography sx={{ color: 'gray.500' }} variant="navText">
+                    {localeCd}
+                    <Flag countryCode={localeToFlags[localeCd]} svg />
+                  </Typography>
+                </Link>
+              </LanguageItem>
+            ))}
+        </LanguageDropDown>
+      </LanguagesContainer>
     )
   }
 
@@ -158,4 +159,3 @@ LanguageSelection.defaultProps = {
 LanguageSelection.displayName = 'LanguageSelection'
 
 export default LanguageSelection
-

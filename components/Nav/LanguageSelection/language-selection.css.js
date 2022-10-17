@@ -149,6 +149,9 @@ export const LanguagesContainer = styled.ul`
       position: absolute;
       display: block;
       top: 20px;
+      padding: 0 1rem;
+      margin-right: -1rem;
+      height: 29rem;
     }
   }
 `

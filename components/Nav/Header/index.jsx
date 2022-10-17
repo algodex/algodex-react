@@ -26,7 +26,6 @@ import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 
 const ENABLE_NETWORK_SELECTION =
@@ -124,7 +123,6 @@ export function Header() {
           </Select>
         </FormControl>
       </Stack>
-
       {!isMobile &&
         <Navigation data-testid="header-navigation-element">
           <NavActiveLink href="/about" matches={/^\/about/}>
@@ -157,6 +155,7 @@ export function Header() {
               <Typography variant="navText">{t('header-rewards')}</Typography>
             </NavTextLgWrapper>
           </NavActiveLink>
+          {/* {!isMobile && ( */}
           <Button
             onClick={() => {
               setOpenWalletConnectDropdown(!openWalletConnectDropdown)
@@ -168,19 +167,19 @@ export function Header() {
               ? `${truncatedWalletAddress(wallet.address, 5)}`
               : 'CONNECT A WALLET'}
           </Button>
+          {/* )} */}
           {openWalletConnectDropdown && (
             <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
           )}
+          <LanguageSelection isMobile={isMobile} />
         </Navigation>
       }
-      {isMobile &&
-        <Stack direction="row" alignItems="center" justifyContent="center">
-          <LanguageSelection isMobile={false} />
-          <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
-          <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+      {isMobile && <Stack direction="row" alignItems="center" justifyContent="center">
+        {/* <LanguageSelection isMobile={false} /> */}
+          <LanguageSelection isMobile={isMobile} />
+          <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
         </Stack>
       }
-
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
           <NavActiveLink href="/trade" matches={/^\/trade/}>

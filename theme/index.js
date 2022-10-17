@@ -512,23 +512,6 @@ const theme = {
           color: colors.gray['100'],
         },
       },
-      // [muiTheme.breakpoints.up('xs')]: {
-      //   display: 'none',
-      // },
-      // [muiTheme.breakpoints.up('sm')]: {
-      //   display: 'none',
-      // },
-      // [muiTheme.breakpoints.up('md')]: {
-      //   display: 'none',
-      // },
-      // [muiTheme.breakpoints.up('lg')]: {
-      //   display: 'flex',
-      //   margin: '0 15px'
-      // },
-      // [muiTheme.breakpoints.up('xl')]: {
-      //   display: 'flex',
-      //   margin: '0 15px'
-      // }
     },
     price: {
       fontFamily: fontFamilies.monospace,

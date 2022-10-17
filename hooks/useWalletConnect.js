@@ -147,7 +147,7 @@ export default function useWalletConnect(onConnect, onDisconnect, sessionUpdate)
 
   useEffect(() => {
     if (walletConnect === undefined || walletConnect.current === undefined) {
-      ;(async () => {
+      (async () => {
         walletConnect.current = await initWalletConnect()
       })()
     }
