@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import Big from 'big.js'
 import { useAlgodex } from '@algodex/algodex-hooks'
@@ -33,7 +33,7 @@ export const useMaxSpendableAlgo = () => {
     wallet
   })
 
-  useEffect(() => {
+  useMemo(() => {
     try {
       if (!isWalletBalanceLoading && !isWalletBalanceError) {
         const total = new Big(algoBalance)

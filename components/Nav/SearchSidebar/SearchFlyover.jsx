@@ -23,6 +23,7 @@ import SvgImage from 'components/SvgImage'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+import { useCallback } from 'react'
 
 export const InfoPopup = styled.aside`
   width: ${({ isLarge }) => (isLarge ? '480px' : '360px')};
@@ -67,11 +68,11 @@ export function SearchFlyover(props) {
   const { row } = props
   const { t } = useTranslation('assets')
 
-  const renderName = () => {
+  const renderName = useCallback(() => {
     if (row.verified) {
       return (
         <>
-          {`${row.fullName} `}
+          {`${row.fullName || row.name} `}
           <span>
             {`(${row.name}) `}
             <SvgImage use="verified" w={1.5} h={1.5} />
@@ -79,10 +80,10 @@ export function SearchFlyover(props) {
         </>
       )
     }
-    return <>{`${row.fullName} (${row.name})`}</>
-  }
+    return <>{`${row.fullName || row.name} (${row.name})`}</>
+  }, [row.fullName, row.name, row.verified])
 
-  const renderChange = () => {
+  const renderChange = useCallback(() => {
     const color = row.change === '--' ? 'gray.400' : row.change < 0 ? 'red.500' : 'green.500'
     const display = row.change === '--' ? '--' : `${row.change}%`
 
@@ -101,7 +102,7 @@ export function SearchFlyover(props) {
         </Typography>
       </InfoItem>
     )
-  }
+  }, [row.change, t])
 
   return (
     <InfoPopup className="bg-gray-800 p-4 ml-4 rounded" isLarge={row?.hasBeenOrdered}>

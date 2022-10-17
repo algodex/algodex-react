@@ -24,6 +24,7 @@ import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseU
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { truncatedWalletAddress } from '@/components/helpers'
+import { useCallback } from 'react'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -112,7 +113,7 @@ export const WalletsList = ({
   getWalletLogo,
   walletDisconnectMap
 }) => {
-  const copyAddress = (address) => {
+  const copyAddress = useCallback((address) => {
     navigator.clipboard.writeText(address).then(
       () => {
         toast.success('Copied wallet address to clipboard!')
@@ -121,7 +122,8 @@ export const WalletsList = ({
         toast.error('Failed to copy wallet address to clipboard')
       }
     )
-  }
+  }, [])
+
   return addresses.map((wallet) => (
     <Container key={wallet.address}>
       <WalletRow

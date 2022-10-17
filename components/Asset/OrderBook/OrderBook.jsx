@@ -13,9 +13,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+// import '@/wdyr';
 
 import { ArrowDown, ArrowUp } from 'react-feather'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect,useCallback, useMemo, useState } from 'react'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
 
@@ -87,7 +88,7 @@ const PairSlash = styled.span`
 export function FirstOrderMsg(props) {
   const { asset, isSignedIn } = props
 
-  const renderMessage = () => {
+  const renderMessage = useCallback(() => {
     if (isSignedIn) {
       return (
         <Typography color="gray.500" m={0}>
@@ -100,7 +101,7 @@ export function FirstOrderMsg(props) {
         Connect your wallet and place an order to add liquidity for this trading&nbsp;pair
       </Typography>
     )
-  }
+  }, [isSignedIn])
 
   return (
     <FirstOrderContainer>
@@ -239,7 +240,7 @@ export function OrderBookPrice({ asset }) {
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
-  function NoPriceInfo() {
+  const NoPriceInfo = useCallback(() => {
     return (
       <Fragment>
         --
@@ -248,7 +249,7 @@ export function OrderBookPrice({ asset }) {
         </Typography>
       </Fragment>
     )
-  }
+  }, [])
 
   // function PriceInfo() {
   //   return (
@@ -303,6 +304,16 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
     ServiceError: ServiceError
   }
 })
+
+const DECIMALS_MAP = {
+  0.000001: 6,
+  0.00001: 5,
+  0.0001: 4,
+  0.001: 3,
+  0.01: 2,
+  0.1: 1
+};
+
 /**
  * Recipe: Orderbook Component
  *
@@ -314,7 +325,7 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
  * @returns {JSX.Element}
  * @constructor
  */
-export function OrderBook({ asset, orders, components }) {
+ export function OrderBook({ asset, orders, components }) {
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
@@ -322,31 +333,23 @@ export function OrderBook({ asset, orders, components }) {
   const isSignedIn = isConnected
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-  const DECIMALS_MAP = {
-    0.000001: 6,
-    0.00001: 5,
-    0.0001: 4,
-    0.001: 3,
-    0.01: 2,
-    0.1: 1
-  }
-  const onAggrSelectorChange = (e) => {
+  const onAggrSelectorChange = useCallback((e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
       [asset.id]: e.target.value
     })
     setSelectedPrecision(DECIMALS_MAP[e.target.value])
-  }
-
+  }, [asset.id, cachedSelectedPrecision, setCachedSelectedPrecision])
+  
   const [selectedPrecision, setSelectedPrecision] = useState(
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
   )
 
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
-  useEffect(() => {
+  useMemo(() => {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
-  }, [asset])
+  }, [asset, cachedSelectedPrecision])
 
   const dispatcher = useEventDispatch()
   const maxSpendableAlgo = useMaxSpendableAlgo()
@@ -360,7 +363,7 @@ export function OrderBook({ asset, orders, components }) {
    * @param {String} type
    * @return {Number}
    */
-  const calculatedAmountFn = (price, ordersList, index, type) => {
+  const calculatedAmountFn = useCallback((price, ordersList, index, type) => {
     const _price = parseFloat(price)
     let slicedList = []
     if (type === 'sell') slicedList = ordersList.slice(index)
@@ -374,9 +377,9 @@ export function OrderBook({ asset, orders, components }) {
     } else {
       return compoundedAmount
     }
-  }
+  },[asset.decimals, maxSpendableAlgo])
 
-  const reduceOrders = (result, order) => {
+  const reduceOrders = useCallback((result, order) => {
     const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     const _amount = order.amount
@@ -396,19 +399,19 @@ export function OrderBook({ asset, orders, components }) {
       total: _amount * _price
     })
     return result
-  }
+  }, [selectedPrecision])
 
   const aggregatedBuyOrder = useMemo(() => {
     if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
     return orders.buy.reduce(reduceOrders, [])
-  }, [orders.buy, selectedPrecision])
+  }, [orders.buy, reduceOrders])
 
   const aggregatedSellOrder = useMemo(() => {
     if (typeof orders?.sell === 'undefined' && !Array.isArray(orders.sell)) return []
     return orders.sell.reduce(reduceOrders, [])
-  }, [orders.sell, selectedPrecision])
+  }, [orders.sell, reduceOrders])
 
-  const renderOrders = (data, type) => {
+  const renderOrders = useCallback((data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
@@ -457,13 +460,25 @@ export function OrderBook({ asset, orders, components }) {
         </BookRow>
       )
     })
-  }
-  if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
-    if (orders.sell.length === 0 && orders.buy.length === 0) {
-      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+  },[calculatedAmountFn, decimals, dispatcher])
+
+  const renderedSellOrders = useMemo( () => {
+    return renderOrders(aggregatedSellOrder, 'sell')
+  },[aggregatedSellOrder, renderOrders]);
+
+  const renderedBuyOrders = useMemo( () => {
+    return renderOrders(aggregatedBuyOrder, 'buy')
+  },[aggregatedBuyOrder, renderOrders]);
+  
+
+  return useMemo(() => {
+    if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
+      if (orders.sell.length === 0 && orders.buy.length === 0) {
+        return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+      }
     }
-  }
-  return (
+    
+    return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
@@ -493,7 +508,7 @@ export function OrderBook({ asset, orders, components }) {
         </Box>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderOrders(aggregatedSellOrder, 'sell')}</OrdersWrapper>
+          <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -502,12 +517,14 @@ export function OrderBook({ asset, orders, components }) {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderOrders(aggregatedBuyOrder, 'buy')}
+            {renderedBuyOrders}
           </OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>
-  )
+  )}, [PriceDisplay, asset, assetVeryShortName, isSignedIn,
+      onAggrSelectorChange, orders.buy, orders.sell,
+      renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
 }
 
 OrderBook.propTypes = {
@@ -551,5 +568,7 @@ OrderBook.defaultProps = {
     PriceDisplay: DefaultOrderBookPrice
   }
 }
+
+// OrderBook.whyDidYouRender = true
 
 export default withAssetOrderbookQuery(OrderBook)

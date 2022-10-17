@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import Fade from '@mui/material/Fade'
@@ -244,7 +244,7 @@ function Table({
     useResizeColumns,
     useRowSelect
   )
-  useEffect(() => {
+  useMemo(() => {
     if (!_.isEqual(tableState, initialState)) {
       onStateChange(tableState)
     }

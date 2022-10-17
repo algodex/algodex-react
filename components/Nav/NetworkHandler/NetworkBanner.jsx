@@ -14,63 +14,68 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Icon from '@mdi/react'
-import { mdiWindowClose } from '@mdi/js'
+import CloseIcon from '@mui/icons-material/Close';
+import { Stack } from '@mui/material'
+import { getActiveNetwork } from 'services/environment'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
+import { useCallback, useMemo } from 'react'
 
 const NetworkBanner = () => {
   const { t } = useTranslation('network-notification')
 
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   const hasMainnetRibbon = useUserStore((state) => state.hasMainnetRibbon)
   const hasTestnetRibbon = useUserStore((state) => state.hasTestnetRibbon)
   const setHasTestnetRibbon = useUserStore((state) => state.setHasTestnetRibbon)
   const setHasMainnetRibbon = useUserStore((state) => state.setHasMainnetRibbon)
 
-  const closeRibbonFn = (bool) => {
+  const closeRibbonFn = useCallback((bool) => {
     activeNetwork === 'testnet' && setHasTestnetRibbon(bool)
     activeNetwork === 'mainnet' && setHasMainnetRibbon(bool)
-  }
+  }, [activeNetwork, setHasMainnetRibbon, setHasTestnetRibbon])
 
-  return (
+  return useMemo(() => (
     <>
       {((hasMainnetRibbon && activeNetwork === 'mainnet') ||
         (hasTestnetRibbon && activeNetwork === 'testnet')) && (
-        <div
-          data-testid="banner-container"
-          style={{
-            background: `${
-              activeNetwork == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']
-            }`
-          }}
-          className="flex items-center justify-between"
-        >
-          <p
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            data-testid="banner-container"
             style={{
-              width: '90%',
-              color: '#FFFFFF'
+              background: `${
+                activeNetwork == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']
+              }`
             }}
-            data-testid="banner-message"
-            className="flex justify-center font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
+            className="flex items-center justify-between"
           >
-            {activeNetwork == 'mainnet' ? t('ribbon-message-mainnet') : t('ribbon-message-testnet')}
-          </p>
-          <Icon
-            data-testid="banner-close-btn"
-            onClick={() => closeRibbonFn(false)}
-            path={mdiWindowClose}
-            title="Close ribbon"
-            size={1}
-            className="xs:mr-2 lg:mr-8 cursor-pointer"
-            color="#FFFFFF"
-          />
-        </div>
-      )}
+            <p
+              style={{
+                width: '90%',
+                color: '#FFFFFF'
+              }}
+              data-testid="banner-message"
+              className="flex justify-center font-medium xs:ml-2 xs:mr-2 xs:text-xs xs:text-center lg:text-sm"
+            >
+              {activeNetwork == 'mainnet' ? t('ribbon-message-mainnet') : t('ribbon-message-testnet')}
+            </p>
+            <CloseIcon
+              data-testid="banner-close-btn"
+              sx={{
+                color: "#FFFFFF"
+              }}
+              onClick={() => closeRibbonFn(false)}
+              className="xs:mr-2 lg:mr-8 cursor-pointer"
+            />
+          </Stack>
+        )}
     </>
-  )
+  ), [activeNetwork, closeRibbonFn, hasMainnetRibbon, hasTestnetRibbon, t])
+  
 }
 
 export default NetworkBanner

@@ -14,11 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import _ from 'lodash'
-import { getActiveNetwork } from '../services/environment'
 import { devtools, persist } from 'zustand/middleware'
 
+import _ from 'lodash'
 import create from 'zustand'
+import { getActiveNetwork } from '../services/environment'
 import produce from 'immer'
 
 export const immer = (config) => (set, get, api) =>

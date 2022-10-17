@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 
 /**
  *
@@ -25,7 +25,7 @@ import { useState, useEffect } from 'react'
 export function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value)
 
-  useEffect(() => {
+  useMemo(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(value)
     }, delay)

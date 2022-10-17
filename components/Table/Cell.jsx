@@ -21,10 +21,11 @@ import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import { mdiOpenInNew } from '@mdi/js'
 import styled from '@emotion/styled'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
@@ -46,7 +47,8 @@ const TradeDetailLink = styled.a`
  */
 export const AssetNameCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
-  const assetId = row?.original?.asset?.id || row?.original?.id
+  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id])
   const onClick = useCallback(() => {
     dispatcher('clicked', 'asset')
   }, [dispatcher])
@@ -95,7 +97,7 @@ OrderTypeCell.propTypes = { value: PropTypes.any }
  * @constructor
  */
 export const ExpandTradeDetail = ({ value, row }) => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   // Open Trader History Link
   const explorerOpenOrderURL =

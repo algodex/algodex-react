@@ -43,10 +43,11 @@ import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
+import { getActiveNetwork } from 'services/environment'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -115,8 +116,9 @@ NavTextLgSec.propTypes = {
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
+  const activeNetwork = getActiveNetwork()
+
   const { wallet } = useWallets()
   const isMobile = useMobileDetect()
 
@@ -130,7 +132,7 @@ export function Header() {
    * Route to other network
    * @type {(function(*): void)|*}
    */
-  const handleNetworkChangeFn = (value) => {
+  const handleNetworkChangeFn = useCallback((value) => {
     if (!ENABLE_NETWORK_SELECTION) {
       return
     }
@@ -139,7 +141,7 @@ export function Header() {
     } else {
       window.location = TESTNET_LINK
     }
-  }
+  }, [])
 
   const MAILBOX_URL =
     activeNetwork === 'testnet'

@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+// import '@/wdyr';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { fetchAssetPrice, fetchAssets } from '@/services/cms'
@@ -144,6 +145,7 @@ function useMobileDetect(isMobileSSR = false) {
 function TradePage({ staticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   // console.debug(`TradePage(`, staticExplorerAsset, `)`)
+
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
@@ -156,9 +158,18 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     staticExplorerAsset.isGeoBlocked =
       getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   }
-  // console.log(wallet, 'wallet rendering')
   const [interval, setInterval] = useState('1h')
-  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+  const _asset = useMemo(() => {
+    if (typeof staticExplorerAsset !== 'undefined' && staticExplorerAsset.id !== parseInt(query.id)) {
+      console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
+    }
+
+    if (typeof staticExplorerAsset !== 'undefined' && (staticExplorerAsset.id === parseInt(query.id))) {
+      return staticExplorerAsset
+    }
+    return  { id: parseInt(query.id) }  
+  }, [query.id, staticExplorerAsset])
+
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
   const { data } = useAssetPriceQuery({ asset: _asset })
@@ -171,35 +182,31 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     [setInterval, interval]
   )
 
-  useEffect(() => {
+  useMemo(() => {
     if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
       setAsset(data)
-    }
-  }, [data, setAsset, staticExplorerAsset])
-
-  useEffect(() => {
-    if (
-      typeof staticExplorerAsset !== 'undefined' &&
-      typeof staticExplorerAsset.id !== 'undefined' &&
-      staticExplorerAsset.id !== asset?.id
-    ) {
-      setAsset(staticExplorerAsset)
-    }
-  }, [asset, setAsset, staticExplorerAsset])
+    } else if (
+        typeof staticExplorerAsset !== 'undefined' &&
+        typeof staticExplorerAsset.id !== 'undefined' &&
+        staticExplorerAsset.id !== asset?.id
+      ) {
+        setAsset(staticExplorerAsset)
+      }
+  }, [data, setAsset, asset?.id, staticExplorerAsset])
 
   const isTraded = useMemo(() => {
     return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
   }, [asset, data])
 
-  const renderContent = () => {
+  const renderContent = useCallback(() => {
     // Display spinner when invalid state
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
-  }
+  }, [asset, interval, isFallback, isTraded, onChange, showAssetInfo])
 
-  return (
+  return useMemo(() => (
     <Page
       title={`${prefix} ${title}`}
       description={'Decentralized exchange for trading Algorand ASAs'}
@@ -208,8 +215,9 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
       {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
-  )
+  ), [asset, isMobile, prefix, renderContent])
 }
+// TradePage.whyDidYouRender = true
 
 TradePage.propTypes = {
   staticExplorerAsset: PropTypes.object,

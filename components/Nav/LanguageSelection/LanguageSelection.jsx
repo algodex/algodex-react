@@ -32,7 +32,7 @@ import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 import i18n from 'i18n.json'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 // import useTranslation from 'next-translate/useTranslation'
 
@@ -134,7 +134,7 @@ export const LanguageSelection = ({ isMobile }) => {
   const { asPath, locale } = useRouter()
   const [isLanguageOpen, setIsLanguageOpen] = useState(false)
 
-  const renderLanguageMobile = () => {
+  const renderLanguageMobile = useCallback(() => {
     const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
     return locales.map((localeCd, idx) => {
       return (
@@ -150,7 +150,7 @@ export const LanguageSelection = ({ isMobile }) => {
         </Link>
       )
     })
-  }
+  }, [asPath, isLanguageOpen, locale])
 
   const renderForMobile = () => {
     return (

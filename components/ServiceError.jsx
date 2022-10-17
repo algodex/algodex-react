@@ -18,6 +18,8 @@ import { AlertIcon } from 'components/Icon'
 import PropTypes from 'prop-types'
 import { parseThemeColor } from 'theme'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
+
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -55,8 +57,8 @@ const Message = styled.p`
  * @constructor
  */
 export function ServiceError({ size, color, flex, message, Icon }) {
-  const showMsg = message?.length > 0
-  return flex ? (
+  const showMsg = useMemo(() => message?.length > 0, [message?.length])
+  const serviceError = useMemo(() => flex ? (
     <FlexContainer data-testid="flex-service">
       <Icon size={size} color={color} />
       {showMsg && (
@@ -70,7 +72,8 @@ export function ServiceError({ size, color, flex, message, Icon }) {
       <Icon size={size} color={color} />
       {message}
     </Message>
-  )
+  ), [Icon, color, flex, message, showMsg, size])
+  return serviceError
 }
 
 ServiceError.propTypes = {

@@ -20,6 +20,7 @@ import {
   AssetNameBlock,
   NameVerifiedWrapper
 } from '@/components/Asset/Typography'
+import { getAssetTotalStatus, getIsRestricted, getIsRestrictedCountry } from '../../../utils/restrictedAssets'
 import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -38,6 +39,7 @@ import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
@@ -145,7 +147,7 @@ const Algos = styled(AlgoIcon)`
 `
 
 export const AssetChangeCell = ({ value, row }) => {
-  const displayChange = () => {
+  const displayChange = useCallback(() => {
     if (value === null) {
       return ''
     }
@@ -157,7 +159,7 @@ export const AssetChangeCell = ({ value, row }) => {
         className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
       >{`${value}%`}</span>
     )
-  }
+  }, [row?.original?.isGeoBlocked, value])
   return (
     <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
       {displayChange()}
@@ -184,6 +186,8 @@ export const NavSearchTable = ({
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const searchTableRef = useRef()
+  const router = useRouter()
+  // console.log(router, 'router')
   const { t } = useTranslation('assets')
 
   const filterByFavoritesFn = useCallback(
@@ -210,7 +214,7 @@ export const NavSearchTable = ({
     handleResize()
 
     return () => removeEventListener('resize', handleResize)
-  }, [searchTableRef, setSearchTableSize])
+  }, [searchTableRef, setSearchTableSize, gridSize])
 
   const toggleFavoritesFn = useCallback(
     (assetId) => {
@@ -225,6 +229,25 @@ export const NavSearchTable = ({
     },
     [favoritesState]
   )
+
+  const handleRestrictedAsset = useCallback((assetsList) => {
+    if (typeof assetsList !== 'undefined') {
+      return {
+        assets: assetsList.map((asset) => {
+          const isRestricted =
+            getIsRestricted(`${asset.assetId}`) && getAssetTotalStatus(asset.total)
+          return {
+            ...asset,
+            isRestricted,
+            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted
+          }
+        })
+      }
+    } else {
+      return assetsList
+    }
+  }, [router.query])
+
   /**
    * Handle Search Data
    * @type {Array}
@@ -235,9 +258,15 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
+    // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: true })
+    
 
+    // 
+    const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
+    
+    // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
     } else if (isListingVerifiedAssets) {
@@ -253,7 +282,9 @@ export const NavSearchTable = ({
       // If there is data, use it
       return filteredList.map(mapToSearchResults)
     }
-  }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
+
+  }, [assets, handleRestrictedAsset,
+      isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
@@ -281,7 +312,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="cursor-pointer flex flex-col">
+        <div className="flex flex-col">
           <div
             className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
           >
@@ -429,15 +460,16 @@ export const NavSearchTable = ({
    * @param row
    * @returns {*}
    */
-  const getRowProps = (row) => ({
+  const getRowProps = useCallback((row) => ({
     role: 'button',
+    className: 'cursor-pointer',
     onClick: () => assetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
         assetClick(row)
       }
     }
-  })
+  }), [assetClick])
 
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>

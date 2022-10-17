@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import theme, { parseThemeColor } from 'theme'
-
+import { useMemo }  from 'react'
 const IMAGES = {
   logoLg: {
     viewBox: '0 0 1024 165.69',
@@ -126,17 +126,20 @@ const Svg = styled.svg`
  * @example <SvgImage use="myAlgo" w={3} color="gray.000" />
  */
 function SvgImage(props) {
-  if (!IMAGES[props.use]) {
-    return null
-  }
-
-  const { viewBox, markup } = IMAGES[props.use]
-
-  return (
-    <Svg viewBox={viewBox} {...props}>
-      {markup}
-    </Svg>
-  )
+  const retval = useMemo( () => {
+    if (!IMAGES[props.use]) {
+      return null
+    }
+  
+    const { viewBox, markup } = IMAGES[props.use]
+  
+    return (
+      <Svg viewBox={viewBox} {...props}>
+        {markup}
+      </Svg>
+    )
+  }, [props])
+  return retval
 }
 
 SvgImage.propTypes = {

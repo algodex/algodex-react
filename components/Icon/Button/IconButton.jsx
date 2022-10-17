@@ -20,6 +20,7 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 
 export function getFillColor({ theme, color = 'gray', fillGradient = 500 }) {
   return theme.palette[color][fillGradient]
@@ -55,7 +56,7 @@ const style = (props) => css`
  */
 export const IconButton = styled(({ icon, color, ...rest }) => {
   if (typeof Icons[icon] === 'undefined') throw new Error('Icon Not Found!')
-  const Icon = Icons[icon]
+  const Icon = useMemo(() => Icons[icon], [icon])
   return (
     <button data-testid="info-icon-wrapper" color={color} {...rest}>
       <Icon data-testid="info-icon" {...rest} />
