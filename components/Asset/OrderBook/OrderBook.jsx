@@ -370,9 +370,11 @@ const DECIMALS_MAP = {
     const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
     if (determinedTotal > maxSpendableAlgo) {
       // Deducted a Microalgo because of rounding in use-store while setting total
-      return parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+      const retval = parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+      console.log('yreturning ' + retval)
+      return retval
     } else {
-      console.log('returning ' + compoundedAmount)
+      console.log('zreturning ' + compoundedAmount)
       return compoundedAmount
     }
   },[asset.decimals, maxSpendableAlgo])
