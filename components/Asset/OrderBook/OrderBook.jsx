@@ -410,6 +410,8 @@ const DECIMALS_MAP = {
   const renderOrders = useCallback((data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
+      const amount = new Big(row.amount)
+      const total = new Big(row.total)
       const handleSelectOrder = () => {
         const payload = {
           price: row.price,
