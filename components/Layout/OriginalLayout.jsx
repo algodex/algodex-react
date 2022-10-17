@@ -178,7 +178,7 @@ function MainLayout({ asset, children }) {
   const { wallet } = useAlgodex()
   const gridRef = useRef()
   const searchTableRef = useRef()
-  if (!asset || !asset?.decimals) {
+  if (!asset || asset?.decimals === undefined) {
     return <Spinner flex={true} />
   }
 
