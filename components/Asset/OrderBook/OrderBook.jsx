@@ -360,7 +360,7 @@ const DECIMALS_MAP = {
    * @return {Number}
    */
   const calculatedAmountFn = useCallback((price, ordersList, index, type) => {
-    console.log('in calculatedAmountFn')
+    // console.log('in calculatedAmountFn')
     const _price = parseFloat(price)
     let slicedList = []
     if (type === 'sell') slicedList = ordersList.slice(index)
@@ -371,10 +371,10 @@ const DECIMALS_MAP = {
     if (determinedTotal > maxSpendableAlgo) {
       // Deducted a Microalgo because of rounding in use-store while setting total
       const retval = parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
-      console.log('yreturning ' + retval)
+      // console.log('yreturning ' + retval)
       return retval
     } else {
-      console.log('zreturning ' + compoundedAmount)
+      // console.log('zreturning ' + compoundedAmount)
       return compoundedAmount
     }
   },[asset.decimals, maxSpendableAlgo])
