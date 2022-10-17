@@ -119,7 +119,7 @@ export const useMaxSpendableAlgo = () => {
     try {
       if (!isWalletBalanceLoading && !isWalletBalanceError) {
         const total = new Big(algoBalance)
-        const min = new Big(minBalance).div(1000000)
+        const min = new Big(minBalance)
         const max = total.minus(min).round(6, Big.roundDown).toNumber()
         setMaxSpendableAlgo(Math.max(0, max))
       }
