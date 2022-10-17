@@ -39,14 +39,16 @@ async function getMinWalletBalance(
     try {
       // get full account info
       accountInfo = await algodex.http.indexer.fetchAccountInfo(
-          accountInfo.address,
+          accountInfo,
       );
     } catch (e) {
-      return 1000000;
+      console.error('could not get account info', e)
+      return {algoBalance: 0, minBalance: 0};
     }
   }
-  if (!accountInfo || !accountInfo.address) {
-    return 1000000;
+  if (!accountInfo || !accountInfo?.address) {
+    console.error('could not get account info2')
+    return {algoBalance: accountInfo?.amount || 0, minBalance: 1000000};
   }
 
   // logger.debug('in getMinWalletBalance. Checking: ' + accountInfo.address);
@@ -76,7 +78,7 @@ async function getMinWalletBalance(
   }
   minBalance += 1000000;
 
-  return minBalance;
+  return {algoBalance: accountInfo?.amount || 0, minBalance};
 }
 /**
  * Use Wallet Minimum Balance Query
@@ -104,16 +106,18 @@ export function useWalletMinBalanceQuery({
 
 export const useMaxSpendableAlgo = () => {
   const { wallet } = useAlgodex()
-  const algoBalance = wallet?.amount || 0
-  const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance)
-
   const {
-    data: minBalance,
+    data,
     isLoading: isWalletBalanceLoading,
     isError: isWalletBalanceError
   } = useWalletMinBalanceQuery({
     wallet
   })
+
+  const algoBalance = data?.algoBalance || 0;
+  const minBalance = data?.minBalance || 0;
+
+  const [maxSpendableAlgo, setMaxSpendableAlgo] = useState(algoBalance - minBalance)
 
   useMemo(() => {
     try {
@@ -122,6 +126,8 @@ export const useMaxSpendableAlgo = () => {
         const min = new Big(minBalance)
         const max = total.minus(min).round(6, Big.roundDown).toNumber()
         setMaxSpendableAlgo(Math.max(0, max))
+      } else {
+        throw new Error('wallet not connected')
       }
     } catch (error) {
       console.debug('Wallet not connected')
