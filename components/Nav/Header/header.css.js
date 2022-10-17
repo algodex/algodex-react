@@ -79,6 +79,9 @@ export const Navigation = styled.nav`
   justify-content: flex-end;
   align-items: center;
   width: 75%;
+  position: absolute;
+  z-index: 99;
+  right: 0;
   @media (max-width: 1284px) {
     width: 75%;
   }

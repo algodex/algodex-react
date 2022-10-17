@@ -339,7 +339,7 @@ export const NavSearchTable = ({
               </AssetNameBlock>
             </div>
             {/* <br /> */}
-            <div className="flex item-center -mt-0">
+            <div className="flex item-center mt-0.5">
               <div className="ml-3">
                 <AssetId>{row.original.id}</AssetId>
               </div>

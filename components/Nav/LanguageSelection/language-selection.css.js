@@ -146,14 +146,14 @@ export const LanguagesContainer = styled.ul`
   padding-inline-start: 0;
   margin-block-start: 0;
   margin-block-end: 0;
-  margin-left: 1rem;
+  margin-left: 2rem;
   line-height: 0;
   &:hover,
   &:focus-within {
     ul {
       position: absolute;
       display: block;
-      top: 20px;
+      top: 0px;
       padding: 0 1rem;
       height: 29rem;
     }

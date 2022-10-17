@@ -69,57 +69,57 @@ export function Header() {
   return (
     <Container className="flex" data-testid="header-container">
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <Link href="/trade">
-          <a>
-            <InlineLogo src="/logo-inline-dark.svg" />
-            <IconLogo src="/logo-icon-dark.svg" />
-          </a>
-        </Link>
-        &nbsp;
-        <FormControl className='ml-4 sm:ml-4 md:ml-6 lg:ml-12' sx={{ minWidth: 100 }} size="small">
-          <Select
-            variant="filled"
-            data-testid="header-network-dropdown-element"
-            labelId="demo-select-small"
-            id="demo-select-small"
-            value={activeNetwork}
-            onChange={(e) => handleNetworkChangeFn(e.target.value)}
+      <Link href="/trade">
+        <a>
+          <InlineLogo src="/logo-inline-dark.svg" />
+          <IconLogo src="/logo-icon-dark.svg" />
+        </a>
+      </Link>
+      &nbsp;
+      <FormControl className='ml-2 sm:ml-2 md:ml-4 lg:ml-6' sx={{ minWidth: 100 }} size="small">
+        <Select
+          variant="filled"
+          data-testid="header-network-dropdown-element"
+          labelId="demo-select-small"
+          id="demo-select-small"
+          value={activeNetwork}
+          onChange={(e) => handleNetworkChangeFn(e.target.value)}
+          sx={{
+            color: activeNetwork == 'mainnet' ? 'blue.500' : 'green.500',
+            borderRadius: '3px',
+            border: 0,
+            outline: '2px solid',
+            '& .MuiSelect-icon': {
+              fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
+              color: `unset !important`
+            }
+          }}
+          inputProps={{
+            sx: {
+              padding: '0.1rem 0.4rem',
+              fontSize: '14px',
+              fontWeight: 'bolder'
+            }
+          }}
+        >
+          <MenuItem
             sx={{
-              color: activeNetwork == 'mainnet' ? 'blue.500' : 'green.500',
-              borderRadius: '3px',
-              border: 0,
-              outline: '2px solid',
-              '& .MuiSelect-icon': {
-                fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
-                color: `unset !important`
-              }
+              color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
             }}
-            inputProps={{
-              sx: {
-                padding: '0.1rem 0.4rem',
-                fontSize: '14px',
-                fontWeight: 'bolder'
-              }
-            }}
+            value="testnet"
           >
-            <MenuItem
-              sx={{
-                color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
-              }}
-              value="testnet"
-            >
-              TESTNET
-            </MenuItem>
-            <MenuItem
-              sx={{
-                color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
-              }}
-              value="mainnet"
-            >
-              MAINNET
-            </MenuItem>
-          </Select>
-        </FormControl>
+            TESTNET
+          </MenuItem>
+          <MenuItem
+            sx={{
+              color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
+            }}
+            value="mainnet"
+          >
+            MAINNET
+          </MenuItem>
+        </Select>
+      </FormControl>
       </Stack>
       {!isMobile && (
         <Navigation data-testid="header-navigation-element">
