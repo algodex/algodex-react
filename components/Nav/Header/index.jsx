@@ -121,7 +121,7 @@ export function Header() {
           </Select>
         </FormControl>
       </Stack>
-      {!isMobile &&
+      {!isMobile && (
         <Navigation data-testid="header-navigation-element">
           <NavActiveLink href="/about" matches={/^\/about/}>
             <NavTextLgWrapper isMobile={isMobile}>
@@ -153,7 +153,6 @@ export function Header() {
               <Typography variant="navText">{t('header-rewards')}</Typography>
             </NavTextLgWrapper>
           </NavActiveLink>
-          {/* {!isMobile && ( */}
           <Button
             onClick={() => {
               setOpenWalletConnectDropdown(!openWalletConnectDropdown)
@@ -165,17 +164,16 @@ export function Header() {
               ? `${truncatedWalletAddress(wallet.address, 5)}`
               : 'CONNECT A WALLET'}
           </Button>
-          {/* )} */}
           {openWalletConnectDropdown && (
             <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
           )}
           <LanguageSelection isMobile={isMobile} />
         </Navigation>
-      }
+      )}
       {isMobile && <Stack direction="row" alignItems="center" justifyContent="center">
-          <LanguageSelection isMobile={isMobile} />
-          <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
-        </Stack>
+        <LanguageSelection isMobile={isMobile} />
+        <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+      </Stack>
       }
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>

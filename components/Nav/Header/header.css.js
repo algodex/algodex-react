@@ -76,14 +76,26 @@ export const Flag = styled(ReactCountryFlag)`
 
 export const Navigation = styled.nav`
   display: flex;
-  justify-content: space-between;
-  width: 75%;
+  justify-content: flex-end;
   align-items: center;
+  width: 75%;
+  @media (max-width: 1284px) {
+    width: 75%;
+  }
+  @media (min-width: 1284px) {
+    width: 60%;
+  }
 `
 
 export const NavTextLgWrapper = styled.span`
     color: ${({ isActive, theme }) => isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     display: ${({ isMobile }) => isMobile ? 'none' : 'flex'};
+    @media (min-width: 1024px) {
+      color: ${({ isActive, theme }) =>
+        isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+      display: flex;
+      margin: 0 15px;
+    }
 `
 
 export const NavTextSmWrapper = styled.span`
