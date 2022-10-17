@@ -1,5 +1,3 @@
-// import Button from '@mui/material/Button'
-// import FormControl from '@mui/material/FormControl'
 import { Button, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material'
 import {
   Container,
@@ -175,7 +173,6 @@ export function Header() {
         </Navigation>
       }
       {isMobile && <Stack direction="row" alignItems="center" justifyContent="center">
-        {/* <LanguageSelection isMobile={false} /> */}
           <LanguageSelection isMobile={isMobile} />
           <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
         </Stack>

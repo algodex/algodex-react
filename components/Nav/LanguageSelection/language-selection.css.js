@@ -143,6 +143,8 @@ export const LanguageDropdownContainerMob = styled.div`
 
 export const LanguagesContainer = styled.ul`
   width: 100px;
+  padding-inline-start: 0 !important;
+  line-height: 0;
   &:hover,
   &:focus-within {
     ul {
@@ -150,7 +152,6 @@ export const LanguagesContainer = styled.ul`
       display: block;
       top: 20px;
       padding: 0 1rem;
-      margin-right: -1rem;
       height: 29rem;
     }
   }
