@@ -66,6 +66,7 @@ const ContentSection = styled.section`
   height: auto;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: thin;
 `
 
 const AssetsSection = styled.section`

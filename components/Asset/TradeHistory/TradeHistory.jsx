@@ -14,6 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useCallback, useMemo } from 'react'
+
 import Big from 'big.js'
 import { Box } from '@mui/material'
 import Icon from 'components/Icon'
@@ -27,7 +29,6 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
-import { useMemo, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
@@ -61,6 +62,7 @@ const Trades = styled.div`
   flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
+  scrollbar-width: thin;
   /* width */
   ::-webkit-scrollbar {
     width: 5px;

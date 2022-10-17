@@ -39,6 +39,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
+  scrollbar-width: none;
   ::-webkit-scrollbar {
     width: 0;
     display: none;

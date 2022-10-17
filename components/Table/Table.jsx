@@ -73,7 +73,7 @@ const Container = styled.div`
     border-spacing: 0;
     border: none;
     width: 100%;
-
+    scrollbar-width: none;
     & ::-webkit-scrollbar {
       display: none;
       width: 0px;

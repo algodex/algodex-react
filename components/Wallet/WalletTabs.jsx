@@ -14,6 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useCallback, useState } from 'react'
+
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
@@ -21,7 +23,6 @@ import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
-import { useState, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 const Tab = styled.div`
@@ -85,6 +86,7 @@ const PanelWrapper = styled.section`
   flex-direction: column;
   flex: 1 1 0%;
   overflow: hidden scroll;
+  scrollbar-width: thin;
   @media (max-width: 1536px) {
     overflow: scroll hidden;
   }
