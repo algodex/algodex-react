@@ -299,6 +299,16 @@ const DefaultOrderBookPrice = withAssetPriceQuery(OrderBookPrice, {
     ServiceError: ServiceError
   }
 })
+
+const DECIMALS_MAP = {
+  0.000001: 6,
+  0.00001: 5,
+  0.0001: 4,
+  0.001: 3,
+  0.01: 2,
+  0.1: 1
+};
+
 /**
  * Recipe: Orderbook Component
  *
@@ -318,22 +328,15 @@ export function OrderBook({ asset, orders, components }) {
   const isSignedIn = isConnected
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-  const DECIMALS_MAP = useMemo( () => {return {
-    0.000001: 6,
-    0.00001: 5,
-    0.0001: 4,
-    0.001: 3,
-    0.01: 2,
-    0.1: 1
-  }}, []);
-  const onAggrSelectorChange = (e) => {
+
+  const onAggrSelectorChange = useCallback((e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
       [asset.id]: e.target.value
     })
     setSelectedPrecision(DECIMALS_MAP[e.target.value])
-  }
-
+  }, [asset.id, cachedSelectedPrecision, setCachedSelectedPrecision])
+  
   const [selectedPrecision, setSelectedPrecision] = useState(
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
   )
@@ -342,7 +345,7 @@ export function OrderBook({ asset, orders, components }) {
 
   useMemo(() => {
     setSelectedPrecision(DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6)
-  }, [asset, DECIMALS_MAP, cachedSelectedPrecision])
+  }, [asset, cachedSelectedPrecision])
 
   const dispatcher = useEventDispatch()
   const maxSpendableAlgo = useMaxSpendableAlgo()
@@ -392,7 +395,7 @@ export function OrderBook({ asset, orders, components }) {
       total: _amount * _price
     })
     return result
-  }, [])
+  }, [selectedPrecision])
 
   const aggregatedBuyOrder = useMemo(() => {
     if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
@@ -463,12 +466,15 @@ export function OrderBook({ asset, orders, components }) {
     return renderOrders(aggregatedBuyOrder, 'buy')
   },[aggregatedBuyOrder, renderOrders]);
   
-  if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
-    if (orders.sell.length === 0 && orders.buy.length === 0) {
-      return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+
+  return useMemo(() => {
+    if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
+      if (orders.sell.length === 0 && orders.buy.length === 0) {
+        return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
+      }
     }
-  }
-  return (
+    
+    return (
     <Section area="topLeft" data-testid="asset-orderbook">
       <Container>
         <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
@@ -512,7 +518,9 @@ export function OrderBook({ asset, orders, components }) {
         </BuyOrders>
       </Container>
     </Section>
-  )
+  )}, [PriceDisplay, asset, assetVeryShortName, isSignedIn,
+      onAggrSelectorChange, orders.buy, orders.sell,
+      renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
 }
 
 OrderBook.propTypes = {

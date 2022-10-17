@@ -20,7 +20,7 @@ import { getActiveNetwork } from 'services/environment'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 const NetworkBanner = () => {
   const { t } = useTranslation('network-notification')
@@ -37,7 +37,7 @@ const NetworkBanner = () => {
     activeNetwork === 'mainnet' && setHasMainnetRibbon(bool)
   }, [activeNetwork, setHasMainnetRibbon, setHasTestnetRibbon])
 
-  return (
+  return useMemo(() => (
     <>
       {((hasMainnetRibbon && activeNetwork === 'mainnet') ||
         (hasTestnetRibbon && activeNetwork === 'testnet')) && (
@@ -74,7 +74,8 @@ const NetworkBanner = () => {
           </Stack>
         )}
     </>
-  )
+  ), [activeNetwork, closeRibbonFn, hasMainnetRibbon, hasTestnetRibbon, t])
+  
 }
 
 export default NetworkBanner
