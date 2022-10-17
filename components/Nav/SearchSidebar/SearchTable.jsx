@@ -247,6 +247,7 @@ export const NavSearchTable = ({
       return assetsList
     }
   }, [router.query])
+
   /**
    * Handle Search Data
    * @type {Array}
@@ -281,6 +282,7 @@ export const NavSearchTable = ({
       // If there is data, use it
       return filteredList.map(mapToSearchResults)
     }
+
   }, [assets, handleRestrictedAsset,
       isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
 
@@ -310,7 +312,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       return (
-        <div className="cursor-pointer flex flex-col">
+        <div className="flex flex-col">
           <div
             className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
           >
@@ -460,6 +462,7 @@ export const NavSearchTable = ({
    */
   const getRowProps = useCallback((row) => ({
     role: 'button',
+    className: 'cursor-pointer',
     onClick: () => assetClick(row),
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
