@@ -258,22 +258,28 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
+    
     // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    
 
-    // 
+    // Geoformatted assets
     const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
     const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
     
     // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
+    } else if (isListingVerifiedAssets && isFilteringByFavorites) {
+      // Listing verified favourited assets
+      const result = Object.keys(favoritesState).map((assetId) => {
+        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
+      })
+      return flatten(result).filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isListingVerifiedAssets) {
-      // Return only verified assets
+      // Listing only verified assets
       return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isFilteringByFavorites) {
-      // Filter assets by favorites
+      // Listing only favourited assets
       const result = Object.keys(favoritesState).map((assetId) => {
         return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
       })
