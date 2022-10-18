@@ -33,7 +33,6 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
-// import { floatToFixedDynamic } from '@/services/display'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
@@ -43,6 +42,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
+import {floatToFixedDisplay} from '@/services/display';
 
 /**
  * Map a Query Result to a Search Result
@@ -73,7 +73,7 @@ export const mapToSearchResults = ({
   formattedASALiquidity,
   formattedAlgoLiquidity
 }) => {
-  const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
+  const price = formattedPrice ? floatToFixedDisplay(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
     ? floatToFixed(priceChg24Pct, 2)

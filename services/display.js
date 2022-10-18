@@ -62,3 +62,40 @@ export const floatToFixedDynamic = (float, minDigits = 4, maxDigits = 6) => {
   }
   return new Big(float).toFixed(numDigits)
 }
+
+export const floatToFixedDisplay = (float, minDigits = 4, maxDigits = 6) => {
+  if (typeof float === 'undefined') throw new Error('Must have a valid float')
+  let numDigits
+
+  const absValue = new Big(float).abs().toNumber()
+
+  // checks for fractional numbers less than zero with preceding zeros after decimal point
+  if (absValue > 0 && absValue < 0.1) {
+    // if number is 0.0001, fractionalStr is '0001'
+    const fractionalStr = new Big(float).toFixed(maxDigits).toString().split('.')[1]
+    let precedingZeros = fractionalStr.length
+    if (precedingZeros >= minDigits && precedingZeros <= maxDigits) {
+      numDigits = precedingZeros
+    } else {
+      numDigits = minDigits
+    }
+  } else {
+    // number of digits decide number of decimals
+    const decimalStr = new Big(float).toFixed(maxDigits).toString().split('.')[0]
+    if (decimalStr.length > 6) {
+      numDigits = 0
+    } else if (decimalStr.length > 2 && decimalStr.length < maxDigits) {
+      numDigits = 7 - decimalStr.length
+    } else if (decimalStr.length <= 2) {
+      numDigits = 7 - 1
+    } else if (decimalStr.length == maxDigits) {
+      numDigits = 7 - maxDigits
+    } else {
+      numDigits = 0
+    }
+  }
+  return new Big(float).toFixed(numDigits)
+}
+
+
+
