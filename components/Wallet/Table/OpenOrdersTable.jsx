@@ -72,23 +72,11 @@ export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
 
-  const _formattedOrders = useMemo(() => {
-    return _orders.map((order) => {
-      const _order = {
-        ...order,
-        price: floatToFixedDisplay(order.price)
-      }
-      return _order
-    })
-  }, [_orders])
-
-  const [openOrdersData, setOpenOrdersData] = useState(_formattedOrders)
+  const [openOrdersData, setOpenOrdersData] = useState([])
   const { algodex, wallet, setWallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
-
-  
 
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
@@ -102,9 +90,17 @@ export function OpenOrdersTable({ orders: _orders }) {
     }
   })
 
-  useMemo(() => {
-    setOpenOrdersData(_formattedOrders)
-  }, [_formattedOrders, setOpenOrdersData])
+  const _formattedOrders = useMemo(() => {
+    const ordersList = _orders.map((order) => {
+      const _order = {
+        ...order,
+        price: floatToFixedDisplay(order.price)
+      }
+      return _order
+    })
+    setOpenOrdersData(ordersList)
+    return ordersList
+  }, [_orders])
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
