@@ -33,6 +33,7 @@ import SearchFlyover from './SearchFlyover'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -75,7 +76,7 @@ export const mapToSearchResults = ({
   const price = formattedPrice ? floatToFixedDisplay(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
-    ? floatToFixedDisplay(priceChg24Pct, 2)
+    ? floatToFixed(priceChg24Pct, 2)
     : hasOrders
     ? '--'
     : null
