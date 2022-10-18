@@ -90,7 +90,7 @@ export function OpenOrdersTable({ orders: _orders }) {
     }
   })
 
-  const _formattedOrders = useMemo(() => {
+  useMemo(() => {
     const ordersList = _orders.map((order) => {
       const _order = {
         ...order,
@@ -247,7 +247,7 @@ export function OpenOrdersTable({ orders: _orders }) {
           initialState={walletOpenOrdersTableState}
           onStateChange={(state) => setWalletOpenOrdersTableState(state)}
           columns={columns}
-          data={_formattedOrders || []}
+          data={openOrdersData || []}
         />
       </TableWrapper>
     </OpenOrdersContainer>
