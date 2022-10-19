@@ -53,9 +53,8 @@ USDInputPrice.propTypes = {
   value: PropTypes.number,
   id: PropTypes.string
 }
-
 export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
-  const { onChange, ...other } = props;
+  const { decimals, onChange, ...other } = props;
   return (
     <NumericFormat
       {...other}
@@ -69,7 +68,7 @@ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, 
         });
       }}
       allowNegative={false}
-      decimalScale={6}
+      decimalScale={decimals}
     />
   );
 });
@@ -77,7 +76,12 @@ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, 
 NumberFormatCustom.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  decimals: PropTypes.number
 };
+
+NumberFormatCustom.defaultProps = {
+  decimals: 6
+}
 
 export const TradeInputs = ({
   order,
@@ -153,6 +157,7 @@ export const TradeInputs = ({
         type="number"
         name="price"
         inputComponent={NumberFormatCustom}
+        decimals={6}
         inputProps={{
           decimals: 6,
           min: '0',
@@ -191,9 +196,10 @@ export const TradeInputs = ({
         pattern="\d*"
         name="amount"
         placeholder='0.00'
-        value={order.amount !== '' && order.amount}
+        value={order.amount.toString()}
+        inputComponent={NumberFormatCustom}
+        decimals={asset.decimals}
         inputProps={{
-          decimals: asset.decimals,
           min: '0',
           step: '0.000001',
           placeholder: '0.00'
