@@ -481,6 +481,15 @@ export const NavSearchTable = ({
     }
   }), [assetClick])
 
+  useEffect(() => {
+    // Prefetch the top assets
+    searchResultData.slice(0,30).map(result => {
+      const assetId = result.id
+      // console.log('zprefetching: ' + assetId)
+      router.prefetch('/trade/'+assetId)
+    })
+  }, [router, searchResultData])
+  
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table

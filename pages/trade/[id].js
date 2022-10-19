@@ -49,13 +49,41 @@ export async function getStaticPaths() {
     process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
   const api = new AlgodexApi({ config: configEnv })
   const assets = await api.http.dexd.fetchAssets()
-  const paths = assets
+  const assetSearch = await api.http.dexd.searchAssets('')
+  const assetIdToSearch = assetSearch.assets.reduce((map, asset) => {
+    map.set(asset.assetId, asset);
+    return map;
+  }, new Map());
+
+  const pathsFull = assets
     .filter((asset) => asset.isTraded)
-    .filter(asset => !process.env.SKIP_PRERENDER_EXCEPT_DEFAULT || 
-      asset.id === parseInt(process.env.NEXT_PUBLIC_DEFAULT_ASSET))
+    // .filter(asset =>  
+    //   asset.id === 452399768 ||
+    //   asset.id === 793124631 ||
+    //   asset.id === 724480511 ||
+    //   asset.id === 31566704 ||
+    //   asset.id === 694432641
+    // )
+    .filter((asset) => {
+      if (asset.id === parseInt(process.env.NEXT_PUBLIC_DEFAULT_ASSET) ||
+          asset.price24Change !== 0) {
+        return true;
+      }
+
+      const algoLiquidity = assetIdToSearch.get(asset.id)?.formattedAlgoLiquidity || 0;
+      // console.log(asset.id + ' ' + algoLiquidity);
+      if (parseFloat(algoLiquidity) > 100) {
+        return true;
+      }
+      return false;
+    })
     .map((asset) => ({
       params: { id: asset.id.toString() }
     }))
+
+  // const paths = pathsFull.slice(0, 10)
+  const paths = pathsFull;
+  console.log('STATIC PATHS: ' + JSON.stringify(paths, null, 2))
   return { paths, fallback: true }
 }
 
@@ -106,9 +134,11 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.name = ''
   }
 
-  return {
-    props: { staticExplorerAsset, originalStaticExplorerAsset }
+  const propsOuter = {
+    props: { staticExplorerAsset, originalStaticExplorerAsset },
+    revalidate: 600 //10 minutes
   }
+  return propsOuter
 }
 
 /**
@@ -157,6 +187,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const { wallet } = useWallets()
 
   // TODO: refactor all state into useReducer
+
+  // console.log('logging: ', {routerId: query.id, staticId: originalStaticExplorerAsset?.id})
 
   const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
 
@@ -277,6 +309,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
 // TradePage.whyDidYouRender = true
 
 TradePage.propTypes = {
+  originalStaticExplorerAsset: PropTypes.object,
   staticExplorerAsset: PropTypes.object,
   staticAssetPrice: PropTypes.object,
   deviceType: PropTypes.string
