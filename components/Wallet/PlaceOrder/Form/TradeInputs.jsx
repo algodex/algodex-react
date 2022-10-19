@@ -67,6 +67,7 @@ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, 
           },
         });
       }}
+      allowLeadingZeros
       allowNegative={false}
       decimalScale={decimals}
     />
@@ -150,11 +151,9 @@ export const TradeInputs = ({
           border: order.execution === 'market' ? 0 : 2,
           borderColor: theme.palette.gray['700']
         }}
-        pattern="\d*"
         value={order.price.toString()}
         onChange={handleChange}
         placeholder='0.00'
-        type="number"
         name="price"
         inputComponent={NumberFormatCustom}
         decimals={6}
@@ -192,8 +191,6 @@ export const TradeInputs = ({
 
       <OutlinedInput
         id="amount"
-        type="number"
-        pattern="\d*"
         name="amount"
         placeholder='0.00'
         value={order.amount.toString()}
