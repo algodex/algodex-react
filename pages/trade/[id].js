@@ -157,35 +157,52 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const { wallet } = useWallets()
 
   // TODO: refactor all state into useReducer
+
   const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
 
-  const getRealStaticExplorerAsset = useCallback(async(assetId) => {
+  const getAndSetRealStaticExplorerAsset = useCallback(async(assetId) => {
+    console.log('here4')
     if (realStaticExplorerAsset && realStaticExplorerAsset === assetId) {
+      console.log('here5')
       return;
     }
+
+    if (originalStaticExplorerAsset.id === assetId) {
+      console.log('here6')
+      setRealStaticExplorerAsset(originalStaticExplorerAsset)
+      return;
+    }
+    console.log('here7')
+
     const configEnv =
     process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
     const api = new AlgodexApi({ config: configEnv })
 
     try {
       const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)
+      console.log('here8')
       setRealStaticExplorerAsset(_realStaticExplorerAsset)
     } catch (e) {
       console.error(e)
     }
-  }, [realStaticExplorerAsset, setRealStaticExplorerAsset]);
+  }, [originalStaticExplorerAsset, realStaticExplorerAsset]);
 
   useEffect(() => {
+    console.log('here0');
     if (realStaticExplorerAsset !== undefined && realStaticExplorerAsset.id === parseInt(query.id)) {
+      console.log('here1')
+      setRealStaticExplorerAsset(realStaticExplorerAsset)
       return;
     }
 
     if (query.id === undefined) {
+      console.log('here2')
       return;
     }
+    console.log('here3')
 
-    getRealStaticExplorerAsset(parseInt(query.id))
-  }, [realStaticExplorerAsset, query.id, getRealStaticExplorerAsset])
+    getAndSetRealStaticExplorerAsset(parseInt(query.id))
+  }, [realStaticExplorerAsset, query.id, getAndSetRealStaticExplorerAsset])
 
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
@@ -198,21 +215,27 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const [asset, setAsset] = useState({...realStaticExplorerAsset})
 
   const _asset = useMemo(() => {
+    console.log('here9: ', realStaticExplorerAsset)
     if (typeof staticExplorerAsset !== 'undefined' && staticExplorerAsset.id !== parseInt(query.id)) {
       console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
     }
 
     let _asset = undefined;
     if (typeof staticExplorerAsset !== 'undefined' && (staticExplorerAsset.id === parseInt(query.id))) {
+      console.log('here10 setting')
       _asset = staticExplorerAsset
       if (realStaticExplorerAsset?.name && realStaticExplorerAsset?.id === parseInt(query.id)) {
+        console.log('SETTING ASSET NAME TO realStaticExplorerAsset.name ' + realStaticExplorerAsset.name)
         _asset.name = realStaticExplorerAsset.name
       }
     } else if (query.id) {
+      console.log('here11 setting')
       _asset = { ...realStaticExplorerAsset, id: parseInt(query.id) }  
     } else {
+      console.log('here12 setting')
       _asset = { ...realStaticExplorerAsset }  
     }
+    console.log('xsetting asset: ' + JSON.stringify(_asset, null, 2))
     setAsset(_asset)
 
     return _asset
@@ -225,11 +248,13 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
 
   useMemo(() => {
     const __asset = data?.asset;
+    console.log('data asset: ' + JSON.stringify(data?.asset, null, 2));
     if (outerData?.isSuccess && typeof __asset !== 'undefined' && 
       typeof __asset.id !== 'undefined' && __asset.id === asset?.id) {
+        console.log('zsetting asset: ' + JSON.stringify(__asset, null, 2))
       setAsset(__asset)
     }
-  }, [data, outerData?.isSuccess, setAsset, asset?.id])
+  }, [data, outerData, setAsset, asset?.id])
 
   const isTraded = asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
 
@@ -248,7 +273,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
-  }, [asset?.price_info, interval, isFallback, isTraded, onChange, showAssetInfo])
+  }, [asset, asset?.id, asset?.name, 
+      interval, isFallback, isTraded, onChange, showAssetInfo])
 
   return useMemo(() => {
     return (
@@ -260,7 +286,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
       {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
-  )}, [asset?.price_info,
+  )}, [asset?.price_info, asset, asset.id, asset.name,
       isMobile, prefix, renderContent])
 }
 // TradePage.whyDidYouRender = true
