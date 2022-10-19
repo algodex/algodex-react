@@ -138,7 +138,7 @@ export function NavSearchSidebar({
   const handleAssetClick = useCallback(
     (row) => {
       handleExternalClick()
-      push(`/trade/${row.original.id}`, undefined, {shallow: true})
+      push(`/trade/${row.original.id}`, undefined, {shallow: false})
     },
     [push, handleExternalClick]
   )
