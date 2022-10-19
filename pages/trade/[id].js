@@ -52,10 +52,18 @@ export async function getStaticPaths() {
   const paths = assets
     .filter((asset) => asset.isTraded)
     .filter(asset => !process.env.SKIP_PRERENDER_EXCEPT_DEFAULT || 
-      asset.id === parseInt(process.env.NEXT_PUBLIC_DEFAULT_ASSET))
+      asset.id === parseInt(process.env.NEXT_PUBLIC_DEFAULT_ASSET) 
+      // ||
+      // asset.id === 452399768 ||
+      // asset.id === 793124631 ||
+      // asset.id === 724480511 ||
+      // asset.id === 31566704 ||
+      // asset.id === 694432641
+    )
     .map((asset) => ({
       params: { id: asset.id.toString() }
     }))
+  console.log('STATIC PATHS: ' + JSON.stringify(paths, null, 2))
   return { paths, fallback: true }
 }
 
@@ -66,6 +74,7 @@ export async function getStaticPaths() {
  * @returns {object} Response Object or Redirect Object
  */
 export async function getStaticProps({ params: { id } }) {
+  // console.log('zzid: ' + id)
   let staticExplorerAsset = { id }
   let originalStaticExplorerAsset
   let staticAssetPrice = {}
@@ -106,9 +115,10 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.name = ''
   }
 
-  return {
+  const propsOuter = {
     props: { staticExplorerAsset, originalStaticExplorerAsset }
   }
+  return propsOuter
 }
 
 /**
@@ -157,6 +167,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const { wallet } = useWallets()
 
   // TODO: refactor all state into useReducer
+
+  // console.log('logging: ', {routerId: query.id, staticId: originalStaticExplorerAsset?.id})
 
   const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
 
@@ -277,6 +289,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
 // TradePage.whyDidYouRender = true
 
 TradePage.propTypes = {
+  originalStaticExplorerAsset: PropTypes.object,
   staticExplorerAsset: PropTypes.object,
   staticAssetPrice: PropTypes.object,
   deviceType: PropTypes.string
