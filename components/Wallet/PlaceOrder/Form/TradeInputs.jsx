@@ -25,8 +25,10 @@ import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import {NumericFormat} from 'react-number-format';
+
 /**
  *
  * Render USD Price for an input component
@@ -51,6 +53,31 @@ USDInputPrice.propTypes = {
   value: PropTypes.number,
   id: PropTypes.string
 }
+
+export const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      allowNegative={false}
+      decimalScale={6}
+    />
+  );
+});
+
+NumberFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export const TradeInputs = ({
   order,
@@ -119,17 +146,17 @@ export const TradeInputs = ({
           border: order.execution === 'market' ? 0 : 2,
           borderColor: theme.palette.gray['700']
         }}
-        name="price"
         pattern="\d*"
         value={order.price.toString()}
         onChange={handleChange}
         placeholder='0.00'
+        type="number"
+        name="price"
+        inputComponent={NumberFormatCustom}
         inputProps={{
-          type:"number",
           decimals: 6,
           min: '0',
           step: '0.000001',
-          // step:"any",
           placeholder: '0.00',
           sx: {
             '&.Mui-disabled': {
@@ -164,7 +191,9 @@ export const TradeInputs = ({
         pattern="\d*"
         name="amount"
         placeholder='0.00'
+        // inputComponent={NumberFormatCustom}
         value={order.amount !== '' && order.amount}
+        // value={order.amount.toString()}
         inputProps={{
           decimals: asset.decimals,
           min: '0',
