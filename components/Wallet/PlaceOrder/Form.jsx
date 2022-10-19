@@ -278,7 +278,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return new Big(order.total).lt(0.5)
     }
     return new Big(order.total).eq(0)
-  }, [order])
+  }, [order.total, order.type])
 
   // const isInvalid = () => {
   //   return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))

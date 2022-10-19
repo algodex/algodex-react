@@ -28,7 +28,7 @@ import useTranslation from 'next-translate/useTranslation'
 
 const HeroSection = styled.div`
   min-height: calc(100vh - 80px);
-  background: url('/beautiful-milky.png') no-repeat;
+  background: url('/beautiful-milky.jpg') no-repeat;
   position: relative;
   background-size: cover;
   overflow: hidden;

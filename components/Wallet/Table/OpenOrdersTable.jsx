@@ -21,7 +21,8 @@ import Table, {
   OrderTypeCell
 } from '@/components/Table'
 import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import {floatToFixedDisplay} from '@/services/display';
 
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -70,7 +71,8 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  const [openOrdersData, setOpenOrdersData] = useState(_orders)
+
+  const [openOrdersData, setOpenOrdersData] = useState([])
   const { algodex, wallet, setWallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
@@ -89,8 +91,16 @@ export function OpenOrdersTable({ orders: _orders }) {
   })
 
   useMemo(() => {
-    setOpenOrdersData(_orders)
-  }, [_orders, setOpenOrdersData])
+    const ordersList = _orders.map((order) => {
+      const _order = {
+        ...order,
+        price: floatToFixedDisplay(order.price)
+      }
+      return _order
+    })
+    setOpenOrdersData(ordersList)
+    return ordersList
+  }, [_orders])
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
@@ -237,7 +247,7 @@ export function OpenOrdersTable({ orders: _orders }) {
           initialState={walletOpenOrdersTableState}
           onStateChange={(state) => setWalletOpenOrdersTableState(state)}
           columns={columns}
-          data={_orders || []}
+          data={openOrdersData || []}
         />
       </TableWrapper>
     </OpenOrdersContainer>
