@@ -157,12 +157,19 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const { wallet } = useWallets()
 
   // TODO: refactor all state into useReducer
+
   const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
 
-  const getRealStaticExplorerAsset = useCallback(async(assetId) => {
+  const getAndSetRealStaticExplorerAsset = useCallback(async(assetId) => {
     if (realStaticExplorerAsset && realStaticExplorerAsset === assetId) {
       return;
     }
+
+    if (originalStaticExplorerAsset.id === assetId) {
+      setRealStaticExplorerAsset(originalStaticExplorerAsset)
+      return;
+    }
+
     const configEnv =
     process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
     const api = new AlgodexApi({ config: configEnv })
@@ -173,10 +180,11 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     } catch (e) {
       console.error(e)
     }
-  }, [realStaticExplorerAsset, setRealStaticExplorerAsset]);
+  }, [originalStaticExplorerAsset, realStaticExplorerAsset]);
 
   useEffect(() => {
     if (realStaticExplorerAsset !== undefined && realStaticExplorerAsset.id === parseInt(query.id)) {
+      setRealStaticExplorerAsset(realStaticExplorerAsset)
       return;
     }
 
@@ -184,8 +192,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       return;
     }
 
-    getRealStaticExplorerAsset(parseInt(query.id))
-  }, [realStaticExplorerAsset, query.id, getRealStaticExplorerAsset])
+    getAndSetRealStaticExplorerAsset(parseInt(query.id))
+  }, [realStaticExplorerAsset, query.id, getAndSetRealStaticExplorerAsset])
 
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
@@ -229,7 +237,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       typeof __asset.id !== 'undefined' && __asset.id === asset?.id) {
       setAsset(__asset)
     }
-  }, [data, outerData?.isSuccess, setAsset, asset?.id])
+  }, [data, outerData, setAsset, asset?.id])
 
   const isTraded = asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
 
@@ -248,7 +256,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
-  }, [asset?.price_info, interval, isFallback, isTraded, onChange, showAssetInfo])
+  }, [asset, asset?.id, asset?.name, 
+      interval, isFallback, isTraded, onChange, showAssetInfo])
 
   return useMemo(() => {
     return (
@@ -260,7 +269,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
       {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
-  )}, [asset?.price_info,
+  )}, [asset?.price_info, asset, asset?.id, asset?.name,
       isMobile, prefix, renderContent])
 }
 // TradePage.whyDidYouRender = true
