@@ -144,11 +144,11 @@ function Algodex(props) {
   )
 }
 
-Algodex.getInitialProps = async (ctx) => {
-  const initialProps = await NextApp.getInitialProps(ctx)
-  const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
-  return { pageProps: { ...initialProps, deviceType } }
-}
+// Algodex.getInitialProps = async (ctx) => {
+//   const initialProps = await NextApp.getInitialProps(ctx)
+//   const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
+//   return { pageProps: { ...initialProps, deviceType } }
+// }
 
 Algodex.propTypes = {
   Component: PropTypes.elementType.isRequired,

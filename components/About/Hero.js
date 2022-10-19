@@ -83,7 +83,7 @@ export const Hero = () => {
             )}
             .
           </Typography>
-          <Link href="/trade" shallow="true">
+          <Link href="/trade" shallow={true}>
             <LaunchBtn>{t('launch app')}</LaunchBtn>
           </Link>
           {/* <Note className="mt-5">
