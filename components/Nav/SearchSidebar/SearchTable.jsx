@@ -469,14 +469,27 @@ export const NavSearchTable = ({
   const getRowProps = useCallback((row) => ({
     role: 'button',
     className: 'cursor-pointer',
-    onClick: () => assetClick(row),
+    onClick: (e) => {
+      e.preventDefault()
+      assetClick(row)
+    },
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault()
         assetClick(row)
       }
     }
   }), [assetClick])
 
+  useEffect(() => {
+    // Prefetch the top assets
+    searchResultData.slice(0,30).map(result => {
+      const assetId = result.id
+      // console.log('zprefetching: ' + assetId)
+      router.prefetch('/trade/'+assetId)
+    })
+  }, [router, searchResultData])
+  
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
