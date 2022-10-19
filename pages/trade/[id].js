@@ -176,6 +176,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
 
     try {
       const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)
+      _realStaticExplorerAsset.isRestricted =
+        getIsRestricted(assetId) && getAssetTotalStatus(_realStaticExplorerAsset.total)
       setRealStaticExplorerAsset(_realStaticExplorerAsset)
     } catch (e) {
       console.error(e)
