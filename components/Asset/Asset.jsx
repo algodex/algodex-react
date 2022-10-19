@@ -160,7 +160,7 @@ export function AssetInfo({ asset }) {
           </Button>
         ) : null}
         <HeaderContainer>
-          <Typography variant="h3" data-testid="asset-info-asa-name" color="gray.100" mb={2}>
+          <Typography className='leading-8' variant="h3" data-testid="asset-info-asa-name" color="gray.100" mb={2}>
             {renderName()}
           </Typography>
           {renderLink()}
