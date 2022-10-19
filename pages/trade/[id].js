@@ -51,6 +51,8 @@ export async function getStaticPaths() {
   const assets = await api.http.dexd.fetchAssets()
   const paths = assets
     .filter((asset) => asset.isTraded)
+    .filter(asset => !process.env.SKIP_PRERENDER_EXCEPT_DEFAULT || 
+      asset.id === parseInt(process.env.NEXT_PUBLIC_DEFAULT_ASSET))
     .map((asset) => ({
       params: { id: asset.id.toString() }
     }))
