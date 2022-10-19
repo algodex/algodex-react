@@ -25,7 +25,7 @@ import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
-import React, { useMemo } from 'react'
+import { forwardRef, useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import {NumericFormat} from 'react-number-format';
 
@@ -54,7 +54,7 @@ USDInputPrice.propTypes = {
   id: PropTypes.string
 }
 
-export const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
   return (
     <NumericFormat
@@ -191,9 +191,7 @@ export const TradeInputs = ({
         pattern="\d*"
         name="amount"
         placeholder='0.00'
-        // inputComponent={NumberFormatCustom}
         value={order.amount !== '' && order.amount}
-        // value={order.amount.toString()}
         inputProps={{
           decimals: asset.decimals,
           min: '0',
