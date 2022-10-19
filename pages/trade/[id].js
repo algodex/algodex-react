@@ -156,21 +156,19 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const { isFallback, query } = useRouter()
   const { wallet } = useWallets()
 
+  // TODO: refactor all state into useReducer
   const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
 
   const getRealStaticExplorerAsset = useCallback(async(assetId) => {
-    console.log('in getRealStaticExplorerAsset');
     if (realStaticExplorerAsset && realStaticExplorerAsset === assetId) {
       return;
     }
     const configEnv =
     process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
     const api = new AlgodexApi({ config: configEnv })
-    console.log('zin getRealStaticExplorerAsset fetching ' + assetId);
 
     try {
       const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)
-      console.log('zsetting to _realStaticExplorerAsset ', _realStaticExplorerAsset)
       setRealStaticExplorerAsset(_realStaticExplorerAsset)
     } catch (e) {
       console.error(e)
@@ -178,16 +176,13 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   }, [realStaticExplorerAsset, setRealStaticExplorerAsset]);
 
   useEffect(() => {
-    console.log('here1')
     if (realStaticExplorerAsset !== undefined && realStaticExplorerAsset.id === parseInt(query.id)) {
       return;
     }
-    console.log('here2')
 
     if (query.id === undefined) {
       return;
     }
-    console.log('here3')
 
     getRealStaticExplorerAsset(parseInt(query.id))
   }, [realStaticExplorerAsset, query.id, getRealStaticExplorerAsset])
@@ -200,7 +195,6 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   }
   const [interval, setInterval] = useState('1h')
 
-  console.log('query id: ' + query.id)
   const [asset, setAsset] = useState({...realStaticExplorerAsset})
 
   const _asset = useMemo(() => {
@@ -224,29 +218,18 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     return _asset
   }, [query.id, realStaticExplorerAsset, staticExplorerAsset])
   
-
-  console.log('herea ', {_asset})
-  console.log('hereb ', {asset})
-
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
   const outerData = useAssetPriceQuery({ asset: _asset })
   const data = outerData.data
 
   useMemo(() => {
-    console.log('ZZZIN USE MEMO', data, data?.asset?.id, asset?.id, data?.isSuccess);
     const __asset = data?.asset;
     if (outerData?.isSuccess && typeof __asset !== 'undefined' && 
       typeof __asset.id !== 'undefined' && __asset.id === asset?.id) {
-      console.log('setting asset to: ' , {__asset})
       setAsset(__asset)
-    } else {
-      console.log('COULD NOT SET ASSEt')
-      console.log(`isSuccess: ${data?.isSuccess} typeof __asset: ${typeof __asset} `
-      + ` typeof __asset?.id ${typeof __asset?.id} `
-      + ` __asset?.id ${__asset?.id} asset?.id ${asset?.id})`);
     }
-  }, [data, data?.isSuccess, setAsset, asset?.id])
+  }, [data, outerData?.isSuccess, setAsset, asset?.id])
 
   const isTraded = asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
 
@@ -268,8 +251,6 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   }, [asset?.price_info, interval, isFallback, isTraded, onChange, showAssetInfo])
 
   return useMemo(() => {
-    console.log('RENDERING PAGE!!!!', {asset})
-
     return (
     <Page
       title={`${prefix} ${title}`}

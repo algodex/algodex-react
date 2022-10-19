@@ -48,7 +48,6 @@ export function useAssetPriceQuery({
     id = algorandAsset.id;
   }
 
-  console.log('fetching asset price for: ' + id)
   const {data: dexAsset, ...rest} = useQuery(
       ['assetPrice', {id}],
       () => http.dexd.fetchAssetPrice(id),
@@ -56,8 +55,6 @@ export function useAssetPriceQuery({
   );
 
   const retdata = useMemo(() => {
-    console.log('IN USE MEMO: ' + id)
-
     const asset = {
       ...algorandAsset,
       price_info: dexAsset,
@@ -71,7 +68,6 @@ export function useAssetPriceQuery({
     return {data: undefined}
   }
 
-  console.log('RETURNING: ', {retdata});
   return retdata;
 }
 
