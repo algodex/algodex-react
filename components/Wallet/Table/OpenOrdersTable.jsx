@@ -77,7 +77,6 @@ export function OpenOrdersTable({ orders: _orders }) {
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
-
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
       setWallet({

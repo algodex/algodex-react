@@ -285,7 +285,7 @@ OrderBookPrice.propTypes = {
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
     price_info: PropTypes.shape({
-      price: PropTypes.number.isRequired,
+      price: PropTypes.number,
       price24Change: PropTypes.number.isRequired
     })
   }).isRequired

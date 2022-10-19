@@ -26,6 +26,7 @@ import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -177,12 +178,12 @@ const Main = styled.main`
  */
 function MainLayout({ asset, children }) {
   const { wallet } = useAlgodex()
+  // const { wallet } = useWallets()
   const gridRef = useRef()
   const searchTableRef = useRef()
   if (!asset) {
     return <Spinner flex={true} />
   }
-
   return (
     <MainWrapper>
       <Main ref={gridRef}>

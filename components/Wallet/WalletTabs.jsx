@@ -112,9 +112,8 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
   const { wallet, isConnected } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
-
   const renderPanel = useCallback((panelName) => {
-    if (!isConnected) return <div></div>
+    if (!isConnected) return <div><span style={{ color: 'white'}}>Hey</span></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
         return <WalletOpenOrdersTable wallet={wallet} />
@@ -126,7 +125,6 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
         return null
     }
   }, [isConnected, wallet])
-
   return (
     <Section area={area} borderColor="blue" border="dashed">
       <Container>
