@@ -137,7 +137,6 @@ export function Header() {
             }
           }}
         >
-          {console.log(ENABLE_NETWORK_SELECTION, 'sdfssdd')}
           <MenuItem
             value="testnet"
             sx={{ color: 'gray.300' }}
