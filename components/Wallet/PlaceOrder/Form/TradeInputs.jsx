@@ -25,8 +25,10 @@ import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
-import { useMemo } from 'react'
+import { forwardRef, useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import {NumericFormat} from 'react-number-format';
+
 /**
  *
  * Render USD Price for an input component
@@ -50,6 +52,36 @@ export const USDInputPrice = ({ value, id }) => {
 USDInputPrice.propTypes = {
   value: PropTypes.number,
   id: PropTypes.string
+}
+export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
+  const { decimals, onChange, ...other } = props;
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      allowLeadingZeros
+      allowNegative={false}
+      decimalScale={decimals}
+    />
+  );
+});
+
+NumberFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  decimals: PropTypes.number
+};
+
+NumberFormatCustom.defaultProps = {
+  decimals: 6
 }
 
 export const TradeInputs = ({
@@ -119,17 +151,16 @@ export const TradeInputs = ({
           border: order.execution === 'market' ? 0 : 2,
           borderColor: theme.palette.gray['700']
         }}
-        name="price"
-        pattern="\d*"
         value={order.price.toString()}
         onChange={handleChange}
         placeholder='0.00'
+        name="price"
+        inputComponent={NumberFormatCustom}
+        decimals={6}
         inputProps={{
-          type:"number",
           decimals: 6,
           min: '0',
           step: '0.000001',
-          // step:"any",
           placeholder: '0.00',
           sx: {
             '&.Mui-disabled': {
@@ -160,13 +191,12 @@ export const TradeInputs = ({
 
       <OutlinedInput
         id="amount"
-        type="number"
-        pattern="\d*"
         name="amount"
         placeholder='0.00'
-        value={order.amount !== '' && order.amount}
+        value={order.amount.toString()}
+        inputComponent={NumberFormatCustom}
+        decimals={asset.decimals}
         inputProps={{
-          decimals: asset.decimals,
           min: '0',
           step: '0.000001',
           placeholder: '0.00'
