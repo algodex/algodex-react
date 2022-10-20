@@ -26,6 +26,7 @@ import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -66,6 +67,7 @@ const ContentSection = styled.section`
   height: auto;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: thin;
 `
 
 const AssetsSection = styled.section`
@@ -175,13 +177,13 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  const { wallet } = useAlgodex()
+  // const { wallet } = useAlgodex()
+  const { wallet } = useWallets()
   const gridRef = useRef()
   const searchTableRef = useRef()
   if (!asset || asset?.decimals === undefined) {
     return <Spinner flex={true} />
   }
-
   return (
     <MainWrapper>
       <Main ref={gridRef}>

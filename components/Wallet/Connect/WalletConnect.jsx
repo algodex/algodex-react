@@ -84,6 +84,7 @@ const Wallets = styled.div`
   flex: 1 1 0%;
   position: relative;
   overflow-y: auto;
+  scrollbar-width: thin;
   ::-webkit-scrollbar {
     width: 5px;
     height: 5px;

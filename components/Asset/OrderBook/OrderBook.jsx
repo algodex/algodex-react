@@ -187,6 +187,8 @@ const SellOrders = styled.div`
   display: flex;
   flex-direction: column-reverse;
   /* width */
+  scrollbar-width: none;
+  scrollbar-display: none;
   ::-webkit-scrollbar {
     width: 0;
     display: none;
@@ -201,6 +203,8 @@ const BuyOrders = styled.div`
     right: 0;
   }
   /* width */
+  scrollbar-width: none;
+  scrollbar-display: none;
   ::-webkit-scrollbar {
     width: 0;
     display: none;
@@ -281,7 +285,7 @@ OrderBookPrice.propTypes = {
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
     price_info: PropTypes.shape({
-      price: PropTypes.number.isRequired,
+      price: PropTypes.number,
       price24Change: PropTypes.number.isRequired
     })
   }).isRequired

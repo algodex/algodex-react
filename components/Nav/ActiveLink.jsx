@@ -14,10 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
+import React, { Children, useMemo } from 'react'
+
 import Link from 'next/link'
-import React, { useMemo, Children } from 'react'
+import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 
 /**
  * NavActiveLink

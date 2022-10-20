@@ -32,7 +32,7 @@ export const NavTextLg = styled.span`
   color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
-
+  padding-left: 0.6rem;
   &:hover {
     color: ${({ theme }) => theme.palette.gray[100]};
   }
@@ -143,12 +143,19 @@ export const LanguageDropdownContainerMob = styled.div`
 
 export const LanguagesContainer = styled.ul`
   width: 100px;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-left: 2rem;
+  line-height: 0;
   &:hover,
   &:focus-within {
     ul {
       position: absolute;
       display: block;
-      top: 20px;
+      top: 0px;
+      padding: 0 1rem;
+      height: 29rem;
     }
   }
 `
@@ -157,7 +164,7 @@ export const LanguageDropDown = styled.ul`
   background-color: ${({ theme }) => theme.palette.gray[900]};
   display: none;
   max-height: 500px;
-  overflow: scroll;
+  overflow-y: scroll;
   right: 2rem;
   margin: 0;
   padding: 0;

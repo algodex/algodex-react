@@ -77,102 +77,33 @@ export const Flag = styled(ReactCountryFlag)`
 export const Navigation = styled.nav`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   width: 75%;
-  align-items: center;
-`
-
-export const NavTextLg = styled.span`
-  display: none;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  color: ${({ theme }) => theme.palette.gray[500]};
-  font-weight: 600;
-  font-size: ${(fontSize) => fontSize}
-  color: ${(color) => color}
-  cursor: pointer;
-  transition: color 0.1s ease-in;
-
-  &:hover {
-    color: ${({ theme }) => theme.palette.gray[100]};
+  position: absolute;
+  z-index: 99;
+  right: 0;
+  @media (max-width: 1284px) {
+    width: 75%;
   }
-
-  & > a {
-    color: ${({ theme }) => theme.palette.gray[100]};
-    padding: 1rem 0;
-
-    text-decoration: none;
-    border-bottom: ${({ isActive, border, theme }) =>
-      isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
-
-    &:hover {
-      color: ${({ theme }) => theme.palette.gray[100]};
-    }
-
-    &:active {
-      color: ${({ theme }) => theme.palette.gray[100]};
-    }
-
-    @media (min-width: 1024px) {
-      color: ${({ isActive, theme }) =>
-        isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
-    }
-  }
-
-  @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) =>
-      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
-    display: flex;
-    margin: 0 15px;
+  @media (min-width: 1284px) {
+    width: 60%;
   }
 `
 
-export const NavTextSm = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  color: ${({ theme, isActive }) => (isActive ? theme.palette.gray[100] : theme.palette.gray[500])};
-  font-weight: 600;
-  font-size: ${(fontSize) => fontSize}
-  color: ${(color) => color}
-  cursor: pointer;
-  transition: color 0.1s ease-in;
-
-  &:hover {
-    color: ${({ theme }) => theme.palette.gray[100]};
-  }
-
-  & > a {
-    color: ${({ theme }) => theme.palette.gray[100]};
-    padding: 1rem 0;
-    text-decoration: none;
-    border-bottom: ${({ isActive, border, theme }) =>
-      isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
-
-    &:hover {
-      color: ${({ theme }) => theme.palette.gray[100]};
-    }
-
-    &:active {
-      color: ${({ theme }) => theme.palette.gray[100]};
-    }
-
+export const NavTextLgWrapper = styled.span`
+    color: ${({ isActive, theme }) => isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+    display: ${({ isMobile }) => isMobile ? 'none' : 'flex'};
     @media (min-width: 1024px) {
       color: ${({ isActive, theme }) =>
         isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+      display: flex;
+      margin: 0 15px;
     }
-  }
+`
 
-  @media (min-width: 1024px) {
-    color: ${({ isActive, theme }) =>
-      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
-    display: none;
-  }
+export const NavTextSmWrapper = styled.span`
+  color: ${({ isActive, theme }) => isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+  display: ${({ isMobile }) => isMobile ? 'flex' : 'none'};
 `
 
 export const NavIcon = styled.span`
@@ -198,7 +129,7 @@ export const NavIcon = styled.span`
     padding: 1rem 0;
     text-decoration: none;
     border-bottom: ${({ isActive, border, theme }) =>
-      isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
+    isActive && border ? `6px inset ${theme.palette.green[500]}` : `6px inset transparent`};
 
     &:hover {
       color: ${({ theme }) => theme.palette.gray[100]};
@@ -210,13 +141,13 @@ export const NavIcon = styled.span`
 
     @media (min-width: 1024px) {
       color: ${({ isActive, theme }) =>
-        isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+    isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
     }
   }
 
   @media (min-width: 1024px) {
     color: ${({ isActive, theme }) =>
-      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+    isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
   }
 `
 
@@ -269,31 +200,4 @@ export const MenuContainer = styled.div`
   @media (min-width: 1024px) {
     display: none;
   }
-`
-
-export const NetworkDropdown = styled.select`
-  ${({ theme, value }) =>
-    value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
-  color: ${({ theme, value }) =>
-    value == 'mainnet' ? theme.palette.blue['500'] : theme.palette.green['500']};
-  border-radius: 3px;
-  padding: 0.3rem 0.5rem;
-  border: 0;
-  outline: 2px solid;
-  border-right: 16px solid transparent;
-
-  background: unset;
-  background-image: ${({ value }) =>
-    value == 'mainnet'
-      ? `url("data:image/svg+xml;utf8,<svg fill='%232d75d6' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")`
-      : `url("data:image/svg+xml;utf8,<svg fill='%2338A169' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")`};
-  background-repeat: no-repeat;
-  background-position-x: 130%;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-`
-
-export const NetworkDropdownOption = styled.option`
-  color: ${({ enableLinks }) => (enableLinks ? 'black' : '#AAA')};
 `
