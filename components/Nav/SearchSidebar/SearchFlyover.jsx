@@ -109,7 +109,7 @@ export function SearchFlyover(props) {
       {row && (
         <>
           <HeaderContainer>
-            <Typography variant="h5" color="gray.100" mb={3} data-testid="flyover-asa-name">
+            <Typography className='leading-8' variant="h5" color="gray.100" mb={3} data-testid="flyover-asa-name">
               {renderName()}
             </Typography>
           </HeaderContainer>
