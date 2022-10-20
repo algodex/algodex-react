@@ -57,7 +57,7 @@ const NetworkHandler = () => {
 
   return (
     <section>
-      {/* {isRibbonActive && <NetworkBanner />} */}
+      {isRibbonActive && <NetworkBanner />}
       {isModalActive && <NetworkNotificationModal />}
     </section>
   )
