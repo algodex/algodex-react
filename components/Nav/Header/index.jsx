@@ -137,18 +137,15 @@ export function Header() {
             }
           }}
         >
+          {console.log(ENABLE_NETWORK_SELECTION, 'sdfssdd')}
           <MenuItem
-            sx={{
-              color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
-            }}
             value="testnet"
+            sx={{ color: 'gray.300' }}
           >
             TESTNET
           </MenuItem>
           <MenuItem
-            sx={{
-              color: ENABLE_NETWORK_SELECTION ? 'black' : '#AAA'
-            }}
+            sx={{ color: 'gray.300' }}
             value="mainnet"
           >
             MAINNET
