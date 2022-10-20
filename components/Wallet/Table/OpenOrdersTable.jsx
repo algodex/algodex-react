@@ -89,7 +89,6 @@ export function OpenOrdersTable({ orders: _orders }) {
       })
     }
   })
-
   useMemo(() => {
     const ordersList = _orders.map((order) => {
       const _order = {

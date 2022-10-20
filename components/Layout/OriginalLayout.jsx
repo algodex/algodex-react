@@ -177,8 +177,8 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  const { wallet } = useAlgodex()
-  // const { wallet } = useWallets()
+  // const { wallet } = useAlgodex()
+  const { wallet } = useWallets()
   const gridRef = useRef()
   const searchTableRef = useRef()
   if (!asset || asset?.decimals === undefined) {

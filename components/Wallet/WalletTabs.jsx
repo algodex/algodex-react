@@ -112,21 +112,9 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const { wallet, isConnected } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-  const [isSignedIn, setIsSignedIn] = useState(isConnected)
-
-  useEvent('signOut', (data) => {
-    if (data.type === 'wallet') {
-      setIsSignedIn(false)
-    }
-  })
-  useEvent('signIn', (data) => {
-    if (data.type === 'wallet') {
-      setIsSignedIn(true)
-    }
-  })
 
   const renderPanel = useCallback((panelName) => {
-    if (!isConnected && !isSignedIn) return <div></div>
+    if (!isConnected || !wallet?.connector.connected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
         return <WalletOpenOrdersTable wallet={wallet} />
@@ -137,7 +125,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
       default:
         return null
     }
-  }, [isSignedIn, isConnected, wallet])
+  }, [isConnected, wallet])
 
   
 
