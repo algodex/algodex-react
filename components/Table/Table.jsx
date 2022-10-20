@@ -73,7 +73,7 @@ const Container = styled.div`
     border-spacing: 0;
     border: none;
     width: 100%;
-
+    scrollbar-width: none;
     & ::-webkit-scrollbar {
       display: none;
       width: 0px;
@@ -140,6 +140,9 @@ const Container = styled.div`
       }
     }
     tbody {
+      scrollbar-width: none;
+      scrollbar-display: none;
+      top: 37px;
       tr {
         border: 0;
       }

@@ -70,9 +70,11 @@ const styles = css`
   html {
     height: 100%;
   }
+  
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
+    scrollbar-width: thin;
   }
   ::-webkit-scrollbar-track {
     background: ${theme.palette.gray[900]};

@@ -14,27 +14,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'tailwindcss/tailwind.css'
+
+import * as NextImage from 'next/image'
+
+import { Global, css } from '@emotion/react'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+import AlgodexApi from '@algodex/algodex-sdk'
+import CssBaseline from '@mui/material/CssBaseline'
+import I18nProvider from 'next-translate/I18nProvider'
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
+import { Provider } from '@algodex/algodex-hooks'
 import React from 'react'
-import { jsxDecorator } from 'storybook-addon-jsx'
 import { RouterContext } from 'next/dist/shared/lib/router-context'
 import { ThemeProvider } from '@mui/material/styles'
-import { Global, css } from '@emotion/react'
-import CssBaseline from '@mui/material/CssBaseline'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import theme from '../theme'
-import 'tailwindcss/tailwind.css'
-import I18nProvider from 'next-translate/I18nProvider'
-import commonEN from '../locales/en/common.json'
-import ordersEN from '../locales/en/orders.json'
 import assetsEN from '../locales/en/assets.json'
-import placeOrderEN from '../locales/en/place-order.json'
-import walletEN from '../locales/en/wallet.json'
 import chartEN from '../locales/en/chart.json'
-import { Provider } from '@algodex/algodex-hooks'
+import commonEN from '../locales/en/common.json'
+import { jsxDecorator } from 'storybook-addon-jsx'
+import ordersEN from '../locales/en/orders.json'
+import placeOrderEN from '../locales/en/place-order.json'
+import theme from '../theme'
+import walletEN from '../locales/en/wallet.json'
+
 const queryClient = new QueryClient()
-import * as NextImage from 'next/image'
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
-import AlgodexApi from '@algodex/algodex-sdk'
 
 const OriginalNextImage = NextImage.default
 /**
@@ -64,7 +68,9 @@ const base = css`
   }
   ::-webkit-scrollbar {
     width: 6px;
+    scrollbar-width: 6px;
     height: 5px;
+    scrollbar-height: 6px;
   }
   ::-webkit-scrollbar-track {
     background: ${theme.palette.gray[900]};
