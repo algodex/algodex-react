@@ -45,11 +45,12 @@ const TableWrapper = styled.div`
   padding: 0;
   position: absolute;
   inset: 0;
-  // scrollbar-width: none;
+  overflow: scroll;
+  scrollbar-width: none;
 
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const OrderCancelButton = styled.button`
@@ -241,7 +242,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
   return (
     <OpenOrdersContainer>
-      <TableWrapper>
+      <TableWrapper style={{ overflow: 'scroll'}}>
         <Table
           initialState={walletOpenOrdersTableState}
           onStateChange={(state) => setWalletOpenOrdersTableState(state)}
