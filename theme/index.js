@@ -512,6 +512,18 @@ const theme = {
           color: colors.gray['100'],
         },
       },
+      [muiTheme.breakpoints.up('xs')]: {
+        fontSize: fontSizes[2]
+      },
+      [muiTheme.breakpoints.up('sm')]: {
+        fontSize: fontSizes[1]
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        fontSize: fontSizes[0]
+      },
+      [muiTheme.breakpoints.up('lg')]: {
+        fontSize: fontSizes[2]
+      },
     },
     price: {
       fontFamily: fontFamilies.monospace,

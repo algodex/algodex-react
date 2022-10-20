@@ -173,7 +173,8 @@ export function Header() {
             onClick={() => {
               setOpenWalletConnectDropdown(!openWalletConnectDropdown)
             }}
-            className="font-semibold hover:font-bold text-white border-white hover:border-white"
+            sx={{ minWidth: '4rem'}}
+            className="md:text-xs sm:text-xs lg:text-md font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
             {wallet && wallet?.connector?.connected && wallet?.address
