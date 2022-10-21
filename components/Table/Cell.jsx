@@ -24,7 +24,6 @@ import styled from '@emotion/styled'
 import { useCallback, useMemo } from 'react'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from '@/store/use-user-state'
 import { getActiveNetwork } from 'services/environment'
 
 const OrderTypeSpan = styled.span`
