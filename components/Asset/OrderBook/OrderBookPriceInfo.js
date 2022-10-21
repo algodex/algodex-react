@@ -25,6 +25,9 @@ import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 import { useMemo } from 'react'
+import Spinner from '@/components/Spinner'
+
+const Loading = () => <Spinner size={2} />
 
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   return useMemo(() => {
@@ -48,7 +51,8 @@ export function OrderBookPriceInfo({ algoPrice, asset }) {
           </Typography>
         </div>
       </>
-  )}, [algoPrice, asset])
+    )
+  }, [algoPrice, asset])
 }
 
 OrderBookPriceInfo.propTypes = {
@@ -56,4 +60,6 @@ OrderBookPriceInfo.propTypes = {
   algoPrice: PropTypes.any
 }
 
-export default withAlgorandPriceQuery(OrderBookPriceInfo)
+export default withAlgorandPriceQuery(OrderBookPriceInfo, { 
+  components: { ServiceError: OrderBookPriceInfo, Loading }
+})
