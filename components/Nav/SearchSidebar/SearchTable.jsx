@@ -43,6 +43,7 @@ import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 import {floatToFixedDisplay} from '@/services/display';
+import useMobileDetect from '@/hooks/useMobileDetect'
 
 /**
  * Map a Query Result to a Search Result
@@ -185,6 +186,8 @@ export const NavSearchTable = ({
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
+  const isMobile = useMobileDetect()
+
   const searchTableRef = useRef()
   const router = useRouter()
   // console.log(router, 'router')
@@ -493,7 +496,7 @@ export const NavSearchTable = ({
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
-        flyover={true}
+        flyover={isMobile ? false : true}
         components={{
           Flyover: SearchFlyover
         }}
