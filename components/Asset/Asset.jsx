@@ -101,7 +101,7 @@ export function AssetInfo({ asset }) {
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
   const activeNetwork = getActiveNetwork();
-
+  const MICROALGO = 0.000001
   const explorerURL =
     activeNetwork === 'testnet'
       ? `https://testnet.algoexplorer.io/asset/`
@@ -144,7 +144,7 @@ export function AssetInfo({ asset }) {
     }
     return null
   }, [asset.url])
-
+  
   return (
     <Container>
       <InfoContainer>
@@ -179,7 +179,7 @@ export function AssetInfo({ asset }) {
               {t('circulating-supply')}
             </Typography>
             <Typography data-testid="asset-info-circ-supply" variant="h6" color="gray.400">
-              {asset.circulating || 'NA'}
+              {asset.circulating * MICROALGO || 'NA'}
             </Typography>
           </InfoItem>
           <InfoItem halfWidth>
@@ -187,7 +187,7 @@ export function AssetInfo({ asset }) {
               {t('total-supply')}
             </Typography>
             <Typography data-testid="asset-info-total-supply" variant="h6" color="gray.400">
-              {asset.total}
+              {asset.total * MICROALGO}
             </Typography>
           </InfoItem>
           <InfoItem>
