@@ -276,11 +276,12 @@ export function OrderBookPrice({ asset }) {
       ) : (
         <ArrowUp className="mr-2" data-testid="arrow-up" />
       )}
-      {isUndefined(asset.price_info) ? (
+      {/* {isUndefined(asset.price_info) ? (
         <NoPriceInfo data-testid="no-price-info" />
       ) : (
         <PriceInfo asset={asset} data-testid="has-price-info" />
-      )}
+      )} */}
+      <PriceInfo asset={asset} data-testid="has-price-info" />
     </Price>
   )
 }
