@@ -227,6 +227,7 @@ const Price = styled.div`
   font-weight: 600;
   color: ${({ theme, color }) => theme.palette[color]['500']};
   margin: 0;
+  width: 100%;
   svg {
     // margin-right: 0.5rem;
   }

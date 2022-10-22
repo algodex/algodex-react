@@ -18,7 +18,7 @@
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
-import Typography from '@mui/material/Typography'
+import { Stack, Typography } from '@mui/material'
 import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
@@ -27,7 +27,12 @@ import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 import { useMemo } from 'react'
 import Spinner from '@/components/Spinner'
 
-const Loading = () => <Spinner size={2} />
+const Loading = () => <Stack
+  sx={{ width: '100%'}}
+  direction="row"
+  justifyContent="center"
+  alignItems="center"
+><Spinner size={2} /></Stack>
 
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   return useMemo(() => {
@@ -60,6 +65,6 @@ OrderBookPriceInfo.propTypes = {
   algoPrice: PropTypes.any
 }
 
-export default withAlgorandPriceQuery(OrderBookPriceInfo, { 
+export default withAlgorandPriceQuery(OrderBookPriceInfo, {
   components: { ServiceError: OrderBookPriceInfo, Loading }
 })
