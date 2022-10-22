@@ -179,7 +179,7 @@ export function AssetInfo({ asset }) {
               {t('circulating-supply')}
             </Typography>
             <Typography data-testid="asset-info-circ-supply" variant="h6" color="gray.400">
-              {(asset.circulating / (10**asset.decimals)).toLocaleString()}
+              {asset.circulating ? (asset.circulating / (10**asset.decimals)).toLocaleString() : 'NA'}
             </Typography>
           </InfoItem>
           <InfoItem halfWidth>
