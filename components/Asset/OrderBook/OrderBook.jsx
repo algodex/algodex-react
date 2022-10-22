@@ -217,7 +217,7 @@ const CurrentPrice = styled.div`
   border-bottom: solid 3px ${({ theme }) => theme.palette.gray['700']};
   height: 5rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `
 const Price = styled.div`
