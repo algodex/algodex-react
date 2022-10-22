@@ -25,7 +25,7 @@ import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+// import { useAlgodex } from '@algodex/algodex-hooks'
 import useWallets from '@/hooks/useWallets'
 
 export const Container = styled.div`

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useEffect, useMemo, useState } from 'react'
+import { createRef, forwardRef, useMemo, useState } from 'react'
 
 import { X as CancelIcon } from 'react-feather'
 import Checkbox from './CheckboxInput'
@@ -24,7 +24,6 @@ import TextInput from './TextInput'
 import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import useDebounce from '@/hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`

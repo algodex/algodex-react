@@ -17,7 +17,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useMemo, useReducer, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -35,7 +35,6 @@ import { mdiAlertCircleOutline } from '@mdi/js'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
-import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 
 export const Form = styled.form`
@@ -84,10 +83,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-  const [status, setStatus] = useState({
-    submitted: false,
-    submitting: false
-  })
 
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
@@ -271,8 +266,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return false
   }, [order, algoBalance, assetBalance])
 
-  const MICROALGO = 0.000001
-
   const isBelowMinOrderAmount = useMemo(() => {
     if (order.type === 'buy') {
       return new Big(order.total).lt(0.5)
@@ -347,7 +340,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      setStatus((prev) => ({ ...prev, submitting: true }))
       let lastToastId = undefined
       let orderPromise
       const notifier = (msg) => {
