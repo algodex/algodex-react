@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import Fade from '@mui/material/Fade'
@@ -210,7 +210,6 @@ function Table({
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [itemInfo, setItemInfo] = useState({})
-
   const handleRowFocus = useCallback(
     (event, item) => {
       setItemInfo(item.original)
