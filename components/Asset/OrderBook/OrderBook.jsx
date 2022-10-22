@@ -250,7 +250,7 @@ export function OrderBookPrice({ asset }) {
       <Fragment>
         --
         <Typography data-testid="no-price-info" as="span">
-          0.00%
+          &nbsp; 0.00%
         </Typography>
       </Fragment>
     )
