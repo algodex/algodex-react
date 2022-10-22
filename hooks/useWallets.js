@@ -15,8 +15,6 @@
  */
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { find, intersectionBy } from 'lodash'
-
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
