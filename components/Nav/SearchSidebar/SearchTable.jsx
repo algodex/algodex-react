@@ -34,16 +34,16 @@ import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import {floatToFixedDisplay} from '@/services/display';
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
-import {floatToFixedDisplay} from '@/services/display';
-import useMobileDetect from '@/hooks/useMobileDetect'
 
 /**
  * Map a Query Result to a Search Result
@@ -513,7 +513,7 @@ export const NavSearchTable = ({
 }
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
-  assets: PropTypes.array.isRequired,
+  assets: PropTypes.array,
   assetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,

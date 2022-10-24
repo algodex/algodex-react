@@ -473,7 +473,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
-            tabType={order.type === 'buy' ? 'buy' : 'sell'}
+            tabtype={order.type === 'buy' ? 'buy' : 'sell'}
             onChange={(e, value) => handleMarketTabSwitching(e, value)}
             value={tabSwitch}
           >
