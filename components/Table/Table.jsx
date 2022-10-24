@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import Fade from '@mui/material/Fade'
@@ -143,20 +143,20 @@ const Container = styled.div`
     tbody {
       scrollbar-width: none;
       scrollbar-display: none;
-      top: 37px;
+      // top: 37px;
       tr {
         border: 0;
       }
       position: absolute;
       width: 100%;
-      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height + 39}px`};
+      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height}px`};
       overflow-y: scroll;
       @media (max-width: 996px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 128}px`};
         padding-bottom: 3rem;
       }
       @media (max-width: 375px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height  - 75}px`};
         padding-bottom: 6rem;
       }
     }
@@ -211,7 +211,6 @@ function Table({
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [itemInfo, setItemInfo] = useState({})
-
   const handleRowFocus = useCallback(
     (event, item) => {
       setItemInfo(item.original)

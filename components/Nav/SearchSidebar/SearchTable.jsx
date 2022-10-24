@@ -39,6 +39,7 @@ import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
+import useMobileDetect from '@/hooks/useMobileDetect'
 import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
@@ -185,6 +186,8 @@ export const NavSearchTable = ({
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
+  const isMobile = useMobileDetect()
+
   const searchTableRef = useRef()
   const router = useRouter()
   const { t } = useTranslation('assets')
@@ -492,12 +495,11 @@ export const NavSearchTable = ({
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
-        flyover={true}
+        flyover={isMobile ? false : true}
         components={{
           Flyover: SearchFlyover
         }}
-        style={{ height: 'inherit' }}
-        tableSizeOnMobile={searchTableSize}
+        tableSizeOnMobile={gridSize}
         optionalGridInfo={searchTableSize}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
