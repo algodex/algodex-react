@@ -16,16 +16,17 @@
 
 // import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
+import { Stack, Typography } from '@mui/material'
+
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
-import { Stack, Typography } from '@mui/material'
+import Spinner from '@/components/Spinner'
 import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
-import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 import { useMemo } from 'react'
-import Spinner from '@/components/Spinner'
+import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 
 const Loading = () => <Stack
   sx={{ width: '100%'}}
@@ -35,12 +36,12 @@ const Loading = () => <Stack
 ><Spinner size={2} /></Stack>
 
 export function OrderBookPriceInfo({ algoPrice, asset }) {
+  const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
   return useMemo(() => {
-    const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
     return (
       <>
         <Typography variant="h5" color="white">
-          {asaValue}
+          { typeof asset?.price_info?.price === 'undefined' ? '--' : asaValue}
         </Typography>
         {asset && asset.price_info && (
           <Typography className="ml-3" data-testid="price-info">
@@ -57,7 +58,7 @@ export function OrderBookPriceInfo({ algoPrice, asset }) {
         </div>
       </>
     )
-  }, [algoPrice, asset])
+  }, [algoPrice, asset, asaValue])
 }
 
 OrderBookPriceInfo.propTypes = {
