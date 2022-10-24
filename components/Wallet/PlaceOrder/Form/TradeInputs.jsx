@@ -43,7 +43,7 @@ export const USDInputPrice = ({ value, id }) => {
         USD {id === 'price' ? 'Price' : 'Total'}{' '}
       </Typography>
       <Typography color="gray.400" variant="body_tiny_cap">
-        <USDPrice priceToConvert={value} />
+        <USDPrice priceToConvert={parseFloat(value)} />
         <span className="ml-4 mr-3">USD</span>
       </Typography>
     </div>
@@ -187,7 +187,7 @@ export const TradeInputs = ({
           Price cannot be less than {microAlgo}
         </FormHelperText>
       ) : (
-        <USDInputPrice value={order.price} id="price" />
+        <USDInputPrice value={parseFloat(order.price)} id="price" />
       )}
 
       <OutlinedInput
@@ -274,7 +274,7 @@ export const TradeInputs = ({
           <span className="ml-4 mr-3">USD</span>
         </Typography>
       </MaterialBox>
-      <USDInputPrice value={order.total} id="total" />
+      <USDInputPrice value={parseFloat(order.total)} id="total" />
       {/* <TxnFeeContainer>
         <Typography color="gray.500" textTransform="none">
           Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

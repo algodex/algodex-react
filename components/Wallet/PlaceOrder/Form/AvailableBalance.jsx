@@ -25,10 +25,10 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
  */
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetPriceQuery } from '@algodex/algodex-hooks'
-import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
@@ -165,7 +165,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             {/* {assetValue} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice asaWorth={calcAsaWorth} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
+            <USDPrice asaWorth={parseFloat(calcAsaWorth)} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
       </Stack>

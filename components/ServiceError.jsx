@@ -14,11 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import React, { useMemo } from 'react'
+
 import { AlertIcon } from 'components/Icon'
 import PropTypes from 'prop-types'
 import { parseThemeColor } from 'theme'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
 
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
@@ -89,7 +90,7 @@ ServiceError.defaultProps = {
   color: 'gray.600',
   flex: false,
   message: 'Something went wrong!',
-  Icon: AlertIcon
+  Icon: <React.Fragment>{AlertIcon}</React.Fragment>
 }
 
 export default ServiceError

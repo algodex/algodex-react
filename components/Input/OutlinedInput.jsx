@@ -30,17 +30,20 @@ export const OutlinedInput = styled(MUIOutlinedInput)(({ theme }) => ({
     MozAppearance: 'none',
     WebkitAppearance: 'none',
     ':disabled': {
-      '[-webkit-text-fill-color]': 'unset'
+      'WebkitTextFillColor': 'unset'
     },
     '&[type=number]': {
-      '[-moz-appearance]': 'textfield'
+      // '-moz-appearance': 'textfield'
+      appearance: 'textfield'
     },
     '&::-webkit-outer-spin-button': {
-      '[-webkit-appearance]': 'none',
+      // '-webkit-appearance': 'none',
+      appearance: 'none',
       margin: 0
     },
     '&::-webkit-inner-spin-button': {
-      '[-webkit-appearance]': 'none',
+      // '-webkit-appearance': 'none',
+      appearance: 'none',
       margin: 0
     }
   }
