@@ -149,7 +149,7 @@ const Container = styled.div`
       }
       position: absolute;
       width: 100%;
-      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height}px`};
+      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 125}px`};
       overflow-y: scroll;
       @media (max-width: 996px) {
         height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 128}px`};
