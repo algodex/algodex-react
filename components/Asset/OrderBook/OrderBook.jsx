@@ -245,17 +245,6 @@ export function OrderBookPrice({ asset }) {
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
-  const NoPriceInfo = useCallback(() => {
-    return (
-      <Fragment>
-        --
-        <Typography data-testid="no-price-info" as="span">
-          &nbsp; 0.00%
-        </Typography>
-      </Fragment>
-    )
-  }, [])
-
   // function PriceInfo() {
   //   return (
   //     <Fragment>
@@ -276,11 +265,6 @@ export function OrderBookPrice({ asset }) {
       ) : (
         <ArrowUp className="mr-2" data-testid="arrow-up" />
       )}
-      {/* {isUndefined(asset.price_info) ? (
-        <NoPriceInfo data-testid="no-price-info" />
-      ) : (
-        <PriceInfo asset={asset} data-testid="has-price-info" />
-      )} */}
       <PriceInfo asset={asset} data-testid="has-price-info" />
     </Price>
   )

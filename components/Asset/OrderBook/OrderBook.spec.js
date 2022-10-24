@@ -85,12 +85,6 @@ describe('Order Book', () => {
     expect(queryByTestId(BUY_ROW)).not.toBeNull()
   })
 
-  it('should render empty price info', () => {
-    const { queryByTestId } = render(<OrderBookPriceView />)
-    expect(queryByTestId('no-price-info')).not.toBeNull()
-    expect(queryByTestId('has-price-info')).toBeNull()
-  })
-
   it('should reflect price increase', () => {
     const { queryByTestId } = render(<OrderBookPriceView asset={increaseInPrice} />)
     expect(queryByTestId('arrow-up')).not.toBeNull()
