@@ -19,7 +19,13 @@ import { AssetChangeCell, NavSearchTable } from './SearchTable'
 import { render } from 'test/test-utils'
 import useUserStore from 'store/use-user-state'
 jest.mock('next/dist/client/router', () => require('next-router-mock'))
-
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+  })),
+});
 const assets = [
   {
     assetId: 15322902,
