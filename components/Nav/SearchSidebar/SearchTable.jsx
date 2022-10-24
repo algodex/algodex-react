@@ -34,6 +34,7 @@ import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import {floatToFixedDisplay} from '@/services/display';
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -42,7 +43,6 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
-import {floatToFixedDisplay} from '@/services/display';
 
 /**
  * Map a Query Result to a Search Result
@@ -187,7 +187,6 @@ export const NavSearchTable = ({
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const searchTableRef = useRef()
   const router = useRouter()
-  // console.log(router, 'router')
   const { t } = useTranslation('assets')
 
   const filterByFavoritesFn = useCallback(
@@ -497,8 +496,9 @@ export const NavSearchTable = ({
         components={{
           Flyover: SearchFlyover
         }}
+        style={{ height: 'inherit' }}
         tableSizeOnMobile={searchTableSize}
-        optionalGridInfo={gridSize}
+        optionalGridInfo={searchTableSize}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}

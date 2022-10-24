@@ -84,12 +84,13 @@ export function NavSearchSidebar({
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
-
+  
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(false)
+  
 
   // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -159,7 +160,6 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
