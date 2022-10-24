@@ -491,7 +491,7 @@ export const NavSearchTable = ({
       router.prefetch('/trade/'+assetId)
     })
   }, [router, searchResultData])
-  console.log(gridSize,searchTableSize, 'gridSize,searchTableSize')
+  
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table

@@ -39,6 +39,7 @@ const styleReset = css`
   font: inherit;
   vertical-align: baseline;
 `
+const UPPERBODYHEIGHT = 125
 
 const SortIcon = styled(Icon)`
   position: relative;
@@ -149,14 +150,16 @@ const Container = styled.div`
       }
       position: absolute;
       width: 100%;
-      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 125}px`};
+      height: ${({ optionalGridInfo }) => {
+        return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
+      }};
       overflow-y: scroll;
       @media (max-width: 996px) {
         height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 128}px`};
         padding-bottom: 3rem;
       }
       @media (max-width: 375px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height  - 75}px`};
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 75}px`};
         padding-bottom: 6rem;
       }
     }
