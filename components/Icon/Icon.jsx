@@ -16,12 +16,13 @@
 
 import * as Icons from 'react-feather'
 
+import React, {useMemo} from 'react'
+
 import PropTypes from 'prop-types'
 import { has } from 'lodash/object'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import {useMemo} from 'react'
 
 export const ICONS = {
   wallet: {

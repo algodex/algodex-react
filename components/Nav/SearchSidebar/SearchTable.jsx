@@ -512,7 +512,7 @@ export const NavSearchTable = ({
 }
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
-  assets: PropTypes.array.isRequired,
+  assets: PropTypes.array,
   assetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,

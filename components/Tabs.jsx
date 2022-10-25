@@ -23,8 +23,8 @@ const Tabs = styled(MUITabs)`
   .MuiTabs-indicator {
     min-width: 50px;
     height: 5px;
-    background-color: ${({ tabType, theme }) =>
-      tabType === 'buy' ? theme.colors.green['500'] : theme.colors.red['500']};
+    background-color: ${({ tabtype, theme }) =>
+      tabtype === 'buy' ? theme.colors.green['500'] : theme.colors.red['500']};
   }
   .MuiTab-textColorPrimary {
     &:hover {

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
@@ -202,7 +202,7 @@ NavSearchSidebar.propTypes = {
   searchTableRef: PropTypes.object,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
-    NavTable: PropTypes.node
+    NavTable: PropTypes.elementType
   }),
   tableProps: PropTypes.object,
   area: PropTypes.string
