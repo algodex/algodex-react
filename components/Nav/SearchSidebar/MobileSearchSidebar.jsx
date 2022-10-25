@@ -145,7 +145,7 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
-              gridSize={searchTableSize}
+              gridSize={gridSize}
             />
           </div>
         </AssetsContainer>

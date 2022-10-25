@@ -39,6 +39,7 @@ const styleReset = css`
   font: inherit;
   vertical-align: baseline;
 `
+const UPPERBODYHEIGHT = 125
 
 const SortIcon = styled(Icon)`
   position: relative;
@@ -74,6 +75,7 @@ const Container = styled.div`
     border: none;
     width: 100%;
     scrollbar-width: none;
+    height: inherit;
     & ::-webkit-scrollbar {
       display: none;
       width: 0px;
@@ -142,20 +144,22 @@ const Container = styled.div`
     tbody {
       scrollbar-width: none;
       scrollbar-display: none;
-      top: 37px;
+      // top: 37px;
       tr {
         border: 0;
       }
       position: absolute;
       width: 100%;
-      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 125}px`};
+      height: ${({ optionalGridInfo }) => {
+        return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
+      }};
       overflow-y: scroll;
       @media (max-width: 996px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
-        padding-bottom: 4rem;
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 128}px`};
+        padding-bottom: 3rem;
       }
       @media (max-width: 375px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 75}px`};
         padding-bottom: 6rem;
       }
     }
