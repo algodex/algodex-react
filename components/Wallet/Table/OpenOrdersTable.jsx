@@ -22,11 +22,11 @@ import Table, {
 } from '@/components/Table'
 import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
 import { useCallback, useMemo, useState } from 'react'
-import {floatToFixedDisplay} from '@/services/display';
 
 import PropTypes from 'prop-types'
 import React from 'react'
 import Typography from '@mui/material/Typography'
+import {floatToFixedDisplay} from '@/services/display';
 import { logInfo } from 'services/logRemote'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
@@ -257,7 +257,7 @@ OpenOrdersTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
   }),
-  orders: PropTypes.array.isRequired
+  orders: PropTypes.array
 }
 
 OpenOrdersTable.defaultProps = {

@@ -215,6 +215,10 @@ const CurrentPrice = styled.div`
   padding: 1rem 0;
   border-top: solid 3px ${({ theme }) => theme.palette.gray['700']};
   border-bottom: solid 3px ${({ theme }) => theme.palette.gray['700']};
+  height: 5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `
 const Price = styled.div`
   display: flex;
@@ -223,6 +227,7 @@ const Price = styled.div`
   font-weight: 600;
   color: ${({ theme, color }) => theme.palette[color]['500']};
   margin: 0;
+  width: 100%;
   svg {
     // margin-right: 0.5rem;
   }
@@ -239,17 +244,6 @@ const Price = styled.div`
 export function OrderBookPrice({ asset }) {
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
-
-  const NoPriceInfo = useCallback(() => {
-    return (
-      <Fragment>
-        --
-        <Typography data-testid="no-price-info" as="span">
-          0.00%
-        </Typography>
-      </Fragment>
-    )
-  }, [])
 
   // function PriceInfo() {
   //   return (
@@ -271,11 +265,7 @@ export function OrderBookPrice({ asset }) {
       ) : (
         <ArrowUp className="mr-2" data-testid="arrow-up" />
       )}
-      {isUndefined(asset.price_info) ? (
-        <NoPriceInfo data-testid="no-price-info" />
-      ) : (
-        <PriceInfo asset={asset} data-testid="has-price-info" />
-      )}
+      <PriceInfo asset={asset} data-testid="has-price-info" />
     </Price>
   )
 }
