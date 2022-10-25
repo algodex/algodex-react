@@ -16,12 +16,13 @@
 
 import * as Icons from 'react-feather'
 
+import React, {useMemo} from 'react'
+
 import PropTypes from 'prop-types'
 import { has } from 'lodash/object'
 import { isNumber } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import {useMemo} from 'react'
 
 export const ICONS = {
   wallet: {
@@ -104,7 +105,7 @@ const Svg = styled.svg`
  *
  * @example <Icon use="wallet" size={0.75} color="gray.000" />
  */
-export const Icon = (props) => {
+export function Icon(props) {
   const isCustomIcon = has(ICONS, props.use)
   const isFeatherIcon = has(Icons, props.use)
 
