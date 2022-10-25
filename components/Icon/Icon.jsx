@@ -104,7 +104,7 @@ const Svg = styled.svg`
  *
  * @example <Icon use="wallet" size={0.75} color="gray.000" />
  */
-export function Icon(props) {
+export const Icon = (props) => {
   const isCustomIcon = has(ICONS, props.use)
   const isFeatherIcon = has(Icons, props.use)
 

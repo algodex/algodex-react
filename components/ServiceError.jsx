@@ -90,7 +90,7 @@ ServiceError.defaultProps = {
   color: 'gray.600',
   flex: false,
   message: 'Something went wrong!',
-  Icon: <React.Fragment>{AlertIcon}</React.Fragment>
+  Icon: AlertIcon
 }
 
 export default ServiceError
