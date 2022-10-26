@@ -29,6 +29,7 @@ import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEvent } from 'hooks/useEvents'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
@@ -156,7 +157,6 @@ export function WalletView(props) {
     (wallet) => {
       if (wallet.type === 'wallet-connect') {
         try {
-          console.log(peraConnector.connector, wallet.addr, 'peraConnector.current')
           if (peraConnector.connector.connected) {
             return peraConnector.connector
           }
@@ -179,6 +179,11 @@ export function WalletView(props) {
     [dispatcher, peraConnector.connector]
   )
 
+  useEvent('switch-wallet', (data) => {
+    const {activeWallet} = data
+    localStorage.setItem('activeWallet', JSON.stringify(activeWallet))
+  })
+
   const handleWalletClick = useCallback(async (addr) => {
     const connector = handleConnectionStatus(addr)
     const _addr = {
@@ -186,6 +191,9 @@ export function WalletView(props) {
       connector
     }
     if (_addr.connector && (_addr.connector._connected || _addr.connector.connected)) {
+      dispatcher('switch-wallet', {
+        activeWallet: _addr
+      })
       !isWalletActive(addr) && setActiveWallet(_addr)
     }
   }, [handleConnectionStatus, isWalletActive, setActiveWallet])
