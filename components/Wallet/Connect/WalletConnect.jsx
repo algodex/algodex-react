@@ -132,7 +132,7 @@ export function WalletView(props) {
     _peraDisconnect(targetWallet)
   }, [_peraDisconnect])
 
-  const setActiveWalletOnDisconnect = (wallet) => {
+  const setActiveWalletOnDisconnect = useCallback((wallet) => {
     const allAddresses = localStorage.getItem('addresses')
     if (allAddresses) {
       const parsedAddresses = JSON.parse(allAddresses)
@@ -144,15 +144,15 @@ export function WalletView(props) {
         localStorage.removeItem('activeWallet')
       }
     }
-  }
+  }, [])
 
   const walletDisconnectMap = useMemo(() => ({
     'my-algo-wallet': async (wallet) => {
-      await setActiveWalletOnDisconnect(wallet)
+      setActiveWalletOnDisconnect(wallet)
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': async (wallet) => {
-      await setActiveWalletOnDisconnect(wallet)
+      setActiveWalletOnDisconnect(wallet)
       peraDisconnect(wallet)
     }
   }), [myAlgoDisconnect, peraDisconnect])
