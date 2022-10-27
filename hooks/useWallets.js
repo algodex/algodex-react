@@ -275,9 +275,11 @@ function useWallets(initialState) {
       case 'update':
         return _wallet
       case 'new':
+        // localStorage.setItem('activeWallet', JSON.stringify(wallet))
         return wallet
       default:
         if (_wallet === undefined) {
+          // localStorage.setItem('activeWallet', JSON.stringify(wallet))
           return wallet
         }
         return _wallet
@@ -313,6 +315,12 @@ function useWallets(initialState) {
       }
       setIsRehydrating(true)
       localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+      console.log(_allAddresses, newAddress, actionType, 'adding new')
+      if (actionType === 'new') {
+        const newWallet = find(_allAddresses, o => o.address === newAddress[0].address)
+        localStorage.setItem('activeWallet', JSON.stringify(newWallet))
+      }
+      // localStorage.setItem('activeWallet', JSON.stringify(_allAddresses[0]))
       setAddresses(_allAddresses)
     }
   }
@@ -331,6 +339,11 @@ function useWallets(initialState) {
     })
     setIsRehydrating(true)
     localStorage.setItem('addresses', JSON.stringify(_allAddresses))
+    console.log(_allAddresses, newAddress, actionType, 'adding update')
+    if (actionType === 'new') {
+      const newWallet = find(_allAddresses, o => o.address === newAddress[0].address)
+      localStorage.setItem('activeWallet', JSON.stringify(newWallet))
+    }
     setActiveWallet(_allAddresses, actionType)
     setAddresses(_allAddresses)
   }
