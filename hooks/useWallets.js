@@ -219,12 +219,8 @@ function useWallets(initialState) {
 
   const filterConnectedWallet = useCallback((addressesList) => {
     const _filteredList = addressesList.filter((wallet) => {
-      // return wallet.connector && (wallet.connector.connected || wallet.connector._connected)
-      return wallet.connector && wallet.connector.connected
+      return wallet.connector && (wallet.connector.connected || wallet.connector._connected)
     })
-    // if (_filteredList.length < 1) {
-    //   localStorage.removeItem("activeWallet")
-    // }
     const _activeWallet = localStorage.getItem('activeWallet')
     if (_activeWallet) {
       const activeWallet = JSON.parse(_activeWallet)
@@ -249,7 +245,7 @@ function useWallets(initialState) {
     if (_activeWallet && JSON.parse(_activeWallet).type === 'wallet-connect') {
       const parsedActiveWallet = JSON.parse(_activeWallet)
       const hasPeraConnect = find(addressesList, (o) => o.address === parsedActiveWallet.address)
-      if (hasPeraConnect && hasPeraConnect.connector && hasPeraConnect.connector.connected){
+      if (hasPeraConnect && hasPeraConnect.connector && hasPeraConnect.connector.connected) {
         const _connectedWallet = filterConnectedWallet(addressesList)
         const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
         if (_selectedWallet) {
@@ -264,7 +260,7 @@ function useWallets(initialState) {
         setAlgodexWallet(_selectedWallet)
         return
       }
-    }   
+    }
   }, [peraWalletConnector])
 
   const handleWalletUpdate = (wallet, action) => {
