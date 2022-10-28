@@ -137,6 +137,7 @@ export function WalletView(props) {
     if (allAddresses) {
       const parsedAddresses = JSON.parse(allAddresses)
       const filterWalletToDisconnect = parsedAddresses.filter(_wallet => _wallet.address !== wallet.address)
+      console.log(filterWalletToDisconnect, 'filtered disconnect')
       // Has remaining wallet
       if (filterWalletToDisconnect.length) {
         localStorage.setItem('activeWallet', JSON.stringify(filterWalletToDisconnect[0]))
@@ -148,11 +149,11 @@ export function WalletView(props) {
 
   const walletDisconnectMap = useMemo(() => ({
     'my-algo-wallet': async (wallet) => {
-      setActiveWalletOnDisconnect(wallet)
+      await setActiveWalletOnDisconnect(wallet)
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': async (wallet) => {
-      setActiveWalletOnDisconnect(wallet)
+      await setActiveWalletOnDisconnect(wallet)
       peraDisconnect(wallet)
     }
   }), [myAlgoDisconnect, peraDisconnect])

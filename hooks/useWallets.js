@@ -219,8 +219,10 @@ function useWallets(initialState) {
 
   const filterConnectedWallet = useCallback((addressesList) => {
     const _filteredList = addressesList.filter((wallet) => {
-      return wallet.connector && (wallet.connector.connected || wallet.connector._connected)
+      // return wallet.connector && (wallet.connector.connected || wallet.connector._connected)
+      return wallet.connector && wallet.connector.connected
     })
+    // return _filteredList[0]
     const _activeWallet = localStorage.getItem('activeWallet')
     if (_activeWallet) {
       const activeWallet = JSON.parse(_activeWallet)
@@ -240,12 +242,71 @@ function useWallets(initialState) {
     }
   }, [])
 
+  const handleActiveWallet = (peraWalletConnector) => {
+    // Get active wallet
+    // Check if active wallet is pera-connect
+    // check if _connector of pera wallet is true
+    // if _connector is true, check if peraconnect.connector !== null is true
+
+    console.log(peraWalletConnector, 'pera waperaWalletConnector')
+    console.log(peraWalletConnector.connector, typeof peraWalletConnector.connector, 'pera waperaWalletConnector')
+  }
+
+  useEffect(() => {
+    // const _activeWallet = localStorage.getItem('activeWallet')
+    // if (_activeWallet && JSON.parse(_activeWallet).type === 'wallet-connect') {
+    //   const parsedActiveWallet = JSON.parse(_activeWallet)
+    //   const hasPeraConnect = find(addressesList, (o) => o.address === parsedActiveWallet.address)
+    // }
+    const addressesList = localStorage.getItem('addresses')
+    if (addressesList) {
+      setActiveWallet(JSON.parse(addressesList))
+    }
+  }, [peraWalletConnector])
+  
+
   const setActiveWallet = useCallback((addressesList, action) => {
+    console.log('came back here')
     const _activeWallet = localStorage.getItem('activeWallet')
+    console.log('came back here')
     if (_activeWallet && JSON.parse(_activeWallet).type === 'wallet-connect') {
+      console.log(_activeWallet, 'active wallet inside')
       const parsedActiveWallet = JSON.parse(_activeWallet)
       const hasPeraConnect = find(addressesList, (o) => o.address === parsedActiveWallet.address)
-      if (hasPeraConnect && hasPeraConnect.connector && hasPeraConnect.connector.connected) {
+      console.log(hasPeraConnect, 'hasPeraConnect inside')
+      // // if (hasPeraConnect && hasPeraConnect.connector && hasPeraConnect.connector.connected) {
+      // if (hasPeraConnect && peraWalletConnector.connector !== null) {
+      //   const _connectedWallet = filterConnectedWallet(addressesList)
+      //   const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
+      //   if (_selectedWallet) {
+      //     setAlgodexWallet(_selectedWallet)
+      //     return
+      //   }
+      // } else {
+      //   console.log(Object.keys(peraWalletConnector), peraWalletConnector, 'pera waperaWalletConnector')
+      //   console.log(peraWalletConnector.connector, typeof peraWalletConnector.connector, 'pera waperaWalletConnector')
+      //   const _connectedWallet = filterConnectedWallet(addressesList)
+      //   const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
+      //   if (_selectedWallet) {
+      //     setAlgodexWallet(_selectedWallet)
+      //     return
+      //   }
+      // }
+
+      // if (hasPeraConnect && hasPeraConnect.connector && hasPeraConnect.connector.connected) {
+      console.log(hasPeraConnect, 'has perra connect')
+      if (hasPeraConnect && hasPeraConnect.connector && (hasPeraConnect.connector.connected || hasPeraConnect.connector._connected)) {
+        if (peraWalletConnector.connector !== null) {
+          const _connectedWallet = filterConnectedWallet(addressesList)
+          const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
+          if (_selectedWallet) {
+            setAlgodexWallet(_selectedWallet)
+            return
+          }
+        }
+      } else if (peraWalletConnector.bridge === '') {
+        console.log(Object.values(peraWalletConnector), peraWalletConnector.bridge, peraWalletConnector, 'pera waperaWalletConnector')
+        console.log(peraWalletConnector.connector, typeof peraWalletConnector.connector, 'pera waperaWalletConnector')
         const _connectedWallet = filterConnectedWallet(addressesList)
         const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
         if (_selectedWallet) {
@@ -254,13 +315,29 @@ function useWallets(initialState) {
         }
       }
     } else {
+      console.log('secondsecion inside')
       const _connectedWallet = filterConnectedWallet(addressesList)
+      console.log('secondsecion _connectedWallet', _connectedWallet)
       const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
-      if (_selectedWallet) {
+      console.log('secondsecion _selectedWallet', _selectedWallet)
+      if (_selectedWallet && _selectedWallet.connector._connected === true) {
+        console.log('wallet to set first', _selectedWallet)
         setAlgodexWallet(_selectedWallet)
+      } else if (_connectedWallet.connector.connected) {
+        console.log('wallet to set secod', _connectedWallet)
+        setAlgodexWallet(_connectedWallet)
+      } else {
+        console.log('no wallet to set wallet to set')
         return
       }
     }
+    // handleActiveWallet(peraWalletConnector)
+    // const _connectedWallet = filterConnectedWallet(addressesList)
+    // const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
+    // if (_selectedWallet) {
+    //   setAlgodexWallet(_selectedWallet)
+    //   return
+    // }
   }, [peraWalletConnector])
 
   const handleWalletUpdate = (wallet, action) => {
@@ -273,13 +350,24 @@ function useWallets(initialState) {
 
     switch (action) {
       case 'update':
-        return _wallet
+        console.log('handleWalletUpdate update', _wallet)
+        console.log('handleWalletUpdate gas bew', wallet)
+        if (_wallet && (_wallet.connector.connected !== false || _wallet.connector._connected !== false)) {
+          // return _wallet
+          return wallet
+        } else {
+          return wallet
+        }
+        // return wallet
       case 'new':
+        console.log('handleWalletUpdate new', wallet)
         return wallet
       default:
         if (_wallet === undefined) {
+          console.log('handleWalletUpdate undefinend', wallet)
           return wallet
         }
+        console.log('handleWalletUpdate defualt', _wallet)
         return _wallet
     }
   }
