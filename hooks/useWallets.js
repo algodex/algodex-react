@@ -109,6 +109,19 @@ function useWallets(initialState) {
     console.log(data.activeWallet, 'active wallet to dsiconnect')
   })
 
+  useEvent('signOut', (data) => {
+    if (data.type === 'wallet') {
+      console.log('came here on mobile', wallet)
+      setWallet({
+        ...wallet,
+        connector: {
+          ...wallet.connector,
+          connected: false
+        }
+      })
+    }
+  })
+
   /**
    * Fetches all Addresses from Local storage
    * and populate addresses list.
@@ -242,16 +255,6 @@ function useWallets(initialState) {
     }
   }, [])
 
-  const handleActiveWallet = (peraWalletConnector) => {
-    // Get active wallet
-    // Check if active wallet is pera-connect
-    // check if _connector of pera wallet is true
-    // if _connector is true, check if peraconnect.connector !== null is true
-
-    console.log(peraWalletConnector, 'pera waperaWalletConnector')
-    console.log(peraWalletConnector.connector, typeof peraWalletConnector.connector, 'pera waperaWalletConnector')
-  }
-
   useEffect(() => {
     // const _activeWallet = localStorage.getItem('activeWallet')
     // if (_activeWallet && JSON.parse(_activeWallet).type === 'wallet-connect') {
@@ -266,7 +269,6 @@ function useWallets(initialState) {
   
 
   const setActiveWallet = useCallback((addressesList, action) => {
-    console.log('came back here')
     const _activeWallet = localStorage.getItem('activeWallet')
     console.log('came back here')
     if (_activeWallet && JSON.parse(_activeWallet).type === 'wallet-connect') {
@@ -315,19 +317,31 @@ function useWallets(initialState) {
         }
       }
     } else {
-      console.log('secondsecion inside')
+      // console.log('secondsecion inside')
+      // const _connectedWallet = filterConnectedWallet(addressesList)
+      // console.log('secondsecion _connectedWallet', _connectedWallet)
+      // const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
+      // console.log('secondsecion _selectedWallet', _selectedWallet)
+      // if (_selectedWallet) {
+      //   setAlgodexWallet(_selectedWallet)
+      //   return
+      // }
+      // if (_selectedWallet && _selectedWallet.connector._connected === true) {
+      // if (_selectedWallet && _selectedWallet.connector._connected === true) {
+      //   console.log('wallet to set first', _selectedWallet)
+      //   console.log('wallet to set first', _selectedWallet)
+      //   setAlgodexWallet(_selectedWallet)
+      // } else if (_connectedWallet.connector.connected) {
+      //   console.log('wallet to set secod', _connectedWallet)
+      //   setAlgodexWallet(_connectedWallet)
+      // } else {
+      //   console.log('no wallet to set wallet to set')
+      //   return
+      // }
       const _connectedWallet = filterConnectedWallet(addressesList)
-      console.log('secondsecion _connectedWallet', _connectedWallet)
       const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
-      console.log('secondsecion _selectedWallet', _selectedWallet)
-      if (_selectedWallet && _selectedWallet.connector._connected === true) {
-        console.log('wallet to set first', _selectedWallet)
+      if (_selectedWallet) {
         setAlgodexWallet(_selectedWallet)
-      } else if (_connectedWallet.connector.connected) {
-        console.log('wallet to set secod', _connectedWallet)
-        setAlgodexWallet(_connectedWallet)
-      } else {
-        console.log('no wallet to set wallet to set')
         return
       }
     }
@@ -343,6 +357,7 @@ function useWallets(initialState) {
   const handleWalletUpdate = (wallet, action) => {
     // Update current wallet
     // Set new wallet
+    console.log('handle wallet update', wallet)
     if (!wallet) {
       console.error('No wallet provided')
       return
@@ -350,15 +365,15 @@ function useWallets(initialState) {
 
     switch (action) {
       case 'update':
-        console.log('handleWalletUpdate update', _wallet)
-        console.log('handleWalletUpdate gas bew', wallet)
-        if (_wallet && (_wallet.connector.connected !== false || _wallet.connector._connected !== false)) {
-          // return _wallet
-          return wallet
-        } else {
-          return wallet
-        }
-        // return wallet
+        return _wallet
+        // console.log('handleWalletUpdate update', _wallet)
+        // console.log('handleWalletUpdate gas bew', wallet)
+        // if (_wallet && (_wallet.connector.connected !== false || _wallet.connector._connected !== false)) {
+        //   return _wallet
+        //   // return wallet
+        // } else {
+        //   return wallet
+        // }
       case 'new':
         console.log('handleWalletUpdate new', wallet)
         return wallet
@@ -465,8 +480,10 @@ function useWallets(initialState) {
           }
         }
       }
+      console.log([disconnectedActiveWallet], 'defied walled')
       setActiveWallet([disconnectedActiveWallet], 'new')
     } else {
+      console.log(_wallet, wallet, 'both here')
       let disconnectedActiveWallet = {}
       disconnectedActiveWallet = {
         ..._wallet,
@@ -475,6 +492,8 @@ function useWallets(initialState) {
           connected: false
         }
       }
+      console.log(disconnectedActiveWallet, 'unedneded walled')
+      // setAlgodexWallet(disconnectedActiveWallet)
       setActiveWallet([disconnectedActiveWallet], 'new')
     }
     dispatcher('signOut', { type: 'wallet' })
@@ -516,7 +535,19 @@ function useWallets(initialState) {
       if (_remainingAddresses.length > 0) {
         removeFromExistingList(_remainingAddresses)
       } else {
-        addressesList.length && removeLastWalletFromList(addressesList)
+        const _wallet =  addressesList[0]
+        let disconnectedActiveWallet = {}
+        disconnectedActiveWallet = {
+          ..._wallet,
+          connector: {
+            ..._wallet.connector,
+            connected: false
+          }
+        }
+        console.log(addressesList, disconnectedActiveWallet, 'unedneded walled')
+        setAlgodexWallet(disconnectedActiveWallet)
+        // addressesList.length && removeLastWalletFromList(addressesList)
+        // removeLastWalletFromList(_remainingAddresses)
       }
       logInfo(
         `Disconnected Successfully with : ${_addresses} removed and ${_remainingAddresses.length} remaining`
@@ -525,6 +556,7 @@ function useWallets(initialState) {
       localStorage.setItem('addresses', JSON.stringify(_remainingAddresses))
       setAddresses(_remainingAddresses)
       console.error('Handle removing from storage', _addresses)
+      console.log('_remainingAddresses', _remainingAddresses)
     },
     [setAddresses]
   )

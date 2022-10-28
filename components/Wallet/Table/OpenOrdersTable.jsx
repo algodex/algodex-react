@@ -80,6 +80,7 @@ export function OpenOrdersTable({ orders: _orders }) {
   }
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
+      console.log('came here on mobile')
       setWallet({
         ...wallet,
         connector: {
