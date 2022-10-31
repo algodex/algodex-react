@@ -14,20 +14,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { forwardRef, useMemo } from 'react'
+
 import AdvancedOptions from './AdvancedOptions'
 import Big from 'big.js'
 import { FormHelperText } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialBox } from '@mui/material/Box'
+import {NumericFormat} from 'react-number-format';
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
-import { forwardRef, useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import {NumericFormat} from 'react-number-format';
 
 /**
  *
@@ -42,7 +43,7 @@ export const USDInputPrice = ({ value, id }) => {
         USD {id === 'price' ? 'Price' : 'Total'}{' '}
       </Typography>
       <Typography color="gray.400" variant="body_tiny_cap">
-        <USDPrice priceToConvert={value} />
+        <USDPrice priceToConvert={parseFloat(value)} />
         <span className="ml-4 mr-3">USD</span>
       </Typography>
     </div>
@@ -149,7 +150,7 @@ export const TradeInputs = ({
           backgroundColor:
             order.execution === 'market' ? theme.palette.gray['700'] : theme.palette.gray['900'],
           border: order.execution === 'market' ? 0 : 2,
-          borderColor: theme.palette.gray['700']
+          borderColor: theme.palette.gray['700'],
         }}
         value={order.price.toString()}
         onChange={handleChange}
@@ -186,7 +187,7 @@ export const TradeInputs = ({
           Price cannot be less than {microAlgo}
         </FormHelperText>
       ) : (
-        <USDInputPrice value={order.price} id="price" />
+        <USDInputPrice value={parseFloat(order.price)} id="price" />
       )}
 
       <OutlinedInput
@@ -273,7 +274,7 @@ export const TradeInputs = ({
           <span className="ml-4 mr-3">USD</span>
         </Typography>
       </MaterialBox>
-      <USDInputPrice value={order.total} id="total" />
+      <USDInputPrice value={parseFloat(order.total)} id="total" />
       {/* <TxnFeeContainer>
         <Typography color="gray.500" textTransform="none">
           Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
@@ -84,12 +84,13 @@ export function NavSearchSidebar({
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
-
+  
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(false)
+  
 
   // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -159,7 +160,6 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
@@ -202,7 +202,7 @@ NavSearchSidebar.propTypes = {
   searchTableRef: PropTypes.object,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
-    NavTable: PropTypes.node
+    NavTable: PropTypes.elementType
   }),
   tableProps: PropTypes.object,
   area: PropTypes.string
