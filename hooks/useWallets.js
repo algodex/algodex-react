@@ -211,19 +211,10 @@ function useWallets(initialState) {
    *
    * This is used to ensure consistency in activeWallet
    */
-  // const filterConnectedWallet = useCallback((addressesList) => {
-  //   const _filteredList = addressesList.filter((wallet) => {
-  //     return wallet.connector && wallet.connector.connected
-  //   })
-  //   return _filteredList[0]
-  // }, [])
-
   const filterConnectedWallet = useCallback((addressesList) => {
     const _filteredList = addressesList.filter((wallet) => {
-      // return wallet.connector && (wallet.connector.connected || wallet.connector._connected)
       return wallet.connector && wallet.connector.connected
     })
-    // return _filteredList[0]
     const _activeWallet = localStorage.getItem('activeWallet')
     if (_activeWallet) {
       const activeWallet = JSON.parse(_activeWallet)
@@ -242,19 +233,6 @@ function useWallets(initialState) {
       return _filteredList[0]
     }
   }, [])
-
-  useEffect(() => {
-    // const _activeWallet = localStorage.getItem('activeWallet')
-    // if (_activeWallet && JSON.parse(_activeWallet).type === 'wallet-connect') {
-    //   const parsedActiveWallet = JSON.parse(_activeWallet)
-    //   const hasPeraConnect = find(addressesList, (o) => o.address === parsedActiveWallet.address)
-    // }
-    // const addressesList = localStorage.getItem('addresses')
-    // if (addressesList) {
-    //   setActiveWallet(JSON.parse(addressesList))
-    // }
-  }, [peraWalletConnector])
-  
 
   const setActiveWallet = useCallback((addressesList, action) => {
     const _activeWallet = localStorage.getItem('activeWallet')
@@ -287,13 +265,6 @@ function useWallets(initialState) {
         return
       }
     }
-    // handleActiveWallet(peraWalletConnector)
-    // const _connectedWallet = filterConnectedWallet(addressesList)
-    // const _selectedWallet = handleWalletUpdate(_connectedWallet, action)
-    // if (_selectedWallet) {
-    //   setAlgodexWallet(_selectedWallet)
-    //   return
-    // }
   }, [peraWalletConnector])
 
   const handleWalletUpdate = (wallet, action) => {
@@ -390,41 +361,41 @@ function useWallets(initialState) {
     setActiveWallet(_filteredAddressesList, 'new')
   }
 
-  const removeLastWalletFromList = (addressesList) => {
-    const _wallet = addressesList[0]
-    if (typeof wallet !== 'undefined') {
-      let disconnectedActiveWallet = {}
-      if (wallet.type === 'wallet-connect') {
-        disconnectedActiveWallet = {
-          ..._wallet,
-          connector: {
-            _connected: false,
-            connected: false
-          }
-        }
-      } else {
-        disconnectedActiveWallet = {
-          ..._wallet,
-          connector: {
-            ..._wallet.connector,
-            connected: false
-          }
-        }
-      }
-      setActiveWallet([disconnectedActiveWallet], 'new')
-    } else {
-      let disconnectedActiveWallet = {}
-      disconnectedActiveWallet = {
-        ..._wallet,
-        connector: {
-          ..._wallet.connector,
-          connected: false
-        }
-      }
-      setActiveWallet([disconnectedActiveWallet], 'new')
-    }
-    dispatcher('signOut', { type: 'wallet' })
-  }
+  // const removeLastWalletFromList = (addressesList) => {
+  //   const _wallet = addressesList[0]
+  //   if (typeof wallet !== 'undefined') {
+  //     let disconnectedActiveWallet = {}
+  //     if (wallet.type === 'wallet-connect') {
+  //       disconnectedActiveWallet = {
+  //         ..._wallet,
+  //         connector: {
+  //           _connected: false,
+  //           connected: false
+  //         }
+  //       }
+  //     } else {
+  //       disconnectedActiveWallet = {
+  //         ..._wallet,
+  //         connector: {
+  //           ..._wallet.connector,
+  //           connected: false
+  //         }
+  //       }
+  //     }
+  //     setActiveWallet([disconnectedActiveWallet], 'new')
+  //   } else {
+  //     let disconnectedActiveWallet = {}
+  //     disconnectedActiveWallet = {
+  //       ..._wallet,
+  //       connector: {
+  //         ..._wallet.connector,
+  //         connected: false
+  //       }
+  //     }
+  //     setActiveWallet([disconnectedActiveWallet], 'new')
+  //   }
+  //   dispatcher('signOut', { type: 'wallet' })
+  // }
 
   /**
    * Handles Connection with wallet
