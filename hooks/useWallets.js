@@ -15,8 +15,10 @@
  */
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
+import { find } from 'lodash'
 import { isEqual } from 'lodash/lang'
 import { logInfo } from 'services/logRemote'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
@@ -27,7 +29,6 @@ import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import usePeraConnection from './usePeraConnection'
 import useWalletConnect from './useWalletConnect'
-import { find } from 'lodash'
 
 /**
  *
@@ -109,18 +110,18 @@ function useWallets(initialState) {
     console.log(data.activeWallet, 'active wallet to dsiconnect')
   })
 
-  useEvent('signOut', (data) => {
-    if (data.type === 'wallet') {
-      console.log('came here on mobile', wallet)
-      setWallet({
-        ...wallet,
-        connector: {
-          ...wallet.connector,
-          connected: false
-        }
-      })
-    }
-  })
+  // useEvent('signOut', (data) => {
+  //   if (data.type === 'wallet') {
+  //     console.log('came here on mobile', wallet)
+  //     setWallet({
+  //       ...wallet,
+  //       connector: {
+  //         ...wallet.connector,
+  //         connected: false
+  //       }
+  //     })
+  //   }
+  // })
 
   /**
    * Fetches all Addresses from Local storage
@@ -261,10 +262,10 @@ function useWallets(initialState) {
     //   const parsedActiveWallet = JSON.parse(_activeWallet)
     //   const hasPeraConnect = find(addressesList, (o) => o.address === parsedActiveWallet.address)
     // }
-    const addressesList = localStorage.getItem('addresses')
-    if (addressesList) {
-      setActiveWallet(JSON.parse(addressesList))
-    }
+    // const addressesList = localStorage.getItem('addresses')
+    // if (addressesList) {
+    //   setActiveWallet(JSON.parse(addressesList))
+    // }
   }, [peraWalletConnector])
   
 
@@ -365,7 +366,8 @@ function useWallets(initialState) {
 
     switch (action) {
       case 'update':
-        return _wallet
+        // return _wallet
+        return wallet
         // console.log('handleWalletUpdate update', _wallet)
         // console.log('handleWalletUpdate gas bew', wallet)
         // if (_wallet && (_wallet.connector.connected !== false || _wallet.connector._connected !== false)) {
@@ -456,6 +458,7 @@ function useWallets(initialState) {
       }
       return wallet
     })
+    console.log(_filteredAddressesList, '_filteredAddressesList')
     setActiveWallet(_filteredAddressesList, 'new')
   }
 
@@ -483,7 +486,7 @@ function useWallets(initialState) {
       console.log([disconnectedActiveWallet], 'defied walled')
       setActiveWallet([disconnectedActiveWallet], 'new')
     } else {
-      console.log(_wallet, wallet, 'both here')
+      // console.log(_wallet, wallet, 'both here')
       let disconnectedActiveWallet = {}
       disconnectedActiveWallet = {
         ..._wallet,
@@ -492,7 +495,7 @@ function useWallets(initialState) {
           connected: false
         }
       }
-      console.log(disconnectedActiveWallet, 'unedneded walled')
+      // console.log(disconnectedActiveWallet, 'unedneded walled')
       // setAlgodexWallet(disconnectedActiveWallet)
       setActiveWallet([disconnectedActiveWallet], 'new')
     }
@@ -533,6 +536,7 @@ function useWallets(initialState) {
         }) || []
       let _remainingAddresses = [...remainingAddresses]
       if (_remainingAddresses.length > 0) {
+        console.log(_remainingAddresses, 'first section')
         removeFromExistingList(_remainingAddresses)
       } else {
         const _wallet =  addressesList[0]
@@ -544,7 +548,7 @@ function useWallets(initialState) {
             connected: false
           }
         }
-        console.log(addressesList, disconnectedActiveWallet, 'unedneded walled')
+        console.log(addressesList, 'address list second')
         setAlgodexWallet(disconnectedActiveWallet)
         // addressesList.length && removeLastWalletFromList(addressesList)
         // removeLastWalletFromList(_remainingAddresses)
