@@ -41,11 +41,7 @@ export const getAlgodexApi = () => {
     configEnv.dexd.uri = configEnv.dexd.uri.replace('WINDOW_LOCATION', 
     globalThis.location.protocol + '//' + globalThis.location.host);
   } else {
-    if (process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet') {
-      configEnv.dexd.uri = 'http://mainnet-services-2.algodex.com:3006';
-    } else {
-      configEnv.dexd.uri = 'http://testnet-services-2.algodex.com'; //FIXME - this is a fake URL for now
-    }
+    configEnv.dexd.uri = process.env.ALGODEX_API_V2;
   }
 
   const api = new AlgodexApi({ config: configEnv })
