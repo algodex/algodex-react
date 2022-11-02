@@ -39,13 +39,13 @@ import { Toaster } from 'react-hot-toast'
 import { WalletsProvider } from '@/hooks/useWallets'
 // import AlgodexApi from '@algodex/algodex-sdk'
 // import { Provider } from '@algodex/algodex-hooks'
-import config from '@/config.json'
 // import AlgodexApi from '@algodex/algodex-sdk'
 // import { Provider } from '@algodex/algodex-hooks'
 import createEmotionCache from '@/utils/createEmotionCache'
 import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
+import { getAlgodexApi } from '@/services/environment'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -57,9 +57,7 @@ let api
  */
 function makeApi() {
   if (typeof api === 'undefined') {
-    const configEnv =
-      process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
-    api = new AlgodexApi({ config: configEnv })
+    api = getAlgodexApi()
   }
   return api
 }
