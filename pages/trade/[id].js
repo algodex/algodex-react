@@ -199,9 +199,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       return;
     }
 
-    const configEnv =
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
-    const api = new AlgodexApi({ config: configEnv })
+    const api = getAlgodexApi()
 
     try {
       const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)

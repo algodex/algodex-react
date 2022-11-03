@@ -40,7 +40,7 @@ export const getAlgodexApi = () => {
   if (globalThis.location !== undefined) {
     configEnv.dexd.uri = configEnv.dexd.uri.replace('WINDOW_LOCATION', 
     globalThis.location.protocol + '//' + globalThis.location.host);
-  } else {
+  } else if (process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet') {
     configEnv.dexd.uri = process.env.ALGODEX_API_V2;
   }
 
