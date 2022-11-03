@@ -14,7 +14,9 @@
       "port": ""
     },
     "dexd": {
+      "uriV1": "https://testnet.algodex.com/algodex-backend",
       "uri": "https://testnet.algodex.com/algodex-backend",
+      "apiVersion": 1,
       "token": ""
     }
   },
@@ -33,7 +35,9 @@
       "port": ""
     },
     "dexd": {
-      "uri": "https://app.algodex.com/algodex-backend",
+      "uriV1": "https://app.algodex.com/algodex-backend",
+      "uri": "WINDOW_LOCATION/api/v2",
+      "apiVersion": 2,
       "token": ""
     }
   }

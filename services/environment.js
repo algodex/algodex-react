@@ -14,6 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import config from '@/config.json'
+import AlgodexApi from '@algodex/algodex-sdk'
+
 export const getAlgodexEnvironment = () => {
   return process.env.NEXT_PUBLIC_ALGODEX_ENV || 'public_test'
 }
@@ -28,4 +31,19 @@ export const getActiveNetwork = () => {
 export const getDefaultAsset = () => {
   // Default to LAMP (available on Testnet only)
   return process.env.NEXT_PUBLIC_DEFAULT_ASSET || 15322902
+}
+
+export const getAlgodexApi = () => {
+  const configEnv =
+    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
+  
+  if (globalThis.location !== undefined) {
+    configEnv.dexd.uri = configEnv.dexd.uri.replace('WINDOW_LOCATION', 
+    globalThis.location.protocol + '//' + globalThis.location.host);
+  } else if (process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet') {
+    configEnv.dexd.uri = process.env.ALGODEX_API_V2;
+  }
+
+  const api = new AlgodexApi({ config: configEnv })
+  return api;
 }
