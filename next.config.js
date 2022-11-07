@@ -69,17 +69,6 @@ const moduleExports =
             destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.HUBSPOT_APIKEY}`
           },
           {
-            source: '/api/v2/assets/search',
-              has: [
-                  {
-                      type: 'query',
-                      key: 'searchStr',
-                      value: '(?<paramName>.*)'
-                  }
-              ],
-              destination: '/api/v2/assets/search?searchStr=:paramName'
-          },
-          {
             source: '/api/v2/:path*',
             destination: `${ALGODEX_API_V2}/:path*`
           },
