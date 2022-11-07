@@ -15,10 +15,10 @@
     lodash "^4.17.21"
     millify "^4.0.0"
 
-"@algodex/algodex-sdk@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.2.1.tgz#9385565a8d8fa1d01906707743e1ceb4661f2c30"
-  integrity sha512-Qq3qU3UfovsQGbbLaCZnhntti0EEfgHxvrQ8z24+njpIFbR+jqgeJ7LaLvk7mDD8QJrBb4RP6xoxKxRyNsswvQ==
+"@algodex/algodex-sdk@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.2.3.tgz#b19e56413549021bafc2455d08c42902a9f795d9"
+  integrity sha512-HHiS3maHRt+g4tlTABM7G1Lbw8lg9Bcp+V1/KLeHP2FK2LMzz6ROuidAu7BXKbPsUcyXmscjl1iDiAr1b+PHPQ==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"

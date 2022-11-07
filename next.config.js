@@ -71,7 +71,7 @@ const moduleExports =
           {
             source: '/api/v2/:path*',
             destination: `${ALGODEX_API_V2}/:path*`
-          }
+          },
         ]
       }
     },
