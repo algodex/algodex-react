@@ -28,6 +28,17 @@ import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
 
+const getPriceDecimals = (price) => {
+  if (price >= 10000) {
+    return 2
+  } else if (price >= 1000) {
+    return 3
+  } else if (price >= 100) {
+    return 4
+  }
+  return 6
+}
+
 const Loading = () => <Stack
   sx={{ width: '100%'}}
   direction="row"
@@ -65,7 +76,8 @@ PriceInfoView.propTypes = {
   asaValue: PropTypes.any
 }
 export function OrderBookPriceInfo({ algoPrice, asset }) {
-  const asaValue = floatToFixed(asset?.price_info?.price || 0)
+  const decimals = getPriceDecimals(asset?.price_info?.price || 0)
+  const asaValue = floatToFixed(asset?.price_info?.price || 0, decimals, 6)
   return typeof asset?.price_info === 'undefined' ? <Loading/> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
 }
 
