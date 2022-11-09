@@ -65,7 +65,7 @@ PriceInfoView.propTypes = {
   asaValue: PropTypes.any
 }
 export function OrderBookPriceInfo({ algoPrice, asset }) {
-  const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+  const asaValue = floatToFixed(asset?.price_info?.price)
   return typeof asset?.price_info === 'undefined' ? <Loading/> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
 }
 
