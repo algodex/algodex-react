@@ -211,7 +211,7 @@ export const AboutFooter = () => {
           </div>
           <div className="col-span-1">
             <Title className="mb-6">{t('COMPANY')}</Title>
-            <FooterLinks target={'_blank'} href="https://about.algodex.com/">
+            <FooterLinks target={'_blank'} href="/about">
               {t('about')}
             </FooterLinks>
             <FooterLinks target={'_blank'} href="https://about.algodex.com/blog/">
