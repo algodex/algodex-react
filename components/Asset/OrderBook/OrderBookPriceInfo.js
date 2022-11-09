@@ -16,16 +16,17 @@
 
 // import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
+import { Stack, Typography } from '@mui/material'
+import { useCallback, useMemo } from 'react'
+
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
-import { Stack, Typography } from '@mui/material'
+import Spinner from '@/components/Spinner'
 import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
-import { useMemo } from 'react'
-import Spinner from '@/components/Spinner'
 
 const Loading = () => <Stack
   sx={{ width: '100%'}}
@@ -34,9 +35,8 @@ const Loading = () => <Stack
   alignItems="center"
 ><Spinner size={2} /></Stack>
 
-export function OrderBookPriceInfo({ algoPrice, asset }) {
+const PriceInfoView = ({asaValue, algoPrice, asset}) => {
   return useMemo(() => {
-    const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
     return (
       <>
         <Typography variant="h5" color="white">
@@ -56,8 +56,17 @@ export function OrderBookPriceInfo({ algoPrice, asset }) {
           </Typography>
         </div>
       </>
-    )
-  }, [algoPrice, asset])
+  )}, [asaValue, algoPrice, asset])
+}
+
+PriceInfoView.propTypes = {
+  asset: PropTypes.object,
+  algoPrice: PropTypes.any,
+  asaValue: PropTypes.any
+}
+export function OrderBookPriceInfo({ algoPrice, asset }) {
+  const asaValue = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+  return typeof asset?.price_info === 'undefined' ? <Loading/> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
 }
 
 OrderBookPriceInfo.propTypes = {
