@@ -177,7 +177,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               title={amount.toFixed(asset.decimals)}
               m={0}
             >
-              {amount.toFixed(Math.min(3, asset.decimals))}
+              {amount.toFixed(Math.max(0, asset.decimals - 2))}
             </Typography>
             <Typography
               variant="body_tiny_cap"

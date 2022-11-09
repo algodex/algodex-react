@@ -441,7 +441,7 @@ const DECIMALS_MAP = {
             title={amount.toFixed(decimals).toString()}
             m={0}
           >
-            {amount.toFixed(Math.min(3, decimals))}
+            {amount.toFixed(Math.max(0, decimals - 2))}
           </Typography>
           <Typography
             variant="body_tiny"
