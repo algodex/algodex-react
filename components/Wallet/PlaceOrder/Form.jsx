@@ -36,6 +36,7 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -256,15 +257,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return 0
   }, [order.price, order.amount, algoBalance, assetBalance])
 
+  const maxSpendableAlgo = useMaxSpendableAlgo()
+
   const hasBalance = useMemo(() => {
     if (order.type === 'sell') {
       return assetBalance > 0
     }
     if (order.type === 'buy') {
-      return algoBalance > 0
+      return maxSpendableAlgo
     }
     return false
-  }, [order, algoBalance, assetBalance])
+  }, [order.type, assetBalance, maxSpendableAlgo])
 
   const isBelowMinOrderAmount = useMemo(() => {
     if (order.type === 'buy') {
