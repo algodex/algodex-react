@@ -15,8 +15,8 @@
     },
     "dexd": {
       "uriV1": "https://testnet.algodex.com/algodex-backend",
-      "uri": "https://testnet.algodex.com/algodex-backend",
-      "apiVersion": 1,
+      "uri": "WINDOW_LOCATION/api/v2",
+      "apiVersion": 2,
       "token": ""
     }
   },
