@@ -37,17 +37,12 @@ import ordersEN from '../locales/en/orders.json'
 import placeOrderEN from '../locales/en/place-order.json'
 import theme from '../theme'
 import walletEN from '../locales/en/wallet.json'
+import { getAlgodexApi } from '@/services/environment'
 
 const queryClient = new QueryClient()
 
 const OriginalNextImage = NextImage.default
-/**
- *
- * @type {APIProperties}
- */
-const config = require('../config.json')
-const properties =
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
+
 
 Object.defineProperty(NextImage, 'default', {
   configurable: true,
@@ -112,7 +107,7 @@ let api
  */
 function makeApi() {
     if (typeof api === 'undefined') {
-        api = new AlgodexApi({ config: properties })
+        api = getAlgodexApi()
     }
     return api
 }

@@ -31,7 +31,7 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import config from '@/config.json'
+import { getAlgodexApi } from '@/services/environment'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
 import { useAssetPriceQuery } from '@/hooks/useAssetPriceQuery'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
@@ -45,9 +45,7 @@ import useWallets from '@/hooks/useWallets'
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  const configEnv =
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
-  const api = new AlgodexApi({ config: configEnv })
+  const api = getAlgodexApi();
   const assets = await api.http.dexd.fetchAssets()
   const assetSearch = await api.http.dexd.searchAssets('')
   const assetIdToSearch = assetSearch.assets.reduce((map, asset) => {
@@ -97,9 +95,8 @@ export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
   let originalStaticExplorerAsset
   let staticAssetPrice = {}
-  const configEnv =
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
-  const api = new AlgodexApi({ config: configEnv })
+
+  const api = getAlgodexApi();
   try {
     staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
     originalStaticExplorerAsset = staticExplorerAsset
@@ -202,9 +199,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       return;
     }
 
-    const configEnv =
-    process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
-    const api = new AlgodexApi({ config: configEnv })
+    const api = getAlgodexApi()
 
     try {
       const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)

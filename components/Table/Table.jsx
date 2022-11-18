@@ -144,11 +144,12 @@ const Container = styled.div`
     tbody {
       scrollbar-width: none;
       scrollbar-display: none;
-      // top: 37px;
+      
       tr {
         border: 0;
       }
       position: absolute;
+      top: 37px;
       width: 100%;
       height: ${({ optionalGridInfo }) => {
         return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`

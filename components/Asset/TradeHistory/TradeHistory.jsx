@@ -154,6 +154,23 @@ export function TradeHistory({ asset, orders: tradesData }) {
   const renderHistory = useCallback(() => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
 
+    const avgPrice = tradesData && tradesData.length > 0 ?
+      tradesData.slice(0, 20).map(row => row.price).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / tradesData.length
+      : 0
+
+    const getPriceDecimals = (avgPrice) => {
+      if (avgPrice > 10000) {
+        return 2
+      } else if (avgPrice > 1000) {
+        return 3
+      } else if (avgPrice > 100) {
+        return 4
+      }
+      return 6
+    }
+
+    const priceDecimals = getPriceDecimals(avgPrice);
+
     return tradesData
       .sort((a, b) => {
         if (a.timestamp === b.timestamp) {
@@ -167,7 +184,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
             <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-              {floatToFixed(row.price)}
+              {floatToFixed(row.price, priceDecimals, 6)}
             </Typography>
             <Typography
               variant="body_tiny_cap"
@@ -177,7 +194,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               title={amount.toFixed(asset.decimals)}
               m={0}
             >
-              {amount.toFixed(Math.min(3, asset.decimals))}
+              {amount.toFixed(Math.max(0, asset.decimals - 2))}
             </Typography>
             <Typography
               variant="body_tiny_cap"

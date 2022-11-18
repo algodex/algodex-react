@@ -200,7 +200,7 @@ export function Header() {
               <Typography variant="navText">Docs</Typography>
             </NavTextSmWrapper>
           </NavActiveLink>
-          <NavActiveLink target="_blank" href="/about.algodex.com/support/" rel="noreferrer">
+          <NavActiveLink target="_blank" href="/support" rel="noreferrer">
             <NavTextSmWrapper isMobile={isMobile}>
               <Typography variant="navText">Support</Typography>
             </NavTextSmWrapper>

@@ -147,7 +147,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
         </Typography>
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
-            {fromBaseUnits(wallet.amount)}
+            {fromBaseUnits(maxSpendableAlgo)}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
             <USDPrice priceToConvert={fromBaseUnits(wallet.amount)} currency="$" />

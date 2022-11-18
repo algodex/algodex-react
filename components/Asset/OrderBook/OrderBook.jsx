@@ -41,6 +41,12 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
+import { useRouter } from 'next/router'
+import {
+  getAssetTotalStatus,
+  getIsRestricted,
+  getIsRestrictedCountry
+} from '@/utils/restrictedAssets'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0;
@@ -316,6 +322,7 @@ const DECIMALS_MAP = {
  * @constructor
  */
  export function OrderBook({ asset, orders, components }) {
+  const { query } = useRouter()
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
@@ -406,12 +413,18 @@ const DECIMALS_MAP = {
     return orders.sell.reduce(reduceOrders, [])
   }, [orders.sell, reduceOrders])
 
+  const isGeoBlocked = useMemo(() => getIsRestrictedCountry(query) && getIsRestricted(asset.id)
+  , [asset.id, query])
+
   const renderOrders = useCallback((data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
+        if (isGeoBlocked) {
+          return
+        }
         const payload = {
           price: row.price,
           type: type === 'buy' ? 'sell' : 'buy',
@@ -441,7 +454,7 @@ const DECIMALS_MAP = {
             title={amount.toFixed(decimals).toString()}
             m={0}
           >
-            {amount.toFixed(Math.min(3, decimals))}
+            {amount.toFixed(Math.max(0, decimals - 2))}
           </Typography>
           <Typography
             variant="body_tiny"
@@ -456,7 +469,7 @@ const DECIMALS_MAP = {
         </BookRow>
       )
     })
-  },[calculatedAmountFn, decimals, dispatcher])
+  },[calculatedAmountFn, decimals, dispatcher, isGeoBlocked])
 
   const renderedSellOrders = useMemo( () => {
     return renderOrders(aggregatedSellOrder, 'sell')
