@@ -63,6 +63,7 @@ import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 export const mapToSearchResults = ({
   assetId,
   assetName,
+  decimals,
   formattedPrice,
   priceChg24Pct,
   hasOrders,
@@ -92,7 +93,8 @@ export const mapToSearchResults = ({
     liquidityAlgo: formattedAlgoLiquidity,
     liquidityAsa: formattedASALiquidity,
     price,
-    change
+    change,
+    decimals
   }
 }
 
@@ -263,7 +265,6 @@ export const NavSearchTable = ({
     
     // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-
     // Geoformatted assets
     const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
     const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
