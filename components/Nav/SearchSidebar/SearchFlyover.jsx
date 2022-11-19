@@ -24,6 +24,7 @@ import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import { useCallback } from 'react'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 
 export const InfoPopup = styled.aside`
   width: ${({ isLarge }) => (isLarge ? '480px' : '360px')};
@@ -66,7 +67,22 @@ const Algos = styled(Icon)`
 
 export function SearchFlyover(props) {
   const { row } = props
+  const { decimals } = row
   const { t } = useTranslation('assets')
+
+  // Assumes asaAmount is formatted, i.e. has decimal formatting in it
+  const getAsaDecimals = useCallback((asaAmount) => {
+    if (decimals === undefined) {
+      throw 'decimals is undefined!'
+    }
+    if (asaAmount < 1) {
+      return floatToFixed(asaAmount, decimals, decimals)
+    }
+    if (asaAmount < 1000) {
+      return floatToFixed(asaAmount, Math.min(2, decimals), Math.min(2, decimals))
+    }
+    return Math.round(asaAmount)
+  }, [decimals])
 
   const renderName = useCallback(() => {
     if (row.verified) {
@@ -83,6 +99,10 @@ export function SearchFlyover(props) {
     return <>{`${row.fullName || row.name} (${row.name})`}</>
   }, [row.fullName, row.name, row.verified])
 
+  const getLocaleString = (num) => {
+    const fnum = typeof num === 'string' ? parseFloat(num) : num
+    return fnum.toLocaleString()
+  }
   const renderChange = useCallback(() => {
     const color = row.change === '--' ? 'gray.400' : row.change < 0 ? 'red.500' : 'green.500'
     const display = row.change === '--' ? '--' : `${row.change}%`
@@ -163,7 +183,7 @@ export function SearchFlyover(props) {
                     data-testid="flyover-algo-liquidity"
                     fontFamily="'Roboto Mono', monospace"
                   >
-                    {row.liquidityAlgo}
+                    {getLocaleString(floatToFixed(row.liquidityAlgo, 2, 2))}
                   </Typography>
                 </InfoItem>
                 <InfoItem halfWidth>
@@ -176,7 +196,7 @@ export function SearchFlyover(props) {
                     data-testid="flyover-asa-liqidity"
                     fontFamily="'Roboto Mono', monospace"
                   >
-                    {row.liquidityAsa}
+                    {getLocaleString(getAsaDecimals(row.liquidityAsa))}
                   </Typography>
                 </InfoItem>
               </>
