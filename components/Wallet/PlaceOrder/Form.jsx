@@ -142,7 +142,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     const amount = getAdjOrderAmount(currentState)
 
     // Amount should be based on asset decimals
-    currentState.amount = formatFloat(amount, asset.decimals) || ''
+    // currentState.amount = formatFloat(amount, asset.decimals) || ''
 
     const price = currentState.price || 0
 
