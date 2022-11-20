@@ -90,18 +90,19 @@ Svg.defaultProps = {
  * @constructor
  */
 function Spinner({ size, color, flex, ...rest }) {
-  const retval = useMemo(() => flex ? (
-    <FlexContainer data-testid="spinner-flex-container">
-      <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
-        <circle cx="25" cy="25" r="20" />
-      </Svg>
-    </FlexContainer>
-  ) : (
-    <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
-      <circle cx="25" cy="25" r="20" />
-    </Svg>
-  ), [color, flex, rest, size])
-  return retval
+  // const retval = useMemo(() => flex ? (
+  //   <FlexContainer data-testid="spinner-flex-container">
+  //     <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
+  //       {/* <circle cx="25" cy="25" r="20" /> */}
+  //     </Svg>
+  //   </FlexContainer>
+  // ) : (
+  //   <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
+  //     {/* <circle cx="25" cy="25" r="20" /> */}
+  //   </Svg>
+  // ), [color, flex, rest, size])
+  // return retval
+  return <></>
 }
 
 Spinner.propTypes = {
