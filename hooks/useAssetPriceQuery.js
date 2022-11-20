@@ -1,6 +1,6 @@
 
 import { ServiceError } from '@algodex/algodex-hooks';
-import { Spinner } from '@algodex/algodex-hooks';
+import Spinner from '@/components/Spinner';
 import {useAlgodex} from '@algodex/algodex-hooks';
 import {useMemo} from 'react';
 import {useQuery} from 'react-query';
