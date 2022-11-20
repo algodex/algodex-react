@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/-/-/--0.0.1.tgz#db6db7cd866142880dd03e5b8781d1b4fac0e5bd"
   integrity sha512-3HfneK3DGAm05fpyj20sT3apkNcvPpCuccOThOPdzz8sY7GgQGe0l93XH9bt+YzibcTIgUAIMoyVJI740RtgyQ==
 
-"@algodex/algodex-hooks@^1.5.8":
-  version "1.5.8"
-  resolved "https://registry.yarnpkg.com/@algodex/algodex-hooks/-/algodex-hooks-1.5.8.tgz#881caf43d794aa92597a9a40a34dcd37d41e7659"
-  integrity sha512-syodqp88Aft9qK43Zi5jlOSPFQVtkDSSSYt7/tSOPSHuiLXU9ZIWhH84HIQ/4/aNcBfJKbfqZxF5ys/y+Ncasg==
+"@algodex/algodex-hooks@^1.5.9":
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-hooks/-/algodex-hooks-1.5.9.tgz#6983686537a4864182932a749a674e65f647a0d6"
+  integrity sha512-VG1mtdGZ7uZpyC0w07MBIcbAPhW0KQZ2qQCSKEFsVjREheHvUItHe50//Gh4md/VDQRg7ABlsU4a4dMqjdPdZg==
   dependencies:
     lodash "^4.17.21"
     millify "^4.0.0"
