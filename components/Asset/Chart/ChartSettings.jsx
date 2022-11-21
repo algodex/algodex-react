@@ -44,77 +44,8 @@ const Container = styled.div`
   }
 `
 
-const ToggleWrapper = styled.div`
-  display: flex;
-  // margin-bottom: 1.5rem;
-
-  &:not(:last-child) {
-    margin-right: 2rem;
-  }
-`
-
-const ToggleInput = styled.input`
-  opacity: 0;
-  position: absolute;
-`
-
-const ToggleBtn = styled(Button)`
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
-  min-width: 48px;
-  line-height: 1;
-  background-color: ${({ theme }) => theme.palette.gray['900']};
-  label {
-    cursor: pointer;
-    width: 100%;
-  }
-  &:hover {
-    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['900'])};
-  }
-
-  &:not(:last-child) {
-    margin-right: 0.5rem;
-  }
-
-  && {
-    ${ToggleInput}:checked + & {
-      background-color: ${({ theme }) => theme.palette.gray['700']};
-    }
-
-    ${ToggleInput}:checked + &:hover {
-      background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
-    }
-
-    ${ToggleInput}:focus + & {
-      z-index: 1;
-      border-radius: 3px;
-      box-shadow: 0 0 0 0.2rem #4b9064;
-    }
-
-    ${ToggleInput}:disabled + & {
-      display: none;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    && {
-      ${ToggleInput}:disabled + & {
-        display: flex;
-        opacity: 0.3;
-        pointer-events: none;
-      }
-    }
-  }
-`
-
-
 const ToggleBtn2 = styled(ToggleButton)`
   font-size: 0.75rem;
-  min-width: 48px;
   padding: 0 1.5rem;
   color: white;
   border-radius: 4px;
@@ -142,7 +73,6 @@ const ToggleBtn2 = styled(ToggleButton)`
  * @constructor
  */
 function ChartSettings(props) {
-  // console.log(`ChartSettings(`, arguments[0], `)`)
   const { mode, onChange, interval } = props
   const { t } = useTranslation('chart')
 
@@ -152,58 +82,17 @@ function ChartSettings(props) {
       <ToggleBtn2 key={i} name="interval" value={i} aria-label={i}>
         {i}
       </ToggleBtn2>
-
-      // <Fragment key={i}>
-      //   <ToggleInput
-      //     type="radio"
-      //     name="interval"
-      //     id={`time-${i}`}
-      //     value={i}
-      //     checked={i === interval}
-      //     onChange={onChange}
-      //   />
-      //   <Button variant="default" size="small" >
-      //     <label htmlFor={`time-${i}`}>{i}</label>
-      //   </Button>
-      // </Fragment>
     ))
   }, [])
 
   return (
     <Container>
       <ToggleButtonGroup exclusive="true" value={mode} onChange={onChange}>
-      <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">Candle</ToggleBtn2>
-      <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">Area</ToggleBtn2>
-
-{/* 
-        <ToggleInput
-          type="radio"
-          name="mode"
-          id="mode-candle"
-          value="candle"
-          checked={mode === 'candle'}
-          onChange={onChange}
-        />
-        <ToggleBtn variant="default" size="small">
-          <label htmlFor="mode-candle">{t('candle')}</label>
-        </ToggleBtn>
-        <ToggleInput
-          type="radio"
-          name="mode"
-          id="mode-area"
-          value="area"
-          checked={mode === 'area'}
-          onChange={onChange}
-        />
-        <ToggleBtn variant="default" size="small">
-          <label htmlFor="mode-area">{t('area')}</label>
-        </ToggleBtn> */}
+        <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">Candle</ToggleBtn2>
+        <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">Area</ToggleBtn2>
       </ToggleButtonGroup>
       <ToggleButtonGroup sx={{'marginLeft': '10px'}}
-        exclusive="true" value={interval} onChange={(elem) => {
-        // console.log({zzzz:newValue})
-        onChange(elem)
-      }}>
+        exclusive="true" value={interval} onChange={onChange}>
         {renderTimeIntervals()}
       </ToggleButtonGroup>
     </Container>
