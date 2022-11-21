@@ -29,6 +29,7 @@ import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEvent } from 'hooks/useEvents'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
@@ -131,11 +132,30 @@ export function WalletView(props) {
     _peraDisconnect(targetWallet)
   }, [_peraDisconnect])
 
+  const setActiveWalletOnDisconnect = useCallback((wallet) => {
+    const allAddresses = localStorage.getItem('addresses')
+    if (allAddresses) {
+      const parsedAddresses = JSON.parse(allAddresses)
+      const filterWalletToDisconnect = parsedAddresses.filter(_wallet => _wallet.address !== wallet.address)
+      console.log(filterWalletToDisconnect, 'filtered disconnect')
+      // Has remaining wallet
+      if (filterWalletToDisconnect.length) {
+        localStorage.setItem('activeWallet', JSON.stringify(filterWalletToDisconnect[0]))
+      } else {
+        localStorage.removeItem('activeWallet')
+      }
+    }
+  }, [])
+
   const walletDisconnectMap = useMemo(() => ({
-    'my-algo-wallet': (wallet) => {
+    'my-algo-wallet': async (wallet) => {
+      await setActiveWalletOnDisconnect(wallet)
       myAlgoDisconnect(wallet)
     },
-    'wallet-connect': (wallet) => peraDisconnect(wallet)
+    'wallet-connect': async (wallet) => {
+      await setActiveWalletOnDisconnect(wallet)
+      peraDisconnect(wallet)
+    }
   }), [myAlgoDisconnect, peraDisconnect])
 
   const isWalletActive = useCallback((addr) => {
@@ -156,7 +176,6 @@ export function WalletView(props) {
     (wallet) => {
       if (wallet.type === 'wallet-connect') {
         try {
-          console.log(peraConnector.connector, wallet.addr, 'peraConnector.current')
           if (peraConnector.connector.connected) {
             return peraConnector.connector
           }
@@ -179,6 +198,11 @@ export function WalletView(props) {
     [dispatcher, peraConnector.connector]
   )
 
+  useEvent('switch-wallet', (data) => {
+    const {activeWallet} = data
+    localStorage.setItem('activeWallet', JSON.stringify(activeWallet))
+  })
+
   const handleWalletClick = useCallback(async (addr) => {
     const connector = handleConnectionStatus(addr)
     const _addr = {
@@ -186,6 +210,9 @@ export function WalletView(props) {
       connector
     }
     if (_addr.connector && (_addr.connector._connected || _addr.connector.connected)) {
+      dispatcher('switch-wallet', {
+        activeWallet: _addr
+      })
       !isWalletActive(addr) && setActiveWallet(_addr)
     }
   }, [handleConnectionStatus, isWalletActive, setActiveWallet])
