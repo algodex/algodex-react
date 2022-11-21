@@ -20,6 +20,8 @@ import PropTypes from 'prop-types'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 const Container = styled.div`
   display: flex;
@@ -109,6 +111,23 @@ const ToggleBtn = styled(Button)`
   }
 `
 
+
+const ToggleBtn2 = styled(ToggleButton)`
+  padding: 0 1.5rem;
+  color: white;
+  border-radius: 4px;
+  &.Mui-selected {
+    color: white;
+    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
+    &:hover {
+      background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
+    };
+  };
+  &:hover {
+    background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['900'])};
+  };
+
+`
 /**
  * Chart Settings
  *
@@ -128,21 +147,25 @@ function ChartSettings(props) {
   const renderTimeIntervals = useCallback(() => {
     // @todo: should be handled in view and passed as props when supported
     return ['1m', '5m', '15m', '1h', '4h', '1d'].map((i) => (
-      <Fragment key={i}>
-        <ToggleInput
-          type="radio"
-          name="interval"
-          id={`time-${i}`}
-          value={i}
-          checked={i === interval}
-          onChange={onChange}
-        />
-        <ToggleBtn variant="default" size="small">
-          <label htmlFor={`time-${i}`}>{i}</label>
-        </ToggleBtn>
-      </Fragment>
+      <ToggleBtn2 key={i} name="interval" value={i} aria-label={i}>
+        {i}
+      </ToggleBtn2>
+
+      // <Fragment key={i}>
+      //   <ToggleInput
+      //     type="radio"
+      //     name="interval"
+      //     id={`time-${i}`}
+      //     value={i}
+      //     checked={i === interval}
+      //     onChange={onChange}
+      //   />
+      //   <Button variant="default" size="small" >
+      //     <label htmlFor={`time-${i}`}>{i}</label>
+      //   </Button>
+      // </Fragment>
     ))
-  }, [interval, onChange])
+  }, [])
 
   return (
     <Container>
@@ -170,7 +193,12 @@ function ChartSettings(props) {
           <label htmlFor="mode-area">{t('area')}</label>
         </ToggleBtn>
       </ToggleWrapper>
-      <ToggleWrapper>{renderTimeIntervals()}</ToggleWrapper>
+      <ToggleButtonGroup exclusive="true" value={interval} onChange={(elem) => {
+        // console.log({zzzz:newValue})
+        onChange(elem)
+      }}>
+        {renderTimeIntervals()}
+      </ToggleButtonGroup>
     </Container>
   )
 }
