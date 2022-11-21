@@ -138,7 +138,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     });
 
     // Set Order Price and Amount precision. Price should be to 6 decimals
-    currentState.price = formatFloat(currentState.price, 6) || ''
+    // currentState.price = formatFloat(currentState.price, 6) || ''
 
     const amount = getAdjOrderAmount(currentState)
 
@@ -343,6 +343,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
+      const formattedOrder = {...order}
+      formattedOrder.price = formatFloat(formattedOrder.price, 6)
+      formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
+
+      
       let lastToastId = undefined
       let orderPromise
       const notifier = (msg) => {
@@ -355,18 +360,18 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         // What is the purpose of this conditional?
         // I have checked everywhere in the codebase and no other componenet passes an onSubmit prop to this component
         orderPromise = onSubmit({
-          ...order,
+          ...formattedOrder,
           wallet,
           asset
         })
       } else {
         console.log(
           {
-            ...order,
+            ...formattedOrder,
             address: wallet.address,
             wallet,
             asset,
-            appId: order.type === 'sell' ? 22045522 : 22045503,
+            appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
             version: 6
           },
           { wallet }
@@ -377,11 +382,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             notifier('Initializing order')
             await placeOrder(
               {
-                ...order,
+                ...formattedOrder,
                 address: wallet.address,
                 wallet,
                 asset,
-                appId: order.type === 'sell' ? 22045522 : 22045503,
+                appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
                 version: 6
               },
               { wallet },
