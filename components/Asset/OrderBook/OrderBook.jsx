@@ -322,7 +322,7 @@ const DECIMALS_MAP = {
  * @constructor
  */
  export function OrderBook({ asset, orders, components }) {
-  const { query } = useRouter() || { query: { text: '' } }
+  const { query } = useRouter()
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
