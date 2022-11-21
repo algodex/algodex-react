@@ -113,6 +113,8 @@ const ToggleBtn = styled(Button)`
 
 
 const ToggleBtn2 = styled(ToggleButton)`
+  font-size: 0.75rem;
+  min-width: 48px;
   padding: 0 1.5rem;
   color: white;
   border-radius: 4px;
@@ -169,7 +171,11 @@ function ChartSettings(props) {
 
   return (
     <Container>
-      <ToggleWrapper>
+      <ToggleButtonGroup exclusive="true" value={mode} onChange={onChange}>
+      <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">Candle</ToggleBtn2>
+      <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">Area</ToggleBtn2>
+
+{/* 
         <ToggleInput
           type="radio"
           name="mode"
@@ -191,9 +197,10 @@ function ChartSettings(props) {
         />
         <ToggleBtn variant="default" size="small">
           <label htmlFor="mode-area">{t('area')}</label>
-        </ToggleBtn>
-      </ToggleWrapper>
-      <ToggleButtonGroup exclusive="true" value={interval} onChange={(elem) => {
+        </ToggleBtn> */}
+      </ToggleButtonGroup>
+      <ToggleButtonGroup sx={{'marginLeft': '10px'}}
+        exclusive="true" value={interval} onChange={(elem) => {
         // console.log({zzzz:newValue})
         onChange(elem)
       }}>
