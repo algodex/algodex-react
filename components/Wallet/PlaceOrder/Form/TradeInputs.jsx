@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { forwardRef, useMemo, useCallback } from 'react'
+import { forwardRef, useMemo } from 'react'
 
 import AdvancedOptions from './AdvancedOptions'
 import Big from 'big.js'
@@ -112,15 +112,6 @@ export const TradeInputs = ({
   //       return true
   //     }
   //   }
-
-  const formatFloat = useCallback((value, decimal = 6) => {
-    const splited = value.toString().split('.')
-    const _decimals = decimal > 6 ? 6 : decimal
-    if (splited[1] && splited[1].length > _decimals) {
-      return parseFloat(value).toFixed(_decimals)
-    }
-    return parseFloat(value)
-  }, [])
 
   const marks = [
     {
