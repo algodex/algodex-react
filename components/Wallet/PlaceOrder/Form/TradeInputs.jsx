@@ -161,7 +161,7 @@ export const TradeInputs = ({
         decimals={6}
         inputProps={{
           decimals: 6,
-          pattern: '[0-9]*\.[0-9]*',
+          pattern: '[0-9]*.[0-9]*',
           min: '0',
           step: '0.000001',
           placeholder: '0.00',
@@ -202,7 +202,7 @@ export const TradeInputs = ({
         inputProps={{
           decimals: 6,
           min: '0',
-          pattern: '[0-9]*\.[0-9]*',
+          pattern: '[0-9]*.[0-9]*',
           step: new Big(10).pow(-1 * asset.decimals).toString(),
           placeholder: '0.00',
           sx: {
