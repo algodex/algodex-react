@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, useMemo, useCallback } from 'react'
 
 import AdvancedOptions from './AdvancedOptions'
 import Big from 'big.js'
@@ -85,6 +85,7 @@ NumberFormatCustom.defaultProps = {
   decimals: 6
 }
 
+
 export const TradeInputs = ({
   order,
   handleChange,
@@ -111,6 +112,15 @@ export const TradeInputs = ({
   //       return true
   //     }
   //   }
+
+  const formatFloat = useCallback((value, decimal = 6) => {
+    const splited = value.toString().split('.')
+    const _decimals = decimal > 6 ? 6 : decimal
+    if (splited[1] && splited[1].length > _decimals) {
+      return parseFloat(value).toFixed(_decimals)
+    }
+    return parseFloat(value)
+  }, [])
 
   const marks = [
     {
@@ -152,7 +162,7 @@ export const TradeInputs = ({
           border: order.execution === 'market' ? 0 : 2,
           borderColor: theme.palette.gray['700'],
         }}
-        value={order.price.toString()}
+        value={order.price || ''}
         onChange={handleChange}
         placeholder='0.00'
         name="price"
@@ -160,6 +170,7 @@ export const TradeInputs = ({
         decimals={6}
         inputProps={{
           decimals: 6,
+          pattern: '[0-9]*\.[0-9]*',
           min: '0',
           step: '0.000001',
           placeholder: '0.00',
@@ -194,13 +205,20 @@ export const TradeInputs = ({
         id="amount"
         name="amount"
         placeholder='0.00'
-        value={order.amount.toString()}
+        value={order.amount || ''}
         inputComponent={NumberFormatCustom}
         decimals={asset.decimals}
         inputProps={{
+          decimals: 6,
           min: '0',
-          step: '0.000001',
-          placeholder: '0.00'
+          pattern: '[0-9]*\.[0-9]*',
+          step: new Big(10).pow(-1 * asset.decimals).toString(),
+          placeholder: '0.00',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         sx={{
           backgroundColor: theme.colors.gray['900'],
@@ -209,9 +227,7 @@ export const TradeInputs = ({
           marginBottom: '1rem'
         }}
         onChange={handleChange}
-        step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}
-        // inputMode="decimal"
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
