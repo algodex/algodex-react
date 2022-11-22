@@ -151,7 +151,7 @@ describe('Search Sidebar Component', () => {
         <AssetChangeCell value="10" />
       </>
     )
-    expect(queryByTestId('asa-change-cell').textContent).toBe('10%')
+    expect(queryByTestId('asa-change-cell').textContent).toBe('10.00%')
   })
   it('Should render null when no value is passed', () => {
     const { queryByTestId } = render(
