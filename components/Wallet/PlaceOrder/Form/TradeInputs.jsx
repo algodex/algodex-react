@@ -64,7 +64,7 @@ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, 
         onChange({
           target: {
             name: props.name,
-            value: values.value,
+            value: values.formattedValue,
           },
         });
       }}
@@ -196,15 +196,14 @@ export const TradeInputs = ({
         id="amount"
         name="amount"
         placeholder='0.00'
+        decimals={6}
         value={order.amount || ''}
         inputComponent={NumberFormatCustom}
-        decimals={asset.decimals}
         inputProps={{
           decimals: 6,
           min: '0',
           pattern: '[0-9]*.[0-9]*',
           step: new Big(10).pow(-1 * asset.decimals).toString(),
-          placeholder: '0.00',
           sx: {
             '&.Mui-disabled': {
               color: 'white'

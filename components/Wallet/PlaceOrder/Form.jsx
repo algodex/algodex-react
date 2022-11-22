@@ -140,7 +140,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     // Set Order Price and Amount precision. Price should be to 6 decimals
     // currentState.price = formatFloat(currentState.price, 6) || ''
 
-    const amount = getAdjOrderAmount(currentState)
+    const amount = parseFloat(getAdjOrderAmount(currentState)).toFixed(6)
 
     // Amount should be based on asset decimals
     // currentState.amount = formatFloat(amount, asset.decimals) || ''
@@ -346,7 +346,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const formattedOrder = {...order}
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
-
       
       let lastToastId = undefined
       let orderPromise
