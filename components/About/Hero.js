@@ -44,7 +44,7 @@ const LaunchBtn = styled(Button)`
   font-size: 1.1rem;
   font-weight: 500;
   height: 2.5rem;
-  width: 12rem;
+  min-width: 12rem;
 `
 
 const InlineLogo = styled(ReactSVG)`
