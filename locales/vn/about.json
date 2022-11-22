@@ -1,8 +1,8 @@
 {
-  "A Decentralized": "Một phân cấp" ,
+  "A Decentralized": "Một phân cấp",
   "Marketplace": "Thương trường",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex là một thị trường phi tập trung cao với sổ đặt hàng hoàn toàn trên chính chuỗi khối Algorand",
-  "NOTE":"GHI CHÚ",
+  "NOTE": "GHI CHÚ",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "Người dùng ở Hoa Kỳ và Canada hiện bị hạn chế giao dịch một số tài sản Mainnet. Testnet cũng có sẵn cho bất kỳ ai dùng thử nền tảng tại",
   "blog": "blog",
   "View More Posts": "Xem thêm bài viết",
@@ -37,6 +37,8 @@
   "Algodex rewards and fee system": "Hệ thống phí và phần thưởng Algodex",
   "Launch of trading bot for Algodex": "Ra mắt bot giao dịch cho Algodex",
   "Launch of Algodex NFT marketplace": "Ra mắt thị trường Algodex NFT",
-  "Launch of trading SDK for Algodex":"Ra mắt SDK giao dịch cho Algodex",
-  "launch app":"Chạy chương trình"
+  "Launch of trading SDK for Algodex": "Ra mắt SDK giao dịch cho Algodex",
+  "launch app": "Chạy chương trình",
+  "Exchange": "Trao đổi",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex là một sàn giao dịch phi tập trung cao với sổ đặt hàng hoàn toàn trên chính chuỗi khối Algorand"
 }
