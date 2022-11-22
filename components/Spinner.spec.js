@@ -20,7 +20,7 @@ import Spinner from './Spinner'
 
 expect.extend(matchers)
 const color = 'gray.600'
-describe('spinner', () => {
+describe.skip('spinner', () => {
   it('Should render spinner with container if flex is true', () => {
     const { queryByTestId } = render(
       <Spinner data-testid="spinner-element" color={color} flex={true} size={5} />
