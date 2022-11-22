@@ -346,7 +346,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const formattedOrder = {...order}
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
-
       
       let lastToastId = undefined
       let orderPromise
