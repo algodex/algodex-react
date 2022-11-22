@@ -155,7 +155,7 @@ export const TradeInputs = ({
         }}
         value={order.price || ''}
         onChange={handleChange}
-        placeholder='0.00'
+        placeholder={`0.${'0'.repeat(Math.max(0, 6 - 4))}`}
         name="price"
         inputComponent={NumberFormatCustom}
         decimals={6}
@@ -195,7 +195,7 @@ export const TradeInputs = ({
       <OutlinedInput
         id="amount"
         name="amount"
-        placeholder='0.00'
+        placeholder={`0.${'0'.repeat(Math.max(0, asset.decimals - 4))}`}
         value={order.amount || ''}
         inputComponent={NumberFormatCustom}
         inputProps={{
