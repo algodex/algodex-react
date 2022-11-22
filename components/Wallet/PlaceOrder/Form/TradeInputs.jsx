@@ -196,11 +196,10 @@ export const TradeInputs = ({
         id="amount"
         name="amount"
         placeholder='0.00'
-        decimals={6}
         value={order.amount || ''}
         inputComponent={NumberFormatCustom}
         inputProps={{
-          decimals: 6,
+          decimals: asset.decimals,
           min: '0',
           pattern: '[0-9]*.[0-9]*',
           step: new Big(10).pow(-1 * asset.decimals).toString(),
