@@ -196,7 +196,7 @@ export function SearchFlyover(props) {
                     data-testid="flyover-asa-liqidity"
                     fontFamily="'Roboto Mono', monospace"
                   >
-                    {getLocaleString(getAsaDecimals(row.liquidityAsa))}
+                    {decimals && getLocaleString(getAsaDecimals(row.liquidityAsa))}
                   </Typography>
                 </InfoItem>
               </>
