@@ -112,6 +112,7 @@ export const TradeInputs = ({
   //       return true
   //     }
   //   }
+  const inputPlaceHolder = useMemo(() => asset.decimals !== 0 ? `0.${'0'.repeat(Math.max(0, asset.decimals - 4))}` : '0', [asset])
 
   const marks = [
     {
@@ -195,7 +196,7 @@ export const TradeInputs = ({
       <OutlinedInput
         id="amount"
         name="amount"
-        placeholder={`0.${'0'.repeat(Math.max(0, asset.decimals - 4))}`}
+        placeholder={inputPlaceHolder}
         value={order.amount || ''}
         inputComponent={NumberFormatCustom}
         inputProps={{
