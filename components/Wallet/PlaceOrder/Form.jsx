@@ -140,7 +140,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     // Set Order Price and Amount precision. Price should be to 6 decimals
     // currentState.price = formatFloat(currentState.price, 6) || ''
 
-    const amount = parseFloat(getAdjOrderAmount(currentState)).toFixed(6)
+    const amount = getAdjOrderAmount(currentState)
 
     // Amount should be based on asset decimals
     // currentState.amount = formatFloat(amount, asset.decimals) || ''
