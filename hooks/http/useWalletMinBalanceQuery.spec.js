@@ -17,7 +17,7 @@
 import nock from 'nock';
 import {renderHook} from '@testing-library/react-hooks';
 import useWalletMinBalanceQuery from './useWalletMinBalanceQuery.js';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe('Fetch Wallet Minimum Balance', () => {
   it('should fetch minimum balance from wallet', async () => {
@@ -30,7 +30,7 @@ describe('Fetch Wallet Minimum Balance', () => {
           .get(wallet.address)
           .reply(
               200,
-              require('../../spec/fetchAccountInfo.json'),
+              require('../spec/fetchAccountInfo.json'),
           );
     }
     const {result, waitFor} = renderHook(
@@ -40,7 +40,7 @@ describe('Fetch Wallet Minimum Balance', () => {
 
     await waitFor(() => {
       return result.current.isSuccess;
-    } );
+    }, {timeout: 6000}  );
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
     expect(typeof result.current.data).toBe('number');

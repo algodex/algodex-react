@@ -17,7 +17,7 @@
 import {act, renderHook} from '@testing-library/react-hooks';
 
 import useWatch from './useWatch.js';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 /**
  *

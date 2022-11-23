@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import {ServiceError} from './ServiceError';
-import {render} from '../../test/setup';
+import {render} from '../test/setup.js';
 
 const testProps = {
   flex: true,

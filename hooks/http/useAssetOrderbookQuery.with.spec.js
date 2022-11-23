@@ -18,10 +18,10 @@
  * @jest-environment jsdom
  */
 
-import {TestComponent, render} from '../../test/setup';
+import {TestComponent, render} from '../test/setup.js';
 
 import React from 'react';
-import asset from '../../spec/Asset.json';
+import asset from '../spec/Asset.json';
 import {
   withAssetOrderbookQuery,
 } from './useAssetOrderbookQuery.js';

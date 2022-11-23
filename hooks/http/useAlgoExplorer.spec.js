@@ -21,7 +21,7 @@ import {
 
 import nock from 'nock';
 import {renderHook} from '@testing-library/react-hooks';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe.skip('useAlgoExplorer', () => {
   it('should fetch asset orders alone', async () => {
@@ -31,7 +31,7 @@ describe.skip('useAlgoExplorer', () => {
     if (process.env.TEST_ENV !== 'integration') {
       nock('https://testnet.algoexplorerapi.io')
           .get(`/v1/asset/${asset.id}/info`)
-          .reply(200, require('../../spec/fetchExplorerAssetInfo.json'));
+          .reply(200, require('../spec/fetchExplorerAssetInfo.json'));
     }
     const {result, waitFor} = renderHook(
         () => useExplorerAssetInfo({asset}),
@@ -58,7 +58,7 @@ describe.skip('useAlgoExplorer', () => {
     if (process.env.TEST_ENV !== 'integration') {
       nock(`https://price.algoexplorerapi.io`)
           .get(`/price/algo-usd`)
-          .reply(200, require('../../spec/fetchAlgorandPrice.json'));
+          .reply(200, require('../spec/fetchAlgorandPrice.json'));
     }
     const {result, waitFor} = renderHook(
         () => useAlgorandPriceQuery(),

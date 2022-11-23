@@ -1,0 +1,92 @@
+[
+  {
+    "assetName": "Hello World",
+    "unitName": "domain",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 51039421,
+    "isTraded": false,
+    "decimals": 0,
+    "hasOrders": true,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "10.999000"
+  },
+  {
+    "assetName": "hello",
+    "unitName": "hell",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 21158103,
+    "isTraded": false,
+    "decimals": 0,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  },
+  {
+    "assetName": "HELLO",
+    "unitName": "HJL",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 15148152,
+    "isTraded": false,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  },
+  {
+    "assetName": "HJL",
+    "unitName": "HELLO",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 15147943,
+    "isTraded": false,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  },
+  {
+    "assetName": "HJL",
+    "unitName": "HELLO",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 15147920,
+    "isTraded": false,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  },
+  {
+    "assetName": "HELLO",
+    "unitName": "HJL",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 15147910,
+    "isTraded": false,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  },
+  {
+    "assetName": "HELLO",
+    "unitName": "HJL",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 15147882,
+    "isTraded": false,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  },
+  {
+    "assetName": "HELLO",
+    "unitName": "HLO",
+    "verified": false,
+    "destroyed": false,
+    "assetId": 15147851,
+    "isTraded": false,
+    "hasOrders": false,
+    "formattedASALiquidity": "0",
+    "formattedAlgoLiquidity": "0.000000"
+  }
+]

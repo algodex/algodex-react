@@ -19,7 +19,7 @@ import {renderHook} from '@testing-library/react-hooks';
 import {
   useAssetOrderbookQuery,
 } from './useAssetOrderbookQuery.js';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe.skip('useAssetOrderbookQuery', () => {
   it('should fail on invalid asset id', ()=>{
@@ -40,9 +40,9 @@ describe.skip('useAssetOrderbookQuery', () => {
       decimals: 10,
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('https://testnet.algodex.com/algodex-backend')
-          .get(`/orders.php?assetId=${asset.id}`)
-          .reply(200, require('../../spec/fetchAssetOrders.json'));
+      nock('http://testnet-services-2.algodex.com:8080')
+          .get(`/orders/asset/${asset.id}`)
+          .reply(200, require('../spec/fetchAssetOrders.json'));
     }
     const {result, waitFor} = renderHook(() => useAssetOrderbookQuery(
         {asset},
@@ -50,7 +50,7 @@ describe.skip('useAssetOrderbookQuery', () => {
 
     await waitFor(() => {
       return result.current.isSuccess;
-    });
+    }, {timeout: 6000} );
 
     // TODO: Check the response parts not the entire object.
     // Break up into validation

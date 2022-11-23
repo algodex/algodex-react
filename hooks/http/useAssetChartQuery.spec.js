@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../../test/nock';
+import '../test/nock';
 
 import {
   sortByASAPrice,
@@ -22,10 +22,10 @@ import {
   useAssetChartQuery,
 } from './useAssetChartQuery.js';
 
-import asset from '../../spec/Asset.json';
-import chart from '../../spec/Chart.json';
+import asset from '../spec/Asset.json';
+import chart from '../spec/Chart.json';
 import {renderHook} from '@testing-library/react-hooks';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe('Fetch Asset Chart', () => {
   it('should fetch asset chart', async () => {
@@ -38,7 +38,7 @@ describe('Fetch Asset Chart', () => {
 
     await waitFor(() => {
       return result.current.isSuccess;
-    } );
+    }, {timeout: 6000} );
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
     expect(Object.keys(result.current.data)).toEqual(

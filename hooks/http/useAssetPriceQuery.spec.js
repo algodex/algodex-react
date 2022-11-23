@@ -17,7 +17,7 @@
 import nock from 'nock';
 import {renderHook} from '@testing-library/react-hooks';
 import useAssetPriceQuery from './useAssetPriceQuery.js';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe('Fetch Asset Price', () => {
   it('should fetch asset price', async () => {
@@ -25,9 +25,9 @@ describe('Fetch Asset Price', () => {
       id: 69410904,
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('https://testnet.algodex.com/algodex-backend')
-          .get(`/assets.php?id=${asset.id}`)
-          .reply(200, require('../../spec/fetchAssetPrice.json'));
+      nock('http://testnet-services-2.algodex.com:8080')
+          .get(`/assets/all/${asset.id}`)
+          .reply(200, require('../spec/fetchAssetPrice.json'));
     }
     const {result, waitFor} = renderHook(
         () => useAssetPriceQuery({asset}),
@@ -35,7 +35,7 @@ describe('Fetch Asset Price', () => {
     );
     await waitFor(() => {
       return result.current.isSuccess;
-    });
+    }, {timeout: 6000} );
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
     expect(Object.keys(result.current.data)).toEqual(['asset']);

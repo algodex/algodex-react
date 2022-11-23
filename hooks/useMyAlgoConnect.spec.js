@@ -19,7 +19,7 @@
  */
 import {renderHook} from '@testing-library/react-hooks';
 import useMyAlgoConnect from './useMyAlgoConnect.js';
-import {wrapper} from '../test/setup.js';
+import {wrapper} from './test/setup.js';
 
 describe('useMyAlgoConnect', () => {
   beforeEach(() => {

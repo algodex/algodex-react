@@ -14,12 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../../test/nock';
+import '../test/nock';
 
 import {renderHook} from '@testing-library/react-hooks';
 import useWalletOrdersQuery from './useWalletOrdersQuery.js';
-import wallet from '../../spec/Wallet.json';
-import {wrapper} from '../../test/setup.js';
+import wallet from '../spec/Wallet.json';
+import {wrapper} from '../test/setup.js';
 
 describe.skip('useWalletOrdersQuery', () => {
   it('should query orders for a wallet', async () => {
@@ -30,7 +30,7 @@ describe.skip('useWalletOrdersQuery', () => {
 
     await waitFor(() => {
       return result.current.isSuccess;
-    });
+    }, {timeout: 6000} );
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
     expect(Object.keys(result.current.data)).toEqual(['orders']);

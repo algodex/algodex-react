@@ -36,7 +36,7 @@ module.exports = {
     '!**/components/**/*demo.{js,jsx}',
     '!**/components/**/*spec.{js,jsx}'
   ],
-  coverageReporters: ['lcov', 'text', 'json-summary'],
+  coverageReporters: ['lcov', 'text', 'json', 'json-summary'],
   moduleNameMapper: {
     '^@/components(.*)$': '<rootDir>/components$1',
     '^@/lib(.*)$': '<rootDir>/lib$1',
@@ -49,5 +49,6 @@ module.exports = {
     '^@/test(.*)$': '<rootDir>/test$1',
     '^theme(.*)$': '<rootDir>/theme$1'
   },
-  transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)']
+  transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)'],
+  testURL: 'http://testnet-services-2.algodex.com:8080',
 }

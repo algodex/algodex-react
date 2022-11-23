@@ -21,7 +21,7 @@
 import React from 'react';
 import ServiceError from '../components/ServiceError';
 import Spinner from '../components/Spinner';
-import {render} from '../../test/setup.js';
+import {render} from '../test/setup.js';
 import {useQuery} from 'react-query';
 import withQuery from './withQuery.js';
 

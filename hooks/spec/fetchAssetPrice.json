@@ -1,0 +1,14 @@
+{
+    "ok": true,
+    "rows": 1,
+    "data": [
+      {
+        "id": 69410904,
+        "unix_time": 1647990996,
+        "price": 0.000123456463,
+        "priceBefore": 0.000123456463,
+        "price24Change": 0,
+        "isTraded": true
+      }
+    ]
+  }

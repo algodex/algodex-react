@@ -51,8 +51,9 @@ const config = {
       port: ''
     },
     dexd: {
-      uri: 'https://testnet.algodex.com/algodex-backend',
-      token: ''
+      uri: 'http://testnet-services-2.algodex.com:8080',
+      token: '',
+      apiVersion: 2
     },
     tinyman: {
       uri: 'https://testnet.analytics.tinyman.org',

@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import {Spinner} from './Spinner';
-import {render} from '../../test/setup';
+import {render} from '../test/setup';
 const defaultProps = {
   'data-testid': 'spinner-element',
   'color': 'gray',

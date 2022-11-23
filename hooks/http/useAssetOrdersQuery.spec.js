@@ -17,7 +17,7 @@
 import nock from 'nock';
 import {renderHook} from '@testing-library/react-hooks';
 import useAssetOrdersQuery from './useAssetOrdersQuery.js';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe('Fetch Asset Orders Only', () => {
   it('should fetch asset orders alone', async () => {
@@ -25,9 +25,9 @@ describe('Fetch Asset Orders Only', () => {
       id: 69410904,
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('https://testnet.algodex.com/algodex-backend')
-          .get(`/orders.php?assetId=${asset.id}`)
-          .reply(200, require('../../spec/fetchAssetOrders.json'));
+      nock('http://testnet-services-2.algodex.com:8080')
+          .get(`/orders/asset/${asset.id}`)
+          .reply(200, require('../spec/fetchAssetOrders.json'));
     }
     const {result, waitFor} = renderHook(
         () => useAssetOrdersQuery({asset}),
@@ -35,7 +35,7 @@ describe('Fetch Asset Orders Only', () => {
     );
     await waitFor(() => {
       return result.current.isSuccess;
-    }, {interval: 1000});
+    }, {timeout: 6000});
 
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
@@ -43,6 +43,7 @@ describe('Fetch Asset Orders Only', () => {
     expect(Object.keys(result.current.data)).toEqual([
       'sellASAOrdersInEscrow',
       'buyASAOrdersInEscrow',
+      'etag',
     ]);
   });
 });

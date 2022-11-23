@@ -17,7 +17,7 @@
 import nock from 'nock';
 import {renderHook} from '@testing-library/react-hooks';
 import useAssetTradeHistoryQuery from './useAssetTradeHistoryQuery.js';
-import {wrapper} from '../../test/setup.js';
+import {wrapper} from '../test/setup.js';
 
 describe('Fetch Trade History', () => {
   it('should fetch asset trade history', async () => {
@@ -26,9 +26,9 @@ describe('Fetch Trade History', () => {
       id: 69410904,
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('https://testnet.algodex.com/algodex-backend')
-          .get(`/trade_history.php?assetId=${asset.id}`)
-          .reply(200, require('../../spec/fetchAssetTradeHistory.json'));
+      nock('http://testnet-services-2.algodex.com:8080')
+          .get(`/trades/history/asset/${asset.id}`)
+          .reply(200, require('../spec/fetchAssetTradeHistory.json'));
     }
     const {result, waitFor} = renderHook(
         () => useAssetTradeHistoryQuery({asset}),
@@ -36,7 +36,7 @@ describe('Fetch Trade History', () => {
     );
     await waitFor(() => {
       return result.current.isSuccess;
-    });
+    }, {timeout: 6000} );
 
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
