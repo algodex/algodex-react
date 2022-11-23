@@ -50,7 +50,7 @@ describe.skip('useAssetOrderbookQuery', () => {
 
     await waitFor(() => {
       return result.current.isSuccess;
-    }, {timeout: 1000} );
+    }, {timeout: 5000} );
 
     // TODO: Check the response parts not the entire object.
     // Break up into validation

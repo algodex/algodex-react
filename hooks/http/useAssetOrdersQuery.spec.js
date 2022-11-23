@@ -35,7 +35,7 @@ describe('Fetch Asset Orders Only', () => {
     );
     await waitFor(() => {
       return result.current.isSuccess;
-    }, {timeout: 1000});
+    }, {timeout: 5000});
 
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
