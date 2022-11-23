@@ -17,7 +17,7 @@
 import { useMemo, useState } from 'react'
 
 import Big from 'big.js'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 
 import {useQuery} from 'react-query';
 

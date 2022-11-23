@@ -24,7 +24,7 @@ import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
 
 const styleReset = css`

@@ -32,7 +32,7 @@ import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { withAssetPriceQuery } from '@/hooks'
 
 const Container = styled.div`
   flex: 1 1 0%;

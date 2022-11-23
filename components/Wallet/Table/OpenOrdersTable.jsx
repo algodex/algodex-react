@@ -20,7 +20,7 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
-import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, withWalletOrdersQuery } from '@/hooks'
 import { useCallback, useMemo, useState } from 'react'
 
 import PropTypes from 'prop-types'

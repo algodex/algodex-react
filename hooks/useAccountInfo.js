@@ -15,7 +15,7 @@
  */
 
 import { useQuery } from 'react-query'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 
 /**
  *

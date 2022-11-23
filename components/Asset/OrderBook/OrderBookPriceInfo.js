@@ -26,7 +26,7 @@ import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUni
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
-import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
+import { withAlgorandPriceQuery } from '@/hooks'
 
 const getPriceDecimals = (price) => {
   if (price >= 10000) {
