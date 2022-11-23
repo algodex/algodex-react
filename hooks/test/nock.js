@@ -40,7 +40,7 @@ const routes = {
 if (process.env.TEST_ENV !== 'integration') {
   Object.keys(routes).forEach((key)=>{
     const r = routes[key];
-    nock('http://testnet-services-2.algodex.com:8080')
+    nock('https://testnet.algodex.com/api/v2')
         .get(r.path)
         .reply(200, r.reply);
   });

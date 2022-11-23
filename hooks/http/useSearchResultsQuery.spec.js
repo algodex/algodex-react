@@ -25,7 +25,7 @@ describe('Fetch Search Result', () => {
       query: 'hello',
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('http://testnet-services-2.algodex.com:8080')
+      nock('https://testnet.algodex.com/api/v2')
           .get(`/assets/search/${asset.query}`)
           .reply(200, require('../spec/searchAssets.json'));
     }

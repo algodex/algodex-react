@@ -25,7 +25,7 @@ describe('Fetch Wallet Assets', () => {
       address: 'ZXPEYJMWFLULILWJHWB3Y6DFI4ADE7XVMGARAH734ZJ5ECXAR4YVMRZ4EM',
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('http://testnet-services-2.algodex.com:8080')
+      nock('https://testnet.algodex.com/api/v2')
           .get(`/wallet/assets/${wallet.address}`)
           .reply(200, require('../spec/fetchWalletAssets.json'));
     }

@@ -50,5 +50,5 @@ module.exports = {
     '^theme(.*)$': '<rootDir>/theme$1'
   },
   transformIgnorePatterns: ['node_modules/(?!(lightweight-charts|fancy-canvas)/)'],
-  testURL: 'http://testnet-services-2.algodex.com:8080',
+  testURL: 'https://testnet.algodex.com/api/v2',
 }

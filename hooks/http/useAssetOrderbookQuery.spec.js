@@ -40,7 +40,7 @@ describe.skip('useAssetOrderbookQuery', () => {
       decimals: 10,
     };
     if (process.env.TEST_ENV !== 'integration') {
-      nock('http://testnet-services-2.algodex.com:8080')
+      nock('https://testnet.algodex.com/api/v2')
           .get(`/orders/asset/${asset.id}`)
           .reply(200, require('../spec/fetchAssetOrders.json'));
     }

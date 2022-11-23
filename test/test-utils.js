@@ -51,7 +51,7 @@ const config = {
       port: ''
     },
     dexd: {
-      uri: 'http://testnet-services-2.algodex.com:8080',
+      uri: 'https://testnet.algodex.com/api/v2',
       token: '',
       apiVersion: 2
     },
