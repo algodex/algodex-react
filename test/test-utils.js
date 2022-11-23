@@ -31,7 +31,7 @@ import { render } from '@testing-library/react'
 import theme from '../theme'
 import walletEN from '../locales/en/wallet.json'
 import { WalletsProvider } from '@/hooks/useWallets'
-import { Provider } from '@algodex/algodex-hooks'
+import { Provider } from '@/hooks'
 
 import AlgodexApi from '@algodex/algodex-sdk'
 
@@ -51,8 +51,9 @@ const config = {
       port: ''
     },
     dexd: {
-      uri: 'https://testnet.algodex.com/algodex-backend',
-      token: ''
+      uri: 'https://testnet.algodex.com/api/v2',
+      token: '',
+      apiVersion: 2
     },
     tinyman: {
       uri: 'https://testnet.analytics.tinyman.org',

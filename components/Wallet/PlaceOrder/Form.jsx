@@ -16,7 +16,7 @@
 
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
-import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
 import { useCallback, useMemo, useReducer, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'

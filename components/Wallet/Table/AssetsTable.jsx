@@ -26,7 +26,7 @@ import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletAssetsQuery } from '@algodex/algodex-hooks'
+import { withWalletAssetsQuery } from '@/hooks'
 
 const Container = styled.div`
   display: flex;

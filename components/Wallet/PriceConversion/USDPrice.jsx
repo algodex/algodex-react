@@ -16,7 +16,7 @@
 
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
-import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
+import { withAlgorandPriceQuery } from '@/hooks'
 export function USDPrice({ algoPrice, asaWorth, priceToConvert, currency }) {
   return (
     <span data-testid="USDprice-element">

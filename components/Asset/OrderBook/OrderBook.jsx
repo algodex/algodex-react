@@ -18,7 +18,7 @@
 import { ArrowDown, ArrowUp } from 'react-feather'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
-import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks'
 
 import Big from 'big.js'
 import Box from '@mui/material/Box'

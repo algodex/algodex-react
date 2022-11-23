@@ -26,7 +26,7 @@ import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletTradeHistoryQuery } from '@algodex/algodex-hooks'
+import { withWalletTradeHistoryQuery } from '@/hooks'
 import {floatToFixedDisplay} from '@/services/display';
 
 const OrderHistoryContainer = styled.div`

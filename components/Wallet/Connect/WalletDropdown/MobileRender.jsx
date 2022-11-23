@@ -34,7 +34,7 @@ import WalletOptionsList from './WalletOptionsList'
 import { WalletsContext } from '@/hooks/useWallets'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 
 const Container = styled.div`
   width: 100%;
