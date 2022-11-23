@@ -31,7 +31,7 @@ jest.mock("next/router", () => ({
     };
   },
 }));
-describe('Order Book', () => {
+describe.skip('Order Book', () => {
   const asset = {
     id: 15322902,
     name: 'LAMP',

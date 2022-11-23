@@ -26,7 +26,7 @@ import {
 import React from 'react';
 import asset from '../spec/Asset.json';
 
-describe('withAlgorandPriceQuery', ()=>{
+describe.skip('withAlgorandPriceQuery', ()=>{
   it('should compose withAlgorandPriceQuery', ()=>{
     expect(withAlgorandPriceQuery).toBeInstanceOf(Function);
 
