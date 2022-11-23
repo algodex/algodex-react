@@ -509,7 +509,7 @@ const DECIMALS_MAP = {
           </Stack>
           <Header className="mt-4">
             <TablePriceHeader title="price" textAlign="left" />
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </Typography>
             <TablePriceHeader title="total" textAlign="right" />

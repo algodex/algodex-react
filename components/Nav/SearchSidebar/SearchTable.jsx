@@ -160,7 +160,7 @@ export const AssetChangeCell = ({ value, row }) => {
     return (
       <span
         className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
-      >{`${value}%`}</span>
+      >{`${parseFloat(value).toFixed(2)}%`}</span>
     )
   }, [row?.original?.isGeoBlocked, value])
   return (

@@ -2,7 +2,7 @@
   "A Decentralized": "去中心化的",
   "Marketplace": "市场",
   "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex 是一个高度去中心化的市场，订单簿完全在 Algorand 区块链上",
-  "NOTE":"注意",
+  "NOTE": "注意",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "美国和加拿大的用户目前被限制交易一些主网资产。测试网也可供任何尝试该平台的人使用",
   "blog": "博客",
   "View More Posts": "查看更多帖子",
@@ -37,6 +37,8 @@
   "Algodex rewards and fee system": "Algodex 奖励和费用系统",
   "Launch of trading bot for Algodex": "为 Algodex 推出交易机器人",
   "Launch of Algodex NFT marketplace": "推出 Algodex NFT 市场",
-  "Launch of trading SDK for Algodex":"为 Algodex 推出交易 SDK",
-  "launch app":"启动应用"
+  "Launch of trading SDK for Algodex": "为 Algodex 推出交易 SDK",
+  "launch app": "启动应用",
+  "Exchange": "交换",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex 是一个高度去中心化的交易所，订单簿完全在 Algorand 区块链上"
 }

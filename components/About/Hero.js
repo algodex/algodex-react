@@ -44,7 +44,7 @@ const LaunchBtn = styled(Button)`
   font-size: 1.1rem;
   font-weight: 500;
   height: 2.5rem;
-  width: 12rem;
+  min-width: 12rem;
 `
 
 const InlineLogo = styled(ReactSVG)`
@@ -69,7 +69,7 @@ export const Hero = () => {
         <div className="mt-4 mb-3 md:ml-7 lg:ml-9">
           <InlineLogo src="/logo-inline-dark.svg" />
           <AboutTitle className="leading-10">
-            {t('A Decentralized')} {t('Marketplace')}
+            {t('A Decentralized')} {t('Exchange')}
           </AboutTitle>
           <Image src="/Powered-by-Algorand.svg" width={150} height={24} />
         </div>
@@ -79,7 +79,7 @@ export const Hero = () => {
         <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
           <Typography className="mb-6 leading-6 gray-400" fontWeight="medium" color="gray.400">
             {t(
-              'Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself'
+              'Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself'
             )}
             .
           </Typography>

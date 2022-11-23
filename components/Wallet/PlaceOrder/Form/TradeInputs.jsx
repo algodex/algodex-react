@@ -64,7 +64,7 @@ export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, 
         onChange({
           target: {
             name: props.name,
-            value: values.value,
+            value: values.formattedValue,
           },
         });
       }}
@@ -84,6 +84,7 @@ NumberFormatCustom.propTypes = {
 NumberFormatCustom.defaultProps = {
   decimals: 6
 }
+
 
 export const TradeInputs = ({
   order,
@@ -111,6 +112,7 @@ export const TradeInputs = ({
   //       return true
   //     }
   //   }
+  const inputPlaceHolder = useMemo(() => asset.decimals !== 0 ? `0.${'0'.repeat(Math.max(0, asset.decimals - 4))}` : '0', [asset])
 
   const marks = [
     {
@@ -152,14 +154,15 @@ export const TradeInputs = ({
           border: order.execution === 'market' ? 0 : 2,
           borderColor: theme.palette.gray['700'],
         }}
-        value={order.price.toString()}
+        value={order.price || ''}
         onChange={handleChange}
-        placeholder='0.00'
+        placeholder="0.00"
         name="price"
         inputComponent={NumberFormatCustom}
         decimals={6}
         inputProps={{
           decimals: 6,
+          pattern: '[0-9]*.[0-9]*',
           min: '0',
           step: '0.000001',
           placeholder: '0.00',
@@ -193,14 +196,19 @@ export const TradeInputs = ({
       <OutlinedInput
         id="amount"
         name="amount"
-        placeholder='0.00'
-        value={order.amount.toString()}
+        placeholder={inputPlaceHolder}
+        value={order.amount || ''}
         inputComponent={NumberFormatCustom}
-        decimals={asset.decimals}
         inputProps={{
+          decimals: asset.decimals,
           min: '0',
-          step: '0.000001',
-          placeholder: '0.00'
+          pattern: '[0-9]*.[0-9]*',
+          step: new Big(10).pow(-1 * asset.decimals).toString(),
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         sx={{
           backgroundColor: theme.colors.gray['900'],
@@ -209,9 +217,7 @@ export const TradeInputs = ({
           marginBottom: '1rem'
         }}
         onChange={handleChange}
-        step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}
-        // inputMode="decimal"
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
