@@ -40,7 +40,7 @@ describe('Fetch Wallet Minimum Balance', () => {
 
     await waitFor(() => {
       return result.current.isSuccess;
-    }, {timeout: 6000}  );
+    }, {timeout: 1000}  );
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(false);
     expect(typeof result.current.data).toBe('number');
