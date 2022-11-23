@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 import { useQuery } from 'react-query'
 
 /**

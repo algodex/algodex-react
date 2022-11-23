@@ -27,7 +27,6 @@ import theme from 'theme'
 import useUserStore from 'store/use-user-state'
 // import useWalletConnect from '@/hooks/useWalletConnect'
 // import useUserStore from 'store/use-user-state'
-// import { useWallets } from '@algodex/algodex-hooks'
 import useWallets from '@/hooks/useWallets'
 import { getActiveNetwork } from 'services/environment'
 

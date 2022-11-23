@@ -28,7 +28,7 @@ import styled from '@emotion/styled'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { withAssetPriceQuery } from '@/hooks'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`

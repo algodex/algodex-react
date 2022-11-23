@@ -1,10 +1,10 @@
 
-import { ServiceError } from '@algodex/algodex-hooks';
+import { ServiceError } from '@/hooks'
 import Spinner from '@/components/Spinner';
-import {useAlgodex} from '@algodex/algodex-hooks';
+import {useAlgodex} from '@/hooks'
 import {useMemo} from 'react';
 import {useQuery} from 'react-query';
-import { withQuery } from '@algodex/algodex-hooks';
+import { withQuery } from '@/hooks'
 
 const refetchInterval = 3000;
 

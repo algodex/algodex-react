@@ -31,7 +31,7 @@ import { render } from '@testing-library/react'
 import theme from '../theme'
 import walletEN from '../locales/en/wallet.json'
 import { WalletsProvider } from '@/hooks/useWallets'
-import { Provider } from '@algodex/algodex-hooks'
+import { Provider } from '@/hooks'
 
 import AlgodexApi from '@algodex/algodex-sdk'
 
