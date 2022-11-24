@@ -1,11 +1,27 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import toast from 'react-hot-toast'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { useState, useCallback } from 'react'
+import { createEngagement, createTicket, uploadSupportFile } from '@/services/cms'
 
 // Custom Styled Components
 import Button from 'components/Button'
 import Spinner from 'components/Spinner'
-import { createEngagement, createTicket, uploadSupportFile } from '@/services/cms'
+import styled from '@emotion/styled'
+import toast from 'react-hot-toast'
 
 const SupportWrapper = styled.div`
   margin-top: 15vh;
@@ -96,20 +112,23 @@ const Label = styled.label`
     }
   }
 `
+
+const initialValues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  product: '',
+  subject: '',
+  detail: '',
+  transactionId: '',
+  messageType: 'new-feature',
+  expectedFunctionality: '',
+  upload: ''
+}
+
 export const SupportForm = () => {
   const [loading, setLoading] = useState(false)
-  const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    product: '',
-    subject: '',
-    detail: '',
-    transactionId: '',
-    messageType: 'new-feature',
-    expectedFunctionality: '',
-    upload: ''
-  }
+
   const [formData, setFormData] = useState(initialValues)
   const {
     email,
@@ -128,7 +147,7 @@ export const SupportForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const sendFile = async (file) => {
+  const sendFile = useCallback(async (file) => {
     const payload = new FormData()
     payload.append('file', file)
     const res = await uploadSupportFile(payload)
@@ -141,7 +160,7 @@ export const SupportForm = () => {
       // return file metadata
       return res.objects
     }
-  }
+  }, [])
 
   const onSubmit = async (e) => {
     e.preventDefault()

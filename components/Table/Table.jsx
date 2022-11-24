@@ -1,4 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { useCallback, useMemo, useState } from 'react'
 import { useFlexLayout, useResizeColumns, useRowSelect, useSortBy, useTable } from 'react-table'
 
 import Fade from '@mui/material/Fade'
@@ -23,6 +39,7 @@ const styleReset = css`
   font: inherit;
   vertical-align: baseline;
 `
+const UPPERBODYHEIGHT = 125
 
 const SortIcon = styled(Icon)`
   position: relative;
@@ -57,7 +74,8 @@ const Container = styled.div`
     border-spacing: 0;
     border: none;
     width: 100%;
-
+    scrollbar-width: none;
+    height: inherit;
     & ::-webkit-scrollbar {
       display: none;
       width: 0px;
@@ -125,19 +143,25 @@ const Container = styled.div`
       }
     }
     tbody {
+      scrollbar-width: none;
+      scrollbar-display: none;
+      
       tr {
         border: 0;
       }
       position: absolute;
+      top: 37px;
       width: 100%;
-      height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 125}px`};
+      height: ${({ optionalGridInfo }) => {
+        return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
+      }};
       overflow-y: scroll;
       @media (max-width: 996px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
-        padding-bottom: 4rem;
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 128}px`};
+        padding-bottom: 3rem;
       }
       @media (max-width: 375px) {
-        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height}px`};
+        height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 75}px`};
         padding-bottom: 6rem;
       }
     }
@@ -192,7 +216,6 @@ function Table({
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [itemInfo, setItemInfo] = useState({})
-
   const handleRowFocus = useCallback(
     (event, item) => {
       setItemInfo(item.original)
@@ -226,7 +249,7 @@ function Table({
     useResizeColumns,
     useRowSelect
   )
-  useEffect(() => {
+  useMemo(() => {
     if (!_.isEqual(tableState, initialState)) {
       onStateChange(tableState)
     }

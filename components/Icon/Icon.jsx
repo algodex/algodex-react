@@ -1,4 +1,22 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import * as Icons from 'react-feather'
+
+import React, {useMemo} from 'react'
 
 import PropTypes from 'prop-types'
 import { has } from 'lodash/object'
@@ -90,23 +108,27 @@ const Svg = styled.svg`
 export function Icon(props) {
   const isCustomIcon = has(ICONS, props.use)
   const isFeatherIcon = has(Icons, props.use)
+
+  const svgProps = useMemo(() => {
+    const svgProps = {
+      width: `${props.size}rem`,
+      height: `${props.size}rem`
+    }
+
+    if (isCustomIcon) {
+      const useIcon = ICONS[props.use]
+      svgProps.children = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
+      svgProps.viewBox = useIcon.viewBox
+    }
+    return svgProps
+  }, [isCustomIcon, props.size, props.use])
+
   if (!isCustomIcon && !isFeatherIcon) {
     return null
   }
 
   const SvgIcon = isFeatherIcon ? Icons[props.use] : Svg
-
-  const svgProps = {
-    width: `${props.size}rem`,
-    height: `${props.size}rem`
-  }
-
-  if (isCustomIcon) {
-    const useIcon = ICONS[props.use]
-    svgProps.children = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
-    svgProps.viewBox = useIcon.viewBox
-  }
-
+  
   return <SvgIcon custom={isCustomIcon} {...svgProps} {...props} />
 }
 

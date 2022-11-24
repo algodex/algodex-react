@@ -1,4 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
@@ -68,12 +84,13 @@ export function NavSearchSidebar({
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
-
+  
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(false)
+  
 
   // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -88,7 +105,7 @@ export function NavSearchSidebar({
    * The active (focused) element is blurred so an asset row can't remain
    * focused when flyout is hidden.
    */
-  useEffect(() => {
+  useMemo(() => {
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
     const isMobile = window.matchMedia('(max-width: 996px)').matches
 
@@ -122,7 +139,7 @@ export function NavSearchSidebar({
   const handleAssetClick = useCallback(
     (row) => {
       handleExternalClick()
-      push(`/trade/${row.original.id}`)
+      push(`/trade/${row.original.id}`, undefined, {shallow: false})
     },
     [push, handleExternalClick]
   )
@@ -143,7 +160,6 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
@@ -186,7 +202,7 @@ NavSearchSidebar.propTypes = {
   searchTableRef: PropTypes.object,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
-    NavTable: PropTypes.node
+    NavTable: PropTypes.elementType
   }),
   tableProps: PropTypes.object,
   area: PropTypes.string

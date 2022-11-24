@@ -14,28 +14,6 @@ Main UI Project for Algodex. This is a [Next.js](https://nextjs.org/) project bo
 
 ## Getting Started
 
-### Set up a Github token to make it easy to install the private algodex-sdk npm package.
-
-https://github.com/settings/tokens
-
-Make sure you add the "read:packages" permission.
-Copy and save the secret.
-
-In a Linux terminal (git-bash on Windows):
-
-create an ~/.npmrc file with the following contents:
-```
-//npm.pkg.github.com/:_authToken=tokensecretgoeshere
-@algodex:registry=https://npm.pkg.github.com/
-```
-or you can use npm login with your token
-```
-$ npm login --scope=@algodex --registry=https://npm.pkg.github.com
-> Username: USERNAME
-> Password: TOKEN_SECRET
-> Email: PUBLIC-EMAIL-ADDRESS
-```
-
 ### Clone and install the necessary libraries
 
 ```
@@ -51,14 +29,6 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-### Further edits info (default docs):
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
 ## Learn More
 

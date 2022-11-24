@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { Box, Typography } from '@mui/material'
 import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
@@ -11,10 +27,12 @@ import theme from 'theme'
 import useUserStore from 'store/use-user-state'
 // import useWalletConnect from '@/hooks/useWalletConnect'
 // import useUserStore from 'store/use-user-state'
-import { useWallets } from '@algodex/algodex-hooks'
+// import { useWallets } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
+import { getActiveNetwork } from 'services/environment'
 
 const ActiveWalletList = ({ wallet }) => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
   const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
   const type = wallet?.type

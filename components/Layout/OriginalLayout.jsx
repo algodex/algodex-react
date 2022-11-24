@@ -1,28 +1,33 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+// import '@/wdyr';
 import React, { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
-// import Button from '@/components/Button'
-// import MobileWallet from '@/components/Wallet/Connect/WalletDropdown/MobileRender'
 import OrderBook from '@/components/Asset/OrderBook'
 import Orders from '@/components/Wallet/WalletTabs'
-// import PlaceOrder from '@/components/Wallet/PlaceOrder/Original'
 import PlaceOrder from '@/components/Wallet/PlaceOrder/Form'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
-// import { Typography, Typography } from '@/components/Typography'
-// import Typography from '@mui/material/Typography'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
-
 // import { useAlgodex } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
 
-// import useTranslation from 'next-translate/useTranslation'
-
-// import { Typography, Typography } from '@/components/Typography'
-// import Typography from '@mui/material/Typography'
-// import useWallets from '@/hooks/useWallets'
-// Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -62,6 +67,7 @@ const ContentSection = styled.section`
   height: auto;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: thin;
 `
 
 const AssetsSection = styled.section`
@@ -171,19 +177,13 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
   // const { wallet } = useAlgodex()
-  // const isConnected =
-  //   typeof wallet?.address !== 'undefined' && typeof wallet?.assets !== 'undefined'
-  // const { t } = useTranslation('common')
-  // console.debug(`Main Layout Render ${asset?.id || 'Missing'}`)
+  const { wallet } = useWallets()
   const gridRef = useRef()
   const searchTableRef = useRef()
-
-  if (!asset) {
+  if (!asset || asset?.decimals === undefined) {
     return <Spinner flex={true} />
   }
-
   return (
     <MainWrapper>
       <Main ref={gridRef}>
@@ -191,8 +191,7 @@ function MainLayout({ asset, children }) {
           <Wallet />
         </WalletSection>
         <PlaceOrderSection>
-          <PlaceOrder asset={asset} />
-          {/* {typeof wallet !== 'undefined' && <PlaceOrder asset={asset} />} */}
+          <PlaceOrder wallet={wallet} asset={asset} />
         </PlaceOrderSection>
         <SearchAndChartSection>
           <AssetsSection ref={searchTableRef}>
@@ -219,8 +218,10 @@ function MainLayout({ asset, children }) {
     </MainWrapper>
   )
 }
+// MainLayout.whyDidYouRender = true
 MainLayout.propTypes = {
   asset: PropTypes.object,
   children: PropTypes.any
 }
+
 export default MainLayout

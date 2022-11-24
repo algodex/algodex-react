@@ -1,17 +1,26 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { Box, Stack, Typography } from '@mui/material'
 
-import Button from '@mui/material/Button'
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 
-const WalletsOptions = ({
-  isConnectingAddress,
-  setIsConnectingAddress,
-  myAlgoOnClick,
-  peraConnectOnClick,
-  isPeraConnected
-}) => {
+const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   return (
     <>
       <Box
@@ -22,7 +31,7 @@ const WalletsOptions = ({
       >
         <Box className="flex justify-between items-center">
           <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
-          {isConnectingAddress && (
+          {/* {isConnectingAddress && (
             <Button
               className="cursor-pointer text-white"
               variant="text"
@@ -31,7 +40,7 @@ const WalletsOptions = ({
             >
               Go back
             </Button>
-          )}
+          )} */}
         </Box>
         <Box className="mt-4 ml-4">
           <Stack
@@ -40,21 +49,30 @@ const WalletsOptions = ({
             role="button"
             tabIndex="0"
             className="cursor-pointer mb-2"
-            onClick={peraConnectOnClick}
+            onClick={!isPeraConnected && peraConnectOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
             {isPeraConnected ? (
               <Box width={50} height={50}>
-                <Image
+                {/* <Image
                   src="/Wallet-Connect-icon.svg"
                   alt="Algorand Mobile Wallet"
                   width="100%"
                   height="100%"
+                /> */}
+                <Image
+                  style={{ borderRadius: '50%' }}
+                  src="/Pera-logo.png"
+                  alt="Algorand Mobile Wallet"
+                  width={25}
+                  height={25}
                 />
               </Box>
             ) : (
+              // <></>
               <Image
-                src="/Wallet-Connect-icon.svg"
+                style={{ borderRadius: '50%' }}
+                src="/Pera-logo.png"
                 alt="Algorand Mobile Wallet"
                 width={25}
                 height={25}
@@ -69,12 +87,12 @@ const WalletsOptions = ({
                 className="underline ml-2"
                 variant="body_small_bold"
               >
-                Wallet Connect (Pera or Defly)
+                Pera Wallet
               </Typography>
               {isPeraConnected && (
                 <Typography className="italic color-white ml-2 mt-2" variant="body_tiny">
-                  There is a wallet currently connected with Wallet Connect. You must disonnect this
-                  wallet to connect another.
+                  There is a wallet currently connected with Wallet Connect. You must disconnect
+                  this wallet to connect another.
                 </Typography>
               )}
             </Stack>

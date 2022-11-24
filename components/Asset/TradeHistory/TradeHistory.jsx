@@ -1,3 +1,21 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { useCallback, useMemo } from 'react'
+
 import Big from 'big.js'
 import { Box } from '@mui/material'
 import Icon from 'components/Icon'
@@ -11,7 +29,6 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@algodex/algodex-hooks'
 
@@ -45,6 +62,7 @@ const Trades = styled.div`
   flex: 1 1 0;
   position: relative;
   overflow: hidden scroll;
+  scrollbar-width: thin;
   /* width */
   ::-webkit-scrollbar {
     width: 5px;
@@ -138,8 +156,25 @@ export function TradeHistory({ asset, orders: tradesData }) {
 
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
-  const renderHistory = () => {
+  const renderHistory = useCallback(() => {
     const getColor = (type) => (type === 'buyASA' ? 'green.500' : 'red.500')
+
+    const avgPrice = tradesData && tradesData.length > 0 ?
+      tradesData.slice(0, 20).map(row => row.price).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / tradesData.length
+      : 0
+
+    const getPriceDecimals = (avgPrice) => {
+      if (avgPrice > 10000) {
+        return 2
+      } else if (avgPrice > 1000) {
+        return 3
+      } else if (avgPrice > 100) {
+        return 4
+      }
+      return 6
+    }
+
+    const priceDecimals = getPriceDecimals(avgPrice);
 
     return tradesData
       .sort((a, b) => {
@@ -157,7 +192,8 @@ export function TradeHistory({ asset, orders: tradesData }) {
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
             <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-              {floatToFixed(price)}
+              {/* {floatToFixed(price)} */}
+              {floatToFixed(row.price, priceDecimals, 6)}
             </Typography>
             <Typography
               variant="body_tiny_cap"
@@ -167,7 +203,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
               title={amount.toFixed(asset.decimals)}
               m={0}
             >
-              {amount.toFixed(Math.min(3, asset.decimals))}
+              {amount.toFixed(Math.max(0, asset.decimals - 2))}
             </Typography>
             <Typography
               variant="body_tiny_cap"
@@ -182,7 +218,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
           </TradesRow>
         )
       })
-  }
+  }, [asset.decimals, tradesData])
 
   return (
     <Section area="bottomLeft" data-testid="trade-history-section">

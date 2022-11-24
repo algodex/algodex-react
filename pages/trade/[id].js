@@ -1,4 +1,21 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+// import '@/wdyr';
+
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { fetchAssetPrice, fetchAssets } from '@/services/cms'
 import {
   getAssetTotalStatus,
@@ -14,29 +31,58 @@ import MobileLayout from '@/components/Layout/MobileLayout'
 import Page from '@/components/Page'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import { WalletsContext } from '@/hooks/useWallets'
-import config from '@/config.json'
+import { getAlgodexApi } from '@/services/environment'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
-import { useAssetPriceQuery } from '@algodex/algodex-hooks'
+import { useAssetPriceQuery } from '@/hooks/useAssetPriceQuery'
 // import { useAssetPriceQuery } from '@/hooks/useAlgodex'
 import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import { StableAssets } from '@/components/StableAssets'
+import useWallets from '@/hooks/useWallets'
 
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
  */
 export async function getStaticPaths() {
-  let api = new AlgodexApi(config)
+  const api = getAlgodexApi();
   const assets = await api.http.dexd.fetchAssets()
-  const paths = assets
+  const assetSearch = await api.http.dexd.searchAssets('')
+  const assetIdToSearch = assetSearch.assets.reduce((map, asset) => {
+    map.set(asset.assetId, asset);
+    return map;
+  }, new Map());
+
+  const pathsFull = assets
     .filter((asset) => asset.isTraded)
+    // .filter(asset =>  
+    //   asset.id === 452399768 ||
+    //   asset.id === 793124631 ||
+    //   asset.id === 724480511 ||
+    //   asset.id === 31566704 ||
+    //   asset.id === 694432641
+    // )
+    .filter((asset) => {
+      if (asset.id === parseInt(process.env.NEXT_PUBLIC_DEFAULT_ASSET) ||
+          asset.price24Change !== 0) {
+        return true;
+      }
+
+      const algoLiquidity = assetIdToSearch.get(asset.id)?.formattedAlgoLiquidity || 0;
+      // console.log(asset.id + ' ' + algoLiquidity);
+      if (parseFloat(algoLiquidity) > 100) {
+        return true;
+      }
+      return false;
+    })
     .map((asset) => ({
       params: { id: asset.id.toString() }
     }))
+
+  // const paths = pathsFull.slice(0, 10)
+  const paths = pathsFull;
+  console.log('STATIC PATHS: ' + JSON.stringify(paths, null, 2))
   return { paths, fallback: true }
 }
 
@@ -48,10 +94,13 @@ export async function getStaticPaths() {
  */
 export async function getStaticProps({ params: { id } }) {
   let staticExplorerAsset = { id }
+  let originalStaticExplorerAsset
   let staticAssetPrice = {}
-  let api = new AlgodexApi(config)
+
+  const api = getAlgodexApi();
   try {
     staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
+    originalStaticExplorerAsset = staticExplorerAsset
   } catch ({ response: { status } }) {
     switch (status) {
       case 404:
@@ -78,15 +127,17 @@ export async function getStaticProps({ params: { id } }) {
   if (typeof staticAssetPrice.isTraded !== 'undefined') {
     staticExplorerAsset.price_info = staticAssetPrice
   }
-
   staticExplorerAsset.isStable = StableAssets.includes(parseInt(id))
+  console.log(staticExplorerAsset, 'hello here')
   if (typeof staticExplorerAsset.name === 'undefined') {
     staticExplorerAsset.name = ''
   }
 
-  return {
-    props: { staticExplorerAsset }
+  const propsOuter = {
+    props: { staticExplorerAsset, originalStaticExplorerAsset },
+    revalidate: 600 //10 minutes
   }
+  return propsOuter
 }
 
 /**
@@ -124,55 +175,103 @@ function useMobileDetect(isMobileSSR = false) {
  * @returns {JSX.Element}
  * @constructor
  */
-function TradePage({ staticExplorerAsset, deviceType }) {
+function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceType }) {
   // eslint-disable-next-line no-undef
   // console.debug(`TradePage(`, staticExplorerAsset, `)`)
+
   const title = ' | Algodex'
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
-
   const { isFallback, query } = useRouter()
+  const { wallet } = useWallets()
 
-  const [locStorage, setLocStorage] = useState([])
-  const myAlgoConnector = useRef(null)
+  // TODO: refactor all state into useReducer
+
+  // console.log('logging: ', {routerId: query.id, staticId: originalStaticExplorerAsset?.id})
+
+  const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
+
+  const getAndSetRealStaticExplorerAsset = useCallback(async(assetId) => {
+    if (realStaticExplorerAsset && realStaticExplorerAsset === assetId) {
+      return;
+    }
+
+    if (originalStaticExplorerAsset.id === assetId) {
+      setRealStaticExplorerAsset(originalStaticExplorerAsset)
+      return;
+    }
+
+    const api = getAlgodexApi()
+
+    try {
+      const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)
+      _realStaticExplorerAsset.isRestricted =
+        getIsRestricted(assetId) && getAssetTotalStatus(_realStaticExplorerAsset.total)
+      setRealStaticExplorerAsset(_realStaticExplorerAsset)
+    } catch (e) {
+      console.error(e)
+    }
+  }, [originalStaticExplorerAsset, realStaticExplorerAsset]);
 
   useEffect(() => {
-    if (!myAlgoConnector.current) {
-      const reConnectMyAlgoWallet = async () => {
-        // '@randlabs/myalgo-connect' is imported dynamically
-        // because it uses the window object
-        const MyAlgoConnect = (await import('@randlabs/myalgo-connect')).default
-        MyAlgoConnect.prototype.sign = signer
-        myAlgoConnector.current = new MyAlgoConnect()
-        myAlgoConnector.current.connected = true
-      }
-
-      reConnectMyAlgoWallet()
+    if (realStaticExplorerAsset !== undefined && realStaticExplorerAsset.id === parseInt(query.id)) {
+      setRealStaticExplorerAsset(realStaticExplorerAsset)
+      return;
     }
-  }, [])
-  const [addresses, setAddresses] = useContext(WalletsContext)
 
-  useEffect(() => {
-    const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-
-    if (locStorage.length === 0 && storedAddrs?.length > 0) {
-      setLocStorage(storedAddrs)
+    if (query.id === undefined) {
+      return;
     }
-  }, [myAlgoConnector.current, addresses])
 
-  const [asset, setAsset] = useState(staticExplorerAsset)
+    getAndSetRealStaticExplorerAsset(parseInt(query.id))
+  }, [realStaticExplorerAsset, query.id, getAndSetRealStaticExplorerAsset])
+
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
     // Add GeoBlocking
     staticExplorerAsset.isGeoBlocked =
       getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   }
-
   const [interval, setInterval] = useState('1h')
-  const _asset = typeof staticExplorerAsset !== 'undefined' ? staticExplorerAsset : { id: query.id }
+
+  const [asset, setAsset] = useState({...realStaticExplorerAsset})
+
+  const _asset = useMemo(() => {
+    if (typeof staticExplorerAsset !== 'undefined' && staticExplorerAsset.id !== parseInt(query.id)) {
+      console.error('ID mismatch! ', { staticExplorerAsset }, {queryId: parseInt(query.id)})
+    }
+
+    let _asset = undefined;
+    if (typeof staticExplorerAsset !== 'undefined' && (staticExplorerAsset.id === parseInt(query.id))) {
+      _asset = staticExplorerAsset
+      if (realStaticExplorerAsset?.name && realStaticExplorerAsset?.id === parseInt(query.id)) {
+        _asset.name = realStaticExplorerAsset.name
+      }
+    } else if (query.id) {
+      _asset = { ...realStaticExplorerAsset, id: parseInt(query.id) }  
+    } else {
+      _asset = { ...realStaticExplorerAsset }  
+    }
+    setAsset(_asset)
+
+    return _asset
+  }, [query.id, realStaticExplorerAsset, staticExplorerAsset])
+  
   const isMobile = useMobileDetect(deviceType === 'mobile')
 
-  const { data } = useAssetPriceQuery({ asset: _asset })
+  const outerData = useAssetPriceQuery({ asset: _asset })
+  const data = outerData.data
+
+  useMemo(() => {
+    const __asset = data?.asset;
+    if (outerData?.isSuccess && typeof __asset !== 'undefined' && 
+      typeof __asset.id !== 'undefined' && __asset.id === asset?.id) {
+      setAsset(__asset)
+    }
+  }, [data, outerData, setAsset, asset?.id])
+
+  const isTraded = asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
+
   const onChange = useCallback(
     (e) => {
       if (e.target.name === 'interval' && e.target.value !== interval) {
@@ -182,50 +281,17 @@ function TradePage({ staticExplorerAsset, deviceType }) {
     [setInterval, interval]
   )
 
-  useEffect(() => {
-    if (addresses.length === 0 && locStorage.length > 0) {
-      const reHydratedAddresses = locStorage.map((wallet) => {
-        if (wallet.type === 'my-algo-wallet') {
-          return {
-            ...wallet,
-            connector: myAlgoConnector.current
-          }
-        } else {
-          return wallet
-        }
-      })
-      setAddresses(reHydratedAddresses)
-    }
-  }, [locStorage])
-
-  useEffect(() => {
-    if (typeof data !== 'undefined' && typeof data.id !== 'undefined' && data.id !== asset?.id) {
-      setAsset(data)
-    }
-  }, [data, setAsset, staticExplorerAsset])
-  useEffect(() => {
-    if (
-      typeof staticExplorerAsset !== 'undefined' &&
-      typeof staticExplorerAsset.id !== 'undefined' &&
-      staticExplorerAsset.id !== asset?.id
-    ) {
-      setAsset(staticExplorerAsset)
-    }
-  }, [asset, setAsset, staticExplorerAsset])
-
-  const isTraded = useMemo(() => {
-    return asset?.price_info?.isTraded || data?.asset?.price_info?.isTraded
-  }, [asset, data])
-
-  const renderContent = () => {
+  const renderContent = useCallback(() => {
     // Display spinner when invalid state
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
     else return <Chart asset={asset} interval={interval} onChange={onChange} />
-  }
+  }, [asset, asset?.id, asset?.name, 
+      interval, isFallback, isTraded, onChange, showAssetInfo])
 
-  return (
+  return useMemo(() => {
+    return (
     <Page
       title={`${prefix} ${title}`}
       description={'Decentralized exchange for trading Algorand ASAs'}
@@ -234,10 +300,13 @@ function TradePage({ staticExplorerAsset, deviceType }) {
       {!isMobile && <Layout asset={asset}>{renderContent()}</Layout>}
       {isMobile && <MobileLayout asset={asset}>{renderContent()}</MobileLayout>}
     </Page>
-  )
+  )}, [asset?.price_info, asset, asset?.id, asset?.name,
+      isMobile, prefix, renderContent])
 }
+// TradePage.whyDidYouRender = true
 
 TradePage.propTypes = {
+  originalStaticExplorerAsset: PropTypes.object,
   staticExplorerAsset: PropTypes.object,
   staticAssetPrice: PropTypes.object,
   deviceType: PropTypes.string

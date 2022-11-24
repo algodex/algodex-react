@@ -1,28 +1,45 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { Button, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material'
 import {
   Container,
   IconLogo,
   InlineLogo,
   MobileNavContainer,
   MobileNavigation,
-  NavTextLg,
-  NavTextSm,
-  Navigation,
-  NetworkDropdown,
-  NetworkDropdownOption
+  NavTextLgWrapper,
+  NavTextSmWrapper,
+  Navigation
 } from './header.css'
+import { useCallback, useState } from 'react'
 
-import Button from '@mui/material/Button'
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+// import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
+// import Select from '@mui/material/Select'
 import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
+import { getActiveNetwork } from 'services/environment'
 import { truncatedWalletAddress } from 'components/helpers'
+import { useEvent } from 'hooks/useEvents'
 import useMobileDetect from '@/hooks/useMobileDetect'
-import { useState } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 
 const ENABLE_NETWORK_SELECTION =
@@ -33,18 +50,23 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
   const { t } = useTranslation('common')
-  // const { wallet } = useAlgodex()
-  const wallet = useWallets()
-  // console.log(addresses, 'addresses updated')
+  const activeNetwork = getActiveNetwork()
+
+  const { wallet } = useWallets()
   const isMobile = useMobileDetect()
+
+  useEvent('connecting-wallet', (data) => {
+    if (data.isOpen === false) {
+      setOpenWalletConnectDropdown(false)
+    }
+  })
 
   /**
    * Route to other network
    * @type {(function(*): void)|*}
    */
-  const handleNetworkChangeFn = (value) => {
+  const handleNetworkChangeFn = useCallback((value) => {
     if (!ENABLE_NETWORK_SELECTION) {
       return
     }
@@ -53,7 +75,7 @@ export function Header() {
     } else {
       window.location = TESTNET_LINK
     }
-  }
+  }, [])
 
   const MAILBOX_URL =
     activeNetwork === 'testnet'
@@ -62,6 +84,7 @@ export function Header() {
 
   return (
     <Container className="flex" data-testid="header-container">
+      <Stack direction="row" alignItems="center" justifyContent="center">
       <Link href="/trade">
         <a>
           <InlineLogo src="/logo-inline-dark.svg" />
@@ -69,107 +92,129 @@ export function Header() {
         </a>
       </Link>
       &nbsp;
-      <NetworkDropdown
-        data-testid="header-network-dropdown-element"
-        className="font-bold"
-        value={activeNetwork}
-        onChange={(e) => handleNetworkChangeFn(e.target.value)}
-      >
-        <NetworkDropdownOption value="testnet" enableLinks={ENABLE_NETWORK_SELECTION}>
-          TESTNET
-        </NetworkDropdownOption>
-        <NetworkDropdownOption value="mainnet" enableLinks={ENABLE_NETWORK_SELECTION}>
-          MAINNET
-        </NetworkDropdownOption>
-      </NetworkDropdown>
-      <Navigation data-testid="header-navigation-element">
-        <NavActiveLink href="/about" matches={/^\/about/}>
-          <NavTextLg>{t('header-about')}</NavTextLg>
-        </NavActiveLink>
-        {/*<a target="_blank" href="//about.algodex.com" rel="noreferrer">*/}
-        {/*  <NavTextLg>{t('header-about')}</NavTextLg>*/}
-        {/*</a>*/}
-        <NavActiveLink href="/trade" matches={/^\/trade/}>
-          <NavTextLg>{t('header-trade')}</NavTextLg>
-        </NavActiveLink>
-        {/* <NavActiveLink href="/docs" matches={/^\/docs/}>
-          <NavTextLg>{t('header-docs')}</NavTextLg>
-        </NavActiveLink> */}
-        <NavActiveLink href="https://docs.algodex.com/">
-          <NavTextLg>{t('header-docs')}</NavTextLg>
-        </NavActiveLink>
-        {/*<a*/}
-        {/*  target="_blank"*/}
-        {/*  href="//about.algodex.com/docs/trading-algorand-standard-assets-testnet/"*/}
-        {/*  rel="noreferrer"*/}
-        {/*>*/}
-        {/*  <NavTextLg>{t('header-docs')}</NavTextLg>*/}
-        {/*</a>*/}
-        <NavActiveLink href="/support" matches={/^\/support/}>
-          <NavTextLg>{t('header-support')}</NavTextLg>
-        </NavActiveLink>
-        <NavActiveLink href={MAILBOX_URL}>
-          <NavTextLg>{t('header-mailbox')}</NavTextLg>
-        </NavActiveLink>
-        {/*<a target="_blank" href="//about.algodex.com/support/" rel="noreferrer">*/}
-        {/*  <NavTextLg>{t('header-support')}</NavTextLg>*/}
-        {/*</a>*/}
-        {/*
-        <ActiveLink href="/wallet">
-          <NavTextLg>Wallet</NavTextLg>
-        </ActiveLink>
-        <ActiveLink href="/support">
-          <NavTextLg>Support</NavTextLg>
-        </ActiveLink>
-        */}
-        {/* <NavIcon color="gray.500">
-          <Bell />
-        </NavIcon>
-        <NavIcon color="gray.500">
-          <User />
-        </NavIcon>
-        <NavTextLg onClick={async () => await setLanguage("en")}>
-        </NavIcon> */}
-        {!isMobile && (
+      <FormControl className='ml-2 sm:ml-2 md:ml-4 lg:ml-6' sx={{ minWidth: 100 }} size="small">
+        <Select
+          variant="filled"
+          data-testid="header-network-dropdown-element"
+          labelId="demo-select-small"
+          id="demo-select-small"
+          value={activeNetwork}
+          onChange={(e) => handleNetworkChangeFn(e.target.value)}
+          sx={{
+            color: activeNetwork == 'mainnet' ? 'blue.500' : 'green.500',
+            borderRadius: '3px',
+            border: 0,
+            outline: '2px solid',
+            '& .MuiSelect-icon': {
+              fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
+              color: `unset !important`
+            }
+          }}
+          inputProps={{
+            sx: {
+              padding: '0.1rem 0.4rem',
+              fontSize: '14px',
+              fontWeight: 'bolder'
+            }
+          }}
+        >
+          <MenuItem
+            value="testnet"
+            sx={{ color: 'gray.300' }}
+          >
+            TESTNET
+          </MenuItem>
+          <MenuItem
+            sx={{ color: 'gray.300' }}
+            value="mainnet"
+          >
+            MAINNET
+          </MenuItem>
+        </Select>
+      </FormControl>
+      </Stack>
+      {!isMobile && (
+        <Navigation data-testid="header-navigation-element">
+          <NavActiveLink href="/about" matches={/^\/about/}>
+            <NavTextLgWrapper isMobile={isMobile}>
+              <Typography variant="navText">{t('header-about')}</Typography>
+            </NavTextLgWrapper>
+          </NavActiveLink>
+          <NavActiveLink href="/trade" matches={/^\/trade/}>
+            <NavTextLgWrapper isMobile={isMobile}>
+              <Typography variant="navText">{t('header-trade')}</Typography>
+            </NavTextLgWrapper>
+          </NavActiveLink>
+          <NavActiveLink href="https://docs.algodex.com/">
+            <NavTextLgWrapper isMobile={isMobile}>
+              <Typography variant="navText">{t('header-docs')}</Typography>
+            </NavTextLgWrapper>
+          </NavActiveLink>
+          <NavActiveLink href="/support" matches={/^\/support/}>
+            <NavTextLgWrapper isMobile={isMobile}>
+              <Typography variant="navText">{t('header-support')}</Typography>
+            </NavTextLgWrapper>
+          </NavActiveLink>
+          <NavActiveLink href={MAILBOX_URL}>
+            <NavTextLgWrapper isMobile={isMobile}>
+              <Typography variant="navText">{t('header-mailbox')}</Typography>
+            </NavTextLgWrapper>
+          </NavActiveLink>
+          <NavActiveLink href="https://rewards.algodex.com/">
+            <NavTextLgWrapper isMobile={isMobile}>
+              <Typography variant="navText">{t('header-rewards')}</Typography>
+            </NavTextLgWrapper>
+          </NavActiveLink>
           <Button
-            onClick={() => setOpenWalletConnectDropdown(!openWalletConnectDropdown)}
-            className="font-semibold hover:font-bold text-white border-white hover:border-white"
+            onClick={() => {
+              setOpenWalletConnectDropdown(!openWalletConnectDropdown)
+            }}
+            sx={{ minWidth: '4rem'}}
+            className="md:text-xs sm:text-xs lg:text-md font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
-            {wallet && wallet?.address
+            {wallet && wallet?.connector?.connected && wallet?.address
               ? `${truncatedWalletAddress(wallet.address, 5)}`
               : 'CONNECT A WALLET'}
           </Button>
-        )}
-        {!isMobile && openWalletConnectDropdown && (
-          <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
-        )}
-        <LanguageSelection isMobile={false} />
-        <LanguageSelection isMobile={true} /> &nbsp;&nbsp;&nbsp;
-        <Hamburger onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
-      </Navigation>
+          {openWalletConnectDropdown && (
+            <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
+          )}
+          <LanguageSelection isMobile={isMobile} />
+        </Navigation>
+      )}
+      {isMobile && <Stack direction="row" alignItems="center" justifyContent="center">
+        <LanguageSelection isMobile={isMobile} />
+        <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+      </Stack>
+      }
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
           <NavActiveLink href="/trade" matches={/^\/trade/}>
-            <NavTextSm>Trade</NavTextSm>
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Trade</Typography>
+            </NavTextSmWrapper>
           </NavActiveLink>
           <NavActiveLink target="_blank" href="https://docs.algodex.com/" rel="noreferrer">
-            <NavTextSm>Docs</NavTextSm>
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Docs</Typography>
+            </NavTextSmWrapper>
           </NavActiveLink>
-          <NavActiveLink target="_blank" href="//about.algodex.com/support/" rel="noreferrer">
-            <NavTextSm>Support</NavTextSm>
+          <NavActiveLink target="_blank" href="/support" rel="noreferrer">
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Support</Typography>
+            </NavTextSmWrapper>
           </NavActiveLink>
           <NavActiveLink target="_blank" href={MAILBOX_URL} rel="noreferrer">
-            <NavTextSm>Mailbox</NavTextSm>
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Mailbox</Typography>
+            </NavTextSmWrapper>
           </NavActiveLink>
-          {/*
-          <ActiveLink href="/wallet">
-            <NavTextSm>Wallet</NavTextSm>
-          </ActiveLink>
-          <ActiveLink href="/support">
-            <NavTextSm>Support</NavTextSm>
-          </ActiveLink>
-          */}
+          <NavActiveLink target="_blank" href="https://rewards.algodex.com/" rel="noreferrer">
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Rewards</Typography>
+            </NavTextSmWrapper>
+          </NavActiveLink>
         </MobileNavContainer>
       </MobileNavigation>
     </Container>
@@ -181,3 +226,6 @@ Header.propTypes = {
 }
 
 export default Header
+
+
+

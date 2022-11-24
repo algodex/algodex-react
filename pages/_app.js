@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import '../styles/global.css'
 
 import * as React from 'react'
@@ -23,13 +39,13 @@ import { Toaster } from 'react-hot-toast'
 import { WalletsProvider } from '@/hooks/useWallets'
 // import AlgodexApi from '@algodex/algodex-sdk'
 // import { Provider } from '@algodex/algodex-hooks'
-import config from '@/config.json'
 // import AlgodexApi from '@algodex/algodex-sdk'
 // import { Provider } from '@algodex/algodex-hooks'
 import createEmotionCache from '@/utils/createEmotionCache'
 import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
+import { getAlgodexApi } from '@/services/environment'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -41,7 +57,7 @@ let api
  */
 function makeApi() {
   if (typeof api === 'undefined') {
-    api = new AlgodexApi(config)
+    api = getAlgodexApi()
   }
   return api
 }
@@ -52,9 +68,11 @@ const styles = css`
   html {
     height: 100%;
   }
+  
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
+    scrollbar-width: thin;
   }
   ::-webkit-scrollbar-track {
     background: ${theme.palette.gray[900]};
@@ -68,6 +86,14 @@ const styles = css`
   }
   ::-webkit-scrollbar-corner {
     background: ${theme.palette.gray[700]};
+  }
+  .tv-lightweight-charts {
+    top: -0rem;
+    position: absolute;
+  }
+  #pera-wallet-connect-modal-wrapper {
+    position: fixed;
+    z-index: 9999;
   }
 `
 
@@ -118,11 +144,11 @@ function Algodex(props) {
   )
 }
 
-Algodex.getInitialProps = async (ctx) => {
-  const initialProps = await NextApp.getInitialProps(ctx)
-  const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
-  return { pageProps: { ...initialProps, deviceType } }
-}
+// Algodex.getInitialProps = async (ctx) => {
+//   const initialProps = await NextApp.getInitialProps(ctx)
+//   const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
+//   return { pageProps: { ...initialProps, deviceType } }
+// }
 
 Algodex.propTypes = {
   Component: PropTypes.elementType.isRequired,

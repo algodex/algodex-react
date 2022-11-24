@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
@@ -5,14 +21,14 @@ import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import { mdiOpenInNew } from '@mdi/js'
 import styled from '@emotion/styled'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import useUserStore from '@/store/use-user-state'
+import { getActiveNetwork } from 'services/environment'
 
 const OrderTypeSpan = styled.span`
-  color: ${({ theme, value }) =>
-    ('' + value).toUpperCase() === 'BUY' ? theme.palette.green[500] : theme.palette.red[500]};
+  color: ${({ theme, value }) => 
+    ('' + value).toUpperCase() === 'BUY' ? theme.palette.green[500] : theme.palette.red[500]}
 `
 
 const TradeDetailLink = styled.a`
@@ -30,10 +46,20 @@ const TradeDetailLink = styled.a`
  */
 export const AssetNameCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
-  const assetId = row?.original?.asset?.id || row?.original?.id
+  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id])
   const onClick = useCallback(() => {
     dispatcher('clicked', 'asset')
   }, [dispatcher])
+
+  const formattedPair = (value) => {
+    const splittedPair = value.split('/')
+    if (row.original.isStable && typeof splittedPair[1] !== 'undefined') {
+      return `${splittedPair[1]}/${splittedPair[0]}`
+    } else {
+      return value
+    }
+  }
   return (
     <Link href={`/trade/${assetId}`}>
       {/* <button className="cursor-pointer text-left whitespace-normal"> */}
@@ -43,7 +69,7 @@ export const AssetNameCell = ({ value, row }) => {
         variant="body_small"
         color="gray.000"
       >
-        {value}
+        {formattedPair(value)}
       </Typography>
       {/* </button> */}
     </Link>
@@ -59,11 +85,22 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
  * @returns {JSX.Element}
  * @constructor
  */
-export const OrderTypeCell = ({ value }) => {
+export const OrderTypeCell = ({ row, value }) => {
   const { t } = useTranslation('orders')
+
+  const formattedPair = (value) => {
+    if (row.original.isStable) {
+      return value === 'BUY' ? t('sell') : t('buy')
+    } else {
+      return t(value.toLowerCase())
+      // console.log(value, 'value here')
+    }
+  }
+
   return (
-    <OrderTypeSpan title={value} data-testid="cell-item" value={value}>
-      {t(value.toLowerCase())}
+    <OrderTypeSpan title={formattedPair(value)} isStable={row.original.isStable} data-testid="cell-item" value={formattedPair(value)}>
+      {formattedPair(value)}
+      {/* {t(value.toLowerCase())} */}
     </OrderTypeSpan>
   )
 }
@@ -79,7 +116,7 @@ OrderTypeCell.propTypes = { value: PropTypes.any }
  * @constructor
  */
 export const ExpandTradeDetail = ({ value, row }) => {
-  const activeNetwork = useUserStore((state) => state.activeNetwork)
+  const activeNetwork = getActiveNetwork()
 
   // Open Trader History Link
   const explorerOpenOrderURL =

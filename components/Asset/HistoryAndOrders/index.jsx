@@ -1,8 +1,24 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import OrderBook from '@/components/Asset/OrderBook'
 import PropTypes from 'prop-types'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 
 const Tab = styled.div`
@@ -55,7 +71,7 @@ function HistoryAndOrderBook({ asset, isMobile }) {
   const ORDER_BOOK_PANEL = 'order-book'
   const TRADE_HISTORY_PANEL = 'trade-history'
 
-  const renderPanel = (panelName) => {
+  const renderPanel = useCallback((panelName) => {
     switch (panelName) {
       case ORDER_BOOK_PANEL:
         return <OrderBook isMobile={isMobile} asset={asset} />
@@ -64,7 +80,7 @@ function HistoryAndOrderBook({ asset, isMobile }) {
       default:
         return null
     }
-  }
+  }, [asset, isMobile])
 
   return (
     <Container>

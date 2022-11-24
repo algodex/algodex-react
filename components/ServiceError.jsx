@@ -1,7 +1,26 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React, { useMemo } from 'react'
+
 import { AlertIcon } from 'components/Icon'
 import PropTypes from 'prop-types'
 import { parseThemeColor } from 'theme'
 import styled from '@emotion/styled'
+
 export const FlexContainer = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -39,8 +58,8 @@ const Message = styled.p`
  * @constructor
  */
 export function ServiceError({ size, color, flex, message, Icon }) {
-  const showMsg = message?.length > 0
-  return flex ? (
+  const showMsg = useMemo(() => message?.length > 0, [message?.length])
+  const serviceError = useMemo(() => flex ? (
     <FlexContainer data-testid="flex-service">
       <Icon size={size} color={color} />
       {showMsg && (
@@ -54,7 +73,8 @@ export function ServiceError({ size, color, flex, message, Icon }) {
       <Icon size={size} color={color} />
       {message}
     </Message>
-  )
+  ), [Icon, color, flex, message, showMsg, size])
+  return serviceError
 }
 
 ServiceError.propTypes = {
@@ -62,7 +82,7 @@ ServiceError.propTypes = {
   color: PropTypes.string,
   message: PropTypes.string,
   flex: PropTypes.bool,
-  Icon: PropTypes.element
+  Icon: PropTypes.any
 }
 
 ServiceError.defaultProps = {

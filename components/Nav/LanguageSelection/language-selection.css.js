@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 // import { color, fontSize } from 'styled-system'
 
 import ReactCountryFlag from 'react-country-flag'
@@ -16,7 +32,7 @@ export const NavTextLg = styled.span`
   color: ${(color) => color}
   cursor: pointer;
   transition: color 0.1s ease-in;
-
+  padding-left: 0.6rem;
   &:hover {
     color: ${({ theme }) => theme.palette.gray[100]};
   }
@@ -127,12 +143,19 @@ export const LanguageDropdownContainerMob = styled.div`
 
 export const LanguagesContainer = styled.ul`
   width: 100px;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-left: 2rem;
+  line-height: 0;
   &:hover,
   &:focus-within {
     ul {
       position: absolute;
       display: block;
-      top: 20px;
+      top: 0px;
+      padding: 0 1rem;
+      height: 29rem;
     }
   }
 `
@@ -141,7 +164,7 @@ export const LanguageDropDown = styled.ul`
   background-color: ${({ theme }) => theme.palette.gray[900]};
   display: none;
   max-height: 500px;
-  overflow: scroll;
+  overflow-y: scroll;
   right: 2rem;
   margin: 0;
   padding: 0;

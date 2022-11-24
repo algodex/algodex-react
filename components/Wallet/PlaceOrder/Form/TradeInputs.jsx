@@ -1,16 +1,35 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { forwardRef, useMemo } from 'react'
+
 import AdvancedOptions from './AdvancedOptions'
 import Big from 'big.js'
 import { FormHelperText } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialBox } from '@mui/material/Box'
+import {NumericFormat} from 'react-number-format';
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
-import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+
 /**
  *
  * Render USD Price for an input component
@@ -24,7 +43,7 @@ export const USDInputPrice = ({ value, id }) => {
         USD {id === 'price' ? 'Price' : 'Total'}{' '}
       </Typography>
       <Typography color="gray.400" variant="body_tiny_cap">
-        <USDPrice priceToConvert={value} />
+        <USDPrice priceToConvert={parseFloat(value)} />
         <span className="ml-4 mr-3">USD</span>
       </Typography>
     </div>
@@ -35,6 +54,37 @@ USDInputPrice.propTypes = {
   value: PropTypes.number,
   id: PropTypes.string
 }
+export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
+  const { decimals, onChange, ...other } = props;
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.formattedValue,
+          },
+        });
+      }}
+      allowLeadingZeros
+      allowNegative={false}
+      decimalScale={decimals}
+    />
+  );
+});
+
+NumberFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  decimals: PropTypes.number
+};
+
+NumberFormatCustom.defaultProps = {
+  decimals: 6
+}
+
 
 const OutlinedInputComp = ({
   microAlgo,
@@ -63,12 +113,17 @@ const OutlinedInputComp = ({
         id={id}
         type="number"
         readOnly={name === 'price' && executionType === 'market'}
-        pattern="\d*"
         disabled={name === 'price' && executionType === 'market'}
         value={value}
         onChange={handleChange}
         inputProps={{
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          },
           decimals: 6,
+          pattern: '[0-9]*.[0-9]*',
           min: '0',
           step: '0.000001'
         }}
@@ -88,9 +143,9 @@ const OutlinedInputComp = ({
         <FormHelperText className="mt-0 mx-4 mb-4" error>
           Price cannot be less than {microAlgo}
         </FormHelperText>
-      ) : (
-        <USDInputPrice value={value} id="price" />
-      )}
+      ) : 
+        name === 'price' && <USDInputPrice value={value} id="price" />
+      }
     </>
   )
 }
@@ -172,19 +227,25 @@ export const TradeInputs = ({
           backgroundColor:
             order.execution === 'market' ? theme.palette.gray['700'] : theme.palette.gray['900'],
           border: order.execution === 'market' ? 0 : 2,
-          borderColor: theme.palette.gray['700']
+          borderColor: theme.palette.gray['700'],
         }}
-        name="price"
-        type="number"
-        readOnly={order.execution === 'market'}
-        pattern="\d*"
-        disabled={order.execution === 'market'}
-        value={order.price}
+        value={order.price || ''}
         onChange={handleChange}
+        placeholder='0.00'
+        name="price"
+        inputComponent={NumberFormatCustom}
+        decimals={6}
         inputProps={{
           decimals: 6,
+          pattern: '[0-9]*.[0-9]*',
           min: '0',
-          step: '0.000001'
+          step: '0.000001',
+          placeholder: '0.00',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         startAdornment={
           <MUIInputAdornment position="start">
@@ -198,6 +259,7 @@ export const TradeInputs = ({
         }
         error={isErrorMsgVisible}
       />
+
       {isErrorMsgVisible && order.execution !== 'market' ? (
         <FormHelperText className="mt-0 mx-4 mb-4" error>
           Price cannot be less than {microAlgo}
@@ -256,23 +318,32 @@ export const TradeInputs = ({
           />
         </>
       )}
-
+      {/* <USDInputPrice value={parseFloat(order.price)} id="price" /> */}
       {/* <OutlinedInput
         id="amount"
-        type="number"
-        pattern="\d*"
         name="amount"
+        placeholder='0.00'
+        value={order.amount || ''}
+        inputComponent={NumberFormatCustom}
+        inputProps={{
+          decimals: asset.decimals,
+          min: '0',
+          pattern: '[0-9]*.[0-9]*',
+          step: new Big(10).pow(-1 * asset.decimals).toString(),
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
+        }}
         sx={{
           backgroundColor: theme.colors.gray['900'],
           border: 2,
           borderColor: theme.colors.gray['700'],
           marginBottom: '1rem'
         }}
-        value={order.amount}
         onChange={handleChange}
-        step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}
-        // inputMode="decimal"
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
@@ -299,6 +370,7 @@ export const TradeInputs = ({
       />
       <OutlinedInput
         id="total"
+        min="0"
         name="total"
         type="number"
         value={order.total}
@@ -306,6 +378,13 @@ export const TradeInputs = ({
         disabled
         sx={{
           backgroundColor: theme.colors.gray['700']
+        }}
+        inputProps={{
+          sx: {
+            '&.Mui-disabled': {
+              color: `${order.total ? 'white !important' : 'gray.500'}`
+            }
+          }
         }}
         startAdornment={
           <MUIInputAdornment position="start">
@@ -329,7 +408,7 @@ export const TradeInputs = ({
           <span className="ml-4 mr-3">USD</span>
         </Typography>
       </MaterialBox>
-      <USDInputPrice value={order.total} id="total" />
+      <USDInputPrice value={parseFloat(order.total)} id="total" />
       {/* <TxnFeeContainer>
         <Typography color="gray.500" textTransform="none">
           Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

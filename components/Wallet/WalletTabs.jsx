@@ -1,4 +1,20 @@
-import { useAlgodex, useWallets } from '@algodex/algodex-hooks'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { useCallback, useState } from 'react'
 
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -6,7 +22,7 @@ import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useAlgodex } from '@algodex/algodex-hooks'
 import useTranslation from 'next-translate/useTranslation'
 
 const Tab = styled.div`
@@ -70,6 +86,7 @@ const PanelWrapper = styled.section`
   flex-direction: column;
   flex: 1 1 0%;
   overflow: hidden scroll;
+  scrollbar-width: thin;
   @media (max-width: 1536px) {
     overflow: scroll hidden;
   }
@@ -86,19 +103,17 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
+const OPEN_ORDERS_PANEL = 'open-orders'
+const ORDER_HISTORY_PANEL = 'order-history'
+const ASSETS_PANEL = 'assets'
+
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
-  const { wallet: initialState, isConnected } = useAlgodex()
-  const { wallet } = useWallets(initialState)
-  // const isConnected = typeof wallet?.address !== 'undefined'
+  const { wallet, isConnected } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-  const OPEN_ORDERS_PANEL = 'open-orders'
-  const ORDER_HISTORY_PANEL = 'order-history'
-  const ASSETS_PANEL = 'assets'
 
-  const renderPanel = (panelName) => {
-    // if (!isSignedIn) return <div></div>
-    if (!isConnected) return <div></div>
+  const renderPanel = useCallback((panelName) => {
+    if (!isConnected || !wallet?.connector.connected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
         return <WalletOpenOrdersTable wallet={wallet} />
@@ -109,7 +124,9 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
       default:
         return null
     }
-  }
+  }, [isConnected, wallet])
+
+  
 
   return (
     <Section area={area} borderColor="blue" border="dashed">
@@ -138,7 +155,6 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
           </Tab>
         </Header>
         <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper>
-        {/* {renderPanel(selectedPanel)} */}
       </Container>
     </Section>
   )

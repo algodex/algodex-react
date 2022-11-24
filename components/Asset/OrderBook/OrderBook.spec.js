@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { OrderBookPrice as OrderBookPriceView } from './OrderBook'
 import { OrderBook as OrderBookView } from './OrderBook'
 import React from 'react'
@@ -5,7 +21,16 @@ import { render } from 'test/test-utils'
 
 const SELL_ROW = 'order-book-sell-row'
 const BUY_ROW = 'order-book-buy-row'
-
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "",
+      query: "",
+      asPath: "",
+    };
+  },
+}));
 describe('Order Book', () => {
   const asset = {
     id: 15322902,
@@ -67,12 +92,6 @@ describe('Order Book', () => {
 
     expect(queryByTestId(SELL_ROW)).not.toBeNull()
     expect(queryByTestId(BUY_ROW)).not.toBeNull()
-  })
-
-  it('should render empty price info', () => {
-    const { queryByTestId } = render(<OrderBookPriceView />)
-    expect(queryByTestId('no-price-info')).not.toBeNull()
-    expect(queryByTestId('has-price-info')).toBeNull()
   })
 
   it('should reflect price increase', () => {

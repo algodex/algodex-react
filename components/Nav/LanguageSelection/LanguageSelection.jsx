@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import {
   Flag,
   LanguageButton,
@@ -5,16 +21,15 @@ import {
   LanguageDropdownContainerMob,
   LanguageItem,
   LanguagesContainer,
-  NavTextLg,
-  NavTextSm
 } from './language-selection.css'
+import { useCallback, useState } from 'react'
 
 // import Link from 'next/link'
 import Link from '@/components/Nav/Link'
 import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
 import i18n from 'i18n.json'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 
 // import useTranslation from 'next-translate/useTranslation'
 
@@ -53,23 +68,23 @@ export const LanguageSelection = ({ isMobile }) => {
   const { asPath, locale } = useRouter()
   const [isLanguageOpen, setIsLanguageOpen] = useState(false)
 
-  const renderLanguageMobile = () => {
+  const renderLanguageMobile = useCallback(() => {
     const locales = i18n.locales.filter((localeCd) => localeCd !== locale)
     return locales.map((localeCd, idx) => {
       return (
         <Link key={idx} href={asPath} locale={localeCd} data-testid="dropdown-item-mobile">
-          <NavTextSm
+          <Typography sx={{ lineHeight: '2rem', color: 'gray.500' }} variant="navText"
             onClick={() => setIsLanguageOpen(!isLanguageOpen)}
             style={{ marginBottom: '0.4rem' }}
             data-testid="dropdown-action-mobile"
           >
             {localeCd}{' '}
             <Flag data-testid="flat-item-mobile" countryCode={localeToFlags[localeCd]} svg />
-          </NavTextSm>
+          </Typography>
         </Link>
       )
     })
-  }
+  }, [asPath, isLanguageOpen, locale])
 
   const renderForMobile = () => {
     return (
@@ -79,9 +94,10 @@ export const LanguageSelection = ({ isMobile }) => {
           role="button"
           onClick={() => setIsLanguageOpen(!isLanguageOpen)}
         >
-          <NavTextSm>
-            {locale} <Flag countryCode={localeToFlags[locale]} svg />
-          </NavTextSm>
+          <Typography sx={{ color: 'gray.500' }} variant="navText">
+            {locale}
+            <Flag countryCode={localeToFlags[locale]} svg />
+          </Typography>
         </LanguageButton>
         {isLanguageOpen && (
           <LanguageDropdownContainerMob data-testid="dropdown-container-mobile">
@@ -96,18 +112,19 @@ export const LanguageSelection = ({ isMobile }) => {
     return (
       <LanguagesContainer>
         <Link href={asPath} locale={locale} data-testid="dropdown-button-web">
-          <NavTextLg>
+          <Typography sx={{ color: 'gray.500' }} variant="navText">
             {locale}
             <Flag countryCode={localeToFlags[locale]} svg />
-          </NavTextLg>
+          </Typography>
         </Link>
 
         <LanguageDropDown data-testid="dropdown-container-web">
           <LanguageItem key={locale}>
             <Link href={asPath} locale={locale}>
-              <NavTextLg>
-                {locale} <Flag countryCode={localeToFlags[locale]} svg />
-              </NavTextLg>
+              <Typography sx={{ color: 'gray.500' }} variant="navText">
+                {locale}
+                <Flag countryCode={localeToFlags[locale]} svg />
+              </Typography>
             </Link>
           </LanguageItem>
           {i18n.locales
@@ -115,9 +132,10 @@ export const LanguageSelection = ({ isMobile }) => {
             .map((localeCd) => (
               <LanguageItem key={localeCd} data-testid="dropdown-item-web">
                 <Link href={asPath} locale={localeCd}>
-                  <NavTextLg>
-                    {localeCd} <Flag countryCode={localeToFlags[localeCd]} svg />
-                  </NavTextLg>
+                  <Typography sx={{ color: 'gray.500' }} variant="navText">
+                    {localeCd}
+                    <Flag countryCode={localeToFlags[localeCd]} svg />
+                  </Typography>
                 </Link>
               </LanguageItem>
             ))}

@@ -1,5 +1,23 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { useEffect, useRef } from 'react'
+
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
+
 const ERROR = {
   FAILED_TO_INIT: 'MyAlgo Wallet failed to initialize.',
   FAILED_TO_CONNECT: 'MyAlgo Wallet failed to connect.'
@@ -15,8 +33,8 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
   // Instance reference
   const myAlgoWallet = useRef()
 
-  const disconnect = () => {
-    onDisconnect()
+  const disconnect = (wallet) => {
+    onDisconnect([wallet.address])
   }
   const connect = async () => {
     try {
@@ -36,7 +54,6 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
         acct.connector.connected = true
         return acct
       })
-      console.debug('Setting Address form myAlgoConnect', _addresses)
       // Set Addresses
       onConnect(_addresses)
     } catch (e) {
@@ -44,6 +61,7 @@ export default function useMyAlgoConnect(onConnect, onDisconnect) {
     }
   }
   useEffect(() => {
+    console.log('Initialize MyAlgo Connect')
     const initMyAlgoWallet = async () => {
       // '@randlabs/myalgo-connect' is imported dynamically
       // because it uses the window object

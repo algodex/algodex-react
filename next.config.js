@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 // This file sets a custom webpack configuration to use your Next.js app
 // with Sentry.
@@ -12,14 +28,16 @@ const getDefaultAsset = () => {
 }
 
 const PUBLIC_API = process.env.NEXT_PUBLIC_API
+const ALGODEX_API_V2 = process.env.ALGODEX_API_V2
 
 if (typeof PUBLIC_API === 'undefined') throw new Error('Must have Public API!')
+if (typeof ALGODEX_API_V2 === 'undefined') throw new Error('Must have ALGODEX_API_V2!')
 
 const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
-const nextPWA = require('next-pwa')
-
-const moduleExports = nextPWA(
+// const nextPWA = require('next-pwa')
+console.log({ ALGODEX_API_V2 })
+const moduleExports = 
   nextTranslate({
     // experimental: {
     //   // this will allow nextjs to resolve files (js, ts, css)
@@ -40,16 +58,20 @@ const moduleExports = nextPWA(
           },
           {
             source: '/support/upload',
-            destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+            destination: `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=${process.env.HUBSPOT_APIKEY}`
           },
           {
             source: '/support/engagement',
-            destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
+            destination: `https://api.hubapi.com/engagements/v1/engagements?hapikey=${process.env.HUBSPOT_APIKEY}`
           },
           {
             source: '/support/ticket',
-            destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.NEXT_PUBLIC_HUBSPOT_APIKEY}`
-          }
+            destination: `https://api.hubapi.com/crm-objects/v1/objects/tickets?hapikey=${process.env.HUBSPOT_APIKEY}`
+          },
+          {
+            source: '/api/v2/:path*',
+            destination: `${ALGODEX_API_V2}/:path*`
+          },
         ]
       }
     },
@@ -67,7 +89,7 @@ const moduleExports = nextPWA(
         }
       ]
     }
-  })
+  }
 )
 
 const SentryWebpackPluginOptions = {

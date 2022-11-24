@@ -1,9 +1,26 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import {
   AssetId,
   AssetName,
   AssetNameBlock,
   NameVerifiedWrapper
 } from '@/components/Asset/Typography'
+import { getAssetTotalStatus, getIsRestricted, getIsRestrictedCountry } from '../../../utils/restrictedAssets'
 import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -17,12 +34,14 @@ import { StableAssets } from '@/components/StableAssets'
 import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
-// import { floatToFixedDynamic } from '@/services/display'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import {floatToFixedDisplay} from '@/services/display';
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
 import theme from 'theme'
+import useMobileDetect from '@/hooks/useMobileDetect'
+import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@algodex/algodex-hooks'
@@ -45,6 +64,7 @@ import { withSearchResultsQuery } from '@algodex/algodex-hooks'
 export const mapToSearchResults = ({
   assetId,
   assetName,
+  decimals,
   formattedPrice,
   priceChg24Pct,
   hasOrders,
@@ -57,7 +77,7 @@ export const mapToSearchResults = ({
   formattedAlgoLiquidity,
   isStable
 }) => {
-  const price = formattedPrice ? floatToFixed(formattedPrice) : hasOrders ? '--' : null
+  const price = formattedPrice ? floatToFixedDisplay(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
     ? floatToFixed(priceChg24Pct, 2)
@@ -76,7 +96,8 @@ export const mapToSearchResults = ({
     liquidityAsa: formattedASALiquidity,
     price,
     change,
-    isStable
+    isStable,
+    decimals
   }
 }
 
@@ -132,7 +153,7 @@ const Algos = styled(AlgoIcon)`
 `
 
 export const AssetChangeCell = ({ value, row }) => {
-  const displayChange = () => {
+  const displayChange = useCallback(() => {
     if (value === null) {
       return ''
     }
@@ -144,7 +165,7 @@ export const AssetChangeCell = ({ value, row }) => {
         className={row?.original?.isGeoBlocked ? 'opacity-100' : 'opacity-100'}
       >{`${value}%`}</span>
     )
-  }
+  }, [row?.original?.isGeoBlocked, value])
   return (
     <AssetChange className="cursor-pointer" value={value} data-testid="asa-change-cell">
       {displayChange()}
@@ -170,7 +191,10 @@ export const NavSearchTable = ({
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
+  const isMobile = useMobileDetect()
+
   const searchTableRef = useRef()
+  const router = useRouter()
   const { t } = useTranslation('assets')
 
   const filterByFavoritesFn = useCallback(
@@ -197,7 +221,7 @@ export const NavSearchTable = ({
     handleResize()
 
     return () => removeEventListener('resize', handleResize)
-  }, [searchTableRef, setSearchTableSize])
+  }, [searchTableRef, setSearchTableSize, gridSize])
 
   const toggleFavoritesFn = useCallback(
     (assetId) => {
@@ -216,6 +240,25 @@ export const NavSearchTable = ({
   const formattedAssets = StableAssets.forEach(
     (asa, index) => (formattedStableAsa[StableAssets[index]] = asa)
   )
+
+  const handleRestrictedAsset = useCallback((assetsList) => {
+    if (typeof assetsList !== 'undefined') {
+      return {
+        assets: assetsList.map((asset) => {
+          const isRestricted =
+            getIsRestricted(`${asset.assetId}`) && getAssetTotalStatus(asset.total)
+          return {
+            ...asset,
+            isRestricted,
+            isGeoBlocked: getIsRestrictedCountry(router.query) && isRestricted
+          }
+        })
+      }
+    } else {
+      return assetsList
+    }
+  }, [router.query])
+
   /**
    * Handle Search Data
    * @type {Array}
@@ -226,16 +269,26 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
+    
+    // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
-    const filteredList = sortBy(_acceptedAssets, { isGeoBlocked: true })
-
+    // Geoformatted assets
+    const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
+    // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
+    } else if (isListingVerifiedAssets && isFilteringByFavorites) {
+      // Listing verified favourited assets
+      const result = Object.keys(favoritesState).map((assetId) => {
+        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
+      })
+      return flatten(result).filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isListingVerifiedAssets) {
-      // Return only verified assets
+      // Listing only verified assets
       return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
     } else if (isFilteringByFavorites) {
-      // Filter assets by favorites
+      // Listing only favourited assets
       const result = Object.keys(favoritesState).map((assetId) => {
         return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
       })
@@ -244,7 +297,9 @@ export const NavSearchTable = ({
       // If there is data, use it
       return filteredList.map(mapToSearchResults)
     }
-  }, [assets, favoritesState, isListingVerifiedAssets, isFilteringByFavorites])
+
+  }, [assets, handleRestrictedAsset,
+      isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
@@ -271,8 +326,9 @@ export const NavSearchTable = ({
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
+      // console.log(row, value, 'row and value')
       return (
-        <div className="cursor-pointer flex flex-col">
+        <div className="flex flex-col">
           <div
             className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'} flex flex-col`}
           >
@@ -310,8 +366,8 @@ export const NavSearchTable = ({
                 </AssetNameBlock>
               )}
             </div>
-            <br />
-            <div className="flex item-center -mt-3">
+            {/* <br /> */}
+            <div className="flex item-center mt-0.5">
               <div className="ml-3">
                 <AssetId>{row.original.id}</AssetId>
               </div>
@@ -432,24 +488,38 @@ export const NavSearchTable = ({
    * @param row
    * @returns {*}
    */
-  const getRowProps = (row) => ({
+  const getRowProps = useCallback((row) => ({
     role: 'button',
-    onClick: () => assetClick(row),
+    className: 'cursor-pointer',
+    onClick: (e) => {
+      e.preventDefault()
+      assetClick(row)
+    },
     onKeyDown: (e) => {
       if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault()
         assetClick(row)
       }
     }
-  })
+  }), [assetClick])
 
+  useEffect(() => {
+    // Prefetch the top assets
+    searchResultData.slice(0,30).map(result => {
+      const assetId = result.id
+      // console.log('zprefetching: ' + assetId)
+      router.prefetch('/trade/'+assetId)
+    })
+  }, [router, searchResultData])
+  
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
-        flyover={true}
+        flyover={isMobile ? false : true}
         components={{
           Flyover: SearchFlyover
         }}
-        tableSizeOnMobile={searchTableSize}
+        tableSizeOnMobile={gridSize}
         optionalGridInfo={gridSize}
         initialState={searchState}
         onStateChange={(tableState) => setSearchState(tableState)}
@@ -462,7 +532,7 @@ export const NavSearchTable = ({
 }
 NavSearchTable.propTypes = {
   query: PropTypes.string.isRequired,
-  assets: PropTypes.array.isRequired,
+  assets: PropTypes.array,
   assetClick: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   algoPrice: PropTypes.any,

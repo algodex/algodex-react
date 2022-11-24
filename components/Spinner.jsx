@@ -1,7 +1,24 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 import { parseThemeColor } from 'theme'
+import { useMemo } from 'react'
 
 const rotate = keyframes`
   100% {
@@ -73,17 +90,19 @@ Svg.defaultProps = {
  * @constructor
  */
 function Spinner({ size, color, flex, ...rest }) {
-  return flex ? (
-    <FlexContainer data-testid="spinner-flex-container">
-      <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
-        <circle cx="25" cy="25" r="20" />
-      </Svg>
-    </FlexContainer>
-  ) : (
-    <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
-      <circle cx="25" cy="25" r="20" />
-    </Svg>
-  )
+  // const retval = useMemo(() => flex ? (
+  //   <FlexContainer data-testid="spinner-flex-container">
+  //     <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
+  //       {/* <circle cx="25" cy="25" r="20" /> */}
+  //     </Svg>
+  //   </FlexContainer>
+  // ) : (
+  //   <Svg size={size} color={color} {...rest} data-testid="spinner-svg">
+  //     {/* <circle cx="25" cy="25" r="20" /> */}
+  //   </Svg>
+  // ), [color, flex, rest, size])
+  // return retval
+  return <></>
 }
 
 Spinner.propTypes = {

@@ -1,6 +1,23 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
 import Table, { AssetNameCell, DefaultCell } from '@/components/Table'
 import { useCallback, useMemo } from 'react'
+import { StableAssets } from '@/components/StableAssets'
 
 import Link from 'next/link'
 import PropTypes from 'prop-types'
@@ -36,6 +53,7 @@ export const AssetCoinCell = (props) => {
   const onClick = useCallback(() => {
     dispatcher('clicked', 'asset')
   }, [dispatcher])
+  // console.log(props.row, 'props row')
   return (
     <Link href={`/trade/${props.row.original.id}`}>
       <AssetNameBlock
@@ -56,12 +74,19 @@ AssetCoinCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 
 export function AssetsTable({ assets }) {
   // console.log(`AssetsTable(`, arguments[0], `)`)
+  // console.log(assets, 'assets here')
 
   const { t } = useTranslation('orders')
 
   const walletAssetsTableState = useUserStore((state) => state.walletAssetsTableState)
   const setWalletAssetsTableState = useUserStore((state) => state.setWalletAssetsTableState)
-
+  const formatAssetsList = assets.map((asset) => {
+    return {
+      ...asset,
+      isStable: StableAssets.includes(parseInt(asset.id))
+    }
+  })
+  // console.log(formatAssetsList, 'formattedAsset')
   const columns = useMemo(
     () => [
       {
@@ -105,7 +130,7 @@ export function AssetsTable({ assets }) {
           initialState={walletAssetsTableState}
           onStateChange={(state) => setWalletAssetsTableState(state)}
           columns={columns}
-          data={assets || []}
+          data={formatAssetsList || []}
         />
       </TableWrapper>
     </Container>

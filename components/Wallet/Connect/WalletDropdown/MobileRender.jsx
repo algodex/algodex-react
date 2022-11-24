@@ -1,7 +1,23 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { Box, Typography } from '@mui/material'
 import { copyAddress, truncatedWalletAddress } from 'components/helpers'
 import { filter, find } from 'lodash'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useMemo, useState, useCallback } from 'react'
 
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Button from '@mui/material/Button'
@@ -60,9 +76,8 @@ const ModalContainer = styled.div`
 
 const MobileWalletRender = () => {
   // const { addresses, wallet, signedIn } = useWalletMgmt()
-  const { wallet } = useAlgodex()
+  const { wallet, isConnected } = useAlgodex()
   const [addresses] = useContext(WalletsContext)
-
   // const { addresses, wallet } = useAlgodex()
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
@@ -82,7 +97,7 @@ const MobileWalletRender = () => {
     }
   }, [addresses, wallet])
 
-  const renderWalletOptionsList = () => {
+  const renderWalletOptionsList = useCallback(() => {
     return (
       <Modal
         onClick={() => {
@@ -103,9 +118,9 @@ const MobileWalletRender = () => {
         </ModalContainer>
       </Modal>
     )
-  }
+  }, [isConnectingWallet])
 
-  const renderAddressesList = () => {
+  const renderAddressesList = useCallback(() => {
     return (
       <Modal
         onClick={() => {
@@ -129,9 +144,9 @@ const MobileWalletRender = () => {
         </ModalContainer>
       </Modal>
     )
-  }
+  }, [isDisconnectingWallet, sortedWalletsList, wallet?.address])
 
-  const renderAssets = (assets, address) => {
+  const renderAssets = useCallback((assets, address) => {
     return assets?.map((asset, idx) => {
       return (
         <Box
@@ -143,8 +158,9 @@ const MobileWalletRender = () => {
         </Box>
       )
     })
-  }
-  const renderWalletAddresses = () => {
+  }, [wallet.address])
+
+  const renderWalletAddresses = useCallback(() => {
     return addresses.map((addr, idx) => {
       return (
         <Accordion key={idx} expanded={expanded === idx} onChange={handleChange(idx)}>
@@ -208,7 +224,7 @@ const MobileWalletRender = () => {
         </Accordion>
       )
     })
-  }
+  }, [addresses, expanded, renderAssets, wallet.address])
 
   return (
     <>
@@ -223,7 +239,7 @@ const MobileWalletRender = () => {
                   variant="contained"
                   onClick={() => setIsConnectingWallet(true)}
                 >
-                  CONNECT {addresses && addresses.length > 0 && 'ANOTHER'} WALLET
+                  CONNECT {isConnected && addresses && addresses.length > 0 && 'ANOTHER'} WALLET
                 </Button>
               </Box>
             </Box>
@@ -248,7 +264,7 @@ const MobileWalletRender = () => {
                   </Typography>
                 </Box>
               )}
-              {addresses && addresses.length > 0 && renderWalletAddresses()}
+              {isConnected && addresses && addresses.length > 0 && renderWalletAddresses()}
             </Box>
           </Box>
           <Box className="flex">

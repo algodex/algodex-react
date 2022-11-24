@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /* eslint-disable max-len */
 import React, { useState } from 'react'
 
@@ -169,7 +185,7 @@ export const AboutFooter = () => {
             <FooterLinks target="_blank" href="https://github.com/algodex/">
               Github
             </FooterLinks>
-            <FooterLinks target="_blank" href="https://app.algodex.com/support">
+            <FooterLinks target="_blank" href="/support" matches={/^\/support/}>
               {t('support')}
             </FooterLinks>
 
@@ -195,7 +211,7 @@ export const AboutFooter = () => {
           </div>
           <div className="col-span-1">
             <Title className="mb-6">{t('COMPANY')}</Title>
-            <FooterLinks target={'_blank'} href="https://about.algodex.com/">
+            <FooterLinks target={'_blank'} href="/about">
               {t('about')}
             </FooterLinks>
             <FooterLinks target={'_blank'} href="https://about.algodex.com/blog/">

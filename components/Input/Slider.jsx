@@ -1,9 +1,26 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import MUISlider from '@mui/material/Slider'
 import styled from '@emotion/styled'
+import { useMemo } from 'react'
 
 export const Slider = styled(MUISlider)(({ theme, type }) => {
-  const muiStyle =
-    type === 'line-marks'
+  const muiStyle = useMemo(() => { 
+    return type === 'line-marks'
       ? {
           '& .MuiSlider-valueLabel': {
             fontSize: 12,
@@ -54,6 +71,7 @@ export const Slider = styled(MUISlider)(({ theme, type }) => {
             color: theme.palette.white
           }
         }
+      }, [theme.palette.gray, theme.palette.white, type])
 
   return {
     '&.Mui-disabled': {

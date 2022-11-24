@@ -1,5 +1,21 @@
-import { difference, filter, find } from 'lodash'
-import { useContext, useEffect, useMemo, useRef } from 'react'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { filter, find } from 'lodash'
+import { useContext, useMemo, useCallback } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import DropdownBody from './DropdownBody'
@@ -9,6 +25,7 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@algodex/algodex-hooks'
+import { useEventDispatch } from '@/hooks/useEvents'
 
 const styleReset = css`
   margin: 0;
@@ -35,61 +52,38 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const { wallet } = useAlgodex()
-  const [addresses, setAddresses] = useContext(WalletsContext)
-  const { peraConnect, myAlgoConnect } = useWallets()
-  const addressesRef = useRef(null)
-
-  const WALLETS_CONNECT_MAP = {
+  const { isConnected } = useAlgodex()
+  const [addresses] = useContext(WalletsContext)
+  const dispatcher = useEventDispatch()
+  const { wallet, peraConnect, myAlgoConnect } = useWallets()
+  const WALLETS_CONNECT_MAP = useMemo(() => ({
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect
-  }
+  }), [myAlgoConnect, peraConnect])
 
-  const myAlgoOnClick = () => {
+  const handleConnectionDropdown = useCallback((closeDropdown) => {
+    dispatcher('connecting-wallet', {
+      isOpen: closeDropdown
+    })
+  }, [dispatcher])
+
+  const myAlgoOnClick = useCallback(() => {
+    handleConnectionDropdown(false)
     WALLETS_CONNECT_MAP['my-algo-wallet']()
-  }
+  }, [WALLETS_CONNECT_MAP, handleConnectionDropdown])
 
-  const peraConnectOnClick = () => {
+  const peraConnectOnClick = useCallback(() => {
+    handleConnectionDropdown(false)
     WALLETS_CONNECT_MAP['pera-connect']()
-  }
+  }, [WALLETS_CONNECT_MAP, handleConnectionDropdown])
+
   const isPeraConnected = useMemo(() => {
-    const peraAddr = addresses.filter((addr) => addr.type === 'wallet-connect')
-    return peraAddr.length > 0
-  }, [addresses])
-
-  useEffect(() => {
-    if (!addressesRef.current) {
-      // Initialize the ref after first checking to see what is in localStorage
-      const storedAddrs = JSON.parse(localStorage.getItem('addresses'))
-      if (Array.isArray(storedAddrs) && storedAddrs.length > 0) {
-        setAddresses(storedAddrs)
-      }
-      addressesRef.current = addresses
+    if (isConnected) {
+      const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
+      return peraAddr.length > 0
     }
-
-    const localStorageExists =
-      JSON.parse(localStorage.getItem('addresses')) !== null &&
-      JSON.parse(localStorage.getItem('addresses')).length > 0
-
-    const addressesExist = typeof addresses !== 'undefined' && addresses.length > 0
-
-    if (localStorageExists && addressesExist) {
-      // localStorage.setItem('addresses', JSON.stringify(addresses))
-    }
-    const walletDifference = difference(
-      addresses.map((addr) => addr.address),
-      addressesRef.current.map((addr) => addr.address)
-    )
-    if (walletDifference.length > 0) {
-      localStorage.setItem('addresses', JSON.stringify(addresses))
-      addressesRef.current = addresses
-      closeDropdown()
-    }
-    // **Note** Can't put closeFn() in the onClicks because it will closeOut
-    // modal before wallet-connect finishes connecting leading to stale state.
-    // Creating a ref that persists between renders gives us a way to automatically close out
-    // modals only when a new address is added to the addresses array.
-  }, [addresses])
+    return false
+  }, [isConnected, addresses])
 
   const sortedWalletsList = useMemo(() => {
     if (addresses) {

@@ -1,7 +1,23 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { lighten, opacify } from 'polished'
 
 import { createTheme } from '@mui/material/styles'
-import { opacity } from 'styled-system'
+// import { opacity } from 'styled-system'
 import { experimental_sx as sx } from '@mui/material/styles'
 
 /**
@@ -474,6 +490,41 @@ const theme = {
     button_large: {},
     button_caps: {},
 
+    navText: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      textTransform: 'uppercase',
+      letterSpacing: '0.2rem',
+      color: 'inherit',
+      fontWeight: '600',
+      cursor: 'pointer',
+      '&:hover': {
+        color: colors.gray['100'],
+      },
+      '& > a': {
+        padding: '1rem 0',
+        textDecoration: 'none',
+        '&:hover': {
+          color: colors.gray['100'],
+        },
+        '&:active': {
+          color: colors.gray['100'],
+        },
+      },
+      [muiTheme.breakpoints.up('xs')]: {
+        fontSize: fontSizes[2]
+      },
+      [muiTheme.breakpoints.up('sm')]: {
+        fontSize: fontSizes[1]
+      },
+      [muiTheme.breakpoints.up('md')]: {
+        fontSize: fontSizes[0]
+      },
+      [muiTheme.breakpoints.up('lg')]: {
+        fontSize: fontSizes[2]
+      },
+    },
     price: {
       fontFamily: fontFamilies.monospace,
       fontWeight: 400,

@@ -6,10 +6,29 @@ import { Stack } from '@mui/material'
 import Tooltip from '@/components/Tooltip'
 import Typography from '@mui/material/Typography'
 import USDPrice from '../../PriceConversion/USDPrice'
+import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+import { withAssetPriceQuery } from '@algodex/algodex-hooks'
 
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
@@ -76,16 +95,25 @@ AsaBalance.propTypes = {
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const assetBalance = useMemo(() => {
+  const maxSpendableAlgo = useMaxSpendableAlgo()
+  const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
-        res = filter[0].amount
+        return parseFloat(filter[0].amount)
       }
     }
     return res
   }, [wallet, asset])
+
+  const calcAsaWorth = useMemo(
+    () => {
+      const _calcAsaWorth = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+      return _calcAsaWorth
+    },
+    [asset]
+  )
 
   return (
     <AvailableBalanceContainer>
@@ -110,7 +138,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </Typography>
             <IconTextContainer>
               <Typography variant="body_small_cap_medium" color="gray.300">
-                {fromBaseUnits(wallet.amount)}
+                {fromBaseUnits(maxSpendableAlgo)}
               </Typography>
               <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
@@ -140,7 +168,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
           </BalanceRow>
         </Tooltip>
       </IconTextContainer>
-      {asset.isStable ? (
+      {/* {asset.isStable ? (
         <>
           <AsaBalance
             asaName={asset.name || asset.id}
@@ -160,7 +188,35 @@ export const AvailableBalance = ({ wallet, asset }) => {
             amount={assetBalance}
           />
         </>
-      )}
+      )} */}
+      <Stack direction="row" justifyContent="space-between">
+        <Typography variant="body_small_cap_medium" color="gray.400">
+          ALGO
+        </Typography>
+        <Stack direction="column" className="text-right">
+          <Typography className="leading-5" variant="body_small_medium" color="gray.300">
+            {fromBaseUnits(maxSpendableAlgo)}
+          </Typography>
+          <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
+            <USDPrice priceToConvert={fromBaseUnits(wallet.amount)} currency="$" />
+          </Typography>
+        </Stack>
+      </Stack>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+        <Typography variant="body_small_cap_medium" color="gray.400">
+          <input style={{ display: 'none' }} disabled={true} name="asset" value={asset.id} />
+          {asset.name || asset.id}
+        </Typography>
+        <Stack direction="column" className="text-right">
+          <Typography className="leading-5" variant="body_small_medium" color="gray.300">
+            {fromBaseUnits(assetValue, asset.decimals)}
+            {/* {assetValue} */}
+          </Typography>
+          <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
+            <USDPrice asaWorth={parseFloat(calcAsaWorth)} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
+          </Typography>
+        </Stack>
+      </Stack>
     </AvailableBalanceContainer>
   )
 }
@@ -169,7 +225,8 @@ AvailableBalance.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string,
     decimals: PropTypes.number.isRequired,
-    isStable: PropTypes.bool
+    isStable: PropTypes.bool,
+    price_info: PropTypes.object
   }),
   wallet: PropTypes.shape({
     address: PropTypes.string,
@@ -181,4 +238,4 @@ AvailableBalance.propTypes = {
     )
   })
 }
-export default AvailableBalance
+export default withAssetPriceQuery(AvailableBalance)

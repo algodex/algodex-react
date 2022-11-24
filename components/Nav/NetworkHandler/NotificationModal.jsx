@@ -1,3 +1,19 @@
+/* 
+ * Algodex Frontend (algodex-react) 
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { mdiDiscord, mdiReddit, mdiSend, mdiTwitter } from '@mdi/js'
 
 import ButtonEl from 'components/Button'
@@ -7,7 +23,7 @@ import Modal from 'components/Modal'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 import styled from '@emotion/styled'
-
+import { useCallback } from 'react'
 // export const Button = styled.Button`
 //   width: 100%;
 //   background: white;
@@ -44,30 +60,32 @@ export const ModalContentFooter = styled.div``
 
 export const IconWrapper = styled.div``
 
+const socialData = [
+  {
+    title: 'Telegram',
+    url: 'https://t.me/algodex',
+    path: mdiSend
+  },
+  {
+    title: 'Twitter',
+    url: 'https://twitter.com/AlgodexOfficial',
+    path: mdiTwitter
+  },
+  {
+    title: 'Reddit',
+    url: 'https://www.reddit.com/r/Algodex/',
+    path: mdiReddit
+  },
+  {
+    title: 'Discord',
+    url: 'https://discord.com/invite/ngNzV8bBhy',
+    path: mdiDiscord
+  }
+]
+
 const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
-  const socialData = [
-    {
-      title: 'Telegram',
-      url: 'https://t.me/algodex',
-      path: mdiSend
-    },
-    {
-      title: 'Twitter',
-      url: 'https://twitter.com/AlgodexOfficial',
-      path: mdiTwitter
-    },
-    {
-      title: 'Reddit',
-      url: 'https://www.reddit.com/r/Algodex/',
-      path: mdiReddit
-    },
-    {
-      title: 'Discord',
-      url: 'https://discord.com/invite/ngNzV8bBhy',
-      path: mdiDiscord
-    }
-  ]
-  const renderSocialIcons = () => {
+
+  const renderSocialIcons = useCallback(() => {
     return socialData.map((data, idx) => {
       return (
         <Link key={idx} href={data.url}>
@@ -84,7 +102,7 @@ const NetworkNotificationModal = ({ isModalActive, closeModal, content }) => {
         </Link>
       )
     })
-  }
+  }, [])
   return (
     <Modal data-testid="notification-modal-wrapper" isVisible={isModalActive}>
       <ModalContainer
