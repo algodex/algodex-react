@@ -180,6 +180,10 @@ export function TradeHistory({ asset, orders: tradesData }) {
       })
       .map((row) => {
         const amount = new Big(row.amount)
+        if (row.price === 0) {
+          return
+        }
+        const price = asset.isStable ? 1 / row.price : row.price
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
@@ -219,9 +223,13 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {t('trade-history')}
           </Typography>
           <Header className="mt-4">
-            <PriceHeader />
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {/* <PriceHeader /> */}
+            <PriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
+            {/* <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
+            </Typography> */}
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}

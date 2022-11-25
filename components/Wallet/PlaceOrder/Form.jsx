@@ -211,8 +211,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const buttonProps = useMemo(
     () => ({
-      buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
-      sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
+      buy: { 
+        variant: 'primary', 
+        text: `${t('buy')} ${(asset.isStable ? 'ALGO' : asset.name) || asset.id}` 
+      },
+      sell: { 
+        variant: 'danger', 
+        text: `${t('sell')} ${(asset.isStable ? 'ALGO' : asset.name) || asset.id}` 
+      }
     }),
     [asset]
   )
@@ -343,7 +349,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      const formattedOrder = {...order}
+      const { isStable } = asset
+      const formattedOrder = {...order, type: isStable && order.type === 'buy' ? 'sell' : 'buy'}
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
       
@@ -553,7 +560,8 @@ PlaceOrderForm.propTypes = {
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
     name: PropTypes.string,
-    isGeoBlocked: PropTypes.bool
+    isGeoBlocked: PropTypes.bool,
+    isStable: PropTypes.bool
   }).isRequired,
   /**
    * Wallet to execute Orders from

@@ -382,9 +382,14 @@ const DECIMALS_MAP = {
   },[asset.decimals, maxSpendableAlgo])
 
   const reduceOrders = useCallback((result, order) => {
-    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+    // const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+    const _price = asset.isStable
+      ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
+      : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
-    const _amount = order.amount
+    // const _amount = order.amount
+    const _amount = asset.isStable ? order.amount * order.price : order.amount
+    
     const index = result.findIndex(
       (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
     )
@@ -478,6 +483,14 @@ const DECIMALS_MAP = {
   const renderedBuyOrders = useMemo( () => {
     return renderOrders(aggregatedBuyOrder, 'buy')
   },[aggregatedBuyOrder, renderOrders]);
+
+  const sortedBuyOrder = useMemo(() => {
+    return aggregatedBuyOrder.sort((a, b) => b.price - a.price)
+  }, [aggregatedBuyOrder])
+
+  const sortedSellOrder = useMemo(() => {
+    return aggregatedSellOrder.sort((a, b) => b.price - a.price)
+  }, [aggregatedSellOrder])
   
 
   return useMemo(() => {
@@ -508,16 +521,22 @@ const DECIMALS_MAP = {
             </AggregatorSelector>
           </Stack>
           <Header className="mt-4">
-            <TablePriceHeader title="price" textAlign="left" />
+            {/* <TablePriceHeader title="price" textAlign="left" /> */}
+            <TablePriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
             <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({assetVeryShortName})
+              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
             </Typography>
-            <TablePriceHeader title="total" textAlign="right" />
+            <Typography variant="body_tiny_cap" className="whitespace-nowrap" color="gray.500" textAlign="right" m={0}>
+              {t('total')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
+            </Typography>
+            {/* <TablePriceHeader title="total" textAlign="right" /> */}
           </Header>
         </Box>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
+          {/* <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper> */}
+          {/* {renderOrders(asset.isStable ? sortedBuyOrder : aggregatedSellOrder, 'sell')} */}
+          {renderOrders(asset.isStable ? sortedBuyOrder : renderedSellOrders, 'sell')}
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -526,7 +545,9 @@ const DECIMALS_MAP = {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderedBuyOrders}
+            {/* {renderedBuyOrders} */}
+            {/* {renderOrders(asset.isStable ? sortedSellOrder : aggregatedBuyOrder, 'buy')} */}
+            {renderOrders(asset.isStable ? sortedSellOrder : renderedBuyOrders, 'buy')}
           </OrdersWrapper>
         </BuyOrders>
       </Container>

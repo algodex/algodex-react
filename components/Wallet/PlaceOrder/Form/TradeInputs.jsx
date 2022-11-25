@@ -21,7 +21,7 @@ import Big from 'big.js'
 import { FormHelperText } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialBox } from '@mui/material/Box'
-import {NumericFormat} from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import Slider from '@/components/Input/Slider'
@@ -145,8 +145,102 @@ export const TradeInputs = ({
       return true
     }
   }, [order, microAlgo])
-  return (
-    <MaterialBox className="flex flex-col mb-4">
+
+  const invertedAssetInput = () => {
+    return <>
+      <OutlinedInput
+        sx={{
+          backgroundColor:
+            order.execution === 'market' ? theme.palette.gray['700'] : theme.palette.gray['900'],
+          border: order.execution === 'market' ? 0 : 2,
+          borderColor: theme.palette.gray['700'],
+        }}
+        value={order.price || ''}
+        onChange={handleChange}
+        placeholder="0.00"
+        name="price"
+        inputComponent={NumberFormatCustom}
+        decimals={6}
+        inputProps={{
+          decimals: asset.decimals,
+          // decimals: 6,
+          pattern: '[0-9]*.[0-9]*',
+          min: '0',
+          step: new Big(10).pow(-1 * asset.decimals).toString(),
+          // step: '0.000001',
+          placeholder: '0.00',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
+        }}
+        startAdornment={
+          <MUIInputAdornment position="start">
+            <span className="text-sm font-bold text-gray-500">{t('price')}</span>
+          </MUIInputAdornment>
+        }
+        endAdornment={
+          <MUIInputAdornment position="end">
+            <span className="text-sm font-bold text-gray-500">{asset.name}</span>
+          </MUIInputAdornment>
+        }
+        error={isErrorMsgVisible}
+      />
+
+      {
+        isErrorMsgVisible && order.execution !== 'market' ? (
+          <FormHelperText className="mt-0 mx-4 mb-4" error>
+            Price cannot be less than {microAlgo}
+          </FormHelperText>
+        ) : (
+          <USDInputPrice value={parseFloat(order.price)} id="price" />
+        )
+      }
+
+      <OutlinedInput
+        id="amount"
+        name="amount"
+        placeholder={inputPlaceHolder}
+        value={order.amount || ''}
+        inputComponent={NumberFormatCustom}
+        inputProps={{
+          // decimals: asset.decimals,
+          decimals: 6,
+          min: '0',
+          pattern: '[0-9]*.[0-9]*',
+          // step: new Big(10).pow(-1 * asset.decimals).toString(),
+          step: '0.000001',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
+        }}
+        sx={{
+          backgroundColor: theme.colors.gray['900'],
+          border: 2,
+          borderColor: theme.colors.gray['700'],
+          marginBottom: '1rem'
+        }}
+        onChange={handleChange}
+        // step={new Big(10).pow(-1 * asset.decimals).toString()}
+        startAdornment={
+          <MUIInputAdornment position="start">
+            <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
+          </MUIInputAdornment>
+        }
+        endAdornment={
+          <MUIInputAdornment position="end">
+            <span className="text-sm font-bold text-gray-500">ALGO</span>
+          </MUIInputAdornment>
+        }
+      />
+    </>
+  }
+
+  const regularAssetInput = () => {
+    return <>
       <OutlinedInput
         sx={{
           backgroundColor:
@@ -229,6 +323,93 @@ export const TradeInputs = ({
           </MUIInputAdornment>
         }
       />
+    </>
+  }
+  return (
+    <MaterialBox className="flex flex-col mb-4">
+      {asset.isStable ? invertedAssetInput() : regularAssetInput()}
+      {/* <OutlinedInput
+        sx={{
+          backgroundColor:
+            order.execution === 'market' ? theme.palette.gray['700'] : theme.palette.gray['900'],
+          border: order.execution === 'market' ? 0 : 2,
+          borderColor: theme.palette.gray['700'],
+        }}
+        value={order.price || ''}
+        onChange={handleChange}
+        placeholder="0.00"
+        name="price"
+        inputComponent={NumberFormatCustom}
+        decimals={6}
+        inputProps={{
+          decimals: 6,
+          pattern: '[0-9]*.[0-9]*',
+          min: '0',
+          step: '0.000001',
+          placeholder: '0.00',
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
+        }}
+        startAdornment={
+          <MUIInputAdornment position="start">
+            <span className="text-sm font-bold text-gray-500">{t('price')}</span>
+          </MUIInputAdornment>
+        }
+        endAdornment={
+          <MUIInputAdornment position="end">
+            <span className="text-sm font-bold text-gray-500">ALGO</span>
+          </MUIInputAdornment>
+        }
+        error={isErrorMsgVisible}
+      />
+
+      {isErrorMsgVisible && order.execution !== 'market' ? (
+        <FormHelperText className="mt-0 mx-4 mb-4" error>
+          Price cannot be less than {microAlgo}
+        </FormHelperText>
+      ) : (
+        <USDInputPrice value={parseFloat(order.price)} id="price" />
+      )}
+
+      <OutlinedInput
+        id="amount"
+        name="amount"
+        placeholder={inputPlaceHolder}
+        value={order.amount || ''}
+        inputComponent={NumberFormatCustom}
+        inputProps={{
+          decimals: asset.decimals,
+          min: '0',
+          pattern: '[0-9]*.[0-9]*',
+          step: new Big(10).pow(-1 * asset.decimals).toString(),
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
+        }}
+        sx={{
+          backgroundColor: theme.colors.gray['900'],
+          border: 2,
+          borderColor: theme.colors.gray['700'],
+          marginBottom: '1rem'
+        }}
+        onChange={handleChange}
+        // step={new Big(10).pow(-1 * asset.decimals).toString()}
+        startAdornment={
+          <MUIInputAdornment position="start">
+            <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
+          </MUIInputAdornment>
+        }
+        endAdornment={
+          <MUIInputAdornment position="end">
+            <span className="text-sm font-bold text-gray-500">{asset.name}</span>
+          </MUIInputAdornment>
+        }
+      /> */}
       <Slider
         sx={{
           margin: '0px 0.5rem',
@@ -267,7 +448,9 @@ export const TradeInputs = ({
         }
         endAdornment={
           <MUIInputAdornment position="end">
-            <span className="text-sm font-bold text-gray-500">ALGO</span>
+            <span className="text-sm font-bold text-gray-500">
+              {asset.isStable ? asset.name : 'ALGO'}
+            </span>
           </MUIInputAdornment>
         }
       />

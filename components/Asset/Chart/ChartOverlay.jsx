@@ -15,7 +15,7 @@
  */
 
 import { useCallback, useMemo } from 'react'
-
+import Button from 'components/Button'
 import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
@@ -25,6 +25,7 @@ import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import { useUserStore } from 'store'
+import { Typography, Stack } from '@mui/material'
 
 export const Container = styled.div`
   position: absolute;
@@ -45,6 +46,7 @@ export const Header = styled.header`
   margin-left: 1.75rem;
   margin-top: 1.25rem;
   margin-bottom: 0.125rem;
+  width: 100%;
 `
 
 export const TradingPair = styled.h3`
@@ -57,7 +59,7 @@ export const TradingPair = styled.h3`
   margin-block-end: 0;
   color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
-
+  width: inherit;
   span {
     color: ${({ theme }) => theme.palette.gray[100]};
   }
@@ -120,7 +122,7 @@ export const OhlcItem = styled.div`
 
   dd {
     color: ${({ theme, value }) =>
-      parseFloat(value) < 0 ? theme.palette.red[500] : theme.palette.green[500]};
+    parseFloat(value) < 0 ? theme.palette.red[500] : theme.palette.green[500]};
   }
 
   @media (min-width: 1024px) {
@@ -210,8 +212,8 @@ function ChartOverlay(props) {
   const currentPrice = asset.price_info?.price ? new Big(asset.price_info?.price) : new Big(0)
   const changeAmt = asset.price_info?.price24Change
     ? currentPrice
-        .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
-        .toString()
+      .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
+      .toString()
     : '0'
   const changePct = asset.price_info?.price24Change
     ? new Big(asset.price_info?.price24Change)
@@ -238,14 +240,40 @@ function ChartOverlay(props) {
               color={theme.palette.gray['500']}
             />
           )}
-          <div>
-            &nbsp;<span>{`${asset.name} `}</span> / ALGO
-          </div>
-          <div>
-            <IconButton onClick={onClick} type="button">
-              <Info />
-            </IconButton>
-          </div>
+          <Stack width="100%" direction="row" justifyContent="space-between">
+            <Stack direction="row">
+              {/* <div>
+                &nbsp;<span>{`${asset.name} `}</span> / ALGO
+              </div> */}
+              {!asset.isStable && (
+                <div>
+                  &nbsp;<span>{`${asset.name} `}</span> / ALGO
+                </div>
+              )}
+              {asset.isStable && (
+                <div>
+                  <span>ALGO</span> / {`${asset.name} `}
+                </div>
+              )}
+              <div>
+                <IconButton onClick={onClick} type="button">
+                  <Info />
+                </IconButton>
+              </div>
+            </Stack>
+            <div>
+              <Button
+                data-testid="asset-info-back-btn"
+                color="secondary"
+                variant="outline"
+                onClick={() => console.log('Hello')}
+              >
+                <Typography>Invert Pair</Typography>
+              </Button>
+            </div>
+          </Stack>
+
+
         </TradingPair>
         <OhlcList>
           <OhlcItem value={ohlc.open}>
