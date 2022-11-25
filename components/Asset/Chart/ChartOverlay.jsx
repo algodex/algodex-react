@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useMemo } from 'react'
-import Button from 'components/Button'
+import { useCallback, useMemo, useState } from 'react'
+// import Button from 'components/Button'
 import Big from 'big.js'
 import Icon from '@mdi/react'
 import { Info } from 'react-feather'
@@ -25,7 +25,8 @@ import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import { useUserStore } from 'store'
-import { Typography, Stack } from '@mui/material'
+import { Typography, Stack, Button } from '@mui/material'
+import Image from 'next/image'
 
 export const Container = styled.div`
   position: absolute;
@@ -208,6 +209,7 @@ export const Volume = styled.div`
 
 function ChartOverlay(props) {
   const { asset, ohlc, bid, ask, spread, volume } = props
+  const [inversionStatus, setInversionStatus] = useState(false)
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const currentPrice = asset.price_info?.price ? new Big(asset.price_info?.price) : new Big(0)
   const changeAmt = asset.price_info?.price24Change
@@ -228,6 +230,22 @@ function ChartOverlay(props) {
     setShowAssetInfo(true)
   }, [setShowAssetInfo])
 
+  const setInversionStatusFn = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus) {
+      if (inversionStatus === 'true') {
+        localStorage.setItem('inversionStatus', 'false')
+        setInversionStatus(false)
+      } else {
+        localStorage.setItem('inversionStatus', 'true')
+        setInversionStatus(true)
+      }
+    } else {
+      localStorage.setItem('inversionStatus', 'true')
+      setInversionStatus(true)
+    }
+  }, [])
+
   return (
     <Container>
       <Header>
@@ -247,12 +265,12 @@ function ChartOverlay(props) {
               </div> */}
               {!asset.isInverted && (
                 <div>
-                  &nbsp;<span>{`${asset.name} `}</span> / ALGO
+                  &nbsp;<span color='white'>{`${asset.name} `}</span> / ALGO
                 </div>
               )}
               {asset.isInverted && (
                 <div>
-                  <span>ALGO</span> / {`${asset.name} `}
+                  <span color='white'>ALGO</span> / {`${asset.name} `}
                 </div>
               )}
               <div>
@@ -262,13 +280,29 @@ function ChartOverlay(props) {
               </div>
             </Stack>
             <div>
+              {/* {console.log(inversionStatus, 'hell0o here')} */}
               <Button
                 data-testid="asset-info-back-btn"
-                color="secondary"
-                variant="outline"
-                onClick={() => console.log('Hello')}
-              >
-                <Typography>Invert Pair</Typography>
+                variant="contained"
+                sx={{
+                  background: inversionStatus ? theme.palette.green[500] : '#2F3747',
+                  borderRadius: '3px',
+                  pointerEvents: 'all',
+                  ':hover': {
+                    background: inversionStatus ? theme.palette.green[500] : '#2F3747',
+                  }
+                }}
+                onClick={() => setInversionStatusFn()}
+            >
+                <Image
+                  style={{ borderRadius: '50%' }}
+                  src="/Invert.svg"
+                  fill="black"
+                  alt="Invert Icon"
+                  width={25}
+                  height={25}
+                />&nbsp;&nbsp;
+                <Typography sx={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>INVERT PAIR</Typography>
               </Button>
             </div>
           </Stack>
