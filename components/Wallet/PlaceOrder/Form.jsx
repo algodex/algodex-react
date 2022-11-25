@@ -213,11 +213,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     () => ({
       buy: { 
         variant: 'primary', 
-        text: `${t('buy')} ${(asset.isStable ? 'ALGO' : asset.name) || asset.id}` 
+        text: `${t('buy')} ${(asset.isInverted ? 'ALGO' : asset.name) || asset.id}` 
       },
       sell: { 
         variant: 'danger', 
-        text: `${t('sell')} ${(asset.isStable ? 'ALGO' : asset.name) || asset.id}` 
+        text: `${t('sell')} ${(asset.isInverted ? 'ALGO' : asset.name) || asset.id}` 
       }
     }),
     [asset]
@@ -349,8 +349,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      const { isStable } = asset
-      const formattedOrder = {...order, type: isStable && order.type === 'buy' ? 'sell' : 'buy'}
+      const { isInverted } = asset
+      const formattedOrder = {...order, type: isInverted && order.type === 'buy' ? 'sell' : 'buy'}
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
       
@@ -561,7 +561,7 @@ PlaceOrderForm.propTypes = {
     decimals: PropTypes.number.isRequired,
     name: PropTypes.string,
     isGeoBlocked: PropTypes.bool,
-    isStable: PropTypes.bool
+    isInverted: PropTypes.bool
   }).isRequired,
   /**
    * Wallet to execute Orders from

@@ -327,7 +327,7 @@ export const TradeInputs = ({
   }
   return (
     <MaterialBox className="flex flex-col mb-4">
-      {asset.isStable ? invertedAssetInput() : regularAssetInput()}
+      {asset.isInverted ? invertedAssetInput() : regularAssetInput()}
       {/* <OutlinedInput
         sx={{
           backgroundColor:
@@ -449,7 +449,7 @@ export const TradeInputs = ({
         endAdornment={
           <MUIInputAdornment position="end">
             <span className="text-sm font-bold text-gray-500">
-              {asset.isStable ? asset.name : 'ALGO'}
+              {asset.isInverted ? asset.name : 'ALGO'}
             </span>
           </MUIInputAdornment>
         }

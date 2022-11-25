@@ -74,7 +74,8 @@ export const mapToSearchResults = ({
   unitName,
   isGeoBlocked,
   formattedASALiquidity,
-  formattedAlgoLiquidity
+  formattedAlgoLiquidity,
+  isInverted
 }) => {
   const price = formattedPrice ? floatToFixedDisplay(formattedPrice) : hasOrders ? '--' : null
 
@@ -95,7 +96,8 @@ export const mapToSearchResults = ({
     liquidityAsa: formattedASALiquidity,
     price,
     change,
-    decimals
+    decimals,
+    isInverted
   }
 }
 

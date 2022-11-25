@@ -20,7 +20,7 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
-
+import { StableAssets } from '@/components/StableAssets'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { useMemo } from 'react'
@@ -65,7 +65,8 @@ export function TradeHistoryTable({ orders }) {
     return orders.map((order) => {
       const _order = {
         ...order,
-        price: floatToFixedDisplay(order.price)
+        price: floatToFixedDisplay(order.price),
+        isInverted: StableAssets.includes(parseInt(order.id))
       }
       return _order
     })

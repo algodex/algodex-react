@@ -26,6 +26,7 @@ import styled from '@emotion/styled'
 import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
 import { withAssetChartQuery } from '@/hooks'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 
 const Container = styled.div`
   position: relative;
@@ -127,6 +128,15 @@ export function Chart({
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
 
+  if (asset.isInverted) {
+    ohlc.forEach((ele, index) => {
+      ohlc[index].open = ele.open != 0 ? floatToFixed(1 / ele.open) : 'Invalid'
+      ohlc[index].low = ele.low != 0 ? floatToFixed(1 / ele.low) : 'Invalid'
+      ohlc[index].high = ele.high != 0 ? floatToFixed(1 / ele.high) : 'Invalid'
+      ohlc[index].close = ele.close != 0 ? floatToFixed(1 / ele.close) : 'Invalid'
+    })
+  }
+
   useEffect(() => {
     setOverlay(_overlay)
     setCurrentLogical(ohlc.length - 1)
@@ -145,7 +155,6 @@ export function Chart({
 
   const { candleChart } = useCandleChart(candleChartRef, volume, ohlc, autoScaleProvider)
   const { areaChart } = useAreaChart(areaChartRef, ohlc, autoScaleProvider)
-
   const onSettingsChange = useCallback(
     (e) => {
       if (e?.target?.name === 'mode') {
@@ -170,6 +179,16 @@ export function Chart({
       if (ohlc == null || volume == null) {
         return
       }
+      // if (asset.isInverted) {
+      //   if (ohlc == null || algoVolume == null) {
+      //     return
+      //   }
+      // } else {
+      //   if (ohlc == null || volume == null) {
+      //     return
+      //   }
+      // }
+
       const priceEntry = ohlc[logical]
       const volumeEntry = volume[logical]
 
@@ -183,7 +202,13 @@ export function Chart({
   )
 
   const mouseOut = useCallback(() => {
-    setOverlay(_overlay)
+    // setOverlay(_overlay)
+    if (asset.isInverted) {
+      const __overlay = { ...overlay, ..._overlay }
+      setOverlay(__overlay)
+    } else {
+      setOverlay(_overlay)
+    }
   }, [setOverlay, _overlay])
 
   const mouseMove = useCallback(
@@ -203,6 +228,18 @@ export function Chart({
         return
       }
 
+      // if (asset.isInverted) {
+      //   if (logical >= ohlc.length || logical >= algoVolume.length) {
+      //     // setOverlay(_overlay)
+      //     return
+      //   }
+      // } else {
+      //   if (logical >= ohlc.length || logical >= volume.length) {
+      //     // setOverlay(_overlay)
+      //     return
+      //   }
+      // }
+
       if (logical !== currentLogical) {
         setCurrentLogical(logical)
         updateHoverPrices(logical)
@@ -218,6 +255,7 @@ export function Chart({
       setCurrentLogical,
       updateHoverPrices,
       volume,
+      asset.isInverted,
       ohlc
     ]
   )
@@ -248,6 +286,7 @@ export function Chart({
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
           volume={overlay.volume}
+          // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -258,6 +297,7 @@ export function Chart({
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
           volume={_overlay.volume}
+          // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
         />
       )}
       <SettingsContainer>
@@ -270,7 +310,8 @@ export function Chart({
 Chart.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    isInverted: PropTypes.bool
   }).isRequired,
   interval: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,

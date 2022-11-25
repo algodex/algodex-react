@@ -183,7 +183,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
         if (row.price === 0) {
           return
         }
-        const price = asset.isStable ? 1 / row.price : row.price
+        const price = asset.isInverted ? 1 / row.price : row.price
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
@@ -224,12 +224,12 @@ export function TradeHistory({ asset, orders: tradesData }) {
           </Typography>
           <Header className="mt-4">
             {/* <PriceHeader /> */}
-            <PriceHeader currencySymbol={asset.isStable ? `(${assetVeryShortName})` : ''} />
+            <PriceHeader currencySymbol={asset.isInverted ? `(${assetVeryShortName})` : ''} />
             {/* <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </Typography> */}
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({asset.isStable ? 'ALGO' : assetVeryShortName})
+              {t('amount')} ({asset.isInverted ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}

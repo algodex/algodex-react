@@ -128,7 +128,7 @@ export async function getStaticProps({ params: { id } }) {
     staticExplorerAsset.price_info = staticAssetPrice
   }
 
-  staticExplorerAsset.isStable = StableAssets.includes(parseInt(id))
+  staticExplorerAsset.isInverted = StableAssets.includes(parseInt(id))
   if (typeof staticExplorerAsset.name === 'undefined') {
     staticExplorerAsset.name = ''
   }

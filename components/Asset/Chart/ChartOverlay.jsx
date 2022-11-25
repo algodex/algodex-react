@@ -245,12 +245,12 @@ function ChartOverlay(props) {
               {/* <div>
                 &nbsp;<span>{`${asset.name} `}</span> / ALGO
               </div> */}
-              {!asset.isStable && (
+              {!asset.isInverted && (
                 <div>
                   &nbsp;<span>{`${asset.name} `}</span> / ALGO
                 </div>
               )}
-              {asset.isStable && (
+              {asset.isInverted && (
                 <div>
                   <span>ALGO</span> / {`${asset.name} `}
                 </div>

@@ -17,6 +17,7 @@
 import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
 import Table, { AssetNameCell, DefaultCell } from '@/components/Table'
 import { useCallback, useMemo } from 'react'
+import { StableAssets } from '@/components/StableAssets'
 
 import Link from 'next/link'
 import PropTypes from 'prop-types'
@@ -77,7 +78,12 @@ export function AssetsTable({ assets }) {
 
   const walletAssetsTableState = useUserStore((state) => state.walletAssetsTableState)
   const setWalletAssetsTableState = useUserStore((state) => state.setWalletAssetsTableState)
-
+  const formatAssetsList = assets.map((asset) => {
+    return {
+      ...asset,
+      isInverted: StableAssets.includes(parseInt(asset.id))
+    }
+  })
   const columns = useMemo(
     () => [
       {
@@ -121,7 +127,7 @@ export function AssetsTable({ assets }) {
           initialState={walletAssetsTableState}
           onStateChange={(state) => setWalletAssetsTableState(state)}
           columns={columns}
-          data={assets || []}
+          data={formatAssetsList || []}
         />
       </TableWrapper>
     </Container>
