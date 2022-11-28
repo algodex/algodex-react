@@ -27,7 +27,9 @@ import theme from 'theme'
 import { useUserStore } from 'store'
 import { Typography, Stack, Button } from '@mui/material'
 import Image from 'next/image'
-import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
+import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
+import { StableAssets } from '@/components/StableAssets'
+
 export const Container = styled.div`
   position: absolute;
   top: 0;
@@ -280,8 +282,7 @@ function ChartOverlay(props) {
               </div>
             </Stack>
             <div>
-              {/* {console.log(inversionStatus, 'hell0o here')} */}
-              <Button
+              {StableAssets.includes(parseInt(asset.id)) && <Button
                 data-testid="asset-info-back-btn"
                 variant="contained"
                 sx={{
@@ -293,7 +294,7 @@ function ChartOverlay(props) {
                   }
                 }}
                 onClick={() => setInversionStatusFn()}
-            >
+              >
                 <Image
                   style={{ borderRadius: '50%' }}
                   src="/Invert.svg"
@@ -303,7 +304,7 @@ function ChartOverlay(props) {
                   height={25}
                 />&nbsp;&nbsp;
                 <Typography sx={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>INVERT PAIR</Typography>
-              </Button>
+              </Button>}
             </div>
           </Stack>
 
