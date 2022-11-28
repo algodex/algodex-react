@@ -25,7 +25,6 @@ import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { StableAssets } from '@/components/StableAssets'
-
 import AlgoIcon from '@/components/Icon'
 import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
@@ -45,6 +44,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@/hooks'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 /**
  * Map a Query Result to a Search Result
@@ -327,6 +327,7 @@ export const NavSearchTable = ({
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
+      // const inversionStatusFn = useInversionStatus
       return (
         <div className="flex flex-col">
           <div
@@ -352,8 +353,7 @@ export const NavSearchTable = ({
                   ALGO
                 </NameVerifiedWrapper>
               </AssetNameBlock> */}
-
-              {formattedStableAsa[row?.original.id] && (
+              {useInversionStatus(row?.original.id) && (
                 <AssetNameBlock>
                   <AssetName>ALGO</AssetName>
                   <PairSlash>{`/`}</PairSlash>
@@ -362,7 +362,7 @@ export const NavSearchTable = ({
                   </NameVerifiedWrapper>
                 </AssetNameBlock>
               )}
-              {!formattedStableAsa[row?.original.id] && (
+              {!useInversionStatus(row?.original.id) && (
                 <AssetNameBlock>
                   <AssetName>{value}</AssetName>
                   <PairSlash>{`/`}</PairSlash>

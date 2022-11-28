@@ -27,7 +27,7 @@ import theme from 'theme'
 import { useUserStore } from 'store'
 import { Typography, Stack, Button } from '@mui/material'
 import Image from 'next/image'
-
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 export const Container = styled.div`
   position: absolute;
   top: 0;
@@ -263,12 +263,12 @@ function ChartOverlay(props) {
               {/* <div>
                 &nbsp;<span>{`${asset.name} `}</span> / ALGO
               </div> */}
-              {!asset.isInverted && (
+              {!useInversionStatus(asset.id) && (
                 <div>
                   &nbsp;<span color='white'>{`${asset.name} `}</span> / ALGO
                 </div>
               )}
-              {asset.isInverted && (
+              {(useInversionStatus(asset.id)) && (
                 <div>
                   <span color='white'>ALGO</span> / {`${asset.name} `}
                 </div>

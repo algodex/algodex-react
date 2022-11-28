@@ -28,6 +28,7 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletAssetsQuery } from '@/hooks'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const Container = styled.div`
   display: flex;
@@ -81,7 +82,7 @@ export function AssetsTable({ assets }) {
   const formatAssetsList = assets.map((asset) => {
     return {
       ...asset,
-      isInverted: StableAssets.includes(parseInt(asset.id))
+      isInverted: useInversionStatus(parseInt(asset.id))
     }
   })
   const columns = useMemo(

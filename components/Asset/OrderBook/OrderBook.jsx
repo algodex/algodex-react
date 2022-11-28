@@ -47,6 +47,7 @@ import {
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0;
@@ -330,6 +331,7 @@ const DECIMALS_MAP = {
   const isSignedIn = isConnected
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
+  const isInverted = useInversionStatus(asset.id)
   const onAggrSelectorChange = useCallback((e) => {
     setCachedSelectedPrecision({
       ...cachedSelectedPrecision,
@@ -383,12 +385,12 @@ const DECIMALS_MAP = {
 
   const reduceOrders = useCallback((result, order) => {
     // const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
-    const _price = asset.isInverted
+    const _price = useInversionStatus(asset.id)
       ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
       : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     // const _amount = order.amount
-    const _amount = asset.isInverted ? order.amount * order.price : order.amount
+    const _amount = useInversionStatus(asset.id) ? order.amount * order.price : order.amount
     
     const index = result.findIndex(
       (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
@@ -423,7 +425,9 @@ const DECIMALS_MAP = {
 
   const renderOrders = useCallback((data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
+    
     return data.map((row, index) => {
+      // console.log(row, 'data here')
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
@@ -522,21 +526,22 @@ const DECIMALS_MAP = {
           </Stack>
           <Header className="mt-4">
             {/* <TablePriceHeader title="price" textAlign="left" /> */}
-            <TablePriceHeader currencySymbol={asset.isInverted ? `(${assetVeryShortName})` : ''} />
+            <TablePriceHeader currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
             <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({asset.isInverted ? 'ALGO' : assetVeryShortName})
+              {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" className="whitespace-nowrap" color="gray.500" textAlign="right" m={0}>
-              {t('total')} ({asset.isInverted ? 'ALGO' : assetVeryShortName})
+              {t('total')} ({isInverted ? 'ALGO' : assetVeryShortName})
             </Typography>
             {/* <TablePriceHeader title="total" textAlign="right" /> */}
           </Header>
         </Box>
 
         <SellOrders>
-          {/* <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper> */}
+          <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
           {/* {renderOrders(asset.isInverted ? sortedBuyOrder : aggregatedSellOrder, 'sell')} */}
-          {renderOrders(asset.isInverted ? sortedBuyOrder : renderedSellOrders, 'sell')}
+          {/* {renderOrders(useInversionStatus(asset.id) ? sortedBuyOrder : renderedSellOrders, 'sell')} */}
+          {/* {renderOrders(isInverted ? sortedBuyOrder : renderedSellOrders, 'sell')} */}
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -545,16 +550,16 @@ const DECIMALS_MAP = {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {/* {renderedBuyOrders} */}
+            {renderedBuyOrders}
             {/* {renderOrders(asset.isInverted ? sortedSellOrder : aggregatedBuyOrder, 'buy')} */}
-            {renderOrders(asset.isInverted ? sortedSellOrder : renderedBuyOrders, 'buy')}
+            {/* {renderOrders(useInversionStatus(asset.id) ? sortedSellOrder : renderedBuyOrders, 'buy')} */}
           </OrdersWrapper>
         </BuyOrders>
       </Container>
     </Section>
   )}, [PriceDisplay, asset, assetVeryShortName, isSignedIn,
       onAggrSelectorChange, orders.buy, orders.sell,
-      renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
+      renderedBuyOrders, renderedSellOrders, selectedPrecision, t, isInverted])
 }
 
 OrderBook.propTypes = {

@@ -31,6 +31,7 @@ import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@/hooks'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 dayjs.extend(localizedFormat)
 
@@ -183,7 +184,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
         if (row.price === 0) {
           return
         }
-        const price = asset.isInverted ? 1 / row.price : row.price
+        const price = useInversionStatus(asset.id) ? 1 / row.price : row.price
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
@@ -224,12 +225,12 @@ export function TradeHistory({ asset, orders: tradesData }) {
           </Typography>
           <Header className="mt-4">
             {/* <PriceHeader /> */}
-            <PriceHeader currencySymbol={asset.isInverted ? `(${assetVeryShortName})` : ''} />
+            <PriceHeader currencySymbol={useInversionStatus(asset.id) ? `(${assetVeryShortName})` : ''} />
             {/* <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </Typography> */}
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({asset.isInverted ? 'ALGO' : assetVeryShortName})
+              {t('amount')} ({useInversionStatus(asset.id) ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}

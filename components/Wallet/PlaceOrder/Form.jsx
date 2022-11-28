@@ -17,7 +17,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
-import { useCallback, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -37,6 +37,7 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -84,7 +85,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
+  const [isInverted, setIsInverted] = useState(false)
+  // const isInverted = useInversionStatus(asset.id)
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
     const _decimals = decimal > 6 ? 6 : decimal
@@ -113,7 +115,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet])
 
-  const getAdjOrderAmount = useCallback(({amount, type, price}) => {
+  const getAdjOrderAmount = useCallback(({ amount, type, price }) => {
     let adjAmount = amount || 0
     let total = adjAmount * price
     if (type === 'buy' && total > algoBalance) {
@@ -208,20 +210,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // useEffect(() => {
   //   updateInitialState()
   // }, [order.type, updateInitialState])
-
-  const buttonProps = useMemo(
-    () => ({
-      buy: { 
-        variant: 'primary', 
-        text: `${t('buy')} ${(asset.isInverted ? 'ALGO' : asset.name) || asset.id}` 
-      },
-      sell: { 
-        variant: 'danger', 
-        text: `${t('sell')} ${(asset.isInverted ? 'ALGO' : asset.name) || asset.id}` 
+  
+  const buttonProps = useCallback(
+    (key) => {
+      const isInverted = useInversionStatus(asset.id)
+      const btnProps = {
+        buy: {
+          variant: 'primary',
+          text: `${t('buy')} ${(isInverted ? 'ALGO' : asset.name) || asset.id}`
+        },
+        sell: {
+          variant: 'danger',
+          text: `${t('sell')} ${(isInverted ? 'ALGO' : asset.name) || asset.id}`
+        }
       }
-    }),
-    [asset]
-  )
+      return btnProps[key]?.text
+    }, [asset])
 
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
@@ -349,11 +353,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      const { isInverted } = asset
-      const formattedOrder = {...order, type: isInverted && order.type === 'buy' ? 'sell' : 'buy'}
+      const isInverted = useInversionStatus(asset.id)
+      const formattedOrder = { ...order, type: isInverted && order.type === 'buy' ? 'sell' : 'buy' }
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
-      
+
       let lastToastId = undefined
       let orderPromise
       const notifier = (msg) => {
@@ -520,7 +524,8 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount
             }
           >
-            {buttonProps[order.type || 'buy']?.text}
+            {/* {buttonProps[order.type || 'buy']?.text} */}
+            {buttonProps(order.type || 'buy')}
           </Button>
         </Form>
       )}

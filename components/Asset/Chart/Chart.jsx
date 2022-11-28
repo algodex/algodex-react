@@ -27,6 +27,7 @@ import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
 import { withAssetChartQuery } from '@/hooks'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const Container = styled.div`
   position: relative;
@@ -128,7 +129,7 @@ export function Chart({
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
 
-  if (asset.isInverted) {
+  if (useInversionStatus(asset.id)) {
     ohlc.forEach((ele, index) => {
       ohlc[index].open = ele.open != 0 ? floatToFixed(1 / ele.open) : 'Invalid'
       ohlc[index].low = ele.low != 0 ? floatToFixed(1 / ele.low) : 'Invalid'
@@ -203,7 +204,7 @@ export function Chart({
 
   const mouseOut = useCallback(() => {
     // setOverlay(_overlay)
-    if (asset.isInverted) {
+    if (useInversionStatus(asset.id)) {
       const __overlay = { ...overlay, ..._overlay }
       setOverlay(__overlay)
     } else {

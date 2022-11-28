@@ -29,6 +29,7 @@ import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
 import useTranslation from 'next-translate/useTranslation'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 /**
  *
@@ -327,7 +328,7 @@ export const TradeInputs = ({
   }
   return (
     <MaterialBox className="flex flex-col mb-4">
-      {asset.isInverted ? invertedAssetInput() : regularAssetInput()}
+      {useInversionStatus(asset.id) ? invertedAssetInput() : regularAssetInput()}
       {/* <OutlinedInput
         sx={{
           backgroundColor:
@@ -449,7 +450,7 @@ export const TradeInputs = ({
         endAdornment={
           <MUIInputAdornment position="end">
             <span className="text-sm font-bold text-gray-500">
-              {asset.isInverted ? asset.name : 'ALGO'}
+              {useInversionStatus(asset.id) ? asset.name : 'ALGO'}
             </span>
           </MUIInputAdornment>
         }

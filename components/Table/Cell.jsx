@@ -25,6 +25,7 @@ import { useCallback, useMemo } from 'react'
 import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { getActiveNetwork } from 'services/environment'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
@@ -53,7 +54,8 @@ export const AssetNameCell = ({ value, row }) => {
   }, [dispatcher])
   const formattedPair = (value) => {
     const splittedPair = value.split('/')
-    if (row?.original?.isInverted && typeof splittedPair[1] !== 'undefined') {
+    // if (row?.original?.isInverted && typeof splittedPair[1] !== 'undefined') {
+    if (useInversionStatus(row?.original.id) && typeof splittedPair[1] !== 'undefined') {
       return `${splittedPair[1]}/${splittedPair[0]}`
     } else {
       return value
@@ -87,7 +89,7 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 export const OrderTypeCell = ({ value, row }) => {
   const { t } = useTranslation('orders')
   const formattedPair = (value) => {
-    if (row.original.isInverted) {
+    if (useInversionStatus(row?.original.id)) {
       return value === 'BUY' ? t('sell') : t('buy')
     } else {
       return t(value.toLowerCase())
@@ -95,7 +97,7 @@ export const OrderTypeCell = ({ value, row }) => {
     }
   }
   return (
-    <OrderTypeSpan title={formattedPair(value)} isInverted={row.original.isInverted} data-testid="cell-item" value={formattedPair(value)}>
+    <OrderTypeSpan title={formattedPair(value)} isInverted={useInversionStatus(row?.original.id)} data-testid="cell-item" value={formattedPair(value)}>
       {/* {t(value.toLowerCase())} */}
       {formattedPair(value)}
     </OrderTypeSpan>

@@ -28,6 +28,7 @@ import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@/hooks'
 import {floatToFixedDisplay} from '@/services/display';
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const OrderHistoryContainer = styled.div`
   display: flex;
@@ -66,7 +67,7 @@ export function TradeHistoryTable({ orders }) {
       const _order = {
         ...order,
         price: floatToFixedDisplay(order.price),
-        isInverted: StableAssets.includes(parseInt(order.id))
+        isInverted: useInversionStatus(parseInt(order.id))
       }
       return _order
     })
