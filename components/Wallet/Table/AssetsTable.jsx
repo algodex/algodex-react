@@ -76,13 +76,13 @@ export function AssetsTable({ assets }) {
   // console.log(`AssetsTable(`, arguments[0], `)`)
 
   const { t } = useTranslation('orders')
+  // const isInverted = useInversionStatus(asset.id)
 
   const walletAssetsTableState = useUserStore((state) => state.walletAssetsTableState)
   const setWalletAssetsTableState = useUserStore((state) => state.setWalletAssetsTableState)
   const formatAssetsList = assets.map((asset) => {
     return {
       ...asset,
-      isInverted: useInversionStatus(parseInt(asset.id))
     }
   })
   const columns = useMemo(

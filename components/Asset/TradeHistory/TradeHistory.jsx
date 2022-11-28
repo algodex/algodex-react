@@ -149,7 +149,7 @@ const PriceHeader = () => {
 export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
-
+  const isInverted = useInversionStatus(asset.id)
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
   const renderHistory = useCallback(() => {
@@ -184,7 +184,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
         if (row.price === 0) {
           return
         }
-        const price = useInversionStatus(asset.id) ? 1 / row.price : row.price
+        const price = isInverted ? 1 / row.price : row.price
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
@@ -225,12 +225,12 @@ export function TradeHistory({ asset, orders: tradesData }) {
           </Typography>
           <Header className="mt-4">
             {/* <PriceHeader /> */}
-            <PriceHeader currencySymbol={useInversionStatus(asset.id) ? `(${assetVeryShortName})` : ''} />
+            <PriceHeader currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
             {/* <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </Typography> */}
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({useInversionStatus(asset.id) ? 'ALGO' : assetVeryShortName})
+              {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}

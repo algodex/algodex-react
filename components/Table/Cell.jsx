@@ -47,6 +47,7 @@ const TradeDetailLink = styled.a`
  */
 export const AssetNameCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
+  const isInverted = useInversionStatus(row?.original.id)
   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
     [row?.original?.asset?.id, row?.original?.id])
   const onClick = useCallback(() => {
@@ -55,7 +56,7 @@ export const AssetNameCell = ({ value, row }) => {
   const formattedPair = (value) => {
     const splittedPair = value.split('/')
     // if (row?.original?.isInverted && typeof splittedPair[1] !== 'undefined') {
-    if (useInversionStatus(row?.original.id) && typeof splittedPair[1] !== 'undefined') {
+    if (isInverted && typeof splittedPair[1] !== 'undefined') {
       return `${splittedPair[1]}/${splittedPair[0]}`
     } else {
       return value
@@ -88,8 +89,9 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
  */
 export const OrderTypeCell = ({ value, row }) => {
   const { t } = useTranslation('orders')
+  const isInverted = useInversionStatus(row.original.id)
   const formattedPair = (value) => {
-    if (useInversionStatus(row?.original.id)) {
+    if (isInverted) {
       return value === 'BUY' ? t('sell') : t('buy')
     } else {
       return t(value.toLowerCase())
@@ -97,13 +99,13 @@ export const OrderTypeCell = ({ value, row }) => {
     }
   }
   return (
-    <OrderTypeSpan title={formattedPair(value)} isInverted={useInversionStatus(row?.original.id)} data-testid="cell-item" value={formattedPair(value)}>
+    <OrderTypeSpan title={formattedPair(value)} isInverted={isInverted} data-testid="cell-item" value={formattedPair(value)}>
       {/* {t(value.toLowerCase())} */}
       {formattedPair(value)}
     </OrderTypeSpan>
   )
 }
-OrderTypeCell.propTypes = { value: PropTypes.any }
+OrderTypeCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
 
 /**
  * Show Trade Detail

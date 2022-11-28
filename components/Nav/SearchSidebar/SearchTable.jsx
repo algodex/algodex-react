@@ -325,9 +325,17 @@ export const NavSearchTable = ({
     row: PropTypes.object
   }
 
+  const getInversionStatus = useCallback((id) => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return StableAssets.includes(parseInt(id))
+    }
+    return false
+  }, [])
+
   const AssetNameCell = useCallback(
     ({ value, row }) => {
-      // const inversionStatusFn = useInversionStatus
+      const isInverted = getInversionStatus(row.original?.id)
       return (
         <div className="flex flex-col">
           <div
@@ -353,7 +361,7 @@ export const NavSearchTable = ({
                   ALGO
                 </NameVerifiedWrapper>
               </AssetNameBlock> */}
-              {useInversionStatus(row?.original.id) && (
+              {isInverted && (
                 <AssetNameBlock>
                   <AssetName>ALGO</AssetName>
                   <PairSlash>{`/`}</PairSlash>
@@ -362,7 +370,7 @@ export const NavSearchTable = ({
                   </NameVerifiedWrapper>
                 </AssetNameBlock>
               )}
-              {!useInversionStatus(row?.original.id) && (
+              {!isInverted && (
                 <AssetNameBlock>
                   <AssetName>{value}</AssetName>
                   <PairSlash>{`/`}</PairSlash>

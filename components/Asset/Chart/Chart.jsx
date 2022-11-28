@@ -128,8 +128,9 @@ export function Chart({
   const [overlay, setOverlay] = useState(_overlay)
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
+  const isInverted = useInversionStatus(asset.id)
 
-  if (useInversionStatus(asset.id)) {
+  if (isInverted) {
     ohlc.forEach((ele, index) => {
       ohlc[index].open = ele.open != 0 ? floatToFixed(1 / ele.open) : 'Invalid'
       ohlc[index].low = ele.low != 0 ? floatToFixed(1 / ele.low) : 'Invalid'
@@ -204,7 +205,7 @@ export function Chart({
 
   const mouseOut = useCallback(() => {
     // setOverlay(_overlay)
-    if (useInversionStatus(asset.id)) {
+    if (isInverted) {
       const __overlay = { ...overlay, ..._overlay }
       setOverlay(__overlay)
     } else {

@@ -38,6 +38,7 @@ import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
+import { StableAssets } from '@/components/StableAssets'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -85,8 +86,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-  const [isInverted, setIsInverted] = useState(false)
-  // const isInverted = useInversionStatus(asset.id)
+
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
     const _decimals = decimal > 6 ? 6 : decimal
@@ -106,6 +106,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     }
     return res
   }, [wallet, asset])
+
 
   const algoBalance = useMemo(() => {
     let res = 0
@@ -213,7 +214,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   
   const buttonProps = useCallback(
     (key) => {
-      const isInverted = useInversionStatus(asset.id)
+      const isInverted = getInversionStatus()
       const btnProps = {
         buy: {
           variant: 'primary',
@@ -350,10 +351,18 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [asset.isGeoBlocked]
   )
 
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return StableAssets.includes(parseInt(asset.id))
+    }
+    return false
+  }, [])
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      const isInverted = useInversionStatus(asset.id)
+      const isInverted = getInversionStatus()
+
       const formattedOrder = { ...order, type: isInverted && order.type === 'buy' ? 'sell' : 'buy' }
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)

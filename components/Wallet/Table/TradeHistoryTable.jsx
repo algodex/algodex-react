@@ -23,7 +23,7 @@ import Table, {
 import { StableAssets } from '@/components/StableAssets'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@/hooks'
@@ -62,12 +62,19 @@ export function TradeHistoryTable({ orders }) {
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
   )
+  const getInversionStatus = useCallback((id) => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return StableAssets.includes(parseInt(id))
+    }
+    return false
+  }, [])
   const _formattedOrders = useMemo(() => {
     return orders.map((order) => {
       const _order = {
         ...order,
         price: floatToFixedDisplay(order.price),
-        isInverted: useInversionStatus(parseInt(order.id))
+        isInverted: getInversionStatus(parseInt(order.id))
       }
       return _order
     })
