@@ -22,13 +22,12 @@ import { StableAssets } from '@/components/StableAssets'
  * @param {number} id
  * @return {boolean}
  */
-export function useInversionStatus(id) {
+export function useInversionStatus(id, storageStatus) {
   const inversionStatus = localStorage.getItem('inversionStatus')
   if (inversionStatus && inversionStatus === 'true') {
     return StableAssets.includes(parseInt(id))
   }
   return false
-  // return StableAssets.includes(parseInt(id))
 }
 
 export default useInversionStatus

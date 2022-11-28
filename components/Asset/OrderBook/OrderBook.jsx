@@ -425,9 +425,7 @@ const DECIMALS_MAP = {
 
   const renderOrders = useCallback((data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    
     return data.map((row, index) => {
-      // console.log(row, 'data here')
       const amount = new Big(row.amount)
       const total = new Big(row.total)
       const handleSelectOrder = () => {
@@ -489,11 +487,13 @@ const DECIMALS_MAP = {
   },[aggregatedBuyOrder, renderOrders]);
 
   const sortedBuyOrder = useMemo(() => {
-    return aggregatedBuyOrder.sort((a, b) => b.price - a.price)
+    const sortedOrders = aggregatedBuyOrder.sort((a, b) => b.price - a.price)
+    return renderOrders(sortedOrders, 'buy')
   }, [aggregatedBuyOrder])
 
   const sortedSellOrder = useMemo(() => {
-    return aggregatedSellOrder.sort((a, b) => b.price - a.price)
+    const sortedSellOrder = aggregatedSellOrder.sort((a, b) => b.price - a.price)
+    return renderOrders(sortedSellOrder, 'sell')
   }, [aggregatedSellOrder])
   
 
@@ -538,10 +538,14 @@ const DECIMALS_MAP = {
         </Box>
 
         <SellOrders>
-          <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
+          {/* <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper> */}
           {/* {renderOrders(asset.isInverted ? sortedBuyOrder : aggregatedSellOrder, 'sell')} */}
           {/* {renderOrders(useInversionStatus(asset.id) ? sortedBuyOrder : renderedSellOrders, 'sell')} */}
           {/* {renderOrders(isInverted ? sortedBuyOrder : renderedSellOrders, 'sell')} */}
+          {/* {renderOrders(isInverted ? sortedBuyOrder : aggregatedSellOrder, 'sell')} */}
+          <OrdersWrapper className="p-4">
+            {isInverted ? sortedBuyOrder : renderedSellOrders}
+          </OrdersWrapper>
         </SellOrders>
 
         <CurrentPrice className="px-4">
@@ -550,7 +554,8 @@ const DECIMALS_MAP = {
 
         <BuyOrders>
           <OrdersWrapper className="px-4 pt-4">
-            {renderedBuyOrders}
+            {isInverted ? sortedSellOrder : renderedBuyOrders}
+            {/* {renderedBuyOrders} */}
             {/* {renderOrders(asset.isInverted ? sortedSellOrder : aggregatedBuyOrder, 'buy')} */}
             {/* {renderOrders(useInversionStatus(asset.id) ? sortedSellOrder : renderedBuyOrders, 'buy')} */}
           </OrdersWrapper>
