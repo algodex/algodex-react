@@ -44,7 +44,6 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@/hooks'
-import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 /**
  * Map a Query Result to a Search Result

@@ -17,7 +17,6 @@
 import { AssetId, AssetNameBlock } from '@/components/Asset/Typography'
 import Table, { AssetNameCell, DefaultCell } from '@/components/Table'
 import { useCallback, useMemo } from 'react'
-import { StableAssets } from '@/components/StableAssets'
 
 import Link from 'next/link'
 import PropTypes from 'prop-types'
@@ -28,7 +27,6 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletAssetsQuery } from '@/hooks'
-import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const Container = styled.div`
   display: flex;

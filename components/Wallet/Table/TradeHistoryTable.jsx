@@ -28,7 +28,6 @@ import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@/hooks'
 import {floatToFixedDisplay} from '@/services/display';
-import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 const OrderHistoryContainer = styled.div`
   display: flex;

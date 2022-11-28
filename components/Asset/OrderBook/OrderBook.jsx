@@ -16,7 +16,7 @@
 // import '@/wdyr';
 
 import { ArrowDown, ArrowUp } from 'react-feather'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks'
 

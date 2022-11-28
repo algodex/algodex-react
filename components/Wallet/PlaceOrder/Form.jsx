@@ -17,7 +17,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useMemo, useReducer, useState } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -37,7 +37,6 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
-import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
 import { StableAssets } from '@/components/StableAssets'
 
 export const Form = styled.form`

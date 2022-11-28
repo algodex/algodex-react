@@ -14,7 +14,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, useCallback, useMemo } from 'react'
 import { StableAssets } from '@/components/StableAssets'
 
 /**
@@ -22,7 +21,7 @@ import { StableAssets } from '@/components/StableAssets'
  * @param {number} id
  * @return {boolean}
  */
-export function useInversionStatus(id, storageStatus) {
+export function useInversionStatus(id) {
   const inversionStatus = localStorage.getItem('inversionStatus')
   if (inversionStatus && inversionStatus === 'true') {
     return StableAssets.includes(parseInt(id))

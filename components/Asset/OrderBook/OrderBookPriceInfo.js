@@ -17,12 +17,12 @@
 // import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
 import { Stack, Typography } from '@mui/material'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+// import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
