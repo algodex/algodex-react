@@ -321,7 +321,7 @@ const DECIMALS_MAP = {
  * @returns {JSX.Element}
  * @constructor
  */
- export function OrderBook({ asset, orders, components }) {
+ export function OrderBook({ asset, orders, components, isMobile }) {
   const { query } = useRouter()
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
@@ -434,6 +434,12 @@ const DECIMALS_MAP = {
           type: 'order',
           payload
         })
+        if (isMobile) {
+          dispatcher('mobileClick', {
+            type: 'order',
+            payload
+          })
+        }
       }
 
       return (
