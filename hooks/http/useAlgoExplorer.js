@@ -54,7 +54,7 @@ export function useExplorerAssetInfo({asset, options}) {
   // }, [router, data, isError, error])
 
   return {data, isError, error, ...rest};
-};
+}
 
 /**
  *
@@ -89,7 +89,7 @@ export function useAlgorandPriceQuery({
       options,
 
   );
-};
+}
 
 /**
  * With Algorand Price Query

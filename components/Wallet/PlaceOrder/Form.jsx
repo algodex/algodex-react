@@ -578,7 +578,13 @@ PlaceOrderForm.propTypes = {
   /**
    * Submit Handler
    */
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+
+  selectedOrder: PropTypes.shape({
+    amount: PropTypes.string,
+    type: PropTypes.string,
+    price: PropTypes.string
+  })
 }
 PlaceOrderForm.defaultProps = {
   showTitle: true,
