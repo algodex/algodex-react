@@ -248,6 +248,14 @@ function ChartOverlay(props) {
     }
   }, [])
 
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return StableAssets.includes(parseInt(asset.id))
+    }
+    return false
+  }, [])
+
   return (
     <Container>
       <Header>
@@ -282,15 +290,20 @@ function ChartOverlay(props) {
               </div>
             </Stack>
             <div>
-              {StableAssets.includes(parseInt(asset.id)) && <Button
+              <Button
                 data-testid="asset-info-back-btn"
                 variant="contained"
+                disabled={!(StableAssets.includes(parseInt(asset.id)))}
                 sx={{
-                  background: inversionStatus ? theme.palette.green[500] : '#2F3747',
+                  background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
                   borderRadius: '3px',
                   pointerEvents: 'all',
                   ':hover': {
-                    background: inversionStatus ? theme.palette.green[500] : '#2F3747',
+                    background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
+                  },
+                  ':disabled': {
+                    opacity: '0.5',
+                    background: theme.palette.gray[600],
                   }
                 }}
                 onClick={() => setInversionStatusFn()}
@@ -304,7 +317,7 @@ function ChartOverlay(props) {
                   height={25}
                 />&nbsp;&nbsp;
                 <Typography sx={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>INVERT PAIR</Typography>
-              </Button>}
+              </Button>
             </div>
           </Stack>
 
