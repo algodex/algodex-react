@@ -24,7 +24,7 @@ import { StableAssets } from '@/components/StableAssets'
 export function useInversionStatus(id) {
   const inversionStatus = localStorage.getItem('inversionStatus')
   if (inversionStatus && inversionStatus === 'true') {
-    return StableAssets.includes(parseInt(id))
+    return true
   }
   return false
 }

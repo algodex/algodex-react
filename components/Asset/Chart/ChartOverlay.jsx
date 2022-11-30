@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 // import Button from 'components/Button'
 import Big from 'big.js'
 import Icon from '@mdi/react'
@@ -29,6 +29,7 @@ import { Typography, Stack, Button } from '@mui/material'
 import Image from 'next/image'
 import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
 import { StableAssets } from '@/components/StableAssets'
+import { useRouter } from 'next/router'
 
 export const Container = styled.div`
   position: absolute;
@@ -251,9 +252,16 @@ function ChartOverlay(props) {
   const getInversionStatus = useCallback(() => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
-      return StableAssets.includes(parseInt(asset.id))
+      return true
     }
     return false
+  }, [])
+  const router = useRouter()
+  useEffect(() => {
+    // Get the ID of see
+    const isStableAsset = StableAssets.includes(parseInt(asset.id))
+    if (isStableAsset)
+      localStorage.setItem('inversionStatus', 'true')
   }, [])
 
   return (
@@ -293,7 +301,6 @@ function ChartOverlay(props) {
               <Button
                 data-testid="asset-info-back-btn"
                 variant="contained"
-                disabled={!(StableAssets.includes(parseInt(asset.id)))}
                 sx={{
                   background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
                   borderRadius: '3px',

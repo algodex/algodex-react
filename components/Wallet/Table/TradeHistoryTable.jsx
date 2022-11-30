@@ -64,7 +64,7 @@ export function TradeHistoryTable({ orders }) {
   const getInversionStatus = useCallback((id) => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
-      return StableAssets.includes(parseInt(id))
+      return true
     }
     return false
   }, [])

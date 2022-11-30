@@ -353,7 +353,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const getInversionStatus = useCallback(() => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
-      return StableAssets.includes(parseInt(asset.id))
+      return true
     }
     return false
   }, [])
