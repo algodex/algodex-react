@@ -17,7 +17,7 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
-import { useCallback, useMemo, useReducer, useState } from 'react'
+import { useCallback, useMemo, useReducer, useState, useEffect } from 'react'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -79,7 +79,7 @@ function shallowEqual(object1, object2) {
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box } }) {
+export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box }, selectedOrder }) {
   const { t } = useTranslation('place-order')
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
@@ -208,6 +208,17 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   // useEffect(() => {
   //   updateInitialState()
   // }, [order.type, updateInitialState])
+
+  useEffect(() => {
+    if (selectedOrder) {
+      const order = {
+        amount: selectedOrder.amount,
+        price: Number(selectedOrder.price),
+        type: selectedOrder.type
+      }
+      setOrder(order)
+    }
+  }, [])
 
   const buttonProps = useMemo(
     () => ({
@@ -567,7 +578,13 @@ PlaceOrderForm.propTypes = {
   /**
    * Submit Handler
    */
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+
+  selectedOrder: PropTypes.shape({
+    amount: PropTypes.string,
+    type: PropTypes.string,
+    price: PropTypes.string
+  })
 }
 PlaceOrderForm.defaultProps = {
   showTitle: true,
