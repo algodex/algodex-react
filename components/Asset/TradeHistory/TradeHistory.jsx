@@ -137,6 +137,11 @@ const PriceHeader = ({ title }) => {
   )
 }
 
+PriceHeader.propTypes = {
+  title: PropTypes.string
+}
+
+
 /**
  * Asset Trade History
  *
