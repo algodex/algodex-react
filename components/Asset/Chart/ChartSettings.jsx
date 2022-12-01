@@ -90,8 +90,7 @@ function ChartSettings(props) {
         <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">Candle</ToggleBtn2>
         <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">Area</ToggleBtn2>
       </ToggleButtonGroup>
-      <ToggleButtonGroup exclusive={true} sx={{'marginLeft': '10px'}}
-        exclusive="true" value={interval} onChange={onChange}>
+      <ToggleButtonGroup sx={{'marginLeft': '10px'}} exclusive={true} value={interval} onChange={onChange}>
         {renderTimeIntervals()}
       </ToggleButtonGroup>
     </Container>
