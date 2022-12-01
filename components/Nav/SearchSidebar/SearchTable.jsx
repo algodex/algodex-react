@@ -267,7 +267,9 @@ export const NavSearchTable = ({
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Geoformatted assets
     const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
-    const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
+    // REVERT TO ADD SORTING FOR RESTRICTED
+    // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
+    const filteredList = geoFormattedAssets.assets;
     
     // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
