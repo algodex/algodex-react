@@ -6,7 +6,5 @@ export const StableAssets = [
   38718614, // USDC,
   42279195, // USDT
   94115664, //USDT
-  // 15322902,
-  // 48806985,
   31566704 // USDC Mainnet
 ]

@@ -327,8 +327,7 @@ export const NavSearchTable = ({
   const getInversionStatus = useCallback((id) => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
-      const activeAssetId = router.asPath.split('/')[2].split('?')[0]
-      return parseInt(activeAssetId) === id
+      return true
     }
     return false
   }, [])
@@ -336,6 +335,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       const isInverted = getInversionStatus(row.original?.id)
+      const activeAssetId = router.asPath.split('/')[2].split('?')[0]
       return (
         <div className="flex flex-col">
           <div
@@ -361,7 +361,7 @@ export const NavSearchTable = ({
                   ALGO
                 </NameVerifiedWrapper>
               </AssetNameBlock> */}
-              {isInverted && (
+              {(isInverted && parseInt(activeAssetId) === row.original?.id) ? (
                 <AssetNameBlock>
                   <AssetName>ALGO</AssetName>
                   <PairSlash>{`/`}</PairSlash>
@@ -369,8 +369,7 @@ export const NavSearchTable = ({
                     {value}
                   </NameVerifiedWrapper>
                 </AssetNameBlock>
-              )}
-              {!isInverted && (
+              ) : (
                 <AssetNameBlock>
                   <AssetName>{value}</AssetName>
                   <PairSlash>{`/`}</PairSlash>
@@ -429,7 +428,7 @@ export const NavSearchTable = ({
         </div>
       )
     },
-    [handleFavoritesFn, toggleFavoritesFn]
+    [handleFavoritesFn, toggleFavoritesFn, getInversionStatus, router]
   )
 
   AssetNameCell.propTypes = {
@@ -521,7 +520,6 @@ export const NavSearchTable = ({
     // Prefetch the top assets
     searchResultData.slice(0, 30).map(result => {
       const assetId = result.id
-      // console.log('zprefetching: ' + assetId)
       router.prefetch('/trade/' + assetId)
     })
   }, [router, searchResultData])
