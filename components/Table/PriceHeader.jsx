@@ -36,7 +36,7 @@ export const TablePriceHeader = ({ title, textAlign }) => {
   return (
     <PriceHeaderText variant="body_tiny_cap" textAlign={textAlign} data-testid="header-item">
       {t(title)}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!title && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
     </PriceHeaderText>
   )
 }

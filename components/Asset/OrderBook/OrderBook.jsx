@@ -252,6 +252,7 @@ export function OrderBookPrice({ asset }) {
   const isDecrease = asset?.price_info?.price24Change < 0
   const color = isDecrease ? 'red' : 'green'
 
+  // console.log(asset, 'asset here')
   // function PriceInfo() {
   //   return (
   //     <Fragment>
@@ -526,7 +527,7 @@ export function OrderBook({ asset, orders, components }) {
             </Stack>
             <Header className="mt-4">
               {/* <TablePriceHeader title="price" textAlign="left" /> */}
-              <TablePriceHeader currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
+              <TablePriceHeader title={isInverted ? `${assetVeryShortName}` : ''} currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
               <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
                 {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
               </Typography>

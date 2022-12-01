@@ -127,12 +127,12 @@ const PriceHeaderText = styled(Typography)`
   }
 `
 
-const PriceHeader = () => {
+const PriceHeader = ({ title }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!title ? <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} /> : <span>&nbsp;{title}</span>}
     </PriceHeaderText>
   )
 }
@@ -225,7 +225,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
           </Typography>
           <Header className="mt-4">
             {/* <PriceHeader /> */}
-            <PriceHeader currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
+            <PriceHeader title={isInverted ? `${assetVeryShortName}` : ''} currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
             {/* <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
             </Typography> */}

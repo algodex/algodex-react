@@ -327,7 +327,8 @@ export const NavSearchTable = ({
   const getInversionStatus = useCallback((id) => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
-      return StableAssets.includes(parseInt(id))
+      const activeAssetId = router.asPath.split('/')[2].split('?')[0]
+      return parseInt(activeAssetId) === id
     }
     return false
   }, [])

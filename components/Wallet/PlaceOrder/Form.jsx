@@ -362,7 +362,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       e.preventDefault()
       const isInverted = getInversionStatus()
 
-      const formattedOrder = { ...order, type: isInverted && order.type === 'buy' ? 'sell' : 'buy' }
+      const formattedOrder = { ...order, type: isInverted ? order.type === 'buy' ? 'sell' : 'buy' : order.type }
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
       formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
 

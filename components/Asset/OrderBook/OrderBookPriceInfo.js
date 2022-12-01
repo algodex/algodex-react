@@ -17,7 +17,7 @@
 // import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
 import { Stack, Typography } from '@mui/material'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
@@ -40,34 +40,44 @@ const getPriceDecimals = (price) => {
 }
 
 const Loading = () => <Stack
-  sx={{ width: '100%'}}
+  sx={{ width: '100%' }}
   direction="row"
   justifyContent="center"
   alignItems="center"
 ><Spinner size={2} /></Stack>
 
-const PriceInfoView = ({asaValue, algoPrice, asset}) => {
+const PriceInfoView = ({ asaValue, algoPrice, asset }) => {
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
+  }, [])
+
+  const formattedAsaValue = getInversionStatus() ? (1/asaValue).toFixed(asset.decimals) : asaValue
+  
+
   return useMemo(() => {
     return (
       <>
         <Typography variant="h5" color="white">
-          {asaValue}
+          {formattedAsaValue}
         </Typography>
         {asset && asset.price_info && (
           <Typography className="ml-3" data-testid="price-info">
-            {(asset?.price_info?.price24Change &&
-              `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-              '0.00%'}
+            {(asset?.price_info?.price24Change && `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) || '0.00%'}
           </Typography>
         )}
         <div className="flex items-center ml-4 text-gray-500">
           <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
           <Typography variant="subtitle_small_bold">
-            ${formatUSDPrice(algoPrice * asaValue)}
+            ${formatUSDPrice(algoPrice * formattedAsaValue)}
           </Typography>
         </div>
       </>
-  )}, [asaValue, algoPrice, asset])
+    )
+  }, [formattedAsaValue, asaValue, algoPrice, asset])
 }
 
 PriceInfoView.propTypes = {
@@ -78,7 +88,7 @@ PriceInfoView.propTypes = {
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   const decimals = getPriceDecimals(asset?.price_info?.price || 0)
   const asaValue = floatToFixed(asset?.price_info?.price || 0, decimals, 6)
-  return typeof asset?.price_info === 'undefined' ? <Loading/> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
+  return typeof asset?.price_info === 'undefined' ? <Loading /> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
 }
 
 OrderBookPriceInfo.propTypes = {

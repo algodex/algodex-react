@@ -256,9 +256,10 @@ function ChartOverlay(props) {
     }
     return false
   }, [])
+
   const router = useRouter()
   useEffect(() => {
-    // Get the ID of see
+    // Get the ID of asset
     const isStableAsset = StableAssets.includes(parseInt(asset.id))
     if (isStableAsset)
       localStorage.setItem('inversionStatus', 'true')
@@ -273,8 +274,10 @@ function ChartOverlay(props) {
               path={mdiCheckDecagram}
               title="Verified Asset"
               size={0.7}
+              className="mt-4"
               color={theme.palette.gray['500']}
             />
+            // <></>
           )}
           <Stack width="100%" direction="row" justifyContent="space-between">
             <Stack direction="row">
@@ -305,6 +308,7 @@ function ChartOverlay(props) {
                   background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
                   borderRadius: '3px',
                   pointerEvents: 'all',
+                  marginBottom: '1rem',
                   ':hover': {
                     background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
                   },
