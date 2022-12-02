@@ -155,8 +155,8 @@ export function Chart({
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(candleChartRef, volume, ohlc, autoScaleProvider)
-  const { areaChart } = useAreaChart(areaChartRef, ohlc, autoScaleProvider)
+  const { candleChart } = useCandleChart(isInverted, candleChartRef, volume, ohlc, autoScaleProvider)
+  const { areaChart } = useAreaChart(isInverted, areaChartRef, ohlc, autoScaleProvider)
   const onSettingsChange = useCallback(
     (e) => {
       if (e?.target?.name === 'mode') {
@@ -230,7 +230,7 @@ export function Chart({
         return
       }
 
-      // if (asset.isInverted) {
+      // if (isInverted) {
       //   if (logical >= ohlc.length || logical >= algoVolume.length) {
       //     // setOverlay(_overlay)
       //     return

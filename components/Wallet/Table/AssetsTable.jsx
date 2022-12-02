@@ -78,7 +78,7 @@ export function AssetsTable({ assets }) {
 
   const walletAssetsTableState = useUserStore((state) => state.walletAssetsTableState)
   const setWalletAssetsTableState = useUserStore((state) => state.setWalletAssetsTableState)
-  const formatAssetsList = assets.map((asset) => {
+  const formatAssetsList = assets?.map((asset) => {
     return {
       ...asset,
     }

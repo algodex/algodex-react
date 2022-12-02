@@ -274,10 +274,9 @@ function ChartOverlay(props) {
               path={mdiCheckDecagram}
               title="Verified Asset"
               size={0.7}
-              className="mt-4"
+              className="-mt-4"
               color={theme.palette.gray['500']}
             />
-            // <></>
           )}
           <Stack width="100%" direction="row" justifyContent="space-between">
             <Stack direction="row">

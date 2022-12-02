@@ -391,7 +391,8 @@ export function OrderBook({ asset, orders, components }) {
       : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     // const _amount = order.amount
-    const _amount = isInverted ? order.amount * order.price : order.amount
+    // const _amount = isInverted ? 1/order.amount * order.price : order.amount
+    const _amount = isInverted ? 1/order.amount : order.amount
 
     const index = result.findIndex(
       (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price

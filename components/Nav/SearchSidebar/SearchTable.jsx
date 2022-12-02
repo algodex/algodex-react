@@ -209,6 +209,14 @@ export const NavSearchTable = ({
     (asa, index) => (formattedStableAsa[StableAssets[index]] = asa)
   )
 
+  const getInversionStatus = useCallback((id) => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
+  }, [router])
+
   useEffect(() => {
     const handleResize = () => {
       /**
@@ -304,15 +312,19 @@ export const NavSearchTable = ({
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
+      // console.log(value, 'value', row.original.id)
+      const isInverted = getInversionStatus(row.original.id)
+      const activeAssetId = router.asPath.split('/')[2].split('?')[0]
+      const formattedValue = (isInverted && parseInt(activeAssetId) === row.original?.id) ? (1/value).toFixed(row.original?.decimals) : value
       return (
         <AssetPrice
           className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
             } cursor-pointer font-semibold`}
         >
-          {value}
+          {formattedValue}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{formatUSDPrice(algoPrice * value)}&nbsp;USD</span> : ''}
+            {formattedValue !== '--' ? <span>{formatUSDPrice(algoPrice * formattedValue)}&nbsp;USD</span> : ''}
           </p>
         </AssetPrice>
       )
@@ -323,14 +335,6 @@ export const NavSearchTable = ({
     value: PropTypes.any,
     row: PropTypes.object
   }
-
-  const getInversionStatus = useCallback((id) => {
-    const inversionStatus = localStorage.getItem('inversionStatus')
-    if (inversionStatus && inversionStatus === 'true') {
-      return true
-    }
-    return false
-  }, [])
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
