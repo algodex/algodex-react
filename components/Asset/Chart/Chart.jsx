@@ -155,8 +155,8 @@ export function Chart({
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(isInverted, candleChartRef, volume, ohlc, autoScaleProvider)
-  const { areaChart } = useAreaChart(isInverted, areaChartRef, ohlc, autoScaleProvider)
+  const { candleChart } = useCandleChart(asset, isInverted, candleChartRef, volume, ohlc, autoScaleProvider)
+  const { areaChart } = useAreaChart(asset, isInverted, areaChartRef, ohlc, autoScaleProvider)
   const onSettingsChange = useCallback(
     (e) => {
       if (e?.target?.name === 'mode') {

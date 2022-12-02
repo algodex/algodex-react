@@ -25,7 +25,7 @@ const BACKGROUND_COLOR = theme.palette.gray[900]
 const BORDER_COLOR = theme.palette.gray[500]
 const TEXT_COLOR = theme.palette.gray[300]
 
-export default function useCandleChart(isInverted, containerRef, volumeData, priceData, autoScaleProvider) {
+export default function useCandleChart(asset, isInverted, containerRef, volumeData, priceData, autoScaleProvider) {
   const [candleChart, setCandleChart] = useState()
 
   useEffect(() => {
@@ -150,10 +150,10 @@ export default function useCandleChart(isInverted, containerRef, volumeData, pri
         (accumulator, currentValue) => {
           accumulator.push({
             ...currentValue,
-            close: (1 / parseFloat(currentValue.close)).toFixed(8),
-            high: (1 / parseFloat(currentValue.high)).toFixed(8),
-            low: (1 / parseFloat(currentValue.low)).toFixed(8),
-            open: (1 / parseFloat(currentValue.open)).toFixed(8)
+            close: (1 / parseFloat(currentValue.close)).toFixed(asset.decimals),
+            high: (1 / parseFloat(currentValue.high)).toFixed(asset.decimals),
+            low: (1 / parseFloat(currentValue.low)).toFixed(asset.decimals),
+            open: (1 / parseFloat(currentValue.open)).toFixed(asset.decimals)
           })
           return accumulator
         }, []);
@@ -162,10 +162,11 @@ export default function useCandleChart(isInverted, containerRef, volumeData, pri
     [priceData],
   )
 
-  const formattedPriceData = formattedPriceDataFn()
+  // const formattedPriceData = formattedPriceDataFn()
 
   useEffect(() => {
     if (candleChart) {
+      const formattedPriceData = formattedPriceDataFn()
       candleChart.volumeSeries.setData(volumeData)
       candleChart.candleSeries.setData(isInverted ? formattedPriceData : priceData)
 
@@ -188,7 +189,7 @@ export default function useCandleChart(isInverted, containerRef, volumeData, pri
         }
       })
     }
-  }, [candleChart, containerRef, priceData, volumeData, formattedPriceData])
+  }, [candleChart, containerRef, priceData, volumeData])
 
   return {
     candleChart: candleChart?.chart

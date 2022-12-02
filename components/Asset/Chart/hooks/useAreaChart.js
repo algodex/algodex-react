@@ -29,7 +29,7 @@ const TOP_LINE_COLOR = theme.palette.green[500]
 const BOTTOM_COLOR = 'rgba(56, 161, 105, 0.17)'
 const LINE_WIDTH = 2
 
-export default function useAreaChart(isInverted, containerRef, priceData, autoScaleProvider) {
+export default function useAreaChart(asset, isInverted, containerRef, priceData, autoScaleProvider) {
   const [areaChart, setAreaChart] = useState()
 
   useEffect(() => {
@@ -123,10 +123,10 @@ export default function useAreaChart(isInverted, containerRef, priceData, autoSc
         (accumulator, currentValue) => {
           accumulator.push({
             ...currentValue,
-            close: (1 / parseFloat(currentValue.close)).toFixed(8),
-            high: (1 / parseFloat(currentValue.high)).toFixed(8),
-            low: (1 / parseFloat(currentValue.low)).toFixed(8),
-            open: (1 / parseFloat(currentValue.open)).toFixed(8)
+            close: (1 / parseFloat(currentValue.close)).toFixed(asset.decimals),
+            high: (1 / parseFloat(currentValue.high)).toFixed(asset.decimals),
+            low: (1 / parseFloat(currentValue.low)).toFixed(asset.decimals),
+            open: (1 / parseFloat(currentValue.open)).toFixed(asset.decimals)
           })
           return accumulator
         }, []);
