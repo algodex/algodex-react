@@ -162,11 +162,10 @@ export default function useCandleChart(asset, isInverted, containerRef, volumeDa
     [priceData],
   )
 
-  // const formattedPriceData = formattedPriceDataFn()
+  const formattedPriceData = formattedPriceDataFn()
 
   useEffect(() => {
     if (candleChart) {
-      const formattedPriceData = formattedPriceDataFn()
       candleChart.volumeSeries.setData(volumeData)
       candleChart.candleSeries.setData(isInverted ? formattedPriceData : priceData)
 
@@ -189,7 +188,7 @@ export default function useCandleChart(asset, isInverted, containerRef, volumeDa
         }
       })
     }
-  }, [candleChart, containerRef, priceData, volumeData])
+  }, [candleChart, containerRef, priceData, volumeData, formattedPriceData])
 
   return {
     candleChart: candleChart?.chart

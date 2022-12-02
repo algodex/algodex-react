@@ -78,42 +78,7 @@ const SettingsContainer = styled.div`
     height: 2.75rem;
   }
 `
-function autoScaleProvider(original, chart, priceData) {
-  let visibleRange = chart.timeScale().getVisibleRange()
-  if (!visibleRange) {
-    return
-  }
-  const rangeStart = visibleRange.from
-  const rangeEnd = visibleRange.to
-  let max = 0
-  let min = -1
-  for (let i = 0; i < priceData.length; i++) {
-    const priceItem = priceData[i]
-    if (priceItem.time < rangeStart) {
-      continue
-    }
-    max = Math.max(priceItem.close, max)
-    max = Math.max(priceItem.open, max)
-    max = Math.max(priceItem.high, max)
-    if (min === -1) {
-      min = priceItem.open
-    }
-    min = Math.min(priceItem.close, min)
-    min = Math.min(priceItem.low, min)
-    min = Math.min(priceItem.open, min)
-    if (priceItem.time > rangeEnd) {
-      break
-    }
-  }
 
-  const res = original()
-  if (res !== null && min !== -1) {
-    res.priceRange.maxValue = max
-    res.priceRange.minValue = min
-  }
-
-  return res
-}
 export function Chart({
   asset,
   interval: _interval,
@@ -154,6 +119,43 @@ export function Chart({
 
   const candleChartRef = useRef()
   const areaChartRef = useRef()
+
+  const autoScaleProvider = useCallback((original, chart, priceData) => {
+    let visibleRange = chart.timeScale().getVisibleRange()
+    if (!visibleRange) {
+      return
+    }
+    const rangeStart = visibleRange.from
+    const rangeEnd = visibleRange.to
+    let max = 0
+    let min = -1
+    for (let i = 0; i < priceData.length; i++) {
+      const priceItem = priceData[i]
+      if (priceItem.time < rangeStart) {
+        continue
+      }
+      max = Math.max(priceItem.close, max)
+      max = Math.max(priceItem.open, max)
+      max = Math.max(priceItem.high, max)
+      if (min === -1) {
+        min = priceItem.open
+      }
+      min = Math.min(priceItem.close, min)
+      min = Math.min(priceItem.low, min)
+      min = Math.min(priceItem.open, min)
+      if (priceItem.time > rangeEnd) {
+        break
+      }
+    }
+  
+    const res = original()
+    if (res !== null && min !== -1) {
+      res.priceRange.maxValue = max
+      res.priceRange.minValue = min
+    }
+  
+    return res
+  }, [])
 
   const { candleChart } = useCandleChart(asset, isInverted, candleChartRef, volume, ohlc, autoScaleProvider)
   const { areaChart } = useAreaChart(asset, isInverted, areaChartRef, ohlc, autoScaleProvider)
