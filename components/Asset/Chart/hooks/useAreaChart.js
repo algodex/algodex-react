@@ -29,7 +29,7 @@ const TOP_LINE_COLOR = theme.palette.green[500]
 const BOTTOM_COLOR = 'rgba(56, 161, 105, 0.17)'
 const LINE_WIDTH = 2
 
-export default function useAreaChart(asset, isInverted, containerRef, priceData, autoScaleProvider) {
+export default function useAreaChart(containerRef, priceData, autoScaleProvider) {
   const [areaChart, setAreaChart] = useState()
 
   useEffect(() => {
@@ -116,30 +116,9 @@ export default function useAreaChart(asset, isInverted, containerRef, priceData,
     }
   }, [areaChart, containerRef])
 
-  const formattedPriceDataFn = useCallback(
-    () => {
-      const formatedPriceClone = [...priceData]
-      const formatedPrice = formatedPriceClone.reduce(
-        (accumulator, currentValue) => {
-          accumulator.push({
-            ...currentValue,
-            close: (1 / parseFloat(currentValue.close)).toFixed(asset.decimals),
-            high: (1 / parseFloat(currentValue.high)).toFixed(asset.decimals),
-            low: (1 / parseFloat(currentValue.low)).toFixed(asset.decimals),
-            open: (1 / parseFloat(currentValue.open)).toFixed(asset.decimals)
-          })
-          return accumulator
-        }, []);
-      return formatedPrice
-    },
-    [priceData],
-  )
-
-  const formatedPriceData = formattedPriceDataFn()
-
   useEffect(() => {
     if (areaChart) {
-      const areaPriceData = isInverted ? formatedPriceData : priceData
+      const areaPriceData = priceData
       const areaSeriesData = areaPriceData?.map(({ time, close }) => ({
         time,
         value: close
@@ -148,14 +127,13 @@ export default function useAreaChart(asset, isInverted, containerRef, priceData,
 
       // Scale Chart to appropriate time range
       const dataPointsToShow = 28
-      const lastDataPoint = isInverted ? formatedPriceData.length : priceData.length - 1
+      const lastDataPoint = priceData.length - 1
       areaChart.chart
         .timeScale()
         .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
       areaChart.areaSeries.applyOptions({
         autoscaleInfoProvider: (original) => {
-          const scalePricingData = isInverted ? formatedPriceData : priceData
-          return autoScaleProvider(original, areaChart.chart, scalePricingData)
+          return autoScaleProvider(original, areaChart.chart, priceData)
         }
       })
       if (priceData.length <= dataPointsToShow) {
@@ -163,7 +141,7 @@ export default function useAreaChart(asset, isInverted, containerRef, priceData,
         areaChart.chart.timeScale().fitContent()
       }
     }
-  }, [areaChart, containerRef, priceData, formatedPriceData])
+  }, [areaChart, containerRef, priceData])
 
   return {
     areaChart: areaChart?.chart

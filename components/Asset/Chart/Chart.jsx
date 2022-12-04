@@ -16,7 +16,7 @@
 
 import * as ReactDOM from 'react-dom'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
@@ -27,7 +27,7 @@ import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
 import { withAssetChartQuery } from '@/hooks'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
+import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
 
 const Container = styled.div`
   position: relative;
@@ -94,15 +94,29 @@ export function Chart({
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
   const isInverted = useInversionStatus(asset.id)
-
-  if (isInverted) {
-    ohlc.forEach((ele, index) => {
-      ohlc[index].open = ele.open != 0 ? floatToFixed(1 / ele.open) : 'Invalid'
-      ohlc[index].low = ele.low != 0 ? floatToFixed(1 / ele.low) : 'Invalid'
-      ohlc[index].high = ele.high != 0 ? floatToFixed(1 / ele.high) : 'Invalid'
-      ohlc[index].close = ele.close != 0 ? floatToFixed(1 / ele.close) : 'Invalid'
-    })
-  }
+  // console.log(isInverted, 'is inverted')
+  const formatedPriceData = useMemo(
+    () => {
+      if (isInverted) {
+        const formatedPriceClone = [...ohlc]
+        const formattedPrice = formatedPriceClone.reduce(
+          (accumulator, currentValue) => {
+            accumulator.push({
+              ...currentValue,
+              close: currentValue.close !== 0 ? floatToFixed(1 / currentValue.close) : 'Invalid',
+              high: currentValue.high !== 0 ? floatToFixed(1 / currentValue.high) : 'Invalid',
+              low: currentValue.low !== 0 ? floatToFixed(1 / currentValue.low) : 'Invalid',
+              open: currentValue.open !== 0 ? floatToFixed(1 / currentValue.open) : 'Invalid'
+            })
+            return accumulator
+          }, []);
+        return formattedPrice
+      } else {
+        return ohlc
+      }
+    },
+    [isInverted, ohlc],
+  )
 
   useEffect(() => {
     setOverlay(_overlay)
@@ -147,18 +161,18 @@ export function Chart({
         break
       }
     }
-  
+
     const res = original()
     if (res !== null && min !== -1) {
       res.priceRange.maxValue = max
       res.priceRange.minValue = min
     }
-  
+
     return res
   }, [])
 
-  const { candleChart } = useCandleChart(asset, isInverted, candleChartRef, volume, ohlc, autoScaleProvider)
-  const { areaChart } = useAreaChart(asset, isInverted, areaChartRef, ohlc, autoScaleProvider)
+  const { candleChart } = useCandleChart(candleChartRef, volume, formatedPriceData, autoScaleProvider)
+  const { areaChart } = useAreaChart(areaChartRef, formatedPriceData, autoScaleProvider)
   const onSettingsChange = useCallback(
     (e) => {
       if (e?.target?.name === 'mode') {
@@ -290,7 +304,7 @@ export function Chart({
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
           volume={overlay.volume}
-          // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
+        // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -301,7 +315,7 @@ export function Chart({
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
           volume={_overlay.volume}
-          // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
+        // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
         />
       )}
       <SettingsContainer>

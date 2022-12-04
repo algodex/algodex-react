@@ -303,6 +303,7 @@ function ChartOverlay(props) {
               <Button
                 data-testid="asset-info-back-btn"
                 variant="contained"
+                disabled={asset.decimals !== 6}
                 sx={{
                   background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
                   borderRadius: '3px',

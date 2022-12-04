@@ -25,7 +25,7 @@ const BACKGROUND_COLOR = theme.palette.gray[900]
 const BORDER_COLOR = theme.palette.gray[500]
 const TEXT_COLOR = theme.palette.gray[300]
 
-export default function useCandleChart(asset, isInverted, containerRef, volumeData, priceData, autoScaleProvider) {
+export default function useCandleChart(containerRef, volumeData, priceData, autoScaleProvider) {
   const [candleChart, setCandleChart] = useState()
 
   useEffect(() => {
@@ -134,44 +134,14 @@ export default function useCandleChart(asset, isInverted, containerRef, volumeDa
     }
   }, [candleChart, containerRef])
 
-  const getInversionStatus = useCallback((id) => {
-    const inversionStatus = localStorage.getItem('inversionStatus')
-    if (inversionStatus && inversionStatus === 'true') {
-      return true
-    }
-    return false
-  }, [])
-
-
-  const formattedPriceDataFn = useCallback(
-    () => {
-      const formatedPriceClone = [...priceData]
-      const formattedPrice = formatedPriceClone.reduce(
-        (accumulator, currentValue) => {
-          accumulator.push({
-            ...currentValue,
-            close: (1 / parseFloat(currentValue.close)).toFixed(asset.decimals),
-            high: (1 / parseFloat(currentValue.high)).toFixed(asset.decimals),
-            low: (1 / parseFloat(currentValue.low)).toFixed(asset.decimals),
-            open: (1 / parseFloat(currentValue.open)).toFixed(asset.decimals)
-          })
-          return accumulator
-        }, []);
-      return formattedPrice
-    },
-    [priceData],
-  )
-
-  const formattedPriceData = formattedPriceDataFn()
-
   useEffect(() => {
     if (candleChart) {
       candleChart.volumeSeries.setData(volumeData)
-      candleChart.candleSeries.setData(isInverted ? formattedPriceData : priceData)
+      candleChart.candleSeries.setData(priceData)
 
       // Scale Chart to appropriate time range
       const dataPointsToShow = 28
-      const lastDataPoint = isInverted ? formattedPriceData.length - 1 : priceData.length - 1
+      const lastDataPoint = priceData.length - 1
       candleChart.chart
         .timeScale()
         .setVisibleLogicalRange({ from: lastDataPoint - dataPointsToShow, to: lastDataPoint })
@@ -183,12 +153,11 @@ export default function useCandleChart(asset, isInverted, containerRef, volumeDa
 
       candleChart.candleSeries.applyOptions({
         autoscaleInfoProvider: (original) => {
-          const scalePricingData = isInverted ? formattedPriceData : priceData
-          return autoScaleProvider(original, candleChart.chart, scalePricingData)
+          return autoScaleProvider(original, candleChart.chart, priceData)
         }
       })
     }
-  }, [candleChart, containerRef, priceData, volumeData, formattedPriceData])
+  }, [candleChart, containerRef, priceData, volumeData])
 
   return {
     candleChart: candleChart?.chart

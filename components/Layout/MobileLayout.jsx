@@ -145,6 +145,7 @@ function MainLayout({ asset, children }) {
 
   const { wallet } = useAlgodex()
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
+  const [selectedOrder, setSelectedOrder] = useState()
 
   /**
    * delay time in ms between Nav Button switch
@@ -165,6 +166,14 @@ function MainLayout({ asset, children }) {
       setTimeout(() => setActiveMobile(TABS.TRADE), delaySwitch)
     }
   })
+
+  useEvent('mobileClick', (data) => {
+    if (data.type === 'order') {
+      setActiveMobile(TABS.TRADE)
+      setSelectedOrder(data.payload)
+    }
+  })
+
   if (!asset) {
     return <Spinner flex={true} />
   }
@@ -178,7 +187,7 @@ function MainLayout({ asset, children }) {
         )}
         {activeMobile === TABS.TRADE && (
           <PlaceOrderSection>
-            <PlaceOrder wallet={wallet} asset={asset} />
+            <PlaceOrder wallet={wallet} asset={asset} selectedOrder={selectedOrder} />
           </PlaceOrderSection>
         )}
         {activeMobile === TABS.CHART && (

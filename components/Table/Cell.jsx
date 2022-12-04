@@ -26,6 +26,7 @@ import { useEventDispatch } from '@/hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { getActiveNetwork } from 'services/environment'
 import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
+import { useRouter } from 'next/router'
 
 const OrderTypeSpan = styled.span`
   color: ${({ theme, value }) =>
@@ -48,6 +49,8 @@ const TradeDetailLink = styled.a`
 export const AssetNameCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
   const isInverted = useInversionStatus(row?.original.id)
+  const {query} = useRouter()
+  
   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
     [row?.original?.asset?.id, row?.original?.id])
   const onClick = useCallback(() => {
@@ -55,8 +58,7 @@ export const AssetNameCell = ({ value, row }) => {
   }, [dispatcher])
   const formattedPair = (value) => {
     const splittedPair = value.split('/')
-    // if (row?.original?.isInverted && typeof splittedPair[1] !== 'undefined') {
-    if (isInverted && typeof splittedPair[1] !== 'undefined') {
+    if (isInverted && parseInt(query.id) === assetId && typeof splittedPair[1] !== 'undefined') {
       return `${splittedPair[1]}/${splittedPair[0]}`
     } else {
       return value
@@ -90,16 +92,18 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
 export const OrderTypeCell = ({ value, row }) => {
   const { t } = useTranslation('orders')
   const isInverted = useInversionStatus(row.original.id)
+  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id])
+  const {query} = useRouter()
   const formattedPair = (value) => {
-    if (isInverted) {
+    if (isInverted && parseInt(query.id) === assetId) {
       return value === 'BUY' ? t('sell') : t('buy')
     } else {
       return t(value.toLowerCase())
-      // console.log(value, 'value here')
     }
   }
   return (
-    <OrderTypeSpan title={formattedPair(value)} isInverted={isInverted} data-testid="cell-item" value={formattedPair(value)}>
+    <OrderTypeSpan title={formattedPair(value)} isInverted={isInverted && parseInt(query.id) === assetId} data-testid="cell-item" value={formattedPair(value)}>
       {/* {t(value.toLowerCase())} */}
       {formattedPair(value)}
     </OrderTypeSpan>
