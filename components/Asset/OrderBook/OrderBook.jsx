@@ -407,7 +407,7 @@ const DECIMALS_MAP = {
       total: _amount * _price
     })
     return result
-  }, [selectedPrecision])
+  }, [isInverted, selectedPrecision])
 
   const aggregatedBuyOrder = useMemo(() => {
     if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
