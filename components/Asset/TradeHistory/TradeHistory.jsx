@@ -176,7 +176,6 @@ export function TradeHistory({ asset, orders: tradesData }) {
     }
 
     const priceDecimals = getPriceDecimals(avgPrice);
-
     return tradesData
       .sort((a, b) => {
         if (a.timestamp === b.timestamp) {
@@ -194,7 +193,7 @@ export function TradeHistory({ asset, orders: tradesData }) {
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
             <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-              {floatToFixed(row.price, priceDecimals, 6)}
+              {floatToFixed(price, priceDecimals, 6)}
             </Typography>
             <Typography
               variant="body_tiny_cap"
