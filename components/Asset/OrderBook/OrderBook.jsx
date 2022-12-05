@@ -376,23 +376,20 @@ const DECIMALS_MAP = {
       // Deducted a Microalgo because of rounding in use-store while setting total
       // FIXME: look into  - (asset.decimals ? 0.000001 : 1)
       const retval = parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
-      // console.log('yreturning ' + retval)
       return retval
     } else {
-      // console.log('zreturning ' + compoundedAmount)
       return compoundedAmount
     }
   }, [asset.decimals, maxSpendableAlgo])
 
   const reduceOrders = useCallback((result, order) => {
-    // const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
     const _price = isInverted
       ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
       : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
     // const _amount = order.amount
     // const _amount = isInverted ? 1/order.amount * order.price : order.amount
-    const _amount = isInverted ? 1/order.amount : order.amount
+    const _amount = order.amount
 
     const index = result.findIndex(
       (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
@@ -533,7 +530,6 @@ const DECIMALS_MAP = {
               </AggregatorSelector>
             </Stack>
             <Header className="mt-4">
-              {/* <TablePriceHeader title="price" textAlign="left" /> */}
               <TablePriceHeader title={isInverted ? `${assetVeryShortName}` : ''} currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
               <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
                 {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
@@ -541,16 +537,10 @@ const DECIMALS_MAP = {
               <Typography variant="body_tiny_cap" className="whitespace-nowrap" color="gray.500" textAlign="right" m={0}>
                 {t('total')} ({isInverted ? 'ALGO' : assetVeryShortName})
               </Typography>
-              {/* <TablePriceHeader title="total" textAlign="right" /> */}
             </Header>
           </Box>
 
           <SellOrders>
-            {/* <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper> */}
-            {/* {renderOrders(asset.isInverted ? sortedBuyOrder : aggregatedSellOrder, 'sell')} */}
-            {/* {renderOrders(useInversionStatus(asset.id) ? sortedBuyOrder : renderedSellOrders, 'sell')} */}
-            {/* {renderOrders(isInverted ? sortedBuyOrder : renderedSellOrders, 'sell')} */}
-            {/* {renderOrders(isInverted ? sortedBuyOrder : aggregatedSellOrder, 'sell')} */}
             <OrdersWrapper className="p-4">
               {isInverted ? sortedBuyOrder : renderedSellOrders}
             </OrdersWrapper>
@@ -563,9 +553,6 @@ const DECIMALS_MAP = {
           <BuyOrders>
             <OrdersWrapper className="px-4 pt-4">
               {isInverted ? sortedSellOrder : renderedBuyOrders}
-              {/* {renderedBuyOrders} */}
-              {/* {renderOrders(asset.isInverted ? sortedSellOrder : aggregatedBuyOrder, 'buy')} */}
-              {/* {renderOrders(useInversionStatus(asset.id) ? sortedSellOrder : renderedBuyOrders, 'buy')} */}
             </OrdersWrapper>
           </BuyOrders>
         </Container>
