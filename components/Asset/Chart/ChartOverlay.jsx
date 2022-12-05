@@ -262,9 +262,45 @@ function ChartOverlay(props) {
   useEffect(() => {
     // Get the ID of asset
     const isStableAsset = StableAssets.includes(parseInt(asset.id))
-    if (isStableAsset)
+    if (isStableAsset) {
       localStorage.setItem('inversionStatus', 'true')
-  }, [])
+    } else {
+      localStorage.setItem('inversionStatus', 'false')
+    }
+  }, [router])
+
+  const ButtonComp = ({ setTriggerRef }) => {
+    return <Button
+      ref={setTriggerRef || null}
+      data-testid="asset-info-back-btn"
+      variant="contained"
+      sx={{
+        background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
+        borderRadius: '3px',
+        pointerEvents: 'all',
+        marginBottom: '1rem',
+        opacity: `${asset.decimals !== 6 ? '0.5' : '1'}`,
+        ':hover': {
+          background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
+        },
+      }}
+      onClick={() => asset.decimals === 6 && setInversionStatusFn()}
+    >
+      <Image
+        style={{ borderRadius: '50%' }}
+        src="/Invert.svg"
+        fill="black"
+        alt="Invert Icon"
+        width={25}
+        height={25}
+      />&nbsp;&nbsp;
+      <Typography sx={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>INVERT PAIR</Typography>
+    </Button>
+  }
+
+  ButtonComp.propTypes = {
+    setTriggerRef: PropTypes.func
+  }
 
   return (
     <Container>
@@ -301,35 +337,8 @@ function ChartOverlay(props) {
               </div>
             </Stack>
             <div>
-              <Tooltip
-                renderButton={(setTriggerRef) => (
-                  <Button
-                    ref={setTriggerRef}
-                    data-testid="asset-info-back-btn"
-                    variant="contained"
-                    sx={{
-                      background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
-                      borderRadius: '3px',
-                      pointerEvents: 'all',
-                      marginBottom: '1rem',
-                      opacity: `${asset.decimals !== 6 ? '0.5' : '1'}`,
-                      ':hover': {
-                        background: getInversionStatus() ? theme.palette.green[500] : '#2F3747',
-                      },
-                    }}
-                    onClick={() => getInversionStatus() && setInversionStatusFn()}
-                  >
-                    <Image
-                      style={{ borderRadius: '50%' }}
-                      src="/Invert.svg"
-                      fill="black"
-                      alt="Invert Icon"
-                      width={25}
-                      height={25}
-                    />&nbsp;&nbsp;
-                    <Typography sx={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>INVERT PAIR</Typography>
-                  </Button>
-                )}
+              {asset.decimals !== 6 ? <Tooltip
+                renderButton={(setTriggerRef) => <ButtonComp setTriggerRef={setTriggerRef} />}
               >
                 <section className="flex items-center justify-between mb-1">
                   <Typography
@@ -340,7 +349,8 @@ function ChartOverlay(props) {
                     Inverted mode is currently not supported for assets not configured with 6 decimals
                   </Typography>
                 </section>
-              </Tooltip>
+              </Tooltip> : <ButtonComp />
+              }
             </div>
           </Stack>
 
