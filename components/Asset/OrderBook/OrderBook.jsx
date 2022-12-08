@@ -542,7 +542,8 @@ const DECIMALS_MAP = {
 
           <SellOrders>
             <OrdersWrapper className="p-4">
-              {isInverted ? sortedBuyOrder : renderedSellOrders}
+              {/* {isInverted ? sortedBuyOrder : renderedSellOrders} */}
+              {renderedSellOrders}
             </OrdersWrapper>
           </SellOrders>
 
@@ -552,7 +553,8 @@ const DECIMALS_MAP = {
 
           <BuyOrders>
             <OrdersWrapper className="px-4 pt-4">
-              {isInverted ? sortedSellOrder : renderedBuyOrders}
+              {/* {isInverted ? sortedSellOrder : renderedBuyOrders} */}
+              {renderedBuyOrders}
             </OrdersWrapper>
           </BuyOrders>
         </Container>
