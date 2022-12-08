@@ -55,7 +55,8 @@ export const USDInputPrice = ({ value, id, assetId = null }) => {
 
 USDInputPrice.propTypes = {
   value: PropTypes.number,
-  id: PropTypes.string
+  id: PropTypes.string,
+  assetId: PropTypes.number
 }
 export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { decimals, onChange, ...other } = props;
