@@ -323,7 +323,7 @@ const DECIMALS_MAP = {
  * @returns {JSX.Element}
  * @constructor
  */
- export function OrderBook({ asset, orders, components, isMobile }) {
+export function OrderBook({ asset, orders, components, isMobile }) {
   const { query } = useRouter()
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
@@ -423,7 +423,8 @@ const DECIMALS_MAP = {
     , [asset.id, query])
 
   const renderOrders = useCallback((data, type) => {
-    const color = type === 'buy' ? 'green' : 'red'
+    // const color = type === 'buy' ? isInverted ? 'green' : 'red' : isInverted ? 'red' : 'green'
+    const color = type === 'buy' ? isInverted ? 'red' : 'green' : isInverted ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
@@ -481,7 +482,7 @@ const DECIMALS_MAP = {
         </BookRow>
       )
     })
-  }, [calculatedAmountFn, decimals, dispatcher, isGeoBlocked])
+  }, [calculatedAmountFn, decimals, dispatcher, isGeoBlocked, isInverted])
 
   const renderedSellOrders = useMemo(() => {
     return renderOrders(aggregatedSellOrder, 'sell')
