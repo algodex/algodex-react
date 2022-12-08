@@ -17,6 +17,7 @@
 import Table, {
   AssetNameCell,
   DefaultCell,
+  DefaultCellAmount,
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
@@ -222,7 +223,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: DefaultCell
+        Cell: DefaultCellAmount
       },
       {
         Header: t('status'),

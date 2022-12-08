@@ -201,6 +201,21 @@ export function DefaultCell({ value, row }) {
 }
 DefaultCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
 
+export function DefaultCellAmount({ value }) {
+  return (
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={value}
+      data-testid="default-cell"
+    >
+      {value}
+    </Typography>
+  )
+}
+DefaultCellAmount.propTypes = { value: PropTypes.any }
+
 /**
  * Table Component
  *
