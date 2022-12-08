@@ -56,7 +56,7 @@ const PriceInfoView = ({ asaValue, algoPrice, asset }) => {
   }, [])
 
   const formattedAsaValue = getInversionStatus() ? (1/asaValue).toFixed(asset.decimals) : asaValue
-  
+  // console.log(asaValue, 'asa value here')
 
   return useMemo(() => {
     return (
