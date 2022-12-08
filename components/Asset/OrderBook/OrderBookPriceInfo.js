@@ -18,7 +18,6 @@
 
 import { Stack, Typography } from '@mui/material'
 import { useMemo, useCallback } from 'react'
-
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
@@ -27,6 +26,8 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@/hooks'
+import InvertedUSDInputPrice from '@/components/Wallet/PriceConversion/InvertedUSDInputPrice'
+import { StableAssets } from '../../StableAssets'
 
 const getPriceDecimals = (price) => {
   if (price >= 10000) {
@@ -55,7 +56,7 @@ const PriceInfoView = ({ asaValue, algoPrice, asset }) => {
     return false
   }, [])
 
-  const formattedAsaValue = getInversionStatus() ? (1/asaValue).toFixed(asset.decimals) : asaValue
+  const formattedAsaValue = getInversionStatus() ? (1 / asaValue).toFixed(asset.decimals) : asaValue
   // console.log(asaValue, 'asa value here')
 
   return useMemo(() => {
@@ -69,12 +70,21 @@ const PriceInfoView = ({ asaValue, algoPrice, asset }) => {
             {(asset?.price_info?.price24Change && `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) || '0.00%'}
           </Typography>
         )}
-        <div className="flex items-center ml-4 text-gray-500">
+        {getInversionStatus() && StableAssets.includes(asset.id) &&
+          <div className="flex items-center ml-4 text-gray-500">
+            <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
+            <Typography variant="subtitle_small_bold">
+              $<InvertedUSDInputPrice priceToConvert={formattedAsaValue} id="price" />
+            </Typography>
+          </div>
+        }
+        {!getInversionStatus() && <div className="flex items-center ml-4 text-gray-500">
           <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
           <Typography variant="subtitle_small_bold">
             ${formatUSDPrice(algoPrice * formattedAsaValue)}
           </Typography>
         </div>
+        }
       </>
     )
   }, [formattedAsaValue, asaValue, algoPrice, asset])
