@@ -17,15 +17,23 @@
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
 import { withOtherAssetPriceQuery } from '@/hooks'
+import { useRouter } from 'next/router'
+
 export function InvertedUSDInputPrice(props) {
-	const invertedAssetPrice = props['10458941'].price
+	const { query } = useRouter()
+	const invertedAssetPrice = props[`${query.id}`]?.price
 	const { asaWorth, priceToConvert, currency } = props
-	return (
-		<span data-testid="USDprice-element">
-			{currency}
-			{formatUSDPrice(asaWorth * priceToConvert * invertedAssetPrice)}
-		</span>
-	)
+	if (invertedAssetPrice) {
+		return (
+			<span data-testid="USDprice-element">
+				{currency}
+				{formatUSDPrice(asaWorth * priceToConvert * invertedAssetPrice)}
+			</span>
+		)
+	} else {
+		return <>No USD Price</>
+	}
+
 }
 
 InvertedUSDInputPrice.propTypes = {
