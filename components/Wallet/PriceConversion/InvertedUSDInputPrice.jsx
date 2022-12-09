@@ -18,6 +18,8 @@ import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
 import { withOtherAssetPriceQuery } from '@/hooks'
 import { useRouter } from 'next/router'
+import Icon from '@mdi/react'
+import { mdiApproximatelyEqual } from '@mdi/js'
 
 export function InvertedUSDInputPrice(props) {
 	const { query } = useRouter()
@@ -25,13 +27,16 @@ export function InvertedUSDInputPrice(props) {
 	const { asaWorth, priceToConvert, currency } = props
 	if (invertedAssetPrice) {
 		return (
-			<span data-testid="USDprice-element">
+      <>
+      <span data-testid="USDprice-element">
 				{currency}
-				{formatUSDPrice(asaWorth * priceToConvert * invertedAssetPrice)}
+				${formatUSDPrice(asaWorth * priceToConvert * invertedAssetPrice)}
 			</span>
+      </>
+			
 		)
 	} else {
-		return <>No USD Price</>
+		return <></>
 	}
 
 }
