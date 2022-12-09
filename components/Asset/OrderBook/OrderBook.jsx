@@ -423,8 +423,8 @@ export function OrderBook({ asset, orders, components, isMobile }) {
     , [asset.id, query])
 
   const renderOrders = useCallback((data, type) => {
-    // const color = type === 'buy' ? isInverted ? 'green' : 'red' : isInverted ? 'red' : 'green'
-    const color = type === 'buy' ? isInverted ? 'red' : 'green' : isInverted ? 'green' : 'red'
+    const color = type === 'buy' ? 'green' : 'red'
+    // const color = type === 'buy' ? isInverted ? 'red' : 'green' : isInverted ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
@@ -543,8 +543,9 @@ export function OrderBook({ asset, orders, components, isMobile }) {
 
           <SellOrders>
             <OrdersWrapper className="p-4">
+              {isInverted ? sortedSellOrder : renderedSellOrders}
               {/* {isInverted ? sortedBuyOrder : renderedSellOrders} */}
-              {renderedSellOrders}
+              {/* {renderedSellOrders} */}
             </OrdersWrapper>
           </SellOrders>
 
@@ -554,8 +555,9 @@ export function OrderBook({ asset, orders, components, isMobile }) {
 
           <BuyOrders>
             <OrdersWrapper className="px-4 pt-4">
+              {isInverted ? sortedBuyOrder : renderedBuyOrders}
               {/* {isInverted ? sortedSellOrder : renderedBuyOrders} */}
-              {renderedBuyOrders}
+              {/* {renderedBuyOrders} */}
             </OrdersWrapper>
           </BuyOrders>
         </Container>
