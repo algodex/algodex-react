@@ -20,7 +20,6 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
-import { StableAssets } from '@/components/StableAssets'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { useMemo, useCallback } from 'react'
@@ -55,13 +54,12 @@ const TableWrapper = styled.div`
  * @constructor
  */
 export function TradeHistoryTable({ orders }) {
-  //console.log(`TradeHistoryTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
   )
-  const getInversionStatus = useCallback((id) => {
+  const getInversionStatus = useMemo(() => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
       return true
@@ -73,7 +71,7 @@ export function TradeHistoryTable({ orders }) {
       const _order = {
         ...order,
         price: floatToFixedDisplay(order.price),
-        isInverted: getInversionStatus(parseInt(order.id))
+        isInverted: getInversionStatus
       }
       return _order
     })
@@ -101,7 +99,7 @@ export function TradeHistoryTable({ orders }) {
       },
 
       {
-        Header: t('price') + ' (ALGO)',
+        Header: `${t('price')} ${!getInversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
         Cell: DefaultCell
       },
@@ -111,7 +109,7 @@ export function TradeHistoryTable({ orders }) {
         Cell: DefaultCell
       }
     ],
-    [t]
+    [t, getInversionStatus]
   )
 
   return (

@@ -17,7 +17,6 @@
 
 import { ArrowDown, ArrowUp } from 'react-feather'
 import { useCallback, useMemo, useState } from 'react'
-// import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks'
 
 import Big from 'big.js'
@@ -32,8 +31,6 @@ import TablePriceHeader from '@/components/Table/PriceHeader'
 import Typography from '@mui/material/Typography'
 import { assetVeryShortNameFn } from '@/components/helpers'
 import { floatToFixedDynamic } from '@/services/display'
-// import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
-// import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
@@ -387,8 +384,6 @@ export function OrderBook({ asset, orders, components, isMobile }) {
       ? floatToFixedDynamic(1 / order.price, selectedPrecision, selectedPrecision)
       : floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
-    // const _amount = order.amount
-    // const _amount = isInverted ? 1/order.amount * order.price : order.amount
     const _amount = order.amount
 
     const index = result.findIndex(
@@ -424,7 +419,6 @@ export function OrderBook({ asset, orders, components, isMobile }) {
 
   const renderOrders = useCallback((data, type) => {
     const color = type === 'buy' ? 'green' : 'red'
-    // const color = type === 'buy' ? isInverted ? 'red' : 'green' : isInverted ? 'green' : 'red'
     return data.map((row, index) => {
       const amount = new Big(row.amount)
       const total = new Big(row.total)
@@ -531,7 +525,7 @@ export function OrderBook({ asset, orders, components, isMobile }) {
               </AggregatorSelector>
             </Stack>
             <Header className="mt-4">
-              <TablePriceHeader title={isInverted ? `${assetVeryShortName}` : ''} currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
+              <TablePriceHeader title={isInverted ? `Price ${assetVeryShortName}` : ''} currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
               <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
                 {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
               </Typography>
@@ -544,8 +538,6 @@ export function OrderBook({ asset, orders, components, isMobile }) {
           <SellOrders>
             <OrdersWrapper className="p-4">
               {isInverted ? sortedSellOrder : renderedSellOrders}
-              {/* {isInverted ? sortedBuyOrder : renderedSellOrders} */}
-              {/* {renderedSellOrders} */}
             </OrdersWrapper>
           </SellOrders>
 
@@ -556,8 +548,6 @@ export function OrderBook({ asset, orders, components, isMobile }) {
           <BuyOrders>
             <OrdersWrapper className="px-4 pt-4">
               {isInverted ? sortedBuyOrder : renderedBuyOrders}
-              {/* {isInverted ? sortedSellOrder : renderedBuyOrders} */}
-              {/* {renderedBuyOrders} */}
             </OrdersWrapper>
           </BuyOrders>
         </Container>
