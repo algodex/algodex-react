@@ -468,7 +468,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'buy' ? 'primary' : 'default'}
               color="buy"
               fullWidth
-              onClick={!asset.isGeoBlocked && handleChange}
+              onClick={handleChange}
               name="type"
               value="buy"
             >
@@ -480,7 +480,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               variant={order.type === 'sell' ? 'sell' : 'default'}
               color="sell"
               fullWidth
-              onClick={!asset.isGeoBlocked && handleChange}
+              onClick={handleChange}
               name="type"
               value="sell"
             >
