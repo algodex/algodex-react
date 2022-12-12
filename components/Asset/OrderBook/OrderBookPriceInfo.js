@@ -27,7 +27,7 @@ import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@/hooks'
 import InvertedUSDInputPrice from '@/components/Wallet/PriceConversion/InvertedUSDInputPrice'
-import { StableAssets } from '../../StableAssets'
+import { StableAssets } from '@/components/StableAssets'
 
 const getPriceDecimals = (price) => {
   if (price >= 10000) {

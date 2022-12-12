@@ -194,6 +194,7 @@ export const NavSearchTable = ({
 
   const searchTableRef = useRef()
   const router = useRouter()
+  const {query} = router
   const { t } = useTranslation('assets')
 
   const filterByFavoritesFn = useCallback(
@@ -316,7 +317,7 @@ export const NavSearchTable = ({
     ({ value, row }) => {
       // console.log(value, 'value', row.original.id)
       const isInverted = getInversionStatus(row.original.id)
-      const activeAssetId = router.asPath.split('/')[2].split('?')[0]
+      const activeAssetId = query.id
       const formattedValue = (isInverted && parseInt(activeAssetId) === row.original?.id) ? (1/value).toFixed(row.original?.decimals) : value
       return (
         <AssetPrice
@@ -341,7 +342,7 @@ export const NavSearchTable = ({
   const AssetNameCell = useCallback(
     ({ value, row }) => {
       const isInverted = getInversionStatus(row.original?.id)
-      const activeAssetId = router.asPath.split('/')[2].split('?')[0]
+      const activeAssetId = query.id
       return (
         <div className="flex flex-col">
           <div

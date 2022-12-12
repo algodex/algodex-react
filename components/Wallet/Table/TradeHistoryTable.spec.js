@@ -19,6 +19,7 @@ import { TradeHistoryTable } from './TradeHistoryTable'
 import { render, waitFor } from 'test/test-utils'
 
 const ORDER_HISTORY_ROW = 'default-cell'
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 const wallet = {
   address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'

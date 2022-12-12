@@ -91,7 +91,7 @@ AssetNameCell.propTypes = { row: PropTypes.any, value: PropTypes.any }
  */
 export const OrderTypeCell = ({ value, row }) => {
   const { t } = useTranslation('orders')
-  const isInverted = useInversionStatus(row.original.id)
+  const isInverted = useInversionStatus(row?.original.id)
   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
     [row?.original?.asset?.id, row?.original?.id])
   const {query} = useRouter()

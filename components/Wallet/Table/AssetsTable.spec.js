@@ -27,6 +27,7 @@ const wallet = {
 afterEach(() => {
   cleanup()
 })
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 describe('Assets', () => {
   it('should not show any rows if no data is provided', async () => {

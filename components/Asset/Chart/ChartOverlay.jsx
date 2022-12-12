@@ -28,7 +28,7 @@ import { useUserStore } from 'store'
 import { Typography, Stack, Button } from '@mui/material'
 import Image from 'next/image'
 import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
-import { StableAssets } from '@/components/StableAssets'
+import StableAssets from '@/components/StableAssets'
 import { useRouter } from 'next/router'
 import Tooltip from '@/components/Tooltip'
 
