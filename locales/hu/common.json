@@ -19,5 +19,7 @@
   "order-book": "Rendelési-Könyvk",
   "place-maker-description": "Adjon le gyártói vételi/eladási megbízást a kereskedési pár likviditásának növeléséhez",
   "connect-wallet-liquidity": "Csatlakoztassa pénztárcáját, és adjon meg megbízást, hogy likviditását növelje ehhez a kereskedési párhoz",
-  "place-first": "Adja le az első limites megbízást a következőre"
+  "place-first": "Adja le az első limites megbízást a következőre",
+  "notSignedInTitle": "Kezdje azzal, hogy a fejlécben található gomb segítségével csatlakoztasson egy Algorand Walletet",
+  "notSignedInSubTitle": "Miután csatlakoztatta a pénztárcát és elkezdte a kereskedést, itt látni fogja a rendelésekkel kapcsolatos információkat"
 }

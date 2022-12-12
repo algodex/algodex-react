@@ -19,6 +19,7 @@
     "order-book":"carnet de commande",
     "place-maker-description":"Passez un ordre d'achat/vente de fabricant pour ajouter de la liquidité à cette paire de trading",
     "connect-wallet-liquidity":"Connectez votre portefeuille et passez une commande pour ajouter de la liquidité à cette paire de trading",
-    "place-first":"Passez le premier ordre à cours limité pour"
-    
+    "place-first":"Passez le premier ordre à cours limité pour",
+    "notSignedInTitle": "Commencez par connecter un portefeuille Algorand à l'aide du bouton dans l'en-tête",
+    "notSignedInSubTitle": "Une fois que vous avez connecté un portefeuille et commencé à trader, vous verrez des informations sur les commandes ici"
 }

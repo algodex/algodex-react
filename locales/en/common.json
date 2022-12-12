@@ -19,5 +19,7 @@
     "order-book":"Order Book",
     "place-maker-description":"Place a maker buy/sell order to add liquidity for this trading pair",
     "connect-wallet-liquidity":" Connect your wallet and place an order to add liquidity for this trading pair",
-    "place-first":"Place the first limit order for"
+    "place-first":"Place the first limit order for",
+    "notSignedInTitle": "Start by connecting an Algorand Wallet using the button in the header",
+    "notSignedInSubTitle": "Once you’ve connected a wallet and start trading, you will see information on orders here"
 }
