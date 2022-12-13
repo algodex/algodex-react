@@ -118,8 +118,16 @@ const EmptyState = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 50%;
-  align-self: center;
+  align-self: center; 
+  @media (min-width: 996px) {
+    width: 50%;
+  }
+  @media (min-width: 1024px) {
+    width: 40%;
+  }
+  @media (max-width: 1024px) {
+    width: 30%;
+  }
 `
 
 function WalletTabs({ initialPanel, area = 'footer' }) {
