@@ -35,7 +35,7 @@ export const TablePriceHeader = ({ title, textAlign }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText variant="body_tiny_cap" textAlign={textAlign} data-testid="header-item">
-      {title !== '' && t(title)}
+      {title !== '' && title}
       {!title && <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />}
     </PriceHeaderText>
   )

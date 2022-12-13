@@ -104,7 +104,7 @@ export function OpenOrdersTable({ orders: _orders }) {
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
-  const getInversionStatus = useMemo(() => {
+  const getInversionStatus = useCallback(() => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
       return true
@@ -200,7 +200,7 @@ export function OpenOrdersTable({ orders: _orders }) {
     },
     [t, openOrdersData, wallet]
   )
-
+  const inversionStatus = getInversionStatus()
   const columns = useMemo(
     () => [
       {
@@ -217,9 +217,9 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: AssetNameCell
       },
       {
-        Header: `${t('price')} ${!getInversionStatus ? '(ALGO)' : ''}`,
+        Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
-        Cell: DefaultCell
+        Cell: DefaultCellAmount
       },
       {
         Header: t('type'),
@@ -243,7 +243,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         disableSortBy: true
       }
     ],
-    [t, OrderCancelCell, getInversionStatus]
+    [t, OrderCancelCell, inversionStatus]
   )
 
   return (

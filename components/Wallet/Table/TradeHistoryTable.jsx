@@ -59,7 +59,7 @@ export function TradeHistoryTable({ orders }) {
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
   )
-  const getInversionStatus = useMemo(() => {
+  const getInversionStatus = useCallback(() => {
     const inversionStatus = localStorage.getItem('inversionStatus')
     if (inversionStatus && inversionStatus === 'true') {
       return true
@@ -71,12 +71,14 @@ export function TradeHistoryTable({ orders }) {
       const _order = {
         ...order,
         price: floatToFixedDisplay(order.price),
-        isInverted: getInversionStatus
+        isInverted: getInversionStatus()
       }
       return _order
     })
   }, [orders])
-
+  
+  
+  const inversionStatus = getInversionStatus()
   const columns = useMemo(
     () => [
       {
@@ -99,7 +101,7 @@ export function TradeHistoryTable({ orders }) {
       },
 
       {
-        Header: `${t('price')} ${!getInversionStatus ? '(ALGO)' : ''}`,
+        Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
         Cell: DefaultCell
       },
@@ -109,7 +111,7 @@ export function TradeHistoryTable({ orders }) {
         Cell: DefaultCell
       }
     ],
-    [t, getInversionStatus]
+    [t, inversionStatus]
   )
 
   return (
