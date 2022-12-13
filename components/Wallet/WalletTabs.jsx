@@ -105,6 +105,7 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
+
 const OPEN_ORDERS_PANEL = 'open-orders'
 const ORDER_HISTORY_PANEL = 'order-history'
 const ASSETS_PANEL = 'assets'
