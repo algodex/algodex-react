@@ -118,7 +118,8 @@ const EmptyState = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  
+  width: 50%;
+  align-self: center;
 `
 
 function WalletTabs({ initialPanel, area = 'footer' }) {
@@ -171,7 +172,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
         {isConnected ?
           <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper> :
           <EmptyState p={3}>
-            <Box sx={{ width: '30%' }}>
+            <Box>
               <Typography variant="h5" color="gray.100" m={0} mb={2} className="leading-6">
                 {common.t('notSignedInTitle')}
               </Typography>
