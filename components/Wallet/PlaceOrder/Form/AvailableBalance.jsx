@@ -82,7 +82,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
 
   const calcAsaWorth = useMemo(
     () => {
-      const _calcAsaWorth = floatToFixed(asset?.price_info?.price)
+      const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
       return _calcAsaWorth
     },
     [asset]
