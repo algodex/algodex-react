@@ -92,6 +92,7 @@ const PanelWrapper = styled.section`
     overflow: scroll hidden;
   }
 `
+
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.palette.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
