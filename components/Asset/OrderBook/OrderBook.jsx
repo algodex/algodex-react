@@ -391,15 +391,15 @@ export function OrderBook({ asset, orders, components, isMobile }) {
     )
 
     if (index !== -1) {
-      result[index].amount += _amount
-      result[index].total += _amount * _price
+      result[index].amount += isInverted ? order.price * _amount : _amount
+      result[index].total += isInverted ? _amount : _amount * _price
       return result
     }
 
     result.push({
       price: _price,
-      amount: _amount,
-      total: _amount * _price
+      amount: isInverted ? order.price * _amount : _amount,
+      total: isInverted ? _amount : _amount * _price
     })
     return result
   }, [isInverted, selectedPrecision])
@@ -487,12 +487,12 @@ export function OrderBook({ asset, orders, components, isMobile }) {
   }, [aggregatedBuyOrder, renderOrders]);
 
   const sortedBuyOrder = useMemo(() => {
-    const sortedOrders = aggregatedBuyOrder.sort((a, b) => b.price - a.price)
+    const sortedOrders = aggregatedSellOrder.sort((a, b) => b.price - a.price)
     return renderOrders(sortedOrders, 'buy')
   }, [aggregatedBuyOrder])
 
   const sortedSellOrder = useMemo(() => {
-    const sortedSellOrder = aggregatedSellOrder.sort((a, b) => b.price - a.price)
+    const sortedSellOrder = aggregatedBuyOrder.sort((a, b) => b.price - a.price)
     return renderOrders(sortedSellOrder, 'sell')
   }, [aggregatedSellOrder])
 

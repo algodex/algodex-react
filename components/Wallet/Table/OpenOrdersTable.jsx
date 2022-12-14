@@ -219,7 +219,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
-        Cell: DefaultCellAmount
+        Cell: DefaultCell
       },
       {
         Header: t('type'),
