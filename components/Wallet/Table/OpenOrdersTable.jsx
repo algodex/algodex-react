@@ -53,7 +53,6 @@ const TableWrapper = styled.div`
     display: none;
   }
 `
-
 const OrderCancelButton = styled.button`
   cursor: pointer;
   background: none;
