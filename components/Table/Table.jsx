@@ -206,7 +206,7 @@ export function PriceCell({ value, row }) {
   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
     [row?.original?.asset?.id, row?.original?.id])
   const { query } = useRouter()
-  const {price, amount} = row?.original
+  const {price, amount} = row.original
   const formattedValue = useMemo(() => {
     if (isInverted && parseInt(query.id) === assetId) {
       return parseFloat(amount/(price * amount))?.toFixed(6)
