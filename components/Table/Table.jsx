@@ -211,7 +211,7 @@ export function PriceCell({ value, row }) {
     if (isInverted && parseInt(query.id) === assetId) {
       return 1/(parseFloat(amount/(price * amount)))?.toFixed(6)
     } else {
-      return value
+      return parseFloat(amount/(price * amount))?.toFixed(6)
     }
   }, [isInverted, value])
   return (
