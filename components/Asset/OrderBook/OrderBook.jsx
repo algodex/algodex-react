@@ -530,7 +530,7 @@ export function OrderBook({ asset, orders, components, isMobile }) {
                 {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
               </Typography>
               <Typography variant="body_tiny_cap" className="whitespace-nowrap" color="gray.500" textAlign="right" m={0}>
-                {t('total')} ({isInverted ? 'ALGO' : assetVeryShortName})
+                {t('total')} ({!isInverted ? 'ALGO' : assetVeryShortName})
               </Typography>
             </Header>
           </Box>

@@ -17,6 +17,7 @@
 import Table, {
   AssetNameCell,
   DefaultCell,
+  PriceCell,
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
@@ -103,7 +104,7 @@ export function TradeHistoryTable({ orders }) {
       {
         Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
-        Cell: DefaultCell
+        Cell: PriceCell
       },
       {
         Header: t('amount'),

@@ -170,19 +170,46 @@ const Container = styled.div`
   }
 `
 // height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 126}px`};
-export function DefaultCell({ value, row }) {
+// export function DefaultCell({ value, row }) {
+//   const isInverted = useInversionStatus(row.original.id)
+//   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+//     [row?.original?.asset?.id, row?.original?.id])
+//   const { query } = useRouter()
+//   const formattedValue = useMemo(() => {
+//     if (isInverted && parseInt(query.id) === assetId && !isNaN(parseFloat(value))) {
+//       const val = 1 / value
+//       if (value == 0) {
+//         return value
+//       } else {
+//         return isInverted && parseInt(query.id) === assetId ? parseFloat(val).toFixed(6) : value
+//       }
+//     } else {
+//       return value
+//     }
+//   }, [isInverted, value])
+//   return (
+//     <Typography
+//       variant="body_small"
+//       color="gray.000"
+//       className="cursor-default"
+//       title={value}
+//       data-testid="default-cell"
+//     >
+//       {formattedValue}
+//     </Typography>
+//   )
+// }
+// DefaultCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+
+export function PriceCell({ value, row }) {
   const isInverted = useInversionStatus(row.original.id)
   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
     [row?.original?.asset?.id, row?.original?.id])
   const { query } = useRouter()
+  const {price, amount} = row?.original
   const formattedValue = useMemo(() => {
-    if (isInverted && parseInt(query.id) === assetId && !isNaN(parseFloat(value))) {
-      const val = 1/value
-      if (value == 0) {
-        return value
-      } else {
-        return isInverted && parseInt(query.id) === assetId ? parseFloat(val).toFixed(6) : value
-      }
+    if (isInverted && parseInt(query.id) === assetId) {
+      return parseFloat(amount/(price * amount))?.toFixed(6)
     } else {
       return value
     }
@@ -199,9 +226,9 @@ export function DefaultCell({ value, row }) {
     </Typography>
   )
 }
-DefaultCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+PriceCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
 
-export function DefaultCellAmount({ value }) {
+export function DefaultCell({ value }) {
   return (
     <Typography
       variant="body_small"
@@ -214,7 +241,7 @@ export function DefaultCellAmount({ value }) {
     </Typography>
   )
 }
-DefaultCellAmount.propTypes = { value: PropTypes.any }
+DefaultCell.propTypes = { value: PropTypes.any }
 
 /**
  * Table Component
