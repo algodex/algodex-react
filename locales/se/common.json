@@ -19,5 +19,7 @@
     "order-book":"Beställa bok",
     "place-maker-description":"Lägg en köp-/säljorder för att lägga till likviditet för detta handelspar",
     "connect-wallet-liquidity":"Anslut din plånbok och gör en beställning för att lägga till likviditet för detta handelspar",
-    "place-first":"Lägg den första limitordern för"
+    "place-first":"Lägg den första limitordern för",
+    "notSignedInTitle": "Börja med att ansluta en Algorand Wallet med knappen i rubriken",
+	"notSignedInSubTitle": "När du har anslutit en plånbok och börjat handla kommer du att se information om beställningar här"
 }

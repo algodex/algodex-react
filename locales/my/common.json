@@ -19,5 +19,7 @@
     "order-book":"Memesan buku",
     "place-maker-description":"Tempatkan pembuat pesanan beli/jual untuk menambah likuiditas untuk pasangan perdagangan ini",
     "connect-wallet-liquidity":"Hubungkan dompet Anda dan lakukan pemesanan untuk menambah likuiditas untuk pasangan perdagangan ini ",
-    "place-first":"Tempatkan pesanan batas pertama untuk"
+    "place-first":"Tempatkan pesanan batas pertama untuk",
+    "notSignedInTitle": "Mulakan dengan menyambungkan Dompet Algorand menggunakan butang dalam pengepala",
+	"notSignedInSubTitle": "Sebaik sahaja anda telah menyambungkan dompet dan mula berdagang, anda akan melihat maklumat tentang pesanan di sini"
 }
