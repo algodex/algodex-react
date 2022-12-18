@@ -16,7 +16,7 @@
 
 import NotificationModal from 'components/Nav/NetworkHandler/NotificationModal'
 import PropTypes from 'prop-types'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { getActiveNetwork } from 'services/environment'
@@ -34,10 +34,10 @@ const NetworkNotificationModal = () => {
     (state) => state.setHasMainnetNotificationModal
   )
 
-  const closeModalFn = (bool) => {
+  const closeModalFn = useCallback((bool) => {
     activeNetwork === 'testnet' && setHasTestnetNotificationModal(bool)
     activeNetwork === 'mainnet' && setHasMainnetNotificationModal(bool)
-  }
+  }, [activeNetwork, setHasMainnetNotificationModal, setHasTestnetNotificationModal])
 
   const modalMessages = useMemo(() => {
     if (activeNetwork == 'mainnet') {

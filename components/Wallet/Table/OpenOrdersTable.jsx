@@ -20,12 +20,13 @@ import Table, {
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
-import { useAlgodex, withWalletOrdersQuery } from '@algodex/algodex-hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAlgodex, withWalletOrdersQuery } from '@/hooks'
+import { useCallback, useMemo, useState } from 'react'
 
 import PropTypes from 'prop-types'
 import React from 'react'
 import Typography from '@mui/material/Typography'
+import {floatToFixedDisplay} from '@/services/display';
 import { logInfo } from 'services/logRemote'
 import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
@@ -44,11 +45,12 @@ const TableWrapper = styled.div`
   padding: 0;
   position: absolute;
   inset: 0;
-  // scrollbar-width: none;
+  overflow: scroll;
+  scrollbar-width: none;
 
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const OrderCancelButton = styled.button`
@@ -70,12 +72,12 @@ const OrderCancelButton = styled.button`
 export function OpenOrdersTable({ orders: _orders }) {
   // console.log(`OpenOrdersTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
-  const [openOrdersData, setOpenOrdersData] = useState(_orders)
+
+  const [openOrdersData, setOpenOrdersData] = useState([])
   const { algodex, wallet, setWallet } = useAlgodex()
   function closeOrder() {
     return algodex.closeOrder.apply(algodex, arguments)
   }
-
   useEvent('signOut', (data) => {
     if (data.type === 'wallet') {
       setWallet({
@@ -87,10 +89,17 @@ export function OpenOrdersTable({ orders: _orders }) {
       })
     }
   })
-
-  useEffect(() => {
-    setOpenOrdersData(_orders)
-  }, [_orders, setOpenOrdersData])
+  useMemo(() => {
+    const ordersList = _orders.map((order) => {
+      const _order = {
+        ...order,
+        price: floatToFixedDisplay(order.price)
+      }
+      return _order
+    })
+    setOpenOrdersData(ordersList)
+    return ordersList
+  }, [_orders])
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
@@ -232,12 +241,12 @@ export function OpenOrdersTable({ orders: _orders }) {
 
   return (
     <OpenOrdersContainer>
-      <TableWrapper>
+      <TableWrapper style={{ overflow: 'scroll'}}>
         <Table
           initialState={walletOpenOrdersTableState}
           onStateChange={(state) => setWalletOpenOrdersTableState(state)}
           columns={columns}
-          data={_orders || []}
+          data={openOrdersData || []}
         />
       </TableWrapper>
     </OpenOrdersContainer>
@@ -248,7 +257,7 @@ OpenOrdersTable.propTypes = {
   wallet: PropTypes.shape({
     address: PropTypes.string.isRequired
   }),
-  orders: PropTypes.array.isRequired
+  orders: PropTypes.array
 }
 
 OpenOrdersTable.defaultProps = {

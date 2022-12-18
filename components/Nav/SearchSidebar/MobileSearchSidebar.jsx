@@ -23,7 +23,7 @@ import { Section } from '@/components/Layout/Section'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
+import { withAlgorandPriceQuery } from '@/hooks'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -95,7 +95,7 @@ export function NavSearchSidebar({
   const handleAssetClick = useCallback(
     (row) => {
       handleExternalClick()
-      push(`/trade/${row.original.id}`)
+      push(`/trade/${row.original.id}`, undefined, { shallow: false })
     },
     [push, handleExternalClick]
   )
@@ -145,7 +145,7 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
-              gridSize={searchTableSize}
+              gridSize={gridSize}
             />
           </div>
         </AssetsContainer>

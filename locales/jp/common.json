@@ -19,5 +19,7 @@
   "order-book":"オーダーブック",
   "place-maker-description":"このトレーディングペアの流動性を追加するには、メーカーの売買注文を出します",
   "connect-wallet-liquidity":"ウォレットを接続し、このトレーディングペアの流動性を追加するために注文します",
-  "place-first":"の最初の指値注文を出す"
+  "place-first":"の最初の指値注文を出す",
+  "notSignedInTitle": "ヘッダーのボタンを使用してアルゴランド・ウォレットを接続することから始めます",
+	"notSignedInSubTitle": "ウォレットを接続して取引を開始すると、注文に関する情報がここに表示されます"
 }

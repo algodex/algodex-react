@@ -14,19 +14,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { forwardRef, useMemo } from 'react'
+
 import AdvancedOptions from './AdvancedOptions'
 import Big from 'big.js'
 import { FormHelperText } from '@mui/material'
 import { default as MUIInputAdornment } from '@mui/material/InputAdornment'
 import { default as MaterialBox } from '@mui/material/Box'
+import {NumericFormat} from 'react-number-format';
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import PropTypes from 'prop-types'
 import Slider from '@/components/Input/Slider'
 import Typography from '@mui/material/Typography'
 import USDPrice from '@/components/Wallet/PriceConversion/USDPrice'
 import theme from '../../../../theme'
-import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
+
 /**
  *
  * Render USD Price for an input component
@@ -40,7 +43,7 @@ export const USDInputPrice = ({ value, id }) => {
         USD {id === 'price' ? 'Price' : 'Total'}{' '}
       </Typography>
       <Typography color="gray.400" variant="body_tiny_cap">
-        <USDPrice priceToConvert={value} />
+        <USDPrice priceToConvert={parseFloat(value)} />
         <span className="ml-4 mr-3">USD</span>
       </Typography>
     </div>
@@ -51,6 +54,37 @@ USDInputPrice.propTypes = {
   value: PropTypes.number,
   id: PropTypes.string
 }
+export const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
+  const { decimals, onChange, ...other } = props;
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.formattedValue,
+          },
+        });
+      }}
+      allowLeadingZeros
+      allowNegative={false}
+      decimalScale={decimals}
+    />
+  );
+});
+
+NumberFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  decimals: PropTypes.number
+};
+
+NumberFormatCustom.defaultProps = {
+  decimals: 6
+}
+
 
 export const TradeInputs = ({
   order,
@@ -78,6 +112,7 @@ export const TradeInputs = ({
   //       return true
   //     }
   //   }
+  const inputPlaceHolder = useMemo(() => asset.decimals !== 0 ? `0.${'0'.repeat(Math.max(0, asset.decimals - 4))}` : '0', [asset])
 
   const marks = [
     {
@@ -117,19 +152,19 @@ export const TradeInputs = ({
           backgroundColor:
             order.execution === 'market' ? theme.palette.gray['700'] : theme.palette.gray['900'],
           border: order.execution === 'market' ? 0 : 2,
-          borderColor: theme.palette.gray['700']
+          borderColor: theme.palette.gray['700'],
         }}
-        name="price"
-        pattern="\d*"
-        value={order.price.toString()}
+        value={order.price || ''}
         onChange={handleChange}
-        placeholder='0.00'
+        placeholder="0.00"
+        name="price"
+        inputComponent={NumberFormatCustom}
+        decimals={6}
         inputProps={{
-          type:"number",
           decimals: 6,
+          pattern: '[0-9]*.[0-9]*',
           min: '0',
           step: '0.000001',
-          // step:"any",
           placeholder: '0.00',
           sx: {
             '&.Mui-disabled': {
@@ -155,21 +190,25 @@ export const TradeInputs = ({
           Price cannot be less than {microAlgo}
         </FormHelperText>
       ) : (
-        <USDInputPrice value={order.price} id="price" />
+        <USDInputPrice value={parseFloat(order.price)} id="price" />
       )}
 
       <OutlinedInput
         id="amount"
-        type="number"
-        pattern="\d*"
         name="amount"
-        placeholder='0.00'
-        value={order.amount !== '' && order.amount}
+        placeholder={inputPlaceHolder}
+        value={order.amount || ''}
+        inputComponent={NumberFormatCustom}
         inputProps={{
           decimals: asset.decimals,
           min: '0',
-          step: '0.000001',
-          placeholder: '0.00'
+          pattern: '[0-9]*.[0-9]*',
+          step: new Big(10).pow(-1 * asset.decimals).toString(),
+          sx: {
+            '&.Mui-disabled': {
+              color: 'white'
+            }
+          }
         }}
         sx={{
           backgroundColor: theme.colors.gray['900'],
@@ -178,9 +217,7 @@ export const TradeInputs = ({
           marginBottom: '1rem'
         }}
         onChange={handleChange}
-        step={new Big(10).pow(-1 * asset.decimals).toString()}
         // step={new Big(10).pow(-1 * asset.decimals).toString()}
-        // inputMode="decimal"
         startAdornment={
           <MUIInputAdornment position="start">
             <span className="text-sm font-bold text-gray-500">{t('amount')}</span>
@@ -243,7 +280,7 @@ export const TradeInputs = ({
           <span className="ml-4 mr-3">USD</span>
         </Typography>
       </MaterialBox>
-      <USDInputPrice value={order.total} id="total" />
+      <USDInputPrice value={parseFloat(order.total)} id="total" />
       {/* <TxnFeeContainer>
         <Typography color="gray.500" textTransform="none">
           Algorand transaction fees: <Icon use="algoLogo" color="gray.500" size={0.5} />{' '}

@@ -25,7 +25,7 @@ import millify from 'millify'
 import styled from '@emotion/styled'
 import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
-import { withAssetChartQuery } from '@algodex/algodex-hooks'
+import { withAssetChartQuery } from '@/hooks'
 
 const Container = styled.div`
   position: relative;

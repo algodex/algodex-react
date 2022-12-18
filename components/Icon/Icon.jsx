@@ -16,6 +16,8 @@
 
 import * as Icons from 'react-feather'
 
+import React, {useMemo} from 'react'
+
 import PropTypes from 'prop-types'
 import { has } from 'lodash/object'
 import { isNumber } from 'lodash'
@@ -106,23 +108,27 @@ const Svg = styled.svg`
 export function Icon(props) {
   const isCustomIcon = has(ICONS, props.use)
   const isFeatherIcon = has(Icons, props.use)
+
+  const svgProps = useMemo(() => {
+    const svgProps = {
+      width: `${props.size}rem`,
+      height: `${props.size}rem`
+    }
+
+    if (isCustomIcon) {
+      const useIcon = ICONS[props.use]
+      svgProps.children = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
+      svgProps.viewBox = useIcon.viewBox
+    }
+    return svgProps
+  }, [isCustomIcon, props.size, props.use])
+
   if (!isCustomIcon && !isFeatherIcon) {
     return null
   }
 
   const SvgIcon = isFeatherIcon ? Icons[props.use] : Svg
-
-  const svgProps = {
-    width: `${props.size}rem`,
-    height: `${props.size}rem`
-  }
-
-  if (isCustomIcon) {
-    const useIcon = ICONS[props.use]
-    svgProps.children = useIcon.format === 'data' ? <path d={useIcon.path} /> : useIcon.markup
-    svgProps.viewBox = useIcon.viewBox
-  }
-
+  
   return <SvgIcon custom={isCustomIcon} {...svgProps} {...props} />
 }
 

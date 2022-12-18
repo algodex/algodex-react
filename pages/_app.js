@@ -29,7 +29,7 @@ import Head from 'next/head'
 import { Hydrate } from 'react-query/hydration'
 import NextApp from 'next/app'
 import PropTypes from 'prop-types'
-import { Provider } from '@algodex/algodex-hooks'
+import { Provider } from '@/hooks'
 // Algodex
 import ReactGA from 'react-ga'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -37,15 +37,12 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
 import { WalletsProvider } from '@/hooks/useWallets'
-// import AlgodexApi from '@algodex/algodex-sdk'
-// import { Provider } from '@algodex/algodex-hooks'
-import config from '@/config.json'
-// import AlgodexApi from '@algodex/algodex-sdk'
-// import { Provider } from '@algodex/algodex-hooks'
+
 import createEmotionCache from '@/utils/createEmotionCache'
 import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
+import { getAlgodexApi } from '@/services/environment'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
@@ -57,9 +54,7 @@ let api
  */
 function makeApi() {
   if (typeof api === 'undefined') {
-    const configEnv =
-      process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'mainnet' ? config.mainnet : config.testnet
-    api = new AlgodexApi({ config: configEnv })
+    api = getAlgodexApi()
   }
   return api
 }
@@ -70,9 +65,11 @@ const styles = css`
   html {
     height: 100%;
   }
+  
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
+    scrollbar-width: thin;
   }
   ::-webkit-scrollbar-track {
     background: ${theme.palette.gray[900]};
@@ -144,11 +141,11 @@ function Algodex(props) {
   )
 }
 
-Algodex.getInitialProps = async (ctx) => {
-  const initialProps = await NextApp.getInitialProps(ctx)
-  const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
-  return { pageProps: { ...initialProps, deviceType } }
-}
+// Algodex.getInitialProps = async (ctx) => {
+//   const initialProps = await NextApp.getInitialProps(ctx)
+//   const deviceType = ctx.ctx.req ? parser(ctx.ctx.req.headers['user-agent']).device.type : 'desktop'
+//   return { pageProps: { ...initialProps, deviceType } }
+// }
 
 Algodex.propTypes = {
   Component: PropTypes.elementType.isRequired,

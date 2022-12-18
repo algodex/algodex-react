@@ -25,9 +25,11 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
  */
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
+import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { withAssetPriceQuery } from '@algodex/algodex-hooks'
+import { withAssetPriceQuery } from '@/hooks'
+
 // TODO: Move to <Grid>/<Box>
 const IconTextContainer = styled.div`
   display: flex;
@@ -66,12 +68,13 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
+  const maxSpendableAlgo = useMaxSpendableAlgo()
   const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
       const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
-        return filter[0].amount
+        return parseFloat(filter[0].amount)
       }
     }
     return res
@@ -79,7 +82,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
 
   const calcAsaWorth = useMemo(
     () => {
-      const _calcAsaWorth = floatToFixed(convertFromAsaUnits(asset?.price_info?.price, asset.decimals))
+      const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
       return _calcAsaWorth
     },
     [asset]
@@ -108,7 +111,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
             </Typography>
             <IconTextContainer>
               <Typography variant="body_small_cap_medium" color="gray.300">
-                {fromBaseUnits(wallet.amount)}
+                {fromBaseUnits(maxSpendableAlgo)}
               </Typography>
               <Icon color="gray" fillGradient={300} use="algoLogo" size={0.625} />
             </IconTextContainer>
@@ -144,7 +147,7 @@ export const AvailableBalance = ({ wallet, asset }) => {
         </Typography>
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
-            {fromBaseUnits(wallet.amount)}
+            {fromBaseUnits(maxSpendableAlgo)}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
             <USDPrice priceToConvert={fromBaseUnits(wallet.amount)} currency="$" />
@@ -159,10 +162,9 @@ export const AvailableBalance = ({ wallet, asset }) => {
         <Stack direction="column" className="text-right">
           <Typography className="leading-5" variant="body_small_medium" color="gray.300">
             {fromBaseUnits(assetValue, asset.decimals)}
-            {/* {assetValue} */}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice asaWorth={calcAsaWorth} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
+            <USDPrice asaWorth={parseFloat(calcAsaWorth)} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
           </Typography>
         </Stack>
       </Stack>

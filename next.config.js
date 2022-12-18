@@ -35,9 +35,9 @@ if (typeof ALGODEX_API_V2 === 'undefined') throw new Error('Must have ALGODEX_AP
 
 const defaultAsset = getDefaultAsset()
 const nextTranslate = require('next-translate')
-const nextPWA = require('next-pwa')
+// const nextPWA = require('next-pwa')
 console.log({ ALGODEX_API_V2 })
-const moduleExports = nextPWA(
+const moduleExports = 
   nextTranslate({
     // experimental: {
     //   // this will allow nextjs to resolve files (js, ts, css)
@@ -71,7 +71,7 @@ const moduleExports = nextPWA(
           {
             source: '/api/v2/:path*',
             destination: `${ALGODEX_API_V2}/:path*`
-          }
+          },
         ]
       }
     },
@@ -89,7 +89,7 @@ const moduleExports = nextPWA(
         }
       ]
     }
-  })
+  }
 )
 
 const SentryWebpackPluginOptions = {

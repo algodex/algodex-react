@@ -19,6 +19,7 @@
     "order-book":"주문서",
     "place-maker-description":"이 거래 쌍에 유동성을 추가하기 위해 메이커 매수/매도 주문을 하십시오.",
     "connect-wallet-liquidity":" 지갑을 연결하고 이 거래 쌍에 유동성을 추가하기 위해 주문하십시오.",
-    "place-first":"에 대한 첫 번째 지정가 주문을 하십시오."
-    
+    "place-first":"에 대한 첫 번째 지정가 주문을 하십시오.",
+    "notSignedInTitle": "헤더의 버튼을 사용하여 알고랜드 지갑을 연결하여 시작하십시오.",
+	"notSignedInSubTitle": "지갑을 연결하고 거래를 시작하면 여기에 주문 정보가 표시됩니다."
 }

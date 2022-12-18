@@ -14,15 +14,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useCallback, useState } from 'react'
+
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import { useState } from 'react'
+import { useAlgodex } from '@/hooks'
 import useTranslation from 'next-translate/useTranslation'
+import { Typography, Box } from '@mui/material'
 
 const Tab = styled.div`
   display: flex;
@@ -52,7 +54,7 @@ const Tab = styled.div`
 
   @media (min-width: 1024px) {
     color: ${({ isActive, theme }) =>
-      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+    isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
   }
 `
 const Header = styled.div`
@@ -85,10 +87,12 @@ const PanelWrapper = styled.section`
   flex-direction: column;
   flex: 1 1 0%;
   overflow: hidden scroll;
+  scrollbar-width: thin;
   @media (max-width: 1536px) {
     overflow: scroll hidden;
   }
 `
+
 export const WalletOrdersSection = styled.section`
   border-top: 1px solid ${({ theme }) => theme.palette.gray['700']};
   @media (min-width: 1024px) and (orientation: landscape) {
@@ -101,16 +105,39 @@ export const WalletOrdersSection = styled.section`
     display: flex;
   }
 `
+
+const OPEN_ORDERS_PANEL = 'open-orders'
+const ORDER_HISTORY_PANEL = 'order-history'
+const ASSETS_PANEL = 'assets'
+
+const EmptyState = styled.div`
+  position: relative;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  align-self: center; 
+  @media (min-width: 996px) {
+    width: 50%;
+  }
+  @media (min-width: 1024px) {
+    width: 40%;
+  }
+  @media (max-width: 1024px) {
+    width: 30%;
+  }
+`
+
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
+  const common = useTranslation('common')
   const { wallet, isConnected } = useAlgodex()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-  const OPEN_ORDERS_PANEL = 'open-orders'
-  const ORDER_HISTORY_PANEL = 'order-history'
-  const ASSETS_PANEL = 'assets'
 
-  const renderPanel = (panelName) => {
-    if (!isConnected) return <div></div>
+  const renderPanel = useCallback((panelName) => {
+    if (!isConnected || !wallet?.connector.connected) return <div></div>
     switch (panelName) {
       case OPEN_ORDERS_PANEL:
         return <WalletOpenOrdersTable wallet={wallet} />
@@ -121,7 +148,8 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
       default:
         return null
     }
-  }
+  }, [isConnected, wallet])
+
 
   return (
     <Section area={area} borderColor="blue" border="dashed">
@@ -149,7 +177,19 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
             {t('assets')}
           </Tab>
         </Header>
-        <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper>
+        {isConnected ?
+          <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper> :
+          <EmptyState p={3}>
+            <Box>
+              <Typography variant="h5" color="gray.100" m={0} mb={2} className="leading-6">
+                {common.t('notSignedInTitle')}
+              </Typography>
+              <Typography variant="subtitle_small" color="gray.500" m={0}>
+                {common.t('notSignedInSubTitle')}
+              </Typography>
+            </Box>
+          </EmptyState>
+        }
       </Container>
     </Section>
   )

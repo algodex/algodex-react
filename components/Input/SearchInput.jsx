@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useEffect, useState } from 'react'
+import { createRef, forwardRef, useMemo, useState } from 'react'
 
 import { X as CancelIcon } from 'react-feather'
 import Checkbox from './CheckboxInput'
@@ -24,7 +24,6 @@ import TextInput from './TextInput'
 import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
-import useDebounce from '@/hooks/useDebounce'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
@@ -167,11 +166,11 @@ export function SearchInput(props) {
   } = props
   const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
-  const debouncedSearchText = useDebounce(searchText, 500)
-  useEffect(() => {
+  // const debouncedSearchText = useDebounce(searchText, 500)
+  useMemo(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
-  }, [onChange, debouncedSearchText, searchText])
+  }, [onChange, searchText])
 
   /**
    * This ref is forwarded to the search input
@@ -181,7 +180,7 @@ export function SearchInput(props) {
   /**
    * Blur search bar (if focused) when flyout is hidden
    */
-  useEffect(() => {
+  useMemo(() => {
     !isActive && inputRef?.current?.blur()
   }, [inputRef, isActive])
 

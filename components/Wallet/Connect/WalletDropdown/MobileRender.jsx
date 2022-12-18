@@ -17,7 +17,7 @@
 import { Box, Typography } from '@mui/material'
 import { copyAddress, truncatedWalletAddress } from 'components/helpers'
 import { filter, find } from 'lodash'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useMemo, useState, useCallback } from 'react'
 
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Button from '@mui/material/Button'
@@ -34,7 +34,7 @@ import WalletOptionsList from './WalletOptionsList'
 import { WalletsContext } from '@/hooks/useWallets'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 
 const Container = styled.div`
   width: 100%;
@@ -97,7 +97,7 @@ const MobileWalletRender = () => {
     }
   }, [addresses, wallet])
 
-  const renderWalletOptionsList = () => {
+  const renderWalletOptionsList = useCallback(() => {
     return (
       <Modal
         onClick={() => {
@@ -118,9 +118,9 @@ const MobileWalletRender = () => {
         </ModalContainer>
       </Modal>
     )
-  }
+  }, [isConnectingWallet])
 
-  const renderAddressesList = () => {
+  const renderAddressesList = useCallback(() => {
     return (
       <Modal
         onClick={() => {
@@ -144,9 +144,9 @@ const MobileWalletRender = () => {
         </ModalContainer>
       </Modal>
     )
-  }
+  }, [isDisconnectingWallet, sortedWalletsList, wallet?.address])
 
-  const renderAssets = (assets, address) => {
+  const renderAssets = useCallback((assets, address) => {
     return assets?.map((asset, idx) => {
       return (
         <Box
@@ -158,8 +158,9 @@ const MobileWalletRender = () => {
         </Box>
       )
     })
-  }
-  const renderWalletAddresses = () => {
+  }, [wallet.address])
+
+  const renderWalletAddresses = useCallback(() => {
     return addresses.map((addr, idx) => {
       return (
         <Accordion key={idx} expanded={expanded === idx} onChange={handleChange(idx)}>
@@ -223,7 +224,7 @@ const MobileWalletRender = () => {
         </Accordion>
       )
     })
-  }
+  }, [addresses, expanded, renderAssets, wallet.address])
 
   return (
     <>

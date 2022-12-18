@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
@@ -23,7 +23,7 @@ import { Section } from '@/components/Layout/Section'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
-import { withAlgorandPriceQuery } from '@algodex/algodex-hooks'
+import { withAlgorandPriceQuery } from '@/hooks'
 
 // export const Section = styled.section`
 //   height: inherit;
@@ -84,12 +84,13 @@ export function NavSearchSidebar({
   const [isFilteringByFavorites, setIsFilteringByFavorites] = useState(false)
   const [isListingVerifiedAssets, setIsListingVerifiedAssets] = useState(false)
   const { push } = useRouter()
-
+  
   /**
    * `isActive` determines flyout visibility on smaller screens and whether
    * asset rows are tab-navigable
    */
   const [isActive, setIsActive] = useState(false)
+  
 
   // const [assetInfo, setAssetInfo] = useState(null)
   const containerRef = useRef()
@@ -104,7 +105,7 @@ export function NavSearchSidebar({
    * The active (focused) element is blurred so an asset row can't remain
    * focused when flyout is hidden.
    */
-  useEffect(() => {
+  useMemo(() => {
     const isFixed = window.matchMedia('(min-width: 1536px)').matches
     const isMobile = window.matchMedia('(max-width: 996px)').matches
 
@@ -138,7 +139,7 @@ export function NavSearchSidebar({
   const handleAssetClick = useCallback(
     (row) => {
       handleExternalClick()
-      push(`/trade/${row.original.id}`)
+      push(`/trade/${row.original.id}`, undefined, {shallow: false})
     },
     [push, handleExternalClick]
   )
@@ -159,7 +160,6 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
@@ -202,7 +202,7 @@ NavSearchSidebar.propTypes = {
   searchTableRef: PropTypes.object,
   algoPrice: PropTypes.any,
   components: PropTypes.shape({
-    NavTable: PropTypes.node
+    NavTable: PropTypes.elementType
   }),
   tableProps: PropTypes.object,
   area: PropTypes.string

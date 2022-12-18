@@ -21,7 +21,16 @@ import { render } from 'test/test-utils'
 
 const SELL_ROW = 'order-book-sell-row'
 const BUY_ROW = 'order-book-buy-row'
-
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "",
+      query: "",
+      asPath: "",
+    };
+  },
+}));
 describe('Order Book', () => {
   const asset = {
     id: 15322902,
@@ -83,12 +92,6 @@ describe('Order Book', () => {
 
     expect(queryByTestId(SELL_ROW)).not.toBeNull()
     expect(queryByTestId(BUY_ROW)).not.toBeNull()
-  })
-
-  it('should render empty price info', () => {
-    const { queryByTestId } = render(<OrderBookPriceView />)
-    expect(queryByTestId('no-price-info')).not.toBeNull()
-    expect(queryByTestId('has-price-info')).toBeNull()
   })
 
   it('should reflect price increase', () => {

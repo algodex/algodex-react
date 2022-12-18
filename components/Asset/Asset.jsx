@@ -27,12 +27,12 @@ import SvgImage from '@/components/SvgImage'
 import Typography from '@mui/material/Typography'
 import convertFromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import { getActiveNetwork } from 'services/environment'
 import styled from '@emotion/styled'
 import theme from '../../theme/index'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withAssetPriceQuery } from '@algodex/algodex-hooks'
-import { getActiveNetwork } from 'services/environment'
+import { withAssetPriceQuery } from '@/hooks'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -111,7 +111,7 @@ export function AssetInfo({ asset }) {
     setShowAssetInfo(false)
   }, [setShowAssetInfo])
 
-  const renderName = () => {
+  const renderName = useCallback(() => {
     if (asset.verified) {
       return (
         <>
@@ -124,9 +124,9 @@ export function AssetInfo({ asset }) {
       )
     }
     return <>{`${asset.fullName} (${asset.name})`}</>
-  }
+  }, [asset.fullName, asset.name, asset.verified])
 
-  const renderLink = () => {
+  const renderLink = useCallback(() => {
     const expression =
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,7}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
     const regex = new RegExp(expression)
@@ -143,8 +143,8 @@ export function AssetInfo({ asset }) {
       )
     }
     return null
-  }
-
+  }, [asset.url])
+  
   return (
     <Container>
       <InfoContainer>
@@ -160,7 +160,7 @@ export function AssetInfo({ asset }) {
           </Button>
         ) : null}
         <HeaderContainer>
-          <Typography variant="h3" data-testid="asset-info-asa-name" color="gray.100" mb={2}>
+          <Typography className='leading-8' variant="h3" data-testid="asset-info-asa-name" color="gray.100" mb={2}>
             {renderName()}
           </Typography>
           {renderLink()}
@@ -170,7 +170,7 @@ export function AssetInfo({ asset }) {
             <Typography variant="body_tiny_cap" color="gray.500">
               {t('description')}
             </Typography>
-            <Typography variant="h6" color="gray.400" data-testid="asset-info-desc">
+            <Typography className="leading-normal" variant="h6" color="gray.400" data-testid="asset-info-desc">
               {description}
             </Typography>
           </InfoItem>
@@ -179,7 +179,7 @@ export function AssetInfo({ asset }) {
               {t('circulating-supply')}
             </Typography>
             <Typography data-testid="asset-info-circ-supply" variant="h6" color="gray.400">
-              {asset.circulating || 'NA'}
+              {asset.circulating ? (asset.circulating / (10**asset.decimals)).toLocaleString() : 'NA'}
             </Typography>
           </InfoItem>
           <InfoItem halfWidth>
@@ -187,7 +187,7 @@ export function AssetInfo({ asset }) {
               {t('total-supply')}
             </Typography>
             <Typography data-testid="asset-info-total-supply" variant="h6" color="gray.400">
-              {asset.total}
+              {(asset.total / (10**asset.decimals)).toLocaleString()}
             </Typography>
           </InfoItem>
           <InfoItem>

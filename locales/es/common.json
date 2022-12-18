@@ -15,9 +15,11 @@
   "mobilefooter-TRADE": "INTERCAMBIAR",
   "mobilefooter-ORDERS": "ÓRDENES",
   "mobilefooter-WALLET": "BILLETERA",
-  "trade-history":"Historial Comercial",
-  "order-book":"Libro De Pedidos",
-  "place-maker-description":"Coloque una orden de compra/venta del fabricante para agregar liquidez a este par comercial",
-  "connect-wallet-liquidity":"Conecte su billetera y realice un pedido para agregar liquidez a este par comercial",
-  "place-first":"Coloque la primera orden de límite para"
+  "trade-history": "Historial Comercial",
+  "order-book": "Libro De Pedidos",
+  "place-maker-description": "Coloque una orden de compra/venta del fabricante para agregar liquidez a este par comercial",
+  "connect-wallet-liquidity": "Conecte su billetera y realice un pedido para agregar liquidez a este par comercial",
+  "place-first": "Coloque la primera orden de límite para",
+  "notSignedInTitle": "Comience conectando una billetera Algorand usando el botón en el encabezado",
+  "notSignedInSubTitle": "Una vez que haya conectado una billetera y comience a operar, verá información sobre los pedidos aquí"
 }

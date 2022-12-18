@@ -15,15 +15,13 @@
  */
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { find, intersectionBy } from 'lodash'
-
 import PropTypes from 'prop-types'
 import events from '@algodex/algodex-sdk/lib/events'
 import { isEqual } from 'lodash/lang'
 import { logInfo } from 'services/logRemote'
 import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import useAccountsInfo from '@/hooks/useAccountsInfo'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
 import { useEvent } from 'hooks/useEvents'
 import { useEventDispatch } from './useEvents'
 import useMyAlgoConnect from './useMyAlgoConnect'

@@ -161,7 +161,7 @@ export const FAQSection = () => {
         </div>
         <div className="text-center my-9">
           <a
-            href="https://about.algodex.com/docs/algodex-faq/"
+            href="https://docs.algodex.com/algodex/algodex-faq"
             target="_blank"
             rel="noreferrer"
             className="text-white font-bold underline italic text-xl"

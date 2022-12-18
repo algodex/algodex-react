@@ -23,12 +23,12 @@ import Icon from '@mdi/react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { find } from 'lodash'
+import { useCallback, useMemo } from 'react'
 import theme from 'theme'
-import { useAlgodex } from '@algodex/algodex-hooks'
-import { useEffect } from 'react'
-// import { useAlgodex } from '@algodex/algodex-hooks'
+import { useAlgodex } from '@/hooks'
+// import { useEffect } from 'react'
 // import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
-import useUserStore from 'store/use-user-state'
+// import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 import { getActiveNetwork } from 'services/environment'
 
@@ -43,22 +43,22 @@ const InactiveWalletsList = ({ walletsList }) => {
   // const {  } = useWallets(wallet)
 
   // const { wallet } = useAlgodex()
-  wallet
-  const isWalletActive = (addr) => {
+  // wallet
+  const isWalletActive = useCallback((addr) => {
     return wallet.address === addr
-  }
+  }, [wallet.address])
 
-  const switchWalletAddress = (addr) => {
+  const switchWalletAddress = useCallback((addr) => {
     if (!isWalletActive(addr)) {
       const _wallet = find(addresses, (o) => o.address === addr)
       setWallet(_wallet, { validate: false, merge: true })
     }
-  }
+  }, [addresses, isWalletActive, setWallet])
 
-  const WALLETS_DISCONNECT_MAP = {
+  const WALLETS_DISCONNECT_MAP = useMemo(() => ({
     'my-algo-wallet': myAlgoDisconnect,
     'wallet-connect': peraDisconnect
-  }
+  }), [myAlgoDisconnect, peraDisconnect])
 
   return (
     <Box

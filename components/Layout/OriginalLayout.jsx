@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+// import '@/wdyr';
 import React, { useRef } from 'react'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
@@ -25,7 +25,7 @@ import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@algodex/algodex-hooks'
+import useWallets from '@/hooks/useWallets'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -66,6 +66,7 @@ const ContentSection = styled.section`
   height: auto;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: thin;
 `
 
 const AssetsSection = styled.section`
@@ -175,14 +176,13 @@ const Main = styled.main`
  * @constructor
  */
 function MainLayout({ asset, children }) {
-  const { wallet } = useAlgodex()
+  // const { wallet } = useAlgodex()
+  const { wallet } = useWallets()
   const gridRef = useRef()
   const searchTableRef = useRef()
-
-  if (!asset) {
+  if (!asset || asset?.decimals === undefined) {
     return <Spinner flex={true} />
   }
-
   return (
     <MainWrapper>
       <Main ref={gridRef}>
@@ -217,8 +217,10 @@ function MainLayout({ asset, children }) {
     </MainWrapper>
   )
 }
+// MainLayout.whyDidYouRender = true
 MainLayout.propTypes = {
   asset: PropTypes.object,
   children: PropTypes.any
 }
+
 export default MainLayout

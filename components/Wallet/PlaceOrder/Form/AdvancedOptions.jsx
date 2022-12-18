@@ -30,7 +30,7 @@ import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '../../../../store/use-user-state'
 
@@ -187,21 +187,22 @@ export function AdvancedOptions({ order, onChange }) {
   const newOrderSizeFilter = useUserStore((state) => state.newOrderSizeFilter)
   const setNewOrderSizeFilter = useUserStore((state) => state.setNewOrderSizeFilter)
   const router = useRouter()
-  const showMakerOnly = router && router.query.showMakerOnly === 'true'
+  const showMakerOnly = useMemo(() => router && router.query.showMakerOnly === 'true',
+    [router])
 
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const handleChange = (e, key, value) => {
+  const handleChange = useCallback((e, key, value) => {
     onChange(e, key, value)
-  }
+  }, [onChange])
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === ' ') {
       setIsExpanded(!isExpanded)
     }
-  }
+  }, [isExpanded])
 
-  const renderMessage = () => {
+  const renderMessage = useCallback(() => {
     switch (order.execution) {
       case 'maker':
         return `Your order will only execute as a maker order.`
@@ -215,9 +216,9 @@ export function AdvancedOptions({ order, onChange }) {
       default:
         return null
     }
-  }
+  }, [order.execution, t])
 
-  const marks = [
+  const marks = useMemo(() => ([
     {
       value: 0
     },
@@ -233,7 +234,7 @@ export function AdvancedOptions({ order, onChange }) {
     {
       value: 100
     }
-  ]
+  ]), [])
 
   return (
     <Container isExpanded={isExpanded} type={order.type}>

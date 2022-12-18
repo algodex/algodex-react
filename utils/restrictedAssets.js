@@ -40,7 +40,8 @@ const unrestrictedAssets = {
 const NETWORK_TYPE = process.env.NEXT_PUBLIC_ALGORAND_NETWORK
 export function getIsRestricted(id) {
   if (NETWORK_TYPE !== 'mainnet') return false
-  return !Object.keys(unrestrictedAssets).includes(id.toString())
+  // The asset is restricted since it is not in the unrestricted map
+  return unrestrictedAssets[id.toString()] === undefined
 }
 
 export function getIsRestrictedCountry(query) {

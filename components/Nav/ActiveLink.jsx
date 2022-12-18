@@ -14,10 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
+import React, { Children, useMemo } from 'react'
+
 import Link from 'next/link'
-import React, { Children } from 'react'
+import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 
 /**
  * NavActiveLink
@@ -36,7 +37,9 @@ const NavActiveLink = ({ children, matches, ...props }) => {
   const { asPath } = useRouter()
   const child = Children.only(children)
 
-  const isActive = matches ? matches.test(asPath) : asPath === props.href
+  const isActive = useMemo(() => {
+    return matches ? matches.test(asPath) : asPath === props.href
+  }, [asPath, matches, props.href])
 
   return (
     <Link {...props}>

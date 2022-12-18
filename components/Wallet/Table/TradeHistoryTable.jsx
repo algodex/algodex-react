@@ -26,7 +26,8 @@ import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
-import { withWalletTradeHistoryQuery } from '@algodex/algodex-hooks'
+import { withWalletTradeHistoryQuery } from '@/hooks'
+import {floatToFixedDisplay} from '@/services/display';
 
 const OrderHistoryContainer = styled.div`
   display: flex;
@@ -60,6 +61,15 @@ export function TradeHistoryTable({ orders }) {
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
   )
+  const _formattedOrders = useMemo(() => {
+    return orders.map((order) => {
+      const _order = {
+        ...order,
+        price: floatToFixedDisplay(order.price)
+      }
+      return _order
+    })
+  }, [orders])
 
   const columns = useMemo(
     () => [
@@ -103,7 +113,7 @@ export function TradeHistoryTable({ orders }) {
           initialState={walletOrderHistoryTableState}
           onStateChange={(state) => setWalletOrderHistoryTableState(state)}
           columns={columns}
-          data={orders || []}
+          data={_formattedOrders || []}
         />
       </TableWrapper>
     </OrderHistoryContainer>
