@@ -201,7 +201,7 @@ const Container = styled.div`
 // }
 // DefaultCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
 
-export function PriceCell({ value, row }) {
+export function InvertableCell({ value, row }) {
   const isInverted = useInversionStatus(row.original.id)
   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
     [row?.original?.asset?.id, row?.original?.id])
@@ -226,7 +226,7 @@ export function PriceCell({ value, row }) {
     </Typography>
   )
 }
-PriceCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+InvertableCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
 
 export function DefaultCell({ value }) {
   return (

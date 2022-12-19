@@ -17,7 +17,7 @@
 import Table, {
   AssetNameCell,
   DefaultCell,
-  PriceCell,
+  InvertableCell,
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
@@ -218,7 +218,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
-        Cell: PriceCell
+        Cell: InvertableCell
       },
       {
         Header: t('type'),
@@ -228,7 +228,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: DefaultCell
+        Cell: InvertableCell
       },
       {
         Header: t('status'),
