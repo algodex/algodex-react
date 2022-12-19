@@ -488,7 +488,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                   variant={order.type === 'buy' ? 'primary' : 'default'}
                   color="buy"
                   fullWidth
-                  onClick={isFormActive ? handleChange : () => {}}
+                  onClick={isFormActive ? handleChange : () => console.log('Wallet not connected')}
                   name="type"
                   value="buy"
                 >
@@ -500,7 +500,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
                   variant={order.type === 'sell' ? 'sell' : 'default'}
                   color="sell"
                   fullWidth
-                  onClick={isFormActive ? handleChange : () => {}}
+                  onClick={isFormActive ? handleChange : () => console.log('Wallet not connected')}
                   name="type"
                   value="sell"
                 >
