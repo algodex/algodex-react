@@ -114,6 +114,8 @@ const WalletsWrapper = styled.div`
 export function WalletView(props) {
   const { activeWallet, signedIn, addresses, setActiveWallet } = props
   const { t } = useTranslation('wallet')
+  const isMobile = useMobileDetect()
+  const walletConnectPosition = useMemo(() => isMobile ? 'at the top' : 'in the header', [isMobile])
   const {
     peraConnector,
     // myAlgoConnector,
@@ -266,7 +268,7 @@ export function WalletView(props) {
               <SvgImage use="walletArrow" h={4} color="gray.600" />
             </Arrow> */}
             <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
-              {t('start-by')}
+              {t('start-by', {walletConnectPosition})}
             </Typography>
             <Typography variant="subtitle_small" color="gray.500" m={0}>
               {t('once-connected')}

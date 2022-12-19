@@ -18,6 +18,7 @@ import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
 import { useCallback, useMemo, useReducer, useState, useEffect } from 'react'
+import useMobileDetect from '@/hooks/useMobileDetect'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -93,11 +94,11 @@ function shallowEqual(object1, object2) {
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box }, selectedOrder }) {
   const { t } = useTranslation('place-order')
   const otherTranslate = useTranslation('common')
-
+  const isMobile = useMobileDetect()
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
+  const walletConnectPosition = useMemo(() => isMobile ? 'Wallet Tab' : 'Header', [isMobile])
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
     const _decimals = decimal > 6 ? 6 : decimal
@@ -468,7 +469,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           {notSignedIn && (
             <EmptyState p={3}>
               <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
-                {otherTranslate.t('notSignedInTitle')}
+                {otherTranslate.t('notSignedInTitle', {walletConnectPosition})}
               </Typography>
               <Typography variant="subtitle_small" color="gray.500" m={0}>
                 {otherTranslate.t('notSignedInSubTitle')}

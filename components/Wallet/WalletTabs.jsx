@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
@@ -25,6 +25,7 @@ import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
 import useTranslation from 'next-translate/useTranslation'
 import { Typography, Box } from '@mui/material'
+import useMobileDetect from '@/hooks/useMobileDetect'
 
 const Tab = styled.div`
   display: flex;
@@ -119,23 +120,24 @@ const EmptyState = styled.div`
   justify-content: center;
   text-align: center;
   align-self: center; 
-  @media (min-width: 996px) {
-    width: 50%;
-  }
-  @media (min-width: 1024px) {
-    width: 40%;
-  }
-  @media (max-width: 1024px) {
-    width: 30%;
-  }
+  // @media screen and (min-width: 320px) {
+  //   width: 80%;
+  // }
+  // @media screen and (min-width: 996px) {
+  //   width: 70%;
+  // }
+  // @media (min-width: 1024px) {
+  //   width: 50%;
+  // }
 `
 
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const common = useTranslation('common')
   const { wallet, isConnected } = useAlgodex()
+  const isMobile = useMobileDetect()
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
-
+  const walletConnectPosition = useMemo(() => isMobile ? 'Wallet Tab' : 'Header', [isMobile])
   const renderPanel = useCallback((panelName) => {
     if (!isConnected || !wallet?.connector.connected) return <div></div>
     switch (panelName) {
@@ -149,7 +151,6 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
         return null
     }
   }, [isConnected, wallet])
-
 
   return (
     <Section area={area} borderColor="blue" border="dashed">
@@ -180,9 +181,9 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
         {isConnected ?
           <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper> :
           <EmptyState p={3}>
-            <Box>
+            <Box className='w-3/4 2xl:w-5/6 xl:w-2/4 md:w-2/4 sm:w-1/5'>
               <Typography variant="h5" color="gray.100" m={0} mb={2} className="leading-6">
-                {common.t('notSignedInTitle')}
+                {common.t('notSignedInTitle', {walletConnectPosition})}
               </Typography>
               <Typography variant="subtitle_small" color="gray.500" m={0}>
                 {common.t('notSignedInSubTitle')}
