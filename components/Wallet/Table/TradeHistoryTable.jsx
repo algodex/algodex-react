@@ -18,6 +18,7 @@ import Table, {
   AssetNameCell,
   DefaultCell,
   InvertableCell,
+  AmountInvertibleCell,
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
@@ -109,7 +110,7 @@ export function TradeHistoryTable({ orders }) {
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: InvertableCell
+        Cell: AmountInvertibleCell
       }
     ],
     [t, inversionStatus]

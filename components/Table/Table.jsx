@@ -228,6 +228,33 @@ export function InvertableCell({ value, row }) {
 }
 InvertableCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
 
+export function AmountInvertibleCell({ value, row }) {
+  const isInverted = useInversionStatus(row.original.id)
+  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id])
+  const { query } = useRouter()
+  const {price, amount} = row.original
+  const formattedValue = useMemo(() => {
+    if (isInverted && parseInt(query.id) === assetId) {
+      return parseFloat(price/(price * amount))?.toFixed(6)
+    } else {
+      return value
+    }
+  }, [isInverted, value])
+  return (
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={value}
+      data-testid="default-cell"
+    >
+      {formattedValue}
+    </Typography>
+  )
+}
+AmountInvertibleCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+
 export function DefaultCell({ value }) {
   return (
     <Typography
