@@ -234,16 +234,13 @@ export function AmountInvertibleCell({ value, row }) {
     [row?.original?.asset?.id, row?.original?.id])
   const { query } = useRouter()
   const {price, amount} = row.original
+  // console.log(price, amount)
   const formattedValue = useMemo(() => {
     if (isInverted && parseInt(query.id) === assetId) {
-      const formattedPrice = parseFloat(amount/(price * amount))?.toFixed(6)
-      const invertedAmount = 1/(formattedPrice*amount)
-      return parseFloat(invertedAmount)?.toFixed(6)
+      return price * amount
     } else {
-      return value
-      // console.log(price, amount)
-      // const formattedPrice = 1/price
-      // return formattedPrice/(formattedPrice * amount)
+      const formattedPrice = 1/price
+      return formattedPrice * amount
     }
   }, [isInverted, value])
   return (
