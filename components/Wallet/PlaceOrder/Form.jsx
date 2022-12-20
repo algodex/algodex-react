@@ -468,19 +468,19 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <Typography variant="subtitle_medium_cap_bold" color="gray.500" mb={1}>
               {t('place-order')}
             </Typography>
-            {/* {notSignedIn && (
+            {notSignedIn && isMobile && (
               <EmptyState p={3}>
-                <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
+                <Typography variant="body_small_cap_medium" color="gray.100">
                   {otherTranslate.t('notSignedInTitle', { walletConnectPosition })}
                 </Typography>
-                <Typography variant="subtitle_small" color="gray.500" m={0}>
+                {/* <Typography variant="subtitle_small" color="gray.500" m={0}>
                   {otherTranslate.t('notSignedInSubTitle')}
-                </Typography>
+                </Typography> */}
               </EmptyState>
-            )} */}
+            )}
           </header>
           <Box sx={{ opacity: `${isFormActive ? '1' : '0.3'}` }}>
-            <Form onSubmit={isFormActive && handleSubmit} className="overflow-x-scroll" disabled={isActive}>
+            <Form onSubmit={isFormActive ? handleSubmit : () => console.log('Wallet not connected')} className="overflow-x-scroll" disabled={isActive}>
               <ButtonGroup fullWidth variant="contained" className="mb-6">
                 <MaterialButton
                   disableElevation={order.type === 'buy'}
