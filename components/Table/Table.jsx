@@ -236,7 +236,7 @@ export function AmountInvertibleCell({ value, row }) {
   const {price, amount} = row.original
   const formattedValue = useMemo(() => {
     if (isInverted && parseInt(query.id) === assetId) {
-      return parseFloat(price/(price * amount))?.toFixed(6)
+      return parseFloat(price * amount)?.toFixed(6)
     } else {
       return value
     }
