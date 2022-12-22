@@ -219,7 +219,7 @@ export function InvertableCell({ value, row }) {
       variant="body_small"
       color="gray.000"
       className="cursor-default"
-      title={value}
+      title={formattedValue}
       data-testid="default-cell"
     >
       {formattedValue}
@@ -234,13 +234,11 @@ export function AmountInvertibleCell({ value, row }) {
     [row?.original?.asset?.id, row?.original?.id])
   const { query } = useRouter()
   const {price, amount} = row.original
-  // console.log(price, amount)
   const formattedValue = useMemo(() => {
     if (isInverted && parseInt(query.id) === assetId) {
       return price * amount
     } else {
       return amount
-      
     }
   }, [isInverted, value])
   return (
@@ -248,7 +246,7 @@ export function AmountInvertibleCell({ value, row }) {
       variant="body_small"
       color="gray.000"
       className="cursor-default"
-      title={value}
+      title={formattedValue}
       data-testid="default-cell"
     >
       {formattedValue}

@@ -37,7 +37,6 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
-import { StableAssets } from '@/components/StableAssets'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -85,7 +84,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
     const _decimals = decimal > 6 ? 6 : decimal
@@ -93,6 +91,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return parseFloat(value).toFixed(_decimals)
     }
     return parseFloat(value)
+  }, [])
+
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
   }, [])
 
   const assetBalance = useMemo(() => {
@@ -279,16 +285,33 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   }, [order.price, order.amount, algoBalance, assetBalance])
 
   const maxSpendableAlgo = useMaxSpendableAlgo()
-
-  const hasBalance = useMemo(() => {
+  
+  const hasBalance = useCallback(() => {
+    const isInverted = getInversionStatus()
     if (order.type === 'sell') {
+      if (isInverted) {
+        return maxSpendableAlgo
+      }
       return assetBalance > 0
     }
     if (order.type === 'buy') {
+      if (isInverted) {
+        return assetBalance > 0
+      }
       return maxSpendableAlgo
     }
     return false
   }, [order.type, assetBalance, maxSpendableAlgo])
+
+  const hasTradeableAsset = useCallback(() => {
+    const isInverted = getInversionStatus()
+    if (isInverted) {
+      return order.total > assetBalance
+    } else {
+      return order.total > maxSpendableAlgo
+    }
+  }, [order, assetBalance, maxSpendableAlgo])
+  
 
   const isBelowMinOrderAmount = useMemo(() => {
     if (order.type === 'buy') {
@@ -361,25 +384,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     [asset.isGeoBlocked]
   )
 
-  const getInversionStatus = useCallback(() => {
-    const inversionStatus = localStorage.getItem('inversionStatus')
-    if (inversionStatus && inversionStatus === 'true') {
-      return true
-    }
-    return false
-  }, [])
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
       const isInverted = getInversionStatus()
       const formattedOrder = { ...order, type: isInverted ? order.type === 'buy' ? 'sell' : 'buy' : order.type }
       formattedOrder.price = isInverted ? formatFloat(1/formattedOrder.price, 6) : formatFloat(formattedOrder.price, 6)
-      // formattedOrder.amount = isInverted ? formatFloat(formattedOrder.price * (order.price * order.amount), asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
-      // formattedOrder.amount = isInverted ? formatFloat(1/formattedOrder.amount, asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
-      // const usdprice = order.amount/formattedOrder.price
       formattedOrder.amount = isInverted ? formatFloat(((formattedOrder.price/(formattedOrder.price))*order.price) * order.amount, asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
-      // formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
-
       let lastToastId = undefined
       let orderPromise
       const notifier = (msg) => {
@@ -521,12 +532,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <Tab label={t('market')} />
           </Tabs>
           {/*</TabsUnstyled>*/}
-          {!hasBalance && (
+          {!hasBalance() && (
             <Typography color="gray.500" textAlign="center" className="m-8">
               {t('insufficient-balance')}
             </Typography>
           )}
-          {hasBalance && (
+          {hasBalance() && (
             <TradeInputs
               handleChange={handleChange}
               updateAmount={handleSlider}
@@ -543,7 +554,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
             disabled={
-              asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount
+              asset.isGeoBlocked || !hasBalance() || hasTradeableAsset() || order.total === 0 || isBelowMinOrderAmount
             }
           >
             {/* {buttonProps[order.type || 'buy']?.text} */}
