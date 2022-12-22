@@ -239,8 +239,8 @@ export function AmountInvertibleCell({ value, row }) {
     if (isInverted && parseInt(query.id) === assetId) {
       return price * amount
     } else {
-      const formattedPrice = 1/price
-      return formattedPrice * amount
+      return amount
+      
     }
   }, [isInverted, value])
   return (
