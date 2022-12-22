@@ -374,7 +374,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const isInverted = getInversionStatus()
       const formattedOrder = { ...order, type: isInverted ? order.type === 'buy' ? 'sell' : 'buy' : order.type }
       formattedOrder.price = isInverted ? formatFloat(1/formattedOrder.price, 6) : formatFloat(formattedOrder.price, 6)
-      formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
+      // formattedOrder.amount = isInverted ? formatFloat(formattedOrder.price * (order.price * order.amount), asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
+      // formattedOrder.amount = isInverted ? formatFloat(1/formattedOrder.amount, asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
+      // const usdprice = order.amount/formattedOrder.price
+      formattedOrder.amount = isInverted ? formatFloat(((formattedOrder.price/(formattedOrder.price))*order.price) * order.amount, asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
+      // formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
 
       let lastToastId = undefined
       let orderPromise
