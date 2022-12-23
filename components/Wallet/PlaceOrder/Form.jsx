@@ -37,6 +37,7 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { current } from 'immer'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -149,14 +150,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     // currentState.price = formatFloat(currentState.price, 6) || ''
 
     const amount = getAdjOrderAmount(currentState)
-
+    currentState.amount = amount
     // Amount should be based on asset decimals
     // currentState.amount = formatFloat(amount, asset.decimals) || ''
 
     const price = currentState.price || 0
 
     const total = parseFloat(amount) * parseFloat(price)
-
     // Set Order Total precision
     currentState.total = formatFloat(total, 6)
 
