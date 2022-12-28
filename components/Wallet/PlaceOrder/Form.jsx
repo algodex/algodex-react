@@ -113,14 +113,16 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet, asset])
 
+  const maxSpendableAlgo = useMaxSpendableAlgo()
 
   const algoBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-      res = fromBaseUnits(wallet.amount)
+      res = fromBaseUnits(maxSpendableAlgo)
+      // res = fromBaseUnits(wallet.amount)
     }
     return res
-  }, [wallet])
+  }, [maxSpendableAlgo, wallet])
 
   const getAdjOrderAmount = useCallback(({ amount, type, price }) => {
     let adjAmount = amount || 0
@@ -283,8 +285,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
     return 0
   }, [order.price, order.amount, algoBalance, assetBalance])
-
-  const maxSpendableAlgo = useMaxSpendableAlgo()
   
   const hasBalance = useCallback(() => {
     const isInverted = getInversionStatus()
@@ -440,6 +440,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               duration: 3000
             })
           } catch (e) {
+            console.log(e, 'err')
             toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
           }
         }
