@@ -389,8 +389,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       e.preventDefault()
       const isInverted = getInversionStatus()
       const formattedOrder = { ...order, type: isInverted ? order.type === 'buy' ? 'sell' : 'buy' : order.type }
-      formattedOrder.price = isInverted ? formatFloat(1/formattedOrder.price, 6) : formatFloat(formattedOrder.price, 6)
-      formattedOrder.amount = isInverted ? formatFloat(((formattedOrder.price/(formattedOrder.price))*order.price) * order.amount, asset.decimals) : formatFloat(formattedOrder.amount, asset.decimals)
+      const invertedOrderAmount = (formattedOrder.price/(formattedOrder.price))*order.price * order.amount
+      formattedOrder.price = isInverted ? parseFloat(formatFloat(1/formattedOrder.price, 6)) : formatFloat(formattedOrder.price, 6)
+      formattedOrder.amount = isInverted ? parseFloat(formatFloat(invertedOrderAmount, asset.decimals)) : formatFloat(formattedOrder.amount, asset.decimals)
+      formattedOrder.total = parseFloat(order.total)
+      
       let lastToastId = undefined
       let orderPromise
       const notifier = (msg) => {
@@ -440,7 +443,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               duration: 3000
             })
           } catch (e) {
-            console.log(e, 'err')
             toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
           }
         }
