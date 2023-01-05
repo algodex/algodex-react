@@ -19,5 +19,7 @@
     "order-book":"księga zamówień",
     "place-maker-description":"Złóż zlecenie kupna/sprzedaży producenta, aby dodać płynność dla tej pary handlowej",
     "connect-wallet-liquidity":" Podłącz portfel i złóż zamówienie, aby zwiększyć płynność dla tej pary handlowej",
-    "place-first":"Złóż pierwsze zlecenie z limitem za"
+    "place-first":"Złóż pierwsze zlecenie z limitem za",
+    "notSignedInTitle": "Zacznij od podłączenia portfela Algorand za pomocą przycisku w nagłówku",
+	"notSignedInSubTitle": "Po podłączeniu portfela i rozpoczęciu handlu zobaczysz tutaj informacje o zamówieniach"
 }

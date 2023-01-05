@@ -19,5 +19,7 @@
   "order-book": "bestelboek",
   "place-maker-description": "Afgiv en købs-/salgsordre for at tilføje likviditet til dette handelspar",
   "connect-wallet-liquidity": "Tilslut din tegnebog og afgiv en ordre for at tilføje likviditet til dette handelspar",
-  "place-first": "Afgiv den første grænseordre for"
+  "place-first": "Afgiv den første grænseordre for",
+  "notSignedInTitle": "Begin met het aansluiten van een Algorand Wallet met behulp van de knop in de koptekst",
+	"notSignedInSubTitle": "Zodra u een portemonnee heeft gekoppeld en begint met handelen, ziet u hier informatie over bestellingen"
 }

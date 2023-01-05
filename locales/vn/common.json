@@ -19,5 +19,7 @@
   "order-book": "Quyển sổ đặc Mua hàng",
   "place-maker-description": "Đặt lệnh mua / bán của người tạo để thêm thanh khoản cho cặp giao dịch này",
   "connect-wallet-liquidity": "Kết nối ví của bạn và đặt hàng để thêm thanh khoản cho cặp giao dịch này",
-  "place-first": "Đặt lệnh giới hạn đầu tiên cho"
+  "place-first": "Đặt lệnh giới hạn đầu tiên cho",
+  "notSignedInTitle": "Bắt đầu bằng cách kết nối Ví Algorand bằng nút trong tiêu đề",
+	"notSignedInSubTitle": "Khi bạn đã kết nối ví và bắt đầu giao dịch, bạn sẽ thấy thông tin về các đơn đặt hàng tại đây"
 }

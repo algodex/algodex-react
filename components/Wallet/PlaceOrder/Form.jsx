@@ -47,6 +47,17 @@ export const Form = styled.form`
   }
 `
 
+const EmptyState = styled.div`
+  position: relative;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1.125rem;
+  text-align: center;
+`
+
 function shallowEqual(object1, object2) {
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
@@ -82,6 +93,8 @@ function shallowEqual(object1, object2) {
  */
 export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box }, selectedOrder }) {
   const { t } = useTranslation('place-order')
+  const otherTranslate = useTranslation('common')
+
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
@@ -124,7 +137,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [maxSpendableAlgo, wallet])
 
-  const getAdjOrderAmount = useCallback(({ amount, type, price }) => {
+  const getAdjOrderAmount = useCallback(({amount, type, price}) => {
     let adjAmount = amount || 0
     let total = adjAmount * price
     if (type === 'buy' && total > algoBalance) {
@@ -489,9 +502,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             {t('place-order')}
           </Typography>
           {notSignedIn && (
-            <Typography data-testid="not-signed-in" color="gray.500" textAlign="center" my={5}>
-              {t('not-signed-in')}
-            </Typography>
+            <EmptyState p={3}>
+              <Typography variant="h5" color="gray.100" m={0} mb={4} className="leading-6">
+                {otherTranslate.t('notSignedInTitle')}
+              </Typography>
+              <Typography variant="subtitle_small" color="gray.500" m={0}>
+                {otherTranslate.t('notSignedInSubTitle')}
+              </Typography>
+            </EmptyState>
           )}
         </header>
       )}

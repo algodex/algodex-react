@@ -19,5 +19,7 @@
     "order-book":"portafoglio ordini",
     "place-maker-description":"Effettua un ordine di acquisto/vendita da parte di un produttore per aggiungere liquidità a questa coppia di trading",
     "connect-wallet-liquidity":"Collega il tuo portafoglio ed effettua un ordine per aggiungere liquidità per questa coppia di trading",
-    "place-first":"Effettua il primo ordine limite per"
+    "place-first":"Effettua il primo ordine limite per",
+    "notSignedInTitle": "Inizia collegando un Algorand Wallet utilizzando il pulsante nell'intestazione",
+	"notSignedInSubTitle": "Dopo aver collegato un portafoglio e iniziato a fare trading, vedrai le informazioni sugli ordini qui"
 }
