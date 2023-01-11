@@ -43,10 +43,13 @@ import parser from 'ua-parser-js'
 import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
 import { getAlgodexApi } from '@/services/environment'
+import { reconnectProviders, initializeProviders, WalletProvider } from '@txnlab/use-wallet'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 let api
+
+const walletProviders = initializeProviders()
 
 /**
  *
@@ -65,7 +68,7 @@ const styles = css`
   html {
     height: 100%;
   }
-  
+
   ::-webkit-scrollbar {
     width: 6px;
     height: 5px;
@@ -98,6 +101,10 @@ function Algodex(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const TRACKING_ID = 'UA-195819772-1'
 
+  React.useEffect(() => {
+    reconnectProviders(walletProviders)
+  }, [])
+
   ReactGA.initialize(TRACKING_ID)
   ReactGA.pageview('/')
   const queryClient = new QueryClient({
@@ -125,14 +132,16 @@ function Algodex(props) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Global styles={styles} />
-              <WalletsProvider>
-                <Provider dex={makeApi()}>
-                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                  <Toaster />
-                  <ReactQueryDevtools initialIsOpen={false} />
-                  <Component {...pageProps} />
-                </Provider>
-              </WalletsProvider>
+              <WalletProvider value={walletProviders}>
+                <WalletsProvider>
+                  <Provider dex={makeApi()}>
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <Toaster />
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    <Component {...pageProps} />
+                  </Provider>
+                </WalletsProvider>
+              </WalletProvider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>

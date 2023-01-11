@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@algodex/algodex-sdk": "^2.2.3",
+    "@blockshake/defly-connect": "^1.0.0",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
@@ -47,6 +48,7 @@
     "@randlabs/myalgo-connect": "^1.1.3",
     "@sentry/nextjs": "^6.19.6",
     "@testing-library/react-hooks": "^8.0.1",
+    "@txnlab/use-wallet": "^1.0.4",
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
     "@walletconnect/client": "^1.7.7",

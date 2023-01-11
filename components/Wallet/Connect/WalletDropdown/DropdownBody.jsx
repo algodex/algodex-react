@@ -19,6 +19,7 @@
 // import InactiveWalletsList from './InactiveWalletsList'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
+import Connect from './Connect'
 import theme from 'theme'
 // import { WalletContext } from '../../WalletContext'
 import { useState } from 'react'
@@ -34,14 +35,7 @@ const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConn
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      <WalletOptionsList
-        isConnectingAddress={isConnectingAddress}
-        setIsConnectingAddress={setIsConnectingAddress}
-        addresses={addresses}
-        myAlgoOnClick={myAlgoOnClick}
-        peraConnectOnClick={peraConnectOnClick}
-        isPeraConnected={isPeraConnected}
-      />
+      <Connect />
       {/* {(!activeWalletAddress || isConnectingAddress) && (
         <WalletOptionsList
           isConnectingAddress={isConnectingAddress}

@@ -15,12 +15,15 @@
  */
 
 import { Box, Stack, Typography } from '@mui/material'
+import { useWallet } from '@txnlab/use-wallet'
 
 import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 
 const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
+  const { providers, activeAccount } = useWallet()
+
   return (
     <>
       <Box
@@ -31,17 +34,45 @@ const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) 
       >
         <Box className="flex justify-between items-center">
           <Typography variant="body_small_cap_bold">CONNECT A WALLET</Typography>
-          {/* {isConnectingAddress && (
-            <Button
-              className="cursor-pointer text-white"
-              variant="text"
-              size="small"
-              onClick={() => setIsConnectingAddress(!isConnectingAddress)}
-            >
-              Go back
-            </Button>
-          )} */}
         </Box>
+
+        {providers?.map((provider) => (
+          <Box className="mt-4 ml-4">
+            <h4>
+              <img width={30} height={30} alt="" src={provider.metadata.icon} />
+              {provider.metadata.name} {provider.isActive && '[active]'}
+            </h4>
+            <div>
+              <button onClick={provider.connect} disabled={provider.isConnected}>
+                Connect
+              </button>
+              <button onClick={provider.disconnect} disabled={!provider.isConnected}>
+                Disconnect
+              </button>
+              <button
+                onClick={provider.setActiveProvider}
+                disabled={!provider.isConnected || provider.isActive}
+              >
+                Set Active
+              </button>
+              <div>
+                {provider.isActive && provider.accounts.length && (
+                  <select
+                    value={activeAccount?.address}
+                    onChange={(e) => provider.setActiveAccount(e.target.value)}
+                  >
+                    {provider.accounts.map((account) => (
+                      <option key={account.address} value={account.address}>
+                        {account.address}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+          </Box>
+        ))}
+
         <Box className="mt-4 ml-4">
           <Stack
             direction="row"

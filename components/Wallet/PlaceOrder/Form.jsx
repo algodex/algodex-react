@@ -17,7 +17,15 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
+import structureOrder from './structureOrder'
 import { useCallback, useMemo, useReducer, useState, useEffect } from 'react'
+import algosdk from 'algosdk'
+import {
+  useWallet,
+  DEFAULT_NODE_BASEURL,
+  DEFAULT_NODE_TOKEN,
+  DEFAULT_NODE_PORT
+} from '@txnlab/use-wallet'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -37,6 +45,7 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { act } from 'react-test-renderer'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -58,17 +67,17 @@ const EmptyState = styled.div`
 `
 
 function shallowEqual(object1, object2) {
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
+  const keys1 = Object.keys(object1)
+  const keys2 = Object.keys(object2)
   if (keys1.length !== keys2.length) {
-    return false;
+    return false
   }
   for (let key of keys1) {
     if (object1[key] !== object2[key]) {
-      return false;
+      return false
     }
   }
-  return true;
+  return true
 }
 
 /**
@@ -90,11 +99,18 @@ function shallowEqual(object1, object2) {
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box }, selectedOrder }) {
+export function PlaceOrderForm({
+  showTitle = true,
+  asset,
+  onSubmit,
+  components: { Box },
+  selectedOrder
+}) {
+  const { activeAddress, signTransactions, sendTransactions } = useWallet()
   const { t } = useTranslation('place-order')
   const otherTranslate = useTranslation('common')
 
-  const { wallet, placeOrder, http, isConnected } = useAlgodex()
+  const { wallet, placeOrder, http, isConnected, algodex } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
 
@@ -126,65 +142,57 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet])
 
-  const getAdjOrderAmount = useCallback(({ amount, type, price }) => {
-    let adjAmount = amount || 0
-    let total = adjAmount * price
-    if (type === 'buy' && total > algoBalance) {
-      adjAmount = algoBalance / Math.max(price, 0.000001)
-    } else if (type === 'sell' && adjAmount > assetBalance) {
-      adjAmount = assetBalance
+  const getAdjOrderAmount = useCallback(
+    ({ amount, type, price }) => {
+      // let adjAmount = amount || 0
+      // let total = adjAmount * price
+      // if (type === 'buy' && total > algoBalance) {
+      //   adjAmount = algoBalance / Math.max(price, 0.000001)
+      // } else if (type === 'sell' && adjAmount > assetBalance) {
+      //   adjAmount = assetBalance
+      // }
+      return amount
+    },
+    [algoBalance, assetBalance]
+  )
+
+  const [order, setOrder] = useReducer(
+    (currentState, order) => {
+      const origStateCopy = { ...currentState }
+      if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
+        order.price = 0
+      }
+      if (order.amount !== undefined && order.amount !== '' && isNaN(order.amount)) {
+        order.amount = 0
+      }
+
+      Object.keys(order).forEach((key) => {
+        currentState[key] = order[key]
+      })
+
+      const amount = getAdjOrderAmount(currentState)
+
+      const price = currentState.price || 0
+
+      const total = parseFloat(amount) * parseFloat(price)
+
+      // Set Order Total precision
+      currentState.total = formatFloat(total, 6)
+
+      if (shallowEqual(currentState, origStateCopy)) {
+        return currentState
+      } else {
+        return { ...currentState }
+      }
+    },
+    {
+      type: 'buy',
+      price: '',
+      amount: '',
+      total: 0,
+      execution: 'both'
     }
-    return adjAmount
-  }, [algoBalance, assetBalance])
-
-  const [order, setOrder] = useReducer((currentState, order) => {
-    const origStateCopy = { ...currentState }
-    if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
-      order.price = 0
-    }
-    if (order.amount !== undefined && order.amount !== '' && isNaN(order.amount)) {
-      order.amount = 0
-    }
-
-    Object.keys(order).forEach(key => {
-      currentState[key] = order[key]
-    });
-
-    // Set Order Price and Amount precision. Price should be to 6 decimals
-    // currentState.price = formatFloat(currentState.price, 6) || ''
-
-    const amount = getAdjOrderAmount(currentState)
-
-    // Amount should be based on asset decimals
-    // currentState.amount = formatFloat(amount, asset.decimals) || ''
-
-    const price = currentState.price || 0
-
-    const total = parseFloat(amount) * parseFloat(price)
-
-    // Set Order Total precision
-    currentState.total = formatFloat(total, 6)
-
-    if (shallowEqual(currentState, origStateCopy)) {
-      return currentState
-    } else {
-      return { ...currentState }
-    }
-  }, {
-    type: 'buy',
-    price: '',
-    amount: '',
-    total: 0,
-    execution: 'both'
-  })
-
-  // if (typeof wallet?.address === 'undefined') {
-  //   throw new TypeError('Invalid Wallet!')
-  // }
-  // TODO: Handle empty asset wallets
-  // if (typeof wallet?.assets === 'undefined') {
-  //   throw new TypeError('Invalid Account Info!')
-  // }
+  )
 
   const { data: assetOrders, isLoading, isError } = useAssetOrdersQuery({ asset })
 
@@ -217,10 +225,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       })
     }
   }, [order?.type])
-
-  // useEffect(() => {
-  //   updateInitialState()
-  // }, [order.type, updateInitialState])
 
   useEffect(() => {
     if (selectedOrder) {
@@ -283,39 +287,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const maxSpendableAlgo = useMaxSpendableAlgo()
 
-  const hasBalance = useMemo(() => {
-    if (order.type === 'sell') {
-      return assetBalance > 0
-    }
-    if (order.type === 'buy') {
-      return maxSpendableAlgo
-    }
-    return false
-  }, [order.type, assetBalance, maxSpendableAlgo])
-
-  const isBelowMinOrderAmount = useMemo(() => {
-    if (order.type === 'buy') {
-      return new Big(order.total).lt(0.5)
-    }
-    return new Big(order.total).eq(0)
-  }, [order.total, order.type])
-
-  // const isInvalid = () => {
-  //   return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
-  // }
-
-  // const isBalanceExceeded = () => {
-  //   const maxSpendableAlgo = fromBaseUnits(wallet.amount)
-  //   const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
-  //   if (order.type === 'buy') {
-  //     return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
+  // const hasBalance = useMemo(() => {
+  //   if (order.type === 'sell') {
+  //     return assetBalance > 0
   //   }
-  //   return new Big(order.amount).gt(asaBalance)
-  // }
+  //   if (order.type === 'buy') {
+  //     return maxSpendableAlgo
+  //   }
+  //   return false
+  // }, [order.type, assetBalance, maxSpendableAlgo])
 
-  // const isDisabled = isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded()
-  // asset.isGeoBlocked ||
-  // status.submitting
+  // const isBelowMinOrderAmount = useMemo(() => {
+  //   if (order.type === 'buy') {
+  //     return new Big(order.total).lt(0.5)
+  //   }
+  //   return new Big(order.total).eq(0)
+  // }, [order.total, order.type])
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -335,7 +322,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const handleChange = useCallback(
     (e, _key, _value) => {
-
       if (asset.isGeoBlocked) {
         toast.error('Asset is not available for trading')
         return
@@ -350,10 +336,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         throw new Error('Must have a valid value!')
       }
 
-      // if ((key === 'total' || key === 'price' || key === 'amount') && typeof value !== 'number') {
-      //   value = parseFloat(value)
-      //   // value = value
-      // }
       const neworder = {
         [key]: value
       }
@@ -365,7 +347,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   )
 
   const handleSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault()
       const formattedOrder = { ...order }
       formattedOrder.price = formatFloat(formattedOrder.price, 6)
@@ -388,43 +370,62 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           asset
         })
       } else {
+        console.log('hit else statement')
         console.log(
           {
             ...formattedOrder,
-            address: wallet.address,
+            address: activeAddress,
             wallet,
             asset,
             appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
             version: 6
-          },
-          { wallet }
+          }
+          // { wallet }
         )
 
-        const awaitPlaceOrder = async () => {
-          try {
-            notifier('Initializing order')
-            await placeOrder(
-              {
-                ...formattedOrder,
-                address: wallet.address,
-                wallet,
-                asset,
-                appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
-                version: 6
-              },
-              { wallet },
-              notifier
-            )
-            toast.success(t('order-success'), {
-              id: lastToastId,
-              duration: 3000
-            })
-          } catch (e) {
-            toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
-          }
-        }
+        // const awaitPlaceOrder = async () => {
+        try {
+          notifier('Initializing order')
+          console.log('initalizing order')
+          const txns = await structureOrder(
+            {
+              ...formattedOrder,
+              address: activeAddress,
+              // wallet,
+              asset,
+              appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
+              version: 6,
+              wallet: { address: activeAddress }
+            },
+            algodex
+            // { wallet },
+            // notifier
+          )
 
-        awaitPlaceOrder()
+          console.log(txns)
+
+          // const encodedTransactions = txns.map((txn) => algosdk.encodeUnsignedTransaction(txn))
+          const encodeTxn = txns[0].contract.txns
+            .map((tx) => tx.unsignedTxn)
+            .map((ttxn) => algosdk.encodeUnsignedTransaction(ttxn))
+
+          const signedTransactions = await signTransactions(encodeTxn)
+          const waitRoundsToConfirm = 20
+
+          const { id } = await sendTransactions(signedTransactions, waitRoundsToConfirm)
+          console.log(id)
+
+          toast.success(t('order-success'), {
+            id: lastToastId,
+            duration: 3000
+          })
+        } catch (e) {
+          console.log('hit error')
+          toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
+        }
+        // }
+
+        // awaitPlaceOrder()
       }
 
       // TODO add events
@@ -445,11 +446,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     })
   }
 
-  const isActive = typeof wallet === 'undefined'
+  // const isActive = typeof wallet === 'undefined'
+  const isActive = activeAddress !== null
   if (isLoading || isError) {
     return <Spinner />
   }
-  const notSignedIn = !isConnected ? true : !showForm ? true : false
+  // const notSignedIn = !isConnected ? true : !showForm ? true : false
+  const notSignedIn = !isActive ? true : !showForm ? true : false
   return (
     <Box
       sx={{
@@ -477,79 +480,75 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           )}
         </header>
       )}
-      {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && showForm && (
-        <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
-          <ButtonGroup fullWidth variant="contained" className="mb-6">
-            <MaterialButton
-              disableElevation={order.type === 'buy'}
-              disableRipple={true}
-              variant={order.type === 'buy' ? 'primary' : 'default'}
-              color="buy"
-              fullWidth
-              onClick={handleChange}
-              name="type"
-              value="buy"
-            >
-              {t('buy')}
-            </MaterialButton>
-            <MaterialButton
-              disableRipple={true}
-              disableElevation={order.type === 'sell'}
-              variant={order.type === 'sell' ? 'sell' : 'default'}
-              color="sell"
-              fullWidth
-              onClick={handleChange}
-              name="type"
-              value="sell"
-            >
-              {t('sell')}
-            </MaterialButton>
-          </ButtonGroup>
-          <AvailableBalance wallet={wallet} asset={asset} />
-          <Tabs
-            sx={{ marginBottom: '16px' }}
-            textColor="primary"
-            tabtype={order.type === 'buy' ? 'buy' : 'sell'}
-            onChange={(e, value) => handleMarketTabSwitching(e, value)}
-            value={tabSwitch}
-          >
-            <Tab label={t('limit')} />
-            <Tab label={t('market')} />
-          </Tabs>
-          {/*</TabsUnstyled>*/}
-          {!hasBalance && (
-            <Typography color="gray.500" textAlign="center" className="m-8">
-              {t('insufficient-balance')}
-            </Typography>
-          )}
-          {hasBalance && (
-            <TradeInputs
-              handleChange={handleChange}
-              updateAmount={handleSlider}
-              sliderPercent={sliderPercent}
-              order={order}
-              onChange={handleChange}
-              asset={asset}
-              allowTaker={typeof asset !== 'undefined'}
-            />
-          )}
 
-          <Button
-            type="submit"
-            variant={order.type === 'buy' ? 'primary' : 'sell'}
+      <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
+        <ButtonGroup fullWidth variant="contained" className="mb-6">
+          <MaterialButton
+            disableElevation={order.type === 'buy'}
+            disableRipple={true}
+            variant={order.type === 'buy' ? 'primary' : 'default'}
+            color="buy"
             fullWidth
-            disabled={
-              asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount
-            }
+            onClick={handleChange}
+            name="type"
+            value="buy"
           >
-            {buttonProps[order.type || 'buy']?.text}
-          </Button>
-        </Form>
-      )}
+            {t('buy')}
+          </MaterialButton>
+          <MaterialButton
+            disableRipple={true}
+            disableElevation={order.type === 'sell'}
+            variant={order.type === 'sell' ? 'sell' : 'default'}
+            color="sell"
+            fullWidth
+            onClick={handleChange}
+            name="type"
+            value="sell"
+          >
+            {t('sell')}
+          </MaterialButton>
+        </ButtonGroup>
+        {/* <AvailableBalance wallet={wallet} asset={asset} /> */}
+        <Tabs
+          sx={{ marginBottom: '16px' }}
+          textColor="primary"
+          tabtype={order.type === 'buy' ? 'buy' : 'sell'}
+          onChange={(e, value) => handleMarketTabSwitching(e, value)}
+          value={tabSwitch}
+        >
+          <Tab label={t('limit')} />
+          <Tab label={t('market')} />
+        </Tabs>
+        {/*</TabsUnstyled>*/}
+        {/* {!hasBalance && (
+          <Typography color="gray.500" textAlign="center" className="m-8">
+            {t('insufficient-balance')}
+          </Typography>
+        )} */}
+        <TradeInputs
+          handleChange={handleChange}
+          updateAmount={handleSlider}
+          sliderPercent={sliderPercent}
+          order={order}
+          onChange={handleChange}
+          asset={asset}
+          allowTaker={typeof asset !== 'undefined'}
+        />
+        )
+        <Button
+          type="submit"
+          variant={order.type === 'buy' ? 'primary' : 'sell'}
+          fullWidth
+          // disabled={asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount}
+        >
+          {buttonProps[order.type || 'buy']?.text}
+        </Button>
+      </Form>
+
       {asset.isGeoBlocked && (
         <div className="px-4 flex">
           <MaterialIcon
-            className='mt-2'
+            className="mt-2"
             path={mdiAlertCircleOutline}
             title="Warning icon"
             height="1.5rem"
