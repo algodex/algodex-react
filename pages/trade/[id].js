@@ -39,7 +39,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import useWallets from '@/hooks/useWallets'
-
+import NFTView from '@/components/Asset/NFTView'
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
@@ -182,7 +182,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
   const { wallet } = useWallets()
-
+  const [activeView, setActiveView] = useState('nft')
   // TODO: refactor all state into useReducer
 
   // console.log('logging: ', {routerId: query.id, staticId: originalStaticExplorerAsset?.id})
@@ -231,7 +231,6 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   }
   const [interval, setInterval] = useState('1h')
-
   const [asset, setAsset] = useState({...realStaticExplorerAsset})
 
   const _asset = useMemo(() => {
@@ -284,8 +283,8 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
-    else return <Chart asset={asset} interval={interval} onChange={onChange} />
-  }, [asset, asset?.id, asset?.name, 
+    else return activeView === 'chart' ? <Chart asset={asset} interval={interval} onChange={onChange} /> : <NFTView>The NFT View</NFTView>
+  }, [activeView, asset, asset?.id, asset?.name, 
       interval, isFallback, isTraded, onChange, showAssetInfo])
 
   return useMemo(() => {
