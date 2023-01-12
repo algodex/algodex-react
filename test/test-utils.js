@@ -89,9 +89,9 @@ const Providers = ({ children }) => (
             wallet: walletEN
           }}
         >
-          <WalletsProvider>
-            <Provider dex={makeApi()}>{children}</Provider>
-          </WalletsProvider>
+          {/* <WalletsProvider> */}
+          <Provider dex={makeApi()}>{children}</Provider>
+          {/* </WalletsProvider> */}
         </I18nProvider>
       </QueryClientProvider>
     </ThemeProvider>

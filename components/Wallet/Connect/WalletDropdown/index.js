@@ -1,22 +1,7 @@
-/* 
- * Algodex Frontend (algodex-react) 
- * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-import { filter, find } from 'lodash'
-import { useContext, useMemo, useCallback } from 'react'
+import { filter, find, reduceRight } from 'lodash'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { WalletReducerContext, mergeAddresses } from '../../../../hooks/WalletsReducerProvider'
 
 import DropdownBody from './DropdownBody'
 import DropdownFooter from './DropdownFooter'
@@ -26,6 +11,12 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
 import { useEventDispatch } from '@/hooks/useEvents'
+
+import { connect as newConnect } from '../../../../hooks/useMyAlgoConnectNew'
+import {
+  initialState as reducerInitialState,
+  walletReducer
+} from '../../../../hooks/walletsReducer'
 
 const styleReset = css`
   margin: 0;
@@ -52,49 +43,67 @@ const Container = styled.div`
 `
 
 const WalletConnectDropdown = ({ closeDropdown }) => {
-  const { isConnected } = useAlgodex()
-  const [addresses] = useContext(WalletsContext)
-  const dispatcher = useEventDispatch()
-  const { wallet, peraConnect, myAlgoConnect } = useWallets()
-  const WALLETS_CONNECT_MAP = useMemo(() => ({
+  const { http } = useAlgodex()
+  // const [addresses] = useContext(WalletsContext)
+  const {
+    addressesNew,
+    setAddressesNew,
+    activeWallet,
+    setActiveWallet,
+    peraWallet,
+    setPeraWallet,
+    myAlgoAddresses,
+    setMyAlgoAddresses
+  } = useContext(WalletReducerContext)
+  // const [addresses, setAddresses] = useContext(WalletsContext)
+  const { wallet, peraConnect, myAlgoConnect } = useWallets(closeDropdown)
+  // const addressesRef = useRef(null)
+  const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect
-  }), [myAlgoConnect, peraConnect])
+  }
+  // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
 
-  const handleConnectionDropdown = useCallback((closeDropdown) => {
-    dispatcher('connecting-wallet', {
-      isOpen: closeDropdown
-    })
-  }, [dispatcher])
+  const myAlgoOnClick = async () => {
+    console.log('myAlogOnClick')
+    console.log('hit')
+    // const { connect: newConnect } = useMyAlgoConnectNew()
+    // const _myAlgoAddresses = newConnect()
+    const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
+    const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
+    const _mergedAlgoAddresses = mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses)
 
-  const myAlgoOnClick = useCallback(() => {
-    handleConnectionDropdown(false)
-    WALLETS_CONNECT_MAP['my-algo-wallet']()
-  }, [WALLETS_CONNECT_MAP, handleConnectionDropdown])
+    setMyAlgoAddresses(_mergedAlgoAddresses)
+    setAddressesNew({ type: 'myAlgo', addresses: _mergedAlgoAddresses })
 
-  const peraConnectOnClick = useCallback(() => {
-    handleConnectionDropdown(false)
-    WALLETS_CONNECT_MAP['pera-connect']()
-  }, [WALLETS_CONNECT_MAP, handleConnectionDropdown])
+    if (!activeWallet) setActiveWallet(_mergedAlgoAddresses[0])
 
-  const isPeraConnected = useMemo(() => {
-    if (isConnected) {
-      const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
-      return peraAddr.length > 0
-    }
-    return false
-  }, [isConnected, addresses])
+    console.log('addresses new adter')
+    console.log(addressesNew)
+    closeDropdown()
+  }
+
+  const peraConnectOnClick = async () => {
+    await WALLETS_CONNECT_MAP['pera-connect']()
+    // closeDropdown()
+
+    // setPeraWallet(_peraWallet[0])
+    // setAddressesNew({ type: 'peraWallet', addresses: _peraWallet })
+  }
+
+  const isPeraConnected = peraWallet !== null
 
   const sortedWalletsList = useMemo(() => {
-    if (addresses) {
-      const activeWallet = find(addresses, (o) => o.address === wallet?.address)
-      const inactiveWallet = filter(addresses, (o) => o.address !== wallet?.address)
+    if (addressesNew) {
+      //**may need to change */
+      const activeWallet = find(addressesNew, (o) => o.address === wallet?.address)
+      const inactiveWallet = filter(addressesNew, (o) => o.address !== wallet?.address)
       return {
         activeWallet,
         inactiveWallet
       }
     }
-  }, [addresses, wallet])
+  }, [addressesNew, wallet])
 
   return (
     <Container className="">
@@ -104,7 +113,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
           activeWalletAddress={wallet?.address}
           sortedWalletsList={sortedWalletsList}
           closeFn={closeDropdown}
-          addresses={addresses}
+          addresses={addressesNew}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
           isPeraConnected={isPeraConnected}

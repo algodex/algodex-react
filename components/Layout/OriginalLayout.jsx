@@ -1,20 +1,5 @@
-/* 
- * Algodex Frontend (algodex-react) 
- * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-// import '@/wdyr';
-import React, { useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+// import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import AssetSearch from '@/components/Nav/SearchSidebar'
 import OrderBook from '@/components/Asset/OrderBook'
@@ -25,8 +10,12 @@ import Spinner from '@/components/Spinner'
 import TradeHistory from '@/components/Asset/TradeHistory'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import styled from '@emotion/styled'
-import useWallets from '@/hooks/useWallets'
+// import useWallets from '@/hooks/useWallets'
 
+// import  useAlgodex  from '@/hooks/useAlgodex'
+import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
+
+// Offline PlaceOrder Container
 export const Container = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -177,45 +166,51 @@ const Main = styled.main`
  */
 function MainLayout({ asset, children }) {
   // const { wallet } = useAlgodex()
-  const { wallet } = useWallets()
+  // const { wallet } = useWallets()
   const gridRef = useRef()
   const searchTableRef = useRef()
   if (!asset || asset?.decimals === undefined) {
-    return <Spinner flex={true} />
-  }
-  return (
-    <MainWrapper>
-      <Main ref={gridRef}>
-        <WalletSection>
-          <Wallet />
-        </WalletSection>
-        <PlaceOrderSection>
-          <PlaceOrder wallet={wallet} asset={asset} />
-        </PlaceOrderSection>
-        <SearchAndChartSection>
-          <AssetsSection ref={searchTableRef}>
-            <AssetSearch
-              style={{ height: '6rem' }}
-              className="h-24"
-              searchTableRef={searchTableRef}
-              gridRef={gridRef}
-            />
-          </AssetsSection>
-          <ContentSection>{children}</ContentSection>
-        </SearchAndChartSection>
+    const { activeWallet: wallet } = useContext(WalletReducerContext)
 
-        <AssetOrderBookSection>
-          <OrderBook asset={asset} />
-        </AssetOrderBookSection>
-        <AssetTradeHistorySection>
-          <TradeHistory asset={asset} />
-        </AssetTradeHistorySection>
-        <WalletOrdersSection>
-          <Orders asset={asset} />
-        </WalletOrdersSection>
-      </Main>
-    </MainWrapper>
-  )
+    const gridRef = useRef()
+    const searchTableRef = useRef()
+    if (!asset) {
+      return <Spinner flex={true} />
+    }
+    return (
+      <MainWrapper>
+        <Main ref={gridRef}>
+          <WalletSection>
+            <Wallet />
+          </WalletSection>
+          <PlaceOrderSection>
+            <PlaceOrder wallet={wallet} asset={asset} />
+          </PlaceOrderSection>
+          <SearchAndChartSection>
+            <AssetsSection ref={searchTableRef}>
+              <AssetSearch
+                style={{ height: '6rem' }}
+                className="h-24"
+                searchTableRef={searchTableRef}
+                gridRef={gridRef}
+              />
+            </AssetsSection>
+            <ContentSection>{children}</ContentSection>
+          </SearchAndChartSection>
+
+          <AssetOrderBookSection>
+            <OrderBook asset={asset} />
+          </AssetOrderBookSection>
+          <AssetTradeHistorySection>
+            <TradeHistory asset={asset} />
+          </AssetTradeHistorySection>
+          <WalletOrdersSection>
+            <Orders asset={asset} />
+          </WalletOrdersSection>
+        </Main>
+      </MainWrapper>
+    )
+  }
 }
 // MainLayout.whyDidYouRender = true
 MainLayout.propTypes = {

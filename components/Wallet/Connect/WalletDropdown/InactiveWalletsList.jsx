@@ -25,40 +25,43 @@ import PropTypes from 'prop-types'
 import { find } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import theme from 'theme'
-import { useAlgodex } from '@/hooks'
-// import { useEffect } from 'react'
-// import useMyAlgoConnect from '@/hooks/useMyAlgoConnect'
-// import useUserStore from 'store/use-user-state'
+import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
+import { useContext } from 'react'
+import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 import { getActiveNetwork } from 'services/environment'
 
-// import useWalletConnect from '@/hooks/useWalletConnect'
-
-// import useUserStore from 'store/use-user-state'
-
 const InactiveWalletsList = ({ walletsList }) => {
   const activeNetwork = getActiveNetwork()
-  const { wallet: initialState, setWallet } = useAlgodex()
-  const { wallet, addresses, peraDisconnect, myAlgoDisconnect } = useWallets(initialState)
-  // const {  } = useWallets(wallet)
+  // const { wallet: initialState, setWallet } = useAlgodex()
+  const {
+    activeWallet: wallet,
+    setActiveWallet: setWallet,
+    addresses
+  } = useContext(WalletReducerContext)
+  const { peraDisconnect, myAlgoDisconnect } = useWallets()
 
-  // const { wallet } = useAlgodex()
-  // wallet
-  const isWalletActive = useCallback((addr) => {
+  const isWalletActive = (addr) => {
     return wallet.address === addr
-  }, [wallet.address])
+  }
 
-  const switchWalletAddress = useCallback((addr) => {
-    if (!isWalletActive(addr)) {
-      const _wallet = find(addresses, (o) => o.address === addr)
-      setWallet(_wallet, { validate: false, merge: true })
-    }
-  }, [addresses, isWalletActive, setWallet])
+  const switchWalletAddress = useCallback(
+    (addr) => {
+      if (!isWalletActive(addr)) {
+        const _wallet = find(addresses, (o) => o.address === addr)
+        setWallet(_wallet, { validate: false, merge: true })
+      }
+    },
+    [addresses, isWalletActive, setWallet]
+  )
 
-  const WALLETS_DISCONNECT_MAP = useMemo(() => ({
-    'my-algo-wallet': myAlgoDisconnect,
-    'wallet-connect': peraDisconnect
-  }), [myAlgoDisconnect, peraDisconnect])
+  const WALLETS_DISCONNECT_MAP = useMemo(
+    () => ({
+      'my-algo-wallet': myAlgoDisconnect,
+      'wallet-connect': peraDisconnect
+    }),
+    [myAlgoDisconnect, peraDisconnect]
+  )
 
   return (
     <Box
