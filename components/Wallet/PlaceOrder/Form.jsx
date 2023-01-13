@@ -40,7 +40,7 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { useMaxSpendableAlgo, useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -319,7 +319,7 @@ export function PlaceOrderForm({
     return 0
   }, [order.price, order.amount, algoBalance, assetBalance])
 
-  const maxSpendableAlgo = useMaxSpendableAlgo()
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
 
   const hasBalance = useMemo(() => {
     if (order.type === 'sell') {
