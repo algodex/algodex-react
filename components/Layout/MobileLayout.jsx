@@ -1,20 +1,5 @@
-/* 
- * Algodex Frontend (algodex-react) 
- * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-import { useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
+// import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
 import MobileAssetSearch from '@/components/Nav/SearchSidebar/MobileSearchSidebar'
@@ -29,6 +14,7 @@ import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
+import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
 
 const WalletSection = styled.section`
   grid-area: 1 / 1 / 3 / 3;
@@ -143,7 +129,10 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { wallet } = useAlgodex()
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+
+  // const { wallet } = useWallets()
+
   const [activeMobile, setActiveMobile] = useState(TABS.CHART)
   const [selectedOrder, setSelectedOrder] = useState()
 

@@ -80,13 +80,10 @@ export const AvailableBalance = ({ wallet, asset }) => {
     return res
   }, [wallet, asset])
 
-  const calcAsaWorth = useMemo(
-    () => {
-      const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
-      return _calcAsaWorth
-    },
-    [asset]
-  )
+  const calcAsaWorth = useMemo(() => {
+    const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
+    return _calcAsaWorth
+  }, [asset])
 
   return (
     <AvailableBalanceContainer>
@@ -164,7 +161,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
             {fromBaseUnits(assetValue, asset.decimals)}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice asaWorth={parseFloat(calcAsaWorth)} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
+            <USDPrice
+              asaWorth={parseFloat(calcAsaWorth)}
+              priceToConvert={fromBaseUnits(assetValue, asset.decimals)}
+              currency="$"
+            />
           </Typography>
         </Stack>
       </Stack>
