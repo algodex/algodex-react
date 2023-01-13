@@ -293,6 +293,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       typeof staticExplorerAsset !== 'undefined' &&
       staticExplorerAsset.id === parseInt(query.id)
     ) {
+      ;``
       _asset = staticExplorerAsset
       if (realStaticExplorerAsset?.name && realStaticExplorerAsset?.id === parseInt(query.id)) {
         _asset.name = realStaticExplorerAsset.name

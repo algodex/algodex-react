@@ -127,16 +127,16 @@ export function PlaceOrderForm({
     return parseFloat(value)
   }, [])
 
-  // const assetBalance = useMemo(() => {
-  //   let res = 0
-  //   if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-  //     const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
-  //     if (filter.length > 0) {
-  //       res = fromBaseUnits(filter[0].amount, asset.decimals)
-  //     }
-  //   }
-  //   return res
-  // }, [wallet, asset])
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
+      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = fromBaseUnits(filter[0].amount, asset.decimals)
+      }
+    }
+    return res
+  }, [activeWallet, asset])
 
   const algoBalance = useMemo(() => {
     let res = 0
@@ -293,17 +293,17 @@ export function PlaceOrderForm({
     }
   })
 
-  const assetBalance = useMemo(() => {
-    let res = 0
-    if (activeWallet != null && Array.isArray(activeWallet.assets)) {
-      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
-      if (filter.length > 0) {
-        res = fromBaseUnits(filter[0].amount, asset.decimals)
-      }
-    }
+  // const assetBalance = useMemo(() => {
+  //   let res = 0
+  //   if (activeWallet != null && Array.isArray(activeWallet.assets)) {
+  //     const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
+  //     if (filter.length > 0) {
+  //       res = fromBaseUnits(filter[0].amount, asset.decimals)
+  //     }
+  //   }
 
-    return res
-  }, [activeWallet, asset])
+  //   return res
+  // }, [activeWallet, asset])
 
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {

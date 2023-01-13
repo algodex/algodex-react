@@ -167,51 +167,50 @@ const Main = styled.main`
 function MainLayout({ asset, children }) {
   // const { wallet } = useAlgodex()
   // const { wallet } = useWallets()
+
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+
   const gridRef = useRef()
   const searchTableRef = useRef()
   if (!asset || asset?.decimals === undefined) {
-    const { activeWallet: wallet } = useContext(WalletReducerContext)
-
-    const gridRef = useRef()
-    const searchTableRef = useRef()
-    if (!asset) {
-      return <Spinner flex={true} />
-    }
-    return (
-      <MainWrapper>
-        <Main ref={gridRef}>
-          <WalletSection>
-            <Wallet />
-          </WalletSection>
-          <PlaceOrderSection>
-            <PlaceOrder wallet={wallet} asset={asset} />
-          </PlaceOrderSection>
-          <SearchAndChartSection>
-            <AssetsSection ref={searchTableRef}>
-              <AssetSearch
-                style={{ height: '6rem' }}
-                className="h-24"
-                searchTableRef={searchTableRef}
-                gridRef={gridRef}
-              />
-            </AssetsSection>
-            <ContentSection>{children}</ContentSection>
-          </SearchAndChartSection>
-
-          <AssetOrderBookSection>
-            <OrderBook asset={asset} />
-          </AssetOrderBookSection>
-          <AssetTradeHistorySection>
-            <TradeHistory asset={asset} />
-          </AssetTradeHistorySection>
-          <WalletOrdersSection>
-            <Orders asset={asset} />
-          </WalletOrdersSection>
-        </Main>
-      </MainWrapper>
-    )
+    return <Spinner flex={true} />
   }
+
+  return (
+    <MainWrapper>
+      <Main ref={gridRef}>
+        <WalletSection>
+          <Wallet />
+        </WalletSection>
+        <PlaceOrderSection>
+          <PlaceOrder wallet={wallet} asset={asset} />
+        </PlaceOrderSection>
+        <SearchAndChartSection>
+          <AssetsSection ref={searchTableRef}>
+            <AssetSearch
+              style={{ height: '6rem' }}
+              className="h-24"
+              searchTableRef={searchTableRef}
+              gridRef={gridRef}
+            />
+          </AssetsSection>
+          <ContentSection>{children}</ContentSection>
+        </SearchAndChartSection>
+
+        <AssetOrderBookSection>
+          <OrderBook asset={asset} />
+        </AssetOrderBookSection>
+        <AssetTradeHistorySection>
+          <TradeHistory asset={asset} />
+        </AssetTradeHistorySection>
+        <WalletOrdersSection>
+          <Orders asset={asset} />
+        </WalletOrdersSection>
+      </Main>
+    </MainWrapper>
+  )
 }
+
 // MainLayout.whyDidYouRender = true
 MainLayout.propTypes = {
   asset: PropTypes.object,

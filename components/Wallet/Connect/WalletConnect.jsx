@@ -15,7 +15,7 @@
  */
 
 import { Box, Button } from '@mui/material'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import useWallets from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../hooks/WalletsReducerProvider'
 
