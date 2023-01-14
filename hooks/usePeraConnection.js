@@ -16,8 +16,25 @@
 
 import { PeraWalletConnect } from '@perawallet/connect'
 import { useEffect } from 'react'
+// const algosdk = require('algosdk')
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/WalletConnect'
+
+// PeraWalletConnect.prototype.sign = signer
 
 const peraWallet = new PeraWalletConnect()
+// peraWallet.prototype.sign = signer
+
+// WalletConnect.prototype.sign = (
+//   await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
+// ).default
+
+async function peraSigner(order) {
+  const encodedTxns = signer(order, peraWallet.connector.accounts[0])
+  debugger
+  console.log(encodedTxns)
+  const signedTxn = await peraWallet.signTransaction(encodedTxns)
+  return signedTxn
+}
 
 export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate) {
   useEffect(() => {
@@ -26,6 +43,8 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
       .reconnectSession()
       .then((accounts) => {
         peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
+        // peraWallet.prototype.sign = signer
+
         if (accounts.length) {
           // Disconnect if wallet with Address already exists
           const res = localStorage.getItem('addresses')
@@ -38,7 +57,11 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
                 const _account = {
                   type: 'wallet-connect',
                   address: acct,
-                  connector: peraWallet.connector
+                  connector: {
+                    ...peraWallet.connector,
+                    sign: peraSigner,
+                    accounts: [acct]
+                  }
                 }
                 return _account
               })
@@ -53,21 +76,28 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
   }, [])
 
   function handleConnectWalletClick() {
+    console.log('hit pera wallet new')
     peraWallet
       .connect()
       .then((newAccounts) => {
         peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
+        // peraWallet.prototype.sign = signer
 
         const _addresses = newAccounts.map((acct) => {
           const _account = {
             type: 'wallet-connect',
             address: acct,
-            connector: peraWallet.connector
+            connector: {
+              ...peraWallet.connector,
+              sign: peraSigner,
+              accounts: [acct]
+            }
           }
           _account.connector.connected = true
           return _account
         })
         onConnect(_addresses)
+        // return _addresses
       })
       .catch((error) => {
         if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {
@@ -77,14 +107,11 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
   }
 
   function handleDisconnectWalletClick() {
+    console.log(peraWallet)
+    onDisconnect([{ type: 'pera-wallet', address: peraWallet.connector.accounts[0] }])
+
     peraWallet.disconnect()
     // Fetch Address to disconnect
-    const locStorageAddr = localStorage.getItem('addresses')
-    if (locStorageAddr) {
-      const _formattedAddr = JSON.parse(locStorageAddr)
-      const _peraAddr = _formattedAddr.filter((addr) => addr.type === 'wallet-connect')
-      _peraAddr.length && onDisconnect([_peraAddr[0]?.address])
-    }
   }
 
   return {
