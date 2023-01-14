@@ -50,7 +50,7 @@ export function walletReducer(state, { action, payload }) {
           return { ...state }
         case 'myAlgo':
           //if triggering this event there must be atleast one item in the array
-          if (state.myAlgoAddresses.length > 1) {
+          if (state.myAlgoAddresses.length >= 1) {
             const _remainingAddresses = state.myAlgoAddresses.filter((wallet) => {
               return wallet.address !== address.address
             })
