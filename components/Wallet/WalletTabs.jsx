@@ -145,7 +145,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
 
   const renderPanel = useCallback(
     (panelName) => {
-      if (!isConnected || !wallet?.connector.connected) return <div></div>
+      if (!isConnected || !wallet?.connector?.connected) return <div></div>
       switch (panelName) {
         case OPEN_ORDERS_PANEL:
           return <WalletOpenOrdersTable wallet={wallet} />
