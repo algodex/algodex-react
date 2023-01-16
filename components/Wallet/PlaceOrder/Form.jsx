@@ -197,8 +197,8 @@ export function PlaceOrderForm({
     },
     {
       type: 'buy',
-      price: '',
-      amount: '',
+      price: 0,
+      amount: 0,
       total: 0,
       execution: 'both'
     }
