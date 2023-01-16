@@ -182,7 +182,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
   const { wallet } = useWallets()
-  const [activeView, setActiveView] = useState('nft')
+  const [activeView, setActiveView] = useState('chart')
   // TODO: refactor all state into useReducer
 
   // console.log('logging: ', {routerId: query.id, staticId: originalStaticExplorerAsset?.id})
@@ -283,7 +283,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
-    else return activeView === 'chart' ? <Chart asset={asset} interval={interval} onChange={onChange} /> : <NFTView />
+    else return activeView === 'chart' ? <Chart setActiveView={setActiveView} activeView={activeView} asset={asset} interval={interval} onChange={onChange} /> : <NFTView activeView={activeView} setActiveView={setActiveView} />
   }, [activeView, asset, asset?.id, asset?.name, 
       interval, isFallback, isTraded, onChange, showAssetInfo])
 

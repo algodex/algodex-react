@@ -25,6 +25,7 @@ import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import { useUserStore } from 'store'
+import { Box, Button, Typography } from '@mui/material'
 
 export const Container = styled.div`
   position: absolute;
@@ -54,10 +55,9 @@ export const TradingPair = styled.h3`
   font-size: 1rem;
   font-weight: 600;
   margin-block-start: 0;
-  margin-block-end: 0;
+  // margin-block-end: 0;
   color: ${({ theme }) => theme.palette.gray[500]};
   white-space: nowrap;
-
   span {
     color: ${({ theme }) => theme.palette.gray[100]};
   }
@@ -87,6 +87,16 @@ export const IconButton = styled.button`
     left: -2px;
     top: -5px;
   }
+`
+
+export const BoxWrapper = styled.div`
+  cursor: pointer;
+  margin-left: 2rem;
+  pointer-events: all;
+  border: none;
+  background: transparent;
+  color: ${({ theme }) => theme.palette.gray[100]};
+  padding: 0;
 `
 
 export const OhlcList = styled.dl`
@@ -120,7 +130,7 @@ export const OhlcItem = styled.div`
 
   dd {
     color: ${({ theme, value }) =>
-      parseFloat(value) < 0 ? theme.palette.red[500] : theme.palette.green[500]};
+    parseFloat(value) < 0 ? theme.palette.red[500] : theme.palette.green[500]};
   }
 
   @media (min-width: 1024px) {
@@ -205,13 +215,13 @@ export const Volume = styled.div`
 `
 
 function ChartOverlay(props) {
-  const { asset, ohlc, bid, ask, spread, volume } = props
+  const { asset, ohlc, bid, ask, spread, volume, setActiveView, activeView } = props
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const currentPrice = asset.price_info?.price ? new Big(asset.price_info?.price) : new Big(0)
   const changeAmt = asset.price_info?.price24Change
     ? currentPrice
-        .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
-        .toString()
+      .sub(currentPrice.div(new Big(1 + asset.price_info?.price24Change / 100)))
+      .toString()
     : '0'
   const changePct = asset.price_info?.price24Change
     ? new Big(asset.price_info?.price24Change)
@@ -246,6 +256,23 @@ function ChartOverlay(props) {
               <Info />
             </IconButton>
           </div>
+          <BoxWrapper>
+            <Button
+              onClick={() => setActiveView('nft-details')}
+              sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', marginRight: '1rem', color: theme.colors.gray['000'] }}
+              // sx={{ cursor: 'pointer', width: '6rem', height: '1.5rem', marginRight: '1rem' }} 
+              variant={activeView === 'nft-details' ? "primary" : "outlined"}
+            >
+              <Typography variant="body_small_medium">IMAGE</Typography>
+            </Button>
+            <Button
+              onClick={() => setActiveView('chart')}
+              sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }}
+              variant={activeView === 'chart' ? "primary" : "outlined"}
+            >
+              <Typography variant="body_small_medium">CHART</Typography>
+            </Button>
+          </BoxWrapper>
         </TradingPair>
         <OhlcList>
           <OhlcItem value={ohlc.open}>
@@ -285,6 +312,8 @@ function ChartOverlay(props) {
 }
 
 ChartOverlay.propTypes = {
+  setActiveView: PropTypes.func,
+  activeView: PropTypes.string,
   asset: PropTypes.object.isRequired,
   ohlc: PropTypes.object.isRequired,
   bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

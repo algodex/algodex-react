@@ -30,7 +30,7 @@ const Container = styled.div`
   height: 100%;
 `
 
-export function NFTView() {
+export function NFTView({ setActiveView, activeView }) {
   const containerRef = useRef()
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const NFTData = {
@@ -76,6 +76,7 @@ export function NFTView() {
         <Box
           className='overflow-y-scroll overflow-x-hidden'
           sx={{
+            marginTop: '0.5rem',
             padding: '1rem',
             height: containerSize.height,
             backgroundColor: theme.palette.gray[900]
@@ -87,10 +88,10 @@ export function NFTView() {
               <Typography variant="h6" fontWeight="bold" color={theme.colors.gray['000']}>{NFTData.asset}</Typography>
               <Typography variant="h6" color={theme.colors.gray['500']}>/ALGO</Typography>
             </Stack>
-            <Button sx={{ backgroundColor: theme.colors.green['500'], width: '6rem', height: '1.5rem', marginRight: '1rem' }} variant="contained">
+            <Button onClick={() => setActiveView('nft-image')} sx={{ backgroundColor: theme.colors.green['500'], width: '6rem', height: '1.5rem', marginRight: '1rem' }} variant="primary">
               <Typography variant="body_small_medium">IMAGE</Typography>
             </Button>
-            <Button sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
+            <Button onClick={() => setActiveView('chart')}  sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
               <Typography variant="body_small_medium">CHART</Typography>
             </Button>
           </Stack>
@@ -169,8 +170,13 @@ export function NFTView() {
   }, [containerSize])
 }
 
-NFTView.propTypes = {}
+NFTView.propTypes = {
+  setActiveView: PropTypes.func,
+  activeView: PropTypes.string
+}
 
-NFTView.defaultProps = {}
+NFTView.defaultProps = {
+
+}
 
 export default NFTView
