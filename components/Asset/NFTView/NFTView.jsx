@@ -23,6 +23,8 @@ import Link from '@/components/Nav/Link'
 import VerifiedIcon from '@mui/icons-material/Verified';
 import theme from 'theme'
 import Icon from 'components/Icon'
+import axios from 'axios'
+import { withNFTDetailsQuery } from '../../../hooks'
 
 const Container = styled.div`
   position: relative;
@@ -30,7 +32,8 @@ const Container = styled.div`
   height: 100%;
 `
 
-export function NFTView({ setActiveView, activeView }) {
+export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
+  console.log(nftDetail, 'nft detail')
   const containerRef = useRef()
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const NFTData = {
@@ -172,11 +175,11 @@ export function NFTView({ setActiveView, activeView }) {
 
 NFTView.propTypes = {
   setActiveView: PropTypes.func,
-  activeView: PropTypes.string
+  activeView: PropTypes.string,
+  asset: PropTypes.object,
+  nftDetail: PropTypes.object
 }
 
-NFTView.defaultProps = {
+NFTView.defaultProps = {}
 
-}
-
-export default NFTView
+export default withNFTDetailsQuery(NFTView)
