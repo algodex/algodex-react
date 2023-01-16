@@ -25,7 +25,7 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
  */
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 import { useMemo } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetPriceQuery } from '@/hooks'
@@ -68,7 +68,7 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const maxSpendableAlgo = useMaxSpendableAlgo()
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(wallet)
   const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
