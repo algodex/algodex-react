@@ -40,8 +40,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
-import MyAlgoConnect from '@randlabs/myalgo-connect'
-
+import useMyAlgoConnector from '../../hooks/useMyAlgoConnector'
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
@@ -238,7 +237,9 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     peraWallet,
     setPeraWallet
   } = useContext(WalletReducerContext)
-  const { myAlgoConnector, peraConnector } = useWallets()
+  // const { myAlgoConnector, peraConnector } = useWallets()
+  const { peraConnector } = useWallets()
+  const myAlgoConnector = useMyAlgoConnector()
 
   useEffect(() => {
     const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
@@ -259,8 +260,9 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       addressesNew.length === 0 &&
       Array.isArray(_myAlgoAddresses) &&
       _myAlgoAddresses.length > 0 &&
-      typeof myAlgoConnector !== 'undefined'
+      myAlgoConnector !== null
     ) {
+      myAlgoConnector.connected = true
       const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
         return { ...addrObj, connector: myAlgoConnector }
       })
