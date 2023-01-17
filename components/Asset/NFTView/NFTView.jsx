@@ -23,7 +23,6 @@ import Link from '@/components/Nav/Link'
 import VerifiedIcon from '@mui/icons-material/Verified';
 import theme from 'theme'
 import Icon from 'components/Icon'
-import axios from 'axios'
 import { withNFTDetailsQuery } from '../../../hooks'
 
 const Container = styled.div`
@@ -31,7 +30,18 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.palette.gray[900]};
   height: 100%;
 `
-
+/**
+ * Recipe: NFTView Component
+ *
+ * @todo: Return NFT Details Summary from API
+ *
+ * @param {object} props Component Properties
+ * @param {object} props.asset Algorand Asset Information
+ * @param {object} props.setActiveView Set active view
+ * @param {object} props.activeView Holds active view
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
   console.log(nftDetail, 'nft detail')
   const containerRef = useRef()
