@@ -110,13 +110,7 @@ export function PlaceOrderForm({
 
   const { activeWallet } = useContext(WalletReducerContext)
   const isConnected = activeWallet !== null
-  // const [order, setOrder] = useState({
-  //   type: 'buy',
-  //   price: 0,
-  //   amount: 0,
-  //   total: 0,
-  //   execution: 'both'
-  // })
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
 
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
@@ -129,8 +123,8 @@ export function PlaceOrderForm({
 
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (activeWallet !== null && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = fromBaseUnits(filter[0].amount, asset.decimals)
       }
@@ -138,26 +132,18 @@ export function PlaceOrderForm({
     return res
   }, [activeWallet, asset])
 
-  const algoBalance = useMemo(() => {
-    let res = 0
-    if (activeWallet !== null && typeof activeWallet.amount === 'number') {
-      res = fromBaseUnits(activeWallet.amount)
-    }
-    return res
-  }, [activeWallet])
-
   const getAdjOrderAmount = useCallback(
     ({ amount, type, price }) => {
       let adjAmount = amount || 0
       let total = adjAmount * price
-      if (type === 'buy' && total > algoBalance) {
-        adjAmount = algoBalance / Math.max(price, 0.000001)
+      if (type === 'buy' && total > maxSpendableAlgo) {
+        adjAmount = maxSpendableAlgo / Math.max(price, 0.000001)
       } else if (type === 'sell' && adjAmount > assetBalance) {
         adjAmount = assetBalance
       }
       return adjAmount
     },
-    [algoBalance, assetBalance]
+    [maxSpendableAlgo, assetBalance]
   )
 
   const [order, setOrder] = useReducer(
@@ -274,8 +260,22 @@ export function PlaceOrderForm({
         price: Number(data.payload.price),
         type: data.payload.type
       }
+      console.log(order.type)
+      console.log(assetBalance)
 
-      setOrder(order)
+      if (order.type === 'buy') {
+        if (order.amount * order.price < maxSpendableAlgo / 1000000) {
+          setOrder(order)
+        } else {
+          setOrder({ ...order, amount: maxSpendableAlgo / 1000000 / order.price })
+        }
+      } else {
+        if (order.amount > assetBalance) {
+          setOrder({ ...order, amount: assetBalance })
+        } else {
+          setOrder(order)
+        }
+      }
     }
   })
 
@@ -311,15 +311,13 @@ export function PlaceOrderForm({
       const _value = (order.amount / assetBalance) * 100
       return _value
     }
-    if (order.type === 'buy' && algoBalance !== 0) {
-      const _value = (order.total / algoBalance) * 100
+    if (order.type === 'buy' && maxSpendableAlgo !== 0) {
+      const _value = (order.total / maxSpendableAlgo) * 100
       return _value
     }
 
     return 0
-  }, [order.price, order.amount, algoBalance, assetBalance])
-
-  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
+  }, [order.price, order.amount, maxSpendableAlgo, assetBalance])
 
   const hasBalance = useMemo(() => {
     if (order.type === 'sell') {
@@ -358,7 +356,7 @@ export function PlaceOrderForm({
   const handleSlider = useCallback(
     (e, value) => {
       let _price = order.price || 0
-      let _balance = order.type === 'sell' ? assetBalance : algoBalance
+      let _balance = order.type === 'sell' ? assetBalance : maxSpendableAlgo
       let _percent = (value / 100) * _balance
       const _amount = order.type === 'sell' ? _percent : _percent / _price
 
@@ -368,7 +366,7 @@ export function PlaceOrderForm({
         })
       }
     },
-    [order.price, order.type, algoBalance, order.amount, assetBalance]
+    [order.price, order.type, maxSpendableAlgo, order.amount, assetBalance]
   )
 
   const handleChange = useCallback(
