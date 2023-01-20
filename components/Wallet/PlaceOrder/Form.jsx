@@ -356,7 +356,7 @@ export function PlaceOrderForm({
   const handleSlider = useCallback(
     (e, value) => {
       let _price = order.price || 0
-      let _balance = order.type === 'sell' ? assetBalance : maxSpendableAlgo
+      let _balance = order.type === 'sell' ? assetBalance : maxSpendableAlgo / 1000000
       let _percent = (value / 100) * _balance
       const _amount = order.type === 'sell' ? _percent : _percent / _price
 
