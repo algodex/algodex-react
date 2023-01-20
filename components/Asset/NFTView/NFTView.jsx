@@ -24,6 +24,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import theme from 'theme'
 import Icon from 'components/Icon'
 import { withNFTDetailsQuery } from '../../../hooks'
+import LaunchIcon from '@mui/icons-material/Launch';
 
 const Container = styled.div`
   position: relative;
@@ -42,27 +43,27 @@ const Container = styled.div`
  * @returns {JSX.Element}
  * @constructor
  */
-export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
-  console.log(nftDetail, 'nft detail')
+export function NFTView({ asset, setActiveView, activeView, ...props }) {
+  const nftDetails = props
   const containerRef = useRef()
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const NFTData = {
-    imageUrl: '/NFTImage.png',
-    asset: 'LYNX46',
+    imageUrl: `https://ipfs.algonft.tools/ipfs/${nftDetails.url}`,
+    asset: nftDetails.name,
     collection: {
-      name: 'Algo Lynx',
-      url: 'https://www.nftexplorer.app/asset/379313755',
-      creator: 'Linx Digital Studio'
+      name: nftDetails.fullName,
+      url: `https://${nftDetails.verified_info.url}`,
+      creator: ''
     },
-    description: "The Algo Lynx Collection will be a set of 600 unique 1/1 NFTs. The collections will be made up of 550 Algo Lynxes uniquely designed by our team, 10 full body Lynxes based on Greek Mythology, and 40 special Lynxes based on current popular themes and multiple special collaborations with our favorite creators. Additionally we will have 1 Algo Lynx LE Card and 5 Algo Lynx Legendary Cards.",
-    nftExplorerLink: "https://www.nftexplorer.app/collection/0xm",
+    description: nftDetails.verified_info.description,
+    nftExplorerLink: `https://www.nftexplorer.app/asset/${nftDetails.id}`,
     prices: {
-      lastSalePrice: '275',
-      avgSalePrice: '127.54',
-      collectionAverage: '178.291',
+      lastSalePrice: asset.price_info.price,
+      avgSalePrice: '',
+      collectionAverage: '',
     },
-    currentHolderAddr: 'COFEAYYFGE6QH4ZEOKXCWRIIDJ7H5ZN2VI3EGCNDZNQYBMVXEJADRWUAA4',
-    algoExplorerLink: 'https://algoexplorer.io/asset/379305572'
+    currentHolderAddr: nftDetails.txid,
+    algoExplorerLink: `https://algoexplorer.io/asset/${nftDetails.id}`
   }
 
   useEffect(() => {
@@ -104,18 +105,18 @@ export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
             <Button onClick={() => setActiveView('nft-image')} sx={{ backgroundColor: theme.colors.green['500'], width: '6rem', height: '1.5rem', marginRight: '1rem' }} variant="primary">
               <Typography variant="body_small_medium">IMAGE</Typography>
             </Button>
-            <Button onClick={() => setActiveView('chart')}  sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
+            <Button onClick={() => setActiveView('chart')} sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
               <Typography variant="body_small_medium">CHART</Typography>
             </Button>
           </Stack>
           <Stack>
-            <Typography variant='subtitle_medium' mt={1} fontWeight="500" color={theme.colors.gray['400']}>Collection: {NFTData.collection.name}</Typography>
-            <Stack mb={1} direction="row" alignItems="center">
+            <Typography variant='subtitle_medium' mb={1} mt={1} fontWeight="500" color={theme.colors.gray['400']}>Collection: {NFTData.collection.name}</Typography>
+            {/* <Stack mb={1} direction="row" alignItems="center">
               <Typography variant='subtitle_medium' fontWeight="500" color={theme.colors.gray['400']}>
                 Creator: {NFTData.collection.creator}
               </Typography>&nbsp;
               <VerifiedIcon style={{ width: 18, height: 18, color: '#A1AEC0' }} />
-            </Stack>
+            </Stack> */}
           </Stack>
           {/* <Grid container spacing={2}> */}
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -154,7 +155,7 @@ export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
                     <Icon color="gray" fillGradient={100} use="algoLogo" size={0.725} />
                   </Stack>
                 </Box>
-                <Box sx={{ border: '2px solid #FFFFFF', borderRadius: '3px', padding: '0.1rem' }} mr={1}>
+                {/* <Box sx={{ border: '2px solid #FFFFFF', borderRadius: '3px', padding: '0.1rem' }} mr={1}>
                   <Typography variant='body_tiny_bold' sx={{ color: theme.colors.gray['400'] }}>Avg Sale Price</Typography>
                   <Stack direction="row" alignItems="center" justifyContent="center">
                     <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>{NFTData.prices.avgSalePrice}</Typography>&nbsp;
@@ -167,14 +168,17 @@ export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
                     <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>{NFTData.prices.collectionAverage}</Typography>&nbsp;
                     <Icon color="gray" fillGradient={100} use="algoLogo" size={0.725} />
                   </Stack>
-                </Box>
+                </Box> */}
               </Stack>
               <Box mt={3}>
                 <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>Current Holder: T7J8...JK92</Typography>
               </Box>
-              <Box mt={2}>
-                <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>Algoexplorer</Typography>
-              </Box>
+              <Stack mt={2} direction="row" alignItems="center">
+                <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>
+                  Algoexplorer
+                </Typography>&nbsp;
+                <LaunchIcon style={{ width: 18, height: 18, color: '#A1AEC0' }} />
+              </Stack>
             </Grid>
           </Grid>
         </Box>
@@ -184,10 +188,11 @@ export function NFTView({ nftDetail, asset, setActiveView, activeView }) {
 }
 
 NFTView.propTypes = {
+  nftDetail: PropTypes.object,
   setActiveView: PropTypes.func,
   activeView: PropTypes.string,
   asset: PropTypes.object,
-  nftDetail: PropTypes.object
+
 }
 
 NFTView.defaultProps = {}

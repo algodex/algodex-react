@@ -257,14 +257,14 @@ function ChartOverlay(props) {
             </IconButton>
           </div>
           <BoxWrapper>
-            <Button
+            {asset.total === 1 && <Button
               onClick={() => setActiveView('nft-details')}
               sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', marginRight: '1rem', color: theme.colors.gray['000'] }}
               // sx={{ cursor: 'pointer', width: '6rem', height: '1.5rem', marginRight: '1rem' }} 
               variant={activeView === 'nft-details' ? "primary" : "outlined"}
             >
               <Typography variant="body_small_medium">IMAGE</Typography>
-            </Button>
+            </Button>}
             <Button
               onClick={() => setActiveView('chart')}
               sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }}

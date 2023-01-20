@@ -14,13 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {useEffect, useState} from 'react';
 import {useQuery} from 'react-query';
 const refetchInterval = 3000;
 import withQuery from '../utils/withQuery';
 import Spinner from '../components/Spinner';
 import ServiceError from '../components/ServiceError';
-import useAlgodex from '../useAlgodex.js';
+import { getAlgodexApi } from '@/services/environment'
 
 const components = {
   Loading: Spinner,
@@ -53,15 +52,13 @@ export function useNFTDetailsQuery({
     refetchInterval,
   },
 } = {}) {
-  const {http} = useAlgodex();
+  const api = getAlgodexApi();
   const {id} = asset;
-  const {data, isLoading, ...rest} = useQuery(
-      ['fetchNFTDetails', id],
-      () => http.dexd.fetchNFTDetails({id}),
+  return useQuery(
+      ['fetchExplorerAssetInfo', {id}],
+      () => api.http.explorer.fetchExplorerAssetInfo(id),
       options,
   );
-  return {data: { nftDetail: data }}
-  // return {data: { nftDetail: {} }}
 }
 
 export default useNFTDetailsQuery;
