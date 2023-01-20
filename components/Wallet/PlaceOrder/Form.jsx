@@ -442,7 +442,7 @@ export function PlaceOrderForm({
               {
                 ...formattedOrder,
                 address: activeWallet.address,
-                activeWallet,
+                wallet: activeWallet,
                 asset,
                 appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
                 version: 6
