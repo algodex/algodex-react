@@ -25,7 +25,7 @@ import { mdiCheckDecagram } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import { useUserStore } from 'store'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, Stack } from '@mui/material'
 
 export const Container = styled.div`
   position: absolute;
@@ -50,6 +50,7 @@ export const Header = styled.header`
 
 export const TradingPair = styled.h3`
   margin-right: 1.5em;
+  width: 100%;
   margin-bottom: 0.375em;
   font-family: ${({ theme }) => theme.fontFamilies.body};
   font-size: 1rem;
@@ -239,32 +240,43 @@ function ChartOverlay(props) {
   return (
     <Container>
       <Header>
-        <TradingPair className="flex item-center">
-          {asset?.verified && (
-            <Icon
-              path={mdiCheckDecagram}
-              title="Verified Asset"
-              size={0.7}
-              color={theme.palette.gray['500']}
-            />
-          )}
-          <div>
-            &nbsp;<span>{`${asset.name} `}</span> / ALGO
-          </div>
-          <div>
-            <IconButton onClick={onClick} type="button">
-              <Info />
-            </IconButton>
-          </div>
+        <TradingPair className="flex justify-between item-center">
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            {asset?.verified && (
+              <Icon
+                path={mdiCheckDecagram}
+                title="Verified Asset"
+                size={0.7}
+                color={theme.palette.gray['500']}
+              />
+            )}
+            <div>
+              &nbsp;<span>{`${asset.name} `}</span> / ALGO
+            </div>
+            <div>
+              <IconButton onClick={onClick} type="button">
+                <Info />
+              </IconButton>
+            </div>
+          </Stack>
+
           <BoxWrapper>
-            {asset.total === 1 && <Button
+            <Button
               onClick={() => setActiveView('nft-details')}
               sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', marginRight: '1rem', color: theme.colors.gray['000'] }}
               // sx={{ cursor: 'pointer', width: '6rem', height: '1.5rem', marginRight: '1rem' }} 
               variant={activeView === 'nft-details' ? "primary" : "outlined"}
             >
               <Typography variant="body_small_medium">IMAGE</Typography>
-            </Button>}
+            </Button>
+            {/* {asset.total === 1 && <Button
+              onClick={() => setActiveView('nft-details')}
+              sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', marginRight: '1rem', color: theme.colors.gray['000'] }}
+              // sx={{ cursor: 'pointer', width: '6rem', height: '1.5rem', marginRight: '1rem' }} 
+              variant={activeView === 'nft-details' ? "primary" : "outlined"}
+            >
+              <Typography variant="body_small_medium">IMAGE</Typography>
+            </Button>} */}
             <Button
               onClick={() => setActiveView('chart')}
               sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }}

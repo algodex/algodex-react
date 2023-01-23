@@ -56,7 +56,8 @@ export function useNFTDetailsQuery({
   const {id} = asset;
   return useQuery(
       ['fetchExplorerAssetInfo', {id}],
-      () => api.http.explorer.fetchExplorerAssetInfo(id),
+      // () => api.http.explorer.fetchExplorerAssetInfo(id),
+      () => api.http.explorer.fetchExplorerAssetInfo(100049775),
       options,
   );
 }
