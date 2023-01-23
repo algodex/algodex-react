@@ -312,7 +312,7 @@ export function PlaceOrderForm({
       return _value
     }
     if (order.type === 'buy' && maxSpendableAlgo !== 0) {
-      const _value = (order.total / maxSpendableAlgo) * 100
+      const _value = (order.total / (maxSpendableAlgo / 1000000)) * 100
       return _value
     }
 
