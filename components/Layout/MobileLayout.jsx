@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useMemo, useRef, useState } from 'react'
 // import useWallets, { WalletsContext } from '@/hooks/useWallets'
 
 import HistoryAndOrderBook from '@/components/Asset/HistoryAndOrders'
@@ -11,7 +11,9 @@ import Spinner from '@/components/Spinner'
 import Wallet from '@/components/Wallet/Connect/WalletConnect'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
-import { useAlgodex } from '@/hooks'
+import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
+import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
+
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
@@ -129,7 +131,8 @@ function MainLayout({ asset, children }) {
     HISTORY: 'HISTORY'
   }
 
-  const { activeWallet: wallet } = useContext(WalletReducerContext)
+  const { activeWallet } = useContext(WalletReducerContext)
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
 
   // const { wallet } = useWallets()
 
@@ -156,10 +159,39 @@ function MainLayout({ asset, children }) {
     }
   })
 
+  const assetBalance = useMemo(() => {
+    let res = 0
+    if (activeWallet !== null && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
+      if (filter.length > 0) {
+        res = fromBaseUnits(filter[0].amount, asset.decimals)
+      }
+    }
+    return res
+  }, [activeWallet, asset])
+
   useEvent('mobileClick', (data) => {
     if (data.type === 'order') {
       setActiveMobile(TABS.TRADE)
-      setSelectedOrder(data.payload)
+      const order = {
+        amount: data.payload.amount,
+        price: Number(data.payload.price),
+        type: data.payload.type
+      }
+
+      if (order.type === 'buy') {
+        if (order.amount * order.price < maxSpendableAlgo / 1000000) {
+          setSelectedOrder(order)
+        } else {
+          setSelectedOrder({ ...order, amount: maxSpendableAlgo / 1000000 / order.price })
+        }
+      } else {
+        if (order.amount > assetBalance) {
+          setSelectedOrder({ ...order, amount: assetBalance })
+        } else {
+          setSelectedOrder(order)
+        }
+      }
     }
   })
 
@@ -176,7 +208,7 @@ function MainLayout({ asset, children }) {
         )}
         {activeMobile === TABS.TRADE && (
           <PlaceOrderSection>
-            <PlaceOrder wallet={wallet} asset={asset} selectedOrder={selectedOrder} />
+            <PlaceOrder wallet={activeWallet} asset={asset} selectedOrder={selectedOrder} />
           </PlaceOrderSection>
         )}
         {activeMobile === TABS.CHART && (
