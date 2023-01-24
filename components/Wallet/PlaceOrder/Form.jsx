@@ -22,6 +22,7 @@ import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
 import { useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react'
 // import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+import useAccountInfo from '../../../hooks/useAccountInfo'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -108,7 +109,8 @@ export function PlaceOrderForm({
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
 
-  const { activeWallet } = useContext(WalletReducerContext)
+  const { activeWallet, setActiveWallet } = useContext(WalletReducerContext)
+
   const isConnected = activeWallet !== null
   const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
 
@@ -540,7 +542,7 @@ export function PlaceOrderForm({
               {t('sell')}
             </MaterialButton>
           </ButtonGroup>
-          <AvailableBalance wallet={activeWallet} asset={asset} />
+          <AvailableBalance wallet={activeWallet} setWallet={setActiveWallet} asset={asset} />
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
