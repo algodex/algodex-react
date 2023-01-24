@@ -14,15 +14,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useState } from 'react'
+// import { useCallback, useState } from 'react'
 
 import PropTypes from 'prop-types'
 import { Section } from '@/components/Layout/Section'
 import { default as WalletAssetsTable } from './Table/AssetsTable'
 import { default as WalletOpenOrdersTable } from './Table/OpenOrdersTable'
+import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
+
 import { default as WalletTradeHistoryTable } from './Table/TradeHistoryTable'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
+import { useState, useContext, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { Typography, Box } from '@mui/material'
 
@@ -54,7 +57,7 @@ const Tab = styled.div`
 
   @media (min-width: 1024px) {
     color: ${({ isActive, theme }) =>
-    isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
+      isActive ? theme.palette.gray[100] : theme.palette.gray[500]};
   }
 `
 const Header = styled.div`
@@ -118,7 +121,7 @@ const EmptyState = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  align-self: center; 
+  align-self: center;
   @media (min-width: 996px) {
     width: 50%;
   }
@@ -133,23 +136,29 @@ const EmptyState = styled.div`
 function WalletTabs({ initialPanel, area = 'footer' }) {
   const { t } = useTranslation('orders')
   const common = useTranslation('common')
-  const { wallet, isConnected } = useAlgodex()
+  // const { wallet, isConnected } = useAlgodex()
+
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+  const isConnected = wallet !== null
+
   const [selectedPanel, setSelectedPanel] = useState(initialPanel)
 
-  const renderPanel = useCallback((panelName) => {
-    if (!isConnected || !wallet?.connector.connected) return <div></div>
-    switch (panelName) {
-      case OPEN_ORDERS_PANEL:
-        return <WalletOpenOrdersTable wallet={wallet} />
-      case ORDER_HISTORY_PANEL:
-        return <WalletTradeHistoryTable wallet={wallet} />
-      case ASSETS_PANEL:
-        return <WalletAssetsTable wallet={wallet} />
-      default:
-        return null
-    }
-  }, [isConnected, wallet])
-
+  const renderPanel = useCallback(
+    (panelName) => {
+      if (!isConnected || !wallet?.connector?.connected) return <div></div>
+      switch (panelName) {
+        case OPEN_ORDERS_PANEL:
+          return <WalletOpenOrdersTable wallet={wallet} />
+        case ORDER_HISTORY_PANEL:
+          return <WalletTradeHistoryTable wallet={wallet} />
+        case ASSETS_PANEL:
+          return <WalletAssetsTable wallet={wallet} />
+        default:
+          return null
+      }
+    },
+    [isConnected, wallet]
+  )
 
   return (
     <Section area={area} borderColor="blue" border="dashed">
@@ -177,8 +186,9 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
             {t('assets')}
           </Tab>
         </Header>
-        {isConnected ?
-          <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper> :
+        {isConnected ? (
+          <PanelWrapper>{renderPanel(selectedPanel)}</PanelWrapper>
+        ) : (
           <EmptyState p={3}>
             <Box>
               <Typography variant="h5" color="gray.100" m={0} mb={2} className="leading-6">
@@ -189,7 +199,7 @@ function WalletTabs({ initialPanel, area = 'footer' }) {
               </Typography>
             </Box>
           </EmptyState>
-        }
+        )}
       </Container>
     </Section>
   )
