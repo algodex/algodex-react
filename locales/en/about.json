@@ -31,5 +31,22 @@
   "Launch of trading bot for Algodex": "Launch of trading bot for Algodex",
   "Launch of Algodex NFT marketplace": "Launch of Algodex NFT marketplace",
   "Launch of trading SDK for Algodex":"Launch of trading SDK for Algodex",
-  "launch app":"launch app"
+  "launch app":"launch app",
+  "Get away from liquidity pools":"Get away from liquidity pools",
+  "Set the price you want to sell or buy at":"Set the price you want to sell or buy at",
+  "Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment":"Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment",
+  "Start trading >":"Start trading >",
+  "Trade ANY Algorand Standard Asset":"Trade ANY Algorand Standard Asset",
+  "All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it":"All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it",
+  "Yes - even NFTs":"Yes - even NFTs",
+  "NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets":"NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets",
+  "Projects can apply with":"Projects can apply with",
+  "this form":"this form",
+  "to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions":"to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions",
+  "Provide liquidity and":"Provide liquidity and",
+  "Earn rewards from trading":"Earn rewards from trading",
+  "Earn ALGX rewards by placing orders on Algodex and being a market maker":"Earn ALGX rewards by placing orders on Algodex and being a market maker",
+  "Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App":"Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App",
+  "Go to Rewards App >":"Go to Rewards App >",
+  "ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards":"ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards"
 }

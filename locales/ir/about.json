@@ -1,7 +1,7 @@
 {
   "A Decentralized": "غیر متمرکز",
-  "Marketplace": "بازار",
-  "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex یک بازار بسیار غیرمتمرکز با دفترچه سفارشات کاملاً بر روی خود بلاک چین Algorand است.",
+  "Exchange": "تبادل",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex یک صرافی غیرمتمرکز با دفترچه سفارش کاملاً در خود بلاک چین Algorand است",
   "NOTE":"توجه داشته باشید",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "کاربران در ایالات متحده و کانادا در حال حاضر از تجارت برخی از دارایی های Mainnet محدود شده اند. Testnet همچنین برای هر کسی که این پلتفرم را امتحان کند در دسترس است",
   "blog": "وبلاگ",
@@ -30,5 +30,23 @@
   "Launch of trading bot for Algodex": "راه اندازی ربات معاملاتی برای Algodex",
   "Launch of Algodex NFT marketplace": "راه اندازی بازار NFT Algodex",
   "Launch of trading SDK for Algodex":"راه اندازی تجارت SDK برای Algodex",
-  "launch app":"راه اندازی برنامه"
+  "launch app":"راه اندازی برنامه",
+  "Get away from liquidity pools":"از استخرهای نقدینگی دور شوید",
+  "Set the price you want to sell or buy at":"قیمتی را که می خواهید بفروشید یا بخرید تعیین کنید",
+  "Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment":"Algodex از سفارش‌های محدود پشتیبانی می‌کند، بنابراین می‌توانید مطمئن باشید که معامله شما فقط با قیمتی که تعیین کرده‌اید انجام می‌شود، برخلاف استخرهایی که باید با لغزش مواجه شوید و در آن لحظه کنترلی روی قیمت ندارید.",
+  "Start trading >":"شروع به تجارت >",
+  "Trade ANY Algorand Standard Asset":"هر گونه دارایی استاندارد الگوراند را معامله کنید",
+  "All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it":"تمام دارایی های موجود در بلاک چین Algorand به طور پیش فرض در Algodex پشتیبانی می شوند. اگر وجود دارد، می توانید آن را معامله کنید",
+  "Yes - even NFTs":"بله - حتی NFT",
+  "NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets":"توجه: کاربران در ایالات متحده و کانادا در حال حاضر از تجارت برخی از دارایی های Mainnet محدود شده اند",
+  "Projects can apply with":"پروژه ها می توانند با",
+  "this form":"این فرم",
+  "to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions":"برای تجارت در آمریکای شمالی فهرست می شود. سایر نقاط جهان می توانند همه ASA ها را بدون محدودیت معامله کنند",
+  "Provide liquidity and":"تامین نقدینگی و",
+  "Earn rewards from trading":"از تجارت پاداش کسب کنید",
+  "Earn ALGX rewards by placing orders on Algodex and being a market maker":"با ثبت سفارش در Algodex و بازارساز بودن، جوایز ALGX را به دست آورید",
+  "Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App":"با برنامه پاداش‌های Algodex درباره نحوه محاسبه جوایز بیاموزید و پاداش‌های انباشته‌شده را مشاهده کنید.",
+  "Go to Rewards App >":"به برنامه پاداش > بروید",
+  "ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards":"ربات‌های ALGODEX به زودی راه‌اندازی می‌شوند تا به شما امکان دهند پارامترهایی را برای یک ربات سازنده بازار تنظیم کنید تا به طور خودکار سفارش‌ها را در حدود یک درصد اسپرد تعیین شده و دریافت جوایز انجام دهید."
+
 }

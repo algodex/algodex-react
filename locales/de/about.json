@@ -1,7 +1,7 @@
 {
   "A Decentralized": "A Dezentral",
-  "Marketplace": "Marktplatz",
-  "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex ist ein stark dezentralisierter Marktplatz, bei dem sich das Auftragsbuch vollständig auf der Algorand-Blockchain selbst befindet",
+  "Exchange": "Austausch",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex ist ein stark dezentralisierter Austausch, bei dem sich das Auftragsbuch vollständig auf der Algorand-Blockchain selbst befindet",
   "NOTE":"HINWEIS",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "Benutzern in den USA und Kanada ist derzeit der Handel mit einigen Mainnet-Vermögenswerten untersagt. Testnet ist auch für alle verfügbar, die die Plattform unter ausprobieren",
   "blog": "bloggen",
@@ -30,5 +30,22 @@
   "Launch of trading bot for Algodex": "Einführung des Trading-Bots für Algodex",
   "Launch of Algodex NFT marketplace": "Einführung des Algodex NFT-Marktplatzes",
   "Launch of trading SDK for Algodex":"Einführung des Handels-SDK für Algodex",
-  "launch app":"App starten"
+  "launch app":"App starten",
+  "Get away from liquidity pools":"Weg von Liquiditätspools",
+  "Set the price you want to sell or buy at":"Legen Sie den Preis fest, zu dem Sie verkaufen oder kaufen möchten",
+  "Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment":"Algodex unterstützt Limit-Orders, sodass Sie sicher sein können, dass Ihr Handel nur zu dem von Ihnen festgelegten Preis stattfindet, im Gegensatz zu Pools, bei denen Sie mit Slippage umgehen müssen und in diesem Moment keine Kontrolle über den Preis haben",
+  "Start trading >":"Starten Sie den Handel >",
+  "Trade ANY Algorand Standard Asset":"Handeln Sie mit JEDEM Algorand Standard Asset",
+  "All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it":"Alle Assets auf der Algorand-Blockchain werden standardmäßig in Algodex unterstützt. Wenn es existiert, können Sie es handeln",
+  "Yes - even NFTs":"Ja - sogar NFTs",
+  "NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets":"HINWEIS: Benutzer in den USA und Kanada dürfen derzeit einige Mainnet-Assets nicht handeln",
+  "Projects can apply with":"Projekte können sich mit bewerben",
+  "this form":"diese Form",
+  "to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions":"für den nordamerikanischen Handel gelistet werden. Der Rest der Welt kann alle ASAs ohne Einschränkungen handeln",
+  "Provide liquidity and":"Bereitstellung von Liquidität und",
+  "Earn rewards from trading":"Verdienen Sie Belohnungen durch den Handel",
+  "Earn ALGX rewards by placing orders on Algodex and being a market maker":"Verdienen Sie ALGX-Prämien, indem Sie Bestellungen bei Algodex aufgeben und ein Market Maker sind",
+  "Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App":"Erfahren Sie, wie Prämien berechnet werden, und zeigen Sie angesammelte Prämien mit der Algodex Rewards App an",
+  "Go to Rewards App >":"Gehen Sie zur Prämien-App >",
+  "ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards":"ALGODEX-Bots werden in Kürze eingeführt, damit Sie Parameter für einen Market-Making-Bot festlegen können, um automatisch Aufträge um einen festgelegten Spread-Prozentsatz zu platzieren und Prämien zu verdienen"
 }

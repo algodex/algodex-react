@@ -1,7 +1,7 @@
 {
   "A Decentralized": "एक विकेन्द्रीकृत",
-  "Marketplace": "बाजार",
-  "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex पूरी तरह से Algorand ब्लॉकचेन पर ही ऑर्डरबुक के साथ एक अत्यधिक विकेन्द्रीकृत बाज़ार है",
+  "Exchange": "अदला-बदली",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex पूरी तरह से Algorand ब्लॉकचैन पर ही ऑर्डरबुक के साथ एक अत्यधिक विकेन्द्रीकृत एक्सचेंज है",
   "NOTE":"टिप्पणी",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "संयुक्त राज्य अमेरिका और कनाडा के उपयोगकर्ता वर्तमान में कुछ मेननेट संपत्तियों के व्यापार से प्रतिबंधित हैं। टेस्टनेट उन लोगों के लिए भी उपलब्ध है जो प्लेटफॉर्म को आजमा रहे हैं",
   "blog": "ब्लॉग",
@@ -30,5 +30,23 @@
   "Launch of trading bot for Algodex": "एल्गोडेक्स के लिए ट्रेडिंग बॉट का शुभारंभ",
   "Launch of Algodex NFT marketplace": "एल्गोडेक्स एनएफटी मार्केटप्लेस का शुभारंभ",
   "Launch of trading SDK for Algodex":"एल्गोडेक्स के लिए ट्रेडिंग एसडीके का शुभारंभ",
-  "launch app":"ऐप लांच करें"
+  "launch app":"ऐप लांच करें",
+  "Get away from liquidity pools":"तरलता पूल से दूर हो जाओ",
+  "Set the price you want to sell or buy at":"वह मूल्य निर्धारित करें जिसे आप बेचना या खरीदना चाहते हैं",
+  "Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment":"अल्गोडेक्स लिमिट ऑर्डर का समर्थन करता है ताकि आप आश्वस्त हो सकें कि आपका व्यापार केवल आपके द्वारा निर्धारित मूल्य पर ही होगा, पूल के विपरीत जहां आपको फिसलन से निपटना होगा और उस समय कीमत पर कोई नियंत्रण नहीं होगा",
+  "Start trading >":"व्यापार शुरू करें >",
+  "Trade ANY Algorand Standard Asset":"किसी भी Algorand Standard Asset का व्यापार करें",
+  "All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it":"अल्गोरंड ब्लॉकचैन पर सभी संपत्तियाँ डिफ़ॉल्ट रूप से अल्गोडेक्स में समर्थित हैं। यदि यह मौजूद है, तो आप इसका व्यापार कर सकते हैं",
+  "Yes - even NFTs":"हां - एनएफटी भी",
+  "NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets":"नोट: संयुक्त राज्य अमेरिका और कनाडा में उपयोगकर्ता वर्तमान में कुछ मेननेट संपत्तियों का व्यापार करने से प्रतिबंधित हैं",
+  "Projects can apply with":"परियोजनाओं के साथ आवेदन कर सकते हैं",
+  "this form":"यह रूप",
+  "to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions":"उत्तर अमेरिकी व्यापार के लिए सूचीबद्ध होने के लिए। शेष विश्व बिना किसी प्रतिबंध के सभी एएसए का व्यापार कर सकता है",
+  "Provide liquidity and":"तरलता प्रदान करें और",
+  "Earn rewards from trading":"व्यापार से पुरस्कार अर्जित करें",
+  "Earn ALGX rewards by placing orders on Algodex and being a market maker":"Algodex पर ऑर्डर देकर और मार्केट मेकर बनकर ALGX पुरस्कार अर्जित करें",
+  "Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App":"जानें कि पुरस्कारों की गणना कैसे की जाती है और अल्गोडेक्स रिवार्ड्स ऐप के साथ संचित पुरस्कारों को देखें",
+  "Go to Rewards App >":"रिवॉर्ड ऐप > पर जाएं",
+  "ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards":"ALGODEX बॉट्स जल्द ही लॉन्च होने जा रहे हैं ताकि आप बाजार बनाने वाले बॉट के लिए पैरामीटर सेट कर सकें, ताकि स्वचालित रूप से एक सेट स्प्रेड प्रतिशत के आसपास ऑर्डर दे सकें और पुरस्कार अर्जित कर सकें।"
+
 }

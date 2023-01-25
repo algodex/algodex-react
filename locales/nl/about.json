@@ -1,7 +1,7 @@
 {
   "A Decentralized": "een gedecentraliseerde",
-  "Marketplace": "Marktplaats",
-  "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex is een sterk gedecentraliseerde marktplaats met het orderboek volledig op de Algorand-blockchain zelf",
+  "Exchange": "Aandelenbeurs",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex is een sterk gedecentraliseerde exchange waarbij het orderboek volledig op de Algorand blockchain zelf staat",
   "NOTE": "OPMERKING",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "Gebruikers in de VS en Canada mogen momenteel niet handelen in sommige Mainnet-activa. Testnet is ook beschikbaar voor iedereen die het platform uitprobeert op",
   "blog": "blog",
@@ -31,6 +31,21 @@
   "Launch of Algodex NFT marketplace": "Lancering van Algodex NFT-marktplaats",
   "Launch of trading SDK for Algodex": "Lancering van handels-SDK voor Algodex",
   "launch app": "app starten",
-  "Exchange": "Aandelenbeurs",
-  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex is een sterk gedecentraliseerde exchange waarbij het orderboek volledig op de Algorand blockchain zelf staat"
+  "Get away from liquidity pools":"Ga weg van liquiditeitspools",
+  "Set the price you want to sell or buy at":"Stel de prijs in waarvoor u wilt verkopen of kopen",
+  "Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment":"Algodex ondersteunt limietorders, zodat u er zeker van kunt zijn dat uw transactie alleen plaatsvindt tegen de prijs die u instelt, in tegenstelling tot pools waar u te maken krijgt met ontsporingen en geen controle heeft over de prijs op dat moment",
+  "Start trading >":"Begin met handelen >",
+  "Trade ANY Algorand Standard Asset":"Handel in ELK Algorand-standaardactivum",
+  "All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it":"Alle activa op de Algorand-blockchain worden standaard ondersteund in Algodex. Als het bestaat, kun je het verhandelen",
+  "Yes - even NFTs":"Ja - zelfs NFT's",
+  "NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets":"OPMERKING: Gebruikers in de VS en Canada mogen momenteel bepaalde activa van het Mainnet niet verhandelen",
+  "Projects can apply with":"Projecten kunnen solliciteren met",
+  "this form":"deze vorm",
+  "to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions":"om te worden genoteerd voor Noord-Amerikaanse handel. De rest van de wereld kan alle ASA's zonder beperkingen verhandelen",
+  "Provide liquidity and":"Zorg voor liquiditeit en",
+  "Earn rewards from trading":"Verdien beloningen met handelen",
+  "Earn ALGX rewards by placing orders on Algodex and being a market maker":"Verdien ALGX-beloningen door bestellingen op Algodex te plaatsen en een marktmaker te zijn",
+  "Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App":"Lees meer over hoe beloningen worden berekend en bekijk verzamelde beloningen met de Algodex Rewards-app",
+  "Go to Rewards App >":"Ga naar Rewards-app >",
+  "ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards":"ALGODEX Bots wordt binnenkort gelanceerd, zodat u parameters kunt instellen voor een marktmakende bot om automatisch bestellingen te plaatsen rond een bepaald spreadpercentage en beloningen te verdienen"
 }

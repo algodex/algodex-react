@@ -152,23 +152,18 @@ export const Features = () => {
             </p>
             <hr />
             <p>
-              {t(
-                'NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets'
-              )}
+              {t('NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets')}
               .
               <br />
               <br />
-              {t('Projects can apply with this form')}{' '}
+              {t('Projects can apply with')}{' '}
               <a
                 target="_blank"
                 href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform" rel="noreferrer"
               >
                 {t('this form')}
               </a>{' '}
-              {t(
-                'to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions'
-              )}
-              .
+              {t('to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions')}.
             </p>
           </div>
           <div className="lg:w-1/3">

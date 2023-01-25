@@ -1,7 +1,7 @@
 {
   "A Decentralized": "Một phân cấp",
-  "Marketplace": "Thương trường",
-  "Algodex is a highly decentralized marketplace with the orderbook completely on the Algorand blockchain itself": "Algodex là một thị trường phi tập trung cao với sổ đặt hàng hoàn toàn trên chính chuỗi khối Algorand",
+  "Exchange": "Trao đổi",
+  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex là một sàn giao dịch phi tập trung cao với sổ đặt hàng hoàn toàn trên chính chuỗi khối Algorand",
   "NOTE": "GHI CHÚ",
   "Users in the USA and Canada are currently restricted from trading some Mainnet assets Testnet is also available for anyone trying out the platform at": "Người dùng ở Hoa Kỳ và Canada hiện bị hạn chế giao dịch một số tài sản Mainnet. Testnet cũng có sẵn cho bất kỳ ai dùng thử nền tảng tại",
   "blog": "blog",
@@ -31,6 +31,21 @@
   "Launch of Algodex NFT marketplace": "Ra mắt thị trường Algodex NFT",
   "Launch of trading SDK for Algodex": "Ra mắt SDK giao dịch cho Algodex",
   "launch app": "Chạy chương trình",
-  "Exchange": "Trao đổi",
-  "Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself": "Algodex là một sàn giao dịch phi tập trung cao với sổ đặt hàng hoàn toàn trên chính chuỗi khối Algorand"
+  "Get away from liquidity pools":"Tránh xa nhóm thanh khoản",
+  "Set the price you want to sell or buy at":"Đặt giá bạn muốn bán hoặc mua tại",
+  "Algodex supports limit orders so you can be assured your trade will only occur at the price you set unlike pools where you have to deal with slippage and have no control over the price at that moment":"Algodex hỗ trợ các lệnh giới hạn để bạn có thể yên tâm rằng giao dịch của bạn sẽ chỉ diễn ra ở mức giá bạn đặt, không giống như các nhóm mà bạn phải đối phó với trượt giá và không kiểm soát được giá tại thời điểm đó",
+  "Start trading >":"Bắt đầu giao dịch >",
+  "Trade ANY Algorand Standard Asset":"Giao dịch BẤT CỨ tài sản tiêu chuẩn Algorand nào",
+  "All assets on the Algorand blockchain are supported in Algodex by default. If it exists, you can trade it":"Theo mặc định, tất cả tài sản trên chuỗi khối Algorand đều được hỗ trợ trong Algodex. Nếu nó tồn tại, bạn có thể giao dịch nó",
+  "Yes - even NFTs":"Có - ngay cả NFT",
+  "NOTE: Users in the USA and Canada are currently restricted from trading some Mainnet assets":"LƯU Ý: Người dùng ở Hoa Kỳ và Canada hiện bị hạn chế giao dịch một số tài sản Mainnet",
+  "Projects can apply with":"Dự án có thể áp dụng với",
+  "this form":"mẫu này",
+  "to be listed for North American trading. The rest of the world can trade all ASAs with no restrictions":"được liệt kê cho giao dịch Bắc Mỹ. Phần còn lại của thế giới có thể giao dịch tất cả các ASA mà không bị hạn chế",
+  "Provide liquidity and":"Cung cấp thanh khoản và",
+  "Earn rewards from trading":"Kiếm phần thưởng từ giao dịch",
+  "Earn ALGX rewards by placing orders on Algodex and being a market maker":"Kiếm phần thưởng ALGX bằng cách đặt hàng trên Algodex và trở thành nhà tạo lập thị trường",
+  "Learn about how rewards are calculated and view accumulated rewards with the Algodex Rewards App":"Tìm hiểu về cách tính phần thưởng và xem phần thưởng tích lũy với Ứng dụng Phần thưởng Algodex",
+  "Go to Rewards App >":"Chuyển đến Ứng dụng Phần thưởng >",
+  "ALGODEX Bots will be launching soon to allow you to set parameters for a market making bot to automatically place orders around a set spread percentage and earn rewards":"ALGODEX Bots sẽ sớm ra mắt để cho phép bạn đặt tham số cho bot tạo thị trường để tự động đặt lệnh quanh một tỷ lệ phần trăm chênh lệch đã đặt và kiếm phần thưởng"
 }
