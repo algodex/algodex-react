@@ -347,8 +347,9 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     // Display spinner when invalid state
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
-    if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
-    else return activeView === 'chart' ? <Chart setActiveView={setActiveView} activeView={activeView} asset={asset} interval={interval} onChange={onChange} /> : <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/>
+    if (showAssetInfo || !isTraded) {
+      return asset.total === 1 ? <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/> : <AssetInfo asset={asset} /> 
+    } else return activeView === 'chart' ? <Chart setActiveView={setActiveView} activeView={activeView} asset={asset} interval={interval} onChange={onChange} /> : <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/>
   }, [activeView, asset, asset?.id, asset?.name, 
       interval, isFallback, isTraded, onChange, showAssetInfo])
 

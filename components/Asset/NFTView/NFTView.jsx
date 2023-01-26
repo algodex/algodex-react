@@ -25,6 +25,7 @@ import theme from 'theme'
 import Icon from 'components/Icon'
 import { withNFTDetailsQuery } from '../../../hooks'
 import LaunchIcon from '@mui/icons-material/Launch';
+import { truncatedWalletAddress } from 'components/helpers'
 
 const Container = styled.div`
   position: relative;
@@ -52,14 +53,14 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
     asset: nftDetails.name,
     collection: {
       name: nftDetails.fullName,
-      url: `https://${nftDetails.verified_info.url}`,
+      url: `https://${nftDetails.verified_info?.url}`,
       creator: ''
     },
-    // description: nftDetails.verified_info.description,
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    description: nftDetails.verified_info?.description,
+    // description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     nftExplorerLink: `https://www.nftexplorer.app/asset/${nftDetails.id}`,
     prices: {
-      lastSalePrice: asset.price_info.price,
+      lastSalePrice: asset?.price_info?.price || 0,
       avgSalePrice: '',
       collectionAverage: '',
     },
@@ -107,9 +108,10 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
               <Button onClick={() => setActiveView('nft-image')} sx={{ backgroundColor: theme.colors.green['500'], width: '6rem', height: '1.5rem', marginRight: '1rem' }} variant="primary">
                 <Typography variant="body_small_medium">IMAGE</Typography>
               </Button>
-              <Button onClick={() => setActiveView('chart')} sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
+              { asset.isTraded && <Button onClick={() => setActiveView('chart')} sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
                 <Typography variant="body_small_medium">CHART</Typography>
               </Button>
+              }
             </Box>
 
           </Stack>
@@ -152,7 +154,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                 <Typography variant='subtitle' sx={{ color: theme.colors.white }}>Collection Description:</Typography>
               </Box>
               <Box sx={{
-                height: '8rem',
+                minHeight: '8rem',
                 overflowY: 'scroll'
               }}>
                 <Typography variant='body_small' sx={{ color: theme.colors.white }}>
@@ -177,7 +179,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                 <Box sx={{ border: '2px solid #FFFFFF', borderRadius: '3px', padding: '0.1rem' }} mr={1}>
                   <Typography variant='body_tiny_bold' sx={{ color: theme.colors.gray['400'] }}>Last Sale Price</Typography>
                   <Stack direction="row" alignItems="center" justifyContent="center">
-                    <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>{NFTData.prices.lastSalePrice}</Typography>&nbsp;
+                    <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>{NFTData?.prices.lastSalePrice}</Typography>&nbsp;
                     <Icon color="gray" fillGradient={100} use="algoLogo" size={0.725} />
                   </Stack>
                 </Box>
@@ -197,7 +199,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                 </Box> */}
               </Stack>
               <Box mt={3}>
-                <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>Current Holder: T7J8...JK92</Typography>
+                <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>Current Holder: {truncatedWalletAddress(NFTData.currentHolderAddr, 4)}</Typography>
               </Box>
               <Stack mt={2} direction="row" alignItems="center">
                 <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>
