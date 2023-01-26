@@ -26,6 +26,7 @@ import Icon from 'components/Icon'
 import { withNFTDetailsQuery } from '../../../hooks'
 import LaunchIcon from '@mui/icons-material/Launch';
 import { truncatedWalletAddress } from 'components/helpers'
+import { getActiveNetwork } from 'services/environment'
 
 const Container = styled.div`
   position: relative;
@@ -48,6 +49,8 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
   const nftDetails = props
   const containerRef = useRef()
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+  const activeNetwork = getActiveNetwork()
+  const algoURL = activeNetwork === 'testnet' ? `https://testnet.algoexplorer.io/asset/${nftDetails.id}` : `https://algoexplorer.io/asset/${nftDetails.id}`
   const NFTData = {
     imageUrl: `https://ipfs.algonft.tools/ipfs/${nftDetails.url}`,
     asset: nftDetails.name,
@@ -65,7 +68,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
       collectionAverage: '',
     },
     currentHolderAddr: nftDetails.txid,
-    algoExplorerLink: `https://algoexplorer.io/asset/${nftDetails.id}`
+    algoExplorerLink: algoURL
   }
 
   useEffect(() => {
@@ -108,7 +111,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
               <Button onClick={() => setActiveView('nft-image')} sx={{ backgroundColor: theme.colors.green['500'], width: '6rem', height: '1.5rem', marginRight: '1rem' }} variant="primary">
                 <Typography variant="body_small_medium">IMAGE</Typography>
               </Button>
-              { asset.isTraded && <Button onClick={() => setActiveView('chart')} sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
+              {asset.isTraded && <Button onClick={() => setActiveView('chart')} sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
                 <Typography variant="body_small_medium">CHART</Typography>
               </Button>
               }
@@ -129,7 +132,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
           <Grid container spacing={{ xs: 2, md: 3 }}>
             {/* <Grid item xs={7}> */}
             <Grid item xs={12} sm={12} md={7}>
-              <Box sx={{  }}>
+              <Box sx={{}}>
                 <img
                   src={NFTData.imageUrl}
                   alt="NFT Name"
@@ -137,7 +140,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                   // style={{minHeight: '2550px'}}
                   // height={containerSize.height}
                   height={containerSize.height - 118}
-                  // height="inherit"
+                // height="inherit"
                 />
               </Box>
               <Box>
@@ -167,10 +170,10 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                 </Link>
               </Box> */}
               <Stack mt={3} direction="row" alignItems="center">
-                <Link href={NFTData.nftExplorerLink} data-testid="nft-url">
-                  <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>View Collection on NFTExplorer</Typography>
-                </Link>&nbsp;
-                <LaunchIcon style={{ width: 18, height: 18, color: theme.colors.white }} />
+                <Link href={NFTData.nftExplorerLink} data-testid="nft-url" className="flex">
+                  <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>View Collection on NFTExplorer</Typography>&nbsp;
+                  <LaunchIcon style={{ width: 18, height: 18, color: theme.colors.white }} />
+                </Link>
               </Stack>
               <Box mt={6}>
                 <Typography variant='subtitle' sx={{ color: theme.colors.white }}>Sale Activity:</Typography>
@@ -202,10 +205,13 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                 <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>Current Holder: {truncatedWalletAddress(NFTData.currentHolderAddr, 4)}</Typography>
               </Box>
               <Stack mt={2} direction="row" alignItems="center">
-                <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>
-                  Algoexplorer
-                </Typography>&nbsp;
-                <LaunchIcon style={{ width: 18, height: 18, color: theme.colors.white }} />
+                <Link href={NFTData.algoExplorerLink} data-testid="nft-url" className="flex">
+                  <Typography variant='subtitle_small_bold' sx={{ color: theme.colors.white }}>
+                    Algoexplorer
+                  </Typography>&nbsp;
+                  <LaunchIcon style={{ width: 18, height: 18, color: theme.colors.white }} />
+                </Link>
+
               </Stack>
             </Grid>
           </Grid>
