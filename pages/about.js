@@ -23,9 +23,8 @@ import Header from 'components/Nav/Header'
 import { Hero } from '@/components/About/Hero'
 import { PartnerShip } from '@/components/About/PartnerShip'
 import PropTypes from 'prop-types'
-import { RoadMap } from '@/components/About/RoadMap'
+// import { RoadMap } from '@/components/About/RoadMap'
 import { fetchBlogPosts } from '@/services/cms'
-import { useEffect } from 'react'
 
 /**
  * About Page
@@ -42,7 +41,7 @@ const AboutPage = ({ staticBlogPosts }) => {
       <Header />
       <Hero />
       <Features />
-      <RoadMap />
+      {/* <RoadMap /> */}
       <PartnerShip />
       <BlogPreview staticBlogPosts={staticBlogPosts} />
       <FAQSection />

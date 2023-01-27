@@ -72,6 +72,7 @@ const colors = {
     400: '#A1AEC0',
     500: '#718096',
     600: '#4A5568',
+    650: '#475163',
     700: '#2D3748',
     800: '#1A202C',
     900: '#171923'
@@ -500,17 +501,17 @@ const theme = {
       fontWeight: '600',
       cursor: 'pointer',
       '&:hover': {
-        color: colors.gray['100'],
+        color: colors.gray['100']
       },
       '& > a': {
         padding: '1rem 0',
         textDecoration: 'none',
         '&:hover': {
-          color: colors.gray['100'],
+          color: colors.gray['100']
         },
         '&:active': {
-          color: colors.gray['100'],
-        },
+          color: colors.gray['100']
+        }
       },
       [muiTheme.breakpoints.up('xs')]: {
         fontSize: fontSizes[2]
@@ -523,7 +524,7 @@ const theme = {
       },
       [muiTheme.breakpoints.up('lg')]: {
         fontSize: fontSizes[2]
-      },
+      }
     },
     price: {
       fontFamily: fontFamilies.monospace,

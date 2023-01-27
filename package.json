@@ -8,9 +8,9 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "build": "react-app-rewired build",
+    "build": "next build",
     "build-start": "cross-env DISABLE_SENTRY=true NODE_ENV=test next build && next start",
-    "start": "react-app-rewired start",
+    "start": "next start",
     "test": "concurrently \"npm:test-*\"",
     "test-lint": "cp .env.mainnet .env.production && next lint",
     "test-jest": "jest ",
