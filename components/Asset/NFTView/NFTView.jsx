@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
 import * as ReactDOM from 'react-dom'
 import { useRef, useEffect, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { Box, Button, Grid, Stack, Typography } from '@mui/material'
+import { Box, Button, Grid, Stack, Typography, TextField } from '@mui/material'
 import Image from 'next/image'
 import Link from '@/components/Nav/Link'
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -150,14 +150,23 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                 <Box>
                   <Typography variant='subtitle' sx={{ color: theme.colors.white }}>Collection Description:</Typography>
                 </Box>
-                <Box sx={{
-                  minHeight: '8rem',
-                  overflowY: 'scroll'
-                }}>
-                  <Typography variant='body_small' sx={{ color: theme.colors.white }}>
-                    {NFTData.description}
-                  </Typography>
-                </Box>
+                <TextField
+                  variant="outlined"
+                  sx={{ 
+                    width: '100%',
+                    '.MuiOutlinedInput-root': {
+                      padding: 0,
+                      color: '#FFFFFF',
+                      fontSize: 14,
+                      fontWeight: 500
+                    },
+                    '.MuiOutlinedInput-notchedOutline': {
+                      border: 'unset',
+                    }
+                  }}
+                  multiline
+                  maxRows={7}
+                />
               </Box>
               }
 
