@@ -261,7 +261,6 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
         setPeraWallet(_rehyrdratedPeraWallet)
         setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
         setActiveWallet(_rehyrdratedPeraWallet)
-        debugger
         console.log(accounts)
       })
     }
