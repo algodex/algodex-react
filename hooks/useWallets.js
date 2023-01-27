@@ -90,7 +90,7 @@ function useWallets(closeDropdown) {
     connect: peraConnect,
     disconnect: peraDisconnect,
     connector: _peraConnector
-  } = useWalletConnect(handleConnect, handleDisconnect)
+  } = usePeraConnection(handleConnect, handleDisconnect)
 
   return {
     myAlgoConnect,

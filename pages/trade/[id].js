@@ -41,6 +41,11 @@ import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
 import useMyAlgoConnector from '../../hooks/useMyAlgoConnector'
+import { PeraWalletConnect } from '@perawallet/connect'
+
+import { peraSigner } from '../../hooks/usePeraConnection'
+
+const peraWalletRehydate = new PeraWalletConnect()
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
@@ -245,15 +250,19 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
     const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
 
-    if (
-      _peraWallet?.type === 'wallet-connect' &&
-      peraWallet === null &&
-      typeof peraConnector.current !== 'undefined'
-    ) {
-      const _rehyrdratedPeraWallet = { ..._peraWallet, connector: peraConnector.current }
-      setPeraWallet(_rehyrdratedPeraWallet)
-      setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
-      setActiveWallet(_rehyrdratedPeraWallet)
+    if (_peraWallet?.type === 'wallet-connect' && peraWallet === null && peraConnector) {
+      peraWalletRehydate.reconnectSession().then((accounts) => {
+        // Setup the disconnect event listener
+        // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
+        const _rehyrdratedPeraWallet = {
+          ..._peraWallet,
+          connector: { ...peraConnector.connector, connected: true, sign: peraSigner }
+        }
+        setPeraWallet(_rehyrdratedPeraWallet)
+        setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
+        setActiveWallet(_rehyrdratedPeraWallet)
+        console.log(accounts)
+      })
     }
 
     if (

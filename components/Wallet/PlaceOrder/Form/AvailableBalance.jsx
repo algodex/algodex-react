@@ -85,7 +85,6 @@ export const AvailableBalance = ({ wallet, asset, setWallet }) => {
 
   useEffect(() => {
     setWallet({ ...wallet, ...walletQuery.data })
-    console.log(walletQuery.data)
   }, [walletQuery])
 
   const calcAsaWorth = useMemo(() => {

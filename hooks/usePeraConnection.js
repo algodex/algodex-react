@@ -16,23 +16,14 @@
 
 import { PeraWalletConnect } from '@perawallet/connect'
 import { useEffect } from 'react'
-// const algosdk = require('algosdk')
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/WalletConnect'
 
-// PeraWalletConnect.prototype.sign = signer
+// import algosdk from 'algosdk '
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/PeraConnect'
 
 const peraWallet = new PeraWalletConnect()
-// peraWallet.prototype.sign = signer
 
-// WalletConnect.prototype.sign = (
-//   await import('@algodex/algodex-sdk/lib/wallet/signers/WalletConnect')
-// ).default
-
-async function peraSigner(order) {
-  const encodedTxns = signer(order, peraWallet.connector.accounts[0])
-  debugger
-  console.log(encodedTxns)
-  const signedTxn = await peraWallet.signTransaction(encodedTxns)
+export async function peraSigner(orders) {
+  const signedTxn = await signer(orders, peraWallet)
   return signedTxn
 }
 
@@ -108,7 +99,7 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
 
   function handleDisconnectWalletClick() {
     console.log(peraWallet)
-    onDisconnect([{ type: 'pera-wallet', address: peraWallet.connector.accounts[0] }])
+    onDisconnect([{ type: 'wallet-connect', address: peraWallet.connector.accounts[0] }])
 
     peraWallet.disconnect()
     // Fetch Address to disconnect
@@ -117,6 +108,6 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
   return {
     connect: handleConnectWalletClick,
     disconnect: handleDisconnectWalletClick,
-    peraWalletConnector: peraWallet
+    connector: peraWallet
   }
 }
