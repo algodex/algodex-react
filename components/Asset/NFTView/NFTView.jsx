@@ -124,13 +124,16 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
           <Grid container spacing={{ xs: 2, md: 3 }}>
             {/* <Grid item xs={7}> */}
             <Grid item xs={12} sm={12} md={7}>
-              <Box sx={{}}>
-                <img
-                  src={NFTData.imageUrl}
-                  alt="NFT Name"
-                  width='100%'
-                  height={containerSize.height - 118}
-                />
+              <Box
+                sx={{
+                  backgroundPosition: 'left',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'contain',
+                  width: '100%', 
+                  height: `${containerSize.height - 118}px`,
+                  backgroundImage: `url(${NFTData.imageUrl})`
+                }}
+              >
               </Box>
               <Box>
                 <Stack direction="row">
