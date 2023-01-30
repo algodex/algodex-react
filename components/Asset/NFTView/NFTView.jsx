@@ -164,6 +164,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                       border: 'unset',
                     }
                   }}
+                  value={NFTData.description}
                   multiline
                   maxRows={7}
                 />
