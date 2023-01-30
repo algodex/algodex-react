@@ -295,18 +295,6 @@ export function PlaceOrderForm({
     }
   })
 
-  // const assetBalance = useMemo(() => {
-  //   let res = 0
-  //   if (activeWallet != null && Array.isArray(activeWallet.assets)) {
-  //     const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
-  //     if (filter.length > 0) {
-  //       res = fromBaseUnits(filter[0].amount, asset.decimals)
-  //     }
-  //   }
-
-  //   return res
-  // }, [activeWallet, asset])
-
   // Calculate Slider Percentage
   const sliderPercent = useMemo(() => {
     if (order.type === 'sell' && assetBalance !== 0) {
@@ -337,23 +325,6 @@ export function PlaceOrderForm({
     }
     return new Big(order.total).eq(0)
   }, [order.total, order.type])
-
-  // const isInvalid = () => {
-  //   return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
-  // }
-
-  // const isBalanceExceeded = () => {
-  //   const maxSpendableAlgo = fromBaseUnits(wallet.amount)
-  //   const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
-  //   if (order.type === 'buy') {
-  //     return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
-  //   }
-  //   return new Big(order.amount).gt(asaBalance)
-  // }
-
-  // const isDisabled = isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded()
-  // asset.isGeoBlocked ||
-  // status.submitting
 
   const handleSlider = useCallback(
     (e, value) => {
@@ -439,6 +410,18 @@ export function PlaceOrderForm({
 
         const awaitPlaceOrder = async () => {
           try {
+            if (formattedOrder.type === 'sell' && formattedOrder.amount > assetBalance) {
+              toast.error('You cannot sell more than your available asa balance')
+              return
+            }
+
+            if (
+              formattedOrder.type === 'buy' &&
+              formattedOrder.total > maxSpendableAlgo / 1000000
+            ) {
+              toast.error('You cannot spend more than your available Algo balance')
+              return
+            }
             notifier('Initializing order')
             await placeOrder(
               {
