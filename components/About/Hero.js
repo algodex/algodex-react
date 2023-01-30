@@ -32,7 +32,7 @@ const HeroSection = styled.div`
   position: relative;
   background-size: cover;
   overflow: hidden;
-  padding-block: 4rem;
+  padding-block: 6.5rem 4rem;
 `
 
 const LaunchBtn = styled(Button)`
@@ -52,6 +52,13 @@ const InlineLogo = styled(ReactSVG)`
   width: 19rem;
 `
 
+const ImageSection = styled.div`
+  @media (max-width: 1030px) {
+    width: 609px;
+    max-width: 100%;
+  }
+`
+
 // const Note = styled.p`
 //   font-size: 0.875rem;
 //   color: ${({ theme }) => theme.palette.gray[100]};
@@ -65,28 +72,26 @@ export const Hero = () => {
   const { t } = useTranslation('about')
   return (
     <HeroSection>
-      <AboutContainer>
-        <div className="mt-4 mb-3 md:ml-7 lg:ml-9">
-          <InlineLogo src="/logo-inline-dark.svg" />
-          <AboutTitle className="leading-10">
-            {t('A Decentralized')} {t('Exchange')}
-          </AboutTitle>
-          <Image src="/Powered-by-Algorand.svg" width={150} height={24} />
-        </div>
-        <div className="w-5/5 lg:w-1/2 md:w-4/5 sm:w-5/5">
-          <hr />
-        </div>
-        <div className="w-5/5 lg:w-2/5 md:w-1/2 sm:w-3/5 mt-4 mb-3 md:ml-7 lg:ml-9">
-          <Typography className="mb-6 leading-6 gray-400" fontWeight="medium" color="gray.400">
-            {t(
-              'Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself'
-            )}
-            .
-          </Typography>
-          <Link href="/trade" shallow={true}>
-            <LaunchBtn>{t('launch app')}</LaunchBtn>
-          </Link>
-          {/* <Note className="mt-5">
+      <AboutContainer className="flex flex-col lg:flex-row">
+        <div className="mb-5 lg:mb-0 sm:ml-5 md:ml-7 lg:ml-9">
+          <div className="mt-4 mb-3">
+            <InlineLogo src="/logo-inline-dark.svg" />
+            <AboutTitle className="leading-10">
+              {t('A Decentralized')} {t('Exchange')}
+            </AboutTitle>
+            <Image src="/Powered-by-Algorand.svg" width={150} height={24} />
+          </div>
+          <div className="w-full sm:w-4/5 my-4 mb-3">
+            <Typography className="mb-8 leading-6 gray-400" fontWeight="medium" color="gray.400">
+              {t(
+                'Algodex is a highly decentralized exchange with the order book completely on the Algorand blockchain itself'
+              )}
+              .
+            </Typography>
+            <Link href="/trade" shallow={true}>
+              <LaunchBtn>{t('launch app')}</LaunchBtn>
+            </Link>
+            {/* <Note className="mt-5">
             Projects can apply with{' '}
             <a
               href="https://docs.google.com/forms/d/e/1FAIpQLSdJ7s73pweD83A9FP9X3zxelj4WN7jUvjNzuSCDL7wpfTmElQ/viewform"
@@ -102,7 +107,11 @@ export const Hero = () => {
             Testnet is also available for anyone trying out the platform risk free at :{' '}
             <Link href="https://testnet.algodex.com">testnet.algodex.com</Link>
           </Note> */}
+          </div>
         </div>
+        <ImageSection>
+          <img src="/app-view.svg" width={'100%'} height={'100%'} alt="App Screenshot" />
+        </ImageSection>
       </AboutContainer>
     </HeroSection>
   )
