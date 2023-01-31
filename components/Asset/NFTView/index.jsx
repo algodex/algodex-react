@@ -1,6 +1,6 @@
-/*
+/* 
  * Algodex Frontend (algodex-react) 
- * Copyright (C) 2021-2022 Algodex VASP (BVI) Corp.
+ * Copyright (C) 2021 - 2022 Algodex VASP (BVI) Corp.
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -14,15 +14,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './useAlgoExplorer.js';
-export * from './useAssetChartQuery.js';
-export * from './useAssetOrderbookQuery.js';
-export * from './useAssetOrdersQuery.js';
-export * from './useAssetPriceQuery.js';
-export * from './useAssetTradeHistoryQuery.js';
-export * from './useSearchResultsQuery.js';
-export * from './useWalletAssetsQuery.js';
-export * from './useWalletMinBalanceQuery.js';
-export * from './useWalletOrdersQuery.js';
-export * from './useWalletTradeHistoryQuery.js';
-export * from './useNFTDetails.js';
+import NFTView from './NFTView'
+export default NFTView

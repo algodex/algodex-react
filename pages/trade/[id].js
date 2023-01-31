@@ -39,6 +39,8 @@ import useWallets from '../../hooks/useWallets'
 import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
+// import useWallets from '@/hooks/useWallets'
+import NFTView from '@/components/Asset/NFTView'
 import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
 import useMyAlgoConnector from '../../hooks/useMyAlgoConnector'
 import { PeraWalletConnect } from '@perawallet/connect'
@@ -189,6 +191,11 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const prefix = staticExplorerAsset?.name ? `${staticExplorerAsset.name} to ALGO` : ''
   const showAssetInfo = useUserStore((state) => state.showAssetInfo)
   const { isFallback, query } = useRouter()
+  const { wallet } = useWallets()
+  const [activeView, setActiveView] = useState('chart')
+  // TODO: refactor all state into useReducer
+
+  // console.log('logging: ', {routerId: query.id, staticId: originalStaticExplorerAsset?.id})
   // const myAlgoConnector = useRef(null)
 
   const [realStaticExplorerAsset, setRealStaticExplorerAsset] = useState(undefined)
@@ -288,8 +295,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   }
   const [interval, setInterval] = useState('1h')
-
-  const [asset, setAsset] = useState({ ...realStaticExplorerAsset })
+  const [asset, setAsset] = useState({...realStaticExplorerAsset})
 
   const _asset = useMemo(() => {
     if (
@@ -350,9 +356,11 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     // Display spinner when invalid state
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
-    if (showAssetInfo || !isTraded) return <AssetInfo asset={asset} />
-    else return <Chart asset={asset} interval={interval} onChange={onChange} />
-  }, [asset, asset?.id, asset?.name, interval, isFallback, isTraded, onChange, showAssetInfo])
+    if (showAssetInfo || !isTraded) {
+      return asset.total === 1 ? <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/> : <AssetInfo asset={asset} /> 
+    } else return activeView === 'chart' ? <Chart setActiveView={setActiveView} activeView={activeView} asset={asset} interval={interval} onChange={onChange} /> : <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/>
+  }, [activeView, asset, asset?.id, asset?.name, 
+      interval, isFallback, isTraded, onChange, showAssetInfo])
 
   return useMemo(() => {
     return (
