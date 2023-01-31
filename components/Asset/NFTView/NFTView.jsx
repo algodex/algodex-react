@@ -27,6 +27,7 @@ import { withNFTDetailsQuery } from '../../../hooks'
 import LaunchIcon from '@mui/icons-material/Launch';
 import { truncatedWalletAddress } from 'components/helpers'
 import { getActiveNetwork } from 'services/environment'
+import detectMobileDisplay from '@/utils/detectMobileDisplay'
 
 const Container = styled.div`
   position: relative;
@@ -126,7 +127,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
             <Grid item xs={12} sm={12} md={7}>
               <Box
                 sx={{
-                  backgroundPosition: 'left',
+                  backgroundPosition: detectMobileDisplay() ? 'center' : 'left',
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: 'contain',
                   width: '100%', 
