@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 // import signer from '@algodex/algodex-sdk/lib/wallet/signers/MyAlgoConnect'
 import { logInfo } from 'services/logRemote'
@@ -7,6 +7,7 @@ import useMyAlgoConnect from './useMyAlgoConnect'
 import usePeraConnection from './usePeraConnection'
 import useWalletConnect from './useWalletConnect'
 import { WalletReducerContext } from './WalletsReducerProvider'
+import useAccountInfo from './useAccountInfo'
 
 /**
  *
@@ -35,8 +36,14 @@ function _mergeAddresses(a, b) {
  * @return {*}
  */
 function useWallets(closeDropdown) {
-  const { setPeraWallet, setActiveWallet, setAddressesNew, disconnectWallet, myAlgoAddresses } =
-    useContext(WalletReducerContext)
+  const {
+    setPeraWallet,
+    setActiveWallet,
+    setAddressesNew,
+    disconnectWallet,
+    myAlgoAddresses,
+    activeWallet
+  } = useContext(WalletReducerContext)
 
   const { http, wallet: _wallet } = useAlgodex()
 
@@ -91,6 +98,15 @@ function useWallets(closeDropdown) {
     disconnect: peraDisconnect,
     connector: _peraConnector
   } = usePeraConnection(handleConnect, handleDisconnect)
+
+  const walletQuery = useAccountInfo(activeWallet)
+
+  useEffect(() => {
+    if (activeWallet && walletQuery.data) {
+      console.log(activeWallet)
+      setActiveWallet({ ...activeWallet, ...walletQuery.data })
+    }
+  }, [walletQuery.data])
 
   return {
     myAlgoConnect,

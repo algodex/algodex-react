@@ -109,7 +109,7 @@ export function PlaceOrderForm({
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
 
-  const { activeWallet, setActiveWallet } = useContext(WalletReducerContext)
+  const { activeWallet } = useContext(WalletReducerContext)
 
   const isConnected = activeWallet !== null
   const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
@@ -525,7 +525,7 @@ export function PlaceOrderForm({
               {t('sell')}
             </MaterialButton>
           </ButtonGroup>
-          <AvailableBalance wallet={activeWallet} setWallet={setActiveWallet} asset={asset} />
+          <AvailableBalance wallet={activeWallet} asset={asset} />
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
