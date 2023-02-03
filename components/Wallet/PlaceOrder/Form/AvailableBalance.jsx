@@ -6,8 +6,7 @@ import { Stack } from '@mui/material'
 import Tooltip from '@/components/Tooltip'
 import Typography from '@mui/material/Typography'
 import USDPrice from '../../PriceConversion/USDPrice'
-import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
-import useAccountInfo from '../../../../hooks/useAccountInfo'
+
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 /* 
  * Algodex Frontend (algodex-react) 
@@ -67,7 +66,7 @@ const IconButton = styled.button`
   }
 `
 
-export const AvailableBalance = ({ wallet, asset, setWallet }) => {
+export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
   const maxSpendableAlgo = useMaxSpendableAlgoNew(wallet)
   const assetValue = useMemo(() => {
@@ -80,12 +79,6 @@ export const AvailableBalance = ({ wallet, asset, setWallet }) => {
     }
     return res
   }, [wallet, asset])
-
-  const walletQuery = useAccountInfo(wallet)
-
-  useEffect(() => {
-    setWallet({ ...wallet, ...walletQuery.data })
-  }, [walletQuery])
 
   const calcAsaWorth = useMemo(() => {
     const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
@@ -194,7 +187,6 @@ AvailableBalance.propTypes = {
         amount: PropTypes.number.isRequired
       })
     )
-  }),
-  setWallet: PropTypes.func.isRequired
+  })
 }
 export default withAssetPriceQuery(AvailableBalance)
