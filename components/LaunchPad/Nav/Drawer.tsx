@@ -28,6 +28,7 @@ import { Icon } from '@iconify/react'
 
 // Custom MUI Components
 import ListItemLink from '@/components/Nav/ListItemLink'
+import Typography from '@mui/material/Typography'
 
 const styles = {
   linkWrapper: {
@@ -140,9 +141,22 @@ function LaunchpadDrawer({
             icon={<Icon icon="fa:send" style={styles.icon} fontSize={'20px'} />}
             primary={'Distribute Token'}
             textStyles={styles.text}
-            wrapperStyles={styles.linkWrapper}
+            wrapperStyles={{ ...styles.linkWrapper, paddingBottom: '0 !important' }}
             iconStyles={styles.iconWrapper}
           />
+          <Typography
+            sx={{
+              ...styles.linkWrapper,
+              ...styles.text,
+              fontSize: '12px',
+              fontStyle: 'italic',
+              px: '60px',
+              paddingTop: '0 !important',
+              opacity: 0.4
+            }}
+          >
+            with Algodex Mailbox
+          </Typography>
         </List>
       </Box>
     </MUIDrawer>

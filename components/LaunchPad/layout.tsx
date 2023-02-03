@@ -29,7 +29,7 @@ export const LaunchpadLayout = ({ children }: { children: ReactNode }) => {
   const drawerWidth = 250
   const toolbarHeight = 90
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   return (
     <Box sx={{ backgroundColor: 'gray.150', minHeight: '100%' }}>
@@ -52,6 +52,10 @@ export const LaunchpadLayout = ({ children }: { children: ReactNode }) => {
             height: '100%',
             paddingInline: '50px',
             paddingBlock: `${toolbarHeight + 15}px ${toolbarHeight - 20}px`,
+            '@media(min-width:900px) and (max-width:1120px)': {
+              width: `calc(100% - (${drawerWidth}px + 15%))`,
+              maxWidth: `calc(100% - (${drawerWidth}px + 15%)) !important`
+            },
             '@media(max-width:500px)': {
               paddingInline: '30px',
               paddingBlock: `${toolbarHeight + 10}px`

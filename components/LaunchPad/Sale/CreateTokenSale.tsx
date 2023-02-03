@@ -27,7 +27,6 @@ import Box from '@mui/material/Box'
 import Button from '@/components/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
-import { Icon } from '@iconify/react'
 import { DateTimePickers } from '../dateTimePickers'
 
 const initialValues = {
