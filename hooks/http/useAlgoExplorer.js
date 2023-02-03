@@ -19,6 +19,8 @@ import Spinner from '../components/Spinner';
 import useAlgodex from '../useAlgodex.js';
 import {useQuery} from 'react-query';
 import withQuery from '../utils/withQuery';
+import axios from 'axios'
+
 const DEBUG = process.env.NEXT_PUBLIC_DEBUG || process.env.DEBUG || false;
 
 const refetchInterval = 3000;
@@ -26,6 +28,21 @@ const components = {
   Loading: Spinner,
   ServiceError,
 };
+
+const fetchCurrentPrices = async () => {
+  const testnet = `https://testnet.analytics.tinyman.org/api/v1/current-asset-prices/`
+  const mainnet = `https://mainnet.analytics.tinyman.org/api/v1/current-asset-prices/`
+  const url = process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'testnet' ? testnet : mainnet
+  const response = await axios
+    .get(url)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+  return response
+}
 
 
 /**
@@ -87,6 +104,20 @@ export function useAlgorandPriceQuery({
       ['fetchAlgorandPrice', {query}],
       () => http.explorer.fetchAlgorandPrice(query),
       options,
+  );
+}
+
+export function useOtherAssetPriceQuery({
+  query = '',
+  isInverted,
+  options = {
+    refetchInterval: query === '' ? refetchInterval : 20000,
+  },
+} = {}) {
+  return useQuery(
+      ['fetchCurrentPrices'],
+      () => fetchCurrentPrices(isInverted),
+      options,
 
   );
 }
@@ -100,6 +131,20 @@ export function useAlgorandPriceQuery({
 export function withAlgorandPriceQuery(Component, options) {
   return withQuery(Component, {
     hook: useAlgorandPriceQuery,
+    components,
+    ...options,
+  });
+}
+
+/**
+ * With Algorand Price Query
+ * @param {JSX.Element| Function} Component Component to wrap
+ * @param {object} [options] Options to pass to withQuery
+ * @return {JSX.Element}
+ */
+export function withOtherAssetPriceQuery(Component, options) {
+  return withQuery(Component, {
+    hook: useOtherAssetPriceQuery,
     components,
     ...options,
   });

@@ -24,7 +24,7 @@ import { getAssetTotalStatus, getIsRestricted, getIsRestrictedCountry } from '..
 import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
-
+import { StableAssets } from '@/components/StableAssets'
 import AlgoIcon from '@/components/Icon'
 import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
@@ -34,7 +34,7 @@ import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-import {floatToFixedDisplay} from '@/services/display';
+import { floatToFixedDisplay } from '@/services/display';
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -73,15 +73,16 @@ export const mapToSearchResults = ({
   unitName,
   isGeoBlocked,
   formattedASALiquidity,
-  formattedAlgoLiquidity
+  formattedAlgoLiquidity,
+  isInverted
 }) => {
   const price = formattedPrice ? floatToFixedDisplay(formattedPrice) : hasOrders ? '--' : null
 
   const change = !isNaN(parseFloat(priceChg24Pct))
     ? floatToFixed(priceChg24Pct, 2)
     : hasOrders
-    ? '--'
-    : null
+      ? '--'
+      : null
 
   return {
     id: assetId,
@@ -94,7 +95,8 @@ export const mapToSearchResults = ({
     liquidityAsa: formattedASALiquidity,
     price,
     change,
-    decimals
+    decimals,
+    isInverted
   }
 }
 
@@ -192,6 +194,7 @@ export const NavSearchTable = ({
 
   const searchTableRef = useRef()
   const router = useRouter()
+  const {query} = router
   const { t } = useTranslation('assets')
 
   const filterByFavoritesFn = useCallback(
@@ -201,6 +204,19 @@ export const NavSearchTable = ({
     },
     [setIsFilteringByFavorites, isFilteringByFavorites]
   )
+
+  const formattedStableAsa = {}
+  const formattedAssets = StableAssets.forEach(
+    (asa, index) => (formattedStableAsa[StableAssets[index]] = asa)
+  )
+
+  const getInversionStatus = useCallback((id) => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
+  }, [router])
 
   useEffect(() => {
     const handleResize = () => {
@@ -262,7 +278,7 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    
+
     // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Geoformatted assets
@@ -295,20 +311,23 @@ export const NavSearchTable = ({
     }
 
   }, [assets, handleRestrictedAsset,
-      isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
+    isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
+      // console.log(value, 'value', row.original.id)
+      const isInverted = getInversionStatus(row.original.id)
+      const activeAssetId = query.id
+      const formattedValue = (isInverted && parseInt(activeAssetId) === row.original?.id) ? (1/value).toFixed(row.original?.decimals) : value
       return (
         <AssetPrice
-          className={`${
-            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
-          } cursor-pointer font-semibold`}
+          className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
+            } cursor-pointer font-semibold`}
         >
-          {value}
+          {formattedValue}
           <br />
           <p className="text-gray-600">
-            {value !== '--' ? <span>{formatUSDPrice(algoPrice * value)}&nbsp;USD</span> : ''}
+            {formattedValue !== '--' ? <span>{formatUSDPrice(algoPrice * formattedValue)}&nbsp;USD</span> : ''}
           </p>
         </AssetPrice>
       )
@@ -322,6 +341,8 @@ export const NavSearchTable = ({
 
   const AssetNameCell = useCallback(
     ({ value, row }) => {
+      const isInverted = getInversionStatus(row.original?.id)
+      const activeAssetId = query.id
       return (
         <div className="flex flex-col">
           <div
@@ -340,14 +361,30 @@ export const NavSearchTable = ({
                 style={{ minWidth: '0.75rem' }}
                 color={handleFavoritesFn(row?.original?.id)}
               />
-              <AssetNameBlock>
+              {/* <AssetNameBlock>
                 <AssetName>{value}</AssetName>
                 <PairSlash>{`/`}</PairSlash>
                 <NameVerifiedWrapper>
                   ALGO
-                  {/* {row.original.verified && <SvgImage use="verified" w={0.75} h={0.75} />} */}
                 </NameVerifiedWrapper>
-              </AssetNameBlock>
+              </AssetNameBlock> */}
+              {(isInverted && parseInt(activeAssetId) === row.original?.id) ? (
+                <AssetNameBlock>
+                  <AssetName>ALGO</AssetName>
+                  <PairSlash>{`/`}</PairSlash>
+                  <NameVerifiedWrapper>
+                    {value}
+                  </NameVerifiedWrapper>
+                </AssetNameBlock>
+              ) : (
+                <AssetNameBlock>
+                  <AssetName>{value}</AssetName>
+                  <PairSlash>{`/`}</PairSlash>
+                  <NameVerifiedWrapper>
+                    ALGO
+                  </NameVerifiedWrapper>
+                </AssetNameBlock>
+              )}
             </div>
             {/* <br /> */}
             <div className="flex item-center mt-0.5">
@@ -398,7 +435,7 @@ export const NavSearchTable = ({
         </div>
       )
     },
-    [handleFavoritesFn, toggleFavoritesFn]
+    [handleFavoritesFn, toggleFavoritesFn, getInversionStatus, router]
   )
 
   AssetNameCell.propTypes = {
@@ -488,13 +525,12 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     // Prefetch the top assets
-    searchResultData.slice(0,30).map(result => {
+    searchResultData.slice(0, 30).map(result => {
       const assetId = result.id
-      // console.log('zprefetching: ' + assetId)
-      router.prefetch('/trade/'+assetId)
+      router.prefetch('/trade/' + assetId)
     })
   }, [router, searchResultData])
-  
+
   return (
     <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table

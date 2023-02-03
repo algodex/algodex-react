@@ -28,6 +28,9 @@ import _ from 'lodash'
 import { css } from '@emotion/react'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
+import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
+import { useRouter } from 'next/router'
+import { floatToFixedDisplay } from '@/services/display';
 
 // import { usePopperTooltip } from 'react-popper-tooltip'
 
@@ -152,8 +155,8 @@ const Container = styled.div`
       top: 37px;
       width: 100%;
       height: ${({ optionalGridInfo }) => {
-        return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
-      }};
+    return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
+  }};
       overflow-y: scroll;
       @media (max-width: 996px) {
         height: ${({ tableSizeOnMobile }) => tableSizeOnMobile && `${tableSizeOnMobile.height - 128}px`};
@@ -167,6 +170,91 @@ const Container = styled.div`
   }
 `
 // height: ${({ optionalGridInfo }) => optionalGridInfo && `${optionalGridInfo.height - 126}px`};
+// export function DefaultCell({ value, row }) {
+//   const isInverted = useInversionStatus(row.original.id)
+//   const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+//     [row?.original?.asset?.id, row?.original?.id])
+//   const { query } = useRouter()
+//   const formattedValue = useMemo(() => {
+//     if (isInverted && parseInt(query.id) === assetId && !isNaN(parseFloat(value))) {
+//       const val = 1 / value
+//       if (value == 0) {
+//         return value
+//       } else {
+//         return isInverted && parseInt(query.id) === assetId ? parseFloat(val).toFixed(6) : value
+//       }
+//     } else {
+//       return value
+//     }
+//   }, [isInverted, value])
+//   return (
+//     <Typography
+//       variant="body_small"
+//       color="gray.000"
+//       className="cursor-default"
+//       title={value}
+//       data-testid="default-cell"
+//     >
+//       {formattedValue}
+//     </Typography>
+//   )
+// }
+// DefaultCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+
+export function InvertableCell({ value, row }) {
+  const isInverted = useInversionStatus(row.original.id)
+  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id])
+  const { query } = useRouter()
+  const {price, amount} = row.original
+  const formattedValue = useMemo(() => {
+    if (isInverted && parseInt(query.id) === assetId) {
+      return parseFloat(amount/(price * amount))?.toFixed(6)
+    } else {
+      return value
+    }
+  }, [isInverted, value])
+  return (
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={formattedValue}
+      data-testid="default-cell"
+    >
+      {formattedValue}
+    </Typography>
+  )
+}
+InvertableCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+
+export function AmountInvertibleCell({ value, row }) {
+  const isInverted = useInversionStatus(row.original.id)
+  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id])
+  const { query } = useRouter()
+  const {price, amount} = row.original
+  const formattedValue = useMemo(() => {
+    if (isInverted && parseInt(query.id) === assetId) {
+      return price * amount
+    } else {
+      return amount
+    }
+  }, [isInverted, value])
+  return (
+    <Typography
+      variant="body_small"
+      color="gray.000"
+      className="cursor-default"
+      title={formattedValue}
+      data-testid="default-cell"
+    >
+      {formattedValue}
+    </Typography>
+  )
+}
+AmountInvertibleCell.propTypes = { value: PropTypes.any, row: PropTypes.object }
+
 export function DefaultCell({ value }) {
   return (
     <Typography

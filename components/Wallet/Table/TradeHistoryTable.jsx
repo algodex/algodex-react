@@ -17,13 +17,14 @@
 import Table, {
   AssetNameCell,
   DefaultCell,
+  InvertableCell,
+  AmountInvertibleCell,
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
-
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withWalletTradeHistoryQuery } from '@/hooks'
@@ -55,22 +56,31 @@ const TableWrapper = styled.div`
  * @constructor
  */
 export function TradeHistoryTable({ orders }) {
-  //console.log(`TradeHistoryTable(`, arguments[0], `)`)
   const { t } = useTranslation('orders')
   const walletOrderHistoryTableState = useUserStore((state) => state.walletOrderHistoryTableState)
   const setWalletOrderHistoryTableState = useUserStore(
     (state) => state.setWalletOrderHistoryTableState
   )
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
+  }, [])
   const _formattedOrders = useMemo(() => {
     return orders.map((order) => {
       const _order = {
         ...order,
-        price: floatToFixedDisplay(order.price)
+        price: floatToFixedDisplay(order.price),
+        isInverted: getInversionStatus()
       }
       return _order
     })
   }, [orders])
-
+  
+  
+  const inversionStatus = getInversionStatus()
   const columns = useMemo(
     () => [
       {
@@ -93,17 +103,17 @@ export function TradeHistoryTable({ orders }) {
       },
 
       {
-        Header: t('price') + ' (ALGO)',
+        Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
-        Cell: DefaultCell
+        Cell: InvertableCell
       },
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: DefaultCell
+        Cell: AmountInvertibleCell
       }
     ],
-    [t]
+    [t, inversionStatus]
   )
 
   return (

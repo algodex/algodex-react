@@ -20,6 +20,7 @@ import { render } from 'test/test-utils'
 import generateAsset from '../../spec/OrderHistory'
 
 expect.extend(matchers)
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 describe('Cell Component', () => {
   it('Should render Table Cell', () => {

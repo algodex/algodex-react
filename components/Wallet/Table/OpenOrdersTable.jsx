@@ -17,6 +17,8 @@
 import Table, {
   AssetNameCell,
   DefaultCell,
+  InvertableCell,
+  AmountInvertibleCell,
   ExpandTradeDetail,
   OrderTypeCell
 } from '@/components/Table'
@@ -52,7 +54,6 @@ const TableWrapper = styled.div`
     display: none;
   }
 `
-
 const OrderCancelButton = styled.button`
   cursor: pointer;
   background: none;
@@ -103,7 +104,13 @@ export function OpenOrdersTable({ orders: _orders }) {
 
   const walletOpenOrdersTableState = useUserStore((state) => state.walletOpenOrdersTableState)
   const setWalletOpenOrdersTableState = useUserStore((state) => state.setWalletOpenOrdersTableState)
-
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
+  }, [])
   const OrderCancelCell = useCallback(
     ({ data, cell }) => {
       const handleCancelOrder = async () => {
@@ -193,7 +200,7 @@ export function OpenOrdersTable({ orders: _orders }) {
     },
     [t, openOrdersData, wallet]
   )
-
+  const inversionStatus = getInversionStatus()
   const columns = useMemo(
     () => [
       {
@@ -210,9 +217,9 @@ export function OpenOrdersTable({ orders: _orders }) {
         Cell: AssetNameCell
       },
       {
-        Header: t('price') + ' (ALGO)',
+        Header: `${t('price')} ${!inversionStatus ? '(ALGO)' : ''}`,
         accessor: 'price',
-        Cell: DefaultCell
+        Cell: InvertableCell
       },
       {
         Header: t('type'),
@@ -222,7 +229,7 @@ export function OpenOrdersTable({ orders: _orders }) {
       {
         Header: t('amount'),
         accessor: 'amount',
-        Cell: DefaultCell
+        Cell: AmountInvertibleCell
       },
       {
         Header: t('status'),
@@ -236,7 +243,7 @@ export function OpenOrdersTable({ orders: _orders }) {
         disableSortBy: true
       }
     ],
-    [t, OrderCancelCell]
+    [t, OrderCancelCell, inversionStatus]
   )
 
   return (

@@ -14,8 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Button from 'components/Button'
-import { Fragment, useCallback } from 'react'
+import { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
@@ -87,12 +86,11 @@ function ChartSettings(props) {
 
   return (
     <Container>
-      <ToggleButtonGroup exclusive="true" value={mode} onChange={onChange}>
+      <ToggleButtonGroup exclusive={true} value={mode} onChange={onChange}>
         <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">Candle</ToggleBtn2>
         <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">Area</ToggleBtn2>
       </ToggleButtonGroup>
-      <ToggleButtonGroup sx={{'marginLeft': '10px'}}
-        exclusive="true" value={interval} onChange={onChange}>
+      <ToggleButtonGroup sx={{'marginLeft': '10px'}} exclusive={true} value={interval} onChange={onChange}>
         {renderTimeIntervals()}
       </ToggleButtonGroup>
     </Container>

@@ -13,11 +13,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import axios from 'axios'
+export const fetchCurrentPrices = async () => {
+  // const url = `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.NEXT_PUBLIC_PORTAL_ID}/${formId}`
+  const url = `https://testnet.analytics.tinyman.org/api/v1/current-asset-prices/`
+  // const config = {
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   }
+  // }
+  const response = await axios
+    .get(url)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      return error
+    })
+
+  return response
+}
 
 import PropTypes from 'prop-types'
 import { formatUSDPrice } from '@/components/helpers'
 import { withAlgorandPriceQuery } from '@/hooks'
 export function USDPrice({ algoPrice, asaWorth, priceToConvert, currency }) {
+  // const res = fetchCurrentPrices()
   return (
     <span data-testid="USDprice-element">
       {currency}

@@ -31,6 +31,7 @@ import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetTradeHistoryQuery } from '@/hooks'
+import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 dayjs.extend(localizedFormat)
 
@@ -126,15 +127,20 @@ const PriceHeaderText = styled(Typography)`
   }
 `
 
-const PriceHeader = () => {
+const PriceHeader = ({ title }) => {
   const { t } = useTranslation('common')
   return (
     <PriceHeaderText variant="body_tiny_cap">
       {t('price')}
-      <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} />
+      {!title ? <Icon color="gray" fillGradient={500} use="algoLogo" size={0.625} /> : <span>&nbsp;{title}</span>}
     </PriceHeaderText>
   )
 }
+
+PriceHeader.propTypes = {
+  title: PropTypes.string
+}
+
 
 /**
  * Asset Trade History
@@ -148,7 +154,7 @@ const PriceHeader = () => {
 export function TradeHistory({ asset, orders: tradesData }) {
   const { t } = useTranslation('common')
   const hasTradeHistory = tradesData.length > 0
-
+  const isInverted = useInversionStatus(asset.id)
   const assetVeryShortName = useMemo(() => assetVeryShortNameFn(asset), [asset])
 
   const renderHistory = useCallback(() => {
@@ -170,7 +176,6 @@ export function TradeHistory({ asset, orders: tradesData }) {
     }
 
     const priceDecimals = getPriceDecimals(avgPrice);
-
     return tradesData
       .sort((a, b) => {
         if (a.timestamp === b.timestamp) {
@@ -180,11 +185,15 @@ export function TradeHistory({ asset, orders: tradesData }) {
       })
       .map((row) => {
         const amount = new Big(row.amount)
+        if (row.price === 0) {
+          return
+        }
+        const price = isInverted ? 1 / row.price : row.price
 
         return (
           <TradesRow key={row.id} type={row.type} data-testid="trade-history-row">
             <Typography variant="price" color={getColor(row.type)} title={row.price} m={0}>
-              {floatToFixed(row.price, priceDecimals, 6)}
+              {floatToFixed(price, priceDecimals, 6)}
             </Typography>
             <Typography
               variant="body_tiny_cap"
@@ -219,9 +228,13 @@ export function TradeHistory({ asset, orders: tradesData }) {
             {t('trade-history')}
           </Typography>
           <Header className="mt-4">
-            <PriceHeader />
-            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+            {/* <PriceHeader /> */}
+            <PriceHeader title={isInverted ? `${assetVeryShortName}` : ''} currencySymbol={isInverted ? `(${assetVeryShortName})` : ''} />
+            {/* <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('amount')} ({assetVeryShortName})
+            </Typography> */}
+            <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
+              {t('amount')} ({isInverted ? 'ALGO' : assetVeryShortName})
             </Typography>
             <Typography variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
               {t('time')}

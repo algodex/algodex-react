@@ -39,6 +39,8 @@ import useDebounce from '@/hooks/useDebounce'
 import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 import useWallets from '@/hooks/useWallets'
+import { StableAssets } from '@/components/StableAssets'
+// import {useInversionStatus} from '@/hooks/utils/useInversionStatus'
 
 /**
  * Fetch Traded Asset Paths
@@ -126,7 +128,9 @@ export async function getStaticProps({ params: { id } }) {
   if (typeof staticAssetPrice.isTraded !== 'undefined') {
     staticExplorerAsset.price_info = staticAssetPrice
   }
-
+  // const isInverted = localStorage.getItem('inversionStatus')
+  // console.log(isInverted, 'hello here')
+  staticExplorerAsset.isInverted = StableAssets.includes(parseInt(id))
   if (typeof staticExplorerAsset.name === 'undefined') {
     staticExplorerAsset.name = ''
   }

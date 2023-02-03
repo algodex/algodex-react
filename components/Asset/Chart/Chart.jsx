@@ -16,7 +16,7 @@
 
 import * as ReactDOM from 'react-dom'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 
 import ChartOverlay from './ChartOverlay'
 import ChartSettings from './ChartSettings'
@@ -26,6 +26,8 @@ import styled from '@emotion/styled'
 import useAreaChart from './hooks/useAreaChart'
 import useCandleChart from './hooks/useCandleChart'
 import { withAssetChartQuery } from '@/hooks'
+import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
+import { useInversionStatus } from '@/hooks/utils/useInversionStatus'
 
 const Container = styled.div`
   position: relative;
@@ -76,42 +78,7 @@ const SettingsContainer = styled.div`
     height: 2.75rem;
   }
 `
-function autoScaleProvider(original, chart, priceData) {
-  let visibleRange = chart.timeScale().getVisibleRange()
-  if (!visibleRange) {
-    return
-  }
-  const rangeStart = visibleRange.from
-  const rangeEnd = visibleRange.to
-  let max = 0
-  let min = -1
-  for (let i = 0; i < priceData.length; i++) {
-    const priceItem = priceData[i]
-    if (priceItem.time < rangeStart) {
-      continue
-    }
-    max = Math.max(priceItem.close, max)
-    max = Math.max(priceItem.open, max)
-    max = Math.max(priceItem.high, max)
-    if (min === -1) {
-      min = priceItem.open
-    }
-    min = Math.min(priceItem.close, min)
-    min = Math.min(priceItem.low, min)
-    min = Math.min(priceItem.open, min)
-    if (priceItem.time > rangeEnd) {
-      break
-    }
-  }
 
-  const res = original()
-  if (res !== null && min !== -1) {
-    res.priceRange.maxValue = max
-    res.priceRange.minValue = min
-  }
-
-  return res
-}
 export function Chart({
   asset,
   interval: _interval,
@@ -126,6 +93,30 @@ export function Chart({
   const [overlay, setOverlay] = useState(_overlay)
   const [chartMode, setChartMode] = useState(_mode)
   const [currentLogical, setCurrentLogical] = useState(ohlc.length - 1)
+  const isInverted = useInversionStatus(asset.id)
+  // console.log(isInverted, 'is inverted')
+  const formatedPriceData = useMemo(
+    () => {
+      if (isInverted) {
+        const formatedPriceClone = [...ohlc]
+        const formattedPrice = formatedPriceClone.reduce(
+          (accumulator, currentValue) => {
+            accumulator.push({
+              ...currentValue,
+              close: currentValue.close !== 0 ? floatToFixed(1 / currentValue.close) : 'Invalid',
+              high: currentValue.high !== 0 ? floatToFixed(1 / currentValue.high) : 'Invalid',
+              low: currentValue.low !== 0 ? floatToFixed(1 / currentValue.low) : 'Invalid',
+              open: currentValue.open !== 0 ? floatToFixed(1 / currentValue.open) : 'Invalid'
+            })
+            return accumulator
+          }, []);
+        return formattedPrice
+      } else {
+        return ohlc
+      }
+    },
+    [isInverted, ohlc],
+  )
 
   useEffect(() => {
     setOverlay(_overlay)
@@ -143,9 +134,45 @@ export function Chart({
   const candleChartRef = useRef()
   const areaChartRef = useRef()
 
-  const { candleChart } = useCandleChart(candleChartRef, volume, ohlc, autoScaleProvider)
-  const { areaChart } = useAreaChart(areaChartRef, ohlc, autoScaleProvider)
+  const autoScaleProvider = useCallback((original, chart, priceData) => {
+    let visibleRange = chart.timeScale().getVisibleRange()
+    if (!visibleRange) {
+      return
+    }
+    const rangeStart = visibleRange.from
+    const rangeEnd = visibleRange.to
+    let max = 0
+    let min = -1
+    for (let i = 0; i < priceData.length; i++) {
+      const priceItem = priceData[i]
+      if (priceItem.time < rangeStart) {
+        continue
+      }
+      max = Math.max(priceItem.close, max)
+      max = Math.max(priceItem.open, max)
+      max = Math.max(priceItem.high, max)
+      if (min === -1) {
+        min = priceItem.open
+      }
+      min = Math.min(priceItem.close, min)
+      min = Math.min(priceItem.low, min)
+      min = Math.min(priceItem.open, min)
+      if (priceItem.time > rangeEnd) {
+        break
+      }
+    }
 
+    const res = original()
+    if (res !== null && min !== -1) {
+      res.priceRange.maxValue = max
+      res.priceRange.minValue = min
+    }
+
+    return res
+  }, [])
+
+  const { candleChart } = useCandleChart(candleChartRef, volume, formatedPriceData, autoScaleProvider)
+  const { areaChart } = useAreaChart(areaChartRef, formatedPriceData, autoScaleProvider)
   const onSettingsChange = useCallback(
     (e) => {
       if (e?.target?.name === 'mode') {
@@ -170,6 +197,16 @@ export function Chart({
       if (ohlc == null || volume == null) {
         return
       }
+      // if (asset.isInverted) {
+      //   if (ohlc == null || algoVolume == null) {
+      //     return
+      //   }
+      // } else {
+      //   if (ohlc == null || volume == null) {
+      //     return
+      //   }
+      // }
+
       const priceEntry = ohlc[logical]
       const volumeEntry = volume[logical]
 
@@ -183,7 +220,13 @@ export function Chart({
   )
 
   const mouseOut = useCallback(() => {
-    setOverlay(_overlay)
+    // setOverlay(_overlay)
+    if (isInverted) {
+      const __overlay = { ...overlay, ..._overlay }
+      setOverlay(__overlay)
+    } else {
+      setOverlay(_overlay)
+    }
   }, [setOverlay, _overlay])
 
   const mouseMove = useCallback(
@@ -203,6 +246,18 @@ export function Chart({
         return
       }
 
+      // if (isInverted) {
+      //   if (logical >= ohlc.length || logical >= algoVolume.length) {
+      //     // setOverlay(_overlay)
+      //     return
+      //   }
+      // } else {
+      //   if (logical >= ohlc.length || logical >= volume.length) {
+      //     // setOverlay(_overlay)
+      //     return
+      //   }
+      // }
+
       if (logical !== currentLogical) {
         setCurrentLogical(logical)
         updateHoverPrices(logical)
@@ -218,6 +273,7 @@ export function Chart({
       setCurrentLogical,
       updateHoverPrices,
       volume,
+      asset.isInverted,
       ohlc
     ]
   )
@@ -248,6 +304,7 @@ export function Chart({
           ask={overlay.orderbook.ask}
           spread={overlay.orderbook.spread}
           volume={overlay.volume}
+        // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
         />
       )}
       {typeof overlay.ohlc === 'undefined' && (
@@ -258,6 +315,7 @@ export function Chart({
           ask={_overlay.orderbook.ask}
           spread={_overlay.orderbook.spread}
           volume={_overlay.volume}
+        // volume={asset.isInverted ? overlay.algoVolume : overlay.volume}
         />
       )}
       <SettingsContainer>
@@ -270,7 +328,8 @@ export function Chart({
 Chart.propTypes = {
   asset: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    isInverted: PropTypes.bool
   }).isRequired,
   interval: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,

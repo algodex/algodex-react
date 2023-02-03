@@ -17,16 +17,17 @@
 // import { BodyCopy, HeaderSmInter, LabelLg } from '@/components/Typography'
 
 import { Stack, Typography } from '@mui/material'
-import { useCallback, useMemo } from 'react'
-
+import { useMemo, useCallback } from 'react'
 import Icon from '@mdi/react'
 import PropTypes from 'prop-types'
 import Spinner from '@/components/Spinner'
-import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+// import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 import { formatUSDPrice } from '@/components/helpers'
 import { mdiApproximatelyEqual } from '@mdi/js'
 import { withAlgorandPriceQuery } from '@/hooks'
+import InvertedUSDInputPrice from '@/components/Wallet/PriceConversion/InvertedUSDInputPrice'
+import { StableAssets } from '@/components/StableAssets'
 
 const getPriceDecimals = (price) => {
   if (price >= 10000) {
@@ -40,34 +41,53 @@ const getPriceDecimals = (price) => {
 }
 
 const Loading = () => <Stack
-  sx={{ width: '100%'}}
+  sx={{ width: '100%' }}
   direction="row"
   justifyContent="center"
   alignItems="center"
 ><Spinner size={2} /></Stack>
 
-const PriceInfoView = ({asaValue, algoPrice, asset}) => {
+const PriceInfoView = ({ asaValue, algoPrice, asset }) => {
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
+  }, [])
+
+  const formattedAsaValue = getInversionStatus() ? (1 / asaValue).toFixed(asset.decimals) : asaValue
+  // console.log(asaValue, 'asa value here')
+
   return useMemo(() => {
     return (
       <>
         <Typography variant="h5" color="white">
-          {asaValue}
+          {formattedAsaValue}
         </Typography>
         {asset && asset.price_info && (
           <Typography className="ml-3" data-testid="price-info">
-            {(asset?.price_info?.price24Change &&
-              `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) ||
-              '0.00%'}
+            {(asset?.price_info?.price24Change && `${floatToFixed(asset?.price_info?.price24Change, 2)}%`) || '0.00%'}
           </Typography>
         )}
-        <div className="flex items-center ml-4 text-gray-500">
+        {getInversionStatus() && StableAssets.includes(asset.id) &&
+          <div className="flex items-center ml-4 text-gray-500">
+            <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
+            <Typography variant="subtitle_small_bold">
+              <InvertedUSDInputPrice priceToConvert={formattedAsaValue} id="price" />
+            </Typography>
+          </div>
+        }
+        {!getInversionStatus() && <div className="flex items-center ml-4 text-gray-500">
           <Icon className="m-0 p-0" path={mdiApproximatelyEqual} title="Approximately" size={0.7} />
           <Typography variant="subtitle_small_bold">
-            ${formatUSDPrice(algoPrice * asaValue)}
+            ${formatUSDPrice(algoPrice * formattedAsaValue)}
           </Typography>
         </div>
+        }
       </>
-  )}, [asaValue, algoPrice, asset])
+    )
+  }, [formattedAsaValue, asaValue, algoPrice, asset])
 }
 
 PriceInfoView.propTypes = {
@@ -78,7 +98,7 @@ PriceInfoView.propTypes = {
 export function OrderBookPriceInfo({ algoPrice, asset }) {
   const decimals = getPriceDecimals(asset?.price_info?.price || 0)
   const asaValue = floatToFixed(asset?.price_info?.price || 0, decimals, 6)
-  return typeof asset?.price_info === 'undefined' ? <Loading/> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
+  return typeof asset?.price_info === 'undefined' ? <Loading /> : <PriceInfoView asaValue={asaValue} algoPrice={algoPrice} asset={asset} />
 }
 
 OrderBookPriceInfo.propTypes = {

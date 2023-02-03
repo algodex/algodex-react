@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { addListener, removeListener } from 'resize-detector'
 import theme from '@/theme/index'
 import moment from 'moment'
@@ -118,7 +118,8 @@ export default function useAreaChart(containerRef, priceData, autoScaleProvider)
 
   useEffect(() => {
     if (areaChart) {
-      const areaSeriesData = priceData?.map(({ time, close }) => ({
+      const areaPriceData = priceData
+      const areaSeriesData = areaPriceData?.map(({ time, close }) => ({
         time,
         value: close
       }))

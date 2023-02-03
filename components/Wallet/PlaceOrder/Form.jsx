@@ -37,6 +37,7 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { current } from 'immer'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -97,7 +98,6 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const { wallet, placeOrder, http, isConnected } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
-
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
     const _decimals = decimal > 6 ? 6 : decimal
@@ -105,6 +105,14 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       return parseFloat(value).toFixed(_decimals)
     }
     return parseFloat(value)
+  }, [])
+
+  const getInversionStatus = useCallback(() => {
+    const inversionStatus = localStorage.getItem('inversionStatus')
+    if (inversionStatus && inversionStatus === 'true') {
+      return true
+    }
+    return false
   }, [])
 
   const assetBalance = useMemo(() => {
@@ -118,15 +126,18 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return res
   }, [wallet, asset])
 
+  const maxSpendableAlgo = useMaxSpendableAlgo()
+
   const algoBalance = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-      res = fromBaseUnits(wallet.amount)
+      res = fromBaseUnits(maxSpendableAlgo)
+      // res = fromBaseUnits(wallet.amount)
     }
     return res
-  }, [wallet])
+  }, [maxSpendableAlgo, wallet])
 
-  const getAdjOrderAmount = useCallback(({ amount, type, price }) => {
+  const getAdjOrderAmount = useCallback(({amount, type, price}) => {
     let adjAmount = amount || 0
     let total = adjAmount * price
     if (type === 'buy' && total > algoBalance) {
@@ -154,14 +165,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     // currentState.price = formatFloat(currentState.price, 6) || ''
 
     const amount = getAdjOrderAmount(currentState)
-
+    currentState.amount = amount
     // Amount should be based on asset decimals
     // currentState.amount = formatFloat(amount, asset.decimals) || ''
 
     const price = currentState.price || 0
 
     const total = parseFloat(amount) * parseFloat(price)
-
     // Set Order Total precision
     currentState.total = formatFloat(total, 6)
 
@@ -232,14 +242,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       setOrder(order)
     }
   }, [])
-
-  const buttonProps = useMemo(
-    () => ({
-      buy: { variant: 'primary', text: `${t('buy')} ${asset.name || asset.id}` },
-      sell: { variant: 'danger', text: `${t('sell')} ${asset.name || asset.id}` }
-    }),
-    [asset]
-  )
+  
+  const buttonProps = useCallback(
+    (key) => {
+      const isInverted = getInversionStatus()
+      const btnProps = {
+        buy: {
+          variant: 'primary',
+          text: `${t('buy')} ${(isInverted ? 'ALGO' : asset.name) || asset.id}`
+        },
+        sell: {
+          variant: 'danger',
+          text: `${t('sell')} ${(isInverted ? 'ALGO' : asset.name) || asset.id}`
+        }
+      }
+      return btnProps[key]?.text
+    }, [asset])
 
   useEvent('clicked', (data) => {
     if (data.type === 'order') {
@@ -280,18 +298,33 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
     return 0
   }, [order.price, order.amount, algoBalance, assetBalance])
-
-  const maxSpendableAlgo = useMaxSpendableAlgo()
-
-  const hasBalance = useMemo(() => {
+  
+  const hasBalance = useCallback(() => {
+    const isInverted = getInversionStatus()
     if (order.type === 'sell') {
+      if (isInverted) {
+        return maxSpendableAlgo
+      }
       return assetBalance > 0
     }
     if (order.type === 'buy') {
+      if (isInverted) {
+        return assetBalance > 0
+      }
       return maxSpendableAlgo
     }
     return false
   }, [order.type, assetBalance, maxSpendableAlgo])
+
+  const hasTradeableAsset = useCallback(() => {
+    const isInverted = getInversionStatus()
+    if (isInverted) {
+      return order.total > assetBalance
+    } else {
+      return order.total > maxSpendableAlgo
+    }
+  }, [order, assetBalance, maxSpendableAlgo])
+  
 
   const isBelowMinOrderAmount = useMemo(() => {
     if (order.type === 'buy') {
@@ -367,10 +400,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault()
-      const formattedOrder = { ...order }
-      formattedOrder.price = formatFloat(formattedOrder.price, 6)
-      formattedOrder.amount = formatFloat(formattedOrder.amount, asset.decimals)
-
+      const isInverted = getInversionStatus()
+      const formattedOrder = { ...order, type: isInverted ? order.type === 'buy' ? 'sell' : 'buy' : order.type }
+      const invertedOrderAmount = (formattedOrder.price/(formattedOrder.price))*order.price * order.amount
+      formattedOrder.price = isInverted ? parseFloat(formatFloat(1/formattedOrder.price, 6)) : formatFloat(formattedOrder.price, 6)
+      formattedOrder.amount = isInverted ? parseFloat(formatFloat(invertedOrderAmount, asset.decimals)) : formatFloat(formattedOrder.amount, asset.decimals)
+      formattedOrder.total = parseFloat(order.total)
+      
       let lastToastId = undefined
       let orderPromise
       const notifier = (msg) => {
@@ -517,12 +553,12 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             <Tab label={t('market')} />
           </Tabs>
           {/*</TabsUnstyled>*/}
-          {!hasBalance && (
+          {!hasBalance() && (
             <Typography color="gray.500" textAlign="center" className="m-8">
               {t('insufficient-balance')}
             </Typography>
           )}
-          {hasBalance && (
+          {hasBalance() && (
             <TradeInputs
               handleChange={handleChange}
               updateAmount={handleSlider}
@@ -539,10 +575,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
             variant={order.type === 'buy' ? 'primary' : 'sell'}
             fullWidth
             disabled={
-              asset.isGeoBlocked || !hasBalance || order.total === 0 || isBelowMinOrderAmount
+              asset.isGeoBlocked || !hasBalance() || hasTradeableAsset() || order.total === 0 || isBelowMinOrderAmount
             }
           >
-            {buttonProps[order.type || 'buy']?.text}
+            {/* {buttonProps[order.type || 'buy']?.text} */}
+            {buttonProps(order.type || 'buy')}
           </Button>
         </Form>
       )}
@@ -582,7 +619,8 @@ PlaceOrderForm.propTypes = {
     id: PropTypes.number.isRequired,
     decimals: PropTypes.number.isRequired,
     name: PropTypes.string,
-    isGeoBlocked: PropTypes.bool
+    isGeoBlocked: PropTypes.bool,
+    isInverted: PropTypes.bool
   }).isRequired,
   /**
    * Wallet to execute Orders from

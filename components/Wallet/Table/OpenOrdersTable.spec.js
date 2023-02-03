@@ -22,6 +22,7 @@ const OPEN_ORDER_ROW = 'cancel-order-button'
 const wallet = {
   address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
 }
+jest.mock('next/dist/client/router', () => require('next-router-mock'))
 
 describe('OpenOrders', () => {
   it('should not show any rows if no data is provided', () => {

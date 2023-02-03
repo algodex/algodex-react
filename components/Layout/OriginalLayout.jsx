@@ -210,7 +210,7 @@ function MainLayout({ asset, children }) {
         <AssetTradeHistorySection>
           <TradeHistory asset={asset} />
         </AssetTradeHistorySection>
-        <WalletOrdersSection>
+          <WalletOrdersSection>
           <Orders asset={asset} />
         </WalletOrdersSection>
       </Main>
