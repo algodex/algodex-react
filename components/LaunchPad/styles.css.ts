@@ -54,5 +54,49 @@ export const styles = {
     ['@media(max-width:600px)']: {
       fontSize: '1.5rem'
     }
+  },
+  dateBox: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent:'space-between',
+    opacity: '0.8',
+    flexWrap: 'wrap',
+    columnGap: '6px',
+    border: '1px solid',
+    borderColor: 'gray.250',
+    padding: '7px 9px',
+    borderRadius: '4px',
+    width:'100%',
+    span: {
+      fontStyle: 'italic'
+    },
+    input: {
+      width: '220px',
+      backgroundColor: 'transparent',
+      border: 'none',
+      boxShadow: 'none',
+      color: 'white',
+      outline: 0,
+      '&::placeholder': {
+        color: 'gray.250'
+      },
+      '&::before': {
+        content: 'attr(data-placeholder)',
+        width: '100%'
+      },
+      '&:valid::before': {
+        display: 'none'
+      },
+      '&:focus::before': {
+        display: 'none'
+      },
+      '&::-webkit-calendar-picker-indicator': {
+        color: 'red.400',
+        width: '25px',
+        height: '25px',
+        filter: 'invert(1)',
+        opacity: '0.8'
+      }
+    }
   }
 }

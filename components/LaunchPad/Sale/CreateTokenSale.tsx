@@ -27,6 +27,8 @@ import Box from '@mui/material/Box'
 import Button from '@/components/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
+import { Icon } from '@iconify/react'
+import { DateTimePickers } from '../dateTimePickers'
 
 const initialValues = {
   assetId: '',
@@ -38,7 +40,6 @@ const initialValues = {
 
 export const CreateTokenSale = () => {
   const [loading, setLoading] = useState(false)
-
   const [formData, setFormData] = useState(initialValues)
   const { assetId, quantity, perUnit, startDate, endDate } = formData
 
@@ -140,23 +141,15 @@ export const CreateTokenSale = () => {
             Set Timing of Sale:
           </Typography>
           <Box className="mb-4 px-4">
-            <OutlinedInput
-              type="date"
-              placeholder="Token Sale Start Date : yyyy-mm-dd-hh-mm-ss"
-              name="startDate"
-              value={startDate}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
-              className="mb-6"
-            />
-            <OutlinedInput
-              type="date"
-              placeholder="Token Sale End Date : yyyy-mm-dd-hh-mm-ss"
-              name="endDate"
-              value={endDate}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
-            />
+            <Box className="mb-6" sx={styles.dateBox}>
+              <span>Token Sale Start Date :</span>
+              <DateTimePickers name="startDate" value={startDate} onChange={(e) => onChange(e)} />
+            </Box>
+            <Box className="mb-6" sx={styles.dateBox}>
+              <span>Token Sale End Date :</span>
+              <DateTimePickers name="endDate" value={endDate} onChange={(e) => onChange(e)} />
+            </Box>
+           
             <Typography className="my-5 text-center" sx={{ fontSize: '15px', fontStyle: 'italic' }}>
               Sale length = 7 days, 6 hours
             </Typography>
