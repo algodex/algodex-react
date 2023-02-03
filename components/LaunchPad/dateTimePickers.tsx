@@ -9,12 +9,12 @@ export const DateTimePickers = ({
   value: string | number | readonly string[]
   onChange: (e: unknown) => void
 }) => {
-//   const datePicker = document ? document.querySelector('-webkit-calendar-picker-indicator'):null
+  //   const datePicker = document ? document.querySelector('-webkit-calendar-picker-indicator'):null
 
-  const displayPicker = () => {
-//     console.log(datePicker)
-    // datePicker.click()
-  }
+  //   const displayPicker = () => {
+  // //     console.log(datePicker)
+  //     // datePicker.click()
+  //   }
   return (
     <>
       <input
@@ -22,7 +22,7 @@ export const DateTimePickers = ({
         data-placeholder="yyyy-mm-dd-hh-mm-ss"
         required
         aria-required="true"
-        onClick={displayPicker}
+        //         onClick={displayPicker}
         name={name}
         value={value}
         onChange={onChange}
