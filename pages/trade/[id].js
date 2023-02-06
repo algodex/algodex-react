@@ -273,7 +273,6 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     }
 
     if (
-      addressesNew.length === 0 &&
       Array.isArray(_myAlgoAddresses) &&
       _myAlgoAddresses.length > 0 &&
       myAlgoConnector !== null
@@ -295,7 +294,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       getIsRestrictedCountry(query) && staticExplorerAsset.isRestricted
   }
   const [interval, setInterval] = useState('1h')
-  const [asset, setAsset] = useState({...realStaticExplorerAsset})
+  const [asset, setAsset] = useState({ ...realStaticExplorerAsset })
 
   const _asset = useMemo(() => {
     if (
@@ -357,10 +356,34 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     if (isFallback) return <Spinner flex />
     // Render AssetInfo if showAssetInfo is selected or the asset is not traded
     if (showAssetInfo || !isTraded) {
-      return asset.total === 1 ? <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/> : <AssetInfo asset={asset} /> 
-    } else return activeView === 'chart' ? <Chart setActiveView={setActiveView} activeView={activeView} asset={asset} interval={interval} onChange={onChange} /> : <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset}/>
-  }, [activeView, asset, asset?.id, asset?.name, 
-      interval, isFallback, isTraded, onChange, showAssetInfo])
+      return asset.total === 1 ? (
+        <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset} />
+      ) : (
+        <AssetInfo asset={asset} />
+      )
+    } else
+      return activeView === 'chart' ? (
+        <Chart
+          setActiveView={setActiveView}
+          activeView={activeView}
+          asset={asset}
+          interval={interval}
+          onChange={onChange}
+        />
+      ) : (
+        <NFTView activeView={activeView} setActiveView={setActiveView} asset={asset} />
+      )
+  }, [
+    activeView,
+    asset,
+    asset?.id,
+    asset?.name,
+    interval,
+    isFallback,
+    isTraded,
+    onChange,
+    showAssetInfo
+  ])
 
   return useMemo(() => {
     return (
