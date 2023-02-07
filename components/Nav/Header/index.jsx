@@ -24,7 +24,7 @@ import {
   NavTextSmWrapper,
   Navigation
 } from './header.css'
-import { useCallback, useState } from 'react'
+// import { useCallback, useState } from 'react'
 
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
@@ -37,9 +37,14 @@ import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { getActiveNetwork } from 'services/environment'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
+// import useMobileDetect from '@/hooks/useMobileDetect'
+// import useTranslation from 'next-translate/useTranslation'
+// import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
+import { useState, useContext, useCallback } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+// import useWallets from '@/hooks/useWallets'
 
 //MUI Components
 import Menu from '@mui/material/Menu'
@@ -67,7 +72,10 @@ export function Header() {
   const openMenu = Boolean(anchorEl)
 
   const activeNetwork = getActiveNetwork()
-  const { wallet } = useWallets()
+  // const { wallet } = useWallets()
+  // const { wallet } = useAlgodex()
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+
   const isMobile = useMobileDetect()
 
   const handleClickMenu = (event) => {

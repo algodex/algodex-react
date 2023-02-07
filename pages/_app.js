@@ -36,7 +36,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 // Material UI
 import { ThemeProvider } from '@mui/material/styles'
 import { Toaster } from 'react-hot-toast'
-import { WalletsProvider } from '@/hooks/useWallets'
+import { WalletsReducerProvider } from '../hooks/WalletsReducerProvider'
 
 import createEmotionCache from '@/utils/createEmotionCache'
 import parser from 'ua-parser-js'
@@ -127,14 +127,14 @@ function Algodex(props) {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Global styles={styles} />
-              <WalletsProvider>
+              <WalletsReducerProvider>
                 <Provider dex={makeApi()}>
                   {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                   <Toaster />
                   <ReactQueryDevtools initialIsOpen={false} />
                   {getLayout(<Component {...pageProps} />)}
                 </Provider>
-              </WalletsProvider>
+              </WalletsReducerProvider>
             </ThemeProvider>
           </CacheProvider>
         </EventEmitter>
