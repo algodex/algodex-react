@@ -185,17 +185,16 @@ export function Header() {
             aria-expanded={openMenu ? 'true' : undefined}
             onClick={handleClickMenu}
           >
-              <NavActiveLink href="#!" matches={/^\/launchpad/}>
-
-            <NavTextLgWrapper isMobile={isMobile}>
-              <Typography variant="navText" sx={{ display: 'flex', alignItems: 'center' }}>
-                <span>APPS</span>
-                <Icon
-                  icon={openMenu ? 'pepicons-pop:angle-up' : 'pepicons-pop:angle-down'}
-                  fontSize={'18px'}
-                />
-              </Typography>
-            </NavTextLgWrapper>
+            <NavActiveLink href="#!" matches={/^\/launchpad/}>
+              <NavTextLgWrapper isMobile={isMobile}>
+                <Typography variant="navText" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <span>APPS</span>
+                  <Icon
+                    icon={openMenu ? 'pepicons-pop:angle-up' : 'pepicons-pop:angle-down'}
+                    fontSize={'18px'}
+                  />
+                </Typography>
+              </NavTextLgWrapper>
             </NavActiveLink>
           </Button>
           <Menu
