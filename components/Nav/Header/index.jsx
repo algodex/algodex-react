@@ -25,7 +25,7 @@ import {
   NavTextSmWrapper,
   Navigation
 } from './header.css'
-import { useCallback, useState } from 'react'
+// import { useCallback, useState } from 'react'
 
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
@@ -38,9 +38,16 @@ import WalletConnectDropdown from 'components/Wallet/Connect/WalletDropdown'
 import { getActiveNetwork } from 'services/environment'
 import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
-import useMobileDetect from '@/hooks/useMobileDetect'
-import useTranslation from 'next-translate/useTranslation'
+// import useMobileDetect from '@/hooks/useMobileDetect'
+// import useTranslation from 'next-translate/useTranslation'
 import useWallets from '@/hooks/useWallets'
+// import { useAlgodex } from '@algodex/algodex-hooks'
+import useMobileDetect from '@/hooks/useMobileDetect'
+import { useState, useContext, useCallback } from 'react'
+import useTranslation from 'next-translate/useTranslation'
+import useUserStore from 'store/use-user-state'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+// import useWallets from '@/hooks/useWallets'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -53,7 +60,10 @@ export function Header() {
   const { t } = useTranslation('common')
   const activeNetwork = getActiveNetwork()
 
-  const { wallet } = useWallets()
+  // const { wallet } = useWallets()
+  // const { wallet } = useAlgodex()
+  const { activeWallet: wallet } = useContext(WalletReducerContext)
+
   const isMobile = useMobileDetect()
 
   useEvent('connecting-wallet', (data) => {
@@ -85,53 +95,47 @@ export function Header() {
   return (
     <Container className="flex" data-testid="header-container">
       <Stack direction="row" alignItems="center" justifyContent="center">
-      <Link href="/trade">
-        <a>
-          <InlineLogo src="/logo-inline-dark.svg" />
-          <IconLogo src="/logo-icon-dark.svg" />
-        </a>
-      </Link>
-      &nbsp;
-      <FormControl className='ml-2 sm:ml-2 md:ml-4 lg:ml-6' sx={{ minWidth: 100 }} size="small">
-        <Select
-          variant="filled"
-          data-testid="header-network-dropdown-element"
-          labelId="demo-select-small"
-          id="demo-select-small"
-          value={activeNetwork}
-          onChange={(e) => handleNetworkChangeFn(e.target.value)}
-          sx={{
-            color: activeNetwork == 'mainnet' ? 'blue.500' : 'green.500',
-            borderRadius: '3px',
-            border: 0,
-            outline: '2px solid',
-            '& .MuiSelect-icon': {
-              fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
-              color: `unset !important`
-            }
-          }}
-          inputProps={{
-            sx: {
-              padding: '0.1rem 0.4rem',
-              fontSize: '14px',
-              fontWeight: 'bolder'
-            }
-          }}
-        >
-          <MenuItem
-            value="testnet"
-            sx={{ color: 'gray.300' }}
+        <Link href="/trade">
+          <a>
+            <InlineLogo src="/logo-inline-dark.svg" />
+            <IconLogo src="/logo-icon-dark.svg" />
+          </a>
+        </Link>
+        &nbsp;
+        <FormControl className="ml-2 sm:ml-2 md:ml-4 lg:ml-6" sx={{ minWidth: 100 }} size="small">
+          <Select
+            variant="filled"
+            data-testid="header-network-dropdown-element"
+            labelId="demo-select-small"
+            id="demo-select-small"
+            value={activeNetwork}
+            onChange={(e) => handleNetworkChangeFn(e.target.value)}
+            sx={{
+              color: activeNetwork == 'mainnet' ? 'blue.500' : 'green.500',
+              borderRadius: '3px',
+              border: 0,
+              outline: '2px solid',
+              '& .MuiSelect-icon': {
+                fill: `${activeNetwork == 'mainnet' ? 'blue.500' : 'green.500'} !important`,
+                color: `unset !important`
+              }
+            }}
+            inputProps={{
+              sx: {
+                padding: '0.1rem 0.4rem',
+                fontSize: '14px',
+                fontWeight: 'bolder'
+              }
+            }}
           >
-            TESTNET
-          </MenuItem>
-          <MenuItem
-            sx={{ color: 'gray.300' }}
-            value="mainnet"
-          >
-            MAINNET
-          </MenuItem>
-        </Select>
-      </FormControl>
+            <MenuItem value="testnet" sx={{ color: 'gray.300' }}>
+              TESTNET
+            </MenuItem>
+            <MenuItem sx={{ color: 'gray.300' }} value="mainnet">
+              MAINNET
+            </MenuItem>
+          </Select>
+        </FormControl>
       </Stack>
       {!isMobile && (
         <Navigation data-testid="header-navigation-element">
@@ -169,7 +173,7 @@ export function Header() {
             onClick={() => {
               setOpenWalletConnectDropdown(!openWalletConnectDropdown)
             }}
-            sx={{ minWidth: '4rem'}}
+            sx={{ minWidth: '4rem' }}
             className="md:text-xs sm:text-xs lg:text-md font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
@@ -183,11 +187,12 @@ export function Header() {
           <LanguageSelection isMobile={isMobile} />
         </Navigation>
       )}
-      {isMobile && <Stack direction="row" alignItems="center" justifyContent="center">
-        <LanguageSelection isMobile={isMobile} />
-        <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
-      </Stack>
-      }
+      {isMobile && (
+        <Stack direction="row" alignItems="center" justifyContent="center">
+          <LanguageSelection isMobile={isMobile} />
+          <Hamburger className="ml-4" onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+        </Stack>
+      )}
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
           <NavActiveLink href="/trade" matches={/^\/trade/}>
@@ -226,6 +231,3 @@ Header.propTypes = {
 }
 
 export default Header
-
-
-

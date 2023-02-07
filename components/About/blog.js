@@ -146,7 +146,7 @@ const BlogPreview = ({ staticBlogPosts }) => {
           ))}
         </div>
         <div className="text-center my-9">
-          <a href="https://about.algodex.com/blog/" target="_blank" rel="noreferrer">
+          <a href="https://about.algodex.com/blog/" target="_blank" rel="noreferrer" className='no-underline'>
             <MoreButton>{t('View More Posts')}</MoreButton>
           </a>
         </div>

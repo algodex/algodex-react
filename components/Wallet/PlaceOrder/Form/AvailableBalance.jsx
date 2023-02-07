@@ -6,7 +6,7 @@ import { Stack } from '@mui/material'
 import Tooltip from '@/components/Tooltip'
 import Typography from '@mui/material/Typography'
 import USDPrice from '../../PriceConversion/USDPrice'
-import convertFromAsaUnits from '@algodex/algodex-sdk/lib/utils/units/fromAsaUnits'
+
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
 /* 
  * Algodex Frontend (algodex-react) 
@@ -25,8 +25,8 @@ import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
  */
 import fromBaseUnits from '@algodex/algodex-sdk/lib/utils/units/fromBaseUnits'
 import styled from '@emotion/styled'
-import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
-import { useMemo } from 'react'
+import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
+import { useMemo, useEffect } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import { withAssetPriceQuery } from '@/hooks'
 
@@ -68,7 +68,7 @@ const IconButton = styled.button`
 
 export const AvailableBalance = ({ wallet, asset }) => {
   const { t } = useTranslation('place-order')
-  const maxSpendableAlgo = useMaxSpendableAlgo()
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(wallet)
   const assetValue = useMemo(() => {
     let res = 0
     if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
@@ -80,13 +80,10 @@ export const AvailableBalance = ({ wallet, asset }) => {
     return res
   }, [wallet, asset])
 
-  const calcAsaWorth = useMemo(
-    () => {
-      const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
-      return _calcAsaWorth
-    },
-    [asset]
-  )
+  const calcAsaWorth = useMemo(() => {
+    const _calcAsaWorth = floatToFixed(asset?.price_info?.price || 0)
+    return _calcAsaWorth
+  }, [asset])
 
   return (
     <AvailableBalanceContainer>
@@ -164,7 +161,11 @@ export const AvailableBalance = ({ wallet, asset }) => {
             {fromBaseUnits(assetValue, asset.decimals)}
           </Typography>
           <Typography className="leading-5" color="gray.400" variant="body_tiny_cap">
-            <USDPrice asaWorth={parseFloat(calcAsaWorth)} priceToConvert={fromBaseUnits(assetValue, asset.decimals)} currency="$" />
+            <USDPrice
+              asaWorth={parseFloat(calcAsaWorth)}
+              priceToConvert={fromBaseUnits(assetValue, asset.decimals)}
+              currency="$"
+            />
           </Typography>
         </Stack>
       </Stack>

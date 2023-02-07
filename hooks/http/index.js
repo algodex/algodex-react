@@ -25,3 +25,4 @@ export * from './useWalletAssetsQuery.js';
 export * from './useWalletMinBalanceQuery.js';
 export * from './useWalletOrdersQuery.js';
 export * from './useWalletTradeHistoryQuery.js';
+export * from './useNFTDetails.js';
