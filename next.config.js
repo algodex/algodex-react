@@ -45,6 +45,9 @@ const moduleExports =
     //   externalDir: true
     // },
     reactStrictMode: true,
+    images : {
+      domains : ['ipfs.algonft.tools', 'localhost'] // <== Domain name
+    },
     pwa: {
       dest: 'public',
       disable: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'

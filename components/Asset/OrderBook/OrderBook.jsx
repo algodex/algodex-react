@@ -16,7 +16,7 @@
 // import '@/wdyr';
 
 import { ArrowDown, ArrowUp } from 'react-feather'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState, useContext } from 'react'
 // import { Typography, Typography, Typography, Typography } from '@/components/Typography'
 import { useAlgodex, withAssetOrderbookQuery, withAssetPriceQuery } from '@/hooks'
 
@@ -38,7 +38,7 @@ import { isUndefined } from 'lodash/lang'
 import { rgba } from 'polished'
 import styled from '@emotion/styled'
 import { useEventDispatch } from '@/hooks/useEvents'
-import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 import useTranslation from 'next-translate/useTranslation'
 import useUserState from 'store/use-user-state'
 import { useRouter } from 'next/router'
@@ -47,6 +47,7 @@ import {
   getIsRestricted,
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
 
 const FirstOrderContainer = styled.div`
   flex: 1 1 0;
@@ -308,7 +309,7 @@ const DECIMALS_MAP = {
   0.001: 3,
   0.01: 2,
   0.1: 1
-};
+}
 
 /**
  * Recipe: Orderbook Component
@@ -321,23 +322,29 @@ const DECIMALS_MAP = {
  * @returns {JSX.Element}
  * @constructor
  */
- export function OrderBook({ asset, orders, components, isMobile }) {
+export function OrderBook({ asset, orders, components, isMobile }) {
   const { query } = useRouter()
   const { PriceDisplay } = components
   const { t } = useTranslation('common')
   const { decimals } = asset
-  const { isConnected } = useAlgodex()
-  const isSignedIn = isConnected
+  // const { isConnected } = useAlgodex()
+  const { activeWallet } = useContext(WalletReducerContext)
+  // const isConnected = activeWallet ? true : false
+
+  const isSignedIn = activeWallet ? true : false
   const cachedSelectedPrecision = useUserState((state) => state.cachedSelectedPrecision)
   const setCachedSelectedPrecision = useUserState((state) => state.setCachedSelectedPrecision)
-  const onAggrSelectorChange = useCallback((e) => {
-    setCachedSelectedPrecision({
-      ...cachedSelectedPrecision,
-      [asset.id]: e.target.value
-    })
-    setSelectedPrecision(DECIMALS_MAP[e.target.value])
-  }, [asset.id, cachedSelectedPrecision, setCachedSelectedPrecision])
-  
+  const onAggrSelectorChange = useCallback(
+    (e) => {
+      setCachedSelectedPrecision({
+        ...cachedSelectedPrecision,
+        [asset.id]: e.target.value
+      })
+      setSelectedPrecision(DECIMALS_MAP[e.target.value])
+    },
+    [asset.id, cachedSelectedPrecision, setCachedSelectedPrecision]
+  )
+
   const [selectedPrecision, setSelectedPrecision] = useState(
     DECIMALS_MAP[cachedSelectedPrecision[asset.id]] || 6
   )
@@ -349,7 +356,7 @@ const DECIMALS_MAP = {
   }, [asset, cachedSelectedPrecision])
 
   const dispatcher = useEventDispatch()
-  const maxSpendableAlgo = useMaxSpendableAlgo()
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
   /**
    * Determines amount for an asset
    * when an order is clicked
@@ -360,48 +367,55 @@ const DECIMALS_MAP = {
    * @param {String} type
    * @return {Number}
    */
-  const calculatedAmountFn = useCallback((price, ordersList, index, type) => {
-    // console.log('in calculatedAmountFn')
-    const _price = parseFloat(price)
-    let slicedList = []
-    if (type === 'sell') slicedList = ordersList.slice(index)
-    if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
+  const calculatedAmountFn = useCallback(
+    (price, ordersList, index, type) => {
+      // console.log('in calculatedAmountFn')
+      const _price = parseFloat(price)
+      let slicedList = []
+      if (type === 'sell') slicedList = ordersList.slice(index)
+      if (type === 'buy') slicedList = ordersList.slice(0, index + 1)
 
-    const compoundedAmount = slicedList.reduce((prev, curr) => prev + curr.amount, 0)
-    const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
-    if (determinedTotal > maxSpendableAlgo) {
-      // Deducted a Microalgo because of rounding in use-store while setting total
-      // FIXME: look into  - (asset.decimals ? 0.000001 : 1)
-      const retval = parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
-      // console.log('yreturning ' + retval)
-      return retval
-    } else {
-      // console.log('zreturning ' + compoundedAmount)
-      return compoundedAmount
-    }
-  },[asset.decimals, maxSpendableAlgo])
+      const compoundedAmount = slicedList.reduce((prev, curr) => prev + curr.amount, 0)
+      const determinedTotal = parseFloat(new Big(_price).times(compoundedAmount))
+      if (determinedTotal > maxSpendableAlgo) {
+        // Deducted a Microalgo because of rounding in use-store while setting total
+        // FIXME: look into  - (asset.decimals ? 0.000001 : 1)
+        const retval =
+          parseFloat(new Big(maxSpendableAlgo).div(_price)) - (asset.decimals ? 0.000001 : 1)
+        // console.log('yreturning ' + retval)
+        return retval
+      } else {
+        // console.log('zreturning ' + compoundedAmount)
+        return compoundedAmount
+      }
+    },
+    [asset.decimals, maxSpendableAlgo]
+  )
 
-  const reduceOrders = useCallback((result, order) => {
-    const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
+  const reduceOrders = useCallback(
+    (result, order) => {
+      const _price = floatToFixedDynamic(order.price, selectedPrecision, selectedPrecision)
 
-    const _amount = order.amount
-    const index = result.findIndex(
-      (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
-    )
+      const _amount = order.amount
+      const index = result.findIndex(
+        (obj) => floatToFixedDynamic(obj.price, selectedPrecision, selectedPrecision) === _price
+      )
 
-    if (index !== -1) {
-      result[index].amount += _amount
-      result[index].total += _amount * _price
+      if (index !== -1) {
+        result[index].amount += _amount
+        result[index].total += _amount * _price
+        return result
+      }
+
+      result.push({
+        price: _price,
+        amount: _amount,
+        total: _amount * _price
+      })
       return result
-    }
-
-    result.push({
-      price: _price,
-      amount: _amount,
-      total: _amount * _price
-    })
-    return result
-  }, [selectedPrecision])
+    },
+    [selectedPrecision]
+  )
 
   const aggregatedBuyOrder = useMemo(() => {
     if (typeof orders?.buy === 'undefined' && !Array.isArray(orders.buy)) return []
@@ -413,78 +427,82 @@ const DECIMALS_MAP = {
     return orders.sell.reduce(reduceOrders, [])
   }, [orders.sell, reduceOrders])
 
-  const isGeoBlocked = useMemo(() => getIsRestrictedCountry(query) && getIsRestricted(asset.id)
-  , [asset.id, query])
+  const isGeoBlocked = useMemo(
+    () => getIsRestrictedCountry(query) && getIsRestricted(asset.id),
+    [asset.id, query]
+  )
 
-  const renderOrders = useCallback((data, type) => {
-    const color = type === 'buy' ? 'green' : 'red'
-    return data.map((row, index) => {
-      const amount = new Big(row.amount)
-      const total = new Big(row.total)
-      const handleSelectOrder = () => {
-        if (isGeoBlocked) {
-          return
-        }
-        const payload = {
-          price: row.price,
-          type: type === 'buy' ? 'sell' : 'buy',
-          amount: calculatedAmountFn(row.price, data, index, type)
-        }
-        dispatcher('clicked', {
-          type: 'order',
-          payload
-        })
-        if (isMobile) {
-          dispatcher('mobileClick', {
+  const renderOrders = useCallback(
+    (data, type) => {
+      const color = type === 'buy' ? 'green' : 'red'
+      return data.map((row, index) => {
+        const amount = new Big(row.amount)
+        const total = new Big(row.total)
+        const handleSelectOrder = () => {
+          if (isGeoBlocked) {
+            return
+          }
+          const payload = {
+            price: row.price,
+            type: type === 'buy' ? 'sell' : 'buy',
+            amount: calculatedAmountFn(row.price, data, index, type)
+          }
+          dispatcher('clicked', {
             type: 'order',
             payload
           })
+          if (isMobile) {
+            dispatcher('mobileClick', {
+              type: 'order',
+              payload
+            })
+          }
         }
-      }
 
-      return (
-        <BookRow
-          onClick={handleSelectOrder}
-          key={`sell-${row.price}`}
-          type={type}
-          data-testid={`order-book-${type}-row`}
-        >
-          <Typography variant="price" color={`${color}.500`}>
-            {row.price}
-          </Typography>
-          <Typography
-            variant="body_tiny"
-            fontFamily="'Roboto Mono', monospace"
-            color="gray.400"
-            textAlign="right"
-            title={amount.toFixed(decimals).toString()}
-            m={0}
+        return (
+          <BookRow
+            onClick={handleSelectOrder}
+            key={`sell-${row.price}`}
+            type={type}
+            data-testid={`order-book-${type}-row`}
           >
-            {amount.toFixed(Math.max(0, decimals - 2))}
-          </Typography>
-          <Typography
-            variant="body_tiny"
-            fontFamily="'Roboto Mono', monospace"
-            color="gray.400"
-            textAlign="right"
-            title={total.toFixed(decimals).toString()}
-            m={0}
-          >
-            {total.toFixed(Math.min(3, decimals))}
-          </Typography>
-        </BookRow>
-      )
-    })
-  },[calculatedAmountFn, decimals, dispatcher, isGeoBlocked])
+            <Typography variant="price" color={`${color}.500`}>
+              {row.price}
+            </Typography>
+            <Typography
+              variant="body_tiny"
+              fontFamily="'Roboto Mono', monospace"
+              color="gray.400"
+              textAlign="right"
+              title={amount.toFixed(decimals).toString()}
+              m={0}
+            >
+              {amount.toFixed(Math.max(0, decimals - 2))}
+            </Typography>
+            <Typography
+              variant="body_tiny"
+              fontFamily="'Roboto Mono', monospace"
+              color="gray.400"
+              textAlign="right"
+              title={total.toFixed(decimals).toString()}
+              m={0}
+            >
+              {total.toFixed(Math.min(3, decimals))}
+            </Typography>
+          </BookRow>
+        )
+      })
+    },
+    [calculatedAmountFn, decimals, dispatcher, isGeoBlocked]
+  )
 
-  const renderedSellOrders = useMemo( () => {
+  const renderedSellOrders = useMemo(() => {
     return renderOrders(aggregatedSellOrder, 'sell')
-  },[aggregatedSellOrder, renderOrders]);
+  }, [aggregatedSellOrder, renderOrders])
 
-  const renderedBuyOrders = useMemo( () => {
+  const renderedBuyOrders = useMemo(() => {
     return renderOrders(aggregatedBuyOrder, 'buy')
-  },[aggregatedBuyOrder, renderOrders]);
-  
+  }, [aggregatedBuyOrder, renderOrders])
 
   return useMemo(() => {
     if (typeof orders.sell !== 'undefined' && typeof orders.buy !== 'undefined') {
@@ -492,54 +510,69 @@ const DECIMALS_MAP = {
         return <FirstOrderMsg asset={asset} isSignedIn={isSignedIn} />
       }
     }
-    
+
     return (
-    <Section area="topLeft" data-testid="asset-orderbook">
-      <Container>
-        <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="subtitle_medium_cap_bold" color="gray.500">
-              {t('order-book')}
-            </Typography>
-            <AggregatorSelector
-              onChange={onAggrSelectorChange}
-              value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
-            >
-              <option>0.000001</option>
-              <option>0.00001</option>
-              <option>0.0001</option>
-              <option>0.001</option>
-              <option>0.01</option>
-              <option>0.1</option>
-            </AggregatorSelector>
-          </Stack>
-          <Header className="mt-4">
-            <TablePriceHeader title="price" textAlign="left" />
-            <Typography className="whitespace-nowrap" variant="body_tiny_cap" color="gray.500" textAlign="right" m={0}>
-              {t('amount')} ({assetVeryShortName})
-            </Typography>
-            <TablePriceHeader title="total" textAlign="right" />
-          </Header>
-        </Box>
+      <Section area="topLeft" data-testid="asset-orderbook">
+        <Container>
+          <Box className="px-4 pt-4" sx={{ paddingBottom: 0 }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="subtitle_medium_cap_bold" color="gray.500">
+                {t('order-book')}
+              </Typography>
+              <AggregatorSelector
+                onChange={onAggrSelectorChange}
+                value={Object.keys(DECIMALS_MAP)[6 - selectedPrecision]}
+              >
+                <option>0.000001</option>
+                <option>0.00001</option>
+                <option>0.0001</option>
+                <option>0.001</option>
+                <option>0.01</option>
+                <option>0.1</option>
+              </AggregatorSelector>
+            </Stack>
+            <Header className="mt-4">
+              <TablePriceHeader title="price" textAlign="left" />
+              <Typography
+                className="whitespace-nowrap"
+                variant="body_tiny_cap"
+                color="gray.500"
+                textAlign="right"
+                m={0}
+              >
+                {t('amount')} ({assetVeryShortName})
+              </Typography>
+              <TablePriceHeader title="total" textAlign="right" />
+            </Header>
+          </Box>
 
-        <SellOrders>
-          <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
-        </SellOrders>
+          <SellOrders>
+            <OrdersWrapper className="p-4">{renderedSellOrders}</OrdersWrapper>
+          </SellOrders>
 
-        <CurrentPrice className="px-4">
-          <PriceDisplay asset={asset} />
-        </CurrentPrice>
+          <CurrentPrice className="px-4">
+            <PriceDisplay asset={asset} />
+          </CurrentPrice>
 
-        <BuyOrders>
-          <OrdersWrapper className="px-4 pt-4">
-            {renderedBuyOrders}
-          </OrdersWrapper>
-        </BuyOrders>
-      </Container>
-    </Section>
-  )}, [PriceDisplay, asset, assetVeryShortName, isSignedIn,
-      onAggrSelectorChange, orders.buy, orders.sell,
-      renderedBuyOrders, renderedSellOrders, selectedPrecision, t])
+          <BuyOrders>
+            <OrdersWrapper className="px-4 pt-4">{renderedBuyOrders}</OrdersWrapper>
+          </BuyOrders>
+        </Container>
+      </Section>
+    )
+  }, [
+    PriceDisplay,
+    asset,
+    assetVeryShortName,
+    isSignedIn,
+    onAggrSelectorChange,
+    orders.buy,
+    orders.sell,
+    renderedBuyOrders,
+    renderedSellOrders,
+    selectedPrecision,
+    t
+  ])
 }
 
 OrderBook.propTypes = {

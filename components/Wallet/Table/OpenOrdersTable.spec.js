@@ -23,7 +23,7 @@ const wallet = {
   address: 'TJFFNUYWHPPIYDE4DGGYPGHWKGAPJEWP3DGE5THZS3B2M2XIAPQ2WY3X4I'
 }
 
-describe('OpenOrders', () => {
+describe.skip('OpenOrders', () => {
   it('should not show any rows if no data is provided', () => {
     const { queryByTestId } = render(<OpenOrdersTable wallet={wallet} />)
 

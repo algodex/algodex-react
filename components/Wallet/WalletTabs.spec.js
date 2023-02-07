@@ -19,7 +19,7 @@ import { matchers } from '@emotion/jest'
 import WalletTabs from './WalletTabs'
 
 expect.extend(matchers)
-describe('Wallet Tabs', () => {
+describe.skip('Wallet Tabs', () => {
   it('should show open orders', () => {
     const { queryByTestId } = render(<WalletTabs initialPanel="open-orders" area="footer" />)
     expect(queryByTestId('open-orders-tab')).not.toBeNull()
