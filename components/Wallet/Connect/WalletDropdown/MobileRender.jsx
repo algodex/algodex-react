@@ -32,6 +32,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary'
 // import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import { WalletsContext } from '@/hooks/useWallets'
+import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
 import { mdiChevronDown } from '@mdi/js'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
@@ -76,15 +77,18 @@ const ModalContainer = styled.div`
 
 const MobileWalletRender = () => {
   // const { addresses, wallet, signedIn } = useWalletMgmt()
-  const { wallet, isConnected } = useAlgodex()
-  const [addresses] = useContext(WalletsContext)
+  // const { wallet, isConnected } = useAlgodex()
+  // const [addresses] = useContext(WalletsContext)
   // const { addresses, wallet } = useAlgodex()
+  const { activeWallet: wallet, addresses } = useContext(WalletReducerContext)
   const [expanded, setExpanded] = useState(false)
   const [isConnectingWallet, setIsConnectingWallet] = useState(false)
   const [isDisconnectingWallet, setIsDisconnectingWallet] = useState(false)
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
+
+  const isConnected = wallet !== null
 
   const sortedWalletsList = useMemo(() => {
     if (addresses) {
@@ -146,19 +150,22 @@ const MobileWalletRender = () => {
     )
   }, [isDisconnectingWallet, sortedWalletsList, wallet?.address])
 
-  const renderAssets = useCallback((assets, address) => {
-    return assets?.map((asset, idx) => {
-      return (
-        <Box
-          key={idx}
-          className={`${wallet.address !== address && 'opacity-40'} flex justify-between  my-2`}
-        >
-          <Typography>{asset['asset-id']}</Typography>
-          <Typography>{asset.amount}</Typography>
-        </Box>
-      )
-    })
-  }, [wallet.address])
+  const renderAssets = useCallback(
+    (assets, address) => {
+      return assets?.map((asset, idx) => {
+        return (
+          <Box
+            key={idx}
+            className={`${wallet.address !== address && 'opacity-40'} flex justify-between  my-2`}
+          >
+            <Typography>{asset['asset-id']}</Typography>
+            <Typography>{asset.amount}</Typography>
+          </Box>
+        )
+      })
+    },
+    [wallet.address]
+  )
 
   const renderWalletAddresses = useCallback(() => {
     return addresses.map((addr, idx) => {

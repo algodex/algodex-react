@@ -19,5 +19,7 @@
   "order-book": "Kniha objednávok",
   "place-maker-description":"Umiestnite príkaz na nákup/predaj výrobcu, aby ste pridali likviditu pre tento obchodný pár",
   "connect-wallet-liquidity":" pripojte svoju peňaženku a zadajte objednávku na doplnenie likvidity pre tento obchodný pár",
-  "place-first":"Zadajte prvú limitnú objednávku pre"
+  "place-first":"Zadajte prvú limitnú objednávku pre",
+  "notSignedInTitle": "Začnite pripojením Algorand Wallet pomocou tlačidla v hlavičke",
+	"notSignedInSubTitle": "Po pripojení peňaženky a začatí obchodovania sa tu zobrazia informácie o objednávkach"
 }

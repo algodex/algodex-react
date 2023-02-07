@@ -19,5 +19,7 @@
   "order-book": "Sipariş defteri",
   "place-maker-description": "Bu ticaret çifti için likidite eklemek için bir üretici alım/satım emri verin",
   "connect-wallet-liquidity": "Cüzdanınızı bağlayın ve bu işlem çifti için likidite eklemek için bir sipariş verin ",
-  "place-first": "için ilk limit siparişini verin"
+  "place-first": "için ilk limit siparişini verin",
+  "notSignedInTitle": "Başlıktaki düğmeyi kullanarak bir Algorand Wallet bağlayarak başlayın",
+	"notSignedInSubTitle": "Bir cüzdan bağlayıp işlem yapmaya başladığınızda, siparişlerle ilgili bilgileri burada göreceksiniz"
 }

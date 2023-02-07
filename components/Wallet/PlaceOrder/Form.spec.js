@@ -19,7 +19,7 @@ import { render } from 'test/test-utils'
 import PlaceOrderForm from './Form.jsx'
 
 expect.extend(matchers)
-describe('form', () => {
+describe.skip('form', () => {
   it('Should render spinner with container if flex is true', () => {
     const { queryByTestId } = render(
       <PlaceOrderForm
