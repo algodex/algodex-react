@@ -40,7 +40,12 @@ export const styles = {
     textDecoration: 'uppercase',
     backgroundColor: 'green.600',
     px: '20px',
-    fontWeight: 700
+    fontWeight: 700,
+    transition:'all ease .3s',
+    '&:hover': {
+      backgroundColor: 'green.600',
+      opacity:'0.8'
+    }
   },
   copy: {
     marginRight: '0.4rem',
@@ -58,7 +63,7 @@ export const styles = {
   dateBox: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     opacity: '0.8',
     flexWrap: 'wrap',
     columnGap: '6px',
@@ -66,7 +71,7 @@ export const styles = {
     borderColor: 'gray.250',
     padding: '7px 9px',
     borderRadius: '4px',
-    width:'100%',
+    width: '100%',
     span: {
       fontStyle: 'italic'
     },

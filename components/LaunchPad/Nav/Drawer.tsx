@@ -146,13 +146,12 @@ function LaunchpadDrawer({
           />
           <Typography
             sx={{
-              ...styles.linkWrapper,
               ...styles.text,
               fontSize: '12px',
               fontStyle: 'italic',
               px: '60px',
-              paddingTop: '0 !important',
-              opacity: 0.4
+              opacity: 0.4,
+              cursor:'default'
             }}
           >
             with Algodex Mailbox

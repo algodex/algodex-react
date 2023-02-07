@@ -38,8 +38,11 @@ const initialValues = {
   tokenName: '',
   showClawbackAddr: false,
   clawbackAddr: '',
+  showReserveAddr: false,
   reserveAddr: '',
+  showManagerAddr: false,
   managerAddr: '',
+  showFreezeAddr: false,
   freezeAddr: ''
 }
 
@@ -47,8 +50,17 @@ export const ManageToken = () => {
   const [loading, setLoading] = useState(false)
 
   const [formData, setFormData] = useState(initialValues)
-  const { tokenName, showClawbackAddr, clawbackAddr, reserveAddr, managerAddr, freezeAddr } =
-    formData
+  const {
+    tokenName,
+    showClawbackAddr,
+    clawbackAddr,
+    showReserveAddr,
+    reserveAddr,
+    showManagerAddr,
+    managerAddr,
+    showFreezeAddr,
+    freezeAddr
+  } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -190,76 +202,107 @@ export const ManageToken = () => {
                 />
               )}
             </Box>
-            <Box
-              className="mb-4 px-4"
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '10px'
-              }}
-            >
-              <Typography
-                sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
+            <Box className="mb-4 px-4">
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '10px'
+                }}
               >
-                Reserve Address?
-                <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-              </Typography>
-              <Switch
-                inputProps={{ 'aria-label': 'Switch demo' }}
-                color="success"
-                name="reserveAddr"
-                value={reserveAddr}
-                onChange={(e) => handleCheck(e)}
-              />
+                <Typography
+                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
+                >
+                  Reserve Address?
+                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                </Typography>
+                <Switch
+                  inputProps={{ 'aria-label': 'Switch demo' }}
+                  color="success"
+                  name="showReserveAddr"
+                  value={showReserveAddr}
+                  onChange={(e) => handleCheck(e)}
+                />
+              </Box>
+              {showReserveAddr && (
+                <OutlinedInput
+                  type="text"
+                  placeholder="Enter Reserve Address"
+                  name="reserveAddr"
+                  value={reserveAddr}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+              )}
             </Box>
-
-            <Box
-              className="mb-4 px-4"
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '10px'
-              }}
-            >
-              <Typography
-                sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
+            <Box className="mb-4 px-4">
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '10px'
+                }}
               >
-                Manager Address?
-                <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-              </Typography>
-              <Switch
-                inputProps={{ 'aria-label': 'Switch demo' }}
-                color="success"
-                name="managerAddr"
-                value={managerAddr}
-                onChange={(e) => handleCheck(e)}
-              />
+                <Typography
+                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
+                >
+                  Manager Address?
+                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                </Typography>
+                <Switch
+                  inputProps={{ 'aria-label': 'Switch demo' }}
+                  color="success"
+                  name="showManagerAddr"
+                  value={showManagerAddr}
+                  onChange={(e) => handleCheck(e)}
+                />
+              </Box>
+              {showManagerAddr && (
+                <OutlinedInput
+                  type="text"
+                  placeholder="Enter Manager Address"
+                  name="managerAddr"
+                  value={managerAddr}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+              )}
             </Box>
-
-            <Box
-              className="mb-4 px-4"
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '10px'
-              }}
-            >
-              <Typography
-                sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
+            <Box className="mb-4 px-4">
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '10px'
+                }}
               >
-                Freeze Address?
-                <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-              </Typography>
-              <Switch
-                inputProps={{ 'aria-label': 'Switch demo' }}
-                color="success"
-                name="freezeAddr"
-                value={freezeAddr}
-                onChange={(e) => handleCheck(e)}
-              />
+                <Typography
+                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
+                >
+                  Freeze Address?
+                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                </Typography>
+                <Switch
+                  inputProps={{ 'aria-label': 'Switch demo' }}
+                  color="success"
+                  name="showFreezeAddr"
+                  value={showFreezeAddr}
+                  onChange={(e) => handleCheck(e)}
+                />
+              </Box>
+              {showFreezeAddr && (
+                <OutlinedInput
+                  type="text"
+                  placeholder="Enter Freeze Address"
+                  name="freezeAddr"
+                  value={freezeAddr}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+              )}
             </Box>
           </AccordionDetails>
         </Accordion>
