@@ -16,57 +16,33 @@
 
 import React, { useState } from 'react'
 import { ConnectedAddress } from '../connectedAddress'
-import { Note } from '../note'
+import { Icon } from '@iconify/react'
 
 //MUI Components
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import Switch from '@mui/material/Switch'
+import Button from '@mui/material/Button'
 
 // Custom Styled Components
-import Button from '@/components/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
+import { Note } from '../note'
+import { CopyIcon } from '../copyIcon'
 
 const initialValues = {
   tokenName: '',
-  showClawbackAddr: false,
-  clawbackAddr: '',
-  showReserveAddr: false,
-  reserveAddr: '',
-  showManagerAddr: false,
-  managerAddr: '',
-  showFreezeAddr: false,
-  freezeAddr: ''
+  assetURL: 'thegoosetoken.com',
+  showAssetURL: false
 }
 
 export const ManageToken = () => {
   const [loading, setLoading] = useState(false)
-
   const [formData, setFormData] = useState(initialValues)
-  const {
-    tokenName,
-    showClawbackAddr,
-    clawbackAddr,
-    showReserveAddr,
-    reserveAddr,
-    showManagerAddr,
-    managerAddr,
-    showFreezeAddr,
-    freezeAddr
-  } = formData
+  const { tokenName, assetURL, showAssetURL } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-  const handleCheck = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.checked })
   }
 
   const onSubmit = async (e) => {
@@ -121,191 +97,90 @@ export const ManageToken = () => {
 
           <Box className="mb-10 px-4">
             <Box className="md:flex gap-x-2">
-              <Typography sx={{ ...styles.name }}>Token Name</Typography>
-              <Typography sx={{ ...styles.value }}>The Goose Token (GOOSE)</Typography>
+              <Typography sx={styles.name}>Token Name</Typography>
+              <Typography sx={styles.value}>The Goose Token (GOOSE)</Typography>
             </Box>
             <Divider className="my-5 opacity-40" sx={styles.divider} />
             <Box className="md:flex gap-x-2">
-              <Typography sx={{ ...styles.name }}>Token Supply</Typography>
-              <Typography sx={{ ...styles.value }}>101,117.0000</Typography>
+              <Typography sx={styles.name}>Token Supply</Typography>
+              <Typography sx={styles.value}>101,117.0000</Typography>
             </Box>
             <Divider className="my-5 opacity-40" sx={styles.divider} />
             <Box className="md:flex gap-x-2">
-              <Typography sx={{ ...styles.name }}>Decimals</Typography>
-              <Typography sx={{ ...styles.value }}>4</Typography>
+              <Typography sx={styles.name}>Decimals</Typography>
+              <Typography sx={styles.value}>4</Typography>
             </Box>
             <Divider className="my-5 opacity-40" sx={styles.divider} />
             <Box className="md:flex gap-x-2">
-              <Typography sx={{ ...styles.name }}>Asset URL Property</Typography>
-              <Typography sx={{ ...styles.value }}>thegoosetoken.com</Typography>
+              <Typography sx={styles.name}>Asset URL Property</Typography>
+              {showAssetURL ? (
+                <OutlinedInput
+                  type="text"
+                  placeholder="Enter Price per Token"
+                  name="assetURL"
+                  value={assetURL}
+                  onChange={(e) => onChange(e)}
+                  sx={{
+                    ...styles.input,
+                    borderTop: 0,
+                    borderInline: 0
+                  }}
+                />
+              ) : (
+                <Typography className="flex items-center" sx={styles.value}>
+                  {assetURL}
+                  <Icon
+                    icon="material-symbols:edit"
+                    className="ml-3 cursor-pointer"
+                    onClick={() =>
+                      onChange({
+                        target: {
+                          name: 'showAssetURL',
+                          value: !showAssetURL
+                        }
+                      })
+                    }
+                  />
+                </Typography>
+              )}
             </Box>
             <Divider className="my-5 opacity-40" sx={styles.divider} />
             <Box className="md:flex gap-x-2">
-              <Typography sx={{ ...styles.name }}>Asset Metdata Hash</Typography>
+              <Typography sx={styles.name}>Asset Metdata Hash</Typography>
               <Typography sx={{ ...styles.value, fontSize: '12px' }}>
                 A28C2F09C0211E165AE9DC3A60A490C0
               </Typography>
             </Box>
+            <Divider className="my-5 opacity-40" sx={styles.divider} />
+            <Box className="md:flex gap-x-2">
+              <Typography sx={styles.name}>Clawback Address</Typography>
+              <Typography sx={styles.value}>
+                V537CZ....4WVQCA <CopyIcon content={'V537CZGHERY87634WVQCA'} />
+              </Typography>
+            </Box>
+            <Divider className="my-5 opacity-40" sx={styles.divider} />
+            <Box className="md:flex gap-x-2">
+              <Typography sx={styles.name}>Reserve Address</Typography>
+              <Typography sx={styles.value}>
+                V537CZ....4WVQCA <CopyIcon content={'V537CZGHERY87634WVQCA'} />
+              </Typography>
+            </Box>
+            <Divider className="my-5 opacity-40" sx={styles.divider} />
+            <Box className="md:flex gap-x-2">
+              <Typography sx={styles.name}>Manager Address</Typography>
+              <Typography sx={styles.value}>
+                V537CZ....4WVQCA <CopyIcon content={'V537CZGHERY87634WVQCA'} />
+              </Typography>
+            </Box>
+            <Divider className="my-5 opacity-40" sx={styles.divider} />
+            <Box className="md:flex gap-x-2">
+              <Typography sx={styles.name}>Freeze Address</Typography>
+              <Typography sx={styles.value}>
+                V537CZ....4WVQCA <CopyIcon content={'V537CZGHERY87634WVQCA'} />
+              </Typography>
+            </Box>
           </Box>
         </Box>
-
-        <Accordion sx={styles.accordionStyles}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography variant="subtitle2" sx={styles.subtitle2}>
-              Advanced Options
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ paddingTop: 0 }}>
-            <Box className="mb-4 px-4">
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '10px'
-                }}
-              >
-                <Typography
-                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
-                >
-                  Clawback Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-                </Typography>
-                <Switch
-                  inputProps={{ 'aria-label': 'Switch demo' }}
-                  color="success"
-                  name="showClawbackAddr"
-                  value={showClawbackAddr}
-                  onChange={(e) => {
-                    const value = e.target.checked
-                    onChange({
-                      target: {
-                        value,
-                        name: 'showClawbackAddr'
-                      }
-                    })
-                  }}
-                />
-              </Box>
-              {showClawbackAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Clawback Address"
-                  name="clawbackAddr"
-                  value={clawbackAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
-              )}
-            </Box>
-            <Box className="mb-4 px-4">
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '10px'
-                }}
-              >
-                <Typography
-                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
-                >
-                  Reserve Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-                </Typography>
-                <Switch
-                  inputProps={{ 'aria-label': 'Switch demo' }}
-                  color="success"
-                  name="showReserveAddr"
-                  value={showReserveAddr}
-                  onChange={(e) => handleCheck(e)}
-                />
-              </Box>
-              {showReserveAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Reserve Address"
-                  name="reserveAddr"
-                  value={reserveAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
-              )}
-            </Box>
-            <Box className="mb-4 px-4">
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '10px'
-                }}
-              >
-                <Typography
-                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
-                >
-                  Manager Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-                </Typography>
-                <Switch
-                  inputProps={{ 'aria-label': 'Switch demo' }}
-                  color="success"
-                  name="showManagerAddr"
-                  value={showManagerAddr}
-                  onChange={(e) => handleCheck(e)}
-                />
-              </Box>
-              {showManagerAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Manager Address"
-                  name="managerAddr"
-                  value={managerAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
-              )}
-            </Box>
-            <Box className="mb-4 px-4">
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '10px'
-                }}
-              >
-                <Typography
-                  sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
-                >
-                  Freeze Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
-                </Typography>
-                <Switch
-                  inputProps={{ 'aria-label': 'Switch demo' }}
-                  color="success"
-                  name="showFreezeAddr"
-                  value={showFreezeAddr}
-                  onChange={(e) => handleCheck(e)}
-                />
-              </Box>
-              {showFreezeAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Freeze Address"
-                  name="freezeAddr"
-                  value={freezeAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
-              )}
-            </Box>
-          </AccordionDetails>
-        </Accordion>
 
         <Note
           className="my-6"

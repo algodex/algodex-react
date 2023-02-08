@@ -28,9 +28,9 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Switch from '@mui/material/Switch'
+import Button from '@mui/material/Button'
 
 // Custom Styled Components
-import Button from '@/components/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 

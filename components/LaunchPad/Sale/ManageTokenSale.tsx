@@ -16,27 +16,43 @@
 
 import React, { useState } from 'react'
 import { ConnectedAddress } from '../connectedAddress'
+import { Icon } from '@iconify/react'
 
 //MUI Components
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import Button from '@mui/material/Button'
 
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
+import { CopyIcon } from '../copyIcon'
+import { LinearProgressWithLabel } from '../progressBar'
 
 const initialValues = {
-  tokenName: ''
+  tokenName: '',
+  pricePerToken: 0.75,
+  showPricePerToken: false,
+  totalForSale: 14600,
+  showTotalForSale: false
 }
 
 export const ManageTokenSale = () => {
   const [formData, setFormData] = useState(initialValues)
-  const { tokenName } = formData
+  const { tokenName, pricePerToken, showPricePerToken, totalForSale, showTotalForSale } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleViewChanges = (name) => {
+    onChange({
+      target: {
+        name,
+        value: !Number(name)
+      }
+    })
   }
 
   const onSubmit = async (e) => {
@@ -87,7 +103,7 @@ export const ManageTokenSale = () => {
           </Typography>
 
           <Box
-            className="mb-10 p-4"
+            className="mb-10 px-4 py-8"
             sx={{
               border: '1px solid',
               borderColor: 'gray.250',
@@ -105,18 +121,110 @@ export const ManageTokenSale = () => {
                 sx={{ ...styles.value, fontSize: '12px', display: 'flex', columnGap: '5px' }}
               >
                 https://app.algodex.com/trade/793124631?cc=US
-                <ContentCopyIcon sx={styles.copy} />
+                <CopyIcon content={'https://app.algodex.com/trade/793124631?cc=US'} />
               </Typography>
             </Box>
             <Divider className="my-5 opacity-40" sx={styles.divider} />
+            <Box>
+              <Typography
+                sx={{ ...styles.title, fontSize: '21px', textAlign: 'center', mb: '20px' }}
+              >
+                Sale Progress:
+              </Typography>
+              <LinearProgressWithLabel value={83.344} label={`${Math.round(83.344)}% sold`} />
+              <Box
+                className="flex justify-between"
+                sx={{
+                  color: 'white'
+                }}
+              >
+                <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>14587.78 ALGO</Typography>
+                <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>
+                  3577 GOOSE remaining
+                </Typography>
+              </Box>
+            </Box>
+            <Divider className="my-5 opacity-40" sx={styles.divider} />
             <Box className="md:flex gap-x-2">
-              <Typography sx={styles.name}>Number of Tokens on Sale</Typography>
-              <Typography sx={styles.value}>4600</Typography>
+              <Typography sx={styles.name}>Total For Sale</Typography>
+              {showTotalForSale ? (
+                <OutlinedInput
+                  type="text"
+                  placeholder="Enter No. of Tokens on Sale"
+                  name="totalForSale"
+                  value={totalForSale}
+                  onChange={(e) => onChange(e)}
+                  sx={{
+                    ...styles.input,
+                    borderTop: 0,
+                    borderInline: 0
+                  }}
+                />
+              ) : (
+                <Typography className='flex items-center' sx={styles.value}>
+                  {totalForSale} ALGO
+                  <Icon
+                    icon="material-symbols:edit"
+                    className="ml-3 cursor-pointer"
+                    onClick={() => handleViewChanges('showTotalForSale')}
+                  />
+                </Typography>
+              )}
             </Box>
             <Divider className="my-5 opacity-40" sx={styles.divider} />
             <Box className="md:flex gap-x-2">
               <Typography sx={styles.name}>Price Per Token</Typography>
-              <Typography sx={{ ...styles.value, fontSize: '12px' }}>.76 ALGO per GOOSE</Typography>
+              {showPricePerToken ? (
+                <OutlinedInput
+                  type="text"
+                  placeholder="Enter Price per Token"
+                  name="pricePerToken"
+                  value={pricePerToken}
+                  onChange={(e) => onChange(e)}
+                  sx={{
+                    ...styles.input,
+                    borderTop: 0,
+                    borderInline: 0
+                  }}
+                />
+              ) : (
+                <Typography className='flex items-center' sx={styles.value}>
+                  {pricePerToken} ALGO
+                  <Icon
+                    icon="material-symbols:edit"
+                    className="ml-3 cursor-pointer"
+                    onClick={() => handleViewChanges('showPricePerToken')}
+                  />
+                </Typography>
+              )}
+            </Box>
+            <Divider className="my-5 opacity-40" sx={styles.divider} />
+            <Box className="flex justify-center gap-4 mt-7">
+              <Button
+                type="submit"
+                variant="outlined"
+                sx={{
+                  ...styles.btnOutline,
+                  borderColor: 'green.500',
+                  '&:hover': {
+                    backgroundColor: 'green.500'
+                  }
+                }}
+              >
+                UPDATE sale
+              </Button>
+              <Button
+                type="button"
+                sx={{
+                  ...styles.btnOutline,
+                  borderColor: 'red.600',
+                  '&:hover': {
+                    backgroundColor: 'red.600'
+                  }
+                }}
+              >
+                End sale
+              </Button>
             </Box>
           </Box>
         </Box>

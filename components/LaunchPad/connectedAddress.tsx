@@ -1,24 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 //MUI Components
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import Tooltip from '@mui/material/Tooltip'
-import { styles } from './styles.css'
+
+// Custom coponent
+import { CopyIcon } from './copyIcon'
 
 export const ConnectedAddress = () => {
-  const [tooltiptext, setTooltiptext] = useState('Click to Copy')
-
-  const copyAddress = (address) => {
-    document.querySelector('.copyToClipboard')
-    navigator.clipboard.writeText(address)
-    setTooltiptext(`Copied: ${address}`)
-    setTimeout(() => {
-      setTooltiptext('Click to Copy')
-    }, 500)
-  }
-
   return (
     <Box
       sx={{
@@ -42,23 +31,7 @@ export const ConnectedAddress = () => {
       >
         V537CZ....4WVQCA
       </Typography>
-      <Tooltip
-        title={tooltiptext}
-        placement="top"
-        arrow
-        sx={{
-          cursor: 'pointer',
-          marginLeft: '0.5rem'
-        }}
-      >
-        <ContentCopyIcon
-          sx={styles.copy}
-          onClick={(e) => {
-            copyAddress('address')
-            e.stopPropagation()
-          }}
-        />
-      </Tooltip>
+      <CopyIcon content={'V537CZGHERY87634WVQCA'} />
     </Box>
   )
 }

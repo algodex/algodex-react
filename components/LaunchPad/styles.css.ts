@@ -26,8 +26,8 @@ export const styles = {
     }
   },
   divider: { backgroundColor: 'gray.250', marginTop: '5px' },
-  name: { fontWeight: 500, fontSize: '16px', color: 'gray.750', lineHeight: 1.3, minWidth: '40%' },
-  value: { fontWeight: 700, fontSize: '16px', color: 'white', lineHeight: 1.3 },
+  name: { fontWeight: 500, fontSize: '15px', color: 'gray.750', lineHeight: 1.3, minWidth: '40%' },
+  value: { fontWeight: 700, fontSize: '14px', color: 'white', lineHeight: 1.3 },
   accordionStyles: {
     marginBlock: '1rem',
     border: '1px solid',
@@ -41,10 +41,23 @@ export const styles = {
     backgroundColor: 'green.600',
     px: '20px',
     fontWeight: 700,
-    transition:'all ease .3s',
+    transition: 'all ease .3s',
     '&:hover': {
       backgroundColor: 'green.600',
-      opacity:'0.8'
+      opacity: '0.8'
+    }
+  },
+  btnOutline: {
+    color: 'white',
+    textDecoration: 'uppercase',
+    backgroundColor: 'transparent',
+    px: '20px',
+    py: '3px',
+    fontWeight: 700,
+    border: '2px solid',
+    transition: 'all ease .3s',
+    '&:hover': {
+      color: 'white'
     }
   },
   copy: {
@@ -58,50 +71,6 @@ export const styles = {
     },
     ['@media(max-width:600px)']: {
       fontSize: '1.5rem'
-    }
-  },
-  dateBox: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    opacity: '0.8',
-    flexWrap: 'wrap',
-    columnGap: '6px',
-    border: '1px solid',
-    borderColor: 'gray.250',
-    padding: '7px 9px',
-    borderRadius: '4px',
-    width: '100%',
-    span: {
-      fontStyle: 'italic'
-    },
-    input: {
-      width: '220px',
-      backgroundColor: 'transparent',
-      border: 'none',
-      boxShadow: 'none',
-      color: 'white',
-      outline: 0,
-      '&::placeholder': {
-        color: 'gray.250'
-      },
-      '&::before': {
-        content: 'attr(data-placeholder)',
-        width: '100%'
-      },
-      '&:valid::before': {
-        display: 'none'
-      },
-      '&:focus::before': {
-        display: 'none'
-      },
-      '&::-webkit-calendar-picker-indicator': {
-        color: 'red.400',
-        width: '25px',
-        height: '25px',
-        filter: 'invert(1)',
-        opacity: '0.8'
-      }
     }
   }
 }

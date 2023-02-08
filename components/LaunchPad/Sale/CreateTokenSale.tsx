@@ -22,25 +22,22 @@ import { Note } from '../note'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 
 // Custom Styled Components
-import Button from '@/components/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
-import { DateTimePickers } from '../dateTimePickers'
 
 const initialValues = {
   assetId: '',
   quantity: '',
-  perUnit: '',
-  startDate: '',
-  endDate: ''
+  perUnit: ''
 }
 
 export const CreateTokenSale = () => {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
-  const { assetId, quantity, perUnit, startDate, endDate } = formData
+  const { assetId, quantity, perUnit } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -131,26 +128,6 @@ export const CreateTokenSale = () => {
               sx={{ fontSize: '15px', fontStyle: 'italic' }}
             >
               1 ALGO = .56 USDC
-            </Typography>
-          </Box>
-        </Box>
-
-        <Box className="mb-6" sx={{ color: 'white' }}>
-          <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '18px' }}>
-            Set Timing of Sale:
-          </Typography>
-          <Box className="mb-4 px-4">
-            <Box className="mb-6" sx={styles.dateBox}>
-              <span>Token Sale Start Date :</span>
-              <DateTimePickers name="startDate" value={startDate} onChange={(e) => onChange(e)} />
-            </Box>
-            <Box className="mb-6" sx={styles.dateBox}>
-              <span>Token Sale End Date :</span>
-              <DateTimePickers name="endDate" value={endDate} onChange={(e) => onChange(e)} />
-            </Box>
-           
-            <Typography className="my-5 text-center" sx={{ fontSize: '15px', fontStyle: 'italic' }}>
-              Sale length = 7 days, 6 hours
             </Typography>
           </Box>
         </Box>
