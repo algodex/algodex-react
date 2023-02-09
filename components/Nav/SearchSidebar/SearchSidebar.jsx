@@ -176,7 +176,7 @@ export function NavSearchSidebar({
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
             />
           </div>
-          <div className="mt-1.5" style={{ height: '91%' }}>
+          {/* <div className="mt-1.5" style={{ height: '91%' }}>
             <NavTable
               query={query}
               isActive={isActive}
@@ -190,7 +190,7 @@ export function NavSearchSidebar({
               {...tableProps}
               gridSize={searchTableSize}
             />
-          </div>
+          </div> */}
         </AssetsContainer>
       </Container>
     </Section>

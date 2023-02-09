@@ -14,8 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useMemo, useState } from 'react'
-
+import { createRef, forwardRef, useMemo, useState, useReducer } from 'react'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { X as CancelIcon } from 'react-feather'
 import Checkbox from './CheckboxInput'
 import Icon from '@mdi/react'
@@ -25,6 +26,7 @@ import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
+import { Box, Slider, Stack } from '@mui/material'
 
 const Container = styled.div`
   display: flex;
@@ -84,6 +86,7 @@ const Input = styled(TextInput)`
   // padding-right: 3rem;
 `
 
+
 export const Search = forwardRef(
   (
     { isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, isActive, ...props },
@@ -95,7 +98,57 @@ export const Search = forwardRef(
         onCancel()
       }
     }
+    const [toggleFilters, setToggleFilters] = useState(false)
 
+    const filterReducer = (state, action) => {
+      switch (action.type) {
+        case 'updateSliderValue':
+          return {
+            ...state,
+            [action.field]: action.value
+          }
+        case 'toggleMarketCap':
+          return {
+            ...state,
+            isFilteringMarketCap: !state.isFilteringMarketCap
+          }      
+        case 'setMarketCap':
+          return {
+            ...state,
+            isFilteringMarketCap: !state.isFilteringMarketCap
+          }      
+        case 'toggleAgeOfProject':
+          return {
+            ...state,
+            isFilteringAgeOfProject: !state.isFilteringAgeOfProject
+          }      
+        case 'toggleMarketPrice':
+          return {
+            ...state,
+            isFilteringPrice: !state.isFilteringPrice
+          }      
+        case 'toggleNFTOnly':
+          return {
+            ...state,
+            isFilteringNFTOnly: !state.isFilteringNFTOnly
+          }      
+        default:
+          break;
+      }
+      return state
+    }
+    
+    const initialState = {
+      marketCapAmount: 0,
+      isFilteringMarketCap: false,
+      ageOfProject: 0,
+      isFilteringAgeOfProject: false,
+      price: 0,
+      isFilteringPrice: false,
+      isFilteringNFTOnly: false
+    }
+    const [filters, dispatch] = useReducer(filterReducer, initialState)
+    
     return (
       <div>
         <Container
@@ -125,13 +178,103 @@ export const Search = forwardRef(
             </CancelButton>
           )}
         </Container>
-        <div className={`${isActive ? '' : 'xs:invisible'} visible flex items-center ml-6`}>
+        <div className={`${isActive ? '' : 'xs:invisible'} visible fflex-col items-center justify-between ml-6`}>
           {/* <div className={`visible flex items-center ml-6`}> */}
-          <Checkbox
-            isChecked={isListingVerifiedAssets}
-            onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
-          />
-          <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={isListingVerifiedAssets}
+                onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
+              />
+              <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
+            </Stack>
+            <Stack onClick={() => setToggleFilters(!toggleFilters)} direction="row" alignItems="center" sx={{ height: '0rem' }}>
+              <p className="mx-1.5 my-0 text-xs text-white font-bold">More Filters</p>
+              {toggleFilters ? <ExpandLessIcon sx={{ color: theme.colors.white }} /> : <ExpandMoreIcon sx={{ color: theme.colors.white }} />}
+            </Stack>
+          </Stack>
+          {toggleFilters && <Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={filters.isFilteringNFTOnly}
+                onChange={() => dispatch({type: 'toggleNFTOnly'})}
+              />
+              <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only Mode</p>
+            </Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={filters.isFilteringMarketCap}
+                onChange={() => dispatch({type: 'toggleMarketCap'})}
+              />
+              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
+                <p className="mx-1.5 my-0 text-xs  text-white">Marketcap</p>
+                <Slider
+                  size="small"
+                  sx={{
+                    color: 'white',
+                    width: '70%'
+                  }}
+                  value={filters.marketCapAmount}
+                  onChange={(e) => dispatch({ 
+                    type: 'updateSliderValue',
+                    field: 'marketCapAmount',
+                    value: e.target.value
+                  })}
+                  aria-label="Small"
+                  valueLabelDisplay="auto"
+                />
+              </Stack>
+            </Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={filters.isFilteringAgeOfProject}
+                onChange={() => dispatch({type: 'toggleAgeOfProject'})}
+              />
+              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
+                <p className="mx-1.5 my-0 text-xs text-white">Age of Project</p>
+                <Slider
+                  size="small"
+                  sx={{
+                    color: 'white',
+                    width: '70%'
+                  }}
+                  value={filters.ageOfProject}
+                  onChange={(e) => dispatch({ 
+                    type: 'updateSliderValue',
+                    field: 'ageOfProject',
+                    value: e.target.value
+                  })}
+                  aria-label="Small"
+                  valueLabelDisplay="auto"
+                />
+              </Stack>
+            </Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={filters.isFilteringPrice}
+                onChange={() => dispatch({type: 'toggleMarketPrice'})}
+              />
+              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
+                <p className="mx-1.5 my-0 text-xs text-white">Price</p>
+                <Slider
+                  size="small"
+                  sx={{
+                    color: 'white',
+                    width: '70%'
+                  }}
+                  value={filters.price}
+                  onChange={(e) => dispatch({ 
+                    type: 'updateSliderValue',
+                    field: 'price',
+                    value: e.target.value
+                  })}
+                  aria-label="Small"
+                  valueLabelDisplay="auto"
+                />
+              </Stack>
+            </Stack>
+          </Stack>
+          }
         </div>
       </div>
     )
