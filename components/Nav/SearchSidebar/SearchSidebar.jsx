@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState, useReducer } from 'react'
 
 import { default as NavSearchTable } from './SearchTable'
 import PropTypes from 'prop-types'
@@ -144,6 +144,50 @@ export function NavSearchSidebar({
     [push, handleExternalClick]
   )
 
+  const filterReducer = (state, action) => {
+    switch (action.type) {
+      case 'updateSliderValue':
+        return {
+          ...state,
+          [action.field]: action.value
+        }
+      case 'toggleMarketCap':
+        return {
+          ...state,
+          isFilteringMarketCap: !state.isFilteringMarketCap
+        }      
+      case 'toggleAgeOfProject':
+        return {
+          ...state,
+          isFilteringAgeOfProject: !state.isFilteringAgeOfProject
+        }      
+      case 'toggleMarketPrice':
+        return {
+          ...state,
+          isFilteringPrice: !state.isFilteringPrice
+        }      
+      case 'toggleNFTOnly':
+        return {
+          ...state,
+          isFilteringNFTOnly: !state.isFilteringNFTOnly
+        }      
+      default:
+        break;
+    }
+    return state
+  }
+  const initialState = {
+    marketCapAmount: 0,
+    isFilteringMarketCap: false,
+    ageOfProject: 0,
+    isFilteringAgeOfProject: false,
+    price: 0,
+    isFilteringPrice: false,
+    isFilteringNFTOnly: false
+  }
+  const [filters, dispatch] = useReducer(filterReducer, initialState)
+  const [toggleFilters, setToggleFilters] = useState(false)
+
   useEffect(() => {
     const handleResize = () => {
       if (gridRef?.current) {
@@ -172,11 +216,15 @@ export function NavSearchSidebar({
               onExternalClick={handleExternalClick}
               containerRef={containerRef}
               isActive={isActive}
+              searchFilters={filters}
+              dispatchAction={dispatch}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+              toggleFilters={toggleFilters}
+              setToggleFilters={setToggleFilters}
             />
           </div>
-          {/* <div className="mt-1.5" style={{ height: '91%' }}>
+          <div className="mt-1.5" style={{ height: '91%' }}>
             <NavTable
               query={query}
               isActive={isActive}
@@ -188,9 +236,10 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
+              toggleFilters={toggleFilters}
               gridSize={searchTableSize}
             />
-          </div> */}
+          </div>
         </AssetsContainer>
       </Container>
     </Section>

@@ -89,7 +89,18 @@ const Input = styled(TextInput)`
 
 export const Search = forwardRef(
   (
-    { isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, isActive, ...props },
+    { 
+      dispatchAction, 
+      searchFilters, 
+      toggleFilters,
+      setToggleFilters,
+      isListingVerifiedAssets, 
+      setIsListingVerifiedAssets, 
+      value, 
+      onCancel, 
+      isActive, 
+      ...props 
+    },
     ref
   ) => {
     const { t } = useTranslation('assets')
@@ -98,56 +109,6 @@ export const Search = forwardRef(
         onCancel()
       }
     }
-    const [toggleFilters, setToggleFilters] = useState(false)
-
-    const filterReducer = (state, action) => {
-      switch (action.type) {
-        case 'updateSliderValue':
-          return {
-            ...state,
-            [action.field]: action.value
-          }
-        case 'toggleMarketCap':
-          return {
-            ...state,
-            isFilteringMarketCap: !state.isFilteringMarketCap
-          }      
-        case 'setMarketCap':
-          return {
-            ...state,
-            isFilteringMarketCap: !state.isFilteringMarketCap
-          }      
-        case 'toggleAgeOfProject':
-          return {
-            ...state,
-            isFilteringAgeOfProject: !state.isFilteringAgeOfProject
-          }      
-        case 'toggleMarketPrice':
-          return {
-            ...state,
-            isFilteringPrice: !state.isFilteringPrice
-          }      
-        case 'toggleNFTOnly':
-          return {
-            ...state,
-            isFilteringNFTOnly: !state.isFilteringNFTOnly
-          }      
-        default:
-          break;
-      }
-      return state
-    }
-    
-    const initialState = {
-      marketCapAmount: 0,
-      isFilteringMarketCap: false,
-      ageOfProject: 0,
-      isFilteringAgeOfProject: false,
-      price: 0,
-      isFilteringPrice: false,
-      isFilteringNFTOnly: false
-    }
-    const [filters, dispatch] = useReducer(filterReducer, initialState)
     
     return (
       <div>
@@ -196,15 +157,15 @@ export const Search = forwardRef(
           {toggleFilters && <Stack>
             <Stack direction="row" alignItems="center">
               <Checkbox
-                isChecked={filters.isFilteringNFTOnly}
-                onChange={() => dispatch({type: 'toggleNFTOnly'})}
+                isChecked={searchFilters.isFilteringNFTOnly}
+                onChange={() => dispatchAction({ type: 'toggleNFTOnly' })}
               />
               <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only Mode</p>
             </Stack>
             <Stack direction="row" alignItems="center">
               <Checkbox
-                isChecked={filters.isFilteringMarketCap}
-                onChange={() => dispatch({type: 'toggleMarketCap'})}
+                isChecked={searchFilters.isFilteringMarketCap}
+                onChange={() => dispatchAction({ type: 'toggleMarketCap' })}
               />
               <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
                 <p className="mx-1.5 my-0 text-xs  text-white">Marketcap</p>
@@ -214,8 +175,8 @@ export const Search = forwardRef(
                     color: 'white',
                     width: '70%'
                   }}
-                  value={filters.marketCapAmount}
-                  onChange={(e) => dispatch({ 
+                  value={searchFilters.marketCapAmount}
+                  onChange={(e) => dispatchAction({
                     type: 'updateSliderValue',
                     field: 'marketCapAmount',
                     value: e.target.value
@@ -227,8 +188,8 @@ export const Search = forwardRef(
             </Stack>
             <Stack direction="row" alignItems="center">
               <Checkbox
-                isChecked={filters.isFilteringAgeOfProject}
-                onChange={() => dispatch({type: 'toggleAgeOfProject'})}
+                isChecked={searchFilters.isFilteringAgeOfProject}
+                onChange={() => dispatchAction({ type: 'toggleAgeOfProject' })}
               />
               <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
                 <p className="mx-1.5 my-0 text-xs text-white">Age of Project</p>
@@ -238,8 +199,8 @@ export const Search = forwardRef(
                     color: 'white',
                     width: '70%'
                   }}
-                  value={filters.ageOfProject}
-                  onChange={(e) => dispatch({ 
+                  value={searchFilters.ageOfProject}
+                  onChange={(e) => dispatchAction({
                     type: 'updateSliderValue',
                     field: 'ageOfProject',
                     value: e.target.value
@@ -251,8 +212,8 @@ export const Search = forwardRef(
             </Stack>
             <Stack direction="row" alignItems="center">
               <Checkbox
-                isChecked={filters.isFilteringPrice}
-                onChange={() => dispatch({type: 'toggleMarketPrice'})}
+                isChecked={searchFilters.isFilteringPrice}
+                onChange={() => dispatchAction({ type: 'toggleMarketPrice' })}
               />
               <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
                 <p className="mx-1.5 my-0 text-xs text-white">Price</p>
@@ -262,8 +223,8 @@ export const Search = forwardRef(
                     color: 'white',
                     width: '70%'
                   }}
-                  value={filters.price}
-                  onChange={(e) => dispatch({ 
+                  value={searchFilters.price}
+                  onChange={(e) => dispatchAction({
                     type: 'updateSliderValue',
                     field: 'price',
                     value: e.target.value
@@ -286,6 +247,10 @@ Search.propTypes = {
   placeholder: PropTypes.string,
   onCancel: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
+  dispatchAction: PropTypes.func,
+  searchFilters: PropTypes.object,
+  toggleFilters: PropTypes.bool,
+  setToggleFilters: PropTypes.func,
   setIsListingVerifiedAssets: PropTypes.func,
   isActive: PropTypes.bool
 }
@@ -305,7 +270,11 @@ export function SearchInput(props) {
     containerRef,
     isActive,
     isListingVerifiedAssets,
-    setIsListingVerifiedAssets
+    setIsListingVerifiedAssets,
+    toggleFilters,
+    setToggleFilters,
+    dispatchAction,
+    searchFilters
   } = props
   const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
@@ -355,6 +324,10 @@ export function SearchInput(props) {
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
+      dispatchAction={dispatchAction}
+      searchFilters={searchFilters}
+      toggleFilters={toggleFilters}
+      setToggleFilters={setToggleFilters}
       placeholder={`${t('search')}`}
       isListingVerifiedAssets={isListingVerifiedAssets}
       setIsListingVerifiedAssets={setIsListingVerifiedAssets}
@@ -372,6 +345,10 @@ SearchInput.propTypes = {
   onExternalClick: PropTypes.func,
   containerRef: PropTypes.object,
   isActive: PropTypes.bool,
+  dispatchAction: PropTypes.func,
+  searchFilters: PropTypes.object,
+  toggleFilters: PropTypes.bool, 
+  setToggleFilters: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   setIsListingVerifiedAssets: PropTypes.func
 }

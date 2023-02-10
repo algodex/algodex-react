@@ -152,6 +152,7 @@ const Container = styled.div`
       top: 37px;
       width: 100%;
       height: ${({ optionalGridInfo }) => {
+        console.log(optionalGridInfo, 'optioal grid info')
         return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
       }};
       overflow-y: scroll;
