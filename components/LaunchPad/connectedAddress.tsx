@@ -6,32 +6,51 @@ import Box from '@mui/material/Box'
 
 // Custom coponent
 import { CopyIcon } from './copyIcon'
+import { truncatedWalletAddress } from 'components/helpers'
 
-export const ConnectedAddress = () => {
+export const ConnectedAddress = ({ address }) => {
+  const isConnected = typeof address !== 'undefined'
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        border: 'solid',
-        borderColor: 'white',
-        color: 'white',
-        columnGap: '5px',
-        borderRadius: '3px',
-        padding: '5px'
-      }}
-    >
-      <Typography
-        sx={{
-          display: 'block',
-          paddingBlock: '0',
-          fontSize: '15px',
-          fontWeight: 500
-        }}
-      >
-        V537CZ....4WVQCA
-      </Typography>
-      <CopyIcon content={'V537CZGHERY87634WVQCA'} />
-    </Box>
+    <>
+      {isConnected ? (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            border: 'solid',
+            borderColor: 'white',
+            color: 'white',
+            columnGap: '5px',
+            borderRadius: '3px',
+            padding: '5px'
+          }}
+        >
+          <Typography
+            sx={{
+              display: 'block',
+              paddingBlock: '0',
+              fontSize: '15px',
+              fontWeight: 500
+            }}
+          >
+            {truncatedWalletAddress(address, 4)}
+          </Typography>
+          <CopyIcon content={address} />
+        </Box>
+      ) : (
+        <Typography
+          sx={{
+            display: 'block',
+            paddingBlock: '0',
+            fontSize: '15px',
+            fontWeight: 500,
+            color: 'white'
+          }}
+        >
+          {/* Needs to be styled properly */}
+          Please connect the wallet you wish to create the asset
+        </Typography>
+      )}
+    </>
   )
 }
