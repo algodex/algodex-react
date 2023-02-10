@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react'
-import { ConnectedAddress } from '../connectedAddress'
+import { ConnectedAddress } from '../ConnectedAddress'
 import { Note } from '../note'
 
 //MUI Components
