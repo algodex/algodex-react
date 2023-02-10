@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react'
-import { ConnectedAddress } from '../connectedAddress'
+import { ConnectedAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
 //MUI Components

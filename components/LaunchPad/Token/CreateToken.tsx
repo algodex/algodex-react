@@ -14,8 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react'
-import { ConnectedAddress } from '../connectedAddress'
+import { useState, useContext } from 'react'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
+import { ConnectedAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
 //MUI Components
@@ -86,6 +87,8 @@ export const CreateToken = () => {
     setLoading(false)
   }
 
+  const { activeWallet } = useContext(WalletReducerContext)
+
   return (
     <>
       <Typography variant="subtitle1" sx={styles.title}>
@@ -103,7 +106,7 @@ export const CreateToken = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <ConnectedAddress />
+        <ConnectedAddress address={activeWallet?.address} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         Creator Address defaults to the wallet that’s currently connected. If you want to create an

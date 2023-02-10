@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react'
-import { ConnectedAddress } from '../connectedAddress'
+import { ConnectedAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
 //MUI Components
@@ -161,7 +161,7 @@ export const ManageTokenSale = () => {
                   }}
                 />
               ) : (
-                <Typography className='flex items-center' sx={styles.value}>
+                <Typography className="flex items-center" sx={styles.value}>
                   {totalForSale} ALGO
                   <Icon
                     icon="material-symbols:edit"
@@ -188,7 +188,7 @@ export const ManageTokenSale = () => {
                   }}
                 />
               ) : (
-                <Typography className='flex items-center' sx={styles.value}>
+                <Typography className="flex items-center" sx={styles.value}>
                   {pricePerToken} ALGO
                   <Icon
                     icon="material-symbols:edit"
