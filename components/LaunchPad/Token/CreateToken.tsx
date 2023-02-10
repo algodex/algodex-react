@@ -16,7 +16,7 @@
 
 import { useState, useContext } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
-import { ConnectedAddress } from '../ConnectedAddress'
+import { ConnectedAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
 //MUI Components
