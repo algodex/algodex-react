@@ -3,6 +3,7 @@ import React from 'react'
 //MUI Components
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import PropTypes from 'prop-types'
 
 // Custom coponent
 import { CopyIcon } from './copyIcon'
@@ -53,4 +54,8 @@ export const ConnectedAddress = ({ address }) => {
       )}
     </>
   )
+}
+
+ConnectedAddress.propTypes = {
+  address: PropTypes.string
 }
