@@ -151,6 +151,11 @@ export function NavSearchSidebar({
           ...state,
           [action.field]: action.value
         }
+      case 'setPriceMax':
+        return {
+          ...state,
+          priceMax: action.value
+        }
       case 'toggleMarketCap':
         return {
           ...state,
@@ -182,6 +187,7 @@ export function NavSearchSidebar({
     ageOfProject: 0,
     isFilteringAgeOfProject: false,
     price: 0,
+    priceMax: 0,
     isFilteringPrice: false,
     isFilteringNFTOnly: false
   }
@@ -236,7 +242,9 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
-              toggleFilters={toggleFilters}
+              searchFilters={filters}
+              setSearchFilterProps={dispatch}
+              isFilterActive={toggleFilters}
               gridSize={searchTableSize}
             />
           </div>

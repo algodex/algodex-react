@@ -109,7 +109,7 @@ export const Search = forwardRef(
         onCancel()
       }
     }
-    
+
     return (
       <div>
         <Container
@@ -149,7 +149,7 @@ export const Search = forwardRef(
               />
               <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
             </Stack>
-            <Stack onClick={() => setToggleFilters(!toggleFilters)} direction="row" alignItems="center" sx={{ height: '0rem' }}>
+            <Stack className='cursor-pointer' onClick={() => setToggleFilters(!toggleFilters)} direction="row" alignItems="center" sx={{ height: '0rem' }}>
               <p className="mx-1.5 my-0 text-xs text-white font-bold">More Filters</p>
               {toggleFilters ? <ExpandLessIcon sx={{ color: theme.colors.white }} /> : <ExpandMoreIcon sx={{ color: theme.colors.white }} />}
             </Stack>
@@ -162,6 +162,13 @@ export const Search = forwardRef(
               />
               <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only Mode</p>
             </Stack>
+            {/* <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={searchFilters.isFilteringNFTOnly}
+                onChange={() => dispatchAction({ type: 'toggleNFTOnly' })}
+              />
+              <p className="mx-1.5 my-0 text-xs text-gray-500">Low Spread</p>
+            </Stack> */}
             <Stack direction="row" alignItems="center">
               <Checkbox
                 isChecked={searchFilters.isFilteringMarketCap}
@@ -231,6 +238,8 @@ export const Search = forwardRef(
                   })}
                   aria-label="Small"
                   valueLabelDisplay="auto"
+                  defaultValue={searchFilters.priceMax}
+                  max={searchFilters.priceMax}
                 />
               </Stack>
             </Stack>

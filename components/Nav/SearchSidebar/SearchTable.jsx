@@ -104,7 +104,7 @@ const TableWrapper = styled.div`
   // overflow-y: scroll;
   // -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  top: 85px;
+  // top: ${({isFilterActive}) => isFilterActive ? '85px' : '12rem'};
   width: 100%;
   height: 85%;
 
@@ -113,7 +113,7 @@ const TableWrapper = styled.div`
   }
 
   @media (min-width: 996px) {
-    top: 85px;
+    top: ${({isFilterActive}) => isFilterActive ? '12rem' : '85px'};
   }
 
   // @media (min-width: 1536px) {
@@ -181,8 +181,12 @@ export const NavSearchTable = ({
   algoPrice,
   isFilteringByFavorites,
   setIsFilteringByFavorites,
-  gridSize
+  gridSize,
+  isFilterActive,
+  searchFilters,
+  setSearchFilterProps
 }) => {
+  // console.log(assets, searchFilters, 'assets')
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
@@ -269,7 +273,26 @@ export const NavSearchTable = ({
     const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
     // REVERT TO ADD SORTING FOR RESTRICTED
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
-    const filteredList = geoFormattedAssets.assets;
+    let filteredList = geoFormattedAssets.assets;
+
+    // Filter Asset By price
+    if (searchFilters.isFilteringPrice) {
+      // Sort list by Price
+      const sortedListByPrice = sortBy(filteredList, o => o.price);
+      // Set max price for the price filter slider
+      setSearchFilterProps({ 
+        type: 'setPriceMax', 
+        value: sortedListByPrice[sortedListByPrice.length - 1].price
+      })
+      const updatedList = [...filteredList].filter((asset) => asset.price < searchFilters.price)
+      filteredList = updatedList
+    }
+
+    // Filter By NFT
+    if (searchFilters.isFilteringNFTOnly) {
+      const updatedList = [...filteredList].filter((asset) => asset.total === 1)
+      filteredList = updatedList
+    }    
     
     // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
@@ -294,8 +317,15 @@ export const NavSearchTable = ({
       return filteredList.map(mapToSearchResults)
     }
 
-  }, [assets, handleRestrictedAsset,
-      isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
+  }, [assets, 
+    handleRestrictedAsset,
+    isListingVerifiedAssets, 
+    isFilteringByFavorites, 
+    favoritesState, 
+    searchFilters.price,
+    searchFilters.isFilteringNFTOnly,
+    searchFilters.isFilteringPrice
+  ])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
@@ -496,7 +526,7 @@ export const NavSearchTable = ({
   }, [router, searchResultData])
   
   return (
-    <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
+    <TableWrapper isFilterActive={isFilterActive} data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
         flyover={isMobile ? false : true}
         components={{
@@ -505,6 +535,7 @@ export const NavSearchTable = ({
         tableSizeOnMobile={gridSize}
         optionalGridInfo={gridSize}
         initialState={searchState}
+        isFilterActive={isFilterActive}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}
         columns={columns}
@@ -521,6 +552,9 @@ NavSearchTable.propTypes = {
   algoPrice: PropTypes.any,
   isFilteringByFavorites: PropTypes.bool,
   setIsFilteringByFavorites: PropTypes.func,
-  gridSize: PropTypes.object
+  gridSize: PropTypes.object,
+  isFilterActive: PropTypes.bool,
+  searchFilters: PropTypes.object,
+  setSearchFilterProps: PropTypes.func
 }
 export default withSearchResultsQuery(NavSearchTable)
