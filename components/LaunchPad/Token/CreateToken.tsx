@@ -16,7 +16,7 @@
 
 import { useState, useContext } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
-import { ConnectedAddress } from '../CreatorAddress'
+import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
 //MUI Components
@@ -35,7 +35,24 @@ import Button from '@mui/material/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 
-const initialValues = {
+type createTokenTypes = {
+  tokenName: string
+  unitName: string
+  totalSupply: string
+  decimals: string
+  assetURL: string
+  assetMetadata: string
+  showClawbackAddr: boolean
+  clawbackAddr: string
+  showReserveAddr: boolean
+  reserveAddr: string
+  showManagerAddr: boolean
+  managerAddr: string
+  showFreezeAddr: boolean
+  freezeAddr: string
+}
+
+const initialValues: createTokenTypes = {
   tokenName: '',
   unitName: '',
   totalSupply: '',
@@ -106,7 +123,7 @@ export const CreateToken = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <ConnectedAddress address={activeWallet?.address} />
+        <CreatorAddress address={activeWallet?.address} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         Creator Address defaults to the wallet that’s currently connected. If you want to create an
