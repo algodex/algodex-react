@@ -8,6 +8,8 @@ import Box from '@mui/material/Box'
 import { CopyIcon } from './copyIcon'
 
 export const ConnectedAddress = () => {
+  const connected = false //this is a fake data, not tied to anything. Just for UI purposes.
+
   return (
     <Box
       sx={{
@@ -18,20 +20,35 @@ export const ConnectedAddress = () => {
         color: 'white',
         columnGap: '5px',
         borderRadius: '3px',
-        padding: '5px'
+        padding: '5px 7px'
       }}
     >
-      <Typography
-        sx={{
-          display: 'block',
-          paddingBlock: '0',
-          fontSize: '15px',
-          fontWeight: 500
-        }}
-      >
-        V537CZ....4WVQCA
-      </Typography>
-      <CopyIcon content={'V537CZGHERY87634WVQCA'} />
+      {connected ? (
+        <>
+          <Typography
+            sx={{
+              display: 'block',
+              paddingBlock: '0',
+              fontSize: '15px',
+              fontWeight: 500
+            }}
+          >
+            V537CZ....4WVQCA
+          </Typography>
+          <CopyIcon content={'V537CZGHERY87634WVQCA'} />
+        </>
+      ) : (
+        <Typography
+          sx={{
+            display: 'block',
+            paddingBlock: '0',
+            fontSize: '15px',
+            fontWeight: 500
+          }}
+        >
+          Connect creator wallet above
+        </Typography>
+      )}
     </Box>
   )
 }
