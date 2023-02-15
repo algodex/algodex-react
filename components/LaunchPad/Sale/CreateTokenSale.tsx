@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react'
-import { ConnectedAddress } from '../CreatorAddress'
+import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
 //MUI Components
@@ -67,7 +67,7 @@ export const CreateTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator/Reserve Address:
         </Typography>
-        <ConnectedAddress />
+        <CreatorAddress />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         A sale must be started from either the Creator or the Reserve wallet of the ASA. Ensure the
