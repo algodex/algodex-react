@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react'
-import { ConnectedAddress } from '../CreatorAddress'
+import { CreatorAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
 //MUI Components
@@ -76,7 +76,7 @@ export const ManageTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <ConnectedAddress />
+        <CreatorAddress />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage sales that have been created with the connected wallet. If you do not

@@ -3,29 +3,46 @@ import React from 'react'
 //MUI Components
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import PropTypes from 'prop-types'
 
 // Custom coponent
 import { CopyIcon } from './copyIcon'
 import { truncatedWalletAddress } from 'components/helpers'
 
-export const ConnectedAddress = ({ address }) => {
+type creatorAddressTypes = {
+  address?: string
+}
+
+export const CreatorAddress = ({ address }: creatorAddressTypes) => {
   const isConnected = typeof address !== 'undefined'
   return (
     <>
-      {isConnected ? (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            border: 'solid',
-            borderColor: 'white',
-            color: 'white',
-            columnGap: '5px',
-            borderRadius: '3px',
-            padding: '5px'
-          }}
-        >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          border: 'solid',
+          borderColor: 'white',
+          color: 'white',
+          columnGap: '5px',
+          borderRadius: '3px',
+          padding: '5px'
+        }}
+      >
+        {isConnected ? (
+          <>
+            <Typography
+              sx={{
+                display: 'block',
+                paddingBlock: '0',
+                fontSize: '15px',
+                fontWeight: 500
+              }}
+            >
+              {truncatedWalletAddress(address, 4)}
+            </Typography>
+            <CopyIcon content={address} />
+          </>
+        ) : (
           <Typography
             sx={{
               display: 'block',
@@ -34,28 +51,10 @@ export const ConnectedAddress = ({ address }) => {
               fontWeight: 500
             }}
           >
-            {truncatedWalletAddress(address, 4)}
+            Connect creator wallet above
           </Typography>
-          <CopyIcon content={address} />
-        </Box>
-      ) : (
-        <Typography
-          sx={{
-            display: 'block',
-            paddingBlock: '0',
-            fontSize: '15px',
-            fontWeight: 500,
-            color: 'white'
-          }}
-        >
-          {/* Needs to be styled properly */}
-          Please connect the wallet you wish to create the asset
-        </Typography>
-      )}
+        )}
+      </Box>
     </>
   )
-}
-
-ConnectedAddress.propTypes = {
-  address: PropTypes.string
 }
