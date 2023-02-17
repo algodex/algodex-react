@@ -169,7 +169,7 @@ export const Search = forwardRef(
               />
               <p className="mx-1.5 my-0 text-xs text-gray-500">Low Spread</p>
             </Stack> */}
-            <Stack direction="row" alignItems="center">
+            {/* <Stack direction="row" alignItems="center">
               <Checkbox
                 isChecked={searchFilters.isFilteringMarketCap}
                 onChange={() => dispatchAction({ type: 'toggleMarketCap' })}
@@ -192,7 +192,7 @@ export const Search = forwardRef(
                   valueLabelDisplay="auto"
                 />
               </Stack>
-            </Stack>
+            </Stack> */}
             <Stack direction="row" alignItems="center">
               <Checkbox
                 isChecked={searchFilters.isFilteringAgeOfProject}
@@ -214,6 +214,9 @@ export const Search = forwardRef(
                   })}
                   aria-label="Small"
                   valueLabelDisplay="auto"
+                  valueLabelFormat={`${searchFilters.ageOfProject} days`}
+                  defaultValue={searchFilters.ageOfProjectMax}
+                  max={searchFilters.ageOfProjectMax}
                 />
               </Stack>
             </Stack>

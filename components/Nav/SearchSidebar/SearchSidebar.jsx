@@ -24,7 +24,8 @@ import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from '@/hooks'
-
+import dayjs from 'dayjs'
+import { testnetAssets } from '../../AgeOfProjects'
 // export const Section = styled.section`
 //   height: inherit;
 //   width: 100%;
@@ -185,6 +186,7 @@ export function NavSearchSidebar({
     marketCapAmount: 0,
     isFilteringMarketCap: false,
     ageOfProject: 0,
+    ageOfProjectMax: 0,
     isFilteringAgeOfProject: false,
     price: 0,
     priceMax: 0,
@@ -193,7 +195,12 @@ export function NavSearchSidebar({
   }
   const [filters, dispatch] = useReducer(filterReducer, initialState)
   const [toggleFilters, setToggleFilters] = useState(false)
+  const TODAY = useMemo(() => Date.now(), [])
 
+  const first = dayjs(TODAY).format('YYYY-DD-MM')
+  const sec = dayjs(testnetAssets['15322902']).format('YYYY-DD-MM')
+  // console.log(first, sec)
+  // console.log(dayjs(first).diff(dayjs(sec), 'day'))
   useEffect(() => {
     const handleResize = () => {
       if (gridRef?.current) {

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useReducer } from 'react'
 
 import { default as NavSearchTable } from 'components/Nav/SearchSidebar/SearchTable'
 import PropTypes from 'prop-types'
@@ -116,7 +116,55 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-
+  const filterReducer = (state, action) => {
+    switch (action.type) {
+      case 'updateSliderValue':
+        return {
+          ...state,
+          [action.field]: action.value
+        }
+      case 'setPriceMax':
+        return {
+          ...state,
+          priceMax: action.value
+        }
+      case 'toggleMarketCap':
+        return {
+          ...state,
+          isFilteringMarketCap: !state.isFilteringMarketCap
+        }      
+      case 'toggleAgeOfProject':
+        return {
+          ...state,
+          isFilteringAgeOfProject: !state.isFilteringAgeOfProject
+        }      
+      case 'toggleMarketPrice':
+        return {
+          ...state,
+          isFilteringPrice: !state.isFilteringPrice
+        }      
+      case 'toggleNFTOnly':
+        return {
+          ...state,
+          isFilteringNFTOnly: !state.isFilteringNFTOnly
+        }      
+      default:
+        break;
+    }
+    return state
+  }
+  const initialState = {
+    marketCapAmount: 0,
+    isFilteringMarketCap: false,
+    ageOfProject: 0,
+    isFilteringAgeOfProject: false,
+    price: 0,
+    priceMax: 0,
+    isFilteringPrice: false,
+    isFilteringNFTOnly: false
+  }
+  const [filters, dispatch] = useReducer(filterReducer, initialState)
+  const [toggleFilters, setToggleFilters] = useState(false)
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
@@ -131,9 +179,13 @@ export function NavSearchSidebar({
               isActive={isActive}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+              searchFilters={filters}
+              dispatchAction={dispatch}
+              toggleFilters={toggleFilters}
+              setToggleFilters={setToggleFilters}
             />
           </div>
-          <div className="mt-1.5" style={{ height: '91%' }}>
+          <div className="mt-1.5" style={{ position: 'relative', height: '91%' }}>
             <NavTable
               query={query}
               isActive={isActive}
@@ -145,6 +197,9 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
+              searchFilters={filters}
+              setSearchFilterProps={dispatch}
+              isFilterActive={toggleFilters}
               gridSize={gridSize}
             />
           </div>

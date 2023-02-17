@@ -24,7 +24,7 @@ import { getAssetTotalStatus, getIsRestricted, getIsRestrictedCountry } from '..
 import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
-
+import dayjs from 'dayjs'
 import AlgoIcon from '@/components/Icon'
 import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
@@ -44,6 +44,7 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@/hooks'
+import { testnetAssets } from '../../AgeOfProjects'
 
 /**
  * Map a Query Result to a Search Result
@@ -104,7 +105,7 @@ const TableWrapper = styled.div`
   // overflow-y: scroll;
   // -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  // top: ${({isFilterActive}) => isFilterActive ? '85px' : '12rem'};
+  // top: ${({isFilterActive}) => isFilterActive ? '85px' : '10rem'};
   width: 100%;
   height: 85%;
 
@@ -113,7 +114,7 @@ const TableWrapper = styled.div`
   }
 
   @media (min-width: 996px) {
-    top: ${({isFilterActive}) => isFilterActive ? '12rem' : '85px'};
+    top: ${({isFilterActive}) => isFilterActive ? '10rem' : '85px'};
   }
 
   // @media (min-width: 1536px) {
@@ -187,13 +188,14 @@ export const NavSearchTable = ({
   setSearchFilterProps
 }) => {
   // console.log(assets, searchFilters, 'assets')
+  // console.log(assets.map((asset) => asset.assetId))
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const isMobile = useMobileDetect()
-
+  const TODAY = useMemo(() => dayjs(Date.now()).format('YYYY-DD-MM'), [])
   const searchTableRef = useRef()
   const router = useRouter()
   const { t } = useTranslation('assets')
@@ -275,6 +277,24 @@ export const NavSearchTable = ({
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
     let filteredList = geoFormattedAssets.assets;
 
+    if (searchFilters.isFilteringAgeOfProject) {
+      const updatedList = [...filteredList].map((asset) => {
+        const formatDateOfFirstTrans = dayjs(testnetAssets[`${asset.assetId}`]).format('YYYY-DD-MM')
+        return {
+          ...asset,
+          ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
+        }
+      })
+      const sortedListByAgeOfProject = sortBy(updatedList, o => o.ageOfProject);
+      setSearchFilterProps({ 
+        type: 'updateSliderValue', 
+        field: 'ageOfProjectMax',
+        value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1].ageOfProject
+      })
+      
+      filteredList = [...updatedList].filter((asset) => asset.ageOfProject <= searchFilters.ageOfProject)
+    }
+
     // Filter Asset By price
     if (searchFilters.isFilteringPrice) {
       // Sort list by Price
@@ -323,6 +343,8 @@ export const NavSearchTable = ({
     isFilteringByFavorites, 
     favoritesState, 
     searchFilters.price,
+    searchFilters.ageOfProject,
+    searchFilters.isFilteringAgeOfProject,
     searchFilters.isFilteringNFTOnly,
     searchFilters.isFilteringPrice
   ])
