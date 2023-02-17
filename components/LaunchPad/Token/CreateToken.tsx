@@ -34,12 +34,14 @@ import Button from '@mui/material/Button'
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
+import { ErrorMessage } from '../ErrorMessage'
+import { algodClient } from '@/components/helpers'
 
 type createTokenTypes = {
   tokenName: string
   unitName: string
-  totalSupply: string
-  decimals: string
+  totalSupply: number
+  decimals: number
   assetURL: string
   assetMetadata: string
   showClawbackAddr: boolean
@@ -55,8 +57,8 @@ type createTokenTypes = {
 const initialValues: createTokenTypes = {
   tokenName: '',
   unitName: '',
-  totalSupply: '',
-  decimals: '',
+  totalSupply: 0,
+  decimals: 0,
   assetURL: '',
   assetMetadata: '',
   showClawbackAddr: false,
@@ -70,8 +72,9 @@ const initialValues: createTokenTypes = {
 }
 
 export const CreateToken = () => {
+  const { activeWallet } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
-
+  const [error, setError] = useState({})
   const [formData, setFormData] = useState(initialValues)
   const {
     tokenName,
@@ -90,21 +93,132 @@ export const CreateToken = () => {
     freezeAddr
   } = formData
 
+  const resetError = (e) => {
+    setError((prev) => ({ ...prev, [e.target.name]: '' }))
+    setError((prev) => ({ ...prev, all: '' }))
+  }
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    resetError(e)
   }
+
   const handleCheck = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.checked })
+    resetError(e)
+  }
+
+  const isInteger = (value: number) => {
+    return value % 1 == 0 ? true : false
+  }
+
+  const isValidURL = (url: string) => {
+    const pattern = new RegExp(
+      '^(https?:\\/\\/)?' +
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+        '((\\d{1,3}\\.){3}\\d{1,3}))' +
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+        '(\\?[;&a-z\\d%_.~+=-]*)?' +
+        '(\\#[-a-z\\d_]*)?$',
+      'i'
+    )
+
+    return pattern.test(url)
+  }
+
+  const isValidAddr = async (addr: string) => {
+    //Check your if account exist on Algorand
+    try {
+      await algodClient().accountInformation(addr).do()
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    let _error = false
+    if (
+      !tokenName ||
+      !unitName ||
+      !totalSupply ||
+      !decimals ||
+      (showClawbackAddr && !clawbackAddr) ||
+      (showReserveAddr && !reserveAddr) ||
+      (showFreezeAddr && !freezeAddr) ||
+      (showManagerAddr && !managerAddr)
+    ) {
+      setError((prev) => ({ ...prev, all: 'Please enter all the required field' }))
+      _error = true
+    }
 
-    setLoading(true)
-    setLoading(false)
+    //Ensure it is a valid whole number
+    if (isNaN(totalSupply) || !isInteger(totalSupply) || totalSupply < 1) {
+      setError((prev) => ({ ...prev, totalSupply: 'Enter a valid whole number' }))
+
+      _error = true
+    }
+
+    //Ensure it is a valid whole number and between 1 - 10
+    if (isNaN(decimals) || !isInteger(decimals) || decimals < 1 || decimals > 10) {
+      setError((prev) => ({ ...prev, decimals: 'Enter whole number between 1 and 10' }))
+
+      _error = true
+    }
+
+    //Check for string with no spaces
+    if (/\s/g.test(tokenName.trim())) {
+      setError((prev) => ({ ...prev, tokenName: 'Spaces not allowed between letters!' }))
+      _error = true
+    }
+    if (/\s/g.test(unitName.trim())) {
+      setError((prev) => ({ ...prev, unitName: 'Spaces not allowed between letters!' }))
+      _error = true
+    }
+
+    //Check for valid url string
+    if (assetURL && !isValidURL(assetURL.trim())) {
+      setError((prev) => ({ ...prev, assetURL: 'Invalid URL string!' }))
+      _error = true
+    }
+
+    //Confirm its a valid algorand address
+    if (showClawbackAddr && clawbackAddr && !(await isValidAddr(clawbackAddr.trim()))) {
+      setError((prev) => ({ ...prev, clawbackAddr: 'Invalid Algorand address!' }))
+      _error = true
+    }
+
+    if (showReserveAddr && reserveAddr && !(await isValidAddr(reserveAddr.trim()))) {
+      setError((prev) => ({ ...prev, reserveAddr: 'Invalid Algorand address!' }))
+      _error = true
+    }
+
+    if (showFreezeAddr && freezeAddr && !(await isValidAddr(freezeAddr.trim()))) {
+      setError((prev) => ({ ...prev, freezeAddr: 'Invalid Algorand address!' }))
+      _error = true
+    }
+
+    if (showManagerAddr && managerAddr && !(await isValidAddr(managerAddr.trim()))) {
+      setError((prev) => ({ ...prev, managerAddr: 'Invalid Algorand address!' }))
+      _error = true
+    }
+
+    if (!_error) {
+      setError(null)
+      createToken()
+    }
   }
 
-  const { activeWallet } = useContext(WalletReducerContext)
+  const createToken = () => {
+    setLoading(true)
+    const payload = { ...formData, decimals: Number(decimals), totalSupply: Number(totalSupply) }
+    delete payload.showClawbackAddr
+    delete payload.showFreezeAddr
+    delete payload.showManagerAddr
+    delete payload.showReserveAddr
+    console.log('Create token', payload)
+    setLoading(false)
+  }
 
   return (
     <>
@@ -140,41 +254,49 @@ export const CreateToken = () => {
               type="text"
               placeholder="Token Name"
               name="tokenName"
+              required
               value={tokenName}
               onChange={(e) => onChange(e)}
               sx={styles.input}
             />
+            <ErrorMessage error={error} name="tokenName" />
           </Box>
           <Box className="mb-4 px-4">
             <OutlinedInput
               type="text"
               placeholder="Unit Name (ex. USDC)"
               name="unitName"
+              required
               value={unitName}
               onChange={(e) => onChange(e)}
               sx={styles.input}
             />
+            <ErrorMessage error={error} name="unitName" />
           </Box>
           <Box className="px-4 md:flex">
             <Box className="mb-4 md:pr-3 w-full md:w-1/2">
               <OutlinedInput
-                type="text"
+                type="number"
                 placeholder="Total Supply"
                 name="totalSupply"
+                required
                 value={totalSupply}
                 onChange={(e) => onChange(e)}
                 sx={styles.input}
               />
+              <ErrorMessage error={error} name="totalSupply" />
             </Box>
             <Box className="mb-4 w-full md:w-1/2">
               <OutlinedInput
-                type="text"
-                placeholder="Decimals (0-10)"
+                type="number"
+                placeholder="Decimals (1-10)"
                 name="decimals"
+                required
                 value={decimals}
                 onChange={(e) => onChange(e)}
                 sx={styles.input}
               />
+              <ErrorMessage error={error} name="decimals" />
             </Box>
           </Box>
         </Box>
@@ -192,6 +314,7 @@ export const CreateToken = () => {
               onChange={(e) => onChange(e)}
               sx={styles.input}
             />
+            <ErrorMessage error={error} name="assetURL" />
             <Typography
               className="ml-4 mt-1"
               sx={{ fontSize: '11px', color: 'gray.500', fontStyle: 'italic' }}
@@ -208,6 +331,7 @@ export const CreateToken = () => {
               onChange={(e) => onChange(e)}
               sx={styles.input}
             />
+            <ErrorMessage error={error} name="assetMetadata" />
             <Typography
               className="ml-4 mt-1"
               sx={{ fontSize: '11px', color: 'gray.500', fontStyle: 'italic' }}
@@ -260,14 +384,17 @@ export const CreateToken = () => {
                 />
               </Box>
               {showClawbackAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Clawback Address"
-                  name="clawbackAddr"
-                  value={clawbackAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
+                <>
+                  <OutlinedInput
+                    type="text"
+                    placeholder="Enter Clawback Address"
+                    name="clawbackAddr"
+                    value={clawbackAddr}
+                    onChange={(e) => onChange(e)}
+                    sx={styles.input}
+                  />
+                  <ErrorMessage error={error} name="clawbackAddr" />
+                </>
               )}
             </Box>
             <Box className="mb-4 px-4">
@@ -294,14 +421,17 @@ export const CreateToken = () => {
                 />
               </Box>
               {showReserveAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Reserve Address"
-                  name="reserveAddr"
-                  value={reserveAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
+                <>
+                  <OutlinedInput
+                    type="text"
+                    placeholder="Enter Reserve Address"
+                    name="reserveAddr"
+                    value={reserveAddr}
+                    onChange={(e) => onChange(e)}
+                    sx={styles.input}
+                  />
+                  <ErrorMessage error={error} name="reserveAddr" />
+                </>
               )}
             </Box>
             <Box className="mb-4 px-4">
@@ -328,14 +458,17 @@ export const CreateToken = () => {
                 />
               </Box>
               {showManagerAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Manager Address"
-                  name="managerAddr"
-                  value={managerAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
+                <>
+                  <OutlinedInput
+                    type="text"
+                    placeholder="Enter Manager Address"
+                    name="managerAddr"
+                    value={managerAddr}
+                    onChange={(e) => onChange(e)}
+                    sx={styles.input}
+                  />
+                  <ErrorMessage error={error} name="managerAddr" />
+                </>
               )}
             </Box>
             <Box className="mb-4 px-4">
@@ -362,18 +495,22 @@ export const CreateToken = () => {
                 />
               </Box>
               {showFreezeAddr && (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Freeze Address"
-                  name="freezeAddr"
-                  value={freezeAddr}
-                  onChange={(e) => onChange(e)}
-                  sx={styles.input}
-                />
+                <>
+                  <OutlinedInput
+                    type="text"
+                    placeholder="Enter Freeze Address"
+                    name="freezeAddr"
+                    value={freezeAddr}
+                    onChange={(e) => onChange(e)}
+                    sx={styles.input}
+                  />
+                  <ErrorMessage error={error} name="freezeAddr" />
+                </>
               )}
             </Box>
           </AccordionDetails>
         </Accordion>
+        <ErrorMessage error={error} name="all" />
 
         <Note
           className="my-6"
