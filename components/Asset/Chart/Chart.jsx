@@ -113,6 +113,8 @@ function autoScaleProvider(original, chart, priceData) {
   return res
 }
 export function Chart({
+  setActiveView,
+  activeView,
   asset,
   interval: _interval,
   mode: _mode,
@@ -242,6 +244,8 @@ export function Chart({
 
       {typeof overlay?.ohlc !== 'undefined' && (
         <ChartOverlay
+          setActiveView={setActiveView}
+          activeView={activeView}
           asset={asset}
           ohlc={overlay.ohlc}
           bid={overlay.orderbook.bid}
@@ -252,6 +256,8 @@ export function Chart({
       )}
       {typeof overlay.ohlc === 'undefined' && (
         <ChartOverlay
+          setActiveView={setActiveView}
+          activeView={activeView}
           asset={asset}
           ohlc={_overlay.ohlc}
           bid={_overlay.orderbook.bid}
@@ -268,6 +274,8 @@ export function Chart({
 }
 
 Chart.propTypes = {
+  setActiveView: PropTypes.func,
+  activeView: PropTypes.string,
   asset: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     decimals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired

@@ -17,7 +17,12 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { logInfo, throttleLog } from 'services/logRemote'
 import { useAlgodex, useAssetOrdersQuery } from '@/hooks'
-import { useCallback, useMemo, useReducer, useState, useEffect } from 'react'
+// import { useCallback, useMemo, useReducer, useState, useEffect } from 'react'
+// import { useAlgodex, useAssetOrdersQuery } from '@algodex/algodex-hooks'
+import { useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react'
+// import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+import useAccountInfo from '../../../hooks/useAccountInfo'
 
 import { AvailableBalance } from './Form/AvailableBalance'
 import Big from 'big.js'
@@ -36,7 +41,7 @@ import styled from '@emotion/styled'
 import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
-import { useMaxSpendableAlgo } from '@/hooks/useMaxSpendableAlgo'
+import { useMaxSpendableAlgo, useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 
 export const Form = styled.form`
   scrollbar-width: none;
@@ -58,17 +63,17 @@ const EmptyState = styled.div`
 `
 
 function shallowEqual(object1, object2) {
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
+  const keys1 = Object.keys(object1)
+  const keys2 = Object.keys(object2)
   if (keys1.length !== keys2.length) {
-    return false;
+    return false
   }
   for (let key of keys1) {
     if (object1[key] !== object2[key]) {
-      return false;
+      return false
     }
   }
-  return true;
+  return true
 }
 
 /**
@@ -90,13 +95,24 @@ function shallowEqual(object1, object2) {
  * @returns {JSX.Element}
  * @constructor
  */
-export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: { Box }, selectedOrder }) {
+export function PlaceOrderForm({
+  showTitle = true,
+  asset,
+  onSubmit,
+  components: { Box },
+  selectedOrder
+}) {
   const { t } = useTranslation('place-order')
   const otherTranslate = useTranslation('common')
 
-  const { wallet, placeOrder, http, isConnected } = useAlgodex()
+  const { wallet, placeOrder, http } = useAlgodex()
   const [tabSwitch, setTabSwitch] = useState(0)
   const [showForm, setShowForm] = useState(true)
+
+  const { activeWallet } = useContext(WalletReducerContext)
+
+  const isConnected = activeWallet !== null
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
 
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
@@ -109,74 +125,72 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
   const assetBalance = useMemo(() => {
     let res = 0
-    if (typeof wallet !== 'undefined' && Array.isArray(wallet.assets)) {
-      const filter = wallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (activeWallet !== null && Array.isArray(activeWallet.assets)) {
+      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = fromBaseUnits(filter[0].amount, asset.decimals)
       }
     }
     return res
-  }, [wallet, asset])
+  }, [activeWallet, asset])
 
-  const algoBalance = useMemo(() => {
-    let res = 0
-    if (typeof wallet !== 'undefined' && typeof wallet.amount === 'number') {
-      res = fromBaseUnits(wallet.amount)
+  const getAdjOrderAmount = useCallback(
+    ({ amount, type, price }) => {
+      let adjAmount = amount || 0
+      let total = adjAmount * price
+      if (type === 'buy' && total > maxSpendableAlgo) {
+        adjAmount = maxSpendableAlgo / Math.max(price, 0.000001)
+      } else if (type === 'sell' && adjAmount > assetBalance) {
+        adjAmount = assetBalance
+      }
+      return adjAmount
+    },
+    [maxSpendableAlgo, assetBalance]
+  )
+
+  const [order, setOrder] = useReducer(
+    (currentState, order) => {
+      const origStateCopy = { ...currentState }
+      if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
+        order.price = 0
+      }
+      if (order.amount !== undefined && order.amount !== '' && isNaN(order.amount)) {
+        order.amount = 0
+      }
+
+      Object.keys(order).forEach((key) => {
+        currentState[key] = order[key]
+      })
+
+      // Set Order Price and Amount precision. Price should be to 6 decimals
+      // currentState.price = formatFloat(currentState.price, 6) || ''
+
+      const amount = getAdjOrderAmount(currentState)
+
+      // Amount should be based on asset decimals
+      // currentState.amount = formatFloat(amount, asset.decimals) || ''
+
+      const price = currentState.price || 0
+
+      const total = parseFloat(amount) * parseFloat(price)
+
+      // Set Order Total precision
+      currentState.total = formatFloat(total, 6)
+
+      if (shallowEqual(currentState, origStateCopy)) {
+        return currentState
+      } else {
+        return { ...currentState }
+      }
+    },
+    {
+      type: 'buy',
+      price: 0,
+      amount: 0,
+      total: 0,
+      execution: 'both'
     }
-    return res
-  }, [wallet])
-
-  const getAdjOrderAmount = useCallback(({ amount, type, price }) => {
-    let adjAmount = amount || 0
-    let total = adjAmount * price
-    if (type === 'buy' && total > algoBalance) {
-      adjAmount = algoBalance / Math.max(price, 0.000001)
-    } else if (type === 'sell' && adjAmount > assetBalance) {
-      adjAmount = assetBalance
-    }
-    return adjAmount
-  }, [algoBalance, assetBalance])
-
-  const [order, setOrder] = useReducer((currentState, order) => {
-    const origStateCopy = { ...currentState }
-    if (order.price !== undefined && order.price !== '' && isNaN(order.price)) {
-      order.price = 0
-    }
-    if (order.amount !== undefined && order.amount !== '' && isNaN(order.amount)) {
-      order.amount = 0
-    }
-
-    Object.keys(order).forEach(key => {
-      currentState[key] = order[key]
-    });
-
-    // Set Order Price and Amount precision. Price should be to 6 decimals
-    // currentState.price = formatFloat(currentState.price, 6) || ''
-
-    const amount = getAdjOrderAmount(currentState)
-
-    // Amount should be based on asset decimals
-    // currentState.amount = formatFloat(amount, asset.decimals) || ''
-
-    const price = currentState.price || 0
-
-    const total = parseFloat(amount) * parseFloat(price)
-
-    // Set Order Total precision
-    currentState.total = formatFloat(total, 6)
-
-    if (shallowEqual(currentState, origStateCopy)) {
-      return currentState
-    } else {
-      return { ...currentState }
-    }
-  }, {
-    type: 'buy',
-    price: '',
-    amount: '',
-    total: 0,
-    execution: 'both'
-  })
+  )
 
   // if (typeof wallet?.address === 'undefined') {
   //   throw new TypeError('Invalid Wallet!')
@@ -248,8 +262,22 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         price: Number(data.payload.price),
         type: data.payload.type
       }
+      console.log(order.type)
+      console.log(assetBalance)
 
-      setOrder(order)
+      if (order.type === 'buy') {
+        if (order.amount * order.price < maxSpendableAlgo / 1000000) {
+          setOrder(order)
+        } else {
+          setOrder({ ...order, amount: maxSpendableAlgo / 1000000 / order.price })
+        }
+      } else {
+        if (order.amount > assetBalance) {
+          setOrder({ ...order, amount: assetBalance })
+        } else {
+          setOrder(order)
+        }
+      }
     }
   })
 
@@ -273,15 +301,13 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       const _value = (order.amount / assetBalance) * 100
       return _value
     }
-    if (order.type === 'buy' && algoBalance !== 0) {
-      const _value = (order.total / algoBalance) * 100
+    if (order.type === 'buy' && maxSpendableAlgo !== 0) {
+      const _value = (order.total / (maxSpendableAlgo / 1000000)) * 100
       return _value
     }
 
     return 0
-  }, [order.price, order.amount, algoBalance, assetBalance])
-
-  const maxSpendableAlgo = useMaxSpendableAlgo()
+  }, [order.price, order.amount, maxSpendableAlgo, assetBalance])
 
   const hasBalance = useMemo(() => {
     if (order.type === 'sell') {
@@ -300,27 +326,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     return new Big(order.total).eq(0)
   }, [order.total, order.type])
 
-  // const isInvalid = () => {
-  //   return isNaN(parseFloat(order.price)) || isNaN(parseFloat(order.amount))
-  // }
-
-  // const isBalanceExceeded = () => {
-  //   const maxSpendableAlgo = fromBaseUnits(wallet.amount)
-  //   const asaBalance = fromBaseUnits(assetBalance, asset.decimals)
-  //   if (order.type === 'buy') {
-  //     return new Big(order.price).times(order.amount).gt(maxSpendableAlgo)
-  //   }
-  //   return new Big(order.amount).gt(asaBalance)
-  // }
-
-  // const isDisabled = isBelowMinOrderAmount() || isInvalid() || isBalanceExceeded()
-  // asset.isGeoBlocked ||
-  // status.submitting
-
   const handleSlider = useCallback(
     (e, value) => {
       let _price = order.price || 0
-      let _balance = order.type === 'sell' ? assetBalance : algoBalance
+      let _balance = order.type === 'sell' ? assetBalance : maxSpendableAlgo / 1000000
       let _percent = (value / 100) * _balance
       const _amount = order.type === 'sell' ? _percent : _percent / _price
 
@@ -330,12 +339,11 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         })
       }
     },
-    [order.price, order.type, algoBalance, order.amount, assetBalance]
+    [order.price, order.type, maxSpendableAlgo, order.amount, assetBalance]
   )
 
   const handleChange = useCallback(
     (e, _key, _value) => {
-
       if (asset.isGeoBlocked) {
         toast.error('Asset is not available for trading')
         return
@@ -384,35 +392,47 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
         // I have checked everywhere in the codebase and no other componenet passes an onSubmit prop to this component
         orderPromise = onSubmit({
           ...formattedOrder,
-          wallet,
+          activeWallet,
           asset
         })
       } else {
         console.log(
           {
             ...formattedOrder,
-            address: wallet.address,
-            wallet,
+            address: activeWallet.address,
+            activeWallet,
             asset,
             appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
             version: 6
           },
-          { wallet }
+          { wallet: activeWallet }
         )
 
         const awaitPlaceOrder = async () => {
           try {
+            if (formattedOrder.type === 'sell' && formattedOrder.amount > assetBalance) {
+              toast.error('You cannot sell more than your available asa balance')
+              return
+            }
+
+            if (
+              formattedOrder.type === 'buy' &&
+              formattedOrder.total > maxSpendableAlgo / 1000000
+            ) {
+              toast.error('You cannot spend more than your available Algo balance')
+              return
+            }
             notifier('Initializing order')
             await placeOrder(
               {
                 ...formattedOrder,
-                address: wallet.address,
-                wallet,
+                address: activeWallet.address,
+                wallet: activeWallet,
                 asset,
                 appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
                 version: 6
               },
-              { wallet },
+              { wallet: activeWallet },
               notifier
             )
             toast.success(t('order-success'), {
@@ -429,10 +449,10 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
 
       // TODO add events
       throttleLog('Submitting order', {
-        wallet
+        activeWallet
       })
     },
-    [onSubmit, asset, order, wallet]
+    [onSubmit, asset, order, activeWallet]
   )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
@@ -445,7 +465,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
     })
   }
 
-  const isActive = typeof wallet === 'undefined'
+  const isActive = activeWallet != null
   if (isLoading || isError) {
     return <Spinner />
   }
@@ -477,7 +497,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
           )}
         </header>
       )}
-      {typeof order !== 'undefined' && typeof wallet !== 'undefined' && isConnected && showForm && (
+      {typeof order !== 'undefined' && activeWallet !== null && isConnected && showForm && (
         <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
@@ -505,7 +525,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
               {t('sell')}
             </MaterialButton>
           </ButtonGroup>
-          <AvailableBalance wallet={wallet} asset={asset} />
+          <AvailableBalance wallet={activeWallet} asset={asset} />
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"
@@ -549,7 +569,7 @@ export function PlaceOrderForm({ showTitle = true, asset, onSubmit, components: 
       {asset.isGeoBlocked && (
         <div className="px-4 flex">
           <MaterialIcon
-            className='mt-2'
+            className="mt-2"
             path={mdiAlertCircleOutline}
             title="Warning icon"
             height="1.5rem"

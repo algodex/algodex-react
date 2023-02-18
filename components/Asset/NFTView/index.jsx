@@ -14,6 +14,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createContext } from 'react'
-
-export const WalletContext = createContext()
+import NFTView from './NFTView'
+export default NFTView
