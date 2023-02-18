@@ -195,12 +195,6 @@ export function NavSearchSidebar({
   }
   const [filters, dispatch] = useReducer(filterReducer, initialState)
   const [toggleFilters, setToggleFilters] = useState(false)
-  const TODAY = useMemo(() => Date.now(), [])
-
-  const first = dayjs(TODAY).format('YYYY-DD-MM')
-  const sec = dayjs(testnetAssets['15322902']).format('YYYY-DD-MM')
-  // console.log(first, sec)
-  // console.log(dayjs(first).diff(dayjs(sec), 'day'))
   useEffect(() => {
     const handleResize = () => {
       if (gridRef?.current) {

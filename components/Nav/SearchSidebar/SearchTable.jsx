@@ -44,7 +44,8 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@/hooks'
-import { testnetAssets } from '../../AgeOfProjects'
+import { testnetAssets, mainnetAssets } from '../../AgeOfProjects'
+import { getActiveNetwork } from 'services/environment'
 
 /**
  * Map a Query Result to a Search Result
@@ -187,13 +188,12 @@ export const NavSearchTable = ({
   searchFilters,
   setSearchFilterProps
 }) => {
-  // console.log(assets, searchFilters, 'assets')
-  // console.log(assets.map((asset) => asset.assetId))
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
+  const activeNetwork = getActiveNetwork();
   const isMobile = useMobileDetect()
   const TODAY = useMemo(() => dayjs(Date.now()).format('YYYY-DD-MM'), [])
   const searchTableRef = useRef()
@@ -278,8 +278,9 @@ export const NavSearchTable = ({
     let filteredList = geoFormattedAssets.assets;
 
     if (searchFilters.isFilteringAgeOfProject) {
+      const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
       const updatedList = [...filteredList].map((asset) => {
-        const formatDateOfFirstTrans = dayjs(testnetAssets[`${asset.assetId}`]).format('YYYY-DD-MM')
+        const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-DD-MM')
         return {
           ...asset,
           ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
