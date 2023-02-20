@@ -77,6 +77,7 @@ const initialValues: createTokenTypes = {
 
 export const CreateToken = () => {
   const { activeWallet } = useContext(WalletReducerContext)
+  const { algodex } = useAlgodex()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
   const [formData, setFormData] = useState(initialValues)
@@ -222,8 +223,6 @@ export const CreateToken = () => {
     delete payload.showReserveAddr
     console.log('Create token', payload)
     setLoading(false)
-  }
-
     let lastToastId
     const notifier = (msg) => {
       if (lastToastId) {
@@ -232,13 +231,14 @@ export const CreateToken = () => {
       if (msg === null) return
       lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
     }
-    const { algodex } = useAlgodex()
     // toast.loading('AWAITING SIGNATURE', { duration: 30 * 60 * 1000 })
     createAsset(formData, algodex.algod, activeWallet, notifier).then(
       (asset) => (lastToastId = toast.success('sucess'))
     )
-
+  
     // toast.success('success')
+  }
+
   
 
 
