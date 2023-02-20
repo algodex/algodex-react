@@ -235,14 +235,9 @@ export const CreateToken = () => {
     createAsset(formData, algodex.algod, activeWallet, notifier).then(
       (asset) => (lastToastId = toast.success('sucess'))
     )
-  
+
     // toast.success('success')
   }
-
-  
-
-
- 
 
   return (
     <>
@@ -545,7 +540,7 @@ export const CreateToken = () => {
         Mailbox to distribute."
         />
         <Box className="text-center">
-          <Button type="submit" disabled={loading} sx={styles.submitBtn}>
+          <Button type="submit" disabled={loading || !activeWallet?.address} sx={styles.submitBtn}>
             CREATE TOKEN
             {/* {loading && (
             <span className="ml-2">
