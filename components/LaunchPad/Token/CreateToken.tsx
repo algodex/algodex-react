@@ -232,15 +232,15 @@ export const CreateToken = () => {
       if (msg === null) return
       lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
     }
+    const { algodex } = useAlgodex()
     // toast.loading('AWAITING SIGNATURE', { duration: 30 * 60 * 1000 })
     createAsset(formData, algodex.algod, activeWallet, notifier).then(
       (asset) => (lastToastId = toast.success('sucess'))
     )
 
     // toast.success('success')
-  }
+  
 
-const { algodex } = useAlgodex()
 
  
 
