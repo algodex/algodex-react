@@ -16,6 +16,7 @@
 
 import { useState, useContext } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
+import { useAlgodex } from '@/hooks'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -36,6 +37,9 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { ErrorMessage } from '../ErrorMessage'
 import { algodClient } from '@/components/helpers'
+
+import createAsset from '../createAsset'
+import toast from 'react-hot-toast'
 
 type createTokenTypes = {
   tokenName: string
@@ -220,6 +224,26 @@ export const CreateToken = () => {
     setLoading(false)
   }
 
+    let lastToastId
+    const notifier = (msg) => {
+      if (lastToastId) {
+        toast.dismiss(lastToastId)
+      }
+      if (msg === null) return
+      lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+    }
+    // toast.loading('AWAITING SIGNATURE', { duration: 30 * 60 * 1000 })
+    createAsset(formData, algodex.algod, activeWallet, notifier).then(
+      (asset) => (lastToastId = toast.success('sucess'))
+    )
+
+    // toast.success('success')
+  }
+
+const { algodex } = useAlgodex()
+
+ 
+
   return (
     <>
       <Typography variant="subtitle1" sx={styles.title}>
@@ -244,6 +268,7 @@ export const CreateToken = () => {
         ASA with a different wallet, you must disconnect this wallet and connect the correct one in
         the header.
       </Typography>
+
       <form onSubmit={onSubmit}>
         <Box className="mb-6">
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, marginBottom: '13px' }}>
