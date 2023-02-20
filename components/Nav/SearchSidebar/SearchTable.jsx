@@ -303,7 +303,7 @@ export const NavSearchTable = ({
       // Set max price for the price filter slider
       setSearchFilterProps({ 
         type: 'setPriceMax', 
-        value: sortedListByPrice[sortedListByPrice.length - 1].price
+        value: sortedListByPrice[sortedListByPrice.length - 1]?.price
       })
       const updatedList = [...filteredList].filter((asset) => asset.price < searchFilters.price)
       filteredList = updatedList
