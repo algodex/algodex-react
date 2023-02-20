@@ -14,6 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import algosdk from 'algosdk'
 import toast from 'react-hot-toast'
 
 export const formatUSDPrice = (amount) => {
@@ -47,4 +48,12 @@ export const setExplorerLink = (addr, network) => {
 
 export const assetVeryShortNameFn = (asset) => {
   return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
+}
+
+export const algodClient = () => {
+  const algodToken = ''
+  const algodServer = 'https://node.algoexplorerapi.io/'
+  const algodPort = ''
+
+  return new algosdk.Algodv2(algodToken, algodServer, algodPort)
 }
