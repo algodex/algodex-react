@@ -14,11 +14,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { useAlgodex } from '@/hooks'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
+
+// Wallet related imports
+import useMyAlgoConnector from '@/hooks/useMyAlgoConnector'
+import useWallets from '@/hooks/useWallets'
+import { PeraWalletConnect } from '@perawallet/connect'
+import { peraSigner } from '@/hooks/usePeraConnection'
 
 //MUI Components
 import Typography from '@mui/material/Typography'
@@ -40,6 +46,8 @@ import { algodClient } from '@/components/helpers'
 
 import createAsset from '../createAsset'
 import toast from 'react-hot-toast'
+
+const peraWalletRehydate = new PeraWalletConnect()
 
 type createTokenTypes = {
   tokenName: string
@@ -76,7 +84,14 @@ const initialValues: createTokenTypes = {
 }
 
 export const CreateToken = () => {
-  const { activeWallet } = useContext(WalletReducerContext)
+  const {
+    setMyAlgoAddresses,
+    setAddressesNew,
+    setActiveWallet,
+    peraWallet,
+    setPeraWallet,
+    activeWallet
+  } = useContext(WalletReducerContext)
   const { algodex } = useAlgodex()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
@@ -139,6 +154,44 @@ export const CreateToken = () => {
       return false
     }
   }
+
+  // const { myAlgoConnector, peraConnector } = useWallets()
+  const { peraConnector } = useWallets()
+  const myAlgoConnector = useMyAlgoConnector()
+
+  useEffect(() => {
+    const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
+    const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
+
+    if (_peraWallet?.type === 'wallet-connect' && peraWallet === null && peraConnector) {
+      peraWalletRehydate.reconnectSession().then((accounts) => {
+        // Setup the disconnect event listener
+        // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
+        const _rehyrdratedPeraWallet = {
+          ..._peraWallet,
+          connector: { ...peraConnector.connector, connected: true, sign: peraSigner }
+        }
+        setPeraWallet(_rehyrdratedPeraWallet)
+        setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
+        setActiveWallet(_rehyrdratedPeraWallet)
+        console.log(accounts)
+      })
+    }
+
+    if (
+      Array.isArray(_myAlgoAddresses) &&
+      _myAlgoAddresses.length > 0 &&
+      myAlgoConnector !== null
+    ) {
+      myAlgoConnector.connected = true
+      const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
+        return { ...addrObj, connector: myAlgoConnector }
+      })
+      setMyAlgoAddresses(_rehydratedMyAlgo)
+      setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
+      setActiveWallet(_rehydratedMyAlgo[0])
+    }
+  }, [myAlgoConnector, peraConnector])
 
   const onSubmit = async (e) => {
     e.preventDefault()
