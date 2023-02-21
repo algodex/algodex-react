@@ -195,7 +195,7 @@ export const NavSearchTable = ({
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
   const activeNetwork = getActiveNetwork();
   const isMobile = useMobileDetect()
-  const TODAY = useMemo(() => dayjs(Date.now()).format('YYYY-DD-MM'), [])
+  const TODAY = useMemo(() => dayjs().format('YYYY-MM-DD'), [])
   const searchTableRef = useRef()
   const router = useRouter()
   const { t } = useTranslation('assets')
@@ -276,11 +276,11 @@ export const NavSearchTable = ({
     // REVERT TO ADD SORTING FOR RESTRICTED
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
     let filteredList = geoFormattedAssets.assets;
-
+    // console.log(filteredList, 'filtered list')
     if (searchFilters.isFilteringAgeOfProject) {
       const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
       const updatedList = [...filteredList].map((asset) => {
-        const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-DD-MM')
+        const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
         return {
           ...asset,
           ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
@@ -349,6 +349,24 @@ export const NavSearchTable = ({
     searchFilters.isFilteringNFTOnly,
     searchFilters.isFilteringPrice
   ])
+
+  useEffect(() => {
+    if (!searchFilters.isFilteringPrice) {
+      setSearchFilterProps({ 
+        type: 'updateSliderValue', 
+        field: 'price',
+        value: 0
+      })
+    }
+    if (!searchFilters.isFilteringAgeOfProject) {
+      setSearchFilterProps({ 
+        type: 'updateSliderValue', 
+        field: 'ageOfProject',
+        value: 0
+      })
+    }
+  }, [searchFilters.isFilteringPrice, searchFilters.isFilteringAgeOfProject])
+  
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {

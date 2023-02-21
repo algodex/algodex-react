@@ -160,7 +160,7 @@ export const Search = forwardRef(
                 isChecked={searchFilters.isFilteringNFTOnly}
                 onChange={() => dispatchAction({ type: 'toggleNFTOnly' })}
               />
-              <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only Mode</p>
+              <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only</p>
             </Stack>
             {/* <Stack direction="row" alignItems="center">
               <Checkbox
@@ -199,7 +199,7 @@ export const Search = forwardRef(
                 onChange={() => dispatchAction({ type: 'toggleAgeOfProject' })}
               />
               <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
-                <p className="mx-1.5 my-0 text-xs text-white">Age of Project</p>
+                <p className="mx-1.5 my-0 text-xs text-white">Age Of Project</p>
                 <Slider
                   size="small"
                   sx={{
@@ -241,6 +241,7 @@ export const Search = forwardRef(
                   })}
                   aria-label="Small"
                   valueLabelDisplay="auto"
+                  valueLabelFormat={`${searchFilters.price} ALGOs`}
                   defaultValue={searchFilters.priceMax}
                   max={searchFilters.priceMax}
                 />
