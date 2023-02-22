@@ -232,7 +232,6 @@ export const CreateToken = () => {
       .then((asset) => {
         setLoading(false)
         lastToastId = toast.success('sucess')
-        setLoading(false)
       })
       .catch((err) => {
         setLoading(false)
