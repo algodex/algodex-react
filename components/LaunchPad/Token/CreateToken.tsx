@@ -31,6 +31,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Switch from '@mui/material/Switch'
 import Button from '@mui/material/Button'
+import toast from 'react-hot-toast'
+import useTranslation from 'next-translate/useTranslation'
+import CircularProgress from '@mui/material/CircularProgress'
 
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
@@ -39,7 +42,6 @@ import { ErrorMessage } from '../ErrorMessage'
 import { algodClient } from '@/components/helpers'
 
 import createAsset from '../createAsset'
-import toast from 'react-hot-toast'
 
 type createTokenTypes = {
   tokenName: string
@@ -61,8 +63,8 @@ type createTokenTypes = {
 const initialValues: createTokenTypes = {
   tokenName: '',
   unitName: '',
-  totalSupply: 0,
-  decimals: 0,
+  totalSupply: undefined,
+  decimals: undefined,
   assetURL: '',
   assetMetadata: '',
   showClawbackAddr: false,
@@ -77,6 +79,7 @@ const initialValues: createTokenTypes = {
 
 export const CreateToken = () => {
   const { activeWallet } = useContext(WalletReducerContext)
+  const { t } = useTranslation('place-order')
   const { algodex } = useAlgodex()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
@@ -216,13 +219,6 @@ export const CreateToken = () => {
 
   const createToken = () => {
     setLoading(true)
-    const payload = { ...formData, decimals: Number(decimals), totalSupply: Number(totalSupply) }
-    delete payload.showClawbackAddr
-    delete payload.showFreezeAddr
-    delete payload.showManagerAddr
-    delete payload.showReserveAddr
-    console.log('Create token', payload)
-    setLoading(false)
     let lastToastId
     const notifier = (msg) => {
       if (lastToastId) {
@@ -232,9 +228,19 @@ export const CreateToken = () => {
       lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
     }
     // toast.loading('AWAITING SIGNATURE', { duration: 30 * 60 * 1000 })
-    createAsset(formData, algodex.algod, activeWallet, notifier).then(
-      (asset) => (lastToastId = toast.success('sucess'))
-    )
+    createAsset(formData, algodex.algod, activeWallet, notifier)
+      .then((asset) => {
+        setLoading(false)
+        lastToastId = toast.success('sucess')
+        setLoading(false)
+      })
+      .catch((err) => {
+        setLoading(false)
+        toast.error(`${t('error-placing-order')}: ${err.message}`, {
+          id: lastToastId,
+          duration: 5000
+        })
+      })
 
     // toast.success('success')
   }
@@ -542,11 +548,11 @@ export const CreateToken = () => {
         <Box className="text-center">
           <Button type="submit" disabled={loading || !activeWallet?.address} sx={styles.submitBtn}>
             CREATE TOKEN
-            {/* {loading && (
-            <span className="ml-2">
-              <Spinner size={1} color={'white'} />
-            </span>
-          )} */}
+            {loading && (
+              <span className="ml-2">
+                <CircularProgress size={13} color="inherit" />
+              </span>
+            )}
           </Button>
         </Box>
       </form>

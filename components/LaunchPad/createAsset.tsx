@@ -27,7 +27,7 @@ export default async function createAsset(assetParams, client, activeWalletObj, 
     undefined,
     params
   )
-  notifier('awaiting signature')
+  notifier('Awaiting Signature')
   const signedTransaction = isMyAlgo
     ? await activeWalletObj.connector.signTransaction(createAssetTxn.toByte())
     : await activeWalletObj.peraWallet.signTransaction([[{ txn: createAssetTxn }]])
@@ -36,7 +36,7 @@ export default async function createAsset(assetParams, client, activeWalletObj, 
     .sendRawTransaction(isMyAlgo ? signedTransaction.blob : signedTransaction) /// peraWallet returns the blob directly
     .do()
 
-  notifier('awaiting confirmation')
+  notifier('Awaiting Confirmation')
   const ptx = await algosdk.waitForConfirmation(client, txn.txId, 4)
   notifier(null)
   const assetId = ptx['asset-index']
