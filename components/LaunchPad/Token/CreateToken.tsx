@@ -156,7 +156,7 @@ export const CreateToken = () => {
   }
 
   // const { myAlgoConnector, peraConnector } = useWallets()
-  const { peraConnector } = useWallets()
+  const { peraConnector } = useWallets(() => {})
   const myAlgoConnector = useMyAlgoConnector()
 
   useEffect(() => {
