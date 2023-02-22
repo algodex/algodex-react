@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, useContext } from 'react'
+import { useState, useContext, ChangeEvent } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { useAlgodex } from '@/hooks'
 import { CreatorAddress } from '../CreatorAddress'
@@ -35,11 +35,12 @@ import toast from 'react-hot-toast'
 import useTranslation from 'next-translate/useTranslation'
 import CircularProgress from '@mui/material/CircularProgress'
 
-// Custom Styled Components
+// Custom Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { ErrorMessage } from '../ErrorMessage'
 import { algodClient } from '@/components/helpers'
+import { NumberFormatCustom } from '@/components/Wallet/PlaceOrder/Form/TradeInputs'
 
 import createAsset from '../createAsset'
 
@@ -101,16 +102,16 @@ export const CreateToken = () => {
     freezeAddr
   } = formData
 
-  const resetError = (e) => {
+  const resetError = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setError((prev) => ({ ...prev, [e.target.name]: '' }))
     setError((prev) => ({ ...prev, all: '' }))
   }
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
     resetError(e)
   }
 
-  const handleCheck = (e) => {
+  const handleCheck = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.checked })
     resetError(e)
   }
@@ -143,7 +144,7 @@ export const CreateToken = () => {
     }
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     let _error = false
     if (
@@ -301,7 +302,7 @@ export const CreateToken = () => {
           <Box className="px-4 md:flex">
             <Box className="mb-4 md:pr-3 w-full md:w-1/2">
               <OutlinedInput
-                type="number"
+                inputComponent={NumberFormatCustom}
                 placeholder="Total Supply"
                 name="totalSupply"
                 required
@@ -313,7 +314,7 @@ export const CreateToken = () => {
             </Box>
             <Box className="mb-4 w-full md:w-1/2">
               <OutlinedInput
-                type="number"
+                inputComponent={NumberFormatCustom}
                 placeholder="Decimals (1-10)"
                 name="decimals"
                 required
@@ -397,15 +398,7 @@ export const CreateToken = () => {
                   color="success"
                   name="showClawbackAddr"
                   value={showClawbackAddr}
-                  onChange={(e) => {
-                    const value = e.target.checked
-                    onChange({
-                      target: {
-                        value,
-                        name: 'showClawbackAddr'
-                      }
-                    })
-                  }}
+                  onChange={(e) => handleCheck(e)}
                 />
               </Box>
               {showClawbackAddr && (
