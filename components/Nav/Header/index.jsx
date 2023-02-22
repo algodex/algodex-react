@@ -68,7 +68,7 @@ const ENABLE_NETWORK_SELECTION =
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
-const peraWalletRehydate = new PeraWalletConnect()
+const rehydratedPeraWallet = new PeraWalletConnect()
 
 export function Header() {
   const { t } = useTranslation('common')
@@ -114,12 +114,13 @@ export function Header() {
     const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
 
     if (_peraWallet?.type === 'wallet-connect' && peraWallet === null && peraConnector) {
-      peraWalletRehydate.reconnectSession().then((accounts) => {
+      rehydratedPeraWallet.reconnectSession().then((accounts) => {
         // Setup the disconnect event listener
         // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
         const _rehyrdratedPeraWallet = {
           ..._peraWallet,
-          connector: { ...peraConnector.connector, connected: true, sign: peraSigner }
+          connector: { ...peraConnector.connector, connected: true, sign: peraSigner },
+          peraWallet: rehydratedPeraWallet
         }
         setPeraWallet(_rehyrdratedPeraWallet)
         setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
