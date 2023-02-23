@@ -1,5 +1,6 @@
 import algosdk from 'algosdk'
 
+const isUndefined = (param) => (param.length !== 0 ? param : undefined)
 export default async function createAsset(assetParams, client, activeWalletObj, notifier) {
   const params = await client.getTransactionParams().do()
 
@@ -17,14 +18,14 @@ export default async function createAsset(assetParams, client, activeWalletObj, 
     Number(assetParams.totalSupply), // hardCoded issuance for time being
     Number(assetParams.decimals), // hardCoded decimals for time
     false,
-    activeWalletObj.address,
-    undefined,
-    activeWalletObj.address,
-    activeWalletObj.address,
+    isUndefined(assetParams.managerAddr),
+    isUndefined(assetParams.reserveAddr),
+    isUndefined(assetParams.freezeAddr),
+    isUndefined(assetParams.clawbackAddr),
     assetParams.tokenName,
     assetParams.unitName,
-    undefined,
-    undefined,
+    isUndefined(assetParams.assetURL),
+    isUndefined(assetParams.assetMetadata),
     params
   )
   notifier('Awaiting Signature')
