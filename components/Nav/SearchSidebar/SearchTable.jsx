@@ -308,7 +308,7 @@ export const NavSearchTable = ({
       })
       const updatedList = [...filteredList].filter((asset) => asset.formattedPrice <= searchFilters.price)
       filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice );
-      return filteredList.map(mapToSearchResults)
+      // return filteredList.map(mapToSearchResults)
     }
 
     // Filter By NFT
