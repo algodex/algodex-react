@@ -293,7 +293,8 @@ export const NavSearchTable = ({
         value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1].ageOfProject
       })
       
-      filteredList = [...updatedList].filter((asset) => asset.ageOfProject <= searchFilters.ageOfProject)
+      filteredList = [...updatedList].filter((asset) => asset.ageOfProject <= searchFilters.ageOfProject).sort((a, b) => b.formattedPrice - a.formattedPrice );
+      return filteredList.map(mapToSearchResults)
     }
 
     // Filter Asset By price
@@ -306,13 +307,15 @@ export const NavSearchTable = ({
         value: sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice
       })
       const updatedList = [...filteredList].filter((asset) => asset.formattedPrice <= searchFilters.price)
-      filteredList = updatedList
+      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice );
+      return filteredList.map(mapToSearchResults)
     }
 
     // Filter By NFT
     if (searchFilters.isFilteringNFTOnly) {
       const updatedList = [...filteredList].filter((asset) => asset.total === 1)
-      filteredList = updatedList
+      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice );
+      return filteredList.map(mapToSearchResults)
     }    
     
     // Return List
