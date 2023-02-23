@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
@@ -29,6 +29,7 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { CopyIcon } from '../copyIcon'
 import { LinearProgressWithLabel } from '../progressBar'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 
 const initialValues = {
   tokenName: '',
@@ -39,6 +40,7 @@ const initialValues = {
 }
 
 export const ManageTokenSale = () => {
+  const { activeWallet } = useContext(WalletReducerContext)
   const [formData, setFormData] = useState(initialValues)
   const { tokenName, pricePerToken, showPricePerToken, totalForSale, showTotalForSale } = formData
 
@@ -76,7 +78,7 @@ export const ManageTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress />
+        <CreatorAddress address={activeWallet?.address} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage sales that have been created with the connected wallet. If you do not
