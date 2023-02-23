@@ -41,6 +41,7 @@ import { styles } from '../styles.css'
 import { ErrorMessage } from '../ErrorMessage'
 import { algodClient } from '@/components/helpers'
 import { NumberFormatCustom } from '@/components/Wallet/PlaceOrder/Form/TradeInputs'
+import { Tip } from '../Tip'
 
 import createAsset from '../createAsset'
 
@@ -391,7 +392,12 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Clawback Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip
+                    tip="The clawback address represents an account that is allowed to transfer assets from and to
+        any asset holder (assuming they have opted-in). Use this if you need the option to revoke
+        assets from an account (like if they breach certain contractual obligations tied to holding
+        the asset). In traditional finance, this sort of transaction is referred to as a clawback."
+                  />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
@@ -428,7 +434,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Reserve Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip='Specifying a reserve account signifies that non-minted assets will reside in that account instead of the default creator account. Assets transferred from this account are "minted" units of the asset. If you specify a new reserve address, you must make sure the new account has opted into the asset and then issue a transaction to transfer all assets to the new reserve.' />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
@@ -465,7 +471,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Manager Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip="The manager account is the only account that can authorize transactions to re-configure or destroy an asset. Never set this address to empty if you want to be able to re-configure or destroy the asset." />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
@@ -502,7 +508,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Freeze Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip="The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to restrict liquidation of company stock, to investigate suspected criminal activity or to deny-list certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks)." />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
