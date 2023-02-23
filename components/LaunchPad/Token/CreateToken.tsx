@@ -14,12 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, ChangeEvent, useContext } from 'react'
+import { useState, useContext, ChangeEvent } from 'react'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { useAlgodex } from '@/hooks'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
-import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
-// Wallet related imports
 
 //MUI Components
 import Typography from '@mui/material/Typography'
@@ -80,8 +79,9 @@ const initialValues: createTokenTypes = {
 }
 
 export const CreateToken = () => {
-  const { algodex } = useAlgodex()
+  const { activeWallet } = useContext(WalletReducerContext)
   const { t } = useTranslation('place-order')
+  const { algodex } = useAlgodex()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
   const [formData, setFormData] = useState(initialValues)
@@ -101,8 +101,6 @@ export const CreateToken = () => {
     showFreezeAddr,
     freezeAddr
   } = formData
-
-  const { activeWallet } = useContext(WalletReducerContext)
 
   const resetError = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setError((prev) => ({ ...prev, [e.target.name]: '' }))

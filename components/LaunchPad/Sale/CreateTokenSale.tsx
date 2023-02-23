@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -27,6 +27,7 @@ import Button from '@mui/material/Button'
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 
 const initialValues = {
   assetId: '',
@@ -35,6 +36,7 @@ const initialValues = {
 }
 
 export const CreateTokenSale = () => {
+  const { activeWallet } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
   const { assetId, quantity, perUnit } = formData
@@ -67,7 +69,7 @@ export const CreateTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator/Reserve Address:
         </Typography>
-        <CreatorAddress />
+        <CreatorAddress address={activeWallet?.address} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         A sale must be started from either the Creator or the Reserve wallet of the ASA. Ensure the
