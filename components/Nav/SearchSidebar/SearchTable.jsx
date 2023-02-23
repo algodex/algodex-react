@@ -294,7 +294,7 @@ export const NavSearchTable = ({
       })
       
       filteredList = [...updatedList].filter((asset) => asset.ageOfProject <= searchFilters.ageOfProject).sort((a, b) => b.formattedPrice - a.formattedPrice );
-      return filteredList.map(mapToSearchResults)
+      // return filteredList.map(mapToSearchResults)
     }
 
     // Filter Asset By price
@@ -315,7 +315,7 @@ export const NavSearchTable = ({
     if (searchFilters.isFilteringNFTOnly) {
       const updatedList = [...filteredList].filter((asset) => asset.total === 1)
       filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice );
-      return filteredList.map(mapToSearchResults)
+      // return filteredList.map(mapToSearchResults)
     }    
     
     // Return List
