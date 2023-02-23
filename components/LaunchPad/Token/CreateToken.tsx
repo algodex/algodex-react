@@ -232,7 +232,7 @@ export const CreateToken = () => {
     createAsset(formData, algodex.algod, activeWallet, notifier)
       .then((asset) => {
         setLoading(false)
-        lastToastId = toast.success('sucess')
+        lastToastId = toast.success(t('asset-success'))
       })
       .catch((err) => {
         setLoading(false)

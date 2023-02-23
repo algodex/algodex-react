@@ -26,5 +26,6 @@
     "order-size-filtering": "Beställningsstorleksfiltrering",
     "less-lag": "Mindre fördröjning",
     "better-execution": "Bättre utförande",
-    "fund-wallet":"Vänligen finansiera din plånbok med mer ALGO innan du beställer!"
+    "fund-wallet":"Vänligen finansiera din plånbok med mer ALGO innan du beställer!",
+    "asset-success": "Tillgång har skapats"
 }

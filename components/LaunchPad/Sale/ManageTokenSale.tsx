@@ -36,7 +36,7 @@ const initialValues = {
   pricePerToken: 0.75,
   showPricePerToken: false,
   totalForSale: 14600,
-  showTotalForSale: false
+  showTotalForSale: false,
 }
 
 export const ManageTokenSale = () => {
