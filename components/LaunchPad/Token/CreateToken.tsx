@@ -28,7 +28,6 @@ import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Switch from '@mui/material/Switch'
 import Button from '@mui/material/Button'
 import toast from 'react-hot-toast'
@@ -44,7 +43,7 @@ import { NumberFormatCustom } from '@/components/Wallet/PlaceOrder/Form/TradeInp
 import { Tip } from '../Tip'
 
 import createAsset from '../createAsset'
-import { InputTips } from '../inputTips'
+import * as InputTips from '../InputTips.json'
 
 type createTokenTypes = {
   tokenName: string
