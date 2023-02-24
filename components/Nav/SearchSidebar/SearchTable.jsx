@@ -34,7 +34,7 @@ import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-import {floatToFixedDisplay} from '@/services/display';
+import { floatToFixedDisplay } from '@/services/display';
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -82,8 +82,8 @@ export const mapToSearchResults = ({
   const change = !isNaN(parseFloat(priceChg24Pct))
     ? floatToFixed(priceChg24Pct, 2)
     : hasOrders
-    ? '--'
-    : null
+      ? '--'
+      : null
 
   return {
     id: assetId,
@@ -106,7 +106,7 @@ const TableWrapper = styled.div`
   // overflow-y: scroll;
   // -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  // top: ${({isFilterActive}) => isFilterActive ? '85px' : '10rem'};
+  // top: ${({ isFilterActive }) => isFilterActive ? '85px' : '10rem'};
   width: 100%;
   height: 85%;
 
@@ -115,7 +115,7 @@ const TableWrapper = styled.div`
   }
 
   @media (min-width: 996px) {
-    top: ${({isFilterActive}) => isFilterActive ? '10rem' : '85px'};
+    top: ${({ isFilterActive }) => isFilterActive ? '10rem' : '85px'};
   }
 
   // @media (min-width: 1536px) {
@@ -268,7 +268,7 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    
+
     // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Geoformatted assets
@@ -287,37 +287,40 @@ export const NavSearchTable = ({
         }
       })
       const sortedListByAgeOfProject = sortBy(updatedList, o => o.ageOfProject);
-      setSearchFilterProps({ 
-        type: 'updateSliderValue', 
+      setSearchFilterProps({
+        type: 'updateSliderValue',
         field: 'ageOfProjectMax',
         value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1].ageOfProject
       })
-      
-      filteredList = [...updatedList].filter((asset) => asset.ageOfProject <= searchFilters.ageOfProject).sort((a, b) => b.formattedPrice - a.formattedPrice );
+
+      filteredList = [...updatedList].filter((asset) => asset.ageOfProject <= searchFilters.ageOfProject).sort((a, b) => b.formattedPrice - a.formattedPrice);
       // return filteredList.map(mapToSearchResults)
     }
 
     // Filter Asset By price
     if (searchFilters.isFilteringPrice) {
+
+
       // Sort list by Price
-      const sortedListByPrice = [...filteredList].sort((a, b) => a.formattedPrice - b.formattedPrice );
+      const sortedListByPrice = [...filteredList].sort((a, b) => a.formattedPrice - b.formattedPrice)
+
       // Set max price for the price filter slider
-      setSearchFilterProps({ 
-        type: 'setPriceMax', 
+      setSearchFilterProps({
+        type: 'setPriceMax',
         value: sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice
       })
       const updatedList = [...filteredList].filter((asset) => asset.formattedPrice <= searchFilters.price)
-      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice );
+      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
       // return filteredList.map(mapToSearchResults)
     }
 
     // Filter By NFT
     if (searchFilters.isFilteringNFTOnly) {
       const updatedList = [...filteredList].filter((asset) => asset.total === 1)
-      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice );
+      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
       // return filteredList.map(mapToSearchResults)
-    }    
-    
+    }
+
     // Return List
     if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
       return []
@@ -341,11 +344,11 @@ export const NavSearchTable = ({
       return filteredList.map(mapToSearchResults)
     }
 
-  }, [assets, 
+  }, [assets,
     handleRestrictedAsset,
-    isListingVerifiedAssets, 
-    isFilteringByFavorites, 
-    favoritesState, 
+    isListingVerifiedAssets,
+    isFilteringByFavorites,
+    favoritesState,
     searchFilters.price,
     searchFilters.ageOfProject,
     searchFilters.isFilteringAgeOfProject,
@@ -355,29 +358,28 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     if (!searchFilters.isFilteringPrice) {
-      setSearchFilterProps({ 
-        type: 'updateSliderValue', 
+      setSearchFilterProps({
+        type: 'updateSliderValue',
         field: 'price',
         value: 0
       })
     }
     if (!searchFilters.isFilteringAgeOfProject) {
-      setSearchFilterProps({ 
-        type: 'updateSliderValue', 
+      setSearchFilterProps({
+        type: 'updateSliderValue',
         field: 'ageOfProject',
         value: 0
       })
     }
   }, [searchFilters.isFilteringPrice, searchFilters.isFilteringAgeOfProject])
-  
+
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
       return (
         <AssetPrice
-          className={`${
-            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
-          } cursor-pointer font-semibold`}
+          className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
+            } cursor-pointer font-semibold`}
         >
           {value}
           <br />
@@ -562,13 +564,13 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     // Prefetch the top assets
-    searchResultData.slice(0,30).map(result => {
+    searchResultData.slice(0, 30).map(result => {
       const assetId = result.id
       // console.log('zprefetching: ' + assetId)
-      router.prefetch('/trade/'+assetId)
+      router.prefetch('/trade/' + assetId)
     })
   }, [router, searchResultData])
-  
+
   return (
     <TableWrapper isFilterActive={isFilterActive} data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table

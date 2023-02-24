@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useMemo, useState, useReducer } from 'react'
+import { createRef, forwardRef, useMemo, useState, useReducer, useCallback } from 'react'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { X as CancelIcon } from 'react-feather'
@@ -89,17 +89,17 @@ const Input = styled(TextInput)`
 
 export const Search = forwardRef(
   (
-    { 
-      dispatchAction, 
-      searchFilters, 
+    {
+      dispatchAction,
+      searchFilters,
       toggleFilters,
       setToggleFilters,
-      isListingVerifiedAssets, 
-      setIsListingVerifiedAssets, 
-      value, 
-      onCancel, 
-      isActive, 
-      ...props 
+      isListingVerifiedAssets,
+      setIsListingVerifiedAssets,
+      value,
+      onCancel,
+      isActive,
+      ...props
     },
     ref
   ) => {
@@ -109,6 +109,31 @@ export const Search = forwardRef(
         onCancel()
       }
     }
+
+    // Set the slider value from the logarithmic scale
+    const setSliderValueFn = useCallback((value) => {
+      const min = parseInt(0)
+      const max = parseInt(searchFilters.ageOfProjectMax)
+      const logMin = Math.log10(min)
+      const logMax = Math.log10(max)
+      const logValue = Math.pow(10, (value - min) / (max - min) * (logMax - logMin) + logMin)
+      return logValue
+    }, [searchFilters.ageOfProjectMax])
+
+
+    // Get the slider value from the logarithmic scale
+    const getSliderValue = useCallback(() => {
+      const min = parseInt(0)
+      const max = parseInt(searchFilters.ageOfProjectMax)
+      const logMin = Math.log10(min)
+      const logMax = Math.log10(max)
+      const logValue = Math.log10(searchFilters.ageOfProject)
+      return Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)
+    }, [
+      searchFilters.ageOfProjectMax, 
+      searchFilters.ageOfProject
+    ])
+
 
     return (
       <div>
@@ -206,11 +231,11 @@ export const Search = forwardRef(
                     color: 'white',
                     width: '70%'
                   }}
-                  value={searchFilters.ageOfProject}
+                  value={getSliderValue()}
                   onChange={(e) => dispatchAction({
                     type: 'updateSliderValue',
                     field: 'ageOfProject',
-                    value: e.target.value
+                    value: setSliderValueFn(e.target.value)
                   })}
                   aria-label="Small"
                   valueLabelDisplay="auto"
@@ -360,7 +385,7 @@ SearchInput.propTypes = {
   isActive: PropTypes.bool,
   dispatchAction: PropTypes.func,
   searchFilters: PropTypes.object,
-  toggleFilters: PropTypes.bool, 
+  toggleFilters: PropTypes.bool,
   setToggleFilters: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   setIsListingVerifiedAssets: PropTypes.func
