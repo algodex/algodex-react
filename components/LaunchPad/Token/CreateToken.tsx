@@ -28,7 +28,6 @@ import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Switch from '@mui/material/Switch'
 import Button from '@mui/material/Button'
 import toast from 'react-hot-toast'
@@ -41,8 +40,10 @@ import { styles } from '../styles.css'
 import { ErrorMessage } from '../ErrorMessage'
 import { algodClient } from '@/components/helpers'
 import { NumberFormatCustom } from '@/components/Wallet/PlaceOrder/Form/TradeInputs'
+import { Tip } from '../Tip'
 
 import createAsset from '../createAsset'
+import * as InputTips from '../InputTips.json'
 
 type createTokenTypes = {
   tokenName: string
@@ -391,7 +392,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Clawback Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip={InputTips.clawbackAddr} />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
@@ -428,7 +429,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Reserve Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip={InputTips.reserveAddr} />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
@@ -465,7 +466,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Manager Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip={InputTips.managerAddr} />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
@@ -502,7 +503,7 @@ export const CreateToken = () => {
                   sx={{ fontWeight: 500, fontSize: '16px', color: 'white', fontStyle: 'italic' }}
                 >
                   Freeze Address?
-                  <InfoOutlinedIcon sx={{ color: 'gray.500', fontSize: '16px', ml: '5px' }} />
+                  <Tip tip={InputTips.freezeAddr} />
                 </Typography>
                 <Switch
                   inputProps={{ 'aria-label': 'Switch demo' }}
