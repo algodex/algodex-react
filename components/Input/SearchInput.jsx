@@ -233,11 +233,14 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={searchFilters.ageOfProject}
-                  onChange={(e) => dispatchAction({
-                    type: 'updateSliderValue',
-                    field: 'ageOfProject',
-                    value: e.target.value
-                  })}
+                  onChange={(e) => {
+                    !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
+                    dispatchAction({
+                      type: 'updateSliderValue',
+                      field: 'ageOfProject',
+                      value: e.target.value
+                    })}
+                  }
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.ageOfProject} days`}
@@ -260,11 +263,14 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={getSliderValue()}
-                  onChange={(e) => dispatchAction({
-                    type: 'updateSliderValue',
-                    field: 'price',
-                    value: setSliderValueFn(e.target.value)
-                  })}
+                  onChange={(e) => {
+                    !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+                    dispatchAction({
+                      type: 'updateSliderValue',
+                      field: 'price',
+                      value: setSliderValueFn(e.target.value)
+                    })}
+                  }
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.price} ALGOs`}
