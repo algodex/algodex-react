@@ -112,26 +112,27 @@ export const Search = forwardRef(
 
     // Set the slider value from the logarithmic scale
     const setSliderValueFn = useCallback((value) => {
-      const min = parseInt(0)
-      const max = parseInt(searchFilters.ageOfProjectMax)
-      const logMin = Math.log10(min)
-      const logMax = Math.log10(max)
+      const min = parseInt(1)
+      const max = parseInt(searchFilters.priceMax)
+      const logMin = Math.log10(parseInt(min))
+      const logMax = Math.log10(parseInt(max))
       const logValue = Math.pow(10, (value - min) / (max - min) * (logMax - logMin) + logMin)
-      return logValue
-    }, [searchFilters.ageOfProjectMax])
+      
+      return parseInt(logValue)
+    }, [searchFilters.priceMax])
 
 
     // Get the slider value from the logarithmic scale
     const getSliderValue = useCallback(() => {
-      const min = parseInt(0)
-      const max = parseInt(searchFilters.ageOfProjectMax)
+      const min = parseInt(1)
+      const max = parseInt(searchFilters.priceMax)
       const logMin = Math.log10(min)
       const logMax = Math.log10(max)
-      const logValue = Math.log10(searchFilters.ageOfProject)
+      const logValue = Math.log10(searchFilters.price)
       return Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)
     }, [
-      searchFilters.ageOfProjectMax, 
-      searchFilters.ageOfProject
+      searchFilters.priceMax, 
+      searchFilters.price
     ])
 
 
@@ -231,11 +232,11 @@ export const Search = forwardRef(
                     color: 'white',
                     width: '70%'
                   }}
-                  value={getSliderValue()}
+                  value={searchFilters.ageOfProject}
                   onChange={(e) => dispatchAction({
                     type: 'updateSliderValue',
                     field: 'ageOfProject',
-                    value: setSliderValueFn(e.target.value)
+                    value: e.target.value
                   })}
                   aria-label="Small"
                   valueLabelDisplay="auto"
@@ -258,11 +259,11 @@ export const Search = forwardRef(
                     color: 'white',
                     width: '70%'
                   }}
-                  value={searchFilters.price}
+                  value={getSliderValue()}
                   onChange={(e) => dispatchAction({
                     type: 'updateSliderValue',
                     field: 'price',
-                    value: e.target.value
+                    value: setSliderValueFn(e.target.value)
                   })}
                   aria-label="Small"
                   valueLabelDisplay="auto"
