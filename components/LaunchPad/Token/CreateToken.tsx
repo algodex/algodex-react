@@ -215,11 +215,17 @@ export const CreateToken = () => {
 
     if (!_error) {
       setError(null)
-      createToken()
+      createToken({
+        ...formData,
+        freezeAddr: showFreezeAddr ? freezeAddr : '',
+        clawbackAddr: showClawbackAddr ? clawbackAddr : '',
+        managerAddr: showManagerAddr ? managerAddr : '',
+        reserveAddr: showReserveAddr ? reserveAddr : ''
+      })
     }
   }
 
-  const createToken = () => {
+  const createToken = (payload) => {
     setLoading(true)
     let lastToastId
     const notifier = (msg) => {
@@ -230,7 +236,7 @@ export const CreateToken = () => {
       lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
     }
     // toast.loading('AWAITING SIGNATURE', { duration: 30 * 60 * 1000 })
-    createAsset(formData, algodex.algod, activeWallet, notifier)
+    createAsset(payload, algodex.algod, activeWallet, notifier)
       .then((asset) => {
         setLoading(false)
         lastToastId = toast.success(t('asset-success'))
