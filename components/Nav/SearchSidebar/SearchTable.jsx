@@ -302,8 +302,7 @@ export const NavSearchTable = ({
 
 
       // Sort list by Price
-      const sortedListByPrice = [...filteredList].sort((a, b) => a.formattedPrice - b.formattedPrice)
-
+      const sortedListByPrice = [...geoFormattedAssets.assets].sort((a, b) => a.formattedPrice - b.formattedPrice)
       // Set max price for the price filter slider
       setSearchFilterProps({
         type: 'setPriceMax',
