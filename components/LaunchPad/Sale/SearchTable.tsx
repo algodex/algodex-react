@@ -86,6 +86,7 @@ export const SearchTable = ({
 
   return (
     <Paper
+      ref={dropdownRef}
       sx={{
         width: '95%',
         overflow: 'hidden',
