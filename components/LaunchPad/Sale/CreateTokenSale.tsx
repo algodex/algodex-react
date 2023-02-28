@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -61,6 +61,7 @@ export const CreateTokenSale = () => {
   const [formData, setFormData] = useState(initialValues)
   const [assetList, setAssetList] = useState([])
   const [showTable, setShowTable] = useState(false)
+  const dropdownRef = useRef(null)
 
   const { assetId, quantity, perUnit } = formData
 
@@ -160,7 +161,7 @@ export const CreateTokenSale = () => {
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Asset:
           </Typography>
-          <Box className="mb-4 px-4 relative">
+          <Box className="mb-4 px-4 relative" ref={dropdownRef}>
             <OutlinedInput
               type="text"
               placeholder="ASA Asset ID"
@@ -175,6 +176,7 @@ export const CreateTokenSale = () => {
               rowData={assetList}
               showTable={showTable}
               setShowTable={setShowTable}
+              dropdownRef={dropdownRef}
             />
           </Box>
         </Box>

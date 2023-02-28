@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { MutableRefObject, useEffect, useMemo, useState } from 'react'
 
 //MUI components
 import Paper from '@mui/material/Paper'
@@ -41,14 +41,15 @@ export const SearchTable = ({
   columns,
   rowData,
   showTable,
-  setShowTable
+  setShowTable,
+  dropdownRef
 }: {
   columns: Array<columnType>
   rowData: Array<unknown>
   showTable: boolean
   setShowTable: (v: boolean) => void
+  dropdownRef: MutableRefObject<Element>
 }) => {
-  const dropdownRef = useRef(null)
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [orderBy, setOrderBy] = useState('assetName')
 
@@ -86,7 +87,6 @@ export const SearchTable = ({
 
   return (
     <Paper
-      ref={dropdownRef}
       sx={{
         width: '95%',
         overflow: 'hidden',
