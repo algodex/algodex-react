@@ -26,7 +26,7 @@ import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
-import { Box, Slider, Stack } from '@mui/material'
+import { Slider, Stack } from '@mui/material'
 
 const Container = styled.div`
   display: flex;
@@ -118,7 +118,7 @@ export const Search = forwardRef(
       const logMax = Math.log10(parseInt(max))
       const logValue = Math.pow(10, (value - min) / (max - min) * (logMax - logMin) + logMin)
       return parseInt(logValue)
-    }, [searchFilters.priceMax])
+    }, [searchFilters?.priceMax])
 
 
     // Get the slider value from the logarithmic scale
@@ -130,8 +130,8 @@ export const Search = forwardRef(
       const logValue = Math.log10(searchFilters.price || 1)
       return Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)
     }, [
-      searchFilters.priceMax, 
-      searchFilters.price
+      searchFilters?.priceMax, 
+      searchFilters?.price
     ])
 
 
@@ -187,37 +187,6 @@ export const Search = forwardRef(
               />
               <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only</p>
             </Stack>
-            {/* <Stack direction="row" alignItems="center">
-              <Checkbox
-                isChecked={searchFilters.isFilteringNFTOnly}
-                onChange={() => dispatchAction({ type: 'toggleNFTOnly' })}
-              />
-              <p className="mx-1.5 my-0 text-xs text-gray-500">Low Spread</p>
-            </Stack> */}
-            {/* <Stack direction="row" alignItems="center">
-              <Checkbox
-                isChecked={searchFilters.isFilteringMarketCap}
-                onChange={() => dispatchAction({ type: 'toggleMarketCap' })}
-              />
-              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
-                <p className="mx-1.5 my-0 text-xs  text-white">Marketcap</p>
-                <Slider
-                  size="small"
-                  sx={{
-                    color: 'white',
-                    width: '70%'
-                  }}
-                  value={searchFilters.marketCapAmount}
-                  onChange={(e) => dispatchAction({
-                    type: 'updateSliderValue',
-                    field: 'marketCapAmount',
-                    value: e.target.value
-                  })}
-                  aria-label="Small"
-                  valueLabelDisplay="auto"
-                />
-              </Stack>
-            </Stack> */}
             <Stack direction="row" alignItems="center">
               <Checkbox
                 isChecked={searchFilters.isFilteringAgeOfProject}
@@ -322,7 +291,6 @@ export function SearchInput(props) {
   } = props
   const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
-  // const debouncedSearchText = useDebounce(searchText, 500)
   useMemo(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
