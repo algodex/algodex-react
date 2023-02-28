@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -32,16 +32,20 @@ import { SearchTable } from './SearchTable'
 
 const columns = [
   {
+    id: 'assetId',
+    label: 'AssetId'
+  },
+  {
     id: 'assetName',
-    label: 'Asset Name'
+    label: 'Name'
   },
   {
     id: 'totalQuantity',
-    label: 'Total Quantity'
+    label: 'Quantity'
   },
   {
-    id: 'dateCreated',
-    label: 'Date Created'
+    id: 'createdAt',
+    label: 'Created On'
   }
 ]
 
@@ -56,11 +60,68 @@ export const CreateTokenSale = () => {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
   const [assetList, setAssetList] = useState([])
+  const [showTable, setShowTable] = useState(false)
 
   const { assetId, quantity, perUnit } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const onSearchAsset = (e) => {
+    const searchValue = e.target.value
+    setFormData({ ...formData, [e.target.name]: searchValue })
+    setAssetList([
+      {
+        assetId: 7789624,
+        assetName: 'BUSD',
+        totalQuantity: 300000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 6789654,
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 3789654,
+        assetName: 'goBTC',
+        totalQuantity: 240000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 6789654,
+        assetName: 'UCDC',
+        totalQuantity: 100000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 6789654,
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 6789654,
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 6789654,
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        createdAt: new Date().toLocaleString()
+      },
+      {
+        assetId: 6789654,
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        createdAt: new Date().toLocaleString()
+      }
+    ])
+    setShowTable(true)
   }
 
   const onSubmit = async (e) => {
@@ -70,51 +131,7 @@ export const CreateTokenSale = () => {
     setLoading(false)
   }
 
-  useEffect(() => {
-    //This is just to display the search table pending when the search function will be available to populate the table
-    setAssetList([
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      },
-      {
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        dateCreated: new Date().toLocaleString()
-      }
-    ])
-  }, [])
+
 
   return (
     <>
@@ -144,16 +161,16 @@ export const CreateTokenSale = () => {
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Asset:
           </Typography>
-          <Box className="mb-4 px-4">
+          <Box className="mb-4 px-4 relative">
             <OutlinedInput
               type="text"
               placeholder="ASA Asset ID"
               name="assetId"
               value={assetId}
-              onChange={(e) => onChange(e)}
+              onChange={(e) => onSearchAsset(e)}
               sx={styles.input}
             />
-            <SearchTable columns={columns} rowData={assetList} />
+            <SearchTable columns={columns} rowData={assetList} showTable={showTable} />
           </Box>
         </Box>
 

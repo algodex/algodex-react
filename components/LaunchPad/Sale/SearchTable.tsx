@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 
 //MUI components
 import Paper from '@mui/material/Paper'
@@ -9,18 +9,22 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import visuallyHidden from '@mui/utils/visuallyHidden'
+import TableSortLabel from '@mui/material/TableSortLabel'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  color: 'gray.800',
   [`&.${tableCellClasses.head}`]: {
-    color: theme.palette.primary.light,
+    backgroundColor: 'white',
     border: '0.1px solid',
     borderColor: theme.palette.primary.light,
-    fontSize: 15,
-    fontWeight: 600
+    fontSize: 10,
+    textTransform: 'uppercase'
   },
   [`&.${tableCellClasses.body}`]: {
+    fontWeight: 600,
     fontSize: 14,
-    color: theme.palette.secondary.contrastText,
     border: '0.1px solid',
     borderColor: theme.palette.primary.light
   }
@@ -35,59 +39,91 @@ type columnType = {
 
 export const SearchTable = ({
   columns,
-  rowData
+  rowData,
+  showTable
 }: {
   columns: Array<columnType>
   rowData: Array<unknown>
+  showTable: boolean
 }) => {
-  if (rowData.length === 0) {
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc')
+  const [orderBy, setOrderBy] = useState('assetName')
+
+  const createSortHandler = (property: string) => {
+    const isAsc = orderBy === property && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(property)
+  }
+
+  const sortedData = useMemo(() => {
+    if (order === 'asc') {
+      return rowData.sort((a, b) => `${a[orderBy]}`.localeCompare(`${b[orderBy]}`))
+    } else {
+      return rowData.sort((a, b) => `${b[orderBy]}`.localeCompare(`${a[orderBy]}`))
+    }
+  }, [rowData, order, orderBy])
+
+  if (rowData.length === 0 || !showTable) {
     return null
   }
 
   return (
     <Paper
       sx={{
-        width: '100%',
         overflow: 'hidden',
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
         border: '1px solid',
-        borderColor: 'primary.light'
+        borderColor: 'primary.light',
+        position: 'absolute',
+        zIndex: 1
       }}
     >
       <TableContainer sx={{ maxHeight: 400 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((item) => (
+              {columns.map((col) => (
                 <StyledTableCell
-                  key={item.id}
-                  align={item.align}
-                  sx={{
-                    backgroundColor: 'gray.550'
-                  }}
+                  key={col.id}
+                  align={col.align}
+                  sortDirection={orderBy === col.id ? order : false}
                 >
-                  {item.label}
+                  <TableSortLabel
+                    active={orderBy === col.id}
+                    direction={orderBy === col.id ? order : 'asc'}
+                    onClick={() => createSortHandler(col.id)}
+                  >
+                    {col.label}
+                    {orderBy === col.id ? (
+                      <Box component="span" sx={visuallyHidden}>
+                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                      </Box>
+                    ) : null}
+                  </TableSortLabel>
                 </StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rowData.map((row, index) => {
+            {sortedData.map((row, index) => {
               return (
                 <TableRow
                   hover
                   tabIndex={-1}
                   key={index}
                   sx={{
-                    cursor: 'pointer',
-                    '&:nth-of-type(odd)': {
-                      backgroundColor: 'gray.650'
-                    }
+                    cursor: 'pointer'
                   }}
                 >
                   {columns.map((column) => {
                     return (
-                      <StyledTableCell key={column.id} align={column.align}>
+                      <StyledTableCell
+                        key={column.id}
+                        align={column.align}
+                        sx={{
+                          color: 'gray.800'
+                        }}
+                      >
                         {row[column.id]}
                       </StyledTableCell>
                     )
