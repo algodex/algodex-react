@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 //MUI components
 import Paper from '@mui/material/Paper'
@@ -40,12 +40,15 @@ type columnType = {
 export const SearchTable = ({
   columns,
   rowData,
-  showTable
+  showTable,
+  setShowTable
 }: {
   columns: Array<columnType>
   rowData: Array<unknown>
   showTable: boolean
+  setShowTable: (v: boolean) => void
 }) => {
+  const dropdownRef = useRef(null)
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [orderBy, setOrderBy] = useState('assetName')
 
@@ -62,6 +65,20 @@ export const SearchTable = ({
       return rowData.sort((a, b) => `${b[orderBy]}`.localeCompare(`${a[orderBy]}`))
     }
   }, [rowData, order, orderBy])
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowTable(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true)
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (rowData.length === 0 || !showTable) {
     return null

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -68,9 +68,7 @@ export const CreateTokenSale = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const onSearchAsset = (e) => {
-    const searchValue = e.target.value
-    setFormData({ ...formData, [e.target.name]: searchValue })
+  const fetchUserAssets = () => {
     setAssetList([
       {
         assetId: 7789624,
@@ -121,8 +119,11 @@ export const CreateTokenSale = () => {
         createdAt: new Date().toLocaleString()
       }
     ])
-    setShowTable(true)
   }
+
+  useEffect(() => {
+    fetchUserAssets()
+  }, [])
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -130,8 +131,6 @@ export const CreateTokenSale = () => {
     setLoading(true)
     setLoading(false)
   }
-
-
 
   return (
     <>
@@ -167,10 +166,16 @@ export const CreateTokenSale = () => {
               placeholder="ASA Asset ID"
               name="assetId"
               value={assetId}
-              onChange={(e) => onSearchAsset(e)}
+              onChange={(e) => onChange(e)}
+              onFocus={() => setShowTable(true)}
               sx={styles.input}
             />
-            <SearchTable columns={columns} rowData={assetList} showTable={showTable} />
+            <SearchTable
+              columns={columns}
+              rowData={assetList}
+              showTable={showTable}
+              setShowTable={setShowTable}
+            />
           </Box>
         </Box>
 
