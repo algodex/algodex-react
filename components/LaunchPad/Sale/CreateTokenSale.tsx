@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -55,47 +55,7 @@ export const CreateTokenSale = () => {
   const { activeWallet } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
-  const [assetList, setAssetList] = useState([
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },  {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    },
-    {
-      assetName: 'UCDC',
-      totalQuantity: 200000,
-      dateCreated: new Date().toLocaleString()
-    }
-  ])
+  const [assetList, setAssetList] = useState([])
 
   const { assetId, quantity, perUnit } = formData
 
@@ -109,6 +69,52 @@ export const CreateTokenSale = () => {
     setLoading(true)
     setLoading(false)
   }
+
+  useEffect(() => {
+    //This is just to display the search table pending when the search function will be available to populate the table
+    setAssetList([
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      },
+      {
+        assetName: 'UCDC',
+        totalQuantity: 200000,
+        dateCreated: new Date().toLocaleString()
+      }
+    ])
+  }, [])
 
   return (
     <>

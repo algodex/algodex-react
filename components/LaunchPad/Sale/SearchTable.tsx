@@ -86,14 +86,9 @@ export const SearchTable = ({
                   }}
                 >
                   {columns.map((column) => {
-                    const value = row[column.id]
                     return (
-                      <StyledTableCell
-                        key={column.id}
-                        align={column.align}
-                        data-testid={`column-${column.id}-${value}`}
-                      >
-                        {value}
+                      <StyledTableCell key={column.id} align={column.align}>
+                        {row[column.id]}
                       </StyledTableCell>
                     )
                   })}
