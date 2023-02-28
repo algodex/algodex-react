@@ -277,7 +277,7 @@ export const NavSearchTable = ({
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
     let filteredList = geoFormattedAssets.assets;
     // console.log(filteredList, 'filtered list')
-    if (searchFilters.isFilteringAgeOfProject) {
+    if (searchFilters?.isFilteringAgeOfProject) {
       const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
       const updatedList = [...filteredList].map((asset) => {
         const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
@@ -298,7 +298,7 @@ export const NavSearchTable = ({
     }
 
     // Filter Asset By price
-    if (searchFilters.isFilteringPrice) {
+    if (searchFilters?.isFilteringPrice) {
 
 
       // Sort list by Price
@@ -314,7 +314,7 @@ export const NavSearchTable = ({
     }
 
     // Filter By NFT
-    if (searchFilters.isFilteringNFTOnly) {
+    if (searchFilters?.isFilteringNFTOnly) {
       const updatedList = [...filteredList].filter((asset) => asset.total === 1)
       filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
       // return filteredList.map(mapToSearchResults)
@@ -348,29 +348,29 @@ export const NavSearchTable = ({
     isListingVerifiedAssets,
     isFilteringByFavorites,
     favoritesState,
-    searchFilters.price,
-    searchFilters.ageOfProject,
-    searchFilters.isFilteringAgeOfProject,
-    searchFilters.isFilteringNFTOnly,
-    searchFilters.isFilteringPrice
+    searchFilters?.price,
+    searchFilters?.ageOfProject,
+    searchFilters?.isFilteringAgeOfProject,
+    searchFilters?.isFilteringNFTOnly,
+    searchFilters?.isFilteringPrice
   ])
 
   useEffect(() => {
-    if (!searchFilters.isFilteringPrice) {
+    if (setSearchFilterProps && !searchFilters?.isFilteringPrice) {
       setSearchFilterProps({
         type: 'updateSliderValue',
         field: 'price',
         value: 0
       })
     }
-    if (!searchFilters.isFilteringAgeOfProject) {
+    if (setSearchFilterProps && !searchFilters?.isFilteringAgeOfProject) {
       setSearchFilterProps({
         type: 'updateSliderValue',
         field: 'ageOfProject',
         value: 0
       })
     }
-  }, [searchFilters.isFilteringPrice, searchFilters.isFilteringAgeOfProject])
+  }, [searchFilters?.isFilteringPrice, searchFilters?.isFilteringAgeOfProject])
 
 
   const AssetPriceCell = useCallback(
