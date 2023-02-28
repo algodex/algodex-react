@@ -370,7 +370,21 @@ export const NavSearchTable = ({
         value: 0
       })
     }
-  }, [searchFilters?.isFilteringPrice, searchFilters?.isFilteringAgeOfProject])
+    if (searchFilters?.price === 0) {
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'isFilteringPrice',
+        value: false
+      })
+    }
+    if (searchFilters?.ageOfProject === 0) {
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'isFilteringAgeOfProject',
+        value: false
+      })
+    }
+  }, [searchFilters?.ageOfProject, searchFilters?.price, searchFilters?.isFilteringPrice, searchFilters?.isFilteringAgeOfProject])
 
 
   const AssetPriceCell = useCallback(

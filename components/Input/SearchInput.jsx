@@ -174,8 +174,8 @@ export const Search = forwardRef(
               />
               <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
             </Stack>
-            <Stack className='cursor-pointer' onClick={() => setToggleFilters(!toggleFilters)} direction="row" alignItems="center" sx={{ height: '0rem' }}>
-              <p className="mx-1.5 my-0 text-xs text-white font-bold">More Filters</p>
+            <Stack className='mr-3.5 cursor-pointer' onClick={() => setToggleFilters(!toggleFilters)} direction="row" alignItems="center" sx={{ height: '0rem' }}>
+              <p className="text-xs text-white font-bold">More Filters</p>
               {toggleFilters ? <ExpandLessIcon sx={{ color: theme.colors.white }} /> : <ExpandMoreIcon sx={{ color: theme.colors.white }} />}
             </Stack>
           </Stack>
