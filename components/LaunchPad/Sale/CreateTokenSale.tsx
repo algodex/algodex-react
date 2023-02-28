@@ -28,6 +28,22 @@ import Button from '@mui/material/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
+import { SearchTable } from './SearchTable'
+
+const columns = [
+  {
+    id: 'assetName',
+    label: 'Asset Name'
+  },
+  {
+    id: 'totalQuantity',
+    label: 'Total Quantity'
+  },
+  {
+    id: 'dateCreated',
+    label: 'Date Created'
+  }
+]
 
 const initialValues = {
   assetId: '',
@@ -39,6 +55,48 @@ export const CreateTokenSale = () => {
   const { activeWallet } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
+  const [assetList, setAssetList] = useState([
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },  {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    },
+    {
+      assetName: 'UCDC',
+      totalQuantity: 200000,
+      dateCreated: new Date().toLocaleString()
+    }
+  ])
+
   const { assetId, quantity, perUnit } = formData
 
   const onChange = (e) => {
@@ -89,6 +147,7 @@ export const CreateTokenSale = () => {
               onChange={(e) => onChange(e)}
               sx={styles.input}
             />
+            <SearchTable columns={columns} rowData={assetList} />
           </Box>
         </Box>
 
