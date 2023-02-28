@@ -70,6 +70,7 @@ export const SearchTable = ({
   return (
     <Paper
       sx={{
+        width: '95%',
         overflow: 'hidden',
         backgroundColor: 'white',
         border: '1px solid',
