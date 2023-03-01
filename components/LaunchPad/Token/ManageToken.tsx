@@ -133,7 +133,7 @@ export const ManageToken = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress address={activeWallet?.address} />
+        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage ASAs that have been created with the connected wallet. If you do not see

@@ -259,7 +259,7 @@ export const CreateToken = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress address={activeWallet?.address} />
+        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         Creator Address defaults to the wallet that’s currently connected. If you want to create an
