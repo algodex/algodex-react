@@ -231,7 +231,7 @@ export const CreateToken = () => {
     const notifier = (msg) => {
       if (lastToastId) {
         toast.dismiss(lastToastId)
-      }
+      } 
       if (msg === null) return
       lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
     }
