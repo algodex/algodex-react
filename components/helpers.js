@@ -57,3 +57,13 @@ export const algodClient = () => {
 
   return new algosdk.Algodv2(algodToken, algodServer, algodPort)
 }
+
+export const isValidAddr = async (addr) => {
+  //Check your if account exist on Algorand
+  try {
+    await algodClient().accountInformation(addr).do()
+    return true
+  } catch (error) {
+    return false
+  }
+}
