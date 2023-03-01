@@ -106,11 +106,11 @@ export const ManageToken = () => {
 
     if (!_error) {
       setError(null)
-      createToken()
+      manageToken()
     }
   }
 
-  const createToken = () => {
+  const manageToken = () => {
     console.log(formData)
     setLoading(true)
     setLoading(false)
@@ -191,18 +191,32 @@ export const ManageToken = () => {
               <Typography sx={styles.name}>Clawback Address</Typography>
               <Box>
                 {showClawbackAddr ? (
-                  <OutlinedInput
-                    type="text"
-                    placeholder="Update Clawback Address"
-                    name="clawbackAddr"
-                    value={clawbackAddr}
-                    onChange={(e) => onChange(e)}
-                    sx={{
-                      ...styles.input,
-                      borderTop: 0,
-                      borderInline: 0
-                    }}
-                  />
+                  <Box className="flex items-center">
+                    <OutlinedInput
+                      type="text"
+                      placeholder="Update Clawback Address"
+                      name="clawbackAddr"
+                      value={clawbackAddr}
+                      onChange={(e) => onChange(e)}
+                      sx={{
+                        ...styles.input,
+                        borderTop: 0,
+                        borderInline: 0
+                      }}
+                    />
+                    <Icon
+                      icon="mdi:cancel-bold"
+                      className="ml-3 cursor-pointer text-white"
+                      onClick={() =>
+                        handleShow({
+                          target: {
+                            name: 'showClawbackAddr',
+                            value: !showClawbackAddr
+                          }
+                        })
+                      }
+                    />
+                  </Box>
                 ) : (
                   <Typography className="flex items-center" sx={styles.value}>
                     {truncatedWalletAddress(clawbackAddr, 4)} <CopyIcon content={clawbackAddr} />
@@ -228,18 +242,32 @@ export const ManageToken = () => {
               <Typography sx={styles.name}>Reserve Address</Typography>
               <Box>
                 {showReserveAddr ? (
-                  <OutlinedInput
-                    type="text"
-                    placeholder="Update Reserve Address"
-                    name="reserveAddr"
-                    value={reserveAddr}
-                    onChange={(e) => onChange(e)}
-                    sx={{
-                      ...styles.input,
-                      borderTop: 0,
-                      borderInline: 0
-                    }}
-                  />
+                  <Box className="flex items-center">
+                    <OutlinedInput
+                      type="text"
+                      placeholder="Update Reserve Address"
+                      name="reserveAddr"
+                      value={reserveAddr}
+                      onChange={(e) => onChange(e)}
+                      sx={{
+                        ...styles.input,
+                        borderTop: 0,
+                        borderInline: 0
+                      }}
+                    />{' '}
+                    <Icon
+                      icon="mdi:cancel-bold"
+                      className="ml-3 cursor-pointer text-white"
+                      onClick={() =>
+                        handleShow({
+                          target: {
+                            name: 'showReserveAddr',
+                            value: !showReserveAddr
+                          }
+                        })
+                      }
+                    />
+                  </Box>
                 ) : (
                   <Typography className="flex items-center" sx={styles.value}>
                     {truncatedWalletAddress(reserveAddr, 4)} <CopyIcon content={reserveAddr} />
@@ -265,18 +293,32 @@ export const ManageToken = () => {
               <Typography sx={styles.name}>Manager Address</Typography>
               <Box>
                 {showManagerAddr ? (
-                  <OutlinedInput
-                    type="text"
-                    placeholder="Update Manager Address"
-                    name="managerAddr"
-                    value={managerAddr}
-                    onChange={(e) => onChange(e)}
-                    sx={{
-                      ...styles.input,
-                      borderTop: 0,
-                      borderInline: 0
-                    }}
-                  />
+                  <Box className="flex items-center">
+                    <OutlinedInput
+                      type="text"
+                      placeholder="Update Manager Address"
+                      name="managerAddr"
+                      value={managerAddr}
+                      onChange={(e) => onChange(e)}
+                      sx={{
+                        ...styles.input,
+                        borderTop: 0,
+                        borderInline: 0
+                      }}
+                    />
+                    <Icon
+                      icon="mdi:cancel-bold"
+                      className="ml-3 cursor-pointer text-white"
+                      onClick={() =>
+                        handleShow({
+                          target: {
+                            name: 'showManagerAddr',
+                            value: !showManagerAddr
+                          }
+                        })
+                      }
+                    />
+                  </Box>
                 ) : (
                   <Typography className="flex items-center" sx={styles.value}>
                     {truncatedWalletAddress(managerAddr, 4)} <CopyIcon content={managerAddr} />
@@ -302,18 +344,32 @@ export const ManageToken = () => {
               <Typography sx={styles.name}>Freeze Address</Typography>
               <Box>
                 {showFreezeAddr ? (
-                  <OutlinedInput
-                    type="text"
-                    placeholder="Update Freeze Address"
-                    name="freezeAddr"
-                    value={freezeAddr}
-                    onChange={(e) => onChange(e)}
-                    sx={{
-                      ...styles.input,
-                      borderTop: 0,
-                      borderInline: 0
-                    }}
-                  />
+                  <Box className="flex items-center">
+                    <OutlinedInput
+                      type="text"
+                      placeholder="Update Freeze Address"
+                      name="freezeAddr"
+                      value={freezeAddr}
+                      onChange={(e) => onChange(e)}
+                      sx={{
+                        ...styles.input,
+                        borderTop: 0,
+                        borderInline: 0
+                      }}
+                    />
+                    <Icon
+                      icon="mdi:cancel-bold"
+                      className="ml-3 cursor-pointer text-white"
+                      onClick={() =>
+                        handleShow({
+                          target: {
+                            name: 'showFreezeAddr',
+                            value: !showFreezeAddr
+                          }
+                        })
+                      }
+                    />
+                  </Box>
                 ) : (
                   <Typography className="flex items-center" sx={styles.value}>
                     {truncatedWalletAddress(freezeAddr, 4)} <CopyIcon content={freezeAddr} />
