@@ -9,13 +9,20 @@ import Button from '@mui/material/Button'
 import { CopyIcon } from './copyIcon'
 import { truncatedWalletAddress } from 'components/helpers'
 import { styles } from './styles.css'
+import useWallets from '@/hooks/useWallets'
 
 type creatorAddressTypes = {
-  address?: string
+  activeWallet?: any
 }
 
-export const CreatorAddress = ({ address }: creatorAddressTypes) => {
-  const isConnected = typeof address !== 'undefined'
+export const CreatorAddress = ({ activeWallet }: creatorAddressTypes) => {
+  const { peraDisconnect, myAlgoDisconnect } = useWallets(null)
+  const walletDisconnectMap = {
+    'my-algo-wallet': myAlgoDisconnect,
+    'wallet-connect': peraDisconnect
+  }
+
+  const isConnected = typeof activeWallet !== 'undefined'
   return (
     <>
       <Box
@@ -40,9 +47,9 @@ export const CreatorAddress = ({ address }: creatorAddressTypes) => {
                 fontWeight: 500
               }}
             >
-              {truncatedWalletAddress(address, 4)}
+              {truncatedWalletAddress(activeWallet.address, 4)}
             </Typography>
-            <CopyIcon content={address} />
+            <CopyIcon content={activeWallet.address} />
           </>
         ) : (
           <Typography
@@ -60,13 +67,16 @@ export const CreatorAddress = ({ address }: creatorAddressTypes) => {
       {isConnected && (
         <Button
           type="button"
+          onClick={() => {
+            walletDisconnectMap[activeWallet.type](activeWallet)
+          }}
           sx={{
             color: 'white',
             backgroundColor: 'gray.150',
             px: '10px',
             py: '1px',
             fontWeight: 500,
-            fontSize:'12px',
+            fontSize: '12px',
             border: '2px solid',
             transition: 'all ease .3s',
             '&:hover': {
