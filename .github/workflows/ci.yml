@@ -61,7 +61,7 @@ jobs:
       - name: Run Cypress
         run: yarn test-cypress
         env:
-          WAIT_ON_TIMEOUT: 600000
+          WAIT_ON_TIMEOUT: 1200000
   # chromatic-deployment:
   #  name: Storybook
   #  runs-on: ubuntu-latest
