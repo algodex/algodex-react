@@ -119,7 +119,7 @@ export const SearchTable = ({
                     direction={orderBy === col.id ? order : 'asc'}
                     onClick={() => createSortHandler(col.id)}
                     sx={{
-                      '.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-3l415a-MuiSvgIcon-root-MuiTableSortLabel-icon':
+                      '.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-3l415a-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-s6n6v6, .css-tqymag':
                         {
                           display: 'none'
                         }
