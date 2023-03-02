@@ -39,7 +39,7 @@ const SortIcon = styled(Icon)`
 export type TableColumnType = {
   id: string
   label: string
-  align?: string
+  align?: 'left' | 'center' | 'right' | 'justify' | 'inherit'
   minWidth?: number
   format?: (val: number) => string
 }
@@ -152,7 +152,7 @@ export const SearchTable = ({
                     return (
                       <StyledTableCell
                         key={column.id}
-                        align={column.align as 'left' | 'center' | 'right' | 'justify' | 'inherit'}
+                        align={column.align}
                         sx={{
                           color: 'gray.800'
                         }}
