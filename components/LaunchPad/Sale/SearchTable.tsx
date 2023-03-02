@@ -10,7 +10,6 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import visuallyHidden from '@mui/utils/visuallyHidden'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -115,7 +114,7 @@ export const SearchTable = ({
                   >
                     {col.label}
                     {orderBy === col.id ? (
-                      <Box component="span" sx={visuallyHidden}>
+                      <Box component="span">
                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                       </Box>
                     ) : null}

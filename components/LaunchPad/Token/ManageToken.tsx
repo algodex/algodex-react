@@ -226,7 +226,7 @@ export const ManageToken = () => {
             name="tokenName"
             value={tokenName}
             placeholder="Token Name"
-            onChange={onchange}
+            onChange={onChange}
             columns={columns}
             rowData={assetList}
           />
