@@ -36,7 +36,7 @@ const initialValues = {
   pricePerToken: 0.75,
   showPricePerToken: false,
   totalForSale: 14600,
-  showTotalForSale: false,
+  showTotalForSale: false
 }
 
 export const ManageTokenSale = () => {
@@ -78,7 +78,7 @@ export const ManageTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress address={activeWallet?.address} />
+        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage sales that have been created with the connected wallet. If you do not

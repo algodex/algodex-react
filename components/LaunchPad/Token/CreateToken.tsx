@@ -38,7 +38,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { ErrorMessage } from '../ErrorMessage'
-import { algodClient } from '@/components/helpers'
+import { isValidAddr } from '@/components/helpers'
 import { NumberFormatCustom } from '@/components/Wallet/PlaceOrder/Form/TradeInputs'
 import { Tip } from '../Tip'
 
@@ -133,16 +133,6 @@ export const CreateToken = () => {
     )
 
     return pattern.test(url)
-  }
-
-  const isValidAddr = async (addr: string) => {
-    //Check your if account exist on Algorand
-    try {
-      await algodClient().accountInformation(addr).do()
-      return true
-    } catch (error) {
-      return false
-    }
   }
 
   const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -269,7 +259,7 @@ export const CreateToken = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress address={activeWallet?.address} />
+        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         Creator Address defaults to the wallet that’s currently connected. If you want to create an
