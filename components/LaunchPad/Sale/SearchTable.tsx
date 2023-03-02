@@ -30,11 +30,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }
 }))
 
-type columnType = {
+export type TableColumnType = {
   id: string
   label: string
   align?: 'left' | 'center' | 'right' | 'justify' | 'inherit'
   minWidth?: number
+  format?: (val: number) => string
 }
 
 export const SearchTable = ({
@@ -44,7 +45,7 @@ export const SearchTable = ({
   setShowTable,
   dropdownRef
 }: {
-  columns: Array<columnType>
+  columns: Array<TableColumnType>
   rowData: Array<unknown>
   showTable: boolean
   setShowTable: (v: boolean) => void
@@ -143,7 +144,9 @@ export const SearchTable = ({
                           color: 'gray.800'
                         }}
                       >
-                        {row[column.id]}
+                        {column.format && typeof row[column.id] === 'number'
+                          ? column.format(row[column.id])
+                          : row[column.id]}
                       </StyledTableCell>
                     )
                   })}

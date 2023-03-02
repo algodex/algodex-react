@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -28,24 +28,25 @@ import Button from '@mui/material/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
-import { SearchTable } from './SearchTable'
+import { SearchInput } from '../SearchInput'
 
 const columns = [
   {
-    id: 'assetId',
-    label: 'AssetId'
+    id: 'symbol',
+    label: 'Symbol'
   },
   {
     id: 'assetName',
     label: 'Name'
   },
   {
-    id: 'totalQuantity',
-    label: 'Quantity'
+    id: 'assetId',
+    label: 'AssetId'
   },
   {
-    id: 'createdAt',
-    label: 'Created On'
+    id: 'availableBalance',
+    label: 'Available Balance',
+    format: (value) => value.toLocaleString('en-US')
   }
 ]
 
@@ -60,8 +61,6 @@ export const CreateTokenSale = () => {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
   const [assetList, setAssetList] = useState([])
-  const [showTable, setShowTable] = useState(false)
-  const dropdownRef = useRef(null)
 
   const { assetId, quantity, perUnit } = formData
 
@@ -73,51 +72,51 @@ export const CreateTokenSale = () => {
     setAssetList([
       {
         assetId: 7789624,
-        assetName: 'BUSD',
-        totalQuantity: 300000,
-        createdAt: new Date().toLocaleString()
+        symbol: 'BUSD',
+        assetName: 'BUSD Token',
+        availableBalance: 300000
       },
       {
         assetId: 6789654,
-        assetName: 'UCDC',
-        totalQuantity: 200000,
-        createdAt: new Date().toLocaleString()
+        symbol: 'UCDC',
+        assetName: 'UCDC Token',
+        availableBalance: 200000
       },
       {
         assetId: 3789654,
+        symbol: 'goBTC',
         assetName: 'goBTC',
-        totalQuantity: 240000,
-        createdAt: new Date().toLocaleString()
+        availableBalance: 240000
       },
       {
         assetId: 6789654,
+        symbol: 'UCDC',
         assetName: 'UCDC',
-        totalQuantity: 100000,
-        createdAt: new Date().toLocaleString()
+        availableBalance: 100000
       },
       {
         assetId: 6789654,
+        symbol: 'UCDC',
         assetName: 'UCDC',
-        totalQuantity: 200000,
-        createdAt: new Date().toLocaleString()
+        availableBalance: 200000
       },
       {
         assetId: 6789654,
+        symbol: 'UCDC',
         assetName: 'UCDC',
-        totalQuantity: 200000,
-        createdAt: new Date().toLocaleString()
+        availableBalance: 200000
       },
       {
         assetId: 6789654,
+        symbol: 'UCDC',
         assetName: 'UCDC',
-        totalQuantity: 200000,
-        createdAt: new Date().toLocaleString()
+        availableBalance: 200000
       },
       {
         assetId: 6789654,
+        symbol: 'UCDC',
         assetName: 'UCDC',
-        totalQuantity: 200000,
-        createdAt: new Date().toLocaleString()
+        availableBalance: 200000
       }
     ])
   }
@@ -161,24 +160,14 @@ export const CreateTokenSale = () => {
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Asset:
           </Typography>
-          <Box className="mb-4 px-4 relative" ref={dropdownRef}>
-            <OutlinedInput
-              type="text"
-              placeholder="ASA Asset ID"
-              name="assetId"
-              value={assetId}
-              onChange={(e) => onChange(e)}
-              onFocus={() => setShowTable(true)}
-              sx={styles.input}
-            />
-            <SearchTable
-              columns={columns}
-              rowData={assetList}
-              showTable={showTable}
-              setShowTable={setShowTable}
-              dropdownRef={dropdownRef}
-            />
-          </Box>
+          <SearchInput
+            name="assetId"
+            value={assetId}
+            placeholder="ASA Asset ID"
+            onChange={onChange}
+            columns={columns}
+            rowData={assetList}
+          />
         </Box>
 
         <Box className="mb-10">
