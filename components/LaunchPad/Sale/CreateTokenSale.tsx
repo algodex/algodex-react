@@ -28,7 +28,7 @@ import Button from '@mui/material/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
-import { SearchInput } from '../SearchInput'
+import { TokenSearchInput } from '../TokenSearchInput'
 
 const columns = [
   {
@@ -160,7 +160,7 @@ export const CreateTokenSale = () => {
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Asset:
           </Typography>
-          <SearchInput
+          <TokenSearchInput
             name="assetId"
             value={assetId}
             placeholder="ASA Asset ID"

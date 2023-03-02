@@ -30,7 +30,7 @@ import { styles } from '../styles.css'
 import { CopyIcon } from '../copyIcon'
 import { LinearProgressWithLabel } from '../progressBar'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
-import { SearchInput } from '../SearchInput'
+import { TokenSearchInput } from '../TokenSearchInput'
 
 const initialValues = {
   tokenName: '',
@@ -169,7 +169,7 @@ export const ManageTokenSale = () => {
             Choose Sale to Manage:
           </Typography>
 
-          <SearchInput
+          <TokenSearchInput
             name="tokenName"
             value={tokenName}
             placeholder="Token Name"

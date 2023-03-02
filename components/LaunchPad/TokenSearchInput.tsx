@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 
-export const SearchInput = ({
+export const TokenSearchInput = ({
   value,
   name,
   onChange,

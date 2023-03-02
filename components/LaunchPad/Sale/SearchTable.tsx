@@ -1,4 +1,5 @@
 import React, { MutableRefObject, useEffect, useMemo, useState } from 'react'
+import Icon from '@/components/Icon'
 
 //MUI components
 import Paper from '@mui/material/Paper'
@@ -19,15 +20,21 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     border: '0.1px solid',
     borderColor: theme.palette.primary.light,
     fontSize: 10,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    paddingBlock: '3px'
   },
   [`&.${tableCellClasses.body}`]: {
     fontWeight: 600,
     fontSize: 14,
     border: '0.1px solid',
-    borderColor: theme.palette.primary.light
+    borderColor: theme.palette.primary.light,
+    paddingBlock: '8px'
   }
 }))
+
+const SortIcon = styled(Icon)`
+  margin-left: 0.25rem;
+`
 
 export type TableColumnType = {
   id: string
@@ -111,13 +118,19 @@ export const SearchTable = ({
                     active={orderBy === col.id}
                     direction={orderBy === col.id ? order : 'asc'}
                     onClick={() => createSortHandler(col.id)}
+                    sx={{
+                      '.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-3l415a-MuiSvgIcon-root-MuiTableSortLabel-icon': {
+                        display: 'none'
+                      }
+                    }}
                   >
                     {col.label}
-                    {orderBy === col.id ? (
-                      <Box component="span">
-                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                      </Box>
-                    ) : null}
+                    <Box component="span">
+                      <SortIcon
+                        use={orderBy === col.id && order === 'desc' ? 'sortDesc' : 'sortAsc'}
+                        size={0.625}
+                      />
+                    </Box>
                   </TableSortLabel>
                 </StyledTableCell>
               ))}

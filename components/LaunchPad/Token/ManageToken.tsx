@@ -32,7 +32,7 @@ import { CopyIcon } from '../copyIcon'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { isValidAddr, truncatedWalletAddress } from '@/components/helpers'
 import { ErrorMessage } from '../ErrorMessage'
-import { SearchInput } from '../SearchInput'
+import { TokenSearchInput } from '../TokenSearchInput'
 
 const initialValues = {
   tokenName: '',
@@ -222,7 +222,7 @@ export const ManageToken = () => {
             Choose Token to Manage:
           </Typography>
 
-          <SearchInput
+          <TokenSearchInput
             name="tokenName"
             value={tokenName}
             placeholder="Token Name"
