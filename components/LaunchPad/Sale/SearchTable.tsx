@@ -39,7 +39,7 @@ const SortIcon = styled(Icon)`
 export type TableColumnType = {
   id: string
   label: string
-  align?: 'left' | 'center' | 'right' | 'justify' | 'inherit'
+  align?: string
   minWidth?: number
   format?: (val: number) => string
 }
@@ -111,7 +111,7 @@ export const SearchTable = ({
               {columns.map((col) => (
                 <StyledTableCell
                   key={col.id}
-                  align={col.align}
+                  //                   align={col.align}
                   sortDirection={orderBy === col.id ? order : false}
                 >
                   <TableSortLabel
@@ -119,9 +119,10 @@ export const SearchTable = ({
                     direction={orderBy === col.id ? order : 'asc'}
                     onClick={() => createSortHandler(col.id)}
                     sx={{
-                      '.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-3l415a-MuiSvgIcon-root-MuiTableSortLabel-icon': {
-                        display: 'none'
-                      }
+                      '.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-3l415a-MuiSvgIcon-root-MuiTableSortLabel-icon':
+                        {
+                          display: 'none'
+                        }
                     }}
                   >
                     {col.label}
@@ -151,7 +152,7 @@ export const SearchTable = ({
                     return (
                       <StyledTableCell
                         key={column.id}
-                        align={column.align}
+                        align={column.align as 'left' | 'center' | 'right' | 'justify' | 'inherit'}
                         sx={{
                           color: 'gray.800'
                         }}

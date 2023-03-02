@@ -46,6 +46,7 @@ const columns = [
   {
     id: 'availableBalance',
     label: 'Available Balance',
+    align: 'right',
     format: (value) => value.toLocaleString('en-US')
   }
 ]
