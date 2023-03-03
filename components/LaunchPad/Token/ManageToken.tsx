@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useContext, useState } from 'react'
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
@@ -32,6 +32,7 @@ import { CopyIcon } from '../copyIcon'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { isValidAddr, truncatedWalletAddress } from '@/components/helpers'
 import { ErrorMessage } from '../ErrorMessage'
+import { TokenSearchInput } from '../TokenSearchInput'
 
 const initialValues = {
   tokenName: '',
@@ -46,10 +47,30 @@ const initialValues = {
   freezeAddr: 'V537CZGHERY87634WVQCAGFYTRYH'
 }
 
+const columns = [
+  {
+    id: 'symbol',
+    label: 'Symbol'
+  },
+  {
+    id: 'assetName',
+    label: 'Name'
+  },
+  {
+    id: 'assetId',
+    label: 'AssetId'
+  },
+  {
+    id: 'totalQuantity',
+    label: 'Quantity'
+  }
+]
+
 export const ManageToken = () => {
   const { activeWallet } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
+  const [assetList, setAssetList] = useState([])
   const [error, setError] = useState({})
   const {
     tokenName,
@@ -116,6 +137,62 @@ export const ManageToken = () => {
     setLoading(false)
   }
 
+  const fetchUserAssets = () => {
+    setAssetList([
+      {
+        assetId: 7789624,
+        symbol: 'BUSD',
+        assetName: 'BUSD Token',
+        totalQuantity: 300000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC Token',
+        totalQuantity: 200000
+      },
+      {
+        assetId: 3789654,
+        symbol: 'goBTC',
+        assetName: 'goBTC',
+        totalQuantity: 240000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        totalQuantity: 100000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        totalQuantity: 200000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        totalQuantity: 200000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        totalQuantity: 200000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        totalQuantity: 200000
+      }
+    ])
+  }
+
+  useEffect(() => {
+    fetchUserAssets()
+  }, [])
   return (
     <>
       <Typography variant="subtitle1" sx={styles.title}>
@@ -144,16 +221,15 @@ export const ManageToken = () => {
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Token to Manage:
           </Typography>
-          <Box className="mb-4 px-4">
-            <OutlinedInput
-              type="text"
-              placeholder="Token Name"
-              name="tokenName"
-              value={tokenName}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
-            />
-          </Box>
+
+          <TokenSearchInput
+            name="tokenName"
+            value={tokenName}
+            placeholder="Token Name"
+            onChange={onChange}
+            columns={columns}
+            rowData={assetList}
+          />
           <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '29px' }}>
             Search with Asset Name or Asset ID - Only ASAs created by the currently connected wallet
             will show as options.

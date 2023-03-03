@@ -1,4 +1,5 @@
 import React, { MutableRefObject, useEffect, useMemo, useState } from 'react'
+import Icon from '@/components/Icon'
 
 //MUI components
 import Paper from '@mui/material/Paper'
@@ -10,7 +11,6 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import visuallyHidden from '@mui/utils/visuallyHidden'
 import TableSortLabel from '@mui/material/TableSortLabel'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -20,21 +20,28 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     border: '0.1px solid',
     borderColor: theme.palette.primary.light,
     fontSize: 10,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    paddingBlock: '3px'
   },
   [`&.${tableCellClasses.body}`]: {
     fontWeight: 600,
     fontSize: 14,
     border: '0.1px solid',
-    borderColor: theme.palette.primary.light
+    borderColor: theme.palette.primary.light,
+    paddingBlock: '8px'
   }
 }))
 
-type columnType = {
+const SortIcon = styled(Icon)`
+  margin-left: 0.25rem;
+`
+
+export type TableColumnType = {
   id: string
   label: string
   align?: 'left' | 'center' | 'right' | 'justify' | 'inherit'
   minWidth?: number
+  format?: (val: number) => string
 }
 
 export const SearchTable = ({
@@ -44,7 +51,7 @@ export const SearchTable = ({
   setShowTable,
   dropdownRef
 }: {
-  columns: Array<columnType>
+  columns: Array<TableColumnType>
   rowData: Array<unknown>
   showTable: boolean
   setShowTable: (v: boolean) => void
@@ -104,20 +111,29 @@ export const SearchTable = ({
               {columns.map((col) => (
                 <StyledTableCell
                   key={col.id}
-                  align={col.align}
+                  //                   align={col.align}
                   sortDirection={orderBy === col.id ? order : false}
                 >
                   <TableSortLabel
                     active={orderBy === col.id}
                     direction={orderBy === col.id ? order : 'asc'}
                     onClick={() => createSortHandler(col.id)}
+                    sx={{
+                      '.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-3l415a-MuiSvgIcon-root-MuiTableSortLabel-icon, .css-s6n6v6, .css-tqymag':
+                        {
+                          display: 'none'
+                        }
+                    }}
                   >
                     {col.label}
-                    {orderBy === col.id ? (
-                      <Box component="span" sx={visuallyHidden}>
-                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                      </Box>
-                    ) : null}
+                    <Box component="span">
+                      <SortIcon
+                        use={
+                          orderBy !== col.id ? 'sortNone' : order === 'desc' ? 'sortDesc' : 'sortAsc'
+                        }
+                        size={0.625}
+                      />
+                    </Box>
                   </TableSortLabel>
                 </StyledTableCell>
               ))}
@@ -143,7 +159,9 @@ export const SearchTable = ({
                           color: 'gray.800'
                         }}
                       >
-                        {row[column.id]}
+                        {column.format && typeof row[column.id] === 'number'
+                          ? column.format(row[column.id])
+                          : row[column.id]}
                       </StyledTableCell>
                     )
                   })}
