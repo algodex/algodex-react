@@ -128,7 +128,9 @@ export const SearchTable = ({
                     {col.label}
                     <Box component="span">
                       <SortIcon
-                        use={orderBy === col.id && order === 'desc' ? 'sortDesc' : 'sortAsc'}
+                        use={
+                          orderBy !== col.id ? 'sortNone' : order === 'desc' ? 'sortDesc' : 'sortAsc'
+                        }
                         size={0.625}
                       />
                     </Box>
