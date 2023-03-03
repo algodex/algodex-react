@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -28,6 +28,27 @@ import Button from '@mui/material/Button'
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
+import { TokenSearchInput } from '../TokenSearchInput'
+
+const columns = [
+  {
+    id: 'symbol',
+    label: 'Symbol'
+  },
+  {
+    id: 'assetName',
+    label: 'Name'
+  },
+  {
+    id: 'assetId',
+    label: 'AssetId'
+  },
+  {
+    id: 'availableBalance',
+    label: 'Available Balance',
+    format: (value) => value.toLocaleString('en-US')
+  }
+]
 
 const initialValues = {
   assetId: '',
@@ -39,11 +60,70 @@ export const CreateTokenSale = () => {
   const { activeWallet } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
+  const [assetList, setAssetList] = useState([])
+
   const { assetId, quantity, perUnit } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
+
+  const fetchUserAssets = () => {
+    setAssetList([
+      {
+        assetId: 7789624,
+        symbol: 'BUSD',
+        assetName: 'BUSD Token',
+        availableBalance: 300000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC Token',
+        availableBalance: 200000
+      },
+      {
+        assetId: 3789654,
+        symbol: 'goBTC',
+        assetName: 'goBTC',
+        availableBalance: 240000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        availableBalance: 100000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        availableBalance: 200000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        availableBalance: 200000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        availableBalance: 200000
+      },
+      {
+        assetId: 6789654,
+        symbol: 'UCDC',
+        assetName: 'UCDC',
+        availableBalance: 200000
+      }
+    ])
+  }
+
+  useEffect(() => {
+    fetchUserAssets()
+  }, [])
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -80,16 +160,14 @@ export const CreateTokenSale = () => {
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Asset:
           </Typography>
-          <Box className="mb-4 px-4">
-            <OutlinedInput
-              type="text"
-              placeholder="ASA Asset ID"
-              name="assetId"
-              value={assetId}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
-            />
-          </Box>
+          <TokenSearchInput
+            name="assetId"
+            value={assetId}
+            placeholder="ASA Asset ID"
+            onChange={onChange}
+            columns={columns}
+            rowData={assetList}
+          />
         </Box>
 
         <Box className="mb-10">
