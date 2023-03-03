@@ -110,14 +110,43 @@ export const Search = forwardRef(
       }
     }
 
+    const minDistance = 10;
+    const [activeThumb, setActiveThumb] = useState(0)
+    const [value1, setValue1] = useState([20, 37]);
+    const handleChange1 = (event, newValue, activeThumb) => {
+      if (!Array.isArray(newValue)) {
+        return;
+      }
+
+      if (activeThumb === 0) {
+        setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
+      } else {
+        setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
+      }
+    };
+
     // Set the slider value from the logarithmic scale
-    const setSliderValueFn = useCallback((value) => {
+    const setSliderValueFn = useCallback((activeThumb, value) => {
+      // console.log(value, 'vallue here')
       const min = parseInt(1)
       const max = parseInt(searchFilters.priceMax)
       const logMin = Math.log10(parseInt(min))
       const logMax = Math.log10(parseInt(max))
-      const logValue = Math.pow(10, (value - min) / (max - min) * (logMax - logMin) + logMin)
-      return parseInt(logValue)
+      const logValue = Math.pow(10, (value[activeThumb] - min) / (max - min) * (logMax - logMin) + logMin)
+      // // return parseInt(logValue)
+      // console.log(parseInt(logValue), value[activeThumb], 'hey here')
+      // // return [100, 1007]
+      // // return [20, 37]
+      // console.log(value, searchFilters.price, 'okay here oo')
+      if (activeThumb === 0) {
+        console.log(logValue, value, searchFilters.price, 'activeThumb first')
+        return [logValue, value[1]]
+      } else {
+        console.log(logValue, value, searchFilters.price, 'activeThumb one')
+        // return [searchFilters.price[1], value[1]]
+        return [value[0], logValue]
+      }
+      // return value
     }, [searchFilters?.priceMax])
 
 
@@ -127,12 +156,77 @@ export const Search = forwardRef(
       const max = parseInt(searchFilters.priceMax || 1)
       const logMin = Math.log10(min)
       const logMax = Math.log10(max)
-      const logValue = Math.log10(searchFilters.price || 1)
-      return Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)
+      const logValue = Math.log10(searchFilters.price[activeThumb] || 1)
+      console.log('yelo bow')
+      // console.log(logValue, Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), 'log value here')
+      // console.log(searchFilters.price, logValue, Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), 'log value here')
+      if (activeThumb === 0) {
+        // console.log('get 0', searchFilters.price, logValue, Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[0])
+        // console.log('get 0', Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[1])
+        return [Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[1]]
+        // return [Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[0]]
+      } else {
+        // console.log('get 1', searchFilters.price, logValue, Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[0])
+        // return [searchFilters.price[activeThumb], Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)]
+        // console.log('get 1', [searchFilters.price[0], Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)])
+        return [searchFilters.price[0], Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)]
+      }
+      // return Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)
+      // return [20, 37]
+      // console.log(searchFilters.price, 'hello here')
+      // return [100, 1007]
+      return searchFilters.price
     }, [
-      searchFilters?.priceMax, 
+      searchFilters?.priceMax,
       searchFilters?.price
     ])
+
+    const handleSliderChange = useCallback((event, newValue, activeThumb) => {
+      console.log(event, newValue, activeThumb, 'hello here')
+      setActiveThumb(activeThumb)
+      // !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+      if (!Array.isArray(newValue)) {
+        return;
+      }
+
+      if (activeThumb === 0) {
+        // setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
+        // setValue([Math.min(newValue[0], value1[1] - minDistance), value1[1]])
+        console.log([Math.min(newValue[0], getSliderValue()[1] - minDistance), getSliderValue()[1]], 'active thumb')
+        console.log('value', [Math.min(newValue[0], getSliderValue()[1] - minDistance), getSliderValue()[1]])
+        dispatchAction({
+          type: 'updateSliderValue',
+          field: 'price',
+          // value: setSliderValueFn(event.target.value)
+          // value: setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]])
+          value: setSliderValueFn(activeThumb, [Math.min(newValue[0], getSliderValue()[1] - minDistance), getSliderValue()[1]])
+        })
+      } else {
+        // setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
+        // console.log('value', getSliderValue()[0], newValue[1], [getSliderValue()[0], Math.max(newValue[1], getSliderValue()[0] - minDistance)])
+        dispatchAction({
+          type: 'updateSliderValue',
+          field: 'price',
+          // value: setSliderValueFn(event.target.value)
+          value: setSliderValueFn(activeThumb, [searchFilters.price[1], Math.max(newValue[1], getSliderValue()[0] - minDistance)])
+        })
+      }
+      // !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+      // dispatchAction({
+      //   type: 'updateSliderValue',
+      //   field: 'price',
+      //   value: setSliderValueFn(event.target.value)
+      // })
+      // (e) => {
+      //   !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+      //   dispatchAction({
+      //     type: 'updateSliderValue',
+      //     field: 'price',
+      //     value: setSliderValueFn(e.target.value)
+      //   })}
+
+    }, [])
+
 
 
     return (
@@ -207,7 +301,8 @@ export const Search = forwardRef(
                       type: 'updateSliderValue',
                       field: 'ageOfProject',
                       value: e.target.value
-                    })}
+                    })
+                  }
                   }
                   aria-label="Small"
                   valueLabelDisplay="auto"
@@ -225,24 +320,38 @@ export const Search = forwardRef(
               <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
                 <p className="mx-1.5 my-0 text-xs text-white">Price</p>
                 <Slider
+                  // getAriaLabel={() => 'Minimum distance'}
+                  // value={value1}
+                  // onChange={handleChange1}
+                  // valueLabelDisplay="auto"
+                  // getAriaValueText='Hello'
+                  disableSwap
+                  // defaultValue={[20, 37]}
                   size="small"
                   sx={{
                     color: 'white',
                     width: '70%'
                   }}
                   value={getSliderValue()}
-                  onChange={(e) => {
+                  // value={[100, 1007]}
+                  // value={[20, 37]}
+                  // defaultValue={[20, 37]}
+                  // defaultValue={[20, 37]}
+                  // // value={handleSliderChange()}
+                  // onChange={handleSliderChange}
+                  onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+                    setActiveThumb(activeThumb)
                     dispatchAction({
                       type: 'updateSliderValue',
                       field: 'price',
-                      value: setSliderValueFn(e.target.value)
-                    })}
-                  }
+                      value: setSliderValueFn(activeThumb, e.target.value)
+                    })
+                  }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
-                  valueLabelFormat={`${searchFilters.price} ALGOs`}
-                  defaultValue={searchFilters.priceMax}
+                  valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
+                  // defaultValue={[0, searchFilters.priceMax]}
                   max={searchFilters.priceMax}
                 />
               </Stack>

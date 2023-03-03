@@ -188,7 +188,8 @@ export function NavSearchSidebar({
     ageOfProject: 0,
     ageOfProjectMax: 0,
     isFilteringAgeOfProject: false,
-    price: 0,
+    // price: 0,
+    price: [0, 100],
     priceMax: 0,
     isFilteringPrice: false,
     isFilteringNFTOnly: false

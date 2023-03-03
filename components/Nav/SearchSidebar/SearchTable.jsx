@@ -308,7 +308,7 @@ export const NavSearchTable = ({
         type: 'setPriceMax',
         value: sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice
       })
-      const updatedList = [...filteredList].filter((asset) => asset.formattedPrice <= searchFilters.price)
+      const updatedList = [...filteredList].filter((asset) => asset.formattedPrice >= searchFilters.price[0] && asset.formattedPrice <= searchFilters.price[1])
       filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
       // return filteredList.map(mapToSearchResults)
     }
