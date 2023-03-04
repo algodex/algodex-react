@@ -277,7 +277,6 @@ export const NavSearchTable = ({
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
     let filteredList = geoFormattedAssets.assets;
     if (searchFilters?.isFilteringAgeOfProject) {
-      console.log('age of project here', searchFilters.ageOfProject)
       const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
       const updatedList = [...filteredList].map((asset) => {
         const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
