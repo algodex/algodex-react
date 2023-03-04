@@ -185,10 +185,10 @@ export function NavSearchSidebar({
   const initialState = {
     marketCapAmount: 0,
     isFilteringMarketCap: false,
-    ageOfProject: 0,
+    // ageOfProject: 0,
+    ageOfProject: [0, 20],
     ageOfProjectMax: 0,
     isFilteringAgeOfProject: false,
-    // price: 0,
     price: [0, 100],
     priceMax: 0,
     isFilteringPrice: false,

@@ -110,20 +110,8 @@ export const Search = forwardRef(
       }
     }
 
-    const minDistance = 10;
     const [activeThumb, setActiveThumb] = useState(0)
-    const [value1, setValue1] = useState([20, 37]);
-    const handleChange1 = (event, newValue, activeThumb) => {
-      if (!Array.isArray(newValue)) {
-        return;
-      }
-
-      if (activeThumb === 0) {
-        setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
-      } else {
-        setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
-      }
-    };
+    
 
     // Set the slider value from the logarithmic scale
     const setSliderValueFn = useCallback((activeThumb, value) => {
@@ -133,9 +121,9 @@ export const Search = forwardRef(
       const logMax = Math.log10(parseInt(max))
       const logValue = Math.pow(10, (value[activeThumb] - min) / (max - min) * (logMax - logMin) + logMin)
       if (activeThumb === 0) {
-        return [logValue, value[1]]
+        return [parseInt(logValue), value[1]]
       } else {
-        return [value[0], logValue]
+        return [value[0], parseInt(logValue)]
       }
     }, [searchFilters?.priceMax])
 
@@ -223,19 +211,19 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={searchFilters.ageOfProject}
-                  onChange={(e) => {
+                  onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
+                    setActiveThumb(activeThumb)
                     dispatchAction({
                       type: 'updateSliderValue',
                       field: 'ageOfProject',
                       value: e.target.value
                     })
-                  }
-                  }
+                  }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
-                  valueLabelFormat={`${searchFilters.ageOfProject} days`}
-                  defaultValue={searchFilters.ageOfProjectMax}
+                  disableSwap
+                  valueLabelFormat={`${searchFilters.ageOfProject[activeThumb]} days`}
                   max={searchFilters.ageOfProjectMax}
                 />
               </Stack>
