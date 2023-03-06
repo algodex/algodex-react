@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
-import { CreatorAddress } from '../CreatorAddress'
+import React, { ChangeEvent, useContext, useState } from 'react'
+import { activeWalletTypes, CreatorAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
 //MUI Components
@@ -67,10 +67,9 @@ const columns = [
 ]
 
 export const ManageToken = () => {
-  const { activeWallet } = useContext(WalletReducerContext)
+  const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
-  const [assetList, setAssetList] = useState([])
   const [error, setError] = useState({})
   const {
     tokenName,
@@ -137,62 +136,6 @@ export const ManageToken = () => {
     setLoading(false)
   }
 
-  const fetchUserAssets = () => {
-    setAssetList([
-      {
-        assetId: 7789624,
-        symbol: 'BUSD',
-        assetName: 'BUSD Token',
-        totalQuantity: 300000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC Token',
-        totalQuantity: 200000
-      },
-      {
-        assetId: 3789654,
-        symbol: 'goBTC',
-        assetName: 'goBTC',
-        totalQuantity: 240000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        totalQuantity: 100000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        totalQuantity: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        totalQuantity: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        totalQuantity: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        totalQuantity: 200000
-      }
-    ])
-  }
-
-  useEffect(() => {
-    fetchUserAssets()
-  }, [])
   return (
     <>
       <Typography variant="subtitle1" sx={styles.title}>
@@ -228,7 +171,18 @@ export const ManageToken = () => {
             placeholder="Token Name"
             onChange={onChange}
             columns={columns}
-            rowData={assetList}
+            rowData={
+              activeWallet
+                ? activeWallet['created-assets']
+                    .filter((as) => !as.deleted)
+                    .map((asset) => ({
+                      assetId: asset.index,
+                      symbol: asset.params['unit-name'],
+                      assetName: asset.params.name,
+                      totalQuantity: asset.params.total
+                    }))
+                : []
+            }
           />
           <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '29px' }}>
             Search with Asset Name or Asset ID - Only ASAs created by the currently connected wallet

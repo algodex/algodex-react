@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useEffect, useState } from 'react'
-import { CreatorAddress } from '../CreatorAddress'
+import React, { useContext, useState } from 'react'
+import { activeWalletTypes, CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
 //MUI Components
@@ -57,73 +57,15 @@ const initialValues = {
 }
 
 export const CreateTokenSale = () => {
-  const { activeWallet } = useContext(WalletReducerContext)
+  const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
-  const [assetList, setAssetList] = useState([])
 
   const { assetId, quantity, perUnit } = formData
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const fetchUserAssets = () => {
-    setAssetList([
-      {
-        assetId: 7789624,
-        symbol: 'BUSD',
-        assetName: 'BUSD Token',
-        availableBalance: 300000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC Token',
-        availableBalance: 200000
-      },
-      {
-        assetId: 3789654,
-        symbol: 'goBTC',
-        assetName: 'goBTC',
-        availableBalance: 240000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 100000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      }
-    ])
-  }
-
-  useEffect(() => {
-    fetchUserAssets()
-  }, [])
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -166,7 +108,18 @@ export const CreateTokenSale = () => {
             placeholder="ASA Asset ID"
             onChange={onChange}
             columns={columns}
-            rowData={assetList}
+            rowData={
+              activeWallet
+                ? activeWallet['created-assets']
+                    .filter((as) => !as.deleted)
+                    .map((asset) => ({
+                      assetId: asset.index,
+                      symbol: asset.params['unit-name'],
+                      assetName: asset.params.name,
+                      availableBalance: asset.params.total
+                    }))
+                : []
+            }
           />
         </Box>
 

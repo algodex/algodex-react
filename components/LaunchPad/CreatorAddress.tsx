@@ -10,7 +10,7 @@ import { CopyIcon } from './copyIcon'
 import { truncatedWalletAddress } from 'components/helpers'
 import useWallets from '@/hooks/useWallets'
 
-type activeWalletTypes = {
+export type activeWalletTypes = {
   address: string
   name: string
   type: string
