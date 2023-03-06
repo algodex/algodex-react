@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent, useContext, useState } from 'react'
+import React, { ChangeEvent, useContext, useMemo, useState } from 'react'
 import { activeWalletTypes, CreatorAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
@@ -137,6 +137,20 @@ export const ManageToken = () => {
     setLoading(false)
   }
 
+  const rowData = useMemo(() => {
+    if (activeWallet) {
+      return activeWallet['created-assets']
+        .filter((as) => !as.deleted)
+        .map((asset) => ({
+          assetId: asset.index,
+          symbol: asset.params['unit-name'],
+          assetName: asset.params.name,
+          totalQuantity: asset.params.total
+        }))
+    }
+    return []
+  }, [activeWallet])
+
   return (
     <>
       <Typography variant="subtitle1" sx={styles.title}>
@@ -172,18 +186,7 @@ export const ManageToken = () => {
             placeholder="Token Name"
             onChange={onChange}
             columns={columns}
-            rowData={
-              activeWallet
-                ? activeWallet['created-assets']
-                    .filter((as) => !as.deleted)
-                    .map((asset) => ({
-                      assetId: asset.index,
-                      symbol: asset.params['unit-name'],
-                      assetName: asset.params.name,
-                      totalQuantity: asset.params.total
-                    }))
-                : []
-            }
+            rowData={rowData}
           />
           <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '29px' }}>
             Search with Asset Name or Asset ID - Only ASAs created by the currently connected wallet

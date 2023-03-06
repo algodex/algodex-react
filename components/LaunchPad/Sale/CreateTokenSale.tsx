@@ -82,8 +82,9 @@ export const CreateTokenSale = () => {
           assetId: asset.index,
           symbol: asset.params['unit-name'],
           assetName: asset.params.name,
-          availableBalance: ((activeWallet.assets.find((asst) => asst['asset-id'] === asset.index)
-            .amount)/ 10 ** asset.params.decimals)
+          availableBalance:
+            activeWallet.assets.find((asst) => asst['asset-id'] === asset.index).amount /
+            10 ** asset.params.decimals
         }))
     }
     return []
