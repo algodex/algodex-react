@@ -62,7 +62,8 @@ const columns = [
   },
   {
     id: 'totalQuantity',
-    label: 'Quantity'
+    label: 'Quantity',
+    format: (value) => value.toLocaleString('en-US')
   }
 ]
 
