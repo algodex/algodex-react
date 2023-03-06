@@ -8,14 +8,81 @@ import Button from '@mui/material/Button'
 // Custom coponent
 import { CopyIcon } from './copyIcon'
 import { truncatedWalletAddress } from 'components/helpers'
-import { styles } from './styles.css'
 import useWallets from '@/hooks/useWallets'
 
-type creatorAddressTypes = {
-  activeWallet?: any
+type activeWalletTypes = {
+  address: string
+  name: string
+  type: string
+  connector: {
+    bridge: {
+      options: {
+        waitForReply: boolean
+        timeout: number
+      }
+      bridge: {
+        channelName: string
+        _requests: object
+        _nextId: number
+        _defaultTimeout: number
+      }
+    }
+    timeout: number
+    url: string
+    currentConnectPopup: unknown
+    currentSigntxPopup: unknown
+    currentSignLogicSigPopup: unknown
+    options: {
+      waitForReply: boolean
+      timeout: number
+    }
+    disableLedgerNano: boolean
+    connected: boolean
+  }
+  amount: number
+  'amount-without-pending-rewards': number
+  assets: Array<{
+    amount: 44
+    'asset-id': number
+    deleted: boolean
+    'is-frozen': boolean
+    'opted-in-at-round': number
+  }>
+  'created-assets': Array<{
+    'created-at-round': number
+    deleted: boolean
+    index: number
+    params: {
+      clawback: string
+      creator: string
+      decimals: number
+      'default-frozen': boolean
+      freeze: string
+      manager: string
+      name: string
+      'name-b64': string
+      total: number
+      'unit-name': string
+      'unit-name-b64': string
+    }
+  }>
+  'created-at-round': number
+  deleted: false
+  'pending-rewards': number
+  'reward-base': number
+  rewards: number
+  round: number
+  'sig-type': string
+  status: string
+  'total-apps-opted-in': number
+  'total-assets-opted-in': number
+  'total-box-bytes': number
+  'total-boxes': number
+  'total-created-apps': number
+  'total-created-assets': number
 }
 
-export const CreatorAddress = ({ activeWallet }: creatorAddressTypes) => {
+export const CreatorAddress = ({ activeWallet }: { activeWallet: activeWalletTypes }) => {
   const { peraDisconnect, myAlgoDisconnect } = useWallets(null)
   const walletDisconnectMap = {
     'my-algo-wallet': myAlgoDisconnect,
