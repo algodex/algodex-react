@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { activeWalletTypes, CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -74,6 +74,21 @@ export const CreateTokenSale = () => {
     setLoading(false)
   }
 
+  const rowData = useMemo(() => {
+    if (activeWallet) {
+      return activeWallet['created-assets']
+        .filter((as) => !as.deleted)
+        .map((asset) => ({
+          assetId: asset.index,
+          symbol: asset.params['unit-name'],
+          assetName: asset.params.name,
+          availableBalance: ((activeWallet.assets.find((asst) => asst['asset-id'] === asset.index)
+            .amount)/ 10 ** asset.params.decimals)
+        }))
+    }
+    return []
+  }, [activeWallet])
+
   return (
     <>
       <Typography variant="subtitle1" sx={styles.title}>
@@ -108,18 +123,7 @@ export const CreateTokenSale = () => {
             placeholder="ASA Asset ID"
             onChange={onChange}
             columns={columns}
-            rowData={
-              activeWallet
-                ? activeWallet['created-assets']
-                    .filter((as) => !as.deleted)
-                    .map((asset) => ({
-                      assetId: asset.index,
-                      symbol: asset.params['unit-name'],
-                      assetName: asset.params.name,
-                      availableBalance: asset.params.total
-                    }))
-                : []
-            }
+            rowData={rowData}
           />
         </Box>
 
