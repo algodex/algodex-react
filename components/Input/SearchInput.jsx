@@ -207,6 +207,7 @@ export const Search = forwardRef(
                 <Slider
                   size="small"
                   sx={{
+                    opacity: `${searchFilters.isFilteringAgeOfProject ? '1' : '0.5'}`,
                     '&.MuiSlider-root': {
                       padding: 0,
                     },
@@ -242,6 +243,7 @@ export const Search = forwardRef(
                   disableSwap
                   size="small"
                   sx={{
+                    opacity: `${searchFilters.isFilteringPrice ? '1' : '0.5'}`,
                     '&.MuiSlider-root': {
                       padding: 0,
                     },
