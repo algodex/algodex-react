@@ -49,13 +49,15 @@ export const SearchTable = ({
   rowData,
   showTable,
   setShowTable,
-  dropdownRef
+  dropdownRef,
+  setSelectedAsset
 }: {
   columns: Array<TableColumnType>
   rowData: Array<unknown>
   showTable: boolean
   setShowTable: (v: boolean) => void
   dropdownRef: MutableRefObject<Element>
+  setSelectedAsset: React.Dispatch<React.SetStateAction<unknown>>
 }) => {
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [orderBy, setOrderBy] = useState('assetName')
@@ -129,7 +131,11 @@ export const SearchTable = ({
                     <Box component="span">
                       <SortIcon
                         use={
-                          orderBy !== col.id ? 'sortNone' : order === 'desc' ? 'sortDesc' : 'sortAsc'
+                          orderBy !== col.id
+                            ? 'sortNone'
+                            : order === 'desc'
+                            ? 'sortDesc'
+                            : 'sortAsc'
                         }
                         size={0.625}
                       />
@@ -149,6 +155,7 @@ export const SearchTable = ({
                   sx={{
                     cursor: 'pointer'
                   }}
+                  onClick={() => setSelectedAsset(row)}
                 >
                   {columns.map((column) => {
                     return (

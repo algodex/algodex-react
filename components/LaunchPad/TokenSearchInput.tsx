@@ -14,7 +14,9 @@ export const TokenSearchInput = ({
   onChange,
   columns,
   rowData,
-  placeholder
+  placeholder,
+  disabled,
+  setSelectedAsset
 }: {
   value: string | number
   name: string
@@ -22,6 +24,8 @@ export const TokenSearchInput = ({
   columns: TableColumnType[]
   rowData: unknown[]
   placeholder: string
+  disabled: boolean
+  setSelectedAsset: React.Dispatch<React.SetStateAction<unknown>>
 }) => {
   const [showTable, setShowTable] = useState(false)
   const dropdownRef = useRef(null)
@@ -36,6 +40,7 @@ export const TokenSearchInput = ({
         onChange={(e) => onChange(e)}
         onFocus={() => setShowTable(true)}
         sx={styles.input}
+        disabled={disabled}
       />
       <SearchTable
         columns={columns}
@@ -43,6 +48,7 @@ export const TokenSearchInput = ({
         showTable={showTable}
         setShowTable={setShowTable}
         dropdownRef={dropdownRef}
+        setSelectedAsset={setSelectedAsset}
       />
     </Box>
   )

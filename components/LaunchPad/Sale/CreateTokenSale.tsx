@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useMemo, useState } from 'react'
-import { activeWalletTypes, CreatorAddress } from '../CreatorAddress'
+import React, { useState } from 'react'
+import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
 //MUI Components
@@ -27,28 +27,8 @@ import Button from '@mui/material/Button'
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
-import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { TokenSearchInput } from '../TokenSearchInput'
-
-const columns = [
-  {
-    id: 'symbol',
-    label: 'Symbol'
-  },
-  {
-    id: 'assetName',
-    label: 'Name'
-  },
-  {
-    id: 'assetId',
-    label: 'AssetId'
-  },
-  {
-    id: 'availableBalance',
-    label: 'Available Balance',
-    format: (value) => value.toLocaleString('en-US')
-  }
-]
+import { useTokenSale } from '@/hooks/useTokenSale'
 
 const initialValues = {
   assetId: '',
@@ -57,38 +37,14 @@ const initialValues = {
 }
 
 export const CreateTokenSale = () => {
-  const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
-  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
-
   const { assetId, quantity, perUnit } = formData
+  const { rowData, onSubmit, selectedAsset, setSelectedAsset, activeWallet, columns, loading } =
+    useTokenSale(setFormData)
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-
-    setLoading(true)
-    setLoading(false)
-  }
-
-  const rowData = useMemo(() => {
-    if (activeWallet) {
-      return activeWallet['created-assets']
-        .filter((as) => !as.deleted)
-        .map((asset) => ({
-          assetId: asset.index,
-          symbol: asset.params['unit-name'],
-          assetName: asset.params.name,
-          availableBalance:
-            activeWallet.assets.find((asst) => asst['asset-id'] === asset.index).amount /
-            10 ** asset.params.decimals
-        }))
-    }
-    return []
-  }, [activeWallet])
 
   return (
     <>
@@ -125,60 +81,69 @@ export const CreateTokenSale = () => {
             onChange={onChange}
             columns={columns}
             rowData={rowData}
+            disabled={!activeWallet}
+            setSelectedAsset={setSelectedAsset}
           />
         </Box>
+        {selectedAsset && (
+          <>
+            <Box className="mb-10">
+              <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
+                Set Quantity and Prices for Sale:
+              </Typography>
+              <Box className="mb-4 px-4">
+                <OutlinedInput
+                  type="text"
+                  placeholder="Quantity"
+                  name="quantity"
+                  value={quantity}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+                <Typography
+                  className="my-5 text-center"
+                  sx={{ fontSize: '15px', color: 'white', fontStyle: 'italic' }}
+                >
+                  Available Balance: {selectedAsset.availableBalance.toLocaleString()}{' '}
+                  {selectedAsset.params['unit-name']} UNIT
+                </Typography>
+              </Box>
 
-        <Box className="mb-10">
-          <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
-            Set Quantity and Prices for Sale:
-          </Typography>
-          <Box className="mb-4 px-4">
-            <OutlinedInput
-              type="text"
-              placeholder="Quantity"
-              name="quantity"
-              value={quantity}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
+              <Box className="mb-4 px-4" sx={{ color: 'white' }}>
+                <OutlinedInput
+                  type="text"
+                  placeholder="Price per unit in ALGO"
+                  name="perUnit"
+                  value={perUnit}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+                <Typography
+                  className="my-5 text-center"
+                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                >
+                  1 {selectedAsset.params['unit-name']} UNIT = X ALGO
+                </Typography>
+                <Typography
+                  className="text-center opacity-70"
+                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                >
+                  1 ALGO = .56 {selectedAsset.params['unit-name']}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Note
+              className="my-6"
+              content="It takes approximately 10 seconds to create your ASA after confirming. The Tokens will automatically transfer to the creator wallet after the creation is successful. You are able to create a sale of your token on Algodex or use Mailbox to distribute."
             />
-            <Typography
-              className="my-5 text-center"
-              sx={{ fontSize: '15px', color: 'white', fontStyle: 'italic' }}
-            >
-              Available Balance: XXX,XXX,XXX TEST UNIT
-            </Typography>
-          </Box>
-
-          <Box className="mb-4 px-4" sx={{ color: 'white' }}>
-            <OutlinedInput
-              type="text"
-              placeholder="Price per unit in ALGO"
-              name="perUnit"
-              value={perUnit}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
-            />
-            <Typography className="my-5 text-center" sx={{ fontSize: '15px', fontStyle: 'italic' }}>
-              1 TEST UNIT = X ALGO
-            </Typography>
-            <Typography
-              className="text-center opacity-70"
-              sx={{ fontSize: '15px', fontStyle: 'italic' }}
-            >
-              1 ALGO = .56 USDC
-            </Typography>
-          </Box>
-        </Box>
-
-        <Note
-          className="my-6"
-          content="It takes approximately 10 seconds to create your ASA after confirming. The Tokens will automatically transfer to the creator wallet after the creation is successful. You are able to create a sale of your token on Algodex or use Mailbox to distribute."
-        />
-        <Box className="text-center">
-          <Button type="submit" disabled={loading} sx={styles.submitBtn}>
-            Confirm Sale
-          </Button>
-        </Box>
+            <Box className="text-center">
+              <Button type="submit" disabled={loading} sx={styles.submitBtn}>
+                Confirm Sale
+              </Button>
+            </Box>
+          </>
+        )}
       </form>
     </>
   )

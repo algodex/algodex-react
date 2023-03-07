@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useMemo, useState } from 'react'
-import { activeWalletTypes, CreatorAddress } from '../CreatorAddress'
+import React, { useState } from 'react'
+import { CreatorAddress } from '../CreatorAddress'
 import { Icon } from '@iconify/react'
 
 //MUI Components
@@ -29,42 +29,22 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { CopyIcon } from '../copyIcon'
 import { LinearProgressWithLabel } from '../progressBar'
-import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { TokenSearchInput } from '../TokenSearchInput'
+import { useTokenSale } from '@/hooks/useTokenSale'
 
 const initialValues = {
-  tokenName: '',
+  assetId: '',
   pricePerToken: 0.75,
   showPricePerToken: false,
   totalForSale: 14600,
   showTotalForSale: false
 }
 
-const columns = [
-  {
-    id: 'symbol',
-    label: 'Symbol'
-  },
-  {
-    id: 'assetName',
-    label: 'Name'
-  },
-  {
-    id: 'assetId',
-    label: 'AssetId'
-  },
-  {
-    id: 'availableBalance',
-    label: 'Available Balance',
-    format: (value) => value.toLocaleString('en-US')
-  }
-]
-
 export const ManageTokenSale = () => {
-  const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [formData, setFormData] = useState(initialValues)
-  const { tokenName, pricePerToken, showPricePerToken, totalForSale, showTotalForSale } = formData
-
+  const { assetId, pricePerToken, showPricePerToken, totalForSale, showTotalForSale } = formData
+  const { rowData, onSubmit, selectedAsset, setSelectedAsset, activeWallet, columns, windowHost } =
+    useTokenSale(setFormData)
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -78,25 +58,9 @@ export const ManageTokenSale = () => {
     })
   }
 
-  const onSubmit = async (e) => {
-    e.preventDefault()
+  const handleShow = (e: { target: { name: string; value: boolean } }) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const rowData = useMemo(() => {
-    if (activeWallet) {
-      return activeWallet['created-assets']
-        .filter((as) => !as.deleted)
-        .map((asset) => ({
-          assetId: asset.index,
-          symbol: asset.params['unit-name'],
-          assetName: asset.params.name,
-          availableBalance:
-            activeWallet.assets.find((asst) => asst['asset-id'] === asset.index).amount /
-            10 ** asset.params.decimals
-        }))
-    }
-    return []
-  }, [activeWallet])
 
   return (
     <>
@@ -128,143 +92,180 @@ export const ManageTokenSale = () => {
           </Typography>
 
           <TokenSearchInput
-            name="tokenName"
-            value={tokenName}
-            placeholder="Token Name"
+            name="assetId"
+            value={assetId}
+            placeholder="ASA Asset ID"
             onChange={onChange}
             columns={columns}
             rowData={rowData}
+            disabled={!activeWallet}
+            setSelectedAsset={setSelectedAsset}
           />
           <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '29px' }}>
             Search with Asset Name or Asset ID - Only ASAs created by the currently connected wallet
             will show as options.
           </Typography>
 
-          <Box
-            className="mb-10 px-4 py-8"
-            sx={{
-              border: '1px solid',
-              borderColor: 'gray.250',
-              borderRadius: '3px'
-            }}
-          >
-            <Box className="md:flex gap-x-2">
-              <Typography sx={styles.name}>Token Name</Typography>
-              <Typography sx={styles.value}>The Goose Token (GOOSE)</Typography>
-            </Box>
-            <Divider className="my-5 opacity-40" sx={styles.divider} />
-            <Box className="md:flex gap-x-2">
-              <Typography sx={styles.name}>Token Sale Link</Typography>
-              <Typography
-                sx={{ ...styles.value, fontSize: '12px', display: 'flex', columnGap: '5px' }}
-              >
-                https://app.algodex.com/trade/793124631?cc=US
-                <CopyIcon content={'https://app.algodex.com/trade/793124631?cc=US'} />
-              </Typography>
-            </Box>
-            <Divider className="my-5 opacity-40" sx={styles.divider} />
-            <Box>
-              <Typography
-                sx={{ ...styles.title, fontSize: '21px', textAlign: 'center', mb: '20px' }}
-              >
-                Sale Progress:
-              </Typography>
-              <LinearProgressWithLabel value={83.344} label={`${Math.round(83.344)}% sold`} />
-              <Box
-                className="flex justify-between"
-                sx={{
-                  color: 'white'
-                }}
-              >
-                <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>14587.78 ALGO</Typography>
-                <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>
-                  3577 GOOSE remaining
+          {selectedAsset && (
+            <Box
+              className="mb-10 px-4 py-8"
+              sx={{
+                border: '1px solid',
+                borderColor: 'gray.250',
+                borderRadius: '3px'
+              }}
+            >
+              <Box className="md:flex gap-x-2">
+                <Typography sx={styles.name}>Token Name</Typography>
+                <Typography sx={styles.value}>
+                  {selectedAsset.params.name} ({selectedAsset.params['unit-name']})
                 </Typography>
               </Box>
-            </Box>
-            <Divider className="my-5 opacity-40" sx={styles.divider} />
-            <Box className="md:flex gap-x-2">
-              <Typography sx={styles.name}>Total For Sale</Typography>
-              {showTotalForSale ? (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter No. of Tokens on Sale"
-                  name="totalForSale"
-                  value={totalForSale}
-                  onChange={(e) => onChange(e)}
-                  sx={{
-                    ...styles.input,
-                    borderTop: 0,
-                    borderInline: 0
-                  }}
-                />
-              ) : (
-                <Typography className="flex items-center" sx={styles.value}>
-                  {totalForSale} ALGO
-                  <Icon
-                    icon="material-symbols:edit"
-                    className="ml-3 cursor-pointer"
-                    onClick={() => handleViewChanges('showTotalForSale')}
-                  />
+              <Divider className="my-5 opacity-40" sx={styles.divider} />
+              <Box className="md:flex gap-x-2">
+                <Typography sx={styles.name}>Token Sale Link</Typography>
+                <Typography
+                  sx={{ ...styles.value, fontSize: '12px', display: 'flex', columnGap: '5px' }}
+                >
+                  {`${windowHost}/trade/${selectedAsset.assetId}`}
+                  <CopyIcon content={`${windowHost}/trade/${selectedAsset.assetId}`} />
                 </Typography>
-              )}
-            </Box>
-            <Divider className="my-5 opacity-40" sx={styles.divider} />
-            <Box className="md:flex gap-x-2">
-              <Typography sx={styles.name}>Price Per Token</Typography>
-              {showPricePerToken ? (
-                <OutlinedInput
-                  type="text"
-                  placeholder="Enter Price per Token"
-                  name="pricePerToken"
-                  value={pricePerToken}
-                  onChange={(e) => onChange(e)}
-                  sx={{
-                    ...styles.input,
-                    borderTop: 0,
-                    borderInline: 0
-                  }}
-                />
-              ) : (
-                <Typography className="flex items-center" sx={styles.value}>
-                  {pricePerToken} ALGO
-                  <Icon
-                    icon="material-symbols:edit"
-                    className="ml-3 cursor-pointer"
-                    onClick={() => handleViewChanges('showPricePerToken')}
-                  />
+              </Box>
+              <Divider className="my-5 opacity-40" sx={styles.divider} />
+              <Box>
+                <Typography
+                  sx={{ ...styles.title, fontSize: '21px', textAlign: 'center', mb: '20px' }}
+                >
+                  Sale Progress:
                 </Typography>
-              )}
+                <LinearProgressWithLabel value={83.344} label={`${Math.round(83.344)}% sold`} />
+                <Box
+                  className="flex justify-between"
+                  sx={{
+                    color: 'white'
+                  }}
+                >
+                  <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>
+                    {selectedAsset.availableBalance.toLocaleString()} ALGO
+                  </Typography>
+                  <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>
+                    {selectedAsset.totalQuantity.toLocaleString()}{' '}
+                    {selectedAsset.params['unit-name']} remaining
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider className="my-5 opacity-40" sx={styles.divider} />
+              <Box className="md:flex gap-x-2">
+                <Typography sx={styles.name}>Total For Sale</Typography>
+                {showTotalForSale ? (
+                  <Box className="flex items-center">
+                    <OutlinedInput
+                      type="text"
+                      placeholder="Enter No. of Tokens on Sale"
+                      name="totalForSale"
+                      value={totalForSale}
+                      onChange={(e) => onChange(e)}
+                      sx={{
+                        ...styles.input,
+                        borderTop: 0,
+                        borderInline: 0
+                      }}
+                    />
+                    <Icon
+                      icon="mdi:cancel-bold"
+                      className="ml-3 cursor-pointer text-white"
+                      onClick={() =>
+                        handleShow({
+                          target: {
+                            name: 'showTotalForSale',
+                            value: !showTotalForSale
+                          }
+                        })
+                      }
+                    />
+                  </Box>
+                ) : (
+                  <Typography className="flex items-center" sx={styles.value}>
+                    {totalForSale} ALGO
+                    <Icon
+                      icon="material-symbols:edit"
+                      className="ml-3 cursor-pointer"
+                      onClick={() => handleViewChanges('showTotalForSale')}
+                    />
+                  </Typography>
+                )}
+              </Box>
+              <Divider className="my-5 opacity-40" sx={styles.divider} />
+              <Box className="md:flex gap-x-2">
+                <Typography sx={styles.name}>Price Per Token</Typography>
+                {showPricePerToken ? (
+                  <Box className="flex items-center">
+                    <OutlinedInput
+                      type="text"
+                      placeholder="Enter Price per Token"
+                      name="pricePerToken"
+                      value={pricePerToken}
+                      onChange={(e) => onChange(e)}
+                      sx={{
+                        ...styles.input,
+                        borderTop: 0,
+                        borderInline: 0
+                      }}
+                    />{' '}
+                    <Icon
+                      icon="mdi:cancel-bold"
+                      className="ml-3 cursor-pointer text-white"
+                      onClick={() =>
+                        handleShow({
+                          target: {
+                            name: 'showPricePerToken',
+                            value: !showPricePerToken
+                          }
+                        })
+                      }
+                    />
+                  </Box>
+                ) : (
+                  <Typography className="flex items-center" sx={styles.value}>
+                    {pricePerToken} ALGO
+                    <Icon
+                      icon="material-symbols:edit"
+                      className="ml-3 cursor-pointer"
+                      onClick={() => handleViewChanges('showPricePerToken')}
+                    />
+                  </Typography>
+                )}
+              </Box>
+              <Divider className="my-5 opacity-40" sx={styles.divider} />
+              <Box className="flex justify-center gap-4 mt-7">
+                <Button
+                  type="submit"
+                  variant="outlined"
+                  sx={{
+                    ...styles.btnOutline,
+                    borderColor: 'green.500',
+                    '&:hover': {
+                      backgroundColor: 'green.500'
+                    }
+                  }}
+                >
+                  Update Sale
+                </Button>
+                <Button
+                  type="button"
+                  sx={{
+                    ...styles.btnOutline,
+                    borderColor: 'red.600',
+                    '&:hover': {
+                      backgroundColor: 'red.600'
+                    }
+                  }}
+                >
+                  End Sale
+                </Button>
+              </Box>
             </Box>
-            <Divider className="my-5 opacity-40" sx={styles.divider} />
-            <Box className="flex justify-center gap-4 mt-7">
-              <Button
-                type="submit"
-                variant="outlined"
-                sx={{
-                  ...styles.btnOutline,
-                  borderColor: 'green.500',
-                  '&:hover': {
-                    backgroundColor: 'green.500'
-                  }
-                }}
-              >
-                UPDATE sale
-              </Button>
-              <Button
-                type="button"
-                sx={{
-                  ...styles.btnOutline,
-                  borderColor: 'red.600',
-                  '&:hover': {
-                    backgroundColor: 'red.600'
-                  }
-                }}
-              >
-                End sale
-              </Button>
-            </Box>
-          </Box>
+          )}
         </Box>
       </form>
     </>
