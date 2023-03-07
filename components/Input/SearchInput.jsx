@@ -207,6 +207,9 @@ export const Search = forwardRef(
                 <Slider
                   size="small"
                   sx={{
+                    '&.MuiSlider-root': {
+                      padding: 0,
+                    },
                     color: 'white',
                     width: '70%'
                   }}
@@ -239,6 +242,9 @@ export const Search = forwardRef(
                   disableSwap
                   size="small"
                   sx={{
+                    '&.MuiSlider-root': {
+                      padding: 0,
+                    },
                     color: 'white',
                     width: '70%'
                   }}
@@ -255,7 +261,7 @@ export const Search = forwardRef(
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
-                  // defaultValue={[0, searchFilters.priceMax]}
+                  defaultValue={[0, searchFilters.priceMax]}
                   max={searchFilters.priceMax}
                 />
               </Stack>
