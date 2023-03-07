@@ -293,20 +293,6 @@ export const NavSearchTable = ({
       value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1].ageOfProject
     })
     if (searchFilters?.isFilteringAgeOfProject) {
-      const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
-      // const updatedList = [...filteredList].map((asset) => {
-      //   const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
-      //   return {
-      //     ...asset,
-      //     ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
-      //   }
-      // })
-      // const sortedListByAgeOfProject = sortBy(updatedList, o => o.ageOfProject);
-      // setSearchFilterProps({
-      //   type: 'updateSliderValue',
-      //   field: 'ageOfProjectMax',
-      //   value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1].ageOfProject
-      // })
       filteredList = [...updatedList].filter((asset) => asset.ageOfProject >= searchFilters.ageOfProject[0] && asset.ageOfProject <= searchFilters.ageOfProject[1]).sort((a, b) => b.formattedPrice - a.formattedPrice);
     }
 
@@ -320,13 +306,6 @@ export const NavSearchTable = ({
 
     // Filter Asset By price
     if (searchFilters?.isFilteringPrice) {
-      // Sort list by Price
-      // const sortedListByPrice = [...geoFormattedAssets.assets].sort((a, b) => a.formattedPrice - b.formattedPrice)
-      // // Set max price for the price filter slider
-      // setSearchFilterProps({
-      //   type: 'setPriceMax',
-      //   value: sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice
-      // })
       const updatedList = [...filteredList].filter((asset) => asset.formattedPrice >= searchFilters.price[0] && asset.formattedPrice <= searchFilters.price[1])
       filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
     }
@@ -387,21 +366,6 @@ export const NavSearchTable = ({
         value: [0, searchFilters.ageOfProjectMax]
       })
     }
-
-    // if (searchFilters?.price[1] === 0) {
-    //   setSearchFilterProps({
-    //     type: 'updateSliderValue',
-    //     field: 'isFilteringPrice',
-    //     value: false
-    //   })
-    // }
-    // if (searchFilters?.ageOfProject[1] === 0) {
-    //   setSearchFilterProps({
-    //     type: 'updateSliderValue',
-    //     field: 'isFilteringAgeOfProject',
-    //     value: false
-    //   })
-    // }
   }, [
     searchFilters.ageOfProjectMax,
     searchFilters?.ageOfProject,
