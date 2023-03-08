@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useCallback, useEffect, useRef, useState, useReducer } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { default as NavSearchTable } from 'components/Nav/SearchSidebar/SearchTable'
 import PropTypes from 'prop-types'
@@ -24,6 +24,7 @@ import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from '@/hooks'
+import useSearchFilter from '@/hooks/useSearchFilter'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -116,55 +117,8 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-  const filterReducer = (state, action) => {
-    switch (action.type) {
-      case 'updateSliderValue':
-        return {
-          ...state,
-          [action.field]: action.value
-        }
-      case 'setPriceMax':
-        return {
-          ...state,
-          priceMax: action.value
-        }
-      case 'toggleMarketCap':
-        return {
-          ...state,
-          isFilteringMarketCap: !state.isFilteringMarketCap
-        }      
-      case 'toggleAgeOfProject':
-        return {
-          ...state,
-          isFilteringAgeOfProject: !state.isFilteringAgeOfProject
-        }      
-      case 'toggleMarketPrice':
-        return {
-          ...state,
-          isFilteringPrice: !state.isFilteringPrice
-        }      
-      case 'toggleNFTOnly':
-        return {
-          ...state,
-          isFilteringNFTOnly: !state.isFilteringNFTOnly
-        }      
-      default:
-        break;
-    }
-    return state
-  }
-  const initialState = {
-    marketCapAmount: 0,
-    isFilteringMarketCap: false,
-    // ageOfProject: 0,
-    ageOfProject: [0, 20],
-    isFilteringAgeOfProject: false,
-    price: [0, 100],
-    priceMax: 0,
-    isFilteringPrice: false,
-    isFilteringNFTOnly: false
-  }
-  const [filters, dispatch] = useReducer(filterReducer, initialState)
+  
+  const {filters, dispatch } = useSearchFilter()
   const [toggleFilters, setToggleFilters] = useState(false)
   return (
     <Section area={area} borderColor="red" border="dashed">
