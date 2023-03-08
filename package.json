@@ -15,7 +15,7 @@
     "test-lint": "cp .env.mainnet .env.production && next lint",
     "test-jest": "jest ",
     "coverage": "jest --coverage",
-    "test-cypress": "cross-env DISABLE_SENTRY=true NODE_ENV=test start-server-and-test build-start 127.0.0.1 cypress-run",
+    "test-cypress": "cross-env DISABLE_SENTRY=true NODE_ENV=test start-server-and-test build-start http://localhost:3000 cypress-run",
     "badge": "jest && jest-coverage-badges output ./assets",
     "jest": "jest --watch",
     "lint": "eslint --fix .",
