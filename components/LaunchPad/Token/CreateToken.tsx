@@ -227,7 +227,7 @@ export const CreateToken = () => {
     }
     // toast.loading('AWAITING SIGNATURE', { duration: 30 * 60 * 1000 })
     createAsset(payload, algodex.algod, activeWallet, notifier)
-      .then((asset) => {
+      .then(() => {
         setLoading(false)
         lastToastId = toast.success(t('asset-success'))
       })

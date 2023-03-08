@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import TableSortLabel from '@mui/material/TableSortLabel'
+import { selectedAsset } from '@/components/types'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   color: 'gray.800',
@@ -49,13 +50,15 @@ export const SearchTable = ({
   rowData,
   showTable,
   setShowTable,
-  dropdownRef
+  dropdownRef,
+  setSelectedAsset
 }: {
   columns: Array<TableColumnType>
   rowData: Array<unknown>
   showTable: boolean
   setShowTable: (v: boolean) => void
   dropdownRef: MutableRefObject<Element>
+  setSelectedAsset: React.Dispatch<React.SetStateAction<selectedAsset>>
 }) => {
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [orderBy, setOrderBy] = useState('assetName')
@@ -129,7 +132,11 @@ export const SearchTable = ({
                     <Box component="span">
                       <SortIcon
                         use={
-                          orderBy !== col.id ? 'sortNone' : order === 'desc' ? 'sortDesc' : 'sortAsc'
+                          orderBy !== col.id
+                            ? 'sortNone'
+                            : order === 'desc'
+                            ? 'sortDesc'
+                            : 'sortAsc'
                         }
                         size={0.625}
                       />
@@ -148,6 +155,10 @@ export const SearchTable = ({
                   key={index}
                   sx={{
                     cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    setSelectedAsset(row as selectedAsset)
+                    setShowTable(false)
                   }}
                 >
                   {columns.map((column) => {

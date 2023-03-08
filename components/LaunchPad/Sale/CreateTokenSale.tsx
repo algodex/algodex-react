@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
 import { Note } from '../note'
 
@@ -27,28 +27,8 @@ import Button from '@mui/material/Button'
 // Custom Styled Components
 import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
-import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { TokenSearchInput } from '../TokenSearchInput'
-
-const columns = [
-  {
-    id: 'symbol',
-    label: 'Symbol'
-  },
-  {
-    id: 'assetName',
-    label: 'Name'
-  },
-  {
-    id: 'assetId',
-    label: 'AssetId'
-  },
-  {
-    id: 'availableBalance',
-    label: 'Available Balance',
-    format: (value) => value.toLocaleString('en-US')
-  }
-]
+import { useTokenSale } from '@/hooks/useTokenSale'
 
 const initialValues = {
   assetId: '',
@@ -57,79 +37,21 @@ const initialValues = {
 }
 
 export const CreateTokenSale = () => {
-  const { activeWallet } = useContext(WalletReducerContext)
-  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
-  const [assetList, setAssetList] = useState([])
-
   const { assetId, quantity, perUnit } = formData
+  const {
+    rowData,
+    onSubmit,
+    selectedAsset,
+    setSelectedAsset,
+    activeWallet,
+    columns,
+    loading,
+    resetForm
+  } = useTokenSale(setFormData, initialValues)
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  const fetchUserAssets = () => {
-    setAssetList([
-      {
-        assetId: 7789624,
-        symbol: 'BUSD',
-        assetName: 'BUSD Token',
-        availableBalance: 300000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC Token',
-        availableBalance: 200000
-      },
-      {
-        assetId: 3789654,
-        symbol: 'goBTC',
-        assetName: 'goBTC',
-        availableBalance: 240000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 100000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      },
-      {
-        assetId: 6789654,
-        symbol: 'UCDC',
-        assetName: 'UCDC',
-        availableBalance: 200000
-      }
-    ])
-  }
-
-  useEffect(() => {
-    fetchUserAssets()
-  }, [])
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-
-    setLoading(true)
-    setLoading(false)
   }
 
   return (
@@ -149,7 +71,10 @@ export const CreateTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator/Reserve Address:
         </Typography>
-        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
+        <CreatorAddress
+          activeWallet={activeWallet ? activeWallet : undefined}
+          resetForm={resetForm}
+        />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         A sale must be started from either the Creator or the Reserve wallet of the ASA. Ensure the
@@ -166,61 +91,70 @@ export const CreateTokenSale = () => {
             placeholder="ASA Asset ID"
             onChange={onChange}
             columns={columns}
-            rowData={assetList}
+            rowData={rowData}
+            disabled={!activeWallet}
+            setSelectedAsset={setSelectedAsset}
           />
         </Box>
+        {selectedAsset && (
+          <>
+            <Box className="mb-10">
+              <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
+                Set Quantity and Prices for Sale:
+              </Typography>
+              <Box className="mb-4 px-4">
+                <OutlinedInput
+                  type="text"
+                  placeholder="Quantity"
+                  name="quantity"
+                  value={quantity}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+                <Typography
+                  className="my-5 text-center"
+                  sx={{ fontSize: '15px', color: 'white', fontStyle: 'italic' }}
+                >
+                  Available Balance: {selectedAsset.availableBalance.toLocaleString()}{' '}
+                  {selectedAsset.params['unit-name']} UNIT
+                </Typography>
+              </Box>
 
-        <Box className="mb-10">
-          <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
-            Set Quantity and Prices for Sale:
-          </Typography>
-          <Box className="mb-4 px-4">
-            <OutlinedInput
-              type="text"
-              placeholder="Quantity"
-              name="quantity"
-              value={quantity}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
+              <Box className="mb-4 px-4" sx={{ color: 'white' }}>
+                <OutlinedInput
+                  type="text"
+                  placeholder="Price per unit in ALGO"
+                  name="perUnit"
+                  value={perUnit}
+                  onChange={(e) => onChange(e)}
+                  sx={styles.input}
+                />
+                <Typography
+                  className="my-5 text-center"
+                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                >
+                  1 {selectedAsset.params['unit-name']} UNIT = X ALGO
+                </Typography>
+                <Typography
+                  className="text-center opacity-70"
+                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                >
+                  1 ALGO = .56 {selectedAsset.params['unit-name']}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Note
+              className="my-6"
+              content="It takes approximately 10 seconds to create your ASA after confirming. The Tokens will automatically transfer to the creator wallet after the creation is successful. You are able to create a sale of your token on Algodex or use Mailbox to distribute."
             />
-            <Typography
-              className="my-5 text-center"
-              sx={{ fontSize: '15px', color: 'white', fontStyle: 'italic' }}
-            >
-              Available Balance: XXX,XXX,XXX TEST UNIT
-            </Typography>
-          </Box>
-
-          <Box className="mb-4 px-4" sx={{ color: 'white' }}>
-            <OutlinedInput
-              type="text"
-              placeholder="Price per unit in ALGO"
-              name="perUnit"
-              value={perUnit}
-              onChange={(e) => onChange(e)}
-              sx={styles.input}
-            />
-            <Typography className="my-5 text-center" sx={{ fontSize: '15px', fontStyle: 'italic' }}>
-              1 TEST UNIT = X ALGO
-            </Typography>
-            <Typography
-              className="text-center opacity-70"
-              sx={{ fontSize: '15px', fontStyle: 'italic' }}
-            >
-              1 ALGO = .56 USDC
-            </Typography>
-          </Box>
-        </Box>
-
-        <Note
-          className="my-6"
-          content="It takes approximately 10 seconds to create your ASA after confirming. The Tokens will automatically transfer to the creator wallet after the creation is successful. You are able to create a sale of your token on Algodex or use Mailbox to distribute."
-        />
-        <Box className="text-center">
-          <Button type="submit" disabled={loading} sx={styles.submitBtn}>
-            Confirm Sale
-          </Button>
-        </Box>
+            <Box className="text-center">
+              <Button type="submit" disabled={loading} sx={styles.submitBtn}>
+                Confirm Sale
+              </Button>
+            </Box>
+          </>
+        )}
       </form>
     </>
   )

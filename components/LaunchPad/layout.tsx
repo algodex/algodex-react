@@ -49,7 +49,7 @@ export const LaunchpadLayout = ({ children }: { children: ReactNode }) => {
             width: isMobile ? '100%' : `calc(100% - (${drawerWidth}px + 30%))`,
             maxWidth: isMobile ? '100%' : `calc(100% - (${drawerWidth}px + 30%)) !important`,
             marginInline: 'auto',
-            height: '100%',
+            minHeight: '100vh',
             paddingInline: '50px',
             paddingBlock: `${toolbarHeight + 15}px ${toolbarHeight - 20}px`,
             '@media(min-width:900px) and (max-width:1120px)': {

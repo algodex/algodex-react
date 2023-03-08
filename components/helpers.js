@@ -22,7 +22,10 @@ export const formatUSDPrice = (amount) => {
 }
 
 export const truncatedWalletAddress = (addr, size) => {
-  return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
+  if (addr) {
+    return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
+  }
+  return ''
 }
 
 export const subStringFn = (start, end, string) => {
