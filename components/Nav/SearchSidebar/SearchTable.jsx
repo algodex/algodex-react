@@ -290,7 +290,7 @@ export const NavSearchTable = ({
     setSearchFilterProps({
       type: 'updateSliderValue',
       field: 'ageOfProjectMax',
-      value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1].ageOfProject
+      value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1]?.ageOfProject
     })
     if (searchFilters?.isFilteringAgeOfProject) {
       filteredList = [...updatedList].filter((asset) => asset.ageOfProject >= searchFilters.ageOfProject[0] && asset.ageOfProject <= searchFilters.ageOfProject[1]).sort((a, b) => b.formattedPrice - a.formattedPrice);
@@ -352,14 +352,14 @@ export const NavSearchTable = ({
   ])
 
   useEffect(() => {
-    if ((searchFilters.priceMax === 0 || searchFilters.priceMax) && setSearchFilterProps && !searchFilters?.isFilteringPrice) {
+    if ((searchFilters?.priceMax === 0 || searchFilters?.priceMax) && setSearchFilterProps && !searchFilters?.isFilteringPrice) {
       setSearchFilterProps({
         type: 'updateSliderValue',
         field: 'price',
         value: [0, searchFilters.priceMax]
       })
     }
-    if ((searchFilters.ageOfProjectMax === 0 || searchFilters.ageOfProjectMax) && setSearchFilterProps && !searchFilters?.isFilteringAgeOfProject) {
+    if ((searchFilters?.ageOfProjectMax === 0 || searchFilters?.ageOfProjectMax) && setSearchFilterProps && !searchFilters?.isFilteringAgeOfProject) {
       setSearchFilterProps({
         type: 'updateSliderValue',
         field: 'ageOfProject',
@@ -367,9 +367,9 @@ export const NavSearchTable = ({
       })
     }
   }, [
-    searchFilters.ageOfProjectMax,
+    searchFilters?.ageOfProjectMax,
     searchFilters?.ageOfProject,
-    searchFilters.priceMax,
+    searchFilters?.priceMax,
     searchFilters?.price,
     searchFilters?.isFilteringPrice,
     searchFilters?.isFilteringAgeOfProject
