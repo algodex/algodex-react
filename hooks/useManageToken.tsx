@@ -14,8 +14,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react'
 import { isValidAddr } from '@/components/helpers'
 import { activeWalletTypes, selectedAsset } from '@/components/types'
@@ -123,6 +121,11 @@ const useManageToken = () => {
     setLoading(false)
   }
 
+  const resetForm = () => {
+    setFormData(initialValues)
+    setSelectedAsset(null)
+  }
+
   const rowData = useMemo(() => {
     if (activeWallet) {
       return activeWallet['created-assets']
@@ -132,7 +135,7 @@ const useManageToken = () => {
           assetId: asset.index,
           symbol: asset.params['unit-name'],
           assetName: asset.params.name,
-          totalQuantity: asset.params.total,
+          totalQuantity: asset.params.total
         }))
     }
     return []
@@ -170,7 +173,8 @@ const useManageToken = () => {
     columns,
     onSubmit,
     handleShow,
-    onChange
+    onChange,
+    resetForm
   }
 }
 

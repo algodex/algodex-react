@@ -54,7 +54,8 @@ export const ManageToken = () => {
     columns,
     onSubmit,
     handleShow,
-    onChange
+    onChange,
+    resetForm
   } = useManageToken()
 
   return (
@@ -74,7 +75,10 @@ export const ManageToken = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
+        <CreatorAddress
+          activeWallet={activeWallet ? activeWallet : undefined}
+          resetForm={resetForm}
+        />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage ASAs that have been created with the connected wallet. If you do not see

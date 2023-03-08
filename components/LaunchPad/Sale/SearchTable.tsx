@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import TableSortLabel from '@mui/material/TableSortLabel'
+import { selectedAsset } from '@/components/types'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   color: 'gray.800',
@@ -57,7 +58,7 @@ export const SearchTable = ({
   showTable: boolean
   setShowTable: (v: boolean) => void
   dropdownRef: MutableRefObject<Element>
-  setSelectedAsset: React.Dispatch<React.SetStateAction<unknown>>
+  setSelectedAsset: React.Dispatch<React.SetStateAction<selectedAsset>>
 }) => {
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [orderBy, setOrderBy] = useState('assetName')
@@ -155,7 +156,10 @@ export const SearchTable = ({
                   sx={{
                     cursor: 'pointer'
                   }}
-                  onClick={() => setSelectedAsset(row)}
+                  onClick={() => {
+                    setSelectedAsset(row as selectedAsset)
+                    setShowTable(false)
+                  }}
                 >
                   {columns.map((column) => {
                     return (

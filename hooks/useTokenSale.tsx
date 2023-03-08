@@ -38,7 +38,7 @@ const columns = [
   }
 ]
 
-export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<unknown>>) => {
+export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<unknown>>, initialValues:unknown) => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
@@ -50,6 +50,11 @@ export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<un
     e.preventDefault()
     setLoading(true)
     setLoading(false)
+  }
+
+  const resetForm = () => {
+    setFormData(initialValues)
+    setSelectedAsset(null)
   }
 
   const rowData = useMemo(() => {
@@ -92,6 +97,7 @@ export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<un
     activeWallet,
     columns,
     loading,
-    windowHost
+    windowHost,
+    resetForm
   }
 }

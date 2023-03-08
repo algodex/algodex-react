@@ -43,8 +43,16 @@ const initialValues = {
 export const ManageTokenSale = () => {
   const [formData, setFormData] = useState(initialValues)
   const { assetId, pricePerToken, showPricePerToken, totalForSale, showTotalForSale } = formData
-  const { rowData, onSubmit, selectedAsset, setSelectedAsset, activeWallet, columns, windowHost } =
-    useTokenSale(setFormData)
+  const {
+    rowData,
+    onSubmit,
+    selectedAsset,
+    setSelectedAsset,
+    activeWallet,
+    columns,
+    windowHost,
+    resetForm
+  } = useTokenSale(setFormData, initialValues)
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -79,7 +87,10 @@ export const ManageTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator Address:
         </Typography>
-        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
+        <CreatorAddress
+          activeWallet={activeWallet ? activeWallet : undefined}
+          resetForm={resetForm}
+        />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage sales that have been created with the connected wallet. If you do not

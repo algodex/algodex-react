@@ -11,9 +11,13 @@ import { truncatedWalletAddress } from 'components/helpers'
 import useWallets from '@/hooks/useWallets'
 import { activeWalletTypes } from '../types'
 
-
-
-export const CreatorAddress = ({ activeWallet }: { activeWallet: activeWalletTypes }) => {
+export const CreatorAddress = ({
+  activeWallet,
+  resetForm
+}: {
+  activeWallet: activeWalletTypes
+  resetForm?: () => void
+}) => {
   const { peraDisconnect, myAlgoDisconnect } = useWallets(null)
   const walletDisconnectMap = {
     'my-algo-wallet': myAlgoDisconnect,
@@ -67,6 +71,7 @@ export const CreatorAddress = ({ activeWallet }: { activeWallet: activeWalletTyp
           type="button"
           onClick={() => {
             walletDisconnectMap[activeWallet.type](activeWallet)
+            resetForm && resetForm()
           }}
           sx={{
             color: 'white',

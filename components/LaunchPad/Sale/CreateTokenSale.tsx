@@ -39,8 +39,16 @@ const initialValues = {
 export const CreateTokenSale = () => {
   const [formData, setFormData] = useState(initialValues)
   const { assetId, quantity, perUnit } = formData
-  const { rowData, onSubmit, selectedAsset, setSelectedAsset, activeWallet, columns, loading } =
-    useTokenSale(setFormData)
+  const {
+    rowData,
+    onSubmit,
+    selectedAsset,
+    setSelectedAsset,
+    activeWallet,
+    columns,
+    loading,
+    resetForm
+  } = useTokenSale(setFormData, initialValues)
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -63,7 +71,10 @@ export const CreateTokenSale = () => {
         <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
           Creator/Reserve Address:
         </Typography>
-        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
+        <CreatorAddress
+          activeWallet={activeWallet ? activeWallet : undefined}
+          resetForm={resetForm}
+        />
       </Box>
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         A sale must be started from either the Creator or the Reserve wallet of the ASA. Ensure the
