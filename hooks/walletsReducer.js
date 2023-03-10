@@ -15,7 +15,7 @@ export function walletReducer(state, { action, payload }) {
       switch (type) {
         case 'myAlgo':
           const _addrs =
-            state.peraWallet === null
+            state.peraWallet === null // now there is walletConnect need to query for that as well ****
               ? state.myAlgoAddresses
               : [...state.myAlgoAddresses, state.peraWallet] // We don't want to concat peraWallet if it is null
           // arranged so myAlgoAddresses are first in address array since it triggered the event.
@@ -24,19 +24,41 @@ export function walletReducer(state, { action, payload }) {
         case 'peraWallet':
           return { ...state, addresses: [...addresses, ...state.myAlgoAddresses] }
         // arrange it so peraWallet is first in the array since it triggered the event
+
+        case 'walletConnect':
+          return { ...state, addresses: [...addresses, ...state.myAlgoAddresses] }
+        // You may need to update this since now there is peraWallet and Wallet Connect ****
       }
     // const _arr = (type === 'myAlgo && state.peraWallet !== null)' ? [...addresses, state.peraWallet] :
     // return { ...state, addresses: [...payload] }
     case 'setPeraWallet':
       localStorage.setItem('peraWallet', JSON.stringify(payload))
       return { ...state, peraWallet: payload }
+
+    case 'setWalletConnect':
+      localStorage.setItem('walletConnectWallet', JSON.stringify(payload))
+      return { ...state, walletConnect: payload }
+
     case 'setMyAlgoAddresses':
       localStorage.setItem('myAlgoAddresses', JSON.stringify(payload))
 
       return { ...state, myAlgoAddresses: [...payload] }
     case 'disconnectWallet':
       const { type: walletType, address } = payload
-      switch (walletType) {
+      switch (
+        walletType //Now we have three wallets we need to refavtor this too
+      ) {
+        case 'walletConnect':
+          state.walletConnect = null
+          localStorage.removeItem('walletConnectWallet')
+          if (state.myAlgoAddresses.length > 0) {
+            if (state?.activeWallet.type === address.type) {
+              state.activeWallet = state.myAlgoAddresses[0]
+            }
+          } else {
+            state.activeWallet = null
+          }
+          return { ...state }
         case 'peraWallet':
           state.peraWallet = null
           localStorage.removeItem('peraWallet')
