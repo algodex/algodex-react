@@ -52,6 +52,7 @@ describe('Search Sidebar Component', () => {
       const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
+      const setSearchFilterProps = jest.fn()
       return (
         <NavSearchTable
           query={query}
@@ -63,6 +64,7 @@ describe('Search Sidebar Component', () => {
           isListingVerifiedAssets={false}
           setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           isFilteringByFavorites={false}
+          setSearchFilterProps={setSearchFilterProps}
           setIsFilteringByFavorites={setIsFilteringByFavorites}
         />
       )
@@ -77,6 +79,8 @@ describe('Search Sidebar Component', () => {
       const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
+      const setSearchFilterProps = jest.fn()
+      const dispatch = jest.fn()
       return (
         <NavSearchTable
           query={query}
@@ -88,6 +92,7 @@ describe('Search Sidebar Component', () => {
           isListingVerifiedAssets={true}
           setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           isFilteringByFavorites={false}
+          setSearchFilterProps={dispatch}
           setIsFilteringByFavorites={setIsFilteringByFavorites}
         />
       )
@@ -102,6 +107,7 @@ describe('Search Sidebar Component', () => {
       const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
+      const setSearchFilterProps = jest.fn()
       return (
         <NavSearchTable
           query={query}
@@ -113,6 +119,7 @@ describe('Search Sidebar Component', () => {
           isListingVerifiedAssets={false}
           setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           isFilteringByFavorites={true}
+          setSearchFilterProps={setSearchFilterProps}
           setIsFilteringByFavorites={setIsFilteringByFavorites}
         />
       )
@@ -127,6 +134,7 @@ describe('Search Sidebar Component', () => {
       const assetClick = jest.fn()
       const setIsListingVerifiedAssets = jest.fn()
       const setIsFilteringByFavorites = jest.fn()
+      const setSearchFilterProps = jest.fn()
       return (
         <NavSearchTable
           query={query}
@@ -138,6 +146,7 @@ describe('Search Sidebar Component', () => {
           isListingVerifiedAssets={false}
           setIsListingVerifiedAssets={setIsListingVerifiedAssets}
           isFilteringByFavorites={true}
+          setSearchFilterProps={setSearchFilterProps}
           setIsFilteringByFavorites={setIsFilteringByFavorites}
         />
       )

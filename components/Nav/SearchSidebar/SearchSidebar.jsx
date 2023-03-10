@@ -24,6 +24,7 @@ import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from '@/hooks'
+import useSearchFilter from '@/hooks/useSearchFilter'
 
 // export const Section = styled.section`
 //   height: inherit;
@@ -144,6 +145,8 @@ export function NavSearchSidebar({
     [push, handleExternalClick]
   )
 
+  const {filters, dispatch } = useSearchFilter()
+  const [toggleFilters, setToggleFilters] = useState(false)
   useEffect(() => {
     const handleResize = () => {
       if (gridRef?.current) {
@@ -172,8 +175,12 @@ export function NavSearchSidebar({
               onExternalClick={handleExternalClick}
               containerRef={containerRef}
               isActive={isActive}
+              searchFilters={filters}
+              dispatchAction={dispatch}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+              toggleFilters={toggleFilters}
+              setToggleFilters={setToggleFilters}
             />
           </div>
           <div className="mt-1.5" style={{ height: '91%' }}>
@@ -188,6 +195,9 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
+              searchFilters={filters}
+              setSearchFilterProps={dispatch}
+              isFilterActive={toggleFilters}
               gridSize={searchTableSize}
             />
           </div>
