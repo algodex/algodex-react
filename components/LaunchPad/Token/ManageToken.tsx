@@ -39,12 +39,16 @@ export const ManageToken = () => {
     assetId,
     showClawbackAddr,
     clawbackAddr,
+    tempClawbackAddr,
     showReserveAddr,
     reserveAddr,
+    tempReserveAddr,
     showManagerAddr,
     managerAddr,
+    tempManagerAddr,
     showFreezeAddr,
     freezeAddr,
+    tempFreezeAddr,
     loading,
     selectedAsset,
     setSelectedAsset,
@@ -55,7 +59,10 @@ export const ManageToken = () => {
     onSubmit,
     handleShow,
     onChange,
-    resetForm
+    resetForm,
+    cancelEdit,
+    confirmEdit,
+    isEligible
   } = useManageToken()
 
   return (
@@ -140,14 +147,14 @@ export const ManageToken = () => {
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Clawback Address</Typography>
-                <Box>
+                <Box sx={styles.fillAvailable}>
                   {showClawbackAddr ? (
                     <Box className="flex items-center">
                       <OutlinedInput
                         type="text"
                         placeholder="Update Clawback Address"
-                        name="clawbackAddr"
-                        value={clawbackAddr}
+                        name="tempClawbackAddr"
+                        value={tempClawbackAddr}
                         onChange={(e) => onChange(e)}
                         sx={{
                           ...styles.input,
@@ -156,49 +163,65 @@ export const ManageToken = () => {
                         }}
                       />
                       <Icon
+                        icon="mdi:check-bold"
+                        className="ml-3 cursor-pointer text-white"
+                        onClick={() =>
+                          confirmEdit(
+                            'showClawbackAddr',
+                            showClawbackAddr,
+                            'clawbackAddr',
+                            tempClawbackAddr,
+                            'tempClawbackAddr'
+                          )
+                        }
+                      />
+                      <Icon
                         icon="mdi:cancel-bold"
                         className="ml-3 cursor-pointer text-white"
                         onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showClawbackAddr',
-                              value: !showClawbackAddr
-                            }
-                          })
+                          cancelEdit(
+                            'showClawbackAddr',
+                            showClawbackAddr,
+                            'tempClawbackAddr',
+                            clawbackAddr
+                          )
                         }
                       />
                     </Box>
                   ) : (
                     <Typography className="flex items-center" sx={styles.value}>
-                      {truncatedWalletAddress(clawbackAddr, 4)} <CopyIcon content={clawbackAddr} />
-                      <Icon
-                        icon="material-symbols:edit"
-                        className="ml-3 cursor-pointer"
-                        onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showClawbackAddr',
-                              value: !showClawbackAddr
-                            }
-                          })
-                        }
-                      />
+                      {truncatedWalletAddress(clawbackAddr, 4)}{' '}
+                      {clawbackAddr && <CopyIcon content={clawbackAddr} />}
+                      {isEligible && (
+                        <Icon
+                          icon="material-symbols:edit"
+                          className="ml-3 cursor-pointer"
+                          onClick={() =>
+                            handleShow({
+                              target: {
+                                name: 'showClawbackAddr',
+                                value: !showClawbackAddr
+                              }
+                            })
+                          }
+                        />
+                      )}
                     </Typography>
                   )}
-                  <ErrorMessage error={error} name="clawbackAddr" />
+                  <ErrorMessage error={error} name="tempClawbackAddr" />
                 </Box>
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Reserve Address</Typography>
-                <Box>
+                <Box sx={styles.fillAvailable}>
                   {showReserveAddr ? (
                     <Box className="flex items-center">
                       <OutlinedInput
                         type="text"
                         placeholder="Update Reserve Address"
-                        name="reserveAddr"
-                        value={reserveAddr}
+                        name="tempReserveAddr"
+                        value={tempReserveAddr}
                         onChange={(e) => onChange(e)}
                         sx={{
                           ...styles.input,
@@ -207,49 +230,65 @@ export const ManageToken = () => {
                         }}
                       />{' '}
                       <Icon
+                        icon="mdi:check-bold"
+                        className="ml-3 cursor-pointer text-white"
+                        onClick={() =>
+                          confirmEdit(
+                            'showReserveAddr',
+                            showReserveAddr,
+                            'reserveAddr',
+                            tempReserveAddr,
+                            'tempReserveAddr'
+                          )
+                        }
+                      />
+                      <Icon
                         icon="mdi:cancel-bold"
                         className="ml-3 cursor-pointer text-white"
                         onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showReserveAddr',
-                              value: !showReserveAddr
-                            }
-                          })
+                          cancelEdit(
+                            'showReserveAddr',
+                            showReserveAddr,
+                            'tempReserveAddr',
+                            reserveAddr
+                          )
                         }
                       />
                     </Box>
                   ) : (
                     <Typography className="flex items-center" sx={styles.value}>
-                      {truncatedWalletAddress(reserveAddr, 4)} <CopyIcon content={reserveAddr} />
-                      <Icon
-                        icon="material-symbols:edit"
-                        className="ml-3 cursor-pointer"
-                        onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showReserveAddr',
-                              value: !showReserveAddr
-                            }
-                          })
-                        }
-                      />
+                      {truncatedWalletAddress(reserveAddr, 4)}{' '}
+                      {reserveAddr && <CopyIcon content={reserveAddr} />}
+                      {isEligible && (
+                        <Icon
+                          icon="material-symbols:edit"
+                          className="ml-3 cursor-pointer"
+                          onClick={() =>
+                            handleShow({
+                              target: {
+                                name: 'showReserveAddr',
+                                value: !showReserveAddr
+                              }
+                            })
+                          }
+                        />
+                      )}
                     </Typography>
                   )}
-                  <ErrorMessage error={error} name="reserveAddr" />
+                  <ErrorMessage error={error} name="tempReserveAddr" />
                 </Box>
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Manager Address</Typography>
-                <Box>
+                <Box sx={styles.fillAvailable}>
                   {showManagerAddr ? (
                     <Box className="flex items-center">
                       <OutlinedInput
                         type="text"
                         placeholder="Update Manager Address"
-                        name="managerAddr"
-                        value={managerAddr}
+                        name="tempManagerAddr"
+                        value={tempManagerAddr}
                         onChange={(e) => onChange(e)}
                         sx={{
                           ...styles.input,
@@ -257,50 +296,67 @@ export const ManageToken = () => {
                           borderInline: 0
                         }}
                       />
+
+                      <Icon
+                        icon="mdi:check-bold"
+                        className="ml-3 cursor-pointer text-white"
+                        onClick={() =>
+                          confirmEdit(
+                            'showManagerAddr',
+                            showManagerAddr,
+                            'managerAddr',
+                            tempManagerAddr,
+                            'tempManagerAddr'
+                          )
+                        }
+                      />
                       <Icon
                         icon="mdi:cancel-bold"
                         className="ml-3 cursor-pointer text-white"
                         onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showManagerAddr',
-                              value: !showManagerAddr
-                            }
-                          })
+                          cancelEdit(
+                            'showManagerAddr',
+                            showManagerAddr,
+                            'tempManagerAddr',
+                            managerAddr
+                          )
                         }
                       />
                     </Box>
                   ) : (
                     <Typography className="flex items-center" sx={styles.value}>
-                      {truncatedWalletAddress(managerAddr, 4)} <CopyIcon content={managerAddr} />
-                      <Icon
-                        icon="material-symbols:edit"
-                        className="ml-3 cursor-pointer"
-                        onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showManagerAddr',
-                              value: !showManagerAddr
-                            }
-                          })
-                        }
-                      />
+                      {truncatedWalletAddress(managerAddr, 4)}{' '}
+                      {managerAddr && <CopyIcon content={managerAddr} />}
+                      {isEligible && (
+                        <Icon
+                          icon="material-symbols:edit"
+                          className="ml-3 cursor-pointer"
+                          onClick={() =>
+                            handleShow({
+                              target: {
+                                name: 'showManagerAddr',
+                                value: !showManagerAddr
+                              }
+                            })
+                          }
+                        />
+                      )}
                     </Typography>
                   )}
-                  <ErrorMessage error={error} name="managerAddr" />
+                  <ErrorMessage error={error} name="tempManagerAddr" />
                 </Box>
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Freeze Address</Typography>
-                <Box>
+                <Box sx={styles.fillAvailable}>
                   {showFreezeAddr ? (
                     <Box className="flex items-center">
                       <OutlinedInput
                         type="text"
                         placeholder="Update Freeze Address"
-                        name="freezeAddr"
-                        value={freezeAddr}
+                        name="tempFreezeAddr"
+                        value={tempFreezeAddr}
                         onChange={(e) => onChange(e)}
                         sx={{
                           ...styles.input,
@@ -308,37 +364,49 @@ export const ManageToken = () => {
                           borderInline: 0
                         }}
                       />
+
+                      <Icon
+                        icon="mdi:check-bold"
+                        className="ml-3 cursor-pointer text-white"
+                        onClick={() =>
+                          confirmEdit(
+                            'showFreezeAddr',
+                            showFreezeAddr,
+                            'freezeAddr',
+                            tempFreezeAddr,
+                            'tempFreezeAddr'
+                          )
+                        }
+                      />
                       <Icon
                         icon="mdi:cancel-bold"
                         className="ml-3 cursor-pointer text-white"
                         onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showFreezeAddr',
-                              value: !showFreezeAddr
-                            }
-                          })
+                          cancelEdit('showFreezeAddr', showFreezeAddr, 'tempFreezeAddr', freezeAddr)
                         }
                       />
                     </Box>
                   ) : (
                     <Typography className="flex items-center" sx={styles.value}>
-                      {truncatedWalletAddress(freezeAddr, 4)} <CopyIcon content={freezeAddr} />
-                      <Icon
-                        icon="material-symbols:edit"
-                        className="ml-3 cursor-pointer"
-                        onClick={() =>
-                          handleShow({
-                            target: {
-                              name: 'showFreezeAddr',
-                              value: !showFreezeAddr
-                            }
-                          })
-                        }
-                      />
+                      {truncatedWalletAddress(freezeAddr, 4)}{' '}
+                      {freezeAddr && <CopyIcon content={freezeAddr} />}
+                      {isEligible && (
+                        <Icon
+                          icon="material-symbols:edit"
+                          className="ml-3 cursor-pointer"
+                          onClick={() =>
+                            handleShow({
+                              target: {
+                                name: 'showFreezeAddr',
+                                value: !showFreezeAddr
+                              }
+                            })
+                          }
+                        />
+                      )}
                     </Typography>
                   )}
-                  <ErrorMessage error={error} name="freezeAddr" />
+                  <ErrorMessage error={error} name="tempFreezeAddr" />
                 </Box>
               </Box>
             </Box>

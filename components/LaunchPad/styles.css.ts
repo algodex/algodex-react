@@ -28,6 +28,7 @@ export const styles = {
   divider: { backgroundColor: 'gray.250', marginTop: '5px' },
   name: { fontWeight: 500, fontSize: '15px', color: 'gray.750', lineHeight: 1.3, minWidth: '40%' },
   value: { fontWeight: 700, fontSize: '14px', color: 'white', lineHeight: 1.3 },
+  fillAvailable: { width: '-webkit-fill-available' },
   accordionStyles: {
     marginBlock: '1rem',
     border: '1px solid',

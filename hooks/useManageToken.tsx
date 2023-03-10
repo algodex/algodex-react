@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { isValidAddr } from '@/components/helpers'
 import { activeWalletTypes, selectedAsset } from '@/components/types'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
@@ -23,12 +23,16 @@ const initialValues = {
   assetId: '',
   showClawbackAddr: false,
   clawbackAddr: '',
+  tempClawbackAddr: '',
   showReserveAddr: false,
   reserveAddr: '',
+  tempReserveAddr: '',
   showManagerAddr: false,
   managerAddr: '',
+  tempManagerAddr: '',
   showFreezeAddr: false,
-  freezeAddr: ''
+  freezeAddr: '',
+  tempFreezeAddr: ''
 }
 
 const columns = [
@@ -61,51 +65,87 @@ const useManageToken = () => {
     assetId,
     showClawbackAddr,
     clawbackAddr,
+    tempClawbackAddr,
     showReserveAddr,
     reserveAddr,
+    tempReserveAddr,
     showManagerAddr,
     managerAddr,
+    tempManagerAddr,
     showFreezeAddr,
-    freezeAddr
+    freezeAddr,
+    tempFreezeAddr
   } = formData
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (
+    e:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | { target: { name: string; value: string } }
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
     resetError(e)
   }
 
   const handleShow = (e: { target: { name: string; value: boolean } }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-    resetError(e)
+  }
+
+  const confirmEdit = async (
+    showName: string,
+    showValue: boolean,
+    inputName: string,
+    inputValue: string,
+    tempName: string
+  ) => {
+    if ((await verifyWallet(inputValue, tempName)) === 'valid') {
+      setFormData({ ...formData, [showName]: !showValue, [inputName]: inputValue })
+    }
+  }
+
+  const cancelEdit = (
+    showName: string,
+    showValue: boolean,
+    inputName: string,
+    inputValue: string
+  ) => {
+    setFormData({ ...formData, [showName]: !showValue, [inputName]: inputValue })
+    resetError({
+      target: { name: inputName }
+    })
   }
 
   const resetError = (e: { target: { name: string } }) => {
+    //Clear out input errors
     setError((prev) => ({ ...prev, [e.target.name]: '' }))
     setError((prev) => ({ ...prev, all: '' }))
   }
 
+  const verifyWallet = useCallback(async (address: string, inputName: string) => {
+    //Confirm its a valid algorand address
+    if (!(await isValidAddr(address.trim()))) {
+      setError((prev) => ({ ...prev, [inputName]: 'Invalid Algorand address!' }))
+      return 'invalid'
+    }
+    return 'valid'
+  }, [])
+
   const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     let _error = false
 
-    //Confirm its a valid algorand address
-    if (clawbackAddr && !(await isValidAddr(clawbackAddr.trim()))) {
-      setError((prev) => ({ ...prev, clawbackAddr: 'Invalid Algorand address!' }))
+    if (clawbackAddr && (await verifyWallet(clawbackAddr, 'clawbackAddr')) === 'invalid') {
       _error = true
     }
 
-    if (reserveAddr && !(await isValidAddr(reserveAddr.trim()))) {
-      setError((prev) => ({ ...prev, reserveAddr: 'Invalid Algorand address!' }))
+    if (reserveAddr && (await verifyWallet(reserveAddr, 'reserveAddr')) === 'invalid') {
       _error = true
     }
 
-    if (freezeAddr && !(await isValidAddr(freezeAddr.trim()))) {
-      setError((prev) => ({ ...prev, freezeAddr: 'Invalid Algorand address!' }))
+    if (freezeAddr && (await verifyWallet(freezeAddr, 'freezeAddr')) === 'invalid') {
       _error = true
     }
-
-    if (managerAddr && !(await isValidAddr(managerAddr.trim()))) {
-      setError((prev) => ({ ...prev, managerAddr: 'Invalid Algorand address!' }))
+    if (managerAddr && (await verifyWallet(managerAddr, 'managerAddr')) === 'invalid') {
       _error = true
     }
 
@@ -116,7 +156,7 @@ const useManageToken = () => {
   }
 
   const manageToken = () => {
-    console.log(formData)
+    console.log('Submit token update to Algorand', formData)
     setLoading(true)
     setLoading(false)
   }
@@ -141,15 +181,27 @@ const useManageToken = () => {
     return []
   }, [activeWallet])
 
+  const isEligible = useMemo(() => {
+    // Checks if the connected wallet is eligible to edit the token
+    if (activeWallet && selectedAsset && activeWallet.address === selectedAsset.params.manager) {
+      return true
+    }
+    return false
+  }, [activeWallet, selectedAsset])
+
   useEffect(() => {
     if (selectedAsset) {
       setFormData((prev) => ({
         ...prev,
         assetId: `${selectedAsset.assetId}`,
         clawbackAddr: selectedAsset.params.clawback,
+        tempClawbackAddr: selectedAsset.params.clawback,
         reserveAddr: selectedAsset.params.reserve,
+        tempReserveAddr: selectedAsset.params.reserve,
         managerAddr: selectedAsset.params.manager,
-        freezeAddr: selectedAsset.params.freeze
+        tempManagerAddr: selectedAsset.params.manager,
+        freezeAddr: selectedAsset.params.freeze,
+        tempFreezeAddr: selectedAsset.params.freeze
       }))
     }
   }, [selectedAsset])
@@ -158,12 +210,16 @@ const useManageToken = () => {
     assetId,
     showClawbackAddr,
     clawbackAddr,
+    tempClawbackAddr,
     showReserveAddr,
     reserveAddr,
+    tempReserveAddr,
     showManagerAddr,
     managerAddr,
+    tempManagerAddr,
     showFreezeAddr,
     freezeAddr,
+    tempFreezeAddr,
     loading,
     selectedAsset,
     setSelectedAsset,
@@ -174,7 +230,10 @@ const useManageToken = () => {
     onSubmit,
     handleShow,
     onChange,
-    resetForm
+    cancelEdit,
+    confirmEdit,
+    resetForm,
+    isEligible
   }
 }
 
