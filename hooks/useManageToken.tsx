@@ -129,7 +129,7 @@ const useManageToken = () => {
   const rowData = useMemo(() => {
     if (activeWallet) {
       return activeWallet['created-assets']
-        .filter((as) => !as.deleted)
+        .filter((as) => !as.deleted && as.index.toString().includes(formData.assetId))
         .map((asset) => ({
           ...asset,
           assetId: asset.index,
@@ -139,7 +139,7 @@ const useManageToken = () => {
         }))
     }
     return []
-  }, [activeWallet])
+  }, [activeWallet, formData.assetId])
 
   useEffect(() => {
     if (selectedAsset) {
