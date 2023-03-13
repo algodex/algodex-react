@@ -39,7 +39,7 @@ const InactiveWalletsList = ({ walletsList }) => {
     setActiveWallet: setWallet,
     addresses
   } = useContext(WalletReducerContext)
-  const { peraDisconnect, myAlgoDisconnect } = useWallets()
+  // const { peraDisconnect, myAlgoDisconnect } = useWallets()
 
   const isWalletActive = (addr) => {
     return wallet.address === addr
@@ -55,13 +55,13 @@ const InactiveWalletsList = ({ walletsList }) => {
     [addresses, isWalletActive, setWallet]
   )
 
-  const WALLETS_DISCONNECT_MAP = useMemo(
-    () => ({
-      'my-algo-wallet': myAlgoDisconnect,
-      'wallet-connect': peraDisconnect
-    }),
-    [myAlgoDisconnect, peraDisconnect]
-  )
+  // const WALLETS_DISCONNECT_MAP = useMemo(
+  //   () => ({
+  //     'my-algo-wallet': myAlgoDisconnect,
+  //     'wallet-connect': peraDisconnect
+  //   }),
+  //   [myAlgoDisconnect, peraDisconnect]
+  // )
 
   return (
     <Box
@@ -105,7 +105,7 @@ const InactiveWalletsList = ({ walletsList }) => {
                   style={{
                     backgroundColor: theme.colors.gray['800']
                   }}
-                  onClick={() => WALLETS_DISCONNECT_MAP[type]()}
+                  // onClick={() => WALLETS_DISCONNECT_MAP[type]()}
                 >
                   DISCONNECT
                 </Button>

@@ -32,13 +32,13 @@ import { getActiveNetwork } from 'services/environment'
 
 const ActiveWalletList = ({ wallet }) => {
   const activeNetwork = getActiveNetwork()
-  const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
+  // const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
   const type = wallet?.type
-  const WALLETS_DISCONNECT_MAP = {
-    'my-algo-wallet': myAlgoDisconnect,
-    'wallet-connect': peraDisconnect
-  }
+  // const WALLETS_DISCONNECT_MAP = {
+  //   'my-algo-wallet': myAlgoDisconnect,
+  //   'wallet-connect': peraDisconnect
+  // }
   return (
     <Box>
       {typeof address !== 'undefined' ? (
@@ -71,7 +71,7 @@ const ActiveWalletList = ({ wallet }) => {
                   style={{
                     backgroundColor: theme.colors.gray['700']
                   }}
-                  onClick={() => WALLETS_DISCONNECT_MAP[type]()}
+                  // onClick={() => WALLETS_DISCONNECT_MAP[type]()}
                 >
                   DISCONNECT
                 </Button>

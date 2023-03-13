@@ -63,7 +63,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     'pera-connect': peraConnect
   }
   // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
-
+  console.log(activeWallet, 'hello wallet')
   const myAlgoOnClick = async () => {
     console.log('myAlogOnClick')
     console.log('hit')
@@ -110,7 +110,8 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
       <div className="flex flex-col justify-between">
         <DropdownHeader closeFn={closeDropdown} />
         <DropdownBody
-          activeWalletAddress={wallet?.address}
+          wallet={activeWallet}
+          activeWalletAddress={activeWallet?.address}
           sortedWalletsList={sortedWalletsList}
           closeFn={closeDropdown}
           addresses={addressesNew}

@@ -14,9 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// import ActiveWalletList from './ActiveWalletList'
+import ActiveWalletList from './ActiveWalletList'
 // import Button from '@mui/material/Button'
-// import InactiveWalletsList from './InactiveWalletsList'
+import InactiveWalletsList from './InactiveWalletsList'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
@@ -26,9 +26,8 @@ import theme from 'theme'
 import { useState } from 'react'
 
 // const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
-const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
+const DropdownBody = ({ wallet, activeWalletAddress, sortedWalletsList, addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-
   return (
     <div
       className="p-2"
@@ -36,14 +35,44 @@ const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConn
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      <WalletOptionsList
+      {/* {console.log(activeWalletAddress, 'active wallet address here')} */}
+      {!activeWalletAddress || isConnectingAddress ? (
+        <WalletOptionsList
+          isRenderingList={!activeWalletAddress}
+          // handleWalletConnect={handleWalletConnect}
+          isConnectingAddress={isConnectingAddress}
+          setIsConnectingAddress={setIsConnectingAddress}
+          addresses={addresses}
+          myAlgoOnClick={myAlgoOnClick}
+          peraConnectOnClick={peraConnectOnClick}
+          isPeraConnected={isPeraConnected}
+        />
+      ) : (
+        <>
+          {/* <ActiveWalletList disconnectWalletFn={disconnectWalletFn} /> */}
+          <ActiveWalletList wallet={wallet} />
+          {/* <InactiveWalletsList disconnectWalletFn={disconnectWalletFn} /> */}
+          <InactiveWalletsList walletsList={addresses} />
+          <WalletOptionsList
+            isRenderingList={!activeWalletAddress}
+            // handleWalletConnect={handleWalletConnect}
+            isConnectingAddress={isConnectingAddress}
+            setIsConnectingAddress={setIsConnectingAddress}
+            addresses={addresses}
+            myAlgoOnClick={myAlgoOnClick}
+            peraConnectOnClick={peraConnectOnClick}
+            isPeraConnected={isPeraConnected}
+          />
+        </>
+      )}
+      {/* <WalletOptionsList
         isConnectingAddress={isConnectingAddress}
         setIsConnectingAddress={setIsConnectingAddress}
         addresses={addresses}
         myAlgoOnClick={myAlgoOnClick}
         peraConnectOnClick={peraConnectOnClick}
         isPeraConnected={isPeraConnected}
-      />
+      /> */}
     </div>
   )
 }
