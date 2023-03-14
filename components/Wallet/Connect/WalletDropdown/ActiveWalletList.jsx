@@ -30,7 +30,7 @@ import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 import { getActiveNetwork } from 'services/environment'
 
-const ActiveWalletList = ({ wallet }) => {
+const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
   const activeNetwork = getActiveNetwork()
   // const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
@@ -71,7 +71,7 @@ const ActiveWalletList = ({ wallet }) => {
                   style={{
                     backgroundColor: theme.colors.gray['700']
                   }}
-                  // onClick={() => WALLETS_DISCONNECT_MAP[type]()}
+                  onClick={disconnectWalletFn}
                 >
                   DISCONNECT
                 </Button>
@@ -101,7 +101,8 @@ const ActiveWalletList = ({ wallet }) => {
 }
 
 ActiveWalletList.propTypes = {
-  wallet: PropTypes.object
+  wallet: PropTypes.object,
+  disconnectWalletFn: PropTypes.func
 }
 
 export default ActiveWalletList

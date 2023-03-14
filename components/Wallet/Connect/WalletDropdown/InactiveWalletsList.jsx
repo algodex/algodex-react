@@ -31,7 +31,7 @@ import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 import { getActiveNetwork } from 'services/environment'
 
-const InactiveWalletsList = ({ walletsList }) => {
+const InactiveWalletsList = ({ walletsList, walletDisconnectMap }) => {
   const activeNetwork = getActiveNetwork()
   // const { wallet: initialState, setWallet } = useAlgodex()
   const {
@@ -77,21 +77,21 @@ const InactiveWalletsList = ({ walletsList }) => {
         <Typography>Click on address to switch active wallets</Typography>
       </Box>
       <Box>
-        {walletsList.map(({ address, type }, idx) => {
+        {walletsList.map((wallet, idx) => {
           return (
             <Box className="mt-4" key={idx}>
               <Box className="flex justify-between items-center">
                 <Box
-                  onKeyDown={() => switchWalletAddress(address)}
-                  onClick={() => switchWalletAddress(address)}
+                  onKeyDown={() => switchWalletAddress(wallet.address)}
+                  onClick={() => switchWalletAddress(wallet.address)}
                   role="button"
                   tabIndex="0"
                   title="Set as active"
                   className="cursor-pointer flex justify-between border-solid border rounded items-center p-1.5 w-4/5"
                 >
-                  <Typography>{truncatedWalletAddress(address, 11)}</Typography>
+                  <Typography>{truncatedWalletAddress(wallet.address, 11)}</Typography>
                   <Icon
-                    onClick={() => copyAddress(address)}
+                    onClick={() => copyAddress(wallet.address)}
                     path={mdiContentCopy}
                     title="Copy Address"
                     size={0.8}
@@ -105,13 +105,13 @@ const InactiveWalletsList = ({ walletsList }) => {
                   style={{
                     backgroundColor: theme.colors.gray['800']
                   }}
-                  // onClick={() => WALLETS_DISCONNECT_MAP[type]()}
+                  onClick={() => walletDisconnectMap[wallet.type](wallet)}
                 >
                   DISCONNECT
                 </Button>
               </Box>
               <Box>
-                <Link href={setExplorerLink(address, activeNetwork)}>
+                <Link href={setExplorerLink(wallet.address, activeNetwork)}>
                   <a
                     target="_blank"
                     className="flex justify-end items-center text-white mr-10 mt-3 font-medium"

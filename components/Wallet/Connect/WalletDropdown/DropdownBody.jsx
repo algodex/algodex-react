@@ -13,9 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import ActiveWalletList from './ActiveWalletList'
-// import Button from '@mui/material/Button'
 import InactiveWalletsList from './InactiveWalletsList'
 import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
@@ -25,9 +23,9 @@ import theme from 'theme'
 // import { WalletContext } from '../../WalletContext'
 import { useState } from 'react'
 
-// const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
-const DropdownBody = ({ wallet, activeWalletAddress, sortedWalletsList, addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
+const DropdownBody = ({ walletDisconnectMap, wallet, activeWalletAddress, sortedWalletsList, addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
+
   return (
     <div
       className="p-2"
@@ -35,11 +33,9 @@ const DropdownBody = ({ wallet, activeWalletAddress, sortedWalletsList, addresse
         backgroundColor: theme.colors.gray['600']
       }}
     >
-      {/* {console.log(activeWalletAddress, 'active wallet address here')} */}
       {!activeWalletAddress || isConnectingAddress ? (
         <WalletOptionsList
           isRenderingList={!activeWalletAddress}
-          // handleWalletConnect={handleWalletConnect}
           isConnectingAddress={isConnectingAddress}
           setIsConnectingAddress={setIsConnectingAddress}
           addresses={addresses}
@@ -49,13 +45,12 @@ const DropdownBody = ({ wallet, activeWalletAddress, sortedWalletsList, addresse
         />
       ) : (
         <>
-          {/* <ActiveWalletList disconnectWalletFn={disconnectWalletFn} /> */}
-          <ActiveWalletList wallet={wallet} />
-          {/* <InactiveWalletsList disconnectWalletFn={disconnectWalletFn} /> */}
-          <InactiveWalletsList walletsList={addresses} />
+          <ActiveWalletList wallet={wallet} disconnectWalletFn={() => walletDisconnectMap[wallet.type](wallet)} />
+          {sortedWalletsList.inactiveWallet.length > 0 && 
+            <InactiveWalletsList walletsList={sortedWalletsList.inactiveWallet} walletDisconnectMap={walletDisconnectMap}/>
+          }
           <WalletOptionsList
             isRenderingList={!activeWalletAddress}
-            // handleWalletConnect={handleWalletConnect}
             isConnectingAddress={isConnectingAddress}
             setIsConnectingAddress={setIsConnectingAddress}
             addresses={addresses}
@@ -65,14 +60,6 @@ const DropdownBody = ({ wallet, activeWalletAddress, sortedWalletsList, addresse
           />
         </>
       )}
-      {/* <WalletOptionsList
-        isConnectingAddress={isConnectingAddress}
-        setIsConnectingAddress={setIsConnectingAddress}
-        addresses={addresses}
-        myAlgoOnClick={myAlgoOnClick}
-        peraConnectOnClick={peraConnectOnClick}
-        isPeraConnected={isPeraConnected}
-      /> */}
     </div>
   )
 }
@@ -84,7 +71,8 @@ DropdownBody.propTypes = {
   addresses: PropTypes.array,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
-  isPeraConnected: PropTypes.book
+  isPeraConnected: PropTypes.book,
+  walletDisconnectMap: PropTypes.object
 }
 
 DropdownBody.defaultProps = {
