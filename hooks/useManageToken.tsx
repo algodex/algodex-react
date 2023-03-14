@@ -59,20 +59,17 @@ const useManageToken = () => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
+  const [isEdit, setIsEdit] = useState(null)
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [error, setError] = useState({})
   const {
     assetId,
-    showClawbackAddr,
     clawbackAddr,
     tempClawbackAddr,
-    showReserveAddr,
     reserveAddr,
     tempReserveAddr,
-    showManagerAddr,
     managerAddr,
     tempManagerAddr,
-    showFreezeAddr,
     freezeAddr,
     tempFreezeAddr
   } = formData
@@ -86,29 +83,27 @@ const useManageToken = () => {
     resetError(e)
   }
 
-  const handleShow = (e: { target: { name: string; value: boolean } }) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  const confirmEdit = async (
-    showName: string,
-    showValue: boolean,
-    inputName: string,
-    inputValue: string,
-    tempName: string
-  ) => {
-    if ((await verifyWallet(inputValue, tempName)) === 'valid') {
-      setFormData({ ...formData, [showName]: !showValue, [inputName]: inputValue })
+  const handleEdit = (e: { target: { name: string; value: string } } | null) => {
+    if (e) {
+      setFormData({ ...formData, [e.target.name]: e.target.value })
+      setIsEdit(e.target.name)
+    } else {
+      setIsEdit(e)
     }
   }
 
-  const cancelEdit = (
-    showName: string,
-    showValue: boolean,
-    inputName: string,
-    inputValue: string
-  ) => {
-    setFormData({ ...formData, [showName]: !showValue, [inputName]: inputValue })
+  const confirmEdit = async (inputName: string, inputValue: string, tempName: string) => {
+    if ((await verifyWallet(inputValue, tempName)) === 'valid') {
+      setFormData({ ...formData, [inputName]: inputValue })
+      handleEdit(null)
+    }
+  }
+
+  const cancelEdit = (inputName: string, inputValue: string) => {
+    setFormData({ ...formData, [inputName]: inputValue }) // Reset the edit field
+    handleEdit(null)
+
+    //Clear out error message if any
     resetError({
       target: { name: inputName }
     })
@@ -208,16 +203,12 @@ const useManageToken = () => {
 
   return {
     assetId,
-    showClawbackAddr,
     clawbackAddr,
     tempClawbackAddr,
-    showReserveAddr,
     reserveAddr,
     tempReserveAddr,
-    showManagerAddr,
     managerAddr,
     tempManagerAddr,
-    showFreezeAddr,
     freezeAddr,
     tempFreezeAddr,
     loading,
@@ -228,7 +219,8 @@ const useManageToken = () => {
     rowData,
     columns,
     onSubmit,
-    handleShow,
+    handleEdit,
+    isEdit,
     onChange,
     cancelEdit,
     confirmEdit,
