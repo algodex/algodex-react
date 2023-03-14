@@ -38,7 +38,11 @@ const columns = [
   }
 ]
 
-export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<unknown>>, initialValues:unknown) => {
+export const useTokenSale = (
+  formData,
+  setFormData: React.Dispatch<React.SetStateAction<unknown>>,
+  initialValues: unknown
+) => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
@@ -60,7 +64,7 @@ export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<un
   const rowData = useMemo(() => {
     if (activeWallet) {
       return activeWallet['created-assets']
-        .filter((as) => !as.deleted)
+        .filter((as) => !as.deleted && as.index.toString().startsWith(formData.assetId))
         .map((asset) => ({
           ...asset,
           assetId: asset.index,
@@ -73,7 +77,7 @@ export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<un
         }))
     }
     return []
-  }, [activeWallet])
+  }, [activeWallet, formData.assetId])
 
   useEffect(() => {
     if (selectedAsset) {
