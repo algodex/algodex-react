@@ -45,15 +45,11 @@ const InactiveWalletsList = ({ walletsList, walletDisconnectMap }) => {
     return wallet.address === addr
   }
 
-  const switchWalletAddress = useCallback(
-    (addr) => {
-      if (!isWalletActive(addr)) {
-        const _wallet = find(addresses, (o) => o.address === addr)
-        setWallet(_wallet, { validate: false, merge: true })
-      }
-    },
-    [addresses, isWalletActive, setWallet]
-  )
+  const switchWalletAddress = useCallback((wallet) => {
+    if (!isWalletActive(wallet.address)) {
+      setWallet(wallet)
+    }
+  }, [isWalletActive, setWallet])
 
   // const WALLETS_DISCONNECT_MAP = useMemo(
   //   () => ({
@@ -82,8 +78,8 @@ const InactiveWalletsList = ({ walletsList, walletDisconnectMap }) => {
             <Box className="mt-4" key={idx}>
               <Box className="flex justify-between items-center">
                 <Box
-                  onKeyDown={() => switchWalletAddress(wallet.address)}
-                  onClick={() => switchWalletAddress(wallet.address)}
+                  onKeyDown={() => switchWalletAddress(wallet)}
+                  onClick={() => switchWalletAddress(wallet)}
                   role="button"
                   tabIndex="0"
                   title="Set as active"
