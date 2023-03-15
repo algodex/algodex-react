@@ -52,7 +52,7 @@ export const ManageTokenSale = () => {
     columns,
     windowHost,
     resetForm
-  } = useTokenSale(setFormData, initialValues)
+  } = useTokenSale(formData, setFormData, initialValues)
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }

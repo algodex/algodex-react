@@ -164,7 +164,7 @@ const useManageToken = () => {
   const rowData = useMemo(() => {
     if (activeWallet && activeWallet['created-assets']) {
       return activeWallet['created-assets']
-        .filter((as) => !as.deleted)
+        .filter((as) => !as.deleted && as.index.toString().startsWith(formData.assetId))
         .map((asset) => ({
           ...asset,
           assetId: asset.index,
@@ -174,7 +174,7 @@ const useManageToken = () => {
         }))
     }
     return []
-  }, [activeWallet])
+  }, [activeWallet, formData.assetId])
 
   const isEligible = useMemo(() => {
     // Checks if the connected wallet is eligible to edit the token

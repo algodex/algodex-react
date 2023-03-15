@@ -39,6 +39,7 @@ const columns = [
 ]
 
 export const useTokenSale = (
+  formData,
   setFormData: React.Dispatch<React.SetStateAction<unknown>>,
   initialValues: unknown
 ) => {
@@ -63,7 +64,7 @@ export const useTokenSale = (
   const rowData = useMemo(() => {
     if (activeWallet && activeWallet['created-assets']) {
       return activeWallet['created-assets']
-        .filter((as) => !as.deleted)
+        .filter((as) => !as.deleted && as.index.toString().startsWith(formData.assetId))
         .map((asset) => ({
           ...asset,
           assetId: asset.index,
@@ -76,7 +77,7 @@ export const useTokenSale = (
         }))
     }
     return []
-  }, [activeWallet])
+  }, [activeWallet, formData.assetId])
 
   useEffect(() => {
     if (selectedAsset) {
