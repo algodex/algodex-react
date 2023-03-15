@@ -58,7 +58,7 @@ export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<un
   }
 
   const rowData = useMemo(() => {
-    if (activeWallet) {
+    if (activeWallet && activeWallet['created-assets']) {
       return activeWallet['created-assets']
         .filter((as) => !as.deleted)
         .map((asset) => ({

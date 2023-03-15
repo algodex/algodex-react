@@ -162,7 +162,7 @@ const useManageToken = () => {
   }
 
   const rowData = useMemo(() => {
-    if (activeWallet) {
+    if (activeWallet && activeWallet['created-assets']) {
       return activeWallet['created-assets']
         .filter((as) => !as.deleted)
         .map((asset) => ({
