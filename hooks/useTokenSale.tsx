@@ -38,7 +38,10 @@ const columns = [
   }
 ]
 
-export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<unknown>>, initialValues:unknown) => {
+export const useTokenSale = (
+  setFormData: React.Dispatch<React.SetStateAction<unknown>>,
+  initialValues: unknown
+) => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
@@ -66,7 +69,7 @@ export const useTokenSale = (setFormData: React.Dispatch<React.SetStateAction<un
           assetId: asset.index,
           symbol: asset.params['unit-name'],
           assetName: asset.params.name,
-          totalQuantity: asset.params.total,
+          totalQuantity: asset.params.total / 10 ** asset.params.decimals,
           availableBalance:
             activeWallet.assets.find((asst) => asst['asset-id'] === asset.index).amount /
             10 ** asset.params.decimals

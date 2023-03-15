@@ -170,7 +170,7 @@ const useManageToken = () => {
           assetId: asset.index,
           symbol: asset.params['unit-name'],
           assetName: asset.params.name,
-          totalQuantity: asset.params.total
+          totalQuantity: asset.params.total / 10 ** asset.params.decimals
         }))
     }
     return []

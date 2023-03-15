@@ -125,7 +125,7 @@ export const ManageToken = () => {
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
-                <Typography sx={styles.name}>Token Supply</Typography>
+                <Typography sx={styles.name}>Total Supply</Typography>
                 <Typography sx={styles.value}>
                   {selectedAsset.totalQuantity.toLocaleString()}
                 </Typography>

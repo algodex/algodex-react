@@ -68,7 +68,8 @@ export const EditableAddress = ({
         </Box>
       ) : (
         <Typography className="flex items-center" sx={styles.value}>
-          {truncatedWalletAddress(inputValue, 4)} {inputValue && <CopyIcon content={inputValue} />}
+          {truncatedWalletAddress(inputValue, 4)}{' '}
+          {inputValue && <CopyIcon className="ml-1" content={inputValue} />}
           {isEligible && (
             <Icon
               icon="material-symbols:edit"
