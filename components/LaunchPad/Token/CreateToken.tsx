@@ -233,13 +233,16 @@ export const CreateToken = () => {
       })
       .catch((err) => {
         setLoading(false)
-        toast.error(`${t('error-placing-order')}: ${err.message}`, {
+        console.log(err.message)
+        let errorMessage = `${err.message}`
+        if (/transaction asset unit name too big/.test(errorMessage)) {
+          errorMessage = 'Asset unit name too big, please reduce the characters.'
+        }
+        toast.error(`${t('error-placing-order')}: ${errorMessage}`, {
           id: lastToastId,
           duration: 5000
         })
       })
-
-    // toast.success('success')
   }
 
   return (
