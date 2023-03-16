@@ -20,7 +20,12 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 
-const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
+const WalletsOptions = ({
+  myAlgoOnClick,
+  peraConnectOnClick,
+  isPeraConnected,
+  walletconnectGeneralOnClick
+}) => {
   return (
     <>
       <Box
@@ -101,6 +106,23 @@ const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) 
             className="cursor-pointer flex items-center mb-2"
             role="button"
             tabIndex="0"
+            onClick={walletconnectGeneralOnClick}
+            onKeyPress={() => console.log('key pressed')}
+          >
+            <Image
+              src="/Wallet-Connect-Icon.svg"
+              alt="Wallet-connect-general"
+              width={25}
+              height={25}
+            />
+            <Typography className="underline ml-2" variant="body_small_bold">
+              General Wallet Connect (Supports Defly, Fireblocks, Exodus)
+            </Typography>
+          </Box>
+          <Box
+            className="cursor-pointer flex items-center mb-2"
+            role="button"
+            tabIndex="0"
             onClick={myAlgoOnClick}
             onKeyPress={() => console.log('key pressed')}
           >
@@ -120,6 +142,8 @@ WalletsOptions.propTypes = {
   setIsConnectingAddress: PropTypes.func,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
+  walletconnectGeneralOnClick: PropTypes.func,
+
   isPeraConnected: PropTypes.bool
 }
 

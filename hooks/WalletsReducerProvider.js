@@ -34,6 +34,9 @@ export const WalletsReducerProvider = ({ children }) => {
     setPeraWallet: (address) => {
       dispatch({ action: 'setPeraWallet', payload: address })
     },
+    setWalletConnect: (address) => {
+      dispatch({ action: 'setWalletConnect', payload: address })
+    },
     signIn: () => {
       dispatch({ action: 'signIn' })
     },
