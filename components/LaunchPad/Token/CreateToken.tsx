@@ -166,6 +166,18 @@ export const CreateToken = () => {
       _error = true
     }
 
+    //Token name should not exceed 32 chars
+    if (tokenName.trim().split('').length > 32) {
+      setError((prev) => ({ ...prev, tokenName: "Can't exceed 32 characters" }))
+      _error = true
+    }
+
+    //Unit name should not exceed 8 chars
+    if (unitName.trim().split('').length > 8) {
+      setError((prev) => ({ ...prev, unitName: "Can't exceed 8 characters" }))
+      _error = true
+    }
+
     //Check for string with no spaces
     if (/\s/g.test(tokenName.trim())) {
       setError((prev) => ({ ...prev, tokenName: 'Spaces not allowed between letters!' }))
@@ -233,12 +245,8 @@ export const CreateToken = () => {
       })
       .catch((err) => {
         setLoading(false)
-        console.log(err.message)
-        let errorMessage = `${err.message}`
-        if (/transaction asset unit name too big/.test(errorMessage)) {
-          errorMessage = 'Asset unit name too big, please reduce the characters.'
-        }
-        toast.error(`${t('error-placing-order')}: ${errorMessage}`, {
+
+        toast.error(`${t('error-placing-order')}: ${err.message}`, {
           id: lastToastId,
           duration: 5000
         })
