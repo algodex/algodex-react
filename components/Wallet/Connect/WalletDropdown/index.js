@@ -56,11 +56,12 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     setMyAlgoAddresses
   } = useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
-  const { wallet, peraConnect, myAlgoConnect } = useWallets(closeDropdown)
+  const { wallet, peraConnect, myAlgoConnect, walletconnectConnect } = useWallets(closeDropdown)
   // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
-    'pera-connect': peraConnect
+    'pera-connect': peraConnect,
+    'wallet-connect-general': walletconnectConnect
   }
   // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
 
@@ -85,10 +86,9 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
 
   const peraConnectOnClick = async () => {
     await WALLETS_CONNECT_MAP['pera-connect']()
-    // closeDropdown()
-
-    // setPeraWallet(_peraWallet[0])
-    // setAddressesNew({ type: 'peraWallet', addresses: _peraWallet })
+  }
+  const walletconnectGeneralOnClick = async () => {
+    await WALLETS_CONNECT_MAP['wallet-connect-general']()
   }
 
   const isPeraConnected = peraWallet !== null
@@ -116,6 +116,7 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
           addresses={addressesNew}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
+          walletconnectGeneralOnClick={walletconnectGeneralOnClick}
           isPeraConnected={isPeraConnected}
         />
         <DropdownFooter />
