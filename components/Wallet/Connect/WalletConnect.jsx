@@ -121,7 +121,8 @@ export function WalletView(props) {
   const {
     // myAlgoConnector,
     peraDisconnect: _peraDisconnect,
-    myAlgoDisconnect: _myAlgoDisconnect
+    myAlgoDisconnect: _myAlgoDisconnect,
+    walletconnectDisconnect
   } = useWallets(activeWallet)
 
   const myAlgoDisconnect = (targetWallet) => {
@@ -139,7 +140,8 @@ export function WalletView(props) {
     'my-algo-wallet': (wallet) => {
       myAlgoDisconnect(wallet)
     },
-    'wallet-connect': (wallet) => peraDisconnect(wallet)
+    'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
   }
 
   const isWalletActive = useCallback(
@@ -263,11 +265,12 @@ export function WalletOptionsListComp(props) {
     setMyAlgoAddresses
   } = props
   const { http } = useAlgodex()
-  const { peraConnect, myAlgoConnect } = useWallets()
+  const { peraConnect, myAlgoConnect, walletconnectConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': () => myAlgoConnect(),
-    'pera-connect': () => peraConnect()
+    'pera-connect': () => peraConnect(),
+    'wallet-connect-general': () => walletconnectConnect()
   }
 
   const isConnected = activeWallet !== null
@@ -287,6 +290,10 @@ export function WalletOptionsListComp(props) {
 
   const peraConnectOnClick = useCallback(() => {
     WALLETS_CONNECT_MAP['pera-connect']()
+  }, [WALLETS_CONNECT_MAP])
+
+  const walletconnectGeneralOnClick = useCallback(() => {
+    WALLETS_CONNECT_MAP['wallet-connect-general']()
   }, [WALLETS_CONNECT_MAP])
 
   const isPeraConnected = useMemo(() => {
@@ -319,6 +326,7 @@ export function WalletOptionsListComp(props) {
                 setIsConnectingAddress={setIsConnectingWallet}
                 addresses={addresses}
                 myAlgoOnClick={myAlgoOnClick}
+                walletconnectGeneralOnClick={() => walletconnectGeneralOnClick()}
                 peraConnectOnClick={() => peraConnectOnClick()}
                 isPeraConnected={isPeraConnected}
               />

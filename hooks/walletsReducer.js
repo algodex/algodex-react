@@ -3,6 +3,7 @@ export const initialState = {
   activeWallet: null,
   signedIn: false,
   peraWallet: null,
+  walletConnect: null,
   myAlgoAddresses: []
 }
 export function walletReducer(state, { action, payload }) {
@@ -12,21 +13,31 @@ export function walletReducer(state, { action, payload }) {
       return { ...state, activeWallet: payload }
     case 'setAddresses':
       const { type, addresses } = payload
+      const _addresses = []
       switch (type) {
         case 'myAlgo':
-          const _addrs =
-            state.peraWallet === null // now there is walletConnect need to query for that as well ****
-              ? state.myAlgoAddresses
-              : [...state.myAlgoAddresses, state.peraWallet] // We don't want to concat peraWallet if it is null
-          // arranged so myAlgoAddresses are first in address array since it triggered the event.
-          return { ...state, addresses: [..._addrs] }
+          _addresses.push(...state.myAlgoAddresses)
+          if (state.peraWallet) _addresses.push(state.peraWallet)
+          if (state.walletConnect) _addresses.push(state.walletConnect)
+
+          return { ...state, addresses: [..._addresses] }
 
         case 'peraWallet':
-          return { ...state, addresses: [...addresses, ...state.myAlgoAddresses] }
-        // arrange it so peraWallet is first in the array since it triggered the event
+          // return { ...state, addresses: [...addresses, ...state.myAlgoAddresses] }
+          // return { ...state, addresses: [...state.addresses, ...addresses] }
+          // const _addresses = []
+          // arrange it so peraWallet is first in the array since it triggered the event
+          _addresses.push(state.peraWallet)
+          _addresses.push(...state.myAlgoAddresses)
+          if (state.walletConnect) _addresses.push(state.walletConnect)
+
+          return { ...state, addresses: [..._addresses] }
 
         case 'walletConnect':
-          return { ...state, addresses: [...addresses, ...state.myAlgoAddresses] }
+          _addresses.push(state.walletConnect)
+          _addresses.push(...state.myAlgoAddresses)
+          if (state.peraWallet) _addresses.push(state.peraWallet)
+        // return { ...state, addresses: [...state.addresses, ...addresses] }
         // You may need to update this since now there is peraWallet and Wallet Connect ****
       }
     // const _arr = (type === 'myAlgo && state.peraWallet !== null)' ? [...addresses, state.peraWallet] :
@@ -45,57 +56,42 @@ export function walletReducer(state, { action, payload }) {
       return { ...state, myAlgoAddresses: [...payload] }
     case 'disconnectWallet':
       const { type: walletType, address } = payload
+
+      if (state.addresses.map((_address) => _address.address).includes(address.address) === false)
+        return state
+
+      const _remainingAddresses = state.addresses.filter((wallet) => {
+        return wallet.address !== address.address
+      })
+
+      const _state = { ...state }
+
       switch (
         walletType //Now we have three wallets we need to refavtor this too
       ) {
         case 'walletConnect':
-          state.walletConnect = null
+          _state.walletConnect = null
           localStorage.removeItem('walletConnectWallet')
-          if (state.myAlgoAddresses.length > 0) {
-            if (state?.activeWallet.type === address.type) {
-              state.activeWallet = state.myAlgoAddresses[0]
-            }
-          } else {
-            state.activeWallet = null
-          }
-          return { ...state }
+
         case 'peraWallet':
-          state.peraWallet = null
+          _state.peraWallet = null
           localStorage.removeItem('peraWallet')
-          if (state.myAlgoAddresses.length > 0) {
-            if (state?.activeWallet.type === address.type) {
-              state.activeWallet = state.myAlgoAddresses[0]
-            }
-          } else {
-            state.activeWallet = null
-          }
-          return { ...state }
+
         case 'myAlgo':
-          //if triggering this event there must be atleast one item in the array
-          if (state.myAlgoAddresses.length >= 1) {
-            const _remainingAddresses = state.myAlgoAddresses.filter((wallet) => {
-              return wallet.address !== address.address
-            })
-            state.myAlgoAddresses = [..._remainingAddresses]
-            state.activeWallet = { ..._remainingAddresses[0] }
-            localStorage.setItem('myAlgoAddresses', JSON.stringify(_remainingAddresses))
-            return { ...state }
-          } else {
-            // if there are no more algoWallets check pera
-            if (state.peraWallet !== null) {
-              state.activeWallet = { ...state.peraWallet }
-              state.myAlgoAddresses = []
-              localStorage.setItem('myAlgoAddresses', JSON.stringify([]))
+          const _remainingAlgoAddresses = state.myAlgoAddresses.filter((wallet) => {
+            return wallet.address !== address.address
+          })
 
-              return { ...state }
-            } else {
-              state.activeWallet = null
-              state.myAlgoAddresses = []
-              localStorage.setItem('myAlgoAddresses', JSON.stringify([]))
+          _state.myAlgoAddresses = [..._remainingAlgoAddresses]
+          localStorage.setItem('myAlgoAddresses', JSON.stringify(_remainingAlgoAddresses))
+      }
+      // state.addresses = [..._remainingAddresses]
 
-              return { ...state }
-            }
-          }
+      _state.activeWallet = _remainingAddresses.length > 0 ? { ..._remainingAddresses[0] } : null
+
+      return {
+        ...state,
+        ..._state
       }
   }
 }
