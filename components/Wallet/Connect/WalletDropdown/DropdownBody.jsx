@@ -26,7 +26,13 @@ import theme from 'theme'
 import { useState } from 'react'
 
 // const DropdownBody = ({ activeWalletAddress, sortedWalletsList, closeFn }) => {
-const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
+const DropdownBody = ({
+  addresses,
+  myAlgoOnClick,
+  peraConnectOnClick,
+  walletconnectGeneralOnClick,
+  isPeraConnected
+}) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
 
   return (
@@ -42,6 +48,7 @@ const DropdownBody = ({ addresses, myAlgoOnClick, peraConnectOnClick, isPeraConn
         addresses={addresses}
         myAlgoOnClick={myAlgoOnClick}
         peraConnectOnClick={peraConnectOnClick}
+        walletconnectGeneralOnClick={walletconnectGeneralOnClick}
         isPeraConnected={isPeraConnected}
       />
     </div>
@@ -55,7 +62,9 @@ DropdownBody.propTypes = {
   addresses: PropTypes.array,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
-  isPeraConnected: PropTypes.book
+  walletconnectGeneralOnClick: PropTypes.func,
+
+  isPeraConnected: PropTypes.bool
 }
 
 DropdownBody.defaultProps = {

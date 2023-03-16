@@ -179,6 +179,8 @@ export function WalletView(props) {
         return '/Pera-logo.png'
       case 'my-algo-wallet':
         return '/My-Algo-Wallet-icon.svg'
+      case 'wallet-connect-general':
+        return '/Wallet-Connect-icon.svg'
     }
   }, [])
 
@@ -292,9 +294,11 @@ export function WalletOptionsListComp(props) {
     WALLETS_CONNECT_MAP['pera-connect']()
   }, [WALLETS_CONNECT_MAP])
 
-  const walletconnectGeneralOnClick = useCallback(() => {
+  const walletconnectGeneralOnClick = () => {
+    console.log('gut')
     WALLETS_CONNECT_MAP['wallet-connect-general']()
-  }, [WALLETS_CONNECT_MAP])
+  }
+  console.log(WALLETS_CONNECT_MAP['wallet-connect-general'])
 
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
@@ -326,7 +330,7 @@ export function WalletOptionsListComp(props) {
                 setIsConnectingAddress={setIsConnectingWallet}
                 addresses={addresses}
                 myAlgoOnClick={myAlgoOnClick}
-                walletconnectGeneralOnClick={() => walletconnectGeneralOnClick()}
+                walletconnectGeneralOnClick={walletconnectGeneralOnClick}
                 peraConnectOnClick={() => peraConnectOnClick()}
                 isPeraConnected={isPeraConnected}
               />

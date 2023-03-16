@@ -27,16 +27,19 @@ export function walletReducer(state, { action, payload }) {
           // return { ...state, addresses: [...state.addresses, ...addresses] }
           // const _addresses = []
           // arrange it so peraWallet is first in the array since it triggered the event
-          _addresses.push(state.peraWallet)
+          if (state.peraWallet) _addresses.push(state.peraWallet)
           _addresses.push(...state.myAlgoAddresses)
           if (state.walletConnect) _addresses.push(state.walletConnect)
 
           return { ...state, addresses: [..._addresses] }
 
         case 'walletConnect':
-          _addresses.push(state.walletConnect)
+          if (state.walletConnect) _addresses.push(state.walletConnect)
           _addresses.push(...state.myAlgoAddresses)
           if (state.peraWallet) _addresses.push(state.peraWallet)
+
+          return { ...state, addresses: [..._addresses] }
+
         // return { ...state, addresses: [...state.addresses, ...addresses] }
         // You may need to update this since now there is peraWallet and Wallet Connect ****
       }

@@ -38,6 +38,7 @@ function _mergeAddresses(a, b) {
 function useWallets(closeDropdown) {
   const {
     setPeraWallet,
+    setWalletConnect,
     setActiveWallet,
     setAddressesNew,
     disconnectWallet,
