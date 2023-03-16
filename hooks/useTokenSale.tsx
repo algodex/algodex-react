@@ -62,7 +62,7 @@ export const useTokenSale = (
   }
 
   const rowData = useMemo(() => {
-    if (activeWallet) {
+    if (activeWallet && activeWallet['created-assets']) {
       return activeWallet['created-assets']
         .filter((as) => !as.deleted && as.index.toString().startsWith(formData.assetId))
         .map((asset) => ({
@@ -70,7 +70,7 @@ export const useTokenSale = (
           assetId: asset.index,
           symbol: asset.params['unit-name'],
           assetName: asset.params.name,
-          totalQuantity: asset.params.total,
+          totalQuantity: asset.params.total / 10 ** asset.params.decimals,
           availableBalance:
             activeWallet.assets.find((asst) => asst['asset-id'] === asset.index).amount /
             10 ** asset.params.decimals

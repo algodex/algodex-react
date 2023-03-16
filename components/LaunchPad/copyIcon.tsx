@@ -7,10 +7,12 @@ import Tooltip from '@mui/material/Tooltip'
 
 export const CopyIcon = ({
   content,
-  tooltipStyles
+  tooltipStyles,
+  className
 }: {
   content: string | number
   tooltipStyles?: object
+  className?: string
 }) => {
   const [tooltiptext, setTooltiptext] = useState('Click to Copy')
 
@@ -34,6 +36,7 @@ export const CopyIcon = ({
       }}
     >
       <ContentCopyIcon
+        className={className}
         sx={styles.copy}
         onClick={(e) => {
           copyAddress(content)
