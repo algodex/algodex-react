@@ -132,7 +132,8 @@ const InactiveWalletsList = ({ walletsList, walletDisconnectMap }) => {
 }
 
 InactiveWalletsList.propTypes = {
-  walletsList: PropTypes.array
+  walletsList: PropTypes.array,
+  walletDisconnectMap: PropTypes.object
 }
 
 InactiveWalletsList.defaultProps = {

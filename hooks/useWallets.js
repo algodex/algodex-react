@@ -103,7 +103,7 @@ function useWallets(closeDropdown) {
 
   useEffect(() => {
     if (activeWallet && walletQuery.data) {
-      console.log(activeWallet)
+      // console.log(activeWallet)
       setActiveWallet({ ...activeWallet, ...walletQuery.data })
     }
   }, [walletQuery.data])

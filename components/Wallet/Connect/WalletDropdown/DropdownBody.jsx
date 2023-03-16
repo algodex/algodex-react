@@ -68,6 +68,7 @@ DropdownBody.propTypes = {
   activeWalletAddress: PropTypes.string,
   sortedWalletsList: PropTypes.object,
   // closeFn: PropTypes.func,
+  wallet: PropTypes.object,
   addresses: PropTypes.array,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
