@@ -51,7 +51,7 @@ function useWallets(closeDropdown) {
   // TODO: Account Info Query
   // Handle any Connection
   const handleConnect = async (_addresses) => {
-    //Handle Connect is only used for pera wallet, for myAlgo we deal with the connection in walletDropdown/index
+    //Handle Connect is only used for pera wallet and walletConnect, for myAlgo we deal with the connection in walletDropdown/index
     if (_addresses.length > 0) {
       logInfo('Handling Connect')
 
@@ -138,7 +138,8 @@ function useWallets(closeDropdown) {
     myAlgoConnector,
     peraConnector: _peraConnector,
     walletconnectConnect,
-    walletconnectDisconnect
+    walletconnectDisconnect,
+    walletconnectConnector
   }
 }
 
