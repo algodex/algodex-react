@@ -23,7 +23,6 @@ import {
   getIsRestrictedCountry
 } from '@/utils/restrictedAssets'
 
-import AlgodexApi from '@algodex/algodex-sdk'
 import AssetInfo from '@/components/Asset/Asset'
 import Chart from '@/components/Asset/Chart'
 import Layout from '@/components/Layout/OriginalLayout'
@@ -41,22 +40,11 @@ import { useRouter } from 'next/router'
 import useUserStore from '@/store/use-user-state'
 // import useWallets from '@/hooks/useWallets'
 import NFTView from '@/components/Asset/NFTView'
-import { WalletReducerContext } from '../../hooks/WalletsReducerProvider'
-import useMyAlgoConnector from '../../hooks/useMyAlgoConnector'
-import { PeraWalletConnect } from '@perawallet/connect'
-import useWalletConnect from '../../hooks/useWalletConnect'
 
-import WalletConnect from '@walletconnect/client'
-
-import { peraSigner } from '../../hooks/usePeraConnection'
-import signer from '@algodex/algodex-sdk/lib/wallet/signers/WalletConnect'
 import _ from 'lodash'
 
-const peraWalletRehydate = new PeraWalletConnect()
+// const peraWalletRehydate = new PeraWalletConnect()
 
-const walletConnectRehyrdate = new WalletConnect({
-  bridge: 'https://bridge.walletconnect.org'
-})
 /**
  * Fetch Traded Asset Paths
  * @returns {Promise<{paths: {params: {id: *}}[], fallback: boolean}>}
@@ -249,72 +237,6 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
 
     getAndSetRealStaticExplorerAsset(parseInt(query.id))
   }, [realStaticExplorerAsset, query.id, getAndSetRealStaticExplorerAsset])
-
-  const {
-    setMyAlgoAddresses,
-    setAddressesNew,
-    setActiveWallet,
-    addressesNew,
-    peraWallet,
-    walletConnect,
-    setPeraWallet,
-    setWalletConnect
-  } = useContext(WalletReducerContext)
-  // const { myAlgoConnector, peraConnector } = useWallets()
-  // const { peraConnector } = useWallets()
-  const myAlgoConnector = useMyAlgoConnector()
-  const { connector } = useWalletConnect()
-
-  useEffect(() => {
-    const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
-    const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
-    const _walletconnectGeneral = JSON.parse(localStorage.getItem('walletConnectWallet'))
-
-    if (_peraWallet?.type === 'wallet-connect' && peraWallet === null) {
-      peraWalletRehydate.reconnectSession().then((accounts) => {
-        // Setup the disconnect event listener
-        // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
-        const _rehyrdratedPeraWallet = {
-          ..._peraWallet,
-          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner }
-        }
-        setPeraWallet(_rehyrdratedPeraWallet)
-        setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
-        setActiveWallet(_rehyrdratedPeraWallet)
-        console.log(accounts)
-      })
-    }
-
-    if (
-      _walletconnectGeneral?.type === 'wallet-connect-general' &&
-      walletConnect === null &&
-      typeof connector.current !== 'undefined'
-    ) {
-      const _rehyrdratedWalletconnectWallet = {
-        ..._walletconnectGeneral,
-        connector: connector.current
-      }
-
-      setWalletConnect(_rehyrdratedWalletconnectWallet)
-      setAddressesNew({ type: 'walletConnect', addresses: [_rehyrdratedWalletconnectWallet] })
-      setActiveWallet(_rehyrdratedWalletconnectWallet)
-      // walletconnectConnect()
-    }
-
-    if (
-      Array.isArray(_myAlgoAddresses) &&
-      _myAlgoAddresses.length > 0 &&
-      myAlgoConnector !== null
-    ) {
-      myAlgoConnector.connected = true
-      const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
-        return { ...addrObj, connector: myAlgoConnector }
-      })
-      setMyAlgoAddresses(_rehydratedMyAlgo)
-      setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
-      setActiveWallet(_rehydratedMyAlgo[0])
-    }
-  }, [myAlgoConnector, connector])
 
   //TODO: useEffect and remove this from the compilation
   if (typeof staticExplorerAsset !== 'undefined') {
