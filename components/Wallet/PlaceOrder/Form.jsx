@@ -422,6 +422,15 @@ export function PlaceOrderForm({
               toast.error('You cannot spend more than your available Algo balance')
               return
             }
+
+            if (
+              activeWallet.type === 'wallet-connect-general' &&
+              activeWallet.connector.connected !== true
+            ) {
+              notifier(
+                'Your wallet-connect session went stale, please disconnect completely and try again'
+              )
+            }
             notifier('Initializing order')
             await placeOrder(
               {
