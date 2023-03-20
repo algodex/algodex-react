@@ -18,6 +18,9 @@ import { ChangeEvent, useCallback, useContext, useEffect, useMemo, useState } fr
 import { isValidAddr } from '@/components/helpers'
 import { activeWalletTypes, selectedAsset } from '@/components/types'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
+import toast from 'react-hot-toast'
+import useAlgodex from './useAlgodex'
+import { manageAsset } from '@/components/LaunchPad/createAsset'
 
 const initialValues = {
   assetId: '',
@@ -56,6 +59,7 @@ const columns = [
 ]
 
 const useManageToken = () => {
+  const { algodex } = useAlgodex()
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState(initialValues)
@@ -99,10 +103,11 @@ const useManageToken = () => {
     }
   }
 
-  const cancelEdit = (inputName: string, inputValue: string) => {
-    setFormData({ ...formData, [inputName]: inputValue }) // Reset the edit field
+  const cancelEdit = (inputName?: string, inputValue?: string) => {
+    if (inputName && inputValue) {
+      setFormData({ ...formData, [inputName]: inputValue }) // Reset the edit field
+    }
     handleEdit(null)
-
     //Clear out error message if any
     resetError({
       target: { name: inputName }
@@ -151,9 +156,39 @@ const useManageToken = () => {
   }
 
   const manageToken = () => {
-    console.log('Submit token update to Algorand', formData)
+    cancelEdit()
+    const payload = {
+      assetId: Number(formData.assetId),
+      managerAddr: formData.managerAddr,
+      reserveAddr: formData.reserveAddr,
+      freezeAddr: formData.freezeAddr,
+      clawbackAddr: formData.clawbackAddr
+    }
     setLoading(true)
-    setLoading(false)
+    let lastToastId
+    const notifier = (msg) => {
+      if (lastToastId) {
+        toast.dismiss(lastToastId)
+      }
+      if (msg === null) return
+      lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+    }
+    manageAsset(payload, algodex.algod, activeWallet, notifier)
+      .then(() => {
+        setLoading(false)
+        lastToastId = toast.success('Asset updated successfully')
+        selectedAsset.params.manager = formData.managerAddr
+        selectedAsset.params.reserve = formData.reserveAddr
+        selectedAsset.params.freeze = formData.freezeAddr
+        selectedAsset.params.clawback = formData.clawbackAddr
+      })
+      .catch((err) => {
+        setLoading(false)
+        toast.error(`Error: ${err.message}`, {
+          id: lastToastId,
+          duration: 5000
+        })
+      })
   }
 
   const resetForm = () => {

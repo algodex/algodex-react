@@ -46,6 +46,8 @@ export type activeWalletTypes = {
         _defaultTimeout: number
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    signTransaction?: (arg: unknown) => ({ blob: Uint8Array | Uint8Array[] } | any)
     timeout: number
     url: string
     currentConnectPopup: unknown
@@ -58,6 +60,7 @@ export type activeWalletTypes = {
     disableLedgerNano: boolean
     connected: boolean
   }
+  peraWallet?: { signTransaction?: (arg: unknown) => Uint8Array | Uint8Array[] }
   amount: number
   'amount-without-pending-rewards': number
   assets: Array<asset>
