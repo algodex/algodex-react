@@ -14,10 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {AlgodexContext} from './components/AlgodexContext';
-import {useContext} from 'react';
-
-import AlgodexApi from '@algodex/algodex-sdk/lib/AlgodexApi.js';
+import { AlgodexContext } from './components/AlgodexContext'
+import { useContext } from 'react'
 
 /**
  * @typedef {Object} AlgodexAPIHook
@@ -40,14 +38,15 @@ import AlgodexApi from '@algodex/algodex-sdk/lib/AlgodexApi.js';
  */
 export default function useAlgodex() {
   // Get AlgodexAPI Context
-  const algodex = useContext(AlgodexContext);
+  const algodex = useContext(AlgodexContext)
 
   // Check connection status
-  const isConnected = typeof algodex !== 'undefined' &&
+  const isConnected =
+    typeof algodex !== 'undefined' &&
     typeof algodex.wallet !== 'undefined' &&
     typeof algodex.wallet.address !== 'undefined' &&
     typeof algodex.wallet.connector !== 'undefined' &&
-    algodex.wallet.connector.connected;
+    algodex.wallet.connector.connected
 
   // Return Algodex
   return {
@@ -55,7 +54,7 @@ export default function useAlgodex() {
     isConnected,
     http: algodex.http,
     wallet: algodex.wallet,
-    setWallet: (...args)=>algodex.setWallet(...args),
-    placeOrder: (...args)=>algodex.placeOrder(...args),
-  };
+    setWallet: (...args) => algodex.setWallet(...args),
+    placeOrder: (...args) => algodex.placeOrder(...args)
+  }
 }

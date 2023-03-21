@@ -48,8 +48,8 @@ import * as InputTips from '../InputTips.json'
 type createTokenTypes = {
   tokenName: string
   unitName: string
-  totalSupply: number
-  decimals: number
+  totalSupply: string
+  decimals: string
   assetURL: string
   assetMetadata: string
   showClawbackAddr: boolean
@@ -65,8 +65,8 @@ type createTokenTypes = {
 const initialValues: createTokenTypes = {
   tokenName: '',
   unitName: '',
-  totalSupply: undefined,
-  decimals: undefined,
+  totalSupply: '',
+  decimals: '',
   assetURL: '',
   assetMetadata: '',
   showClawbackAddr: false,
@@ -135,6 +135,7 @@ export const CreateToken = () => {
     return pattern.test(url)
   }
 
+  console.log({ formData })
   const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     let _error = false
@@ -153,14 +154,19 @@ export const CreateToken = () => {
     }
 
     //Ensure it is a valid whole number
-    if (isNaN(totalSupply) || !isInteger(totalSupply) || totalSupply < 1) {
+    if (isNaN(Number(totalSupply)) || !isInteger(Number(totalSupply)) || Number(totalSupply) < 1) {
       setError((prev) => ({ ...prev, totalSupply: 'Enter a valid whole number' }))
 
       _error = true
     }
 
     //Ensure it is a valid whole number and between 1 - 10
-    if (isNaN(decimals) || !isInteger(decimals) || decimals < 1 || decimals > 10) {
+    if (
+      isNaN(Number(decimals)) ||
+      !isInteger(Number(decimals)) ||
+      Number(decimals) < 1 ||
+      Number(decimals) > 10
+    ) {
       setError((prev) => ({ ...prev, decimals: 'Enter whole number between 1 and 10' }))
 
       _error = true
@@ -242,6 +248,7 @@ export const CreateToken = () => {
       .then(() => {
         setLoading(false)
         lastToastId = toast.success(t('asset-success'))
+        setFormData(initialValues)
       })
       .catch((err) => {
         setLoading(false)
