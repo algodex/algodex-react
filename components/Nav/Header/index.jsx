@@ -28,6 +28,8 @@ import {
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+import { getWalletLogo } from '../../helpers'
+
 // import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
@@ -90,18 +92,6 @@ export function Header() {
     activeNetwork === 'testnet'
       ? 'https://mailbox-testnet.algodex.com/'
       : 'https://mailbox.algodex.com/'
-
-  const getWalletLogo = useCallback((wallet) => {
-    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
-      throw new TypeError('Must have a valid wallet!')
-    }
-    switch (wallet.type) {
-      case 'wallet-connect':
-        return '/Pera-logo.png'
-      case 'my-algo-wallet':
-        return '/My-Algo-Wallet-icon.svg'
-    }
-  }, [])
 
   return (
     <Container className="flex" data-testid="header-container">

@@ -19,23 +19,14 @@ import PropTypes from 'prop-types'
 import WalletOptionsList from './WalletOptionsList'
 import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
 import theme from 'theme'
+import { getWalletLogo } from '../../../helpers'
+
 // import { useState, useContext } from 'react'
 // import { WalletContext } from '../../WalletContext'
 import { useState, useCallback } from 'react'
 
 const DropdownBody = ({ walletDisconnectMap, wallet, activeWalletAddress, sortedWalletsList, addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-  const getWalletLogo = useCallback((wallet) => {
-    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
-      throw new TypeError('Must have a valid wallet!')
-    }
-    switch (wallet.type) {
-      case 'wallet-connect':
-        return '/Pera-logo.png'
-      case 'my-algo-wallet':
-        return '/My-Algo-Wallet-icon.svg'
-    }
-  }, [])
   return (
     <div
       className="p-2"

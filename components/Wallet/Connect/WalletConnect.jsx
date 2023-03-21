@@ -18,7 +18,7 @@ import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import useWallets from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../hooks/WalletsReducerProvider'
-
+import { getWalletLogo } from '../../helpers'
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
 import Modal from 'components/Modal'
@@ -167,18 +167,6 @@ export function WalletView(props) {
       !isWalletActive(addr) && setActiveWallet(addr)
     }
   }
-
-  const getWalletLogo = useCallback((wallet) => {
-    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
-      throw new TypeError('Must have a valid wallet!')
-    }
-    switch (wallet.type) {
-      case 'wallet-connect':
-        return '/Pera-logo.png'
-      case 'my-algo-wallet':
-        return '/My-Algo-Wallet-icon.svg'
-    }
-  }, [])
 
   return (
     <Section area="topRight">
