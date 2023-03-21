@@ -21,11 +21,21 @@ import { WalletReducerContext } from '../../../../hooks/WalletsReducerProvider'
 import theme from 'theme'
 // import { useState, useContext } from 'react'
 // import { WalletContext } from '../../WalletContext'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 const DropdownBody = ({ walletDisconnectMap, wallet, activeWalletAddress, sortedWalletsList, addresses, myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
-
+  const getWalletLogo = useCallback((wallet) => {
+    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
+      throw new TypeError('Must have a valid wallet!')
+    }
+    switch (wallet.type) {
+      case 'wallet-connect':
+        return '/Pera-logo.png'
+      case 'my-algo-wallet':
+        return '/My-Algo-Wallet-icon.svg'
+    }
+  }, [])
   return (
     <div
       className="p-2"
@@ -45,9 +55,9 @@ const DropdownBody = ({ walletDisconnectMap, wallet, activeWalletAddress, sorted
         />
       ) : (
         <>
-          <ActiveWalletList wallet={wallet} disconnectWalletFn={() => walletDisconnectMap[wallet.type](wallet)} />
+          <ActiveWalletList getWalletLogo={getWalletLogo} wallet={wallet} disconnectWalletFn={() => walletDisconnectMap[wallet.type](wallet)} />
           {sortedWalletsList.inactiveWallet.length > 0 && 
-            <InactiveWalletsList walletsList={sortedWalletsList.inactiveWallet} walletDisconnectMap={walletDisconnectMap}/>
+            <InactiveWalletsList getWalletLogo={getWalletLogo} walletsList={sortedWalletsList.inactiveWallet} walletDisconnectMap={walletDisconnectMap}/>
           }
           <WalletOptionsList
             isRenderingList={!activeWalletAddress}

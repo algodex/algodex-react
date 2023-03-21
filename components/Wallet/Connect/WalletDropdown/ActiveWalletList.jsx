@@ -17,7 +17,7 @@
 import { Box, Typography } from '@mui/material'
 import { copyAddress, setExplorerLink, truncatedWalletAddress } from 'components/helpers'
 import { mdiContentCopy, mdiOpenInNew } from '@mdi/js'
-
+import Image from 'next/image'
 import Button from '@mui/material/Button'
 import Icon from '@mdi/react'
 import Link from 'next/link'
@@ -30,7 +30,7 @@ import useUserStore from 'store/use-user-state'
 import useWallets from '@/hooks/useWallets'
 import { getActiveNetwork } from 'services/environment'
 
-const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
+const ActiveWalletList = ({ getWalletLogo, wallet, disconnectWalletFn }) => {
   const activeNetwork = getActiveNetwork()
   // const { peraDisconnect, myAlgoDisconnect } = useWallets(wallet)
   const address = wallet?.address
@@ -54,8 +54,16 @@ const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
               }}
             >
               <Box className="flex justify-between items-center">
-                <Box className="flex item-center border-solid border rounded justify-between w-4/5 p-1.5">
-                  <Typography>{truncatedWalletAddress(address, 11)}</Typography>
+                <Box className="flex items-center border-solid border rounded justify-between w-4/5 p-1.5">
+                  <Image
+                    src={getWalletLogo(wallet)}
+                    alt="Algorand Wallet Client Image"
+                    style={{ borderRadius: '100%' }}
+                    width={18}
+                    height={18}
+                  />
+                  &nbsp;
+                  <Typography>{truncatedWalletAddress(address, 9)}</Typography>
                   <Icon
                     onClick={() => copyAddress(address)}
                     path={mdiContentCopy}
@@ -78,8 +86,8 @@ const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
               </Box>
               <Box>
                 <Link href={setExplorerLink(address, activeNetwork)}>
-                  <a className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
-                    <Typography>View on AlgoExplorer</Typography>
+                  <a target="_blank" rel="noreferrer noopener" className="flex justify-end items-center text-white mr-10 mt-3 font-medium">
+                    <Typography>View on AlgoExplorer</Typography>&nbsp;
                     <Icon
                       path={mdiOpenInNew}
                       title="Algo explorer link"
@@ -102,7 +110,8 @@ const ActiveWalletList = ({ wallet, disconnectWalletFn }) => {
 
 ActiveWalletList.propTypes = {
   wallet: PropTypes.object,
-  disconnectWalletFn: PropTypes.func
+  disconnectWalletFn: PropTypes.func,
+  getWalletLogo: PropTypes.func
 }
 
 export default ActiveWalletList

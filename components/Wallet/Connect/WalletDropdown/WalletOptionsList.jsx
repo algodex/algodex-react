@@ -126,7 +126,7 @@ const WalletsOptions = ({
           className="w-full flex text-xs font-bold justify-center items-center h-8 mt-2 text-white rounded"
           variant="contained"
           style={{
-            backgroundColor: theme.colors.gray['700']
+            backgroundColor: theme.colors.green['500']
           }}
           onClick={() => setIsConnectingAddress(!isConnectingAddress)}
         >

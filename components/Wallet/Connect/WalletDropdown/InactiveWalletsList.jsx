@@ -70,7 +70,7 @@ const InactiveWalletsList = ({ walletsList, walletDisconnectMap }) => {
         <Typography variant="body_small_cap_bold" color="gray.000" className="mb-1.5">
           SWITCH WALLETS
         </Typography>
-        <Typography>Click on address to switch active wallets</Typography>
+        <Typography>Click on the address to switch active wallets</Typography>
       </Box>
       <Box>
         {walletsList.map((wallet, idx) => {
@@ -110,9 +110,10 @@ const InactiveWalletsList = ({ walletsList, walletDisconnectMap }) => {
                 <Link href={setExplorerLink(wallet.address, activeNetwork)}>
                   <a
                     target="_blank"
+                    rel="noreferrer noopener"         
                     className="flex justify-end items-center text-white mr-10 mt-3 font-medium"
                   >
-                    <Typography>View on AlgoExplorer</Typography>
+                    <Typography>View on AlgoExplorer</Typography>&nbsp;
                     <Icon
                       path={mdiOpenInNew}
                       title="Algo explorer link"
