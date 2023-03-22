@@ -196,6 +196,8 @@ export const NavSearchTable = ({
   const activeNetwork = getActiveNetwork();
   const isMobile = useMobileDetect()
   const TODAY = useMemo(() => dayjs().format('YYYY-MM-DD'), [])
+  const [geoFormattedAssets, setGeoformattedAssets] = useState({})
+  const [formattedWithAgeOfProject, setformattedWithAgeOfProject] = useState([])
   const searchTableRef = useRef()
   const router = useRouter()
   const { t } = useTranslation('assets')
@@ -258,7 +260,6 @@ export const NavSearchTable = ({
     }
   }, [router.query])
 
-  let geoFormattedAssets = []
   let updatedList = []
 
   const updatePriceMax = useCallback(() => {
@@ -272,23 +273,15 @@ export const NavSearchTable = ({
   }, [geoFormattedAssets])
 
   const updateAgeOfProjectMax = useCallback(() => {
-    if (updatedList.length > 0) {
-      const sortedListByAgeOfProject = sortBy(updatedList, o => o.ageOfProject);
+    if (formattedWithAgeOfProject.length > 0) {
+      const sortedListByAgeOfProject = sortBy(formattedWithAgeOfProject, o => o.ageOfProject);
       setSearchFilterProps({
         type: 'updateSliderValue',
         field: 'ageOfProjectMax',
         value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1]?.ageOfProject
       })
     }
-  }, [updatedList])
-
-  useEffect(() => {
-    updatePriceMax()
-    updateAgeOfProjectMax()
-  }, [geoFormattedAssets, updatedList])
-  
-
-
+  }, [formattedWithAgeOfProject])
 
   /**
    * Handle Search Data
@@ -305,74 +298,64 @@ export const NavSearchTable = ({
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Geoformatted assets
     // const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
-    geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    // geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    setGeoformattedAssets(handleRestrictedAsset(_acceptedAssets))
     // REVERT TO ADD SORTING FOR RESTRICTED
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
-    let filteredList = geoFormattedAssets.assets;
+    if (geoFormattedAssets?.assets) {
+      let filteredList = geoFormattedAssets?.assets;
 
-    // Set Max for Age of Project
-    const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
-    // const updatedList = [...filteredList].map((asset) => {
-    updatedList = [...filteredList].map((asset) => {
-      const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
-      return {
-        ...asset,
-        ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
+      // Set Max for Age of Project
+      const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
+      const updatedList = [...filteredList].map((asset) => {
+        const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
+        return {
+          ...asset,
+          ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
+        }
+      })
+      setformattedWithAgeOfProject(updatedList)
+      if (searchFilters?.isFilteringAgeOfProject) {
+        filteredList = [...updatedList].filter((asset) => asset.ageOfProject >= searchFilters.ageOfProject[0] && asset.ageOfProject <= searchFilters.ageOfProject[1]).sort((a, b) => b.formattedPrice - a.formattedPrice);
       }
-    })
-    const sortedListByAgeOfProject = sortBy(updatedList, o => o.ageOfProject);
-    // setSearchFilterProps({
-    //   type: 'updateSliderValue',
-    //   field: 'ageOfProjectMax',
-    //   value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1]?.ageOfProject
-    // })
-    // updateAgeOfProjectMax(updatedList)
-    if (searchFilters?.isFilteringAgeOfProject) {
-      filteredList = [...updatedList].filter((asset) => asset.ageOfProject >= searchFilters.ageOfProject[0] && asset.ageOfProject <= searchFilters.ageOfProject[1]).sort((a, b) => b.formattedPrice - a.formattedPrice);
-    }
 
-    // Set max for Price of Assets
-    const sortedListByPrice = [...geoFormattedAssets.assets].sort((a, b) => a.formattedPrice - b.formattedPrice)
-    // Set max price for the price filter slider
-    // setSearchFilterProps({
-    //   type: 'setPriceMax',
-    //   value: sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice
-    // })
-    // updatePriceMax(geoFormattedAssets)
 
-    // Filter Asset By price
-    if (searchFilters?.isFilteringPrice) {
-      const updatedList = [...filteredList].filter((asset) => asset.formattedPrice >= searchFilters.price[0] && asset.formattedPrice <= searchFilters.price[1])
-      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
-    }
+      // Filter Asset By price
+      if (searchFilters?.isFilteringPrice) {
+        const updatedList = [...filteredList].filter((asset) => asset.formattedPrice >= searchFilters.price[0] && asset.formattedPrice <= searchFilters.price[1])
+        filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
+      }
 
-    // Filter By NFT
-    if (searchFilters?.isFilteringNFTOnly) {
-      const updatedList = [...filteredList].filter((asset) => asset.total === 1)
-      filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
-    }
+      // Filter By NFT
+      if (searchFilters?.isFilteringNFTOnly) {
+        const updatedList = [...filteredList].filter((asset) => asset.total === 1)
+        filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
+      }
 
-    // Return List
-    if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
-      return []
-    } else if (isListingVerifiedAssets && isFilteringByFavorites) {
-      // Listing verified favourited assets
-      const result = Object.keys(favoritesState).map((assetId) => {
-        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
-      })
-      return flatten(result).filter((asset) => asset.verified).map(mapToSearchResults)
-    } else if (isListingVerifiedAssets) {
-      // Listing only verified assets
-      return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
-    } else if (isFilteringByFavorites) {
-      // Listing only favourited assets
-      const result = Object.keys(favoritesState).map((assetId) => {
-        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
-      })
-      return flatten(result).map(mapToSearchResults)
+      // Return List
+      if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
+        return []
+      } else if (isListingVerifiedAssets && isFilteringByFavorites) {
+        // Listing verified favourited assets
+        const result = Object.keys(favoritesState).map((assetId) => {
+          return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
+        })
+        return flatten(result).filter((asset) => asset.verified).map(mapToSearchResults)
+      } else if (isListingVerifiedAssets) {
+        // Listing only verified assets
+        return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
+      } else if (isFilteringByFavorites) {
+        // Listing only favourited assets
+        const result = Object.keys(favoritesState).map((assetId) => {
+          return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
+        })
+        return flatten(result).map(mapToSearchResults)
+      } else {
+        // If there is data, use it
+        return filteredList.map(mapToSearchResults)
+      }
     } else {
-      // If there is data, use it
-      return filteredList.map(mapToSearchResults)
+      return []
     }
   }, [assets,
     handleRestrictedAsset,
@@ -602,6 +585,8 @@ export const NavSearchTable = ({
       // console.log('zprefetching: ' + assetId)
       router.prefetch('/trade/' + assetId)
     })
+    updatePriceMax()
+    updateAgeOfProjectMax()
   }, [router, searchResultData])
 
   return (

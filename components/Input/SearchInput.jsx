@@ -130,7 +130,6 @@ export const Search = forwardRef(
 
     // Get the slider value from the logarithmic scale
     const getSliderValue = useCallback(() => {
-      console.log(searchFilters.priceMax, searchFilters.price, 'all here')
       const min = parseInt(1)
       const max = parseInt(searchFilters.priceMax || 1)
       const logMin = Math.log10(min)
