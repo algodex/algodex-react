@@ -21,6 +21,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from '@emotion/styled'
 import theme from '../theme/index'
+import ClientOnly from './ClientOnly'
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +64,10 @@ const Page = ({
         {noFollow && <meta name="robots" content="noindex,nofollow" />}
       </Head>
       <Header />
-      <NetworkHandler />
+      <ClientOnly>
+        <NetworkHandler />
+      </ClientOnly>
+
       {children}
     </Container>
   )
