@@ -145,6 +145,22 @@ export const Search = forwardRef(
       searchFilters?.price
     ])
 
+    const handleSliderChange = useCallback((e, newValue, activeThumb, field) => {
+      setActiveThumb(activeThumb)
+      dispatchAction({
+        type: 'updateSliderValue',
+        field,
+        value: e.target.value
+      })
+    }, [
+      searchFilters?.priceMax,
+      searchFilters?.price,
+      searchFilters?.isFilteringPrice,
+      searchFilters?.ageOfProjectMax,
+      searchFilters?.ageOfProject,
+      searchFilters?.isFilteringAgeOfProject
+    ])
+
     return (
       <div>
         <Container
@@ -217,12 +233,7 @@ export const Search = forwardRef(
                   value={searchFilters.ageOfProject}
                   onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
-                    setActiveThumb(activeThumb)
-                    dispatchAction({
-                      type: 'updateSliderValue',
-                      field: 'ageOfProject',
-                      value: e.target.value
-                    })
+                    handleSliderChange(e, newValue, activeThumb, 'ageOfProject')
                   }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
@@ -253,12 +264,7 @@ export const Search = forwardRef(
                   value={getSliderValue()}
                   onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
-                    setActiveThumb(activeThumb)
-                    dispatchAction({
-                      type: 'updateSliderValue',
-                      field: 'price',
-                      value: setSliderValueFn(activeThumb, e.target.value)
-                    })
+                    handleSliderChange(e, newValue, activeThumb, 'price')
                   }}
                   aria-label="Small"
                   valueLabelDisplay="auto"

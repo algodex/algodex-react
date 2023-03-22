@@ -368,11 +368,7 @@ export const NavSearchTable = ({
     }
   }, [
     searchFilters?.ageOfProjectMax,
-    searchFilters?.ageOfProject,
-    searchFilters?.priceMax,
-    searchFilters?.price,
-    searchFilters?.isFilteringPrice,
-    searchFilters?.isFilteringAgeOfProject
+    searchFilters?.priceMax
   ])
 
 
