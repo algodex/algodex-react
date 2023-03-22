@@ -88,7 +88,9 @@ export const useTokenSale = (
       _error = true
     }
     if (maxSpendableAlgo === 0) {
-      toast.error('Insufficient Algo to start a sale')
+      toast.error(
+        'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
+      )
       _error = true
     }
     if (!_error) {
