@@ -25,7 +25,6 @@ import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from '@/hooks'
 import useSearchFilter from '@/hooks/useSearchFilter'
-import { filter } from 'lodash'
 
 // export const Section = styled.section`
 //   height: inherit;
