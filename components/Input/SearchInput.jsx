@@ -130,6 +130,7 @@ export const Search = forwardRef(
 
     // Get the slider value from the logarithmic scale
     const getSliderValue = useCallback(() => {
+      console.log(searchFilters.priceMax, searchFilters.price, 'all here')
       const min = parseInt(1)
       const max = parseInt(searchFilters.priceMax || 1)
       const logMin = Math.log10(min)
@@ -147,11 +148,7 @@ export const Search = forwardRef(
 
     const handleSliderChange = useCallback((value, newValue, activeThumb, field) => {
       setActiveThumb(activeThumb)
-      dispatchAction({
-        type: 'updateSliderValue',
-        field,
-        value
-      })
+      dispatchAction({type: 'updateSliderValue', field, value})
     }, [
       searchFilters?.price,
       searchFilters?.ageOfProject,
@@ -231,7 +228,6 @@ export const Search = forwardRef(
                     !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
                     handleSliderChange(e.target.value, newValue, activeThumb, 'ageOfProject')
                   }}
-                  aria-label="Small"
                   valueLabelDisplay="auto"
                   disableSwap
                   valueLabelFormat={`${searchFilters.ageOfProject[activeThumb]} days`}
@@ -262,7 +258,6 @@ export const Search = forwardRef(
                     !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
                     handleSliderChange(setSliderValueFn(activeThumb, e.target.value), newValue, activeThumb, 'price')
                   }}
-                  aria-label="Small"
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
                   defaultValue={[0, searchFilters.priceMax]}
