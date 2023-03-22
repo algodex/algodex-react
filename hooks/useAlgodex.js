@@ -26,6 +26,7 @@ import { useContext } from 'react'
  * @property {function} setConfig Set AlgodexAPIConfig
  * @property {function} setAddresses Set Available Addresses
  * @property {((function(): Promise<void>)|*)} connect MyAlgo Connect
+ * @property {((function(): Promise<void>)|*)} placeOrder Place Order
  */
 
 /**

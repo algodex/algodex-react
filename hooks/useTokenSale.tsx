@@ -16,6 +16,10 @@
 
 import { activeWalletTypes, selectedAsset } from '@/components/types'
 import { useContext, useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useAlgodex } from '@/hooks'
+import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
+
 import { WalletReducerContext } from './WalletsReducerProvider'
 
 const columns = [
@@ -44,21 +48,99 @@ export const useTokenSale = (
   initialValues: unknown
 ) => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
+  const { placeOrder } = useAlgodex()
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
+
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState({})
+
   const windowHost = globalThis.location
     ? globalThis.location.protocol + '//' + globalThis.location.host
     : null
+  let lastToastId
+  const notifier = (msg) => {
+    if (lastToastId) {
+      toast.dismiss(lastToastId)
+    }
+    if (msg === null) return
+    lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    let _error = false
+    if (!formData.perUnit || formData.perUnit <= 0) {
+      setError((prev) => ({ ...prev, perUnit: 'Invalid algo unit!' }))
+      _error = true
+    }
+
+    if (!formData.quantity || formData.quantity <= 0) {
+      setError((prev) => ({ ...prev, quantity: 'Invalid sale amount!' }))
+      _error = true
+    }
+
+    if (formData.quantity > selectedAsset.availableBalance) {
+      setError((prev) => ({
+        ...prev,
+        quantity: 'You cannot sell more than your available asa balance'
+      }))
+      _error = true
+    }
+    if (maxSpendableAlgo === 0) {
+      toast.error(
+        'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
+      )
+      _error = true
+    }
+    if (!_error) {
+      setError(null)
+      createTokenSale()
+    }
+  }
+
+  const createTokenSale = async () => {
+    const formattedOrder = {
+      asset: {
+        id: Number(formData.assetId), // Asset Index
+        decimals: Number(formData.decimals) // Asset Decimals
+      },
+      execution: 'both', // Type of exeuction
+      type: 'sell', // Order Type
+      address: activeWallet.address,
+      wallet: activeWallet,
+      appId: 22045522,
+      version: 6,
+      amount: Number(formData.quantity), // Amount to Sell
+      price: Number(formData.perUnit) // Price in ALGOs
+    }
+    // return
     setLoading(true)
-    setLoading(false)
+    notifier('Initializing order')
+    await placeOrder(formattedOrder, { wallet: activeWallet }, notifier)
+      .then(() => {
+        setLoading(false)
+        notifier(null)
+        lastToastId = toast.success('Order successfully placed')
+      })
+      .catch((err) => {
+        setLoading(false)
+        toast.error(`Error: ${err.message}`, {
+          id: lastToastId,
+          duration: 5000
+        })
+      })
   }
 
   const resetForm = () => {
     setFormData(initialValues)
     setSelectedAsset(null)
+  }
+
+  const resetError = (e: { target: { name: string } }) => {
+    //Clear out input errors
+    setError((prev) => ({ ...prev, [e.target.name]: '' }))
+    setError((prev) => ({ ...prev, all: '' }))
   }
 
   const rowData = useMemo(() => {
@@ -84,10 +166,8 @@ export const useTokenSale = (
       setFormData((prev) => ({
         ...prev,
         assetId: `${selectedAsset.assetId}`,
-        clawbackAddr: selectedAsset.params.clawback,
         reserveAddr: selectedAsset.params.reserve,
-        managerAddr: selectedAsset.params.manager,
-        freezeAddr: selectedAsset.params.freeze
+        decimals: selectedAsset.params.decimals
       }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,6 +175,8 @@ export const useTokenSale = (
 
   return {
     rowData,
+    error,
+    resetError,
     onSubmit,
     selectedAsset,
     setSelectedAsset,

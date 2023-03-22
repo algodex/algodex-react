@@ -29,11 +29,14 @@ import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { TokenSearchInput } from '../TokenSearchInput'
 import { useTokenSale } from '@/hooks/useTokenSale'
+import { ErrorMessage } from '../ErrorMessage'
 
 const initialValues = {
   assetId: '',
   quantity: '',
-  perUnit: ''
+  perUnit: '',
+  decimals: '',
+  reserveAddr: ''
 }
 
 export const CreateTokenSale = () => {
@@ -41,6 +44,8 @@ export const CreateTokenSale = () => {
   const { assetId, quantity, perUnit } = formData
   const {
     rowData,
+    error,
+    resetError,
     onSubmit,
     selectedAsset,
     setSelectedAsset,
@@ -52,6 +57,7 @@ export const CreateTokenSale = () => {
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    resetError(e)
   }
 
   return (
@@ -111,6 +117,7 @@ export const CreateTokenSale = () => {
                   onChange={(e) => onChange(e)}
                   sx={styles.input}
                 />
+                <ErrorMessage error={error} name="quantity" />
                 <Typography
                   className="my-5 text-center"
                   sx={{ fontSize: '15px', color: 'white', fontStyle: 'italic' }}
@@ -129,18 +136,24 @@ export const CreateTokenSale = () => {
                   onChange={(e) => onChange(e)}
                   sx={styles.input}
                 />
-                <Typography
-                  className="my-5 text-center"
-                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
-                >
-                  1 {selectedAsset.params['unit-name']} UNIT = X ALGO
-                </Typography>
-                <Typography
-                  className="text-center opacity-70"
-                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
-                >
-                  1 ALGO = .56 {selectedAsset.params['unit-name']}
-                </Typography>
+                <ErrorMessage error={error} name="perUnit" />
+
+                {/* {formData.perUnit && ( */}
+                <>
+                  <Typography
+                    className="my-5 text-center"
+                    sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                  >
+                    1 {selectedAsset.params['unit-name']} UNIT = X ALGO
+                  </Typography>
+                  <Typography
+                    className="text-center opacity-70"
+                    sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                  >
+                    1 ALGO = .56 {selectedAsset.params['unit-name']}
+                  </Typography>
+                </>
+                {/* )} */}
               </Box>
             </Box>
 
