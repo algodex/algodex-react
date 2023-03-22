@@ -144,23 +144,17 @@ export const Search = forwardRef(
       searchFilters?.price
     ])
 
-    const handleSliderChange = useCallback((e, newValue, activeThumb) => {
-      !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
+    const handleSliderChange = useCallback((value, newValue, activeThumb, field) => {
       setActiveThumb(activeThumb)
       dispatchAction({
         type: 'updateSliderValue',
-        field: 'ageOfProject',
-        value: e.target.value
+        field,
+        value
       })
     }, [
-      searchFilters?.priceMax,
       searchFilters?.price,
-      searchFilters?.isFilteringPrice,
-      searchFilters?.ageOfProjectMax,
       searchFilters?.ageOfProject,
-      searchFilters?.isFilteringAgeOfProject
     ])
-
 
     return (
       <div>
@@ -232,7 +226,10 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={searchFilters.ageOfProject}
-                  onChange={(e, newValue, activeThumb) => handleSliderChange(e, newValue, activeThumb)}
+                  onChange={(e, newValue, activeThumb) => {
+                    !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
+                    handleSliderChange(e.target.value, newValue, activeThumb, 'ageOfProject')
+                  }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   disableSwap
@@ -260,7 +257,10 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={getSliderValue()}
-                  onChange={(e, newValue, activeThumb) => handleSliderChange(e, newValue, activeThumb)}
+                  onChange={(e, newValue, activeThumb) => {
+                    !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+                    handleSliderChange(setSliderValueFn(activeThumb, e.target.value), newValue, activeThumb, 'price')
+                  }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
@@ -318,29 +318,6 @@ export function SearchInput(props) {
     onChange(filteredSearchText)
   }, [onChange, searchText])
 
-  // useEffect(() => {
-  //   if ((searchFilters?.priceMax === 0 || searchFilters?.priceMax) && dispatchAction && !searchFilters?.isFilteringPrice) {
-  //     dispatchAction({
-  //       type: 'updateSliderValue',
-  //       field: 'price',
-  //       value: [0, searchFilters.priceMax]
-  //     })
-  //   }
-  //   if ((searchFilters?.ageOfProjectMax === 0 || searchFilters?.ageOfProjectMax) && dispatchAction && !searchFilters?.isFilteringAgeOfProject) {
-  //     dispatchAction({
-  //       type: 'updateSliderValue',
-  //       field: 'ageOfProject',
-  //       value: [0, searchFilters.ageOfProjectMax]
-  //     })
-  //   }
-  // }, [
-  //   searchFilters?.ageOfProjectMax,
-  //   searchFilters?.ageOfProject,
-  //   searchFilters?.priceMax,
-  //   searchFilters?.price,
-  //   searchFilters?.isFilteringPrice,
-  //   searchFilters?.isFilteringAgeOfProject
-  // ])
 
   /**
    * This ref is forwarded to the search input
