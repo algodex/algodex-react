@@ -145,20 +145,16 @@ export const Search = forwardRef(
       searchFilters?.price
     ])
 
-    const handleSliderChange = useCallback((e, newValue, activeThumb, field) => {
+    const handleSliderChange = useCallback((value, newValue, activeThumb, field) => {
       setActiveThumb(activeThumb)
       dispatchAction({
         type: 'updateSliderValue',
         field,
-        value: e.target.value
+        value
       })
     }, [
-      searchFilters?.priceMax,
       searchFilters?.price,
-      searchFilters?.isFilteringPrice,
-      searchFilters?.ageOfProjectMax,
       searchFilters?.ageOfProject,
-      searchFilters?.isFilteringAgeOfProject
     ])
 
     return (
@@ -233,7 +229,7 @@ export const Search = forwardRef(
                   value={searchFilters.ageOfProject}
                   onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
-                    handleSliderChange(e, newValue, activeThumb, 'ageOfProject')
+                    handleSliderChange(e.target.value, newValue, activeThumb, 'ageOfProject')
                   }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
@@ -264,7 +260,7 @@ export const Search = forwardRef(
                   value={getSliderValue()}
                   onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
-                    handleSliderChange(e, newValue, activeThumb, 'price')
+                    handleSliderChange(setSliderValueFn(activeThumb, e.target.value), newValue, activeThumb, 'price')
                   }}
                   aria-label="Small"
                   valueLabelDisplay="auto"
