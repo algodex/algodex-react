@@ -64,6 +64,10 @@ export const useTokenSale = (
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    if (formData.quantity <= 0) {
+      toast.error('Invalid sale amount')
+      return
+    }
     if (formData.quantity > selectedAsset.availableBalance) {
       toast.error('You cannot sell more than your available asa balance')
       return
