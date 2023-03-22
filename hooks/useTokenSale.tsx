@@ -16,6 +16,9 @@
 
 import { activeWalletTypes, selectedAsset } from '@/components/types'
 import { useContext, useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useAlgodex } from '@/hooks'
+
 import { WalletReducerContext } from './WalletsReducerProvider'
 
 const columns = [
@@ -44,16 +47,65 @@ export const useTokenSale = (
   initialValues: unknown
 ) => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
+  const { placeOrder } = useAlgodex()
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
   const windowHost = globalThis.location
     ? globalThis.location.protocol + '//' + globalThis.location.host
     : null
+  let lastToastId
+  const notifier = (msg) => {
+    if (lastToastId) {
+      toast.dismiss(lastToastId)
+    }
+    if (msg === null) return
+    lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    if (formData.quantity > selectedAsset.availableBalance) {
+      toast.error('You cannot sell more than your available asa balance')
+      return
+    }
+    createTokenSale()
+  }
+
+  const createTokenSale = async () => {
+    const formattedOrder = {
+      asset: {
+        id: Number(formData.assetId), // Asset Index
+        decimals: Number(formData.decimals) // Asset Decimals
+      },
+      execution: 'both', // Type of exeuction
+      type: 'sell', // Order Type
+      address: activeWallet.address,
+      wallet: activeWallet,
+      appId: 22045522,
+      version: 6,
+      amount: Number(formData.quantity), // Amount to Sell
+      price: Number(formData.perUnit) // Price in ALGOs
+    }
+    console.log({ formattedOrder })
+    // return
     setLoading(true)
-    setLoading(false)
+    notifier('Initializing order')
+    await placeOrder(formattedOrder, { wallet: activeWallet }, notifier)
+      .then((res) => {
+        setLoading(false)
+        console.log({ res })
+        // notifier('Order successfully placed')
+        notifier(null)
+        lastToastId = toast.success('Order successfully placed')
+      })
+      .catch((err) => {
+        console.log(err)
+        setLoading(false)
+        toast.error(`Error: ${err.message}`, {
+          id: lastToastId,
+          duration: 5000
+        })
+      })
   }
 
   const resetForm = () => {
@@ -84,10 +136,8 @@ export const useTokenSale = (
       setFormData((prev) => ({
         ...prev,
         assetId: `${selectedAsset.assetId}`,
-        clawbackAddr: selectedAsset.params.clawback,
         reserveAddr: selectedAsset.params.reserve,
-        managerAddr: selectedAsset.params.manager,
-        freezeAddr: selectedAsset.params.freeze
+        decimals: selectedAsset.params.decimals
       }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

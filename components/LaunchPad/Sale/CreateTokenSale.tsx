@@ -33,7 +33,9 @@ import { useTokenSale } from '@/hooks/useTokenSale'
 const initialValues = {
   assetId: '',
   quantity: '',
-  perUnit: ''
+  perUnit: '',
+  decimals: '',
+  reserveAddr: ''
 }
 
 export const CreateTokenSale = () => {
@@ -129,18 +131,22 @@ export const CreateTokenSale = () => {
                   onChange={(e) => onChange(e)}
                   sx={styles.input}
                 />
-                <Typography
-                  className="my-5 text-center"
-                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
-                >
-                  1 {selectedAsset.params['unit-name']} UNIT = X ALGO
-                </Typography>
-                <Typography
-                  className="text-center opacity-70"
-                  sx={{ fontSize: '15px', fontStyle: 'italic' }}
-                >
-                  1 ALGO = .56 {selectedAsset.params['unit-name']}
-                </Typography>
+                {/* {formData.perUnit && ( */}
+                  <>
+                    <Typography
+                      className="my-5 text-center"
+                      sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                    >
+                      1 {selectedAsset.params['unit-name']} UNIT = X ALGO
+                    </Typography>
+                    <Typography
+                      className="text-center opacity-70"
+                      sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                    >
+                      1 ALGO = .56 {selectedAsset.params['unit-name']}
+                    </Typography>
+                  </>
+                {/* )} */}
               </Box>
             </Box>
 
