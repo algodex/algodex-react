@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useMemo, useState, useReducer, useCallback } from 'react'
+import { createRef, forwardRef, useEffect, useMemo, useState, useReducer, useCallback } from 'react'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { X as CancelIcon } from 'react-feather'
@@ -111,7 +111,6 @@ export const Search = forwardRef(
     }
 
     const [activeThumb, setActiveThumb] = useState(0)
-    
 
     // Set the slider value from the logarithmic scale
     const setSliderValueFn = useCallback((activeThumb, value) => {
@@ -144,6 +143,24 @@ export const Search = forwardRef(
       searchFilters?.priceMax,
       searchFilters?.price
     ])
+
+    const handleSliderChange = useCallback((e, newValue, activeThumb) => {
+      !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
+      setActiveThumb(activeThumb)
+      dispatchAction({
+        type: 'updateSliderValue',
+        field: 'ageOfProject',
+        value: e.target.value
+      })
+    }, [
+      searchFilters?.priceMax,
+      searchFilters?.price,
+      searchFilters?.isFilteringPrice,
+      searchFilters?.ageOfProjectMax,
+      searchFilters?.ageOfProject,
+      searchFilters?.isFilteringAgeOfProject
+    ])
+
 
     return (
       <div>
@@ -215,15 +232,7 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={searchFilters.ageOfProject}
-                  onChange={(e, newValue, activeThumb) => {
-                    !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
-                    setActiveThumb(activeThumb)
-                    dispatchAction({
-                      type: 'updateSliderValue',
-                      field: 'ageOfProject',
-                      value: e.target.value
-                    })
-                  }}
+                  onChange={(e, newValue, activeThumb) => handleSliderChange(e, newValue, activeThumb)}
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   disableSwap
@@ -251,15 +260,7 @@ export const Search = forwardRef(
                     width: '70%'
                   }}
                   value={getSliderValue()}
-                  onChange={(e, newValue, activeThumb) => {
-                    !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
-                    setActiveThumb(activeThumb)
-                    dispatchAction({
-                      type: 'updateSliderValue',
-                      field: 'price',
-                      value: setSliderValueFn(activeThumb, e.target.value)
-                    })
-                  }}
+                  onChange={(e, newValue, activeThumb) => handleSliderChange(e, newValue, activeThumb)}
                   aria-label="Small"
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
@@ -316,6 +317,30 @@ export function SearchInput(props) {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
   }, [onChange, searchText])
+
+  // useEffect(() => {
+  //   if ((searchFilters?.priceMax === 0 || searchFilters?.priceMax) && dispatchAction && !searchFilters?.isFilteringPrice) {
+  //     dispatchAction({
+  //       type: 'updateSliderValue',
+  //       field: 'price',
+  //       value: [0, searchFilters.priceMax]
+  //     })
+  //   }
+  //   if ((searchFilters?.ageOfProjectMax === 0 || searchFilters?.ageOfProjectMax) && dispatchAction && !searchFilters?.isFilteringAgeOfProject) {
+  //     dispatchAction({
+  //       type: 'updateSliderValue',
+  //       field: 'ageOfProject',
+  //       value: [0, searchFilters.ageOfProjectMax]
+  //     })
+  //   }
+  // }, [
+  //   searchFilters?.ageOfProjectMax,
+  //   searchFilters?.ageOfProject,
+  //   searchFilters?.priceMax,
+  //   searchFilters?.price,
+  //   searchFilters?.isFilteringPrice,
+  //   searchFilters?.isFilteringAgeOfProject
+  // ])
 
   /**
    * This ref is forwarded to the search input
