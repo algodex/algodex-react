@@ -50,7 +50,7 @@ export const useTokenSale = (
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
   const { placeOrder } = useAlgodex()
   const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
-
+  const [isEdit, setIsEdit] = useState(null)
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
@@ -67,26 +67,33 @@ export const useTokenSale = (
     lastToastId = toast.loading(msg, { duration: 30 * 60 * 1000 }) // Awaiting signature, or awaiting confirmations
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e, page) => {
     e.preventDefault()
     let _error = false
-    if (!formData.perUnit || formData.perUnit <= 0) {
-      setError((prev) => ({ ...prev, perUnit: 'Invalid algo unit!' }))
+    if (!Number(formData.perUnit) || Number(formData.perUnit) <= 0) {
+      setError((prev) => ({
+        ...prev,
+        [page === 'create' ? 'perUnit' : 'tempPerUnit']: 'Invalid algo unit!'
+      }))
       _error = true
     }
 
-    if (!formData.quantity || formData.quantity <= 0) {
-      setError((prev) => ({ ...prev, quantity: 'Invalid sale amount!' }))
+    if (!Number(formData.quantity) || Number(formData.quantity) <= 0) {
+      setError((prev) => ({
+        ...prev,
+        [page === 'create' ? 'quantity' : 'tempQuantity']: 'Invalid sale amount!'
+      }))
       _error = true
     }
 
-    if (formData.quantity > selectedAsset.availableBalance) {
+    if (Number(formData.quantity) > selectedAsset.availableBalance) {
       setError((prev) => ({
         ...prev,
         quantity: 'You cannot sell more than your available asa balance'
       }))
       _error = true
     }
+
     if (maxSpendableAlgo === 0) {
       toast.error(
         'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
@@ -95,8 +102,28 @@ export const useTokenSale = (
     }
     if (!_error) {
       setError(null)
-      createTokenSale()
+      page === 'create' ? createTokenSale() : manageTokenSale()
     }
+  }
+
+  const manageTokenSale = async () => {
+    const formattedOrder = {
+      asset: {
+        id: Number(formData.assetId), // Asset Index
+        decimals: Number(formData.decimals) // Asset Decimals
+      },
+      execution: 'both', // Type of exeuction
+      type: 'sell', // Order Type
+      address: activeWallet.address,
+      wallet: activeWallet,
+      appId: 22045522,
+      version: 6,
+      amount: Number(formData.quantity), // Amount to Sell
+      price: Number(formData.perUnit) // Price in ALGOs
+    }
+    console.log(formattedOrder)
+    // setLoading(true)
+    // notifier('Initializing order')
   }
 
   const createTokenSale = async () => {
@@ -114,7 +141,6 @@ export const useTokenSale = (
       amount: Number(formData.quantity), // Amount to Sell
       price: Number(formData.perUnit) // Price in ALGOs
     }
-    // return
     setLoading(true)
     notifier('Initializing order')
     await placeOrder(formattedOrder, { wallet: activeWallet }, notifier)
@@ -143,6 +169,33 @@ export const useTokenSale = (
     setError((prev) => ({ ...prev, all: '' }))
   }
 
+  const handleEdit = (e: { target: { name: string; value: string } } | null) => {
+    if (e) {
+      setFormData({ ...formData, [e.target.name]: e.target.value })
+      setIsEdit(e.target.name)
+    } else {
+      setIsEdit(e)
+    }
+  }
+
+  const confirmEdit = async (inputName: string, inputValue: string) => {
+    if (inputValue) {
+      setFormData({ ...formData, [inputName]: inputValue })
+      handleEdit(null)
+    }
+  }
+
+  const cancelEdit = (inputName?: string, inputValue?: string) => {
+    if (inputName && inputValue) {
+      setFormData({ ...formData, [inputName]: inputValue }) // Reset the edit field
+    }
+    handleEdit(null)
+    //Clear out error message if any
+    resetError({
+      target: { name: inputName }
+    })
+  }
+
   const rowData = useMemo(() => {
     if (activeWallet && activeWallet['created-assets']) {
       return activeWallet['created-assets']
@@ -161,6 +214,7 @@ export const useTokenSale = (
     return []
   }, [activeWallet, formData.assetId])
 
+  console.log(selectedAsset)
   useEffect(() => {
     if (selectedAsset) {
       setFormData((prev) => ({
@@ -184,6 +238,10 @@ export const useTokenSale = (
     columns,
     loading,
     windowHost,
-    resetForm
+    resetForm,
+    isEdit,
+    cancelEdit,
+    confirmEdit,
+    handleEdit
   }
 }

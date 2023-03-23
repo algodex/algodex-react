@@ -86,7 +86,7 @@ export const CreateTokenSale = () => {
         A sale must be started from either the Creator or the Reserve wallet of the ASA. Ensure the
         correct wallet is connected or you will not be able to start a sale.
       </Typography>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => onSubmit(e, 'create')}>
         <Box className="mb-8">
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Asset:
