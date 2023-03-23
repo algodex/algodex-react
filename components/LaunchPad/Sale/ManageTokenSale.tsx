@@ -34,14 +34,14 @@ import { EditableField } from './EditableField'
 const initialValues = {
   assetId: '',
   perUnit: '',
-  tempPerUnit: '',
+  // tempPerUnit: '',
   quantity: '',
   tempQuantity: ''
 }
 
 export const ManageTokenSale = () => {
   const [formData, setFormData] = useState(initialValues)
-  const { assetId, perUnit, tempPerUnit, quantity, tempQuantity } = formData
+  const { assetId, perUnit, quantity, tempQuantity } = formData
   const {
     rowData,
     resetError,
