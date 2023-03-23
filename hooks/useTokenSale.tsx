@@ -94,7 +94,8 @@ export const useTokenSale = (
     if (Number(formData.quantity) > selectedAsset.availableBalance) {
       setError((prev) => ({
         ...prev,
-        quantity: 'You cannot sell more than your available asa balance'
+        [page === 'create' ? 'quantity' : 'tempQuantity']:
+          'You cannot sell more than your available asa balance'
       }))
       _error = true
     }
@@ -107,28 +108,8 @@ export const useTokenSale = (
     }
     if (!_error) {
       setError(null)
-      page === 'create' ? createTokenSale() : manageTokenSale()
+      createTokenSale()
     }
-  }
-
-  const manageTokenSale = async () => {
-    const formattedOrder = {
-      asset: {
-        id: Number(formData.assetId), // Asset Index
-        decimals: Number(formData.decimals) // Asset Decimals
-      },
-      execution: 'both', // Type of exeuction
-      type: 'sell', // Order Type
-      address: activeWallet.address,
-      wallet: activeWallet,
-      appId: 22045522,
-      version: 6,
-      amount: Number(formData.quantity), // Amount to Sell
-      price: Number(formData.perUnit) // Price in ALGOs
-    }
-    console.log(formattedOrder)
-    // setLoading(true)
-    // notifier('Initializing order')
   }
 
   const createTokenSale = async () => {
@@ -146,13 +127,23 @@ export const useTokenSale = (
       amount: Number(formData.quantity), // Amount to Sell
       price: Number(formData.perUnit) // Price in ALGOs
     }
+
     setLoading(true)
     notifier('Initializing order')
     await placeOrder(formattedOrder, { wallet: activeWallet }, notifier)
       .then(() => {
         setLoading(false)
         notifier(null)
-        lastToastId = toast.success('Order successfully placed')
+        lastToastId = toast.success(
+          `Order successfully ${page === 'create' ? 'placed' : 'updated'}`
+        )
+        if (page === 'manage') {
+          setSelectedAsset((prev) => ({
+            ...prev,
+            availableBalance: prev.availableBalance - formData.quantity,
+            quantity: formData.quantity
+          }))
+        }
       })
       .catch((err) => {
         setLoading(false)
@@ -267,8 +258,6 @@ export const useTokenSale = (
     }
     return null
   }, [orders, activeWallet])
-
-  console.log({ salesToManage })
 
   const rowData = useMemo(() => {
     // Return empty if user is on manage sales page and there is no sale to manage

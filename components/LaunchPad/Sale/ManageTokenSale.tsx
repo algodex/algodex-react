@@ -71,7 +71,7 @@ export const ManageTokenSale = () => {
     if (selectedAsset) {
       return Math.round(
         ((selectedAsset.totalQuantity - selectedAsset.availableBalance) /
-          selectedAsset.availableBalance) *
+          selectedAsset.totalQuantity) *
           100
       )
     }
@@ -192,12 +192,16 @@ export const ManageTokenSale = () => {
                   tempInputName={'tempQuantity'}
                   onChange={onChange}
                   placeholder={'Enter No. of Tokens on Sale'}
+                  additionalText={'ALGO'}
                 />
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Price Per Token</Typography>
-                <EditableField
+                <Typography className="flex items-center" sx={styles.value}>
+                  {perUnit} ALGO
+                </Typography>
+                {/* <EditableField
                   confirmEdit={confirmEdit}
                   handleEdit={handleEdit}
                   cancelEdit={cancelEdit}
@@ -210,7 +214,7 @@ export const ManageTokenSale = () => {
                   tempInputName={'tempPerUnit'}
                   onChange={onChange}
                   placeholder={'Enter Price per Token'}
-                />
+                /> */}
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="flex justify-center gap-4 mt-7">

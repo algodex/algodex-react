@@ -22,7 +22,8 @@ export const EditableField = ({
   tempInputValue,
   tempInputName,
   onChange,
-  placeholder
+  placeholder,
+  additionalText
 }: {
   confirmEdit: (inputName: string, inputValue: string | number) => void
   handleEdit: (e: { target: { name: string; value: string | number } }) => void
@@ -36,6 +37,7 @@ export const EditableField = ({
   tempInputName: string
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   placeholder: string
+  additionalText?: string
 }) => {
   return (
     <Box sx={styles.fillAvailable}>
@@ -66,7 +68,7 @@ export const EditableField = ({
         </Box>
       ) : (
         <Typography className="flex items-center" sx={styles.value}>
-          {inputValue} ALGO
+          {inputValue} {additionalText}
           {isEligible && (
             <Icon
               icon="material-symbols:edit"
