@@ -113,6 +113,12 @@ export const useTokenSale = (
   }
 
   const createTokenSale = async () => {
+    if (page === 'create' && salesToManage && salesToManage[formData.assetId]) {
+      toast.error(
+        'There is an active sale on this token, end sale to create a new one or update the token quantity on the manage token sale page'
+      )
+      return
+    }
     const formattedOrder = {
       asset: {
         id: Number(formData.assetId), // Asset Index
