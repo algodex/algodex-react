@@ -269,14 +269,6 @@ export const NavSearchTable = ({
         type: 'setPriceMax',
         value: parseInt(sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice)
       })
-      const priceMax = parseInt(sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice)
-      if ((searchFilters?.priceMax === 0 || searchFilters?.priceMax) && setSearchFilterProps && !searchFilters?.isFilteringPrice) {
-        setSearchFilterProps({
-          type: 'updateSliderValue',
-          field: 'price',
-          value: [0, priceMax]
-        })
-      }
     }
   }, [geoFormattedAssets])
 
@@ -288,14 +280,6 @@ export const NavSearchTable = ({
         field: 'ageOfProjectMax',
         value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1]?.ageOfProject
       })
-      const ageOfProjectMax = sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1]?.ageOfProject
-      if ((searchFilters?.ageOfProjectMax === 0 || searchFilters?.ageOfProjectMax) && setSearchFilterProps && !searchFilters?.isFilteringAgeOfProject) {
-        setSearchFilterProps({
-          type: 'updateSliderValue',
-          field: 'ageOfProject',
-          value: [0, ageOfProjectMax]
-        })
-      }
     }
   }, [formattedWithAgeOfProject])
 
@@ -383,6 +367,26 @@ export const NavSearchTable = ({
     searchFilters?.isFilteringAgeOfProject,
     searchFilters?.isFilteringNFTOnly,
     searchFilters?.isFilteringPrice
+  ])
+
+  useEffect(() => {
+    if ((searchFilters?.priceMax === 0 || searchFilters?.priceMax) && setSearchFilterProps && !searchFilters?.isFilteringPrice) {
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'price',
+        value: [0, searchFilters.priceMax]
+      })
+    }
+    if ((searchFilters?.ageOfProjectMax === 0 || searchFilters?.ageOfProjectMax) && setSearchFilterProps && !searchFilters?.isFilteringAgeOfProject) {
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'ageOfProject',
+        value: [0, searchFilters.ageOfProjectMax]
+      })
+    }
+  }, [
+    searchFilters?.ageOfProjectMax,
+    searchFilters?.priceMax
   ])
 
   const AssetPriceCell = useCallback(
