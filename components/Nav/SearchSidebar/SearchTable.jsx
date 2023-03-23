@@ -323,6 +323,13 @@ export const NavSearchTable = ({
       // Filter Asset By price
       if (searchFilters?.isFilteringPrice) {
         const updatedList = [...filteredList].filter((asset) => asset.formattedPrice >= searchFilters.price[0] && asset.formattedPrice <= searchFilters.price[1])
+        // console.log(
+        //   updatedList, 
+        //   filteredList,
+        //   searchFilters.price[0], 
+        //   searchFilters.price[1], 
+        //   'updated price list here'
+        // )
         filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
       }
 

@@ -113,18 +113,49 @@ export const Search = forwardRef(
     const [activeThumb, setActiveThumb] = useState(0)
     
 
+    // // Set the slider value from the logarithmic scale
+    // const setSliderValueFn = useCallback((activeThumb, value, newValue) => {
+    //   console.log(activeThumb, value, 'active thumb')
+    //   const min = parseInt(1)
+    //   const max = parseInt(searchFilters.priceMax)
+    //   const logMin = Math.log10(parseInt(min))
+    //   const logMax = Math.log10(parseInt(max))
+    //   const logValue = Math.pow(10, (value[activeThumb] - min) / (max - min) * (logMax - logMin) + logMin)
+    //   if (activeThumb === 0) {
+    //     return [parseInt(logValue), value[1]]
+    //   } else {
+    //     return [value[0], parseInt(logValue)]
+    //   }
+    // }, [searchFilters?.priceMax])
+
+
+    // // Get the slider value from the logarithmic scale
+    // const getSliderValue = useCallback(() => {
+    //   console.log(searchFilters.price, searchFilters.priceMax, 'price max')
+    //   const min = parseInt(1)
+    //   const max = parseInt(searchFilters.priceMax || 1)
+    //   const logMin = Math.log10(min)
+    //   const logMax = Math.log10(max)
+    //   const logValue = Math.log10(searchFilters.price[activeThumb] || 1)
+    //   if (activeThumb === 0) {
+    //     return [Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[1]]
+    //   } else {
+    //     return [searchFilters.price[0], Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)]
+    //   }
+    // }, [
+    //   searchFilters?.priceMax,
+    //   searchFilters?.price
+    // ])
+
     // Set the slider value from the logarithmic scale
-    const setSliderValueFn = useCallback((activeThumb, value) => {
+    const setSliderValueFn = useCallback((activeThumb, value, newValue) => {
       const min = parseInt(1)
       const max = parseInt(searchFilters.priceMax)
       const logMin = Math.log10(parseInt(min))
       const logMax = Math.log10(parseInt(max))
-      const logValue = Math.pow(10, (value[activeThumb] - min) / (max - min) * (logMax - logMin) + logMin)
-      if (activeThumb === 0) {
-        return [parseInt(logValue), value[1]]
-      } else {
-        return [value[0], parseInt(logValue)]
-      }
+      const start = Math.pow(10, (value[0] - min) / (max - min) * (logMax - logMin) + logMin)
+      const end = Math.pow(10, (value[1] - min) / (max - min) * (logMax - logMin) + logMin)
+      return [Math.round(start), Math.round(end)]
     }, [searchFilters?.priceMax])
 
 
@@ -134,12 +165,11 @@ export const Search = forwardRef(
       const max = parseInt(searchFilters.priceMax || 1)
       const logMin = Math.log10(min)
       const logMax = Math.log10(max)
-      const logValue = Math.log10(searchFilters.price[activeThumb] || 1)
-      if (activeThumb === 0) {
-        return [Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[1]]
-      } else {
-        return [searchFilters.price[0], Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)]
-      }
+      const start = Math.log10(searchFilters.price[0] || 1)
+      const end = Math.log10(searchFilters.price[1] || 1)
+      const startLog = Math.round((start - logMin) / (logMax - logMin) * (max - min) + min)
+      const endLog = Math.round((end - logMin) / (logMax - logMin) * (max - min) + min)
+      return [startLog, endLog]
     }, [
       searchFilters?.priceMax,
       searchFilters?.price
@@ -255,7 +285,7 @@ export const Search = forwardRef(
                   value={getSliderValue()}
                   onChange={(e, newValue, activeThumb) => {
                     !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
-                    handleSliderChange(setSliderValueFn(activeThumb, e.target.value), newValue, activeThumb, 'price')
+                    handleSliderChange(setSliderValueFn(activeThumb, e.target.value, newValue), newValue, activeThumb, 'price')
                   }}
                   valueLabelDisplay="auto"
                   valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
