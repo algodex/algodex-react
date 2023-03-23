@@ -53,11 +53,13 @@ export const ManageTokenSale = () => {
     windowHost,
     resetForm,
     error,
+    loading,
     isEdit,
     cancelEdit,
     confirmEdit,
-    handleEdit
-  } = useTokenSale(formData, setFormData, initialValues)
+    handleEdit,
+    endSale
+  } = useTokenSale(formData, setFormData, initialValues, 'manage')
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -102,7 +104,7 @@ export const ManageTokenSale = () => {
         You can only manage sales that have been created with the connected wallet. If you do not
         see an expected asset, confirm the correct wallet is connected above.
       </Typography>
-      <form onSubmit={(e) => onSubmit(e, 'manage')}>
+      <form onSubmit={onSubmit}>
         <Box className="mb-6">
           <Typography variant="subtitle2" sx={{ ...styles.subtitle2, mb: '13px' }}>
             Choose Sale to Manage:
@@ -215,6 +217,7 @@ export const ManageTokenSale = () => {
                 <Button
                   type="submit"
                   variant="outlined"
+                  disabled={loading}
                   sx={{
                     ...styles.btnOutline,
                     borderColor: 'green.500',
@@ -227,6 +230,8 @@ export const ManageTokenSale = () => {
                 </Button>
                 <Button
                   type="button"
+                  onClick={endSale}
+                  disabled={loading}
                   sx={{
                     ...styles.btnOutline,
                     borderColor: 'red.600',

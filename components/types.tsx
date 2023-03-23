@@ -47,7 +47,7 @@ export type activeWalletTypes = {
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    signTransaction?: (arg: unknown) => ({ blob: Uint8Array | Uint8Array[] } | any)
+    signTransaction?: (arg: unknown) => { blob: Uint8Array | Uint8Array[] } | any
     timeout: number
     url: string
     currentConnectPopup: unknown
@@ -90,4 +90,6 @@ export type selectedAsset = {
   params: assetParam
   totalQuantity?: number
   availableBalance?: number
+  price?: number
+  amount?: number
 }
