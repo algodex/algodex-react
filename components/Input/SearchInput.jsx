@@ -111,41 +111,6 @@ export const Search = forwardRef(
     }
 
     const [activeThumb, setActiveThumb] = useState(0)
-    
-
-    // // Set the slider value from the logarithmic scale
-    // const setSliderValueFn = useCallback((activeThumb, value, newValue) => {
-    //   console.log(activeThumb, value, 'active thumb')
-    //   const min = parseInt(1)
-    //   const max = parseInt(searchFilters.priceMax)
-    //   const logMin = Math.log10(parseInt(min))
-    //   const logMax = Math.log10(parseInt(max))
-    //   const logValue = Math.pow(10, (value[activeThumb] - min) / (max - min) * (logMax - logMin) + logMin)
-    //   if (activeThumb === 0) {
-    //     return [parseInt(logValue), value[1]]
-    //   } else {
-    //     return [value[0], parseInt(logValue)]
-    //   }
-    // }, [searchFilters?.priceMax])
-
-
-    // // Get the slider value from the logarithmic scale
-    // const getSliderValue = useCallback(() => {
-    //   console.log(searchFilters.price, searchFilters.priceMax, 'price max')
-    //   const min = parseInt(1)
-    //   const max = parseInt(searchFilters.priceMax || 1)
-    //   const logMin = Math.log10(min)
-    //   const logMax = Math.log10(max)
-    //   const logValue = Math.log10(searchFilters.price[activeThumb] || 1)
-    //   if (activeThumb === 0) {
-    //     return [Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min), searchFilters.price[1]]
-    //   } else {
-    //     return [searchFilters.price[0], Math.round((logValue - logMin) / (logMax - logMin) * (max - min) + min)]
-    //   }
-    // }, [
-    //   searchFilters?.priceMax,
-    //   searchFilters?.price
-    // ])
 
     // Set the slider value from the logarithmic scale
     const setSliderValueFn = useCallback((activeThumb, value, newValue) => {
