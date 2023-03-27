@@ -192,7 +192,7 @@ export const ManageTokenSale = () => {
                   tempInputName={'tempQuantity'}
                   onChange={onChange}
                   placeholder={'Enter No. of Tokens on Sale'}
-                  additionalText={'ALGO'}
+                  additionalText={selectedAsset.params['unit-name']}
                 />
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
@@ -221,7 +221,7 @@ export const ManageTokenSale = () => {
                 <Button
                   type="submit"
                   variant="outlined"
-                  disabled={loading}
+                  disabled={loading || selectedAsset.amount === Number(formData.quantity)}
                   sx={{
                     ...styles.btnOutline,
                     borderColor: 'green.500',

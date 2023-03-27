@@ -75,44 +75,61 @@ export const useTokenSale = (
   const onSubmit = async (e) => {
     e.preventDefault()
     let _error = false
-    if (!Number(formData.perUnit) || Number(formData.perUnit) <= 0) {
-      setError((prev) => ({
-        ...prev,
-        [page === 'create' ? 'perUnit' : 'tempPerUnit']: 'Invalid algo unit!'
-      }))
-      _error = true
+    let quantityForSale: number
+
+    if (page === 'create') {
+      quantityForSale = Number(formData.quantity)
+    } else {
+      if (formData.quantity < selectedAsset.amount) {
+        toast.error(
+          'You need to end existing sale before you can reduce the total amount for sale.'
+        )
+        return
+      }
+      quantityForSale = formData.quantity - selectedAsset.amount
     }
 
-    if (!Number(formData.quantity) || Number(formData.quantity) <= 0) {
-      setError((prev) => ({
-        ...prev,
-        [page === 'create' ? 'quantity' : 'tempQuantity']: 'Invalid sale amount!'
-      }))
-      _error = true
-    }
+    if (quantityForSale) {
+      if (!Number(formData.perUnit) || Number(formData.perUnit) <= 0) {
+        setError((prev) => ({
+          ...prev,
+          [page === 'create' ? 'perUnit' : 'tempPerUnit']: 'Invalid algo unit!'
+        }))
+        _error = true
+      }
 
-    if (Number(formData.quantity) > selectedAsset.availableBalance) {
-      setError((prev) => ({
-        ...prev,
-        [page === 'create' ? 'quantity' : 'tempQuantity']:
-          'You cannot sell more than your available asa balance'
-      }))
-      _error = true
-    }
+      if (quantityForSale <= 0) {
+        setError((prev) => ({
+          ...prev,
+          [page === 'create' ? 'quantity' : 'tempQuantity']: 'Invalid sale amount!'
+        }))
+        _error = true
+      }
 
-    if (maxSpendableAlgo === 0) {
-      toast.error(
-        'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
-      )
-      _error = true
-    }
-    if (!_error) {
-      setError(null)
-      createTokenSale()
+      if (quantityForSale > selectedAsset.availableBalance) {
+        setError((prev) => ({
+          ...prev,
+          [page === 'create' ? 'quantity' : 'tempQuantity']:
+            'You cannot sell more than your available ASA balance'
+        }))
+        _error = true
+      }
+
+      if (maxSpendableAlgo === 0) {
+        toast.error(
+          'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
+        )
+        _error = true
+      }
+      if (!_error) {
+        setError(null)
+
+        createTokenSale(quantityForSale)
+      }
     }
   }
 
-  const createTokenSale = async () => {
+  const createTokenSale = async (amount: number) => {
     if (page === 'create' && salesToManage && salesToManage[formData.assetId]) {
       toast.error(
         'There is an active sale on this token, end sale to create a new one or update the token quantity on the manage token sale page'
@@ -130,7 +147,7 @@ export const useTokenSale = (
       wallet: activeWallet,
       appId: 22045522,
       version: 6,
-      amount: Number(formData.quantity), // Amount to Sell
+      amount, // Amount to Sell
       price: Number(formData.perUnit) // Price in ALGOs
     }
 
@@ -146,7 +163,7 @@ export const useTokenSale = (
         if (page === 'manage') {
           setSelectedAsset((prev) => ({
             ...prev,
-            availableBalance: prev.availableBalance - formData.quantity,
+            availableBalance: prev.availableBalance - amount,
             quantity: formData.quantity
           }))
         }
