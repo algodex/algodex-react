@@ -376,16 +376,6 @@ function WalletConnect() {
           </Box>
         </>
       )}
-      <WalletView
-        addresses={addressesNew}
-        setAddresses={setAddressesNew}
-        activeWallet={activeWallet}
-        signedIn={signedIn}
-        setSignedIn={() => console.log('setSignedINcalled')}
-        setActiveWallet={setActiveWallet}
-        setIsConnectingWallet={setIsConnectingWallet}
-        addressesRef={addressesRef}
-      />
     </Box>
   )
 }
