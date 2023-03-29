@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Button, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material'
+import { Box, Button, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material'
 import {
   Container,
   IconLogo,
@@ -25,11 +25,11 @@ import {
   NavTextSmWrapper,
   Navigation
 } from './header.css'
-// import { useCallback, useState } from 'react'
-
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+import { getWalletLogo } from '../../helpers'
+
 // import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
@@ -43,11 +43,12 @@ import { useEvent } from 'hooks/useEvents'
 import useWallets from '@/hooks/useWallets'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
-import { useState, useContext, useCallback } from 'react'
+import { useState, useContext, useCallback, useRef, useEffect } from 'react'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from 'store/use-user-state'
 import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
 // import useWallets from '@/hooks/useWallets'
+import Image from 'next/image'
 
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -169,6 +170,26 @@ export function Header() {
               <Typography variant="navText">{t('header-rewards')}</Typography>
             </NavTextLgWrapper>
           </NavActiveLink>
+          {/* <Box className="flex items-center border-solid border rounded justify-between w-4/5 p-1.5">
+            <Image
+              src={getWalletLogo(wallet)}
+              alt="Algorand Wallet Client Image"
+              style={{ borderRadius: '100%' }}
+              width={18}
+              height={18}
+            />
+            &nbsp;
+            <Typography>{truncatedWalletAddress(address, 5)}</Typography>
+            <Icon
+              onClick={() => copyAddress(address)}
+              path={mdiContentCopy}
+              title="Copy Address"
+              size={0.8}
+              className="cursor-pointer"
+              color="#FFFFFF"
+            />
+          </Box> */}
+
           <Button
             onClick={() => {
               setOpenWalletConnectDropdown(!openWalletConnectDropdown)
@@ -178,11 +199,24 @@ export function Header() {
             variant="outlined"
           >
             {wallet && wallet?.connector?.connected && wallet?.address
-              ? `${truncatedWalletAddress(wallet.address, 5)}`
+              ?
+              <>
+                <Image
+                  src={getWalletLogo(wallet)}
+                  alt="Algorand Wallet Client Image"
+                  style={{ borderRadius: '100%' }}
+                  width={15}
+                  height={15}
+                />&nbsp;
+                {`${truncatedWalletAddress(wallet.address, 6)}`}
+              </>
               : 'CONNECT A WALLET'}
           </Button>
           {openWalletConnectDropdown && (
-            <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
+            <WalletConnectDropdown
+              setOpenWalletConnectDropdown={setOpenWalletConnectDropdown}
+              openWalletConnectDropdown={openWalletConnectDropdown}
+              closeDropdown={() => setOpenWalletConnectDropdown(false)} />
           )}
           <LanguageSelection isMobile={isMobile} />
         </Navigation>

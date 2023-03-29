@@ -1,5 +1,5 @@
 import { filter, find, reduceRight } from 'lodash'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import useWallets, { WalletsContext } from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../../hooks/WalletsReducerProvider'
 
@@ -42,7 +42,7 @@ const Container = styled.div`
   top: 4rem;
 `
 
-const WalletConnectDropdown = ({ closeDropdown }) => {
+const WalletConnectDropdown = ({ closeDropdown, openWalletConnectDropdown, setOpenWalletConnectDropdown }) => {
   const { http } = useAlgodex()
   // const [addresses] = useContext(WalletsContext)
   const {
@@ -56,14 +56,38 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
     setMyAlgoAddresses
   } = useContext(WalletReducerContext)
   // const [addresses, setAddresses] = useContext(WalletsContext)
-  const { wallet, peraConnect, myAlgoConnect } = useWallets(closeDropdown)
+  const { 
+    wallet, 
+    peraConnect, 
+    myAlgoConnect, 
+    peraDisconnect: _peraDisconnect,
+    myAlgoDisconnect: _myAlgoDisconnect 
+  } = useWallets(closeDropdown)
   // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect
   }
-  // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
+  const dropDownRef = useRef()
+  const handleClickOutside = e => {
+    if (dropDownRef.current.contains(e.target)) {
+      return;
+    }
+    setOpenWalletConnectDropdown(false);
+  };
 
+  useEffect(() => {
+    if (openWalletConnectDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openWalletConnectDropdown]);
+  // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
   const myAlgoOnClick = async () => {
     console.log('myAlogOnClick')
     console.log('hit')
@@ -96,36 +120,64 @@ const WalletConnectDropdown = ({ closeDropdown }) => {
   const sortedWalletsList = useMemo(() => {
     if (addressesNew) {
       //**may need to change */
-      const activeWallet = find(addressesNew, (o) => o.address === wallet?.address)
-      const inactiveWallet = filter(addressesNew, (o) => o.address !== wallet?.address)
+      const active = find(addressesNew, (o) => o.address === activeWallet?.address)
+      const inactiveWallet = filter(addressesNew, (o) => o.address !== activeWallet?.address)
       return {
-        activeWallet,
+        activeWallet: active,
         inactiveWallet
       }
     }
-  }, [addressesNew, wallet])
+  }, [addressesNew, activeWallet])
+
+  // const {
+  //   // myAlgoConnector,
+  //   peraDisconnect: _peraDisconnect,
+  //   myAlgoDisconnect: _myAlgoDisconnect
+  // } = useWallets(wallet)
+
+  const myAlgoDisconnect = (targetWallet) => {
+    _myAlgoDisconnect(targetWallet)
+  }
+
+  const peraDisconnect = useCallback(
+    (targetWallet) => {
+      _peraDisconnect(targetWallet)
+    },
+    [_peraDisconnect]
+  )
+
+  const walletDisconnectMap = {
+    'my-algo-wallet': (wallet) => {
+      myAlgoDisconnect(wallet)
+    },
+    'wallet-connect': (wallet) => peraDisconnect(wallet)
+  }
 
   return (
     <Container className="">
-      <div className="flex flex-col justify-between">
+      <div ref={dropDownRef} className="flex flex-col justify-between">
         <DropdownHeader closeFn={closeDropdown} />
         <DropdownBody
-          activeWalletAddress={wallet?.address}
+          wallet={activeWallet}
+          activeWalletAddress={activeWallet?.address}
           sortedWalletsList={sortedWalletsList}
           closeFn={closeDropdown}
           addresses={addressesNew}
+          walletDisconnectMap={walletDisconnectMap}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
           isPeraConnected={isPeraConnected}
         />
-        <DropdownFooter />
+        {/* <DropdownFooter /> */}
       </div>
     </Container>
   )
 }
 
 WalletConnectDropdown.propTypes = {
-  closeDropdown: PropTypes.func
+  closeDropdown: PropTypes.func,
+  setOpenWalletConnectDropdown: PropTypes.func,
+  openWalletConnectDropdown: PropTypes.bool
 }
 
 export default WalletConnectDropdown
