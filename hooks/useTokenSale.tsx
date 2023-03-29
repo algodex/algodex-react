@@ -17,7 +17,7 @@
 import { activeWalletTypes, selectedAsset } from '@/components/types'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useAlgodex } from '@/hooks'
+import { useAlgodex, useWalletOrdersQuery } from '@/hooks'
 import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 
 import { WalletReducerContext } from './WalletsReducerProvider'
@@ -45,12 +45,17 @@ const columns = [
 export const useTokenSale = (
   formData,
   setFormData: React.Dispatch<React.SetStateAction<unknown>>,
-  initialValues: unknown
+  initialValues: unknown,
+  page
 ) => {
   const { activeWallet }: { activeWallet: activeWalletTypes } = useContext(WalletReducerContext)
-  const { placeOrder } = useAlgodex()
-  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
+  const { placeOrder, closeOrder } = useAlgodex()
 
+  const {
+    data: { orders }
+  } = useWalletOrdersQuery({ wallet: activeWallet || { address: null } })
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
+  const [isEdit, setIsEdit] = useState(null)
   const [selectedAsset, setSelectedAsset] = useState<selectedAsset>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
@@ -70,36 +75,67 @@ export const useTokenSale = (
   const onSubmit = async (e) => {
     e.preventDefault()
     let _error = false
-    if (!formData.perUnit || formData.perUnit <= 0) {
-      setError((prev) => ({ ...prev, perUnit: 'Invalid algo unit!' }))
-      _error = true
+    let quantityForSale: number
+
+    if (page === 'create') {
+      quantityForSale = Number(formData.quantity)
+    } else {
+      if (formData.quantity < selectedAsset.amount) {
+        toast.error(
+          'You need to end existing sale before you can reduce the total amount for sale.'
+        )
+        return
+      }
+      quantityForSale = formData.quantity - selectedAsset.amount
     }
 
-    if (!formData.quantity || formData.quantity <= 0) {
-      setError((prev) => ({ ...prev, quantity: 'Invalid sale amount!' }))
-      _error = true
-    }
+    if (quantityForSale) {
+      if (!Number(formData.perUnit) || Number(formData.perUnit) <= 0) {
+        setError((prev) => ({
+          ...prev,
+          [page === 'create' ? 'perUnit' : 'tempPerUnit']: 'Invalid algo unit!'
+        }))
+        _error = true
+      }
 
-    if (formData.quantity > selectedAsset.availableBalance) {
-      setError((prev) => ({
-        ...prev,
-        quantity: 'You cannot sell more than your available asa balance'
-      }))
-      _error = true
-    }
-    if (maxSpendableAlgo === 0) {
-      toast.error(
-        'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
-      )
-      _error = true
-    }
-    if (!_error) {
-      setError(null)
-      createTokenSale()
+      if (quantityForSale <= 0) {
+        setError((prev) => ({
+          ...prev,
+          [page === 'create' ? 'quantity' : 'tempQuantity']: 'Invalid sale amount!'
+        }))
+        _error = true
+      }
+
+      if (quantityForSale > selectedAsset.availableBalance) {
+        setError((prev) => ({
+          ...prev,
+          [page === 'create' ? 'quantity' : 'tempQuantity']:
+            'You cannot sell more than your available ASA balance'
+        }))
+        _error = true
+      }
+
+      if (maxSpendableAlgo === 0) {
+        toast.error(
+          'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
+        )
+        _error = true
+      }
+      if (!_error) {
+        setError(null)
+
+        createTokenSale(quantityForSale)
+      }
     }
   }
 
-  const createTokenSale = async () => {
+  const createTokenSale = async (amount: number) => {
+    if (page === 'create' && salesToManage && salesToManage[formData.assetId]) {
+      toast.error(
+        'There is an active sale on this token, end sale to create a new one or update the token quantity on the manage token sale page'
+      )
+      return
+    }
     const formattedOrder = {
       asset: {
         id: Number(formData.assetId), // Asset Index
@@ -111,17 +147,68 @@ export const useTokenSale = (
       wallet: activeWallet,
       appId: 22045522,
       version: 6,
-      amount: Number(formData.quantity), // Amount to Sell
+      amount, // Amount to Sell
       price: Number(formData.perUnit) // Price in ALGOs
     }
-    // return
+
     setLoading(true)
     notifier('Initializing order')
     await placeOrder(formattedOrder, { wallet: activeWallet }, notifier)
       .then(() => {
         setLoading(false)
         notifier(null)
-        lastToastId = toast.success('Order successfully placed')
+        lastToastId = toast.success(
+          `Order successfully ${page === 'create' ? 'placed' : 'updated'}`
+        )
+        if (page === 'manage') {
+          setSelectedAsset((prev) => ({
+            ...prev,
+            availableBalance: prev.availableBalance - amount,
+            quantity: formData.quantity
+          }))
+        }
+      })
+      .catch((err) => {
+        setLoading(false)
+        toast.error(`Error: ${err.message}`, {
+          id: lastToastId,
+          duration: 5000
+        })
+      })
+  }
+
+  const endSale = async () => {
+    if (activeWallet.address !== selectedAsset.params.creator) return
+    const saleData = salesToManage[formData.assetId]
+    const orderbookEntry = `${saleData.metadata.assetLimitPriceN}-${saleData.metadata.assetLimitPriceD}-0-${saleData.metadata.assetId}`
+    const payload = {
+      appId: 22045522,
+      version: 6,
+      type: 'sell',
+      address: activeWallet.address,
+      price: Number(formData.perUnit),
+      amount: Number(formData.quantity),
+      total: Number(formData.perUnit) * Number(formData.quantity),
+      asset: { id: Number(formData.assetId), decimale: formData.decimals },
+      assetId: Number(formData.assetId),
+      contract: {
+        creator: activeWallet.address,
+        escrow: saleData.metadata.escrowAddress,
+        N: saleData.metadata.assetLimitPriceN,
+        D: saleData.metadata.assetLimitPriceD,
+        entry: orderbookEntry
+      },
+      wallet: activeWallet
+    }
+    setLoading(true)
+    notifier('Initializing cancel')
+
+    await closeOrder(payload, notifier)
+      .then(() => {
+        setLoading(false)
+        notifier(null)
+        lastToastId = toast.success('Order successfully cancelled')
+        resetForm()
       })
       .catch((err) => {
         setLoading(false)
@@ -143,10 +230,73 @@ export const useTokenSale = (
     setError((prev) => ({ ...prev, all: '' }))
   }
 
+  const handleEdit = (e: { target: { name: string; value: string } } | null) => {
+    if (e) {
+      setFormData({ ...formData, [e.target.name]: e.target.value })
+      setIsEdit(e.target.name)
+    } else {
+      setIsEdit(e)
+    }
+  }
+
+  const confirmEdit = async (inputName: string, inputValue: string) => {
+    if (inputValue) {
+      setFormData({ ...formData, [inputName]: inputValue })
+      handleEdit(null)
+    }
+  }
+
+  const cancelEdit = (inputName?: string, inputValue?: string) => {
+    if (inputName && inputValue) {
+      setFormData({ ...formData, [inputName]: inputValue }) // Reset the edit field
+    }
+    handleEdit(null)
+    //Clear out error message if any
+    resetError({
+      target: { name: inputName }
+    })
+  }
+
+  const salesToManage = useMemo(() => {
+    if (orders && activeWallet) {
+      const createdAssets = {}
+      activeWallet['created-assets']
+        .filter((as) => !as.deleted)
+        .forEach(({ index, params }) => {
+          createdAssets[index] = params
+        })
+      const sales = {}
+      orders
+        .filter((order) => order.type === 'SELL' && createdAssets[order.asset.id])
+        .forEach((order) => {
+          sales[order.asset.id] = order
+        })
+
+      // Return null if after filtering, there is no sales to manage.
+      if (Object.keys(sales).length > 0) {
+        return sales
+      } else {
+        return null
+      }
+    }
+    return null
+  }, [orders, activeWallet])
+
   const rowData = useMemo(() => {
-    if (activeWallet && activeWallet['created-assets']) {
+    // Return empty if user is on manage sales page and there is no sale to manage
+    if (
+      activeWallet &&
+      activeWallet['created-assets'] &&
+      (page === 'create' || (page === 'manage' && salesToManage))
+    ) {
+      //If on manage sales page, return assets that are available in the the open orders only.
       return activeWallet['created-assets']
-        .filter((as) => !as.deleted && as.index.toString().startsWith(formData.assetId))
+        .filter(
+          (as) =>
+            !as.deleted &&
+            (page === 'create' || (page === 'manage' && salesToManage[as.index])) &&
+            as.index.toString().startsWith(formData.assetId)
+        )
         .map((asset) => ({
           ...asset,
           assetId: asset.index,
@@ -155,19 +305,23 @@ export const useTokenSale = (
           totalQuantity: asset.params.total / 10 ** asset.params.decimals,
           availableBalance:
             activeWallet.assets.find((asst) => asst['asset-id'] === asset.index).amount /
-            10 ** asset.params.decimals
+            10 ** asset.params.decimals,
+          price: salesToManage ? Number(salesToManage[asset.index]?.price) : '',
+          amount: salesToManage ? Number(salesToManage[asset.index]?.amount) : ''
         }))
     }
     return []
-  }, [activeWallet, formData.assetId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeWallet, formData.assetId, salesToManage])
 
   useEffect(() => {
     if (selectedAsset) {
       setFormData((prev) => ({
         ...prev,
         assetId: `${selectedAsset.assetId}`,
-        reserveAddr: selectedAsset.params.reserve,
-        decimals: selectedAsset.params.decimals
+        decimals: selectedAsset.params.decimals,
+        perUnit: page === 'create' ? '' : selectedAsset.price,
+        quantity: page === 'create' ? '' : selectedAsset.amount
       }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,6 +338,11 @@ export const useTokenSale = (
     columns,
     loading,
     windowHost,
-    resetForm
+    resetForm,
+    isEdit,
+    cancelEdit,
+    confirmEdit,
+    handleEdit,
+    endSale
   }
 }

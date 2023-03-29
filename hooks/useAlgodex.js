@@ -27,6 +27,7 @@ import { useContext } from 'react'
  * @property {function} setAddresses Set Available Addresses
  * @property {((function(): Promise<void>)|*)} connect MyAlgo Connect
  * @property {((function(): Promise<void>)|*)} placeOrder Place Order
+ * @property {((function(): Promise<void>)|*)} closeOrder Close Order
  */
 
 /**
@@ -56,6 +57,7 @@ export default function useAlgodex() {
     http: algodex.http,
     wallet: algodex.wallet,
     setWallet: (...args) => algodex.setWallet(...args),
-    placeOrder: (...args) => algodex.placeOrder(...args)
+    placeOrder: (...args) => algodex.placeOrder(...args),
+    closeOrder: (...args) => algodex.closeOrder(...args),
   }
 }

@@ -14,6 +14,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+const btnDisabled = {
+  '&.Mui-disabled': {
+    color: '#9E9E9E',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
+    backgroundColor: 'rgba(0, 0, 0, 0.12)'
+  }
+}
 export const styles = {
   title: { fontWeight: 700, fontSize: '20px', color: 'white', lineHeight: 1.2 },
   body1: { fontWeight: 600, fontSize: '12px', color: 'gray.300' },
@@ -47,7 +54,8 @@ export const styles = {
     '&:hover': {
       backgroundColor: 'green.600',
       opacity: '0.8'
-    }
+    },
+    ...btnDisabled
   },
   btnOutline: {
     color: 'white',
@@ -60,8 +68,10 @@ export const styles = {
     transition: 'all ease .3s',
     '&:hover': {
       color: 'white'
-    }
+    },
+    ...btnDisabled
   },
+
   copy: {
     marginRight: '0.4rem',
     fontSize: '0.9rem',

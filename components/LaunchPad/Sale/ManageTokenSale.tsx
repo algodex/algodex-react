@@ -14,9 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { CreatorAddress } from '../CreatorAddress'
-import { Icon } from '@iconify/react'
 
 //MUI Components
 import Typography from '@mui/material/Typography'
@@ -25,50 +24,59 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
 // Custom Styled Components
-import OutlinedInput from '@/components/Input/OutlinedInput'
 import { styles } from '../styles.css'
 import { CopyIcon } from '../copyIcon'
 import { LinearProgressWithLabel } from '../progressBar'
 import { TokenSearchInput } from '../TokenSearchInput'
 import { useTokenSale } from '@/hooks/useTokenSale'
+import { EditableField } from './EditableField'
 
 const initialValues = {
   assetId: '',
-  pricePerToken: 0.75,
-  showPricePerToken: false,
-  totalForSale: 14600,
-  showTotalForSale: false
+  perUnit: '',
+  // tempPerUnit: '',
+  quantity: '',
+  tempQuantity: ''
 }
 
 export const ManageTokenSale = () => {
   const [formData, setFormData] = useState(initialValues)
-  const { assetId, pricePerToken, showPricePerToken, totalForSale, showTotalForSale } = formData
+  const { assetId, perUnit, quantity, tempQuantity } = formData
   const {
     rowData,
+    resetError,
     onSubmit,
     selectedAsset,
     setSelectedAsset,
     activeWallet,
     columns,
     windowHost,
-    resetForm
-  } = useTokenSale(formData, setFormData, initialValues)
+    resetForm,
+    error,
+    loading,
+    isEdit,
+    cancelEdit,
+    confirmEdit,
+    handleEdit,
+    endSale
+  } = useTokenSale(formData, setFormData, initialValues, 'manage')
+
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    //Clear out error message if any
+    resetError(e)
   }
 
-  const handleViewChanges = (name) => {
-    onChange({
-      target: {
-        name,
-        value: !Number(name)
-      }
-    })
-  }
-
-  const handleShow = (e: { target: { name: string; value: boolean } }) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  const percentSold = useMemo(() => {
+    if (selectedAsset) {
+      return Math.round(
+        ((selectedAsset.totalQuantity - selectedAsset.availableBalance) /
+          selectedAsset.totalQuantity) *
+          100
+      )
+    }
+    return 0
+  }, [selectedAsset])
 
   return (
     <>
@@ -149,7 +157,7 @@ export const ManageTokenSale = () => {
                 >
                   Sale Progress:
                 </Typography>
-                <LinearProgressWithLabel value={83.344} label={`${Math.round(83.344)}% sold`} />
+                <LinearProgressWithLabel value={percentSold} label={`${percentSold}% sold`} />
                 <Box
                   className="flex justify-between"
                   sx={{
@@ -157,10 +165,13 @@ export const ManageTokenSale = () => {
                   }}
                 >
                   <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>
-                    {selectedAsset.availableBalance.toLocaleString()} ALGO
+                    {(
+                      selectedAsset.totalQuantity - selectedAsset.availableBalance
+                    ).toLocaleString()}{' '}
+                    {selectedAsset.params['unit-name']}
                   </Typography>
                   <Typography sx={{ fontWeight: 600, fontSize: '11px' }}>
-                    {selectedAsset.totalQuantity.toLocaleString()}{' '}
+                    {selectedAsset.availableBalance.toLocaleString()}{' '}
                     {selectedAsset.params['unit-name']} remaining
                   </Typography>
                 </Box>
@@ -168,90 +179,49 @@ export const ManageTokenSale = () => {
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Total For Sale</Typography>
-                {showTotalForSale ? (
-                  <Box className="flex items-center">
-                    <OutlinedInput
-                      type="text"
-                      placeholder="Enter No. of Tokens on Sale"
-                      name="totalForSale"
-                      value={totalForSale}
-                      onChange={(e) => onChange(e)}
-                      sx={{
-                        ...styles.input,
-                        borderTop: 0,
-                        borderInline: 0
-                      }}
-                    />
-                    <Icon
-                      icon="mdi:cancel-bold"
-                      className="ml-3 cursor-pointer text-white"
-                      onClick={() =>
-                        handleShow({
-                          target: {
-                            name: 'showTotalForSale',
-                            value: !showTotalForSale
-                          }
-                        })
-                      }
-                    />
-                  </Box>
-                ) : (
-                  <Typography className="flex items-center" sx={styles.value}>
-                    {totalForSale} ALGO
-                    <Icon
-                      icon="material-symbols:edit"
-                      className="ml-3 cursor-pointer"
-                      onClick={() => handleViewChanges('showTotalForSale')}
-                    />
-                  </Typography>
-                )}
+                <EditableField
+                  confirmEdit={confirmEdit}
+                  handleEdit={handleEdit}
+                  cancelEdit={cancelEdit}
+                  isEligible={true}
+                  isEdit={isEdit}
+                  error={error}
+                  inputValue={quantity}
+                  inputName={'quantity'}
+                  tempInputValue={tempQuantity}
+                  tempInputName={'tempQuantity'}
+                  onChange={onChange}
+                  placeholder={'Enter No. of Tokens on Sale'}
+                  additionalText={selectedAsset.params['unit-name']}
+                />
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="md:flex gap-x-2">
                 <Typography sx={styles.name}>Price Per Token</Typography>
-                {showPricePerToken ? (
-                  <Box className="flex items-center">
-                    <OutlinedInput
-                      type="text"
-                      placeholder="Enter Price per Token"
-                      name="pricePerToken"
-                      value={pricePerToken}
-                      onChange={(e) => onChange(e)}
-                      sx={{
-                        ...styles.input,
-                        borderTop: 0,
-                        borderInline: 0
-                      }}
-                    />{' '}
-                    <Icon
-                      icon="mdi:cancel-bold"
-                      className="ml-3 cursor-pointer text-white"
-                      onClick={() =>
-                        handleShow({
-                          target: {
-                            name: 'showPricePerToken',
-                            value: !showPricePerToken
-                          }
-                        })
-                      }
-                    />
-                  </Box>
-                ) : (
-                  <Typography className="flex items-center" sx={styles.value}>
-                    {pricePerToken} ALGO
-                    <Icon
-                      icon="material-symbols:edit"
-                      className="ml-3 cursor-pointer"
-                      onClick={() => handleViewChanges('showPricePerToken')}
-                    />
-                  </Typography>
-                )}
+                <Typography className="flex items-center" sx={styles.value}>
+                  {perUnit} ALGO
+                </Typography>
+                {/* <EditableField
+                  confirmEdit={confirmEdit}
+                  handleEdit={handleEdit}
+                  cancelEdit={cancelEdit}
+                  isEligible={true}
+                  isEdit={isEdit}
+                  error={error}
+                  inputValue={perUnit}
+                  inputName={'perUnit'}
+                  tempInputValue={tempPerUnit}
+                  tempInputName={'tempPerUnit'}
+                  onChange={onChange}
+                  placeholder={'Enter Price per Token'}
+                /> */}
               </Box>
               <Divider className="my-5 opacity-40" sx={styles.divider} />
               <Box className="flex justify-center gap-4 mt-7">
                 <Button
                   type="submit"
                   variant="outlined"
+                  disabled={loading || selectedAsset.amount === Number(formData.quantity)}
                   sx={{
                     ...styles.btnOutline,
                     borderColor: 'green.500',
@@ -264,6 +234,8 @@ export const ManageTokenSale = () => {
                 </Button>
                 <Button
                   type="button"
+                  onClick={endSale}
+                  disabled={loading}
                   sx={{
                     ...styles.btnOutline,
                     borderColor: 'red.600',

@@ -35,8 +35,7 @@ const initialValues = {
   assetId: '',
   quantity: '',
   perUnit: '',
-  decimals: '',
-  reserveAddr: ''
+  decimals: ''
 }
 
 export const CreateTokenSale = () => {
@@ -53,7 +52,7 @@ export const CreateTokenSale = () => {
     columns,
     loading,
     resetForm
-  } = useTokenSale(formData, setFormData, initialValues)
+  } = useTokenSale(formData, setFormData, initialValues, 'create')
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -138,22 +137,22 @@ export const CreateTokenSale = () => {
                 />
                 <ErrorMessage error={error} name="perUnit" />
 
-                {/* {formData.perUnit && ( */}
-                <>
-                  <Typography
-                    className="my-5 text-center"
-                    sx={{ fontSize: '15px', fontStyle: 'italic' }}
-                  >
-                    1 {selectedAsset.params['unit-name']} UNIT = X ALGO
-                  </Typography>
-                  <Typography
-                    className="text-center opacity-70"
-                    sx={{ fontSize: '15px', fontStyle: 'italic' }}
-                  >
-                    1 ALGO = .56 {selectedAsset.params['unit-name']}
-                  </Typography>
-                </>
-                {/* )} */}
+                {formData.perUnit && (
+                  <>
+                    <Typography
+                      className="my-5 text-center"
+                      sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                    >
+                      1 {selectedAsset.params['unit-name']} UNIT = X ALGO
+                    </Typography>
+                    <Typography
+                      className="text-center opacity-70"
+                      sx={{ fontSize: '15px', fontStyle: 'italic' }}
+                    >
+                      {formData.perUnit} ALGO = 1 {selectedAsset.params['unit-name']}
+                    </Typography>
+                  </>
+                )}
               </Box>
             </Box>
 
