@@ -112,7 +112,6 @@ export function Header() {
         ..._walletconnectGeneral,
         connector: connector.current
       }
-
       setWalletConnect(_rehyrdratedWalletconnectWallet)
       setAddressesNew({ type: 'walletConnect', addresses: [_rehyrdratedWalletconnectWallet] })
       setActiveWallet(_rehyrdratedWalletconnectWallet)
@@ -239,25 +238,6 @@ export function Header() {
               <Typography variant="navText">{t('header-rewards')}</Typography>
             </NavTextLgWrapper>
           </NavActiveLink>
-          {/* <Box className="flex items-center border-solid border rounded justify-between w-4/5 p-1.5">
-            <Image
-              src={getWalletLogo(wallet)}
-              alt="Algorand Wallet Client Image"
-              style={{ borderRadius: '100%' }}
-              width={18}
-              height={18}
-            />
-            &nbsp;
-            <Typography>{truncatedWalletAddress(address, 5)}</Typography>
-            <Icon
-              onClick={() => copyAddress(address)}
-              path={mdiContentCopy}
-              title="Copy Address"
-              size={0.8}
-              className="cursor-pointer"
-              color="#FFFFFF"
-            />
-          </Box> */}
 
           <Button
             onClick={() => {
@@ -267,7 +247,7 @@ export function Header() {
             className="md:text-xs sm:text-xs lg:text-md font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
-            {wallet && wallet?.connector?.connected && wallet?.address ? (
+            {wallet ? (
               <>
                 <Image
                   src={getWalletLogo(wallet)}

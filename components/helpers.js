@@ -58,5 +58,7 @@ export const getWalletLogo = (wallet) => {
       return '/Pera-logo.png'
     case 'my-algo-wallet':
       return '/My-Algo-Wallet-icon.svg'
+    case 'wallet-connect-general':
+      return '/Wallet-Connect-Icon.svg'
   }
 }

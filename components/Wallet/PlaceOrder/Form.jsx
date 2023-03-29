@@ -427,9 +427,10 @@ export function PlaceOrderForm({
               activeWallet.type === 'wallet-connect-general' &&
               activeWallet.connector.connected !== true
             ) {
-              notifier(
+              toast.error(
                 'Your wallet-connect session went stale, please disconnect completely and try again'
               )
+              return
             }
             notifier('Initializing order')
             await placeOrder(

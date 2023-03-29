@@ -67,6 +67,7 @@ const WalletConnectDropdown = ({
     myAlgoConnect,
     peraDisconnect: _peraDisconnect,
     walletconnectConnect,
+    walletconnectDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
   } = useWallets(closeDropdown)
   // const addressesRef = useRef(null)
@@ -156,7 +157,8 @@ const WalletConnectDropdown = ({
     'my-algo-wallet': (wallet) => {
       myAlgoDisconnect(wallet)
     },
-    'wallet-connect': (wallet) => peraDisconnect(wallet)
+    'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
   }
 
   return (
