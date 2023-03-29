@@ -23,12 +23,7 @@ import Image from 'next/image'
 import PropTypes from 'prop-types'
 import theme from 'theme'
 
-const WalletsOptions = ({
-  myAlgoOnClick,
-  peraConnectOnClick,
-  isPeraConnected,
-  walletConnectGeneralOnClick
-}) => {
+const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   const { walletconnectConnect } = useWallets()
   return (
