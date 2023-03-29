@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useMemo, useState, useReducer, useCallback } from 'react'
+import { createRef, forwardRef, useEffect, useMemo, useState, useReducer, useCallback } from 'react'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { X as CancelIcon } from 'react-feather'
@@ -307,6 +307,7 @@ export function SearchInput(props) {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
   }, [onChange, searchText])
+
 
   /**
    * This ref is forwarded to the search input
