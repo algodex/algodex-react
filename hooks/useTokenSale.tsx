@@ -258,7 +258,7 @@ export const useTokenSale = (
   }
 
   const salesToManage = useMemo(() => {
-    if (orders && activeWallet) {
+    if (orders && activeWallet && activeWallet['created-assets']) {
       const createdAssets = {}
       activeWallet['created-assets']
         .filter((as) => !as.deleted)
