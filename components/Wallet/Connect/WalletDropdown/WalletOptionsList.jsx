@@ -143,7 +143,7 @@ const WalletsOptions = ({ myAlgoOnClick, peraConnectOnClick, isPeraConnected }) 
           }}
           onClick={() => setIsConnectingAddress(!isConnectingAddress)}
         >
-          CONNECT ANOTHER WALLET
+          CONNECT A WALLET
         </Button>
       )}
     </>
