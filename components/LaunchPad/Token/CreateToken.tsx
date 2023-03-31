@@ -44,6 +44,7 @@ import { Tip } from '../Tip'
 
 import createAsset from '../createAsset'
 import * as InputTips from '../InputTips.json'
+import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 
 type createTokenTypes = {
   tokenName: string
@@ -86,6 +87,7 @@ export const CreateToken = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({})
   const [formData, setFormData] = useState(initialValues)
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
   const {
     tokenName,
     unitName,
@@ -234,6 +236,12 @@ export const CreateToken = () => {
   }
 
   const createToken = (payload) => {
+    if (maxSpendableAlgo === 0) {
+      toast.error(
+        'Insufficient Algo Balance: See algorand documentation for minimum balance requirements'
+      )
+      return
+    }
     setLoading(true)
     let lastToastId
     const notifier = (msg) => {
