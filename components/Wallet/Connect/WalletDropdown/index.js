@@ -1,22 +1,16 @@
-import { filter, find, reduceRight } from 'lodash'
-import { useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
-import useWallets, { WalletsContext } from '@/hooks/useWallets'
+import { filter, find,  } from 'lodash'
+import { useContext, useMemo, useCallback, useRef } from 'react'
+import useWallets from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../../hooks/WalletsReducerProvider'
 
 import DropdownBody from './DropdownBody'
-import DropdownFooter from './DropdownFooter'
 import DropdownHeader from './DropdownHeader'
 import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
-import { useEventDispatch } from '@/hooks/useEvents'
 
-import { connect as newConnect } from '../../../../hooks/useMyAlgoConnectNew'
-import {
-  initialState as reducerInitialState,
-  walletReducer
-} from '../../../../hooks/walletsReducer'
+
 
 const styleReset = css`
   margin: 0;
@@ -44,8 +38,6 @@ const Container = styled.div`
 
 const WalletConnectDropdown = ({
   closeDropdown,
-  openWalletConnectDropdown,
-  setOpenWalletConnectDropdown
 }) => {
   const { http } = useAlgodex()
   // const [addresses] = useContext(WalletsContext)
@@ -55,14 +47,10 @@ const WalletConnectDropdown = ({
     activeWallet,
     setActiveWallet,
     peraWallet,
-    setPeraWallet,
-    myAlgoAddresses,
     setMyAlgoAddresses
   } = useContext(WalletReducerContext)
-  // const [addresses, setAddresses] = useContext(WalletsContext)
-  // const { wallet, peraConnect, myAlgoConnect, walletconnectConnect } = useWallets(closeDropdown)
+
   const {
-    wallet,
     peraConnect,
     myAlgoConnect,
     peraDisconnect: _peraDisconnect,
@@ -70,32 +58,34 @@ const WalletConnectDropdown = ({
     walletconnectDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
   } = useWallets(closeDropdown)
-  // const addressesRef = useRef(null)
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect,
     'wallet-connect-general': walletconnectConnect
   }
   const dropDownRef = useRef()
-  const handleClickOutside = (e) => {
-    if (dropDownRef.current.contains(e.target)) {
-      return
-    }
-    setOpenWalletConnectDropdown(false)
-  }
 
-  useEffect(() => {
-    if (openWalletConnectDropdown) {
-      document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+  // const handleClickOutside = (e) => {
+  //   if (dropDownRef.current.contains(e.target)) {
+  //     return
+  //   }
+  //   setOpenWalletConnectDropdown(false)
+  //   // **** Unexpected Behavior: Header component is outside the dropdown, so this sets false when clicking on header button 
+  //   // **** Header button is !walletConnectDropdown so it toggles to true, which leads to the unexpected behavior
+  //   // **** Current production behavior forces users to click on header or close icon to exit dropdown so removing altogether
+  // }
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [openWalletConnectDropdown])
-  // const [walletState, dispatch] = useReducer(walletReducer, reducerInitialState)
+  // useEffect(() => {
+  //   if (openWalletConnectDropdown) {
+  //     document.addEventListener('mousedown', handleClickOutside)
+  //   } else {
+  //     document.removeEventListener('mousedown', handleClickOutside)
+  //   }
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside)
+  //   }
+  // }, [openWalletConnectDropdown])
   const myAlgoOnClick = async () => {
     console.log('myAlogOnClick')
     console.log('hit')
