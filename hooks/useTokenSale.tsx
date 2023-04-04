@@ -164,7 +164,7 @@ export const useTokenSale = (
           setSelectedAsset((prev) => ({
             ...prev,
             availableBalance: prev.availableBalance - amount,
-            quantity: formData.quantity
+            amount: formData.quantity
           }))
         }
       })

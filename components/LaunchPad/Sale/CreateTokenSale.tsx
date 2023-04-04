@@ -65,22 +65,11 @@ export const CreateTokenSale = () => {
         Create a Token Sale
       </Typography>
       <Divider sx={styles.divider} />
-      <Box
-        sx={{
-          display: 'flex',
-          columnGap: '20px',
-          marginBlock: '20px 10px',
-          alignItems: 'center'
-        }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
-          Creator/Reserve Address:
-        </Typography>
-        <CreatorAddress
-          activeWallet={activeWallet ? activeWallet : undefined}
-          resetForm={resetForm}
-        />
-      </Box>
+
+      <CreatorAddress
+        activeWallet={activeWallet ? activeWallet : undefined}
+        resetForm={resetForm}
+      />
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         A sale must be started from either the Creator or the Reserve wallet of the ASA. Ensure the
         correct wallet is connected or you will not be able to start a sale.
@@ -158,7 +147,7 @@ export const CreateTokenSale = () => {
 
             <Note
               className="my-6"
-              content="It takes approximately 10 seconds to create your ASA after confirming. The Tokens will automatically transfer to the creator wallet after the creation is successful. You are able to create a sale of your token on Algodex or use Mailbox to distribute."
+              content="It takes approximately 10 seconds to start a sale after confirming."
             />
             <Box className="text-center">
               <Button type="submit" disabled={loading} sx={styles.submitBtn}>

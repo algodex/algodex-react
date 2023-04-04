@@ -22,6 +22,7 @@ import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
 
 // Custom Styled Components
 import { styles } from '../styles.css'
@@ -84,22 +85,11 @@ export const ManageTokenSale = () => {
         Manage an ASA Sale
       </Typography>
       <Divider sx={styles.divider} />
-      <Box
-        sx={{
-          display: 'flex',
-          columnGap: '20px',
-          marginBlock: '20px 10px',
-          alignItems: 'center'
-        }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
-          Creator Address:
-        </Typography>
-        <CreatorAddress
-          activeWallet={activeWallet ? activeWallet : undefined}
-          resetForm={resetForm}
-        />
-      </Box>
+
+      <CreatorAddress
+        activeWallet={activeWallet ? activeWallet : undefined}
+        resetForm={resetForm}
+      />
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage sales that have been created with the connected wallet. If you do not
         see an expected asset, confirm the correct wallet is connected above.
@@ -146,7 +136,14 @@ export const ManageTokenSale = () => {
                 <Typography
                   sx={{ ...styles.value, fontSize: '12px', display: 'flex', columnGap: '5px' }}
                 >
-                  {`${windowHost}/trade/${selectedAsset.assetId}`}
+                  <Link
+                    target="_blank"
+                    color={'white'}
+                    href={`${windowHost}/trade/${selectedAsset.assetId}`}
+                    rel="noreferrer"
+                  >
+                    {`${windowHost}/trade/${selectedAsset.assetId}`}
+                  </Link>
                   <CopyIcon content={`${windowHost}/trade/${selectedAsset.assetId}`} />
                 </Typography>
               </Box>
