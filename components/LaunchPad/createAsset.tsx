@@ -1,7 +1,7 @@
 import algosdk from 'algosdk'
 import { activeWalletTypes } from '../types'
 
-const isUndefined = (param) => (param.length !== 0 ? param : undefined)
+const isUndefined = (param) => (param && param.length !== 0 ? param : undefined)
 
 const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
   return activeWalletObj.type === 'my-algo-wallet'
@@ -13,12 +13,12 @@ const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
 
 const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
   notifier('Awaiting Signature')
-  const signedTransaction = isMyAlgo
+  const signedTransaction = isMyAlgo(activeWalletObj)
     ? await activeWalletObj.connector.signTransaction(ctxn.toByte())
     : await activeWalletObj.peraWallet.signTransaction([[{ txn: ctxn }]])
 
   const txn = await client
-    .sendRawTransaction(isMyAlgo ? signedTransaction.blob : signedTransaction) /// peraWallet returns the blob directly
+    .sendRawTransaction(isMyAlgo(activeWalletObj) ? signedTransaction.blob : signedTransaction) /// peraWallet returns the blob directly
     .do()
 
   notifier('Awaiting Confirmation')
@@ -69,9 +69,8 @@ export async function manageAsset(
   notifier: (arg0: string) => void
 ) {
   const params = await client.getTransactionParams().do()
-
+  
   if (isMyAlgo(activeWalletObj) === null) throw Error('Invalid wallet type')
-
   const ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
     activeWalletObj.address,
     undefined, // no note for time being
@@ -80,9 +79,9 @@ export async function manageAsset(
     isUndefined(assetParams.reserveAddr),
     isUndefined(assetParams.freezeAddr),
     isUndefined(assetParams.clawbackAddr),
-    params
+    params,
+    false // don't throw error if freeze, clawback, or manager are empty
   )
-
   await signedTransaction(activeWalletObj, client, notifier, ctxn)
   notifier(null)
 }

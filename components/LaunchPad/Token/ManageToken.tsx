@@ -227,7 +227,7 @@ export const ManageToken = () => {
               content="After editing the fields above, you must click the “Update Token” button below to submit the changes to the blockchain. It takes approximately 10 seconds to update your ASA after confirming."
             />
             <Box className="text-center">
-              <Button type="submit" disabled={loading} sx={styles.submitBtn}>
+              <Button type="submit" disabled={loading || !isEligible} sx={styles.submitBtn}>
                 UPDATE TOKEN
               </Button>
             </Box>

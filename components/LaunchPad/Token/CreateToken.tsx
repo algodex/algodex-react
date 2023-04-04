@@ -137,7 +137,6 @@ export const CreateToken = () => {
     return pattern.test(url)
   }
 
-  console.log({ formData })
   const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     let _error = false
