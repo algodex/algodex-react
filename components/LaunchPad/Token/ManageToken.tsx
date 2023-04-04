@@ -74,22 +74,11 @@ export const ManageToken = () => {
         Manage an Algorand Standard Asset (ASA)
       </Typography>
       <Divider sx={styles.divider} />
-      <Box
-        sx={{
-          display: 'flex',
-          columnGap: '20px',
-          marginBlock: '20px 10px',
-          alignItems: 'center'
-        }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
-          Creator Address:
-        </Typography>
-        <CreatorAddress
-          activeWallet={activeWallet ? activeWallet : undefined}
-          resetForm={resetForm}
-        />
-      </Box>
+
+      <CreatorAddress
+        activeWallet={activeWallet ? activeWallet : undefined}
+        resetForm={resetForm}
+      />
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '30px' }}>
         You can only manage ASAs that have been created with the connected wallet. If you do not see
         an expected asset, confirm the correct wallet is connected above.

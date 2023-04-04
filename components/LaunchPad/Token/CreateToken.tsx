@@ -274,19 +274,7 @@ export const CreateToken = () => {
         Create an Algorand Standard Asset (ASA)
       </Typography>
       <Divider sx={styles.divider} />
-      <Box
-        sx={{
-          display: 'flex',
-          columnGap: '20px',
-          marginBlock: '20px 10px',
-          alignItems: 'center'
-        }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
-          Creator Address:
-        </Typography>
-        <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
-      </Box>
+      <CreatorAddress activeWallet={activeWallet ? activeWallet : undefined} />
       <Typography variant="body1" sx={{ ...styles.body1, marginBottom: '24px' }}>
         Creator Address defaults to the wallet that’s currently connected. If you want to create an
         ASA with a different wallet, you must disconnect this wallet and connect the correct one in

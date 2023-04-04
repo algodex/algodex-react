@@ -30,17 +30,46 @@ export const CreatorAddress = ({
       <Box
         sx={{
           display: 'flex',
+          columnGap: '20px',
+          marginBlock: '20px 10px',
           alignItems: 'center',
-          border: 'solid',
-          borderColor: 'white',
-          color: 'white',
-          columnGap: '5px',
-          borderRadius: '3px',
-          padding: '5px'
+          ['@media(max-width:700px)']: {
+            flexWrap: 'wrap',
+            rowGap: '10px'
+          }
         }}
       >
-        {isConnected ? (
-          <>
+        <Typography variant="body1" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.2 }}>
+          Creator/Reserve Address:
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            border: 'solid',
+            borderColor: 'white',
+            color: 'white',
+            columnGap: '5px',
+            borderRadius: '3px',
+            padding: '5px'
+          }}
+        >
+          {isConnected ? (
+            <>
+              <Typography
+                sx={{
+                  display: 'block',
+                  paddingBlock: '0',
+                  fontSize: '15px',
+                  fontWeight: 500
+                }}
+              >
+                {truncatedWalletAddress(activeWallet.address, 4)}
+              </Typography>
+              <CopyIcon content={activeWallet.address} />
+            </>
+          ) : (
             <Typography
               sx={{
                 display: 'block',
@@ -49,47 +78,35 @@ export const CreatorAddress = ({
                 fontWeight: 500
               }}
             >
-              {truncatedWalletAddress(activeWallet.address, 4)}
+              Connect creator wallet above
             </Typography>
-            <CopyIcon content={activeWallet.address} />
-          </>
-        ) : (
-          <Typography
+          )}
+        </Box>
+        {isConnected && (
+          <Button
+            type="button"
+            onClick={() => {
+              walletDisconnectMap[activeWallet.type](activeWallet)
+              resetForm && resetForm()
+            }}
             sx={{
-              display: 'block',
-              paddingBlock: '0',
-              fontSize: '15px',
-              fontWeight: 500
+              color: 'white',
+              backgroundColor: 'gray.150',
+              px: '10px',
+              py: '1px',
+              fontWeight: 500,
+              fontSize: '12px',
+              border: '2px solid',
+              transition: 'all ease .3s',
+              '&:hover': {
+                color: 'white'
+              }
             }}
           >
-            Connect creator wallet above
-          </Typography>
+            DISCONNECT
+          </Button>
         )}
       </Box>
-      {isConnected && (
-        <Button
-          type="button"
-          onClick={() => {
-            walletDisconnectMap[activeWallet.type](activeWallet)
-            resetForm && resetForm()
-          }}
-          sx={{
-            color: 'white',
-            backgroundColor: 'gray.150',
-            px: '10px',
-            py: '1px',
-            fontWeight: 500,
-            fontSize: '12px',
-            border: '2px solid',
-            transition: 'all ease .3s',
-            '&:hover': {
-              color: 'white'
-            }
-          }}
-        >
-          DISCONNECT
-        </Button>
-      )}
     </>
   )
 }
