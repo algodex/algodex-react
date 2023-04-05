@@ -20,8 +20,8 @@ import PropTypes from 'prop-types'
 import { lighten } from 'polished'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 
 const Container = styled.div`
   display: flex;
@@ -54,12 +54,11 @@ const ToggleBtn2 = styled(ToggleButton)`
     background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
     &:hover {
       background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['700'])};
-    };
-  };
+    }
+  }
   &:hover {
     background-color: ${({ theme }) => lighten(0.05, theme.palette.gray['900'])};
-  };
-
+  }
 `
 /**
  * Chart Settings
@@ -87,12 +86,20 @@ function ChartSettings(props) {
 
   return (
     <Container>
-      <ToggleButtonGroup exclusive="true" value={mode} onChange={onChange}>
-        <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">Candle</ToggleBtn2>
-        <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">Area</ToggleBtn2>
+      <ToggleButtonGroup exclusive={true} value={mode} onChange={onChange}>
+        <ToggleBtn2 key="candle" name="mode" value="candle" aria-label="candle">
+          Candle
+        </ToggleBtn2>
+        <ToggleBtn2 key="area" name="mode" value="area" aria-label="area">
+          Area
+        </ToggleBtn2>
       </ToggleButtonGroup>
-      <ToggleButtonGroup sx={{'marginLeft': '10px'}}
-        exclusive="true" value={interval} onChange={onChange}>
+      <ToggleButtonGroup
+        sx={{ marginLeft: '10px' }}
+        exclusive={true}
+        value={interval}
+        onChange={onChange}
+      >
         {renderTimeIntervals()}
       </ToggleButtonGroup>
     </Container>
