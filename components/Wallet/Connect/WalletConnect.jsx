@@ -37,6 +37,7 @@ import useAccountsInfo from '@/hooks/useAccountsInfo'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
+import { truncatedWalletAddress } from '../../helpers'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -264,8 +265,6 @@ export function WalletOptionsListComp(props) {
   const isConnected = activeWallet !== null
 
   const myAlgoOnClick = async () => {
-    console.log('myAlogOnClick')
-    console.log('hit')
     const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
     const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
     const _mergedAlgoAddresses = mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses)
@@ -281,10 +280,8 @@ export function WalletOptionsListComp(props) {
   }, [WALLETS_CONNECT_MAP])
 
   const walletconnectGeneralOnClick = () => {
-    console.log('gut')
     WALLETS_CONNECT_MAP['wallet-connect-general']()
   }
-  console.log(WALLETS_CONNECT_MAP['wallet-connect-general'])
 
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
@@ -375,6 +372,12 @@ function WalletConnect() {
           />
 
           <Box mx={2}>
+            {activeWallet && (
+              <h1 className="w-full flex text-sm font-bold justify-center items-center h-8 mt-2 text-white rounded">
+                Connected with: {truncatedWalletAddress(activeWallet?.address, 5)}
+              </h1>
+            )}
+
             <Button
               className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
               variant="contained"
