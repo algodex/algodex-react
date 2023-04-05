@@ -355,6 +355,21 @@ function WalletConnect() {
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
 
+  const {
+    // myAlgoConnector,
+    peraDisconnect,
+    myAlgoDisconnect,
+    walletconnectDisconnect
+  } = useWallets(activeWallet)
+
+  const walletDisconnectMap = {
+    'my-algo-wallet': (wallet) => {
+      myAlgoDisconnect(wallet)
+    },
+    'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
+  }
+
   return (
     <Box className="flex flex-col justify-center" width="100%">
       {isMobile && (
@@ -373,9 +388,20 @@ function WalletConnect() {
 
           <Box mx={2}>
             {activeWallet && (
-              <h1 className="w-full flex text-sm font-bold justify-center items-center h-8 mt-2 text-white rounded">
-                Connected with: {truncatedWalletAddress(activeWallet?.address, 5)}
-              </h1>
+              <>
+                <h1 className="w-full flex text-sm font-bold justify-center items-center h-8 mt-2 text-white rounded">
+                  Connected with: {truncatedWalletAddress(activeWallet?.address, 5)}
+                </h1>
+
+                <Button
+                  className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+                  variant="contained"
+                  sx={{ minHeight: '2.5rem' }}
+                  onClick={() => walletDisconnectMap[activeWallet.type](activeWallet)}
+                >
+                  Disconnect {truncatedWalletAddress(activeWallet?.address, 5)}
+                </Button>
+              </>
             )}
 
             <Button
