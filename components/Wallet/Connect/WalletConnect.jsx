@@ -389,10 +389,6 @@ function WalletConnect() {
           <Box mx={2}>
             {activeWallet && (
               <>
-                <h1 className="w-full flex text-sm font-bold justify-center items-center h-8 mt-2 text-white rounded">
-                  Connected with: {truncatedWalletAddress(activeWallet?.address, 5)}
-                </h1>
-
                 <Button
                   className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
                   variant="contained"
