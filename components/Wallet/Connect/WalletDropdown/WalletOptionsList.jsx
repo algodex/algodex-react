@@ -123,7 +123,7 @@ const WalletsOptions = ({
                 height={25}
               />
               <Typography className="underline ml-2" variant="body_small_bold">
-                General Wallet Connect (Supports Defly, Fireblocks, Exodus)
+                General Wallet Connect (Supports Defly and Exodus)
               </Typography>
             </Box>
             <Box
