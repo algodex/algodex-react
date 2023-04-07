@@ -48,3 +48,17 @@ export const setExplorerLink = (addr, network) => {
 export const assetVeryShortNameFn = (asset) => {
   return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
 }
+
+export const getWalletLogo = (wallet) => {
+  if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
+    throw new TypeError('Must have a valid wallet!')
+  }
+  switch (wallet.type) {
+    case 'wallet-connect':
+      return '/Pera-logo.png'
+    case 'my-algo-wallet':
+      return '/My-Algo-Wallet-icon.svg'
+    case 'wallet-connect-general':
+      return '/Wallet-Connect-Icon.svg'
+  }
+}

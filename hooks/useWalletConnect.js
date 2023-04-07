@@ -60,7 +60,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     // Map the connector to the address list
     const _addresses = accounts.map((acct) => ({
       name: 'WalletConnect',
-      type: 'wallet-connect',
+      type: 'wallet-connect-general',
       connector: walletConnect.current,
       address: acct
     }))
@@ -74,7 +74,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
     console.log('DISCONNECTED')
     console.log(payload)
     if (typeof payload !== 'undefined' && Array.isArray(payload.params)) {
-      onDisconnect([{ ...payload.params[0].accounts, type: 'wallet-connect' }])
+      onDisconnect([{ ...payload.params[0].accounts, type: 'wallet-connect-general' }])
     }
     // let accounts = []
     // logInfo('Connect wallet connect')
@@ -224,7 +224,7 @@ export default function useWalletConnect(onConnect, onDisconnect) {
 
   useEffect(() => {
     if (walletConnect === undefined || walletConnect.current === undefined) {
-      ;(async () => {
+      (async () => {
         walletConnect.current = await initWalletConnect()
       })()
     }
