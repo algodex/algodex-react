@@ -14,8 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createRef, forwardRef, useMemo, useState } from 'react'
-
+import { createRef, forwardRef, useMemo, useState, useReducer, useCallback } from 'react'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { X as CancelIcon } from 'react-feather'
 import Checkbox from './CheckboxInput'
 import Icon from '@mdi/react'
@@ -25,6 +26,7 @@ import { mdiMagnify } from '@mdi/js'
 import styled from '@emotion/styled'
 import theme from 'theme'
 import useTranslation from 'next-translate/useTranslation'
+import { Slider, Stack } from '@mui/material'
 
 const Container = styled.div`
   display: flex;
@@ -84,9 +86,21 @@ const Input = styled(TextInput)`
   // padding-right: 3rem;
 `
 
+
 export const Search = forwardRef(
   (
-    { isListingVerifiedAssets, setIsListingVerifiedAssets, value, onCancel, isActive, ...props },
+    {
+      dispatchAction,
+      searchFilters,
+      toggleFilters,
+      setToggleFilters,
+      isListingVerifiedAssets,
+      setIsListingVerifiedAssets,
+      value,
+      onCancel,
+      isActive,
+      ...props
+    },
     ref
   ) => {
     const { t } = useTranslation('assets')
@@ -95,6 +109,44 @@ export const Search = forwardRef(
         onCancel()
       }
     }
+
+    const [activeThumb, setActiveThumb] = useState(0)
+
+    // Set the slider value from the logarithmic scale
+    const setSliderValueFn = useCallback((activeThumb, value, newValue) => {
+      const min = parseInt(1)
+      const max = parseInt(searchFilters.priceMax)
+      const logMin = Math.log10(parseInt(min))
+      const logMax = Math.log10(parseInt(max))
+      const start = Math.pow(10, (value[0] - min) / (max - min) * (logMax - logMin) + logMin)
+      const end = Math.pow(10, (value[1] - min) / (max - min) * (logMax - logMin) + logMin)
+      return [Math.round(start), Math.round(end)]
+    }, [searchFilters?.priceMax])
+
+
+    // Get the slider value from the logarithmic scale
+    const getSliderValue = useCallback(() => {
+      const min = parseInt(1)
+      const max = parseInt(searchFilters.priceMax || 1)
+      const logMin = Math.log10(min)
+      const logMax = Math.log10(max)
+      const start = Math.log10(searchFilters.price[0] || 1)
+      const end = Math.log10(searchFilters.price[1] || 1)
+      const startLog = Math.round((start - logMin) / (logMax - logMin) * (max - min) + min)
+      const endLog = Math.round((end - logMin) / (logMax - logMin) * (max - min) + min)
+      return [startLog, endLog]
+    }, [
+      searchFilters?.priceMax,
+      searchFilters?.price
+    ])
+
+    const handleSliderChange = useCallback((value, newValue, activeThumb, field) => {
+      setActiveThumb(activeThumb)
+      dispatchAction({type: 'updateSliderValue', field, value})
+    }, [
+      searchFilters?.price,
+      searchFilters?.ageOfProject,
+    ])
 
     return (
       <div>
@@ -125,13 +177,90 @@ export const Search = forwardRef(
             </CancelButton>
           )}
         </Container>
-        <div className={`${isActive ? '' : 'xs:invisible'} visible flex items-center ml-6`}>
+        <div className={`${isActive ? '' : 'xs:invisible'} visible fflex-col items-center justify-between ml-6`}>
           {/* <div className={`visible flex items-center ml-6`}> */}
-          <Checkbox
-            isChecked={isListingVerifiedAssets}
-            onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
-          />
-          <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={isListingVerifiedAssets}
+                onChange={() => setIsListingVerifiedAssets(!isListingVerifiedAssets)}
+              />
+              <p className="mx-1.5 my-0 text-xs text-gray-500">{t('view-verified-asset')}</p>
+            </Stack>
+            <Stack className='mr-3.5 cursor-pointer' onClick={() => setToggleFilters(!toggleFilters)} direction="row" alignItems="center" sx={{ height: '0rem' }}>
+              <p className="text-xs text-white font-bold">More Filters</p>
+              {toggleFilters ? <ExpandLessIcon sx={{ color: theme.colors.white }} /> : <ExpandMoreIcon sx={{ color: theme.colors.white }} />}
+            </Stack>
+          </Stack>
+          {toggleFilters && <Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={searchFilters.isFilteringNFTOnly}
+                onChange={() => dispatchAction({ type: 'toggleNFTOnly' })}
+              />
+              <p className="mx-1.5 my-0 text-xs text-gray-500">NFT Only</p>
+            </Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={searchFilters.isFilteringAgeOfProject}
+                onChange={() => dispatchAction({ type: 'toggleAgeOfProject' })}
+              />
+              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
+                <p className="mx-1.5 my-0 text-xs text-white">Age Of Project</p>
+                <Slider
+                  size="small"
+                  sx={{
+                    opacity: `${searchFilters.isFilteringAgeOfProject ? '1' : '0.5'}`,
+                    '&.MuiSlider-root': {
+                      padding: 0,
+                    },
+                    color: 'white',
+                    width: '70%'
+                  }}
+                  value={searchFilters.ageOfProject}
+                  onChange={(e, newValue, activeThumb) => {
+                    !searchFilters.isFilteringAgeOfProject && dispatchAction({ type: 'toggleAgeOfProject' })
+                    handleSliderChange(e.target.value, newValue, activeThumb, 'ageOfProject')
+                  }}
+                  valueLabelDisplay="auto"
+                  disableSwap
+                  valueLabelFormat={`${searchFilters.ageOfProject[activeThumb]} days`}
+                  max={searchFilters.ageOfProjectMax}
+                />
+              </Stack>
+            </Stack>
+            <Stack direction="row" alignItems="center">
+              <Checkbox
+                isChecked={searchFilters.isFilteringPrice}
+                onChange={() => dispatchAction({ type: 'toggleMarketPrice' })}
+              />
+              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '90%' }}>
+                <p className="mx-1.5 my-0 text-xs text-white">Price</p>
+                <Slider
+                  disableSwap
+                  size="small"
+                  sx={{
+                    opacity: `${searchFilters.isFilteringPrice ? '1' : '0.5'}`,
+                    '&.MuiSlider-root': {
+                      padding: 0,
+                    },
+                    color: 'white',
+                    width: '70%'
+                  }}
+                  value={getSliderValue()}
+                  onChange={(e, newValue, activeThumb) => {
+                    !searchFilters.isFilteringPrice && dispatchAction({ type: 'toggleMarketPrice' })
+                    handleSliderChange(setSliderValueFn(activeThumb, e.target.value, newValue), newValue, activeThumb, 'price')
+                  }}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={`${searchFilters.price[activeThumb]} ALGOs`}
+                  defaultValue={[0, searchFilters.priceMax]}
+                  max={searchFilters.priceMax}
+                />
+              </Stack>
+            </Stack>
+          </Stack>
+          }
         </div>
       </div>
     )
@@ -143,6 +272,10 @@ Search.propTypes = {
   placeholder: PropTypes.string,
   onCancel: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
+  dispatchAction: PropTypes.func,
+  searchFilters: PropTypes.object,
+  toggleFilters: PropTypes.bool,
+  setToggleFilters: PropTypes.func,
   setIsListingVerifiedAssets: PropTypes.func,
   isActive: PropTypes.bool
 }
@@ -162,11 +295,14 @@ export function SearchInput(props) {
     containerRef,
     isActive,
     isListingVerifiedAssets,
-    setIsListingVerifiedAssets
+    setIsListingVerifiedAssets,
+    toggleFilters,
+    setToggleFilters,
+    dispatchAction,
+    searchFilters
   } = props
   const { t } = useTranslation('assets')
   const [searchText, setSearchText] = useState(initialText)
-  // const debouncedSearchText = useDebounce(searchText, 500)
   useMemo(() => {
     const filteredSearchText = searchText.replace(/[^a-zA-Z0-9\s]/g, '')
     onChange(filteredSearchText)
@@ -212,6 +348,10 @@ export function SearchInput(props) {
       onChange={(e) => setSearchText(e.target.value)}
       onCancel={() => setSearchText('')}
       onFocus={handleFocus}
+      dispatchAction={dispatchAction}
+      searchFilters={searchFilters}
+      toggleFilters={toggleFilters}
+      setToggleFilters={setToggleFilters}
       placeholder={`${t('search')}`}
       isListingVerifiedAssets={isListingVerifiedAssets}
       setIsListingVerifiedAssets={setIsListingVerifiedAssets}
@@ -229,6 +369,10 @@ SearchInput.propTypes = {
   onExternalClick: PropTypes.func,
   containerRef: PropTypes.object,
   isActive: PropTypes.bool,
+  dispatchAction: PropTypes.func,
+  searchFilters: PropTypes.object,
+  toggleFilters: PropTypes.bool,
+  setToggleFilters: PropTypes.func,
   isListingVerifiedAssets: PropTypes.bool,
   setIsListingVerifiedAssets: PropTypes.func
 }

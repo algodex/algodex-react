@@ -24,7 +24,7 @@ import { getAssetTotalStatus, getIsRestricted, getIsRestrictedCountry } from '..
 import { mdiAlertCircleOutline, mdiCheckDecagram, mdiStar } from '@mdi/js'
 import { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
-
+import dayjs from 'dayjs'
 import AlgoIcon from '@/components/Icon'
 import { DelistedAssets } from '@/components/DelistedAssets'
 import Icon from '@mdi/react'
@@ -34,7 +34,7 @@ import Table from '@/components/Table'
 import Tooltip from 'components/Tooltip'
 import { flatten } from 'lodash'
 import floatToFixed from '@algodex/algodex-sdk/lib/utils/format/floatToFixed'
-import {floatToFixedDisplay} from '@/services/display';
+import { floatToFixedDisplay } from '@/services/display';
 import { formatUSDPrice } from '@/components/helpers'
 import { sortBy } from 'lodash'
 import styled from '@emotion/styled'
@@ -44,6 +44,8 @@ import { useRouter } from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
 import useUserStore from '@/store/use-user-state'
 import { withSearchResultsQuery } from '@/hooks'
+import { testnetAssets, mainnetAssets } from '../../AgeOfProjects'
+import { getActiveNetwork } from 'services/environment'
 
 /**
  * Map a Query Result to a Search Result
@@ -80,8 +82,8 @@ export const mapToSearchResults = ({
   const change = !isNaN(parseFloat(priceChg24Pct))
     ? floatToFixed(priceChg24Pct, 2)
     : hasOrders
-    ? '--'
-    : null
+      ? '--'
+      : null
 
   return {
     id: assetId,
@@ -104,7 +106,7 @@ const TableWrapper = styled.div`
   // overflow-y: scroll;
   // -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  top: 85px;
+  // top: ${({ isFilterActive }) => isFilterActive ? '85px' : '10rem'};
   width: 100%;
   height: 85%;
 
@@ -113,7 +115,7 @@ const TableWrapper = styled.div`
   }
 
   @media (min-width: 996px) {
-    top: 85px;
+    top: ${({ isFilterActive }) => isFilterActive ? '10rem' : '85px'};
   }
 
   // @media (min-width: 1536px) {
@@ -181,15 +183,21 @@ export const NavSearchTable = ({
   algoPrice,
   isFilteringByFavorites,
   setIsFilteringByFavorites,
-  gridSize
+  gridSize,
+  isFilterActive,
+  searchFilters,
+  setSearchFilterProps
 }) => {
   const searchState = useUserStore((state) => state.search)
   const setSearchState = useUserStore((state) => state.setSearch)
   const toggleFavourite = useUserStore((state) => state.setFavourite)
   const favoritesState = useUserStore((state) => state.favorites)
   const [searchTableSize, setSearchTableSize] = useState({ width: 0, height: '100%' })
+  const activeNetwork = getActiveNetwork();
   const isMobile = useMobileDetect()
-
+  const TODAY = useMemo(() => dayjs().format('YYYY-MM-DD'), [])
+  const [geoFormattedAssets, setGeoformattedAssets] = useState({})
+  const [formattedWithAgeOfProject, setformattedWithAgeOfProject] = useState([])
   const searchTableRef = useRef()
   const router = useRouter()
   const { t } = useTranslation('assets')
@@ -252,6 +260,29 @@ export const NavSearchTable = ({
     }
   }, [router.query])
 
+  let updatedList = []
+
+  const updatePriceMax = useCallback(() => {
+    if (geoFormattedAssets?.assets?.length > 0) {
+      const sortedListByPrice = [...geoFormattedAssets.assets].sort((a, b) => a.formattedPrice - b.formattedPrice)
+      setSearchFilterProps({
+        type: 'setPriceMax',
+        value: parseInt(sortedListByPrice[sortedListByPrice.length - 1]?.formattedPrice)
+      })
+    }
+  }, [geoFormattedAssets])
+
+  const updateAgeOfProjectMax = useCallback(() => {
+    if (formattedWithAgeOfProject.length > 0) {
+      const sortedListByAgeOfProject = sortBy(formattedWithAgeOfProject, o => o.ageOfProject);
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'ageOfProjectMax',
+        value: sortedListByAgeOfProject[sortedListByAgeOfProject.length - 1]?.ageOfProject
+      })
+    }
+  }, [formattedWithAgeOfProject])
+
   /**
    * Handle Search Data
    * @type {Array}
@@ -262,48 +293,115 @@ export const NavSearchTable = ({
     DelistedAssets.forEach((element) => {
       bannedAssets[element] = element
     })
-    
+
     // Remove banned assets
     const _acceptedAssets = assets.filter((asset) => !(asset.assetId in bannedAssets))
     // Geoformatted assets
-    const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    // const geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    // geoFormattedAssets = handleRestrictedAsset(_acceptedAssets)
+    setGeoformattedAssets(handleRestrictedAsset(_acceptedAssets))
     // REVERT TO ADD SORTING FOR RESTRICTED
     // const filteredList = sortBy(geoFormattedAssets.assets, { isGeoBlocked: true })
-    const filteredList = geoFormattedAssets.assets;
-    
-    // Return List
-    if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
-      return []
-    } else if (isListingVerifiedAssets && isFilteringByFavorites) {
-      // Listing verified favourited assets
-      const result = Object.keys(favoritesState).map((assetId) => {
-        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
-      })
-      return flatten(result).filter((asset) => asset.verified).map(mapToSearchResults)
-    } else if (isListingVerifiedAssets) {
-      // Listing only verified assets
-      return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
-    } else if (isFilteringByFavorites) {
-      // Listing only favourited assets
-      const result = Object.keys(favoritesState).map((assetId) => {
-        return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
-      })
-      return flatten(result).map(mapToSearchResults)
-    } else {
-      // If there is data, use it
-      return filteredList.map(mapToSearchResults)
-    }
+    if (geoFormattedAssets?.assets) {
+      let filteredList = geoFormattedAssets?.assets;
 
-  }, [assets, handleRestrictedAsset,
-      isListingVerifiedAssets, isFilteringByFavorites, favoritesState])
+      // Set Max for Age of Project
+      const assetsDateAndTime = activeNetwork === 'testnet' ? testnetAssets : mainnetAssets
+      const updatedList = [...filteredList].map((asset) => {
+        const formatDateOfFirstTrans = dayjs(assetsDateAndTime[`${asset.assetId}`]).format('YYYY-MM-DD')
+        return {
+          ...asset,
+          ageOfProject: dayjs(TODAY).diff(dayjs(formatDateOfFirstTrans), 'day')
+        }
+      })
+      setformattedWithAgeOfProject(updatedList)
+      if (searchFilters?.isFilteringAgeOfProject) {
+        filteredList = [...updatedList].filter((asset) => asset.ageOfProject >= searchFilters.ageOfProject[0] && asset.ageOfProject <= searchFilters.ageOfProject[1]).sort((a, b) => b.formattedPrice - a.formattedPrice);
+      }
+
+
+      // Filter Asset By price
+      if (searchFilters?.isFilteringPrice) {
+        const updatedList = [...filteredList].filter((asset) => asset.formattedPrice >= searchFilters.price[0] && asset.formattedPrice <= searchFilters.price[1])
+        // console.log(
+        //   updatedList, 
+        //   filteredList,
+        //   searchFilters.price[0], 
+        //   searchFilters.price[1], 
+        //   'updated price list here'
+        // )
+        filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
+      }
+
+      // Filter By NFT
+      if (searchFilters?.isFilteringNFTOnly) {
+        const updatedList = [...filteredList].filter((asset) => asset.total === 1)
+        filteredList = updatedList.sort((a, b) => b.formattedPrice - a.formattedPrice);
+      }
+
+      // Return List
+      if (!filteredList || !Array.isArray(filteredList) || filteredList.length === 0) {
+        return []
+      } else if (isListingVerifiedAssets && isFilteringByFavorites) {
+        // Listing verified favourited assets
+        const result = Object.keys(favoritesState).map((assetId) => {
+          return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
+        })
+        return flatten(result).filter((asset) => asset.verified).map(mapToSearchResults)
+      } else if (isListingVerifiedAssets) {
+        // Listing only verified assets
+        return filteredList.filter((asset) => asset.verified).map(mapToSearchResults)
+      } else if (isFilteringByFavorites) {
+        // Listing only favourited assets
+        const result = Object.keys(favoritesState).map((assetId) => {
+          return filteredList.filter((asset) => asset.assetId === parseInt(assetId, 10))
+        })
+        return flatten(result).map(mapToSearchResults)
+      } else {
+        // If there is data, use it
+        return filteredList.map(mapToSearchResults)
+      }
+    } else {
+      return []
+    }
+  }, [assets,
+    handleRestrictedAsset,
+    isListingVerifiedAssets,
+    isFilteringByFavorites,
+    favoritesState,
+    searchFilters?.price,
+    searchFilters?.ageOfProject,
+    searchFilters?.isFilteringAgeOfProject,
+    searchFilters?.isFilteringNFTOnly,
+    searchFilters?.isFilteringPrice
+  ])
+
+  useEffect(() => {
+    if ((searchFilters?.priceMax === 0 || searchFilters?.priceMax) && setSearchFilterProps && !searchFilters?.isFilteringPrice) {
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'price',
+        value: [0, searchFilters.priceMax]
+      })
+    }
+    if ((searchFilters?.ageOfProjectMax === 0 || searchFilters?.ageOfProjectMax) && setSearchFilterProps && !searchFilters?.isFilteringAgeOfProject) {
+      setSearchFilterProps({
+        type: 'updateSliderValue',
+        field: 'ageOfProject',
+        value: [0, searchFilters.ageOfProjectMax]
+      })
+    }
+  }, [
+    searchFilters?.ageOfProjectMax,
+    searchFilters?.priceMax
+  ])
 
   const AssetPriceCell = useCallback(
     ({ value, row }) => {
       return (
         <AssetPrice
-          className={`${
-            row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
-          } cursor-pointer font-semibold`}
+          className={`${row.original.isGeoBlocked ? 'opacity-100' : 'opacity-100'
+            } cursor-pointer font-semibold`}
         >
           {value}
           <br />
@@ -488,15 +586,17 @@ export const NavSearchTable = ({
 
   useEffect(() => {
     // Prefetch the top assets
-    searchResultData.slice(0,30).map(result => {
+    searchResultData.slice(0, 30).map(result => {
       const assetId = result.id
       // console.log('zprefetching: ' + assetId)
-      router.prefetch('/trade/'+assetId)
+      router.prefetch('/trade/' + assetId)
     })
+    updatePriceMax()
+    updateAgeOfProjectMax()
   }, [router, searchResultData])
-  
+
   return (
-    <TableWrapper data-testid="asa-table-wrapper" ref={searchTableRef}>
+    <TableWrapper isFilterActive={isFilterActive} data-testid="asa-table-wrapper" ref={searchTableRef}>
       <Table
         flyover={isMobile ? false : true}
         components={{
@@ -505,6 +605,7 @@ export const NavSearchTable = ({
         tableSizeOnMobile={gridSize}
         optionalGridInfo={gridSize}
         initialState={searchState}
+        isFilterActive={isFilterActive}
         onStateChange={(tableState) => setSearchState(tableState)}
         getRowProps={getRowProps}
         columns={columns}
@@ -521,6 +622,9 @@ NavSearchTable.propTypes = {
   algoPrice: PropTypes.any,
   isFilteringByFavorites: PropTypes.bool,
   setIsFilteringByFavorites: PropTypes.func,
-  gridSize: PropTypes.object
+  gridSize: PropTypes.object,
+  isFilterActive: PropTypes.bool,
+  searchFilters: PropTypes.object,
+  setSearchFilterProps: PropTypes.func
 }
 export default withSearchResultsQuery(NavSearchTable)
