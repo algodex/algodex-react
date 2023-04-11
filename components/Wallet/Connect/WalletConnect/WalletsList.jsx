@@ -156,7 +156,7 @@ export const WalletsList = ({
         <WalletBalance balance={convertFromBaseUnits(wallet.amount)} />
       </WalletRow>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <Button
+        {/* <Button
           onClick={() => {
             walletDisconnectMap[wallet.type](wallet)
           }}
@@ -165,7 +165,7 @@ export const WalletsList = ({
           size="small"
         >
           Disconnect {truncatedWalletAddress(wallet.address, 4)}
-        </Button>
+        </Button> */}
       </Stack>
     </Container>
   ))

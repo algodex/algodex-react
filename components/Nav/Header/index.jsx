@@ -24,15 +24,11 @@ import {
   NavTextSmWrapper,
   Navigation
 } from './header.css'
-
-import useMyAlgoConnector from '@/hooks/useMyAlgoConnector'
-import useWallets from '@/hooks/useWallets'
-import { PeraWalletConnect } from '@perawallet/connect'
-import { peraSigner } from '@/hooks/usePeraConnection'
-
 import Hamburger from 'components/Button/Hamburger'
 import LanguageSelection from 'components/Nav/LanguageSelection'
 import Link from 'next/link'
+import { getWalletLogo } from '../../helpers'
+
 // import MenuItem from '@mui/material/MenuItem'
 import NavActiveLink from 'components/Nav/ActiveLink'
 import PropTypes from 'prop-types'
@@ -45,10 +41,17 @@ import { useEvent } from 'hooks/useEvents'
 // import useTranslation from 'next-translate/useTranslation'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
-import { useState, useContext, useCallback, useEffect } from 'react'
+import { useState, useContext, useCallback, useRef, useEffect } from 'react'
 import useTranslation from 'next-translate/useTranslation'
-import { WalletReducerContext } from '../../../hooks/WalletsReducerProvider'
+import useUserStore from 'store/use-user-state'
+import { WalletReducerContext } from 'hooks/WalletsReducerProvider'
+import useMyAlgoConnector from 'hooks/useMyAlgoConnector'
+import { PeraWalletConnect } from '@perawallet/connect'
+import useWalletConnect from 'hooks/useWalletConnect'
+
+import { peraSigner } from 'hooks/usePeraConnection'
 // import useWallets from '@/hooks/useWallets'
+import Image from 'next/image'
 
 //MUI Components
 import Menu from '@mui/material/Menu'
@@ -68,7 +71,7 @@ const ENABLE_NETWORK_SELECTION =
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
-const rehydratedPeraWallet = new PeraWalletConnect()
+const peraWalletRehydate = new PeraWalletConnect()
 
 export function Header() {
   const { t } = useTranslation('common')
@@ -80,7 +83,71 @@ export function Header() {
   const activeNetwork = getActiveNetwork()
   // const { wallet } = useWallets()
   // const { wallet } = useAlgodex()
-  const { activeWallet: wallet } = useContext(WalletReducerContext)
+  // const { activeWallet: wallet } = useContext(WalletReducerContext)
+  const {
+    setMyAlgoAddresses,
+    setAddressesNew,
+    setActiveWallet,
+    peraWallet,
+    walletConnect,
+    setPeraWallet,
+    setWalletConnect,
+    activeWallet: wallet
+  } = useContext(WalletReducerContext)
+  // const { myAlgoConnector, peraConnector } = useWallets()
+  // const { peraConnector } = useWallets()
+  const myAlgoConnector = useMyAlgoConnector()
+  const { connector } = useWalletConnect()
+
+  useEffect(() => {
+    const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
+    const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
+    const _walletconnectGeneral = JSON.parse(localStorage.getItem('walletConnectWallet'))
+
+    if (_peraWallet?.type === 'wallet-connect' && peraWallet === null) {
+      peraWalletRehydate.reconnectSession().then((accounts) => {
+        // Setup the disconnect event listener
+        // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
+        const _rehyrdratedPeraWallet = {
+          ..._peraWallet,
+          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner }
+        }
+        setPeraWallet(_rehyrdratedPeraWallet)
+        setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
+        setActiveWallet(_rehyrdratedPeraWallet)
+        console.log(accounts)
+      })
+    }
+
+    if (
+      _walletconnectGeneral?.type === 'wallet-connect-general' &&
+      walletConnect === null &&
+      typeof connector.current !== 'undefined'
+    ) {
+      const _rehyrdratedWalletconnectWallet = {
+        ..._walletconnectGeneral,
+        connector: connector.current
+      }
+      setWalletConnect(_rehyrdratedWalletconnectWallet)
+      setAddressesNew({ type: 'walletConnect', addresses: [_rehyrdratedWalletconnectWallet] })
+      setActiveWallet(_rehyrdratedWalletconnectWallet)
+      // walletconnectConnect()
+    }
+
+    if (
+      Array.isArray(_myAlgoAddresses) &&
+      _myAlgoAddresses.length > 0 &&
+      myAlgoConnector !== null
+    ) {
+      myAlgoConnector.connected = true
+      const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
+        return { ...addrObj, connector: myAlgoConnector }
+      })
+      setMyAlgoAddresses(_rehydratedMyAlgo)
+      setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
+      setActiveWallet(_rehydratedMyAlgo[0])
+    }
+  }, [myAlgoConnector, connector])
 
   const isMobile = useMobileDetect()
 
@@ -97,52 +164,52 @@ export function Header() {
     }
   })
 
-  const {
-    setMyAlgoAddresses,
-    setAddressesNew,
-    setActiveWallet,
-    peraWallet,
-    setPeraWallet,
-    activeWallet
-  } = useContext(WalletReducerContext)
+  // const {
+  //   setMyAlgoAddresses,
+  //   setAddressesNew,
+  //   setActiveWallet,
+  //   peraWallet,
+  //   setPeraWallet,
+  //   activeWallet
+  // } = useContext(WalletReducerContext)
 
-  const { peraConnector } = useWallets(null)
-  const myAlgoConnector = useMyAlgoConnector()
+  // const { peraConnector } = useWallets(null)
+  // const myAlgoConnector = useMyAlgoConnector()
 
-  useEffect(() => {
-    const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
-    const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
+  // useEffect(() => {
+  //   const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
+  //   const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
 
-    if (_peraWallet?.type === 'wallet-connect' && peraWallet === null && peraConnector) {
-      rehydratedPeraWallet.reconnectSession().then((accounts) => {
-        // Setup the disconnect event listener
-        // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
-        const _rehyrdratedPeraWallet = {
-          ..._peraWallet,
-          connector: { ...peraConnector.connector, connected: true, sign: peraSigner },
-          peraWallet: rehydratedPeraWallet
-        }
-        setPeraWallet(_rehyrdratedPeraWallet)
-        setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
-        setActiveWallet(_rehyrdratedPeraWallet)
-        console.log(accounts)
-      })
-    }
+  //   if (_peraWallet?.type === 'wallet-connect' && peraWallet === null && peraConnector) {
+  //     rehydratedPeraWallet.reconnectSession().then((accounts) => {
+  //       // Setup the disconnect event listener
+  //       // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
+  //       const _rehyrdratedPeraWallet = {
+  //         ..._peraWallet,
+  //         connector: { ...peraConnector.connector, connected: true, sign: peraSigner },
+  //         peraWallet: rehydratedPeraWallet
+  //       }
+  //       setPeraWallet(_rehyrdratedPeraWallet)
+  //       setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
+  //       setActiveWallet(_rehyrdratedPeraWallet)
+  //       console.log(accounts)
+  //     })
+  //   }
 
-    if (
-      Array.isArray(_myAlgoAddresses) &&
-      _myAlgoAddresses.length > 0 &&
-      myAlgoConnector !== null
-    ) {
-      myAlgoConnector.connected = true
-      const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
-        return { ...addrObj, connector: myAlgoConnector }
-      })
-      setMyAlgoAddresses(_rehydratedMyAlgo)
-      setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
-      setActiveWallet(_rehydratedMyAlgo[0])
-    }
-  }, [myAlgoConnector, peraConnector])
+  //   if (
+  //     Array.isArray(_myAlgoAddresses) &&
+  //     _myAlgoAddresses.length > 0 &&
+  //     myAlgoConnector !== null
+  //   ) {
+  //     myAlgoConnector.connected = true
+  //     const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
+  //       return { ...addrObj, connector: myAlgoConnector }
+  //     })
+  //     setMyAlgoAddresses(_rehydratedMyAlgo)
+  //     setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
+  //     setActiveWallet(_rehydratedMyAlgo[0])
+  //   }
+  // }, [myAlgoConnector, peraConnector])
 
   /**
    * Route to other network
@@ -291,12 +358,28 @@ export function Header() {
             className="md:text-xs sm:text-xs lg:text-md font-semibold hover:font-bold text-white border-white hover:border-white"
             variant="outlined"
           >
-            {wallet && wallet?.connector?.connected && wallet?.address
-              ? `${truncatedWalletAddress(wallet.address, 5)}`
-              : 'CONNECT A WALLET'}
+            {wallet ? (
+              <>
+                <Image
+                  src={getWalletLogo(wallet)}
+                  alt="Algorand Wallet Client Image"
+                  style={{ borderRadius: '100%' }}
+                  width={15}
+                  height={15}
+                />
+                &nbsp;
+                {`${truncatedWalletAddress(wallet.address, 6)}`}
+              </>
+            ) : (
+              'CONNECT A WALLET'
+            )}
           </Button>
           {openWalletConnectDropdown && (
-            <WalletConnectDropdown closeDropdown={() => setOpenWalletConnectDropdown(false)} />
+            <WalletConnectDropdown
+              setOpenWalletConnectDropdown={setOpenWalletConnectDropdown}
+              openWalletConnectDropdown={openWalletConnectDropdown}
+              closeDropdown={() => setOpenWalletConnectDropdown(false)}
+            />
           )}
           <LanguageSelection isMobile={isMobile} />
         </Navigation>
