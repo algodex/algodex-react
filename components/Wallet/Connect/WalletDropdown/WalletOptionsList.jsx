@@ -117,7 +117,7 @@ const WalletsOptions = ({
               onKeyPress={() => console.log('key pressed')}
             >
               <Image
-                src="/Wallet-Connect-Icon.svg"
+                src="/Wallet-Connect-New.svg"
                 alt="Wallet-connect-general"
                 width={25}
                 height={25}
