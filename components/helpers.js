@@ -59,6 +59,6 @@ export const getWalletLogo = (wallet) => {
     case 'my-algo-wallet':
       return '/My-Algo-Wallet-icon.svg'
     case 'wallet-connect-general':
-      return '/Wallet-Connect-icon.svg'
+      return '/Wallet-Connect-New.svg'
   }
 }
