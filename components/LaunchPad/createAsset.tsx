@@ -1,6 +1,7 @@
 import algosdk from 'algosdk'
 import { activeWalletTypes } from '../types'
 
+import { getActiveNetwork } from '@/services/environment'
 const isUndefined = (param) => (param && param.length !== 0 ? param : undefined)
 
 const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
@@ -11,6 +12,11 @@ const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
     : null /// True for myAlgo, false for wallet-connect, if null then throw error and exit early
 }
 
+const hasAlgxBalance = (activeWalletObj) => {
+  if (getActiveNetwork() === 'testnet') return true
+  const algxFilter = activeWalletObj.assets.filter((asset) => asset['asset-id'] === 724480511)
+  return algxFilter.length > 0 ? algxFilter[0].amount > 100000 : false
+}
 const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
   notifier('Awaiting Signature')
   const signedTransaction = isMyAlgo(activeWalletObj)
@@ -69,7 +75,6 @@ export async function manageAsset(
   notifier: (arg0: string) => void
 ) {
   const params = await client.getTransactionParams().do()
-  
   if (isMyAlgo(activeWalletObj) === null) throw Error('Invalid wallet type')
   const ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
     activeWalletObj.address,
