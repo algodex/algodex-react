@@ -4,6 +4,7 @@ import { styles } from './styles.css'
 //MUI components
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import Tooltip from '@mui/material/Tooltip'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
 
 export const CopyIcon = ({
   content,
@@ -43,6 +44,31 @@ export const CopyIcon = ({
           e.stopPropagation()
         }}
       />
+    </Tooltip>
+  )
+}
+
+export const ServiceIcon = ({
+  content,
+  sx
+}: // className
+{
+  content: string | number
+  sx?: object
+  // className?: string
+}) => {
+  return (
+    <Tooltip
+      title={content}
+      placement="top"
+      arrow
+      sx={{
+        cursor: 'pointer',
+
+        ...sx
+      }}
+    >
+      <HelpOutlineOutlinedIcon />
     </Tooltip>
   )
 }
