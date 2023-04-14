@@ -18,7 +18,7 @@ import { useState, useContext, ChangeEvent } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { useAlgodex } from '@/hooks'
 import { CreatorAddress } from '../CreatorAddress'
-import { Note } from '../note'
+import { Note, ServiceFeeNote } from '../note'
 
 //MUI Components
 import Typography from '@mui/material/Typography'
@@ -547,6 +547,8 @@ export const CreateToken = () => {
         creation is successful. You are able to create a sale of your token on Algodex or use
         Mailbox to distribute."
         />
+
+        <ServiceFeeNote className="my-6" />
         <Box className="text-center">
           <Button type="submit" disabled={loading || !activeWallet?.address} sx={styles.submitBtn}>
             CREATE TOKEN
