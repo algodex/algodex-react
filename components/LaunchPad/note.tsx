@@ -7,6 +7,10 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 
+import { ServiceIcon } from './copyIcon'
+
+import Tooltip from '@mui/material'
+
 import AlgoSvg from 'public/algorand-algo-logo.svg'
 import Icon from 'components/Icon'
 
@@ -49,38 +53,27 @@ export const ServiceFeeNote = ({
 }: {
   className?: string
   sx?: object
-  content: string
+  content?: string
 }) => {
   return (
     <Box
-      // className={`flex p-3 ${className}`}
       sx={{
         backgroundColor: 'rgba(171, 179, 188, 0.2)',
         border: ' 2px solid #ABB3BC',
 
-        // borderColor: 'green.500',
         width: '481px',
         height: '97px',
         borderRadius: '3px',
         columnGap: '4px',
-        // display: 'flex',
-        // flexDirection: 'column',
-        // alignItems: 'center',
+        marginBottom: '31px',
+
         ...sx
       }}
     >
-      {/* <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-        <InfoOutlinedIcon sx={{ color: 'white', fontSize: '16px', ml: '10px', mr: '10px' }} />
-        <Typography sx={{ fontWeight: 600, fontSize: '12px', color: 'white', mr: '10px' }}>
-          Cost to Mint
-        </Typography>
-        <Typography sx={{ backgroundColor: 'white', height: '1px', width: '115px' }} />
-      </Box> */}
-
       <Box
         sx={{
           display: 'grid',
-          gridTemplateRows: 'repeat(4, 1fr)',
+          gridTemplateRows: 'repeat(4, 24px)',
           gridTemplateColumns: 'repeat(24, 1fr)'
         }}
       >
@@ -90,6 +83,7 @@ export const ServiceFeeNote = ({
             fontSize: '16px',
             gridColumn: '2 / 3',
             // marginBottom: '20px',
+            marginTop: '15px',
             gridRow: '1 / 2',
             alignSelf: 'center'
           }}
@@ -101,6 +95,8 @@ export const ServiceFeeNote = ({
             color: 'white',
             gridColumn: '3 / 10',
             gridRow: '1 / 2',
+            marginTop: '15px',
+
             marginLeft: '5px',
             alignSelf: 'center'
           }}
@@ -113,6 +109,7 @@ export const ServiceFeeNote = ({
             height: '1px',
             width: '115px',
             gridColumn: '8 / 12',
+            marginTop: '15px',
             gridRow: '1 / 2',
             alignSelf: 'center'
           }}
@@ -125,6 +122,8 @@ export const ServiceFeeNote = ({
             color: 'white',
             gridColumn: '13 / 14',
             gridRow: '1 / 2',
+            marginTop: '15px',
+
             marginLeft: '5px',
             alignSelf: 'center'
           }}
@@ -132,14 +131,8 @@ export const ServiceFeeNote = ({
           1000
         </Typography>
 
-        <Box sx={{ gridColumn: '14 / 15', gridRow: '1 / 2' }}>
-          <Image
-            className="hidden justify-self-start md:block max-w-[224px] max-h-[168px] mt-3"
-            src={AlgoSvg}
-            width="8px"
-            height="8px"
-            alt="AlgoSvg"
-          />
+        <Box sx={{ gridColumn: '14 / 15', gridRow: '1 / 2', marginTop: '7px', marginLeft: '3px' }}>
+          <Image src={AlgoSvg} width="8px" height="8px" alt="AlgoSvg" />
         </Box>
 
         <Typography
@@ -149,19 +142,24 @@ export const ServiceFeeNote = ({
             color: 'white',
             gridColumn: '16 / 20',
             gridRow: '1 / 2',
+            marginTop: '15px',
+
             alignSelf: 'center'
           }}
         >
           Service Fee
         </Typography>
-
-        <HelpOutlineOutlinedIcon
+        <ServiceIcon
+          content="Algodex charges a small service fee to dissuade abuse of the token creation mechanism."
           sx={{
             color: 'white',
             fontSize: '11px',
             gridColumn: '20 / 21',
             // marginBottom: '20px',
             gridRow: '1 / 2',
+            marginTop: '15px',
+            marginLeft: '3px',
+
             alignSelf: 'center'
           }}
         />
@@ -174,13 +172,14 @@ export const ServiceFeeNote = ({
             gridColumn: '13 / 14',
             gridRow: '2 / 3',
             marginLeft: '5px',
-            alignSelf: 'center'
+            alignSelf: 'end',
+            marginTop: '3px'
           }}
         >
           .001
         </Typography>
 
-        <Box sx={{ gridColumn: '14 / 15', gridRow: '2 / 3' }}>
+        <Box sx={{ gridColumn: '14 / 15', gridRow: '2 / 3', marginTop: '3px' }}>
           <Image
             className="hidden justify-self-start md:block max-w-[224px] max-h-[168px] mt-3"
             src={AlgoSvg}
@@ -196,21 +195,24 @@ export const ServiceFeeNote = ({
             color: 'white',
             gridColumn: '16 / 22',
             gridRow: '2 / 3',
-            alignSelf: 'center'
+            marginTop: '3px',
+            alignSelf: 'end'
           }}
         >
           Transaction Fee
         </Typography>
 
-        <HelpOutlineOutlinedIcon
+        <ServiceIcon
           sx={{
             color: 'white',
             fontSize: '11px',
-            gridColumn: '22',
-            // marginBottom: '20px',
+            gridColumn: '21/22',
+            marginBottom: '2px',
+            marginLeft: '11px',
             gridRow: '2 / 3',
-            alignSelf: 'center'
+            alignSelf: 'end'
           }}
+          content=".001 ALGO is the fee for sending the transaction to the Algorand blockchain to create or edit the token."
         />
 
         <Typography
@@ -219,7 +221,8 @@ export const ServiceFeeNote = ({
             height: '1px',
             width: '200px',
             gridColumn: '12 / 24',
-            gridRow: '3 / 4'
+            gridRow: '3 / 4',
+            marginTop: '9px'
           }}
         />
 
@@ -228,8 +231,9 @@ export const ServiceFeeNote = ({
             fontWeight: 600,
             fontSize: '12px',
             color: 'white',
-            gridColumn: '6 / 12',
+            gridColumn: '8/ 14',
             gridRow: '4 ',
+            marginBottom: '14px',
             alignSelf: 'center'
           }}
         >
@@ -243,6 +247,7 @@ export const ServiceFeeNote = ({
             color: 'white',
             gridColumn: '13 / 16',
             gridRow: '4',
+            marginBottom: '14px',
 
             alignSelf: 'center'
           }}
@@ -250,14 +255,8 @@ export const ServiceFeeNote = ({
           1000.001
         </Typography>
 
-        <Box sx={{ gridColumn: '16 / 17', gridRow: '4' }}>
-          <Image
-            className="hidden justify-self-start md:block max-w-[224px] max-h-[168px] mt-3"
-            src={AlgoSvg}
-            width="8px"
-            height="8px"
-            alt="AlgoSvg"
-          />
+        <Box sx={{ gridColumn: '15/ 16', gridRow: '3/ 4', marginLeft: '3px', marginTop: '15px' }}>
+          <Image src={AlgoSvg} width="8px" height="8px" alt="AlgoSvg" />
         </Box>
       </Box>
     </Box>
