@@ -548,7 +548,7 @@ export const CreateToken = () => {
         Mailbox to distribute."
         />
 
-        <ServiceFeeNote className="my-6" />
+        <ServiceFeeNote />
         <Box className="text-center">
           <Button type="submit" disabled={loading || !activeWallet?.address} sx={styles.submitBtn}>
             CREATE TOKEN

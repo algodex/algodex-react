@@ -46,15 +46,7 @@ export const Note = ({
   )
 }
 
-export const ServiceFeeNote = ({
-  className,
-  sx,
-  content
-}: {
-  className?: string
-  sx?: object
-  content?: string
-}) => {
+export const ServiceFeeNote = ({ sx }: { sx?: object }) => {
   return (
     <Box
       sx={{
@@ -66,6 +58,8 @@ export const ServiceFeeNote = ({
         borderRadius: '3px',
         columnGap: '4px',
         marginBottom: '31px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
 
         ...sx
       }}
