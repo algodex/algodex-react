@@ -12,7 +12,7 @@ const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
     : null /// True for myAlgo, false for wallet-connect, if null then throw error and exit early
 }
 
-export const hasAlgxBalance = (activeWalletObj) => {
+export const hasAlgxBalance = (activeWalletObj: activeWalletTypes) => {
   if (getActiveNetwork() === 'testnet') return true
   const AlgxAssetId = 724480511
   const assetInWallet = activeWalletObj?.assets?.find(
@@ -23,11 +23,23 @@ export const hasAlgxBalance = (activeWalletObj) => {
   return typeof assetInWallet !== 'undefined' ? assetInWallet.amount > 100000 : false
 }
 
-const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
+const signedTransaction = async (
+  activeWalletObj: activeWalletTypes,
+  client: algosdk.Algodv2,
+  notifier: (arg0: string) => void,
+  txnArr: [algosdk.Transaction]
+) => {
   const walletSigningMap = {
-    'my-algo-wallet': async () => await activeWalletObj.connector.signTransaction(ctxn.toByte()),
+    'my-algo-wallet': async () =>
+      await activeWalletObj.connector.signTransaction(txnArr.map((txn) => txn.toByte())),
     'wallet-connect': async () =>
-      await activeWalletObj.peraWallet.signTransaction([[{ txn: ctxn }]])
+      await activeWalletObj.peraWallet.signTransaction([
+        [
+          ...txnArr.map((_txn) => {
+            return { txn: _txn }
+          })
+        ]
+      ])
   }
   notifier('Awaiting Signature')
 
@@ -42,7 +54,12 @@ const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
 }
 
 // Create asset function
-export default async function createAsset(assetParams, client, activeWalletObj, notifier) {
+export default async function createAsset(
+  assetParams,
+  client: algosdk.Algodv2,
+  activeWalletObj: activeWalletTypes,
+  notifier: (arg0: string) => void
+) {
   const params = await client.getTransactionParams().do()
 
   if (isMyAlgo(activeWalletObj) === null) throw Error('Invalid wallet type')
@@ -64,7 +81,7 @@ export default async function createAsset(assetParams, client, activeWalletObj, 
     params
   )
 
-  const ptx = await signedTransaction(activeWalletObj, client, notifier, createAssetTxn)
+  const ptx = await signedTransaction(activeWalletObj, client, notifier, [createAssetTxn])
   notifier(null)
   const assetId = ptx['asset-index']
 
@@ -97,6 +114,6 @@ export async function manageAsset(
     params,
     false // don't throw error if freeze, clawback, or manager are empty
   )
-  await signedTransaction(activeWalletObj, client, notifier, ctxn)
+  await signedTransaction(activeWalletObj, client, notifier, [ctxn])
   notifier(null)
 }
