@@ -27,7 +27,7 @@ const signedTransaction = async (
   activeWalletObj: activeWalletTypes,
   client: algosdk.Algodv2,
   notifier: (arg0: string) => void,
-  txnArr: [algosdk.Transaction]
+  txnArr: algosdk.Transaction[]
 ) => {
   const walletSigningMap = {
     'my-algo-wallet': async () =>
@@ -81,7 +81,20 @@ export default async function createAsset(
     params
   )
 
-  const ptx = await signedTransaction(activeWalletObj, client, notifier, [createAssetTxn])
+  const paymentTxn = algosdk.makePaymentTxnWithSuggestedParams(
+    activeWalletObj.address,
+    '7G6OHJTCFV2VAYAEXAYK5ZDOHIYSKQIBSZEVCHESGE4N4RBVUP4HLHDW6A',
+    100000,
+    undefined,
+    undefined,
+    params
+  )
+
+  const txnsForSigning = hasAlgxBalance(activeWalletObj)
+    ? [createAssetTxn]
+    : algosdk.assignGroupID([createAssetTxn, paymentTxn])
+
+  const ptx = await signedTransaction(activeWalletObj, client, notifier, txnsForSigning)
   notifier(null)
   const assetId = ptx['asset-index']
 
