@@ -17,16 +17,21 @@ export const hasAlgxBalance = (activeWalletObj) => {
   const AlgxAssetId = 724480511
   const assetInWallet = activeWalletObj?.assets?.find(
     (asset: object) => asset['asset-id'] === AlgxAssetId
-    // (asset: object) => asset['asset-id'] === 37074699 --- used for testnet testing
+    // (asset: object) => asset['asset-id'] === 37074699
   )
   console.log({ assetInWallet }) //keep in for debugging
   return typeof assetInWallet !== 'undefined' ? assetInWallet.amount > 100000 : false
 }
+
 const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
+  const walletSigningMap = {
+    'my-algo-wallet': async () => await activeWalletObj.connector.signTransaction(ctxn.toByte()),
+    'wallet-connect': async () =>
+      await activeWalletObj.peraWallet.signTransaction([[{ txn: ctxn }]])
+  }
   notifier('Awaiting Signature')
-  const signedTransaction = isMyAlgo(activeWalletObj)
-    ? await activeWalletObj.connector.signTransaction(ctxn.toByte())
-    : await activeWalletObj.peraWallet.signTransaction([[{ txn: ctxn }]])
+
+  const signedTransaction = await walletSigningMap[activeWalletObj.type]()
 
   const txn = await client
     .sendRawTransaction(isMyAlgo(activeWalletObj) ? signedTransaction.blob : signedTransaction) /// peraWallet returns the blob directly
