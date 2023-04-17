@@ -12,10 +12,15 @@ const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
     : null /// True for myAlgo, false for wallet-connect, if null then throw error and exit early
 }
 
-const hasAlgxBalance = (activeWalletObj) => {
+export const hasAlgxBalance = (activeWalletObj) => {
   if (getActiveNetwork() === 'testnet') return true
-  const algxFilter = activeWalletObj.assets.filter((asset) => asset['asset-id'] === 724480511)
-  return algxFilter.length > 0 ? algxFilter[0].amount > 100000 : false
+  const AlgxAssetId = 724480511
+  const assetInWallet = activeWalletObj?.assets?.find(
+    (asset: object) => asset['asset-id'] === AlgxAssetId
+    // (asset: object) => asset['asset-id'] === 37074699 --- used for testnet testing
+  )
+  console.log({ assetInWallet }) //keep in for debugging
+  return typeof assetInWallet !== 'undefined' ? assetInWallet.amount > 100000 : false
 }
 const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
   notifier('Awaiting Signature')
