@@ -46,7 +46,7 @@ export const Note = ({
   )
 }
 
-export const ServiceFeeNote = ({ sx }: { sx?: object }) => {
+export const ServiceFeeNote = ({ sx, fee }: { sx?: object; fee: number }) => {
   return (
     <Box
       sx={{
@@ -122,7 +122,7 @@ export const ServiceFeeNote = ({ sx }: { sx?: object }) => {
             alignSelf: 'center'
           }}
         >
-          1000
+          {fee}
         </Typography>
 
         <Box sx={{ gridColumn: '14 / 15', gridRow: '1 / 2', marginTop: '7px', marginLeft: '3px' }}>
@@ -144,7 +144,7 @@ export const ServiceFeeNote = ({ sx }: { sx?: object }) => {
           Service Fee
         </Typography>
         <ServiceIcon
-          content="Algodex charges a small service fee to dissuade abuse of the token creation mechanism."
+          content="Holding 10,000 ALGX waives the 1000 ALGO service fee"
           sx={{
             color: 'white',
             fontSize: '11px',
@@ -246,7 +246,7 @@ export const ServiceFeeNote = ({ sx }: { sx?: object }) => {
             alignSelf: 'center'
           }}
         >
-          1000.001
+          {fee + 0.001}
         </Typography>
 
         <Box sx={{ gridColumn: '15/ 16', gridRow: '3/ 4', marginLeft: '3px', marginTop: '15px' }}>

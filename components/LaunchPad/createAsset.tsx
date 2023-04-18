@@ -1,24 +1,63 @@
 import algosdk from 'algosdk'
 import { activeWalletTypes } from '../types'
 
+import { formatJsonRpcRequest } from '@json-rpc-tools/utils'
+
+import { getActiveNetwork } from '@/services/environment'
 const isUndefined = (param) => (param && param.length !== 0 ? param : undefined)
 
 const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
-  return activeWalletObj.type === 'my-algo-wallet'
-    ? true
-    : activeWalletObj.type === 'wallet-connect'
-    ? false
-    : null /// True for myAlgo, false for wallet-connect, if null then throw error and exit early
+  return activeWalletObj.type === 'my-algo-wallet' ? true : false
 }
 
-const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
+export const hasAlgxBalance = (activeWalletObj: activeWalletTypes) => {
+  if (getActiveNetwork() === 'testnet') return true
+  const AlgxAssetId = 724480511
+  const assetInWallet = activeWalletObj?.assets?.find(
+    (asset: object) => asset['asset-id'] === AlgxAssetId
+    // (asset: object) => asset['asset-id'] === 37074699
+  )
+  console.log({ assetInWallet }) //keep in for debugging
+  return typeof assetInWallet !== 'undefined' ? assetInWallet.amount > 100000 : false
+}
+
+const signedTransaction = async (
+  activeWalletObj: activeWalletTypes,
+  client: algosdk.Algodv2,
+  notifier: (arg0: string) => void,
+  txnArr: algosdk.Transaction[]
+) => {
+  const walletSigningMap = {
+    'my-algo-wallet': async () =>
+      await activeWalletObj.connector.signTransaction(txnArr.map((txn) => txn.toByte())),
+    'wallet-connect': async () =>
+      await activeWalletObj.peraWallet.signTransaction([
+        [
+          ...txnArr.map((_txn) => {
+            return { txn: _txn }
+          })
+        ]
+      ]),
+    'wallet-connect-general': async () => {
+      const encodedTxns = txnArr.map((txn) => {
+        const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString('base64')
+        return { txn: encodedTxn }
+      })
+      const request = formatJsonRpcRequest('algo_signTxn', [encodedTxns])
+
+      const result = await activeWalletObj.connector.sendCustomRequest(request)
+
+      return result.map((element) => new Uint8Array(Buffer.from(element, 'base64')))
+    }
+  }
   notifier('Awaiting Signature')
-  const signedTransaction = isMyAlgo(activeWalletObj)
-    ? await activeWalletObj.connector.signTransaction(ctxn.toByte())
-    : await activeWalletObj.peraWallet.signTransaction([[{ txn: ctxn }]])
+
+  const signedTransactions = await walletSigningMap[activeWalletObj.type]()
 
   const txn = await client
-    .sendRawTransaction(isMyAlgo(activeWalletObj) ? signedTransaction.blob : signedTransaction) /// peraWallet returns the blob directly
+    .sendRawTransaction(
+      isMyAlgo(activeWalletObj) ? signedTransactions.map((txn) => txn.blob) : signedTransactions
+    ) /// peraWallet and wallet-connect-general returns the blob directly
     .do()
 
   notifier('Awaiting Confirmation')
@@ -26,7 +65,12 @@ const signedTransaction = async (activeWalletObj, client, notifier, ctxn) => {
 }
 
 // Create asset function
-export default async function createAsset(assetParams, client, activeWalletObj, notifier) {
+export default async function createAsset(
+  assetParams,
+  client: algosdk.Algodv2,
+  activeWalletObj: activeWalletTypes,
+  notifier: (arg0: string) => void
+) {
   const params = await client.getTransactionParams().do()
 
   if (isMyAlgo(activeWalletObj) === null) throw Error('Invalid wallet type')
@@ -48,7 +92,20 @@ export default async function createAsset(assetParams, client, activeWalletObj, 
     params
   )
 
-  const ptx = await signedTransaction(activeWalletObj, client, notifier, createAssetTxn)
+  const paymentTxn = algosdk.makePaymentTxnWithSuggestedParams(
+    activeWalletObj.address,
+    '7G6OHJTCFV2VAYAEXAYK5ZDOHIYSKQIBSZEVCHESGE4N4RBVUP4HLHDW6A',
+    100000,
+    undefined,
+    undefined,
+    params
+  )
+
+  const txnsForSigning = hasAlgxBalance(activeWalletObj)
+    ? [createAssetTxn]
+    : algosdk.assignGroupID([createAssetTxn, paymentTxn])
+
+  const ptx = await signedTransaction(activeWalletObj, client, notifier, txnsForSigning)
   notifier(null)
   const assetId = ptx['asset-index']
 
@@ -69,7 +126,6 @@ export async function manageAsset(
   notifier: (arg0: string) => void
 ) {
   const params = await client.getTransactionParams().do()
-  
   if (isMyAlgo(activeWalletObj) === null) throw Error('Invalid wallet type')
   const ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
     activeWalletObj.address,
@@ -82,6 +138,6 @@ export async function manageAsset(
     params,
     false // don't throw error if freeze, clawback, or manager are empty
   )
-  await signedTransaction(activeWalletObj, client, notifier, ctxn)
+  await signedTransaction(activeWalletObj, client, notifier, [ctxn])
   notifier(null)
 }

@@ -10,6 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "build-start": "cross-env DISABLE_SENTRY=true NODE_ENV=test next build && next start",
+    "build-start-prod": "cross-env DISABLE_SENTRY=true NODE_ENV=mainnet next build && next start",
     "start": "next start",
     "test": "concurrently \"npm:test-*\"",
     "test-lint": "cp .env.mainnet .env.production && next lint",

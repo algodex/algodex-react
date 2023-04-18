@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useState, useContext, ChangeEvent } from 'react'
+import { useState, useContext, ChangeEvent, useMemo } from 'react'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider'
 import { useAlgodex } from '@/hooks'
 import { CreatorAddress } from '../CreatorAddress'
@@ -42,7 +42,7 @@ import { isValidAddr } from '@/components/helpers'
 import { NumberFormatCustom } from '@/components/Wallet/PlaceOrder/Form/TradeInputs'
 import { Tip } from '../Tip'
 
-import createAsset from '../createAsset'
+import createAsset, { hasAlgxBalance } from '../createAsset'
 import * as InputTips from '../InputTips.json'
 import { useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
 
@@ -88,6 +88,10 @@ export const CreateToken = () => {
   const [error, setError] = useState({})
   const [formData, setFormData] = useState(initialValues)
   const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
+  const balance = useMemo(() => {
+    return hasAlgxBalance(activeWallet)
+  }, [activeWallet])
+
   const {
     tokenName,
     unitName,
@@ -548,7 +552,7 @@ export const CreateToken = () => {
         Mailbox to distribute."
         />
 
-        <ServiceFeeNote />
+        <ServiceFeeNote fee={balance ? 0 : 1000} />
         <Box className="text-center">
           <Button type="submit" disabled={loading || !activeWallet?.address} sx={styles.submitBtn}>
             CREATE TOKEN
