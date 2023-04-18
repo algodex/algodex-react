@@ -144,7 +144,7 @@ export const ServiceFeeNote = ({ sx, fee }: { sx?: object; fee: number }) => {
           Service Fee
         </Typography>
         <ServiceIcon
-          content="Algodex charges a small service fee to dissuade abuse of the token creation mechanism."
+          content="Holding 10,000 ALGX waives the 1000 ALGO service fee"
           sx={{
             color: 'white',
             fontSize: '11px',
