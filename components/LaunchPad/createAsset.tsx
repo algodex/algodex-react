@@ -43,10 +43,12 @@ const signedTransaction = async (
   }
   notifier('Awaiting Signature')
 
-  const signedTransaction = await walletSigningMap[activeWalletObj.type]()
+  const signedTransactions = await walletSigningMap[activeWalletObj.type]()
 
   const txn = await client
-    .sendRawTransaction(isMyAlgo(activeWalletObj) ? signedTransaction.blob : signedTransaction) /// peraWallet returns the blob directly
+    .sendRawTransaction(
+      isMyAlgo(activeWalletObj) ? signedTransactions.map((txn) => txn.blob) : signedTransactions
+    ) /// peraWallet returns the blob directly
     .do()
 
   notifier('Awaiting Confirmation')
