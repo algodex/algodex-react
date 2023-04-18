@@ -59,6 +59,7 @@ export type activeWalletTypes = {
     }
     disableLedgerNano: boolean
     connected: boolean
+    sendCustomRequest?: (arg: unknown) => Promise<[]>
   }
   peraWallet?: { signTransaction?: (arg: unknown) => Uint8Array | Uint8Array[] }
   amount: number
