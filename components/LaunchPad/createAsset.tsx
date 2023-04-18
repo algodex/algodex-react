@@ -1,15 +1,13 @@
 import algosdk from 'algosdk'
 import { activeWalletTypes } from '../types'
 
+import { formatJsonRpcRequest } from '@json-rpc-tools/utils'
+
 import { getActiveNetwork } from '@/services/environment'
 const isUndefined = (param) => (param && param.length !== 0 ? param : undefined)
 
 const isMyAlgo = (activeWalletObj: activeWalletTypes) => {
-  return activeWalletObj.type === 'my-algo-wallet'
-    ? true
-    : activeWalletObj.type === 'wallet-connect'
-    ? false
-    : null /// True for myAlgo, false for wallet-connect, if null then throw error and exit early
+  return activeWalletObj.type === 'my-algo-wallet' ? true : false
 }
 
 export const hasAlgxBalance = (activeWalletObj: activeWalletTypes) => {
@@ -39,7 +37,18 @@ const signedTransaction = async (
             return { txn: _txn }
           })
         ]
-      ])
+      ]),
+    'wallet-connect-general': async () => {
+      const encodedTxns = txnArr.map((txn) => {
+        const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString('base64')
+        return { txn: encodedTxn }
+      })
+      const request = formatJsonRpcRequest('algo_signTxn', [encodedTxns])
+
+      const result = await activeWalletObj.connector.sendCustomRequest(request)
+
+      return result.map((element) => new Uint8Array(Buffer.from(element, 'base64')))
+    }
   }
   notifier('Awaiting Signature')
 
@@ -48,7 +57,7 @@ const signedTransaction = async (
   const txn = await client
     .sendRawTransaction(
       isMyAlgo(activeWalletObj) ? signedTransactions.map((txn) => txn.blob) : signedTransactions
-    ) /// peraWallet returns the blob directly
+    ) /// peraWallet and wallet-connect-general returns the blob directly
     .do()
 
   notifier('Awaiting Confirmation')
