@@ -1,11 +1,11 @@
 {
   "testnet": {
     "algod": {
-      "uri": "https://node.testnet.algoexplorerapi.io",
+      "uri": "https://testnet-api.algonode.cloud",
       "token": ""
     },
     "indexer": {
-      "uri": "https://algoindexer.testnet.algoexplorerapi.io",
+      "uri": "https://testnet-idx.algonode.cloud",
       "token": "",
       "port": 443
     },
@@ -22,11 +22,11 @@
   },
   "mainnet": {
     "algod": {
-      "uri": "https://node.algoexplorerapi.io",
+      "uri": "https://xna-mainnet-api.algonode.cloud",
       "token": ""
     },
     "indexer": {
-      "uri": "https://algoindexer.algoexplorerapi.io",
+      "uri": "https://mainnet-idx.algonode.cloud",
       "token": "",
       "port": 443
     },
