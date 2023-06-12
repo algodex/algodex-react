@@ -18,7 +18,7 @@ import { Box, Button } from '@mui/material'
 import { useContext, useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import useWallets from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../hooks/WalletsReducerProvider'
-
+import { getWalletLogo } from '../../helpers'
 import DropdownFooter from '@/components/Wallet/Connect/WalletDropdown/DropdownFooter'
 import DropdownHeader from '@/components/Wallet/Connect/WalletDropdown/DropdownHeader'
 import Modal from 'components/Modal'
@@ -37,6 +37,7 @@ import useAccountsInfo from '@/hooks/useAccountsInfo'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import useTranslation from 'next-translate/useTranslation'
+import { truncatedWalletAddress } from '../../helpers'
 
 const Container = styled.div`
   flex: 1 1 0%;
@@ -121,7 +122,8 @@ export function WalletView(props) {
   const {
     // myAlgoConnector,
     peraDisconnect: _peraDisconnect,
-    myAlgoDisconnect: _myAlgoDisconnect
+    myAlgoDisconnect: _myAlgoDisconnect,
+    walletconnectDisconnect
   } = useWallets(activeWallet)
 
   const myAlgoDisconnect = (targetWallet) => {
@@ -139,7 +141,8 @@ export function WalletView(props) {
     'my-algo-wallet': (wallet) => {
       myAlgoDisconnect(wallet)
     },
-    'wallet-connect': (wallet) => peraDisconnect(wallet)
+    'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
   }
 
   const isWalletActive = useCallback(
@@ -167,18 +170,6 @@ export function WalletView(props) {
       !isWalletActive(addr) && setActiveWallet(addr)
     }
   }
-
-  const getWalletLogo = useCallback((wallet) => {
-    if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
-      throw new TypeError('Must have a valid wallet!')
-    }
-    switch (wallet.type) {
-      case 'wallet-connect':
-        return '/Pera-logo.png'
-      case 'my-algo-wallet':
-        return '/My-Algo-Wallet-icon.svg'
-    }
-  }, [])
 
   return (
     <Section area="topRight">
@@ -263,18 +254,17 @@ export function WalletOptionsListComp(props) {
     setMyAlgoAddresses
   } = props
   const { http } = useAlgodex()
-  const { peraConnect, myAlgoConnect } = useWallets()
+  const { peraConnect, myAlgoConnect, walletconnectConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': () => myAlgoConnect(),
-    'pera-connect': () => peraConnect()
+    'pera-connect': () => peraConnect(),
+    'wallet-connect-general': () => walletconnectConnect()
   }
 
   const isConnected = activeWallet !== null
 
   const myAlgoOnClick = async () => {
-    console.log('myAlogOnClick')
-    console.log('hit')
     const _myAlgoAddresses = await WALLETS_CONNECT_MAP['my-algo-wallet']()
     const _fetchedAlgoAddresses = await http.indexer.fetchAccounts(_myAlgoAddresses)
     const _mergedAlgoAddresses = mergeAddresses(_myAlgoAddresses, _fetchedAlgoAddresses)
@@ -288,6 +278,10 @@ export function WalletOptionsListComp(props) {
   const peraConnectOnClick = useCallback(() => {
     WALLETS_CONNECT_MAP['pera-connect']()
   }, [WALLETS_CONNECT_MAP])
+
+  const walletconnectGeneralOnClick = () => {
+    WALLETS_CONNECT_MAP['wallet-connect-general']()
+  }
 
   const isPeraConnected = useMemo(() => {
     if (isConnected) {
@@ -319,6 +313,7 @@ export function WalletOptionsListComp(props) {
                 setIsConnectingAddress={setIsConnectingWallet}
                 addresses={addresses}
                 myAlgoOnClick={myAlgoOnClick}
+                walletconnectGeneralOnClick={walletconnectGeneralOnClick}
                 peraConnectOnClick={() => peraConnectOnClick()}
                 isPeraConnected={isPeraConnected}
               />
@@ -360,6 +355,21 @@ function WalletConnect() {
   const isMobile = useMobileDetect()
   const addressesRef = useRef(null)
 
+  const {
+    // myAlgoConnector,
+    peraDisconnect,
+    myAlgoDisconnect,
+    walletconnectDisconnect
+  } = useWallets(activeWallet)
+
+  const walletDisconnectMap = {
+    'my-algo-wallet': (wallet) => {
+      myAlgoDisconnect(wallet)
+    },
+    'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
+  }
+
   return (
     <Box className="flex flex-col justify-center" width="100%">
       {isMobile && (
@@ -377,6 +387,19 @@ function WalletConnect() {
           />
 
           <Box mx={2}>
+            {activeWallet && (
+              <>
+                <Button
+                  className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
+                  variant="contained"
+                  sx={{ minHeight: '2.5rem' }}
+                  onClick={() => walletDisconnectMap[activeWallet.type](activeWallet)}
+                >
+                  Disconnect {truncatedWalletAddress(activeWallet?.address, 5)}
+                </Button>
+              </>
+            )}
+
             <Button
               className="w-full flex text-xs font-bold justify-center items-center bg-gray-700 h-8 mt-2 text-white rounded"
               variant="contained"
@@ -388,16 +411,6 @@ function WalletConnect() {
           </Box>
         </>
       )}
-      <WalletView
-        addresses={addressesNew}
-        setAddresses={setAddressesNew}
-        activeWallet={activeWallet}
-        signedIn={signedIn}
-        setSignedIn={() => console.log('setSignedINcalled')}
-        setActiveWallet={setActiveWallet}
-        setIsConnectingWallet={setIsConnectingWallet}
-        addressesRef={addressesRef}
-      />
     </Box>
   )
 }

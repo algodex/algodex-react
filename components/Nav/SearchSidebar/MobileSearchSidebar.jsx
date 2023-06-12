@@ -24,6 +24,7 @@ import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import useUserStore from 'store/use-user-state'
 import { withAlgorandPriceQuery } from '@/hooks'
+import useSearchFilter from '@/hooks/useSearchFilter'
 
 export const Container = styled.div`
   flex: 1 1 0%;
@@ -116,7 +117,9 @@ export function NavSearchSidebar({
 
     return () => removeEventListener('resize', handleResize)
   }, [gridRef, setGridSize, searchTableRef, setSearchTableSize])
-
+  
+  const {filters, dispatch } = useSearchFilter()
+  const [toggleFilters, setToggleFilters] = useState(false)
   return (
     <Section area={area} borderColor="red" border="dashed">
       <Container gridHeight={gridSize.height} isActive={isActive}>
@@ -131,9 +134,13 @@ export function NavSearchSidebar({
               isActive={isActive}
               isListingVerifiedAssets={isListingVerifiedAssets}
               setIsListingVerifiedAssets={setIsListingVerifiedAssets}
+              searchFilters={filters}
+              dispatchAction={dispatch}
+              toggleFilters={toggleFilters}
+              setToggleFilters={setToggleFilters}
             />
           </div>
-          <div className="mt-1.5" style={{ height: '91%' }}>
+          <div className="mt-1.5" style={{ position: 'relative', height: '91%' }}>
             <NavTable
               query={query}
               isActive={isActive}
@@ -145,6 +152,9 @@ export function NavSearchSidebar({
               isFilteringByFavorites={isFilteringByFavorites}
               setIsFilteringByFavorites={setIsFilteringByFavorites}
               {...tableProps}
+              searchFilters={filters}
+              setSearchFilterProps={dispatch}
+              isFilterActive={toggleFilters}
               gridSize={gridSize}
             />
           </div>

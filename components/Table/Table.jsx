@@ -151,8 +151,8 @@ const Container = styled.div`
       position: absolute;
       top: 37px;
       width: 100%;
-      height: ${({ optionalGridInfo }) => {
-        return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - UPPERBODYHEIGHT}px` : `inherit`
+      height: ${({ optionalGridInfo, isFilterActive }) => {
+        return optionalGridInfo && (optionalGridInfo.height - UPPERBODYHEIGHT) > 0 ? `${optionalGridInfo.height - (isFilterActive ? UPPERBODYHEIGHT + 105 : UPPERBODYHEIGHT)}px` : `inherit`
       }};
       overflow-y: scroll;
       @media (max-width: 996px) {
@@ -208,10 +208,11 @@ function Table({
   data,
   getRowProps,
   optionalGridInfo,
-  tableSizeOnMobile
+  tableSizeOnMobile,
+  isFilterActive
 }) {
   const { Flyover = InfoFlyover } = components
-
+  // console.log('goggle filter: ', isFilterActive)
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [itemInfo, setItemInfo] = useState({})
@@ -254,7 +255,7 @@ function Table({
     }
   }, [onStateChange, initialState, tableState])
   return (
-    <Container optionalGridInfo={optionalGridInfo} tableSizeOnMobile={tableSizeOnMobile}>
+    <Container optionalGridInfo={optionalGridInfo} isFilterActive={isFilterActive} tableSizeOnMobile={tableSizeOnMobile}>
       <table {...getTableProps()} data-testid="data-table">
         <thead>
           {headerGroups.map((headerGroup, rowKey) => (
@@ -339,13 +340,15 @@ Table.propTypes = {
   flyover: PropTypes.bool,
   flyoverPlacement: PropTypes.string,
   optionalGridInfo: PropTypes.object,
-  tableSizeOnMobile: PropTypes.object
+  tableSizeOnMobile: PropTypes.object,
+  isFilterActive: PropTypes.bool
 }
 
 Table.defaultProps = {
   components: { Flyover: InfoFlyover },
   componentsProps: {},
   flyover: false,
+  isFilterActive: false,
   flyoverPlacement: 'right',
   getRowProps: () => {
     return {}

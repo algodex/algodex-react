@@ -21,6 +21,7 @@ export const WalletsReducerProvider = ({ children }) => {
     signedIn: walletState.signedIn,
     activeWallet: walletState.activeWallet,
     peraWallet: walletState.peraWallet,
+    walletConnect: walletState.walletConnect,
     myAlgoAddresses: walletState.myAlgoAddresses,
     setActiveWallet: (address) => {
       dispatch({ action: 'setActiveWallet', payload: address })
@@ -33,6 +34,9 @@ export const WalletsReducerProvider = ({ children }) => {
     },
     setPeraWallet: (address) => {
       dispatch({ action: 'setPeraWallet', payload: address })
+    },
+    setWalletConnect: (address) => {
+      dispatch({ action: 'setWalletConnect', payload: address })
     },
     signIn: () => {
       dispatch({ action: 'signIn' })

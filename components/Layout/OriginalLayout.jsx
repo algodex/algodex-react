@@ -142,18 +142,16 @@ const Main = styled.main`
 
   @media (min-width: 1024px) {
     grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 2fr 1fr;
     grid-template-areas:
-      'chart book wallet'
       'chart book trade'
       'orders history trade';
   }
 
   @media (min-width: 1536px) {
     grid-template-columns: 1fr 3fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     grid-template-areas:
-      'chart chart book wallet'
       'chart chart book trade'
       'orders orders history trade';
   }
@@ -179,9 +177,6 @@ function MainLayout({ asset, children }) {
   return (
     <MainWrapper>
       <Main ref={gridRef}>
-        <WalletSection>
-          <Wallet />
-        </WalletSection>
         <PlaceOrderSection>
           <PlaceOrder wallet={wallet} asset={asset} />
         </PlaceOrderSection>

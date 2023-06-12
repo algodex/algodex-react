@@ -38,6 +38,7 @@ function _mergeAddresses(a, b) {
 function useWallets(closeDropdown) {
   const {
     setPeraWallet,
+    setWalletConnect,
     setActiveWallet,
     setAddressesNew,
     disconnectWallet,
@@ -50,15 +51,25 @@ function useWallets(closeDropdown) {
   // TODO: Account Info Query
   // Handle any Connection
   const handleConnect = async (_addresses) => {
-    //Handle Connect is only used for pera wallet, for myAlgo we deal with the connection in walletDropdown/index
+    //Handle Connect is only used for pera wallet and walletConnect, for myAlgo we deal with the connection in walletDropdown/index
     if (_addresses.length > 0) {
       logInfo('Handling Connect')
 
-      const accounts = await http.indexer.fetchAccounts(_addresses)
-      const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
-      setPeraWallet(mergedPrivateAddresses[0])
-      setAddressesNew({ type: 'peraWallet', addresses: mergedPrivateAddresses })
-      setActiveWallet(mergedPrivateAddresses[0])
+      if (_addresses[0]?.type === 'wallet-connect') {
+        const accounts = await http.indexer.fetchAccounts(_addresses)
+        const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
+        setPeraWallet(mergedPrivateAddresses[0])
+        setAddressesNew({ type: 'peraWallet', addresses: mergedPrivateAddresses })
+        setActiveWallet(mergedPrivateAddresses[0])
+      }
+
+      if (_addresses[0]?.type === 'wallet-connect-general') {
+        const accounts = await http.indexer.fetchAccounts(_addresses)
+        const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
+        setWalletConnect(mergedPrivateAddresses[0])
+        setAddressesNew({ type: 'walletConnect', addresses: mergedPrivateAddresses })
+        setActiveWallet(mergedPrivateAddresses[0])
+      }
 
       if (typeof closeDropdown === 'function') closeDropdown()
     }
@@ -71,6 +82,11 @@ function useWallets(closeDropdown) {
     if (_addresses[0]?.type === 'wallet-connect') {
       disconnectWallet({ type: 'peraWallet', address: _addresses[0] })
       setAddressesNew({ type: 'peraWallet', addresses: [] })
+    }
+
+    if (_addresses[0]?.type === 'wallet-connect-general') {
+      disconnectWallet({ type: 'walletConnect', address: _addresses[0] })
+      setAddressesNew({ type: 'walletConnect', addresses: [] })
     }
 
     if (_addresses[0].type === 'my-algo-wallet') {
@@ -99,11 +115,17 @@ function useWallets(closeDropdown) {
     connector: _peraConnector
   } = usePeraConnection(handleConnect, handleDisconnect)
 
+  const {
+    connect: walletconnectConnect,
+    disconnect: walletconnectDisconnect,
+    connector: walletconnectConnector
+  } = useWalletConnect(handleConnect, handleDisconnect)
+
   const walletQuery = useAccountInfo(activeWallet)
 
   useEffect(() => {
     if (activeWallet && walletQuery.data) {
-      console.log(activeWallet)
+      // console.log(activeWallet)
       setActiveWallet({ ...activeWallet, ...walletQuery.data })
     }
   }, [walletQuery.data])
@@ -114,7 +136,10 @@ function useWallets(closeDropdown) {
     peraDisconnect,
     myAlgoDisconnect,
     myAlgoConnector,
-    peraConnector: _peraConnector
+    peraConnector: _peraConnector,
+    walletconnectConnect,
+    walletconnectDisconnect,
+    walletconnectConnector
   }
 }
 
