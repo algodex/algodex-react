@@ -109,23 +109,7 @@ const WalletsOptions = ({
                 )}
               </Stack>
             </Stack>
-            <Box
-              className="cursor-pointer flex items-center mb-2"
-              role="button"
-              tabIndex="0"
-              onClick={walletconnectConnect}
-              onKeyPress={() => console.log('key pressed')}
-            >
-              <Image
-                src="/Wallet-Connect-New.svg"
-                alt="Wallet-connect-general"
-                width={25}
-                height={25}
-              />
-              <Typography className="underline ml-2" variant="body_small_bold">
-                General Wallet Connect (Supports Defly and Exodus)
-              </Typography>
-            </Box>
+
             <Box
               className="cursor-pointer flex items-center mb-2"
               role="button"
