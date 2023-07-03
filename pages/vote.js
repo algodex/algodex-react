@@ -12,7 +12,6 @@ const VotePage = () => {
       <Header />
       <Banner />
       <VoteTabs />
-      <div>Vote page here</div>
     </>
   )
 }
