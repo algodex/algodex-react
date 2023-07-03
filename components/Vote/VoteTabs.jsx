@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import OpenVoteCard from './OpenVoteCard'
 
 const StyledTabs = styled(Tabs)`
-  margin-top: 20px;
+  margin-top: 1px;
 
   .MuiTabs-flexContainer {
     justify-content: center;
@@ -27,7 +27,8 @@ const StyledTabs = styled(Tabs)`
   }
 
   @media (min-width: 1024px) {
-    padding-left: 160px;
+    margin-top: 19px;
+    padding-left: 155px;
   }
 `
 const StyledTab = styled(Tab)`
@@ -35,12 +36,15 @@ const StyledTab = styled(Tab)`
   font-family: Inter;
   font-size: 12px;
   font-weight: 700;
+  justify-content: flex-end;
   line-height: 14.52px;
+  padding-bottom: 10px !important;
   text-transform: uppercase;
 
   @media (min-width: 1024px) {
     font-size: 14px;
     line-height: 16.94px;
+    padding-bottom: 18px !important;
   }
 `
 
@@ -56,7 +60,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: '21px' }}>
           <Typography component="div">{children}</Typography>
         </Box>
       )}
@@ -86,7 +90,17 @@ function VoteTabs() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: '#4A5568', alignContent: 'center' }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: '#4A5568',
+          alignContent: 'center',
+          marginBottom: '3px',
+          '@media screen and (min-width: 1024px)': {
+            marginBottom: '7px'
+          }
+        }}
+      >
         <StyledTabs value={value} onChange={handleChange}>
           <StyledTab label="Open Votes" {...a11yProps(0)} />
           <StyledTab label="Upcoming Votes" {...a11yProps(1)} />
@@ -95,12 +109,15 @@ function VoteTabs() {
       </Box>
       <TabPanel value={value} index={0}>
         <OpenVoteCard />
+        <OpenVoteCard />
+        <OpenVoteCard />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <OpenVoteCard />
+        <OpenVoteCard />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <OpenVoteCard />
       </TabPanel>
     </Box>
   )
