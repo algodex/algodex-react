@@ -26,5 +26,6 @@
     "order-size-filtering": "Filtern der Bestellgröße",
     "less-lag": "Weniger Verzögerung",
     "better-execution": "Bessere Ausführung",
-    "fund-wallet":"Bitte füllen Sie Ihr Guthaben mit mehr ALGO auf, bevor Sie Bestellungen aufgeben!"
+    "fund-wallet":"Bitte füllen Sie Ihr Guthaben mit mehr ALGO auf, bevor Sie Bestellungen aufgeben!",
+    "asset-success": "Asset erfolgreich erstellt"
 }

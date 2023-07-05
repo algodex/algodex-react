@@ -26,5 +26,6 @@
   "order-size-filtering": "订单大小过滤",
   "less-lag": "减少滞后",
   "better-execution": "更好的执行",
-  "fund-wallet": "在下订单之前，请为您的钱包注入更多的ALGO！"
+  "fund-wallet": "在下订单之前，请为您的钱包注入更多的ALGO！",
+  "asset-success": "资产创建成功"
 }

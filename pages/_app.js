@@ -114,6 +114,8 @@ function Algodex(props) {
     window.userStore = useUserStore
     window.queryClient = queryClient
   }
+  const getLayout = Component.getLayout || ((page) => page)
+
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
@@ -130,7 +132,7 @@ function Algodex(props) {
                   {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                   <Toaster />
                   <ReactQueryDevtools initialIsOpen={false} />
-                  <Component {...pageProps} />
+                  {getLayout(<Component {...pageProps} />)}
                 </Provider>
               </WalletsReducerProvider>
             </ThemeProvider>

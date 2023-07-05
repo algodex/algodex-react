@@ -26,5 +26,6 @@
     "order-size-filtering": "Filtrat de la mida de la comanda",
     "less-lag": "Menys retard",
     "better-execution": "Millor Execució",
-    "fund-wallet":"Si us plau, finança la teva cartera amb més ALGO abans de fer comandes!"
+    "fund-wallet":"Si us plau, finança la teva cartera amb més ALGO abans de fer comandes!",
+    "asset-success": "El recurs s'ha creat correctament"
 }
