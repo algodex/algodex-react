@@ -48,7 +48,7 @@ const OpenIssue = () => {
         ></link>
       </Head>
       <Header />
-      {innerWidth > 1024 ? (
+      {innerWidth >= 1024 ? (
         <>
           <Banner />
           <DesktopContainer>
