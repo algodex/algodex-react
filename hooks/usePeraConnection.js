@@ -34,7 +34,6 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
       .reconnectSession()
       .then((accounts) => {
         peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
-        // peraWallet.prototype.sign = signer
 
         if (accounts.length) {
           // Disconnect if wallet with Address already exists
@@ -52,7 +51,8 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
                     ...peraWallet.connector,
                     sign: peraSigner,
                     accounts: [acct]
-                  }
+                  },
+                  peraWallet: peraWallet
                 }
                 return _account
               })
@@ -72,7 +72,6 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
       .connect()
       .then((newAccounts) => {
         peraWallet.connector.on('disconnect', handleDisconnectWalletClick)
-        // peraWallet.prototype.sign = signer
 
         const _addresses = newAccounts.map((acct) => {
           const _account = {
@@ -82,13 +81,13 @@ export default function usePeraConnection(onConnect, onDisconnect, sessionUpdate
               ...peraWallet.connector,
               sign: peraSigner,
               accounts: [acct]
-            }
+            },
+            peraWallet: peraWallet
           }
           _account.connector.connected = true
           return _account
         })
         onConnect(_addresses)
-        // return _addresses
       })
       .catch((error) => {
         if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {
