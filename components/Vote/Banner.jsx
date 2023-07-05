@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import Button from '@mui/material/Button'
 
 const Container = styled.div`
   background-color: #4a5568;
@@ -55,15 +54,19 @@ const Subtitle = styled.p`
     margin-bottom: 28px;
   }
 `
-const InfoButton = styled(Button)`
+const InfoButton = styled.a`
+  align-items: center;
   background-color: #38a169;
   border-radius: 2px;
   color: #ffffff;
+  display: flex;
   font-family: Inter;
   font-size: 12px;
   font-weight: 700;
   height: 33px;
+  justify-content: center;
   line-height: 14.52px;
+  text-decoration: none;
   text-transform: uppercase;
   width: 132px;
 
@@ -91,7 +94,9 @@ function Banner() {
         <LeftContainer>
           <Title>Have a say in the future of Algodex.</Title>
           <Subtitle>Receive voting tokens by holding ALGX tokens and vote on proposals</Subtitle>
-          <InfoButton>More Info</InfoButton>
+          <InfoButton href="https://docs.algodex.com/" target="_blank">
+            More Info
+          </InfoButton>
         </LeftContainer>
         <RightContainer>
           <ImagePlaceholder></ImagePlaceholder>
