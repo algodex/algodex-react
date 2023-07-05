@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import useTranslation from 'next-translate/useTranslation'
 
 const CardContainer = styled.article`
   border-radius: 8px;
@@ -128,6 +129,7 @@ const Description = styled.p`
 `
 
 function OpenVoteCard() {
+  const { t } = useTranslation('vote')
   return (
     <>
       <CardContainer>
@@ -139,7 +141,7 @@ function OpenVoteCard() {
               </CheckboxContainer>
               <Title>Title / Question for Vote</Title>
             </TitleContainer>
-            <VotingDate>Voting ends: June 18, 2023, 14:00 GMT</VotingDate>
+            <VotingDate>{t('Voting ends')}: June 18, 2023, 14:00 GMT</VotingDate>
           </LeftHeadingContainer>
           <RightArrowContainer>
             <ArrowForwardIosIcon />

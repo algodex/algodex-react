@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import LinearProgress from '@mui/material/LinearProgress'
+import useTranslation from 'next-translate/useTranslation'
 
 const CurrentLiveResultsContainer = styled.div`
   color: white;
@@ -99,18 +100,20 @@ const Percentage = styled.p`
 `
 
 function CurrentLiveResultsCard() {
+  const { t } = useTranslation('vote')
+
   return (
     <>
       <CurrentLiveResultsContainer>
         <CardTopContainer>
-          <p>Current Live Results:</p>
+          <p>{t('Current Live Results')}:</p>
         </CardTopContainer>
         <CurrentLiveResultsBottomContainer>
           <OptionContainer>
             <Option>Pineapple</Option>
             <LinearProgress variant="determinate" value={42.3} />
             <NumbersContainer>
-              <VoteNumbers>5,687 Votes</VoteNumbers>
+              <VoteNumbers>5,687 {t('Votes')}</VoteNumbers>
               <Percentage>42.3%</Percentage>
             </NumbersContainer>
           </OptionContainer>
@@ -118,7 +121,7 @@ function CurrentLiveResultsCard() {
             <Option>Pepperoni</Option>
             <LinearProgress variant="determinate" value={22.3} />
             <NumbersContainer>
-              <VoteNumbers>3,103 Votes</VoteNumbers>
+              <VoteNumbers>3,103 {t('Votes')}</VoteNumbers>
               <Percentage>22.3%</Percentage>
             </NumbersContainer>
           </OptionContainer>
@@ -126,7 +129,7 @@ function CurrentLiveResultsCard() {
             <Option>Cheese</Option>
             <LinearProgress variant="determinate" value={19.3} />
             <NumbersContainer>
-              <VoteNumbers>2,908 Votes</VoteNumbers>
+              <VoteNumbers>2,908 {t('Votes')}</VoteNumbers>
               <Percentage>19.3%</Percentage>
             </NumbersContainer>
           </OptionContainer>
@@ -134,7 +137,7 @@ function CurrentLiveResultsCard() {
             <Option>Other</Option>
             <LinearProgress variant="determinate" value={12.3} />
             <NumbersContainer>
-              <VoteNumbers>1,678 Votes</VoteNumbers>
+              <VoteNumbers>1,678 {t('Votes')}</VoteNumbers>
               <Percentage>12.3%</Percentage>
             </NumbersContainer>
           </OptionContainer>

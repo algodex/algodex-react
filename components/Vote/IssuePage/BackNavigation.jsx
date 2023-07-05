@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import styled from '@emotion/styled'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import useTranslation from 'next-translate/useTranslation'
 
 const AnchorContainer = styled.a`
   align-items: center;
@@ -24,12 +25,13 @@ const AnchorContainer = styled.a`
   }
 `
 function BackNavigation() {
+  const { t } = useTranslation('vote')
   return (
     <>
       <Link href="/vote">
         <AnchorContainer>
           <ArrowBackIcon />
-          Back to Voting Homepage
+          {t('Back to Voting Homepage')}
         </AnchorContainer>
       </Link>
     </>

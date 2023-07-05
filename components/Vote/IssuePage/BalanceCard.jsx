@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
+import useTranslation from 'next-translate/useTranslation'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -134,21 +135,24 @@ const InfoText = styled.p`
   text-align: center !important;
 `
 function BalanceCard() {
+  const { t } = useTranslation('vote')
   return (
     <>
       <BalanceCardContainer>
         <CardTopContainer>
-          <p>Receive Voting Tokens:</p>
+          <p>{t('Receive Voting Tokens')}:</p>
         </CardTopContainer>
         <BalanceCardBottomContainer>
           <p>
-            You need voting tokens to cast your vote. The number of votes you have is based on the
-            amount of ALGX in this wallet at the time the vote opens and when you cast your vote.
+            {t(
+              'You need voting tokens to cast your vote. The number of votes you have is based on the amount of ALGX in this wallet at the time the vote opens and when you cast your vote'
+            )}
+            .
           </p>
           <BalanceDisplay>
-            <p>Your ALGX Balance: 14,494.24</p>
+            <p>{t('Your ALGX Balance')}: 14,494.24</p>
           </BalanceDisplay>
-          <OptInButton>Opt in and Receive Tokens</OptInButton>
+          <OptInButton>{t('Opt in and Receive Tokens')}</OptInButton>
           {/* <InfoText>
             This wallet has claimed its voting tokens. <br />
             Cast your vote below.

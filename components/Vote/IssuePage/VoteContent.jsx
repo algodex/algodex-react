@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
   color: white;
@@ -86,17 +87,17 @@ const Description = styled.p`
   }
 `
 
-function VoteContent(innerWidth) {
-  console.log(innerWidth)
+function VoteContent() {
+  const { t } = useTranslation('vote')
   return (
     <>
       <Container>
         <ContentContainer>
           <Headingcontainer>
-            <VoteNow>Vote Now</VoteNow>
+            <VoteNow>{t('Vote Now')}</VoteNow>
             <Title>Title / Question for Vote</Title>
-            <VotingDate>Voting started: June 1, 2023, 14:00 GMT</VotingDate>
-            <VotingDate>Voting ends: June 18, 2023, 14:00 GMT</VotingDate>
+            <VotingDate>{t('Voting started')}: June 1, 2023, 14:00 GMT</VotingDate>
+            <VotingDate>{t('Voting ends')}: June 18, 2023, 14:00 GMT</VotingDate>
           </Headingcontainer>
           <Description>
             Porta arcu amet ut nunc fe ugiat mauris. Consectetur nunc ullamcorper tincidunt aenean

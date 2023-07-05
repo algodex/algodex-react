@@ -5,6 +5,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
+import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
   border-radius: 8px;
@@ -118,10 +119,12 @@ const VoteButton = styled(Button)`
   }
 `
 function QuestionForm() {
+  const { t } = useTranslation('vote')
+
   return (
     <>
       <Container>
-        <QuestionNumber>Question #1</QuestionNumber>
+        <QuestionNumber>{t('Question')} #1</QuestionNumber>
         <QuestionTitle>What is the best pizza topping?</QuestionTitle>
         <QuestionDescription>
           Aliquet semper sed egestas viverra sed sed. Risus massa gravida consequat arcu elementum.
@@ -140,7 +143,7 @@ function QuestionForm() {
             </RadioGroup>
           </FormControlStyled>
         </form>
-        <VoteButton>Submit Vote</VoteButton>
+        <VoteButton>{t('Submit Vote')}</VoteButton>
       </Container>
     </>
   )
