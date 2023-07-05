@@ -112,7 +112,6 @@ const Description = styled.p`
   display: -webkit-box;
   font-size: 12px;
   font-weight: 500;
-  height: 45px;
   letter-spacing: 0px;
   line-height: 14.52px;
   overflow: hidden;
@@ -120,7 +119,6 @@ const Description = styled.p`
 
   @media (min-width: 1024px) {
     font-size: 14px;
-    height: 51px;
     letter-spacing: 0px;
     line-height: 16.94px;
     margin-top: 0px;
