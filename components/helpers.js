@@ -14,6 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import algosdk from 'algosdk'
 import toast from 'react-hot-toast'
 
 export const formatUSDPrice = (amount) => {
@@ -21,7 +22,10 @@ export const formatUSDPrice = (amount) => {
 }
 
 export const truncatedWalletAddress = (addr, size) => {
-  return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
+  if (addr) {
+    return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
+  }
+  return ''
 }
 
 export const subStringFn = (start, end, string) => {
@@ -47,6 +51,24 @@ export const setExplorerLink = (addr, network) => {
 
 export const assetVeryShortNameFn = (asset) => {
   return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
+}
+
+export const algodClient = () => {
+  const algodToken = ''
+  const algodServer = 'https://node.algoexplorerapi.io/'
+  const algodPort = ''
+
+  return new algosdk.Algodv2(algodToken, algodServer, algodPort)
+}
+
+export const isValidAddr = async (addr) => {
+  //Check your if account exist on Algorand
+  try {
+    await algodClient().accountInformation(addr).do()
+    return true
+  } catch (error) {
+    return false
+  }
 }
 
 export const getWalletLogo = (wallet) => {

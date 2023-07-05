@@ -26,6 +26,7 @@
     "order-size-filtering": "Pemfilteran Ukuran Pesanan",
     "less-lag": "Lebih Sedikit Keterlambatan",
     "better-execution": "Eksekusi yang Lebih Baik",
-    "fund-wallet":"Harap mendanai dompet Anda dengan lebih banyak ALGO sebelum melakukan pemesanan!"
+    "fund-wallet":"Harap mendanai dompet Anda dengan lebih banyak ALGO sebelum melakukan pemesanan!",
+    "asset-success": "Aset berhasil dibuat"
     
 }

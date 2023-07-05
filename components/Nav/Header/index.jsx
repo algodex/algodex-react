@@ -14,7 +14,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Box, Button, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material'
 import {
   Container,
   IconLogo,
@@ -40,7 +39,6 @@ import { truncatedWalletAddress } from 'components/helpers'
 import { useEvent } from 'hooks/useEvents'
 // import useMobileDetect from '@/hooks/useMobileDetect'
 // import useTranslation from 'next-translate/useTranslation'
-import useWallets from '@/hooks/useWallets'
 // import { useAlgodex } from '@algodex/algodex-hooks'
 import useMobileDetect from '@/hooks/useMobileDetect'
 import { useState, useContext, useCallback, useRef, useEffect } from 'react'
@@ -55,6 +53,19 @@ import { peraSigner } from 'hooks/usePeraConnection'
 // import useWallets from '@/hooks/useWallets'
 import Image from 'next/image'
 
+//MUI Components
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+
+//Iconify
+import { Icon } from '@iconify/react'
+
 const ENABLE_NETWORK_SELECTION =
   process.env.NEXT_PUBLIC_TESTNET_LINK && process.env.NEXT_PUBLIC_MAINNET_LINK
 const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
@@ -63,11 +74,16 @@ const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 const peraWalletRehydate = new PeraWalletConnect()
 
 export function Header() {
+  const { t } = useTranslation('common')
   const [isOpen, setIsOpen] = useState(false)
   const [openWalletConnectDropdown, setOpenWalletConnectDropdown] = useState(false)
-  const { t } = useTranslation('common')
-  const activeNetwork = getActiveNetwork()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const openMenu = Boolean(anchorEl)
 
+  const activeNetwork = getActiveNetwork()
+  // const { wallet } = useWallets()
+  // const { wallet } = useAlgodex()
+  // const { activeWallet: wallet } = useContext(WalletReducerContext)
   const {
     setMyAlgoAddresses,
     setAddressesNew,
@@ -135,11 +151,65 @@ export function Header() {
 
   const isMobile = useMobileDetect()
 
+  const handleClickMenu = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleCloseMenu = () => {
+    setAnchorEl(null)
+  }
+
   useEvent('connecting-wallet', (data) => {
     if (data.isOpen === false) {
       setOpenWalletConnectDropdown(false)
     }
   })
+
+  // const {
+  //   setMyAlgoAddresses,
+  //   setAddressesNew,
+  //   setActiveWallet,
+  //   peraWallet,
+  //   setPeraWallet,
+  //   activeWallet
+  // } = useContext(WalletReducerContext)
+
+  // const { peraConnector } = useWallets(null)
+  // const myAlgoConnector = useMyAlgoConnector()
+
+  // useEffect(() => {
+  //   const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
+  //   const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
+
+  //   if (_peraWallet?.type === 'wallet-connect' && peraWallet === null && peraConnector) {
+  //     rehydratedPeraWallet.reconnectSession().then((accounts) => {
+  //       // Setup the disconnect event listener
+  //       // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
+  //       const _rehyrdratedPeraWallet = {
+  //         ..._peraWallet,
+  //         connector: { ...peraConnector.connector, connected: true, sign: peraSigner },
+  //         peraWallet: rehydratedPeraWallet
+  //       }
+  //       setPeraWallet(_rehyrdratedPeraWallet)
+  //       setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
+  //       setActiveWallet(_rehyrdratedPeraWallet)
+  //       console.log(accounts)
+  //     })
+  //   }
+
+  //   if (
+  //     Array.isArray(_myAlgoAddresses) &&
+  //     _myAlgoAddresses.length > 0 &&
+  //     myAlgoConnector !== null
+  //   ) {
+  //     myAlgoConnector.connected = true
+  //     const _rehydratedMyAlgo = _myAlgoAddresses.map((addrObj) => {
+  //       return { ...addrObj, connector: myAlgoConnector }
+  //     })
+  //     setMyAlgoAddresses(_rehydratedMyAlgo)
+  //     setAddressesNew({ type: 'myAlgo', addresses: _rehydratedMyAlgo })
+  //     setActiveWallet(_rehydratedMyAlgo[0])
+  //   }
+  // }, [myAlgoConnector, peraConnector])
 
   /**
    * Route to other network
@@ -228,17 +298,65 @@ export function Header() {
               <Typography variant="navText">{t('header-support')}</Typography>
             </NavTextLgWrapper>
           </NavActiveLink>
-          <NavActiveLink href={MAILBOX_URL}>
-            <NavTextLgWrapper isMobile={isMobile}>
-              <Typography variant="navText">{t('header-mailbox')}</Typography>
-            </NavTextLgWrapper>
-          </NavActiveLink>
-          <NavActiveLink href="https://rewards.algodex.com/">
-            <NavTextLgWrapper isMobile={isMobile}>
-              <Typography variant="navText">{t('header-rewards')}</Typography>
-            </NavTextLgWrapper>
-          </NavActiveLink>
-
+          <Button
+            id="basic-button"
+            aria-controls={openMenu ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMenu ? 'true' : undefined}
+            onClick={handleClickMenu}
+          >
+            <NavActiveLink href="#!" matches={/^\/launchpad/}>
+              <NavTextLgWrapper isMobile={isMobile}>
+                <Typography variant="navText" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <span>APPS</span>
+                  <Icon
+                    icon={openMenu ? 'pepicons-pop:angle-up' : 'pepicons-pop:angle-down'}
+                    fontSize={'18px'}
+                  />
+                </Typography>
+              </NavTextLgWrapper>
+            </NavActiveLink>
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleCloseMenu}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button'
+            }}
+          >
+            <MenuItem onClick={handleCloseMenu}>
+              <NavActiveLink href={MAILBOX_URL}>
+                <NavTextLgWrapper isMobile={isMobile}>
+                  <Typography variant="navText">{t('header-mailbox')}</Typography>
+                </NavTextLgWrapper>
+              </NavActiveLink>
+            </MenuItem>
+            <Divider sx={{ backgroundColor: 'gray.500', margin: '20px 10px' }} />
+            <MenuItem onClick={handleCloseMenu}>
+              <NavActiveLink href="https://rewards.algodex.com/">
+                <NavTextLgWrapper isMobile={isMobile}>
+                  <Typography variant="navText">{t('header-rewards')}</Typography>
+                </NavTextLgWrapper>
+              </NavActiveLink>
+            </MenuItem>
+            <Divider sx={{ backgroundColor: 'gray.500', margin: '20px 10px' }} />
+            {/* <MenuItem onClick={handleCloseMenu}>
+              <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
+                <NavTextLgWrapper isMobile={isMobile}>
+                  <Typography variant="navText">Launch Pad</Typography>
+                </NavTextLgWrapper>
+              </NavActiveLink>
+            </MenuItem> */}
+            <MenuItem onClick={handleCloseMenu}>
+              <NavActiveLink href="/vote" matches={/^\/vote/}>
+                <NavTextLgWrapper isMobile={isMobile}>
+                  <Typography variant="navText">Vote</Typography>
+                </NavTextLgWrapper>
+              </NavActiveLink>
+            </MenuItem>
+          </Menu>
           <Button
             onClick={() => {
               setOpenWalletConnectDropdown(!openWalletConnectDropdown)
@@ -281,6 +399,21 @@ export function Header() {
       )}
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
+          {/* <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Launch Pad</Typography>
+            </NavTextSmWrapper>
+          </NavActiveLink> */}
+          <NavActiveLink href="/vote" matches={/^\/vote/}>
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">Vote</Typography>
+            </NavTextSmWrapper>
+          </NavActiveLink>
+          <NavActiveLink href="/about" matches={/^\/about/}>
+            <NavTextSmWrapper isMobile={isMobile}>
+              <Typography variant="navText">About</Typography>
+            </NavTextSmWrapper>
+          </NavActiveLink>
           <NavActiveLink href="/trade" matches={/^\/trade/}>
             <NavTextSmWrapper isMobile={isMobile}>
               <Typography variant="navText">Trade</Typography>

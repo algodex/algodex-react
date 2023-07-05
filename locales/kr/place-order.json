@@ -26,5 +26,6 @@
     "order-size-filtering": "주문 크기 필터링",
     "less-lag": "지연 감소",
     "better-execution": "더 나은 실행",
-    "fund-wallet":"주문을하기 전에 더 많은 ALGO와 지갑에 자금을 주세요!"
+    "fund-wallet":"주문을하기 전에 더 많은 ALGO와 지갑에 자금을 주세요!",
+    "asset-success": "애셋이 성공적으로 생성되었습니다."
 }
