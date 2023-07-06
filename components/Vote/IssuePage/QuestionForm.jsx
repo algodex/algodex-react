@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
@@ -136,8 +137,13 @@ function QuestionForm({ vote }) {
               name="radio-buttons-group"
             >
               {question.options &&
-                question.options.map((option) => (
-                  <FormControlLabelStyled value={option} control={<Radio />} label={option} />
+                question.options.map((option, i) => (
+                  <FormControlLabelStyled
+                    value={option}
+                    control={<Radio />}
+                    label={option}
+                    key={i}
+                  />
                 ))}
             </RadioGroup>
           </FormControlStyled>
@@ -147,5 +153,11 @@ function QuestionForm({ vote }) {
     </>
   )
 }
-
+QuestionForm.propTypes = {
+  vote: PropTypes.array,
+  question: PropTypes.object,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  options: PropTypes.array
+}
 export default QuestionForm

@@ -149,13 +149,13 @@ function VoteTabs() {
         </StyledTabs>
       </Box>
       <TabPanel value={value} index={0}>
-        {openVotes && openVotes?.map((vote) => <VoteCard vote={vote} />)}
+        {openVotes && openVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {upcomingVotes && upcomingVotes?.map((vote) => <VoteCard vote={vote} />)}
+        {upcomingVotes && upcomingVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {pastVotes && pastVotes?.map((vote) => <VoteCard vote={vote} />)}
+        {pastVotes && pastVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
       </TabPanel>
     </Box>
   )

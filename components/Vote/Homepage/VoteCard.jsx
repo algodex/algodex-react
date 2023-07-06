@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import useTranslation from 'next-translate/useTranslation'
@@ -138,6 +139,7 @@ const Description = styled.p`
 function VoteCard({ vote }) {
   const { t } = useTranslation('vote')
   const today = dayjs().toISOString()
+  console.log(vote)
   const { title, description, startDate, endDate } = vote
 
   return (
@@ -176,5 +178,11 @@ function VoteCard({ vote }) {
     </>
   )
 }
-
+VoteCard.propTypes = {
+  vote: PropTypes.object,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string
+}
 export default VoteCard

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 import dayjs from 'dayjs'
@@ -138,5 +139,11 @@ function VoteContent({ vote }) {
     </>
   )
 }
-
+VoteContent.propTypes = {
+  vote: PropTypes.object,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string
+}
 export default VoteContent
