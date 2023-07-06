@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import useTranslation from 'next-translate/useTranslation'
+import Link from 'next/link'
 
 const CardContainer = styled.article`
   border-radius: 8px;
@@ -13,6 +14,7 @@ const CardContainer = styled.article`
   padding-bottom: 14px;
   padding-left: 14px;
   padding-top: 18px;
+  cursor: pointer;
 
   @media (min-width: 1024px) {
     height: 155px;
@@ -130,29 +132,31 @@ function OpenVoteCard() {
   const { t } = useTranslation('vote')
   return (
     <>
-      <CardContainer>
-        <HeadingContainer>
-          <LeftHeadingContainer>
-            <TitleContainer>
-              <CheckboxContainer>
-                <img src={'/VoteCardCheckbox.svg'} alt="Voting Card Checkbox" />
-              </CheckboxContainer>
-              <Title>Title / Question for Vote</Title>
-            </TitleContainer>
-            <VotingDate>{t('Voting ends')}: June 18, 2023, 14:00 GMT</VotingDate>
-          </LeftHeadingContainer>
-          <RightArrowContainer>
-            <ArrowForwardIosIcon />
-          </RightArrowContainer>
-        </HeadingContainer>
-        <Description>
-          Porta arcu amet ut nunc feugiat mauris. Consectetur nunc ullamcorper tincidunt aenean
-          lobortis nulla nunc facilisis. Gravida neque orci gravida urna et pulvinar. Ullamcorper
-          congue sed libero at quis iaculis proin varius. Sagittis rhoncus condimentum scelerisque
-          gravida. Neque gravida quam in ornare elementum elementum aliquam id. Viverra facilisi
-          sagittis et dictum risus. Ornare risus enim feugiat porttitor tempus gravida
-        </Description>
-      </CardContainer>
+      <Link href={'/vote/open'}>
+        <CardContainer>
+          <HeadingContainer>
+            <LeftHeadingContainer>
+              <TitleContainer>
+                <CheckboxContainer>
+                  <img src={'/VoteCardCheckbox.svg'} alt="Voting Card Checkbox" />
+                </CheckboxContainer>
+                <Title>Title / Question for Vote</Title>
+              </TitleContainer>
+              <VotingDate>{t('Voting ends')}: June 18, 2023, 14:00 GMT</VotingDate>
+            </LeftHeadingContainer>
+            <RightArrowContainer>
+              <ArrowForwardIosIcon />
+            </RightArrowContainer>
+          </HeadingContainer>
+          <Description>
+            Porta arcu amet ut nunc feugiat mauris. Consectetur nunc ullamcorper tincidunt aenean
+            lobortis nulla nunc facilisis. Gravida neque orci gravida urna et pulvinar. Ullamcorper
+            congue sed libero at quis iaculis proin varius. Sagittis rhoncus condimentum scelerisque
+            gravida. Neque gravida quam in ornare elementum elementum aliquam id. Viverra facilisi
+            sagittis et dictum risus. Ornare risus enim feugiat porttitor tempus gravida
+          </Description>
+        </CardContainer>
+      </Link>
     </>
   )
 }
