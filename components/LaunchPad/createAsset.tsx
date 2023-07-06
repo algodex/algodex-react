@@ -73,13 +73,17 @@ export default async function createAsset(
 ) {
   const params = await client.getTransactionParams().do()
 
+  const totalSupply = Number(assetParams.totalSupply)
+  const decimals = Number(assetParams.decimals)
+  const realTotalSupply = totalSupply * Math.pow(10, decimals)
+
   if (isMyAlgo(activeWalletObj) === null) throw Error('Invalid wallet type')
 
   const createAssetTxn = algosdk.makeAssetCreateTxnWithSuggestedParams(
     activeWalletObj.address,
     undefined, // no note for time being
-    Number(assetParams.totalSupply), // hardCoded issuance for time being
-    Number(assetParams.decimals), // hardCoded decimals for time
+    realTotalSupply,
+    Number(assetParams.decimals),
     false,
     isUndefined(assetParams.managerAddr),
     isUndefined(assetParams.reserveAddr),
