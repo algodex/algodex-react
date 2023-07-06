@@ -3,6 +3,9 @@ import styled from '@emotion/styled'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import useTranslation from 'next-translate/useTranslation'
 import Link from 'next/link'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(isBetween)
 
 const CardContainer = styled.article`
   border-radius: 8px;
@@ -34,7 +37,7 @@ const HeadingContainer = styled.div`
 const LeftHeadingContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 92%;
 `
 const RightArrowContainer = styled.div`
   align-items: center;
@@ -62,6 +65,7 @@ const TitleContainer = styled.div`
   align-items: center;
   display: flex;
   height: 20px;
+  width: 90%;
 `
 const CheckboxContainer = styled.div`
   display: flex;
@@ -87,6 +91,9 @@ const Title = styled.h3`
   font-size: 16px;
   font-weight: 700;
   line-height: 19.36px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   @media (min-width: 1024px) {
     font-size: 20px;
@@ -128,11 +135,14 @@ const Description = styled.p`
   }
 `
 
-function OpenVoteCard() {
+function VoteCard({ vote }) {
   const { t } = useTranslation('vote')
+  const today = dayjs().toISOString()
+  const { title, description, startDate, endDate } = vote
+
   return (
     <>
-      <Link href={'/vote/open'}>
+      <Link href={`/vote/${title}`}>
         <CardContainer>
           <HeadingContainer>
             <LeftHeadingContainer>
@@ -140,25 +150,31 @@ function OpenVoteCard() {
                 <CheckboxContainer>
                   <img src={'/VoteCardCheckbox.svg'} alt="Voting Card Checkbox" />
                 </CheckboxContainer>
-                <Title>Title / Question for Vote</Title>
+                <Title>{title}</Title>
               </TitleContainer>
-              <VotingDate>{t('Voting ends')}: June 18, 2023, 14:00 GMT</VotingDate>
+              {dayjs(today).isBetween(startDate, endDate) ? (
+                <VotingDate>
+                  {t('Voting ends')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+              ) : dayjs(today).isBefore(dayjs(startDate)) ? (
+                <VotingDate>
+                  {t('Voting starts')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+              ) : (
+                <VotingDate>
+                  {t('Voting ended')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+              )}
             </LeftHeadingContainer>
             <RightArrowContainer>
               <ArrowForwardIosIcon />
             </RightArrowContainer>
           </HeadingContainer>
-          <Description>
-            Porta arcu amet ut nunc feugiat mauris. Consectetur nunc ullamcorper tincidunt aenean
-            lobortis nulla nunc facilisis. Gravida neque orci gravida urna et pulvinar. Ullamcorper
-            congue sed libero at quis iaculis proin varius. Sagittis rhoncus condimentum scelerisque
-            gravida. Neque gravida quam in ornare elementum elementum aliquam id. Viverra facilisi
-            sagittis et dictum risus. Ornare risus enim feugiat porttitor tempus gravida
-          </Description>
+          <Description>{description}</Description>
         </CardContainer>
       </Link>
     </>
   )
 }
 
-export default OpenVoteCard
+export default VoteCard
