@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import styled from '@emotion/styled'
 import OpenVoteCard from './OpenVoteCard'
+import styled from '@emotion/styled'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import Typography from '@mui/material/Typography'
+import useTranslation from 'next-translate/useTranslation'
 
 const StyledTabs = styled(Tabs)`
   margin-top: 1px;
@@ -82,6 +83,7 @@ function a11yProps(index) {
 }
 
 function VoteTabs() {
+  const { t } = useTranslation('vote')
   const [value, setValue] = React.useState(0)
 
   const handleChange = (event, newValue) => {
@@ -102,9 +104,9 @@ function VoteTabs() {
         }}
       >
         <StyledTabs value={value} onChange={handleChange}>
-          <StyledTab label="Open Votes" {...a11yProps(0)} />
-          <StyledTab label="Upcoming Votes" {...a11yProps(1)} />
-          <StyledTab label="Past Votes" {...a11yProps(2)} />
+          <StyledTab label={t('Open Votes')} {...a11yProps(0)} />
+          <StyledTab label={t('Upcoming Votes')} {...a11yProps(1)} />
+          <StyledTab label={t('Past Votes')} {...a11yProps(2)} />
         </StyledTabs>
       </Box>
       <TabPanel value={value} index={0}>

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
   background-color: #4a5568;
@@ -88,14 +89,17 @@ const ImagePlaceholder = styled.img`
 `
 
 function Banner() {
+  const { t } = useTranslation('vote')
   return (
     <>
       <Container>
         <LeftContainer>
-          <Title>Have a say in the future of Algodex.</Title>
-          <Subtitle>Receive voting tokens by holding ALGX tokens and vote on proposals</Subtitle>
+          <Title>{t('Have a say in the future of Algodex')}.</Title>
+          <Subtitle>
+            {t('Receive voting tokens by holding ALGX tokens and vote on proposals')}
+          </Subtitle>
           <InfoButton href="https://docs.algodex.com/" target="_blank">
-            More Info
+            {t('More Info')}
           </InfoButton>
         </LeftContainer>
         <RightContainer>
