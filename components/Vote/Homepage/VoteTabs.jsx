@@ -106,7 +106,7 @@ function VoteTabs() {
     }
   }
 
-  votesArray.map((vote) => {
+  votesArray.forEach((vote) => {
     checkDate(today, vote.startDate, vote.endDate, vote)
   })
 
