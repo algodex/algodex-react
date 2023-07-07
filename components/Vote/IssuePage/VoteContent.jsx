@@ -1,6 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(isBetween)
 
 const Container = styled.div`
   color: white;
@@ -87,38 +91,59 @@ const Description = styled.p`
   }
 `
 
-function VoteContent() {
+function VoteContent({ vote }) {
   const { t } = useTranslation('vote')
+  const { title, description, startDate, endDate } = vote[0]
+  const today = dayjs().toISOString()
+
   return (
     <>
       <Container>
         <ContentContainer>
           <Headingcontainer>
             <VoteNow>{t('Vote Now')}</VoteNow>
-            <Title>Title / Question for Vote</Title>
-            <VotingDate>{t('Voting started')}: June 1, 2023, 14:00 GMT</VotingDate>
-            <VotingDate>{t('Voting ends')}: June 18, 2023, 14:00 GMT</VotingDate>
+            <Title>{title}</Title>
+
+            {dayjs(today).isBetween(startDate, endDate) ? (
+              <>
+                <VotingDate>
+                  {t('Voting started')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+                <VotingDate>
+                  {t('Voting ends')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+              </>
+            ) : dayjs(today).isBefore(dayjs(startDate)) ? (
+              <>
+                <VotingDate>
+                  {t('Voting starts')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+                <VotingDate>
+                  {t('Voting ends')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+              </>
+            ) : (
+              <>
+                <VotingDate>
+                  {t('Voting started')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+                <VotingDate>
+                  {t('Voting ended')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                </VotingDate>
+              </>
+            )}
           </Headingcontainer>
-          <Description>
-            Porta arcu amet ut nunc fe ugiat mauris. Consectetur nunc ullamcorper tincidunt aenean
-            lobortis nulla nunc facilisis. Gravida neque orci gravida urna et pulvinar. Ullamcorper
-            congue sed libero at quis iaculis proin varius. Sagittis rhoncus condimentum scelerisque
-            gravida.
-            <br />
-            <br />
-            Neque gravida quam in ornare elementum elementum aliquam id. Viverra facilisi sagittis
-            et dictum risus. Ornare risus enim feugiat porttitor tempus gravida.
-            <br />
-            <br />
-            Posuere odio sit amet scelerisque. Elementum vulputate pulvinar diam habitasse diam
-            purus convallis volutpat. Non faucibus diam dictum eu. At imperdiet id sed pharetra. In
-            proin eleifend rutrum tortor pharetra sit lacus sed viverra. Malesuada ullamcorper sit
-            donec sed in. Nulla lacinia lorem diam non. Augue sed neque sed arcu diam fringilla sit.
-          </Description>
+          <Description>{description}</Description>
         </ContentContainer>
       </Container>
     </>
   )
 }
-
+VoteContent.propTypes = {
+  vote: PropTypes.object,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string
+}
 export default VoteContent

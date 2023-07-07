@@ -1,12 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Box from '@mui/material/Box'
-import OpenVoteCard from './OpenVoteCard'
+import VoteCard from './VoteCard'
 import styled from '@emotion/styled'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
 import useTranslation from 'next-translate/useTranslation'
+import { votesArray } from '../../../utils/votesData'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(isBetween)
 
 const StyledTabs = styled(Tabs)`
   margin-top: 1px;
@@ -86,6 +90,41 @@ function VoteTabs() {
   const { t } = useTranslation('vote')
   const [value, setValue] = React.useState(0)
 
+  const today = dayjs().toISOString()
+
+  let openVotes = []
+  let upcomingVotes = []
+  let pastVotes = []
+
+  let checkDate = (todayDate, startDate, endDate, vote) => {
+    if (dayjs(todayDate).isBetween(startDate, endDate)) {
+      openVotes.push(vote)
+    } else if (dayjs(todayDate).isBefore(dayjs(startDate))) {
+      upcomingVotes.push(vote)
+    } else {
+      pastVotes.push(vote)
+    }
+  }
+
+  votesArray.forEach((vote) => {
+    checkDate(today, vote.startDate, vote.endDate, vote)
+  })
+
+  openVotes.sort((a, b) => {
+    if (dayjs(a.endDate).isBefore(dayjs(b.endDate))) {
+      return -1
+    }
+  })
+  upcomingVotes.sort((a, b) => {
+    if (dayjs(a.startDate).isBefore(dayjs(b.startDate))) {
+      return -1
+    }
+  })
+  pastVotes.sort((a, b) => {
+    if (dayjs(b.endDate).isBefore(dayjs(a.endDate))) {
+      return -1
+    }
+  })
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -110,16 +149,13 @@ function VoteTabs() {
         </StyledTabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <OpenVoteCard />
-        <OpenVoteCard />
-        <OpenVoteCard />
+        {openVotes && openVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <OpenVoteCard />
-        <OpenVoteCard />
+        {upcomingVotes && upcomingVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <OpenVoteCard />
+        {pastVotes && pastVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
       </TabPanel>
     </Box>
   )

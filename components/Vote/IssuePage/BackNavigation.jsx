@@ -16,6 +16,7 @@ const AnchorContainer = styled.a`
   margin-left: 22px;
   margin-top: 12px;
   cursor: pointer;
+  width: 230px;
   svg {
     margin-right: 9px;
   }

@@ -9,6 +9,8 @@ import CurrentTurnoutCard from '@/components/Vote/IssuePage/CurrentTurnoutCard'
 import CurrentLiveResultsCard from '@/components/Vote/IssuePage/CurrentLiveResultsCard'
 import Banner from '@/components/Vote/Homepage/Banner'
 import styled from '@emotion/styled'
+import { useRouter } from 'next/router'
+import { votesArray } from '../../utils/votesData'
 
 const DesktopContainer = styled.div`
   display: flex;
@@ -22,8 +24,18 @@ const DesktopLeftContainer = styled.div`
 const DesktopRightContainer = styled.div`
   width: 37%;
 `
+const NotFoundContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: ${({ theme }) => theme.palette.background.dark};
+  color: ${({ theme }) => theme.palette.gray['400']};
+`
 const OpenIssue = () => {
   const [innerWidth, setInnerWidth] = useState(undefined)
+  const router = useRouter()
+  const { title } = router.query
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,6 +47,10 @@ const OpenIssue = () => {
       window.removeEventListener('resize', handleResize)
     }
   }, [])
+
+  const vote = votesArray.filter((e) => {
+    return e.title === title
+  })
 
   return (
     <>
@@ -48,31 +64,37 @@ const OpenIssue = () => {
         ></link>
       </Head>
       <Header />
-      {innerWidth >= 1024 ? (
-        <>
-          <Banner />
-          <DesktopContainer>
-            <DesktopLeftContainer>
-              <BackNavigation />
-              <VoteContent />
-              <QuestionForm />
-            </DesktopLeftContainer>
-            <DesktopRightContainer>
-              <BalanceCard />
-              <CurrentTurnoutCard />
-              <CurrentLiveResultsCard />
-            </DesktopRightContainer>
-          </DesktopContainer>
-        </>
+      {vote && vote.length ? (
+        innerWidth >= 1024 ? (
+          <>
+            <Banner />
+            <DesktopContainer>
+              <DesktopLeftContainer>
+                <BackNavigation />
+                <VoteContent vote={vote} />
+                <QuestionForm vote={vote} />
+              </DesktopLeftContainer>
+              <DesktopRightContainer>
+                <BalanceCard />
+                <CurrentTurnoutCard />
+                <CurrentLiveResultsCard />
+              </DesktopRightContainer>
+            </DesktopContainer>
+          </>
+        ) : (
+          <>
+            <BackNavigation />
+            <VoteContent vote={vote} />
+            <BalanceCard />
+            <QuestionForm vote={vote} />
+            <CurrentTurnoutCard />
+            <CurrentLiveResultsCard />
+          </>
+        )
       ) : (
-        <>
-          <BackNavigation />
-          <VoteContent />
-          <BalanceCard />
-          <QuestionForm />
-          <CurrentTurnoutCard />
-          <CurrentLiveResultsCard />
-        </>
+        <NotFoundContainer>
+          <h1>404 - Page Not Found</h1>
+        </NotFoundContainer>
       )}
     </>
   )

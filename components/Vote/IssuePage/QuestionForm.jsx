@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
@@ -118,17 +119,16 @@ const VoteButton = styled(Button)`
     width: 151px;
   }
 `
-function QuestionForm() {
+function QuestionForm({ vote }) {
   const { t } = useTranslation('vote')
+  const { question } = vote[0]
 
   return (
     <>
       <Container>
         <QuestionNumber>{t('Question')} #1</QuestionNumber>
-        <QuestionTitle>What is the best pizza topping?</QuestionTitle>
-        <QuestionDescription>
-          Aliquet semper sed egestas viverra sed sed. Risus massa gravida consequat arcu elementum.
-        </QuestionDescription>
+        <QuestionTitle>{question.title}</QuestionTitle>
+        <QuestionDescription>{question.description}</QuestionDescription>
         <form action="">
           <FormControlStyled>
             <RadioGroup
@@ -136,10 +136,15 @@ function QuestionForm() {
               defaultValue="female"
               name="radio-buttons-group"
             >
-              <FormControlLabelStyled value="Pineapple" control={<Radio />} label="Pineapple" />
-              <FormControlLabelStyled value="Pepperoni" control={<Radio />} label="Pepperoni" />
-              <FormControlLabelStyled value="Cheese" control={<Radio />} label="Cheese" />
-              <FormControlLabelStyled value="Other" control={<Radio />} label="Other" />
+              {question.options &&
+                question.options.map((option, i) => (
+                  <FormControlLabelStyled
+                    value={option}
+                    control={<Radio />}
+                    label={option}
+                    key={i}
+                  />
+                ))}
             </RadioGroup>
           </FormControlStyled>
         </form>
@@ -148,5 +153,11 @@ function QuestionForm() {
     </>
   )
 }
-
+QuestionForm.propTypes = {
+  vote: PropTypes.array,
+  question: PropTypes.object,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  options: PropTypes.array
+}
 export default QuestionForm
