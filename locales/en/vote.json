@@ -23,5 +23,7 @@
     "This wallet has claimed its voting tokens" : "This wallet has claimed its voting tokens",
     "Cast your vote below" : "Cast your vote below",
     "This wallet is not eligible to vote on this issue" : "This wallet is not eligible to vote on this issue",
-    "This wallet has claimed its voting tokens and has already voted" : "This wallet has claimed its voting tokens and has already voted"
+    "This wallet has claimed its voting tokens and has already voted" : "This wallet has claimed its voting tokens and has already voted",
+    "Connect wallet for ALGX balance": "Connect wallet for ALGX balance",
+    "Connect a wallet in header to view eligibility for voting tokens": "Connect a wallet in header to view eligibility for voting tokens"
 }

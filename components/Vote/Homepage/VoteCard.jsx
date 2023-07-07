@@ -139,7 +139,6 @@ const Description = styled.p`
 function VoteCard({ vote }) {
   const { t } = useTranslation('vote')
   const today = dayjs().toISOString()
-  console.log(vote)
   const { title, description, startDate, endDate } = vote
 
   return (

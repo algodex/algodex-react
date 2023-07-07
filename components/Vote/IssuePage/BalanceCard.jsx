@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
+import { getActiveNetwork } from '@/services/environment'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -57,12 +59,30 @@ const BalanceCardBottomContainer = styled.div`
     width: 90%;
   }
 
+  .disabledOptInButton {
+    background-color: #363B46;
+    color: #72767D;
+    margin-bottom: 16px;
+    
+
+    :hover {
+      background-color: #363B46;
+    }
+  }
+
   @media (min-width: 1024px) {
     padding-top: 21px;
     p {
         font-size: 12px;
         line-height: 15px;
-        
+    }
+    .disabledOptInButton {
+     
+      margin-top: -16px;
+  
+      :hover {
+        background-color: #363B46;
+      }
     }
 `
 const BalanceDisplay = styled.div`
@@ -84,6 +104,9 @@ const BalanceDisplay = styled.div`
     text-align: center;
     width: 100%;
   }
+  .noWallet {
+    font-size: 14px;
+  }
 
   @media (min-width: 1024px) {
     height: 41px;
@@ -95,6 +118,9 @@ const BalanceDisplay = styled.div`
     p {
       font-size: 20px;
       line-height: 24px;
+    }
+    .noWallet {
+      font-size: 18px;
     }
   }
 `
@@ -126,16 +152,39 @@ const OptInButton = styled(Button)`
   }
 `
 const InfoText = styled.p`
-  font-size: 14px;
+  font-size: 12px !important;
   font-style: italic;
   font-weight: 600;
   letter-spacing: 0em;
   line-height: 17px;
   padding-bottom: 23px;
   text-align: center !important;
+
+  @media (min-width: 1024px) {
+    font-size: 14px !important;
+  }
 `
 function BalanceCard() {
   const { t } = useTranslation('vote')
+  const { activeWallet } = useContext(WalletReducerContext)
+  const [balance, setBalance] = useState('')
+
+  const hasAlgxBalance = (activeWalletObj) => {
+    if (getActiveNetwork() === 'testnet') return true
+
+    const AlgxAssetId = 724480511
+    const assetInWallet = activeWalletObj?.assets?.find(
+      (asset) => asset['asset-id'] === AlgxAssetId
+      // (asset) => asset['asset-id'] === 37074699
+    )
+    console.log({ assetInWallet }) //keep in for debugging
+    return typeof assetInWallet !== 'undefined' ? assetInWallet.amount : false
+  }
+
+  useEffect(() => {
+    setBalance(hasAlgxBalance(activeWallet))
+  }, [])
+
   return (
     <>
       <BalanceCardContainer>
@@ -150,13 +199,32 @@ function BalanceCard() {
             .
           </p>
           <BalanceDisplay>
-            <p>{t('Your ALGX Balance')}: 14,494.24</p>
+            {activeWallet && balance !== true ? (
+              balance !== false ? (
+                <p>
+                  {t('Your ALGX Balance')}: {balance}
+                </p>
+              ) : (
+                <p>{t('Your ALGX Balance')}: 0</p>
+              )
+            ) : balance == true ? (
+              <p>{t('Your ALGX Balance')}:</p>
+            ) : (
+              <p className="noWallet">{t('Connect wallet for ALGX balance')}</p>
+            )}
           </BalanceDisplay>
-          <OptInButton>{t('Opt in and Receive Tokens')}</OptInButton>
-          {/* <InfoText>
-            This wallet has claimed its voting tokens. <br />
-            Cast your vote below.
-          </InfoText> */}
+          {activeWallet ? (
+            <OptInButton>{t('Opt in and Receive Tokens')}</OptInButton>
+          ) : (
+            <>
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in and Receive Tokens')}
+              </OptInButton>
+              <InfoText>
+                {t('Connect a wallet in header to view eligibility for voting tokens')}
+              </InfoText>
+            </>
+          )}
         </BalanceCardBottomContainer>
       </BalanceCardContainer>
     </>
