@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
-import { getActiveNetwork } from '@/services/environment'
-import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
+import useBalanceInfo from '../../../hooks/useBalanceInfo'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -166,24 +165,7 @@ const InfoText = styled.p`
 `
 function BalanceCard() {
   const { t } = useTranslation('vote')
-  const { activeWallet } = useContext(WalletReducerContext)
-  const [balance, setBalance] = useState('')
-
-  const hasAlgxBalance = (activeWalletObj) => {
-    if (getActiveNetwork() === 'testnet') return true
-
-    const AlgxAssetId = 724480511
-    const assetInWallet = activeWalletObj?.assets?.find(
-      (asset) => asset['asset-id'] === AlgxAssetId
-      // (asset) => asset['asset-id'] === 37074699
-    )
-    console.log({ assetInWallet }) //keep in for debugging
-    return typeof assetInWallet !== 'undefined' ? assetInWallet.amount : false
-  }
-
-  useEffect(() => {
-    setBalance(hasAlgxBalance(activeWallet))
-  }, [])
+  const { activeWallet, currentBalance, balanceBeforeDate } = useBalanceInfo()
 
   return (
     <>
@@ -199,15 +181,15 @@ function BalanceCard() {
             .
           </p>
           <BalanceDisplay>
-            {activeWallet && balance !== true ? (
-              balance !== false ? (
+            {activeWallet && currentBalance !== true ? (
+              currentBalance !== false ? (
                 <p>
-                  {t('Your ALGX Balance')}: {balance}
+                  {t('Your ALGX Balance')}: {currentBalance}
                 </p>
               ) : (
                 <p>{t('Your ALGX Balance')}: 0</p>
               )
-            ) : balance == true ? (
+            ) : currentBalance == true ? (
               <p>{t('Your ALGX Balance')}:</p>
             ) : (
               <p className="noWallet">{t('Connect wallet for ALGX balance')}</p>
