@@ -8,28 +8,20 @@ import { useAlgodex } from '@/hooks'
 const peraWallet = new PeraWalletConnect()
 
 function useBalanceInfo() {
-  const { http } = useAlgodex()
+  const { algodex } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
-
   const [currentBalance, setCurrentBalance] = useState('')
   const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
   const [optedIn, setOptedIn] = useState('')
-
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
-
-  const algodToken = ''
-  const algodServer = 'https://testnet-api.algonode.cloud'
-  const algodPort = 443
-
-  const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort)
 
   async function hasAlgxBalance(activeWalletObj) {
     if (getActiveNetwork() === 'testnet') return setCurrentBalance(true)
     const assetId = 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
 
     try {
-      const assetInfo = await http.indexer.indexer.lookupAssetByID(assetId).do()
+      const assetInfo = await algodex.http.indexer.indexer.lookupAssetByID(assetId).do()
       const assetDecimals = assetInfo?.asset?.params?.decimals
       const assetInWallet = activeWalletObj?.assets?.find((asset) => asset['asset-id'] === assetId)
       setCurrentBalance(
@@ -44,8 +36,9 @@ function useBalanceInfo() {
   }
   async function checkBalanceBeforeDate(activeWalletObj, beforeTime) {
     const assetId = 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
+    let indexerFetch = ''
     try {
-      const indexerAssetInfo = await http.indexer.indexer
+      const indexerAssetInfo = await algodex.http.indexer.indexer
         .lookupAccountTransactions(activeWalletObj?.address)
         .assetID(assetId)
         .beforeTime(beforeTime)
@@ -53,9 +46,11 @@ function useBalanceInfo() {
         .do()
 
       if (indexerAssetInfo?.transactions[0]?.id) {
-        const response = await fetch(
-          `https://indexer.testnet.algoexplorerapi.io/v2/transactions/${indexerAssetInfo?.transactions[0]?.id}`
-        )
+        getActiveNetwork() === 'testnet'
+          ? (indexerFetch = 'https://indexer.testnet.algoexplorerapi.io/v2/transactions/')
+          : (indexerFetch = 'https://indexer.algoexplorerapi.io/v2/transactions/')
+
+        const response = await fetch(`${indexerFetch}${indexerAssetInfo?.transactions[0]?.id}`)
         const data = await response.json()
         const balance =
           data?.transaction?.sender === activeWalletObj?.address
@@ -73,7 +68,7 @@ function useBalanceInfo() {
   async function checkOptIn(activeWalletObj) {
     const assetId = 255830125 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
     try {
-      const accountAssets = await http.indexer.indexer
+      const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
         .do()
       const assetOptedIn = await accountAssets.assets?.some((asset) => asset['asset-id'] == assetId)
@@ -85,7 +80,7 @@ function useBalanceInfo() {
   }
   async function optInTxn(activeWalletObj) {
     async function generateOptIntoAssetTxns({ assetID, initiatorAddr }) {
-      const suggestedParams = await algodClient.getTransactionParams().do()
+      const suggestedParams = await algodex.algod.getTransactionParams().do()
       const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         from: initiatorAddr,
         to: initiatorAddr,
@@ -102,7 +97,7 @@ function useBalanceInfo() {
     try {
       const signedTxnGroups = await peraWallet.signTransaction([optInTxn])
       console.log(signedTxnGroups)
-      const { txId } = await algodClient.sendRawTransaction(signedTxnGroups).do()
+      const { txId } = await algodex.algod.sendRawTransaction(signedTxnGroups).do()
       console.log(`txns signed successfully! - txID: ${txId}`)
     } catch (error) {
       console.log("Couldn't sign txn", error)
@@ -110,7 +105,7 @@ function useBalanceInfo() {
   }
   async function assetTransferTxn(activeWalletObj) {
     async function generateAssetTransferTxns() {
-      const suggestedParams = await algodClient.getTransactionParams().do()
+      const suggestedParams = await algodex.algod.getTransactionParams().do()
       const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         from: recoveredAccount1.addr,
         suggestedParams,
@@ -123,8 +118,8 @@ function useBalanceInfo() {
     try {
       const unsignedTxn = await generateAssetTransferTxns()
       const signedTxn = unsignedTxn.signTxn(recoveredAccount1.sk)
-      const { txId } = await algodClient.sendRawTransaction(signedTxn).do()
-      const result = await algosdk.waitForConfirmation(algodClient, txId, 4)
+      const { txId } = await algodex.algod.sendRawTransaction(signedTxn).do()
+      const result = await algosdk.waitForConfirmation(algodex.algod, txId, 4)
       console.log(result)
     } catch (error) {
       console.log("Couldn't sign all txns", error)
