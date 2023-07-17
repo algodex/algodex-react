@@ -59,6 +59,7 @@ const BalanceCardBottomContainer = styled.div`
   }
 
   .disabledOptInButton {
+    cursor: default;
     background-color: #363B46;
     color: #72767D;
     margin-bottom: 16px;
@@ -76,7 +77,7 @@ const BalanceCardBottomContainer = styled.div`
         line-height: 15px;
     }
     .disabledOptInButton {
-     
+      cursor: default;
       margin-top: -16px;
   
       :hover {
@@ -175,15 +176,16 @@ function BalanceCard() {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn
+    optedIn,
+    received
   } = useBalanceInfo()
 
   useEffect(() => {
-    // if (activeWallet) {
-    //   hasAlgxBalance(activeWallet)
-    //   checkBalanceBeforeDate(activeWallet, '2023-07-16T14:30:00.000Z')
-    //   checkOptIn(activeWallet)
-    // }
+    if (activeWallet) {
+      hasAlgxBalance(activeWallet)
+      checkBalanceBeforeDate(activeWallet)
+      checkOptIn(activeWallet)
+    }
   }, [activeWallet])
 
   return (
@@ -214,8 +216,16 @@ function BalanceCard() {
               <p className="noWallet">{t('Connect wallet for ALGX balance')}</p>
             )}
           </BalanceDisplay>
-          {activeWallet ? (
-            <OptInButton>{t('Opt in and Receive Tokens')}</OptInButton>
+          {activeWallet && optedIn === false ? (
+            <OptInButton onClick={() => optInTxn(activeWallet)}>{t('Opt in')}</OptInButton>
+          ) : activeWallet && optedIn === true && received === true ? (
+            <OptInButton className="disabledOptInButton">
+              {t('Already received Tokens')}
+            </OptInButton>
+          ) : activeWallet && optedIn === true ? (
+            <OptInButton onClick={() => assetTransferTxn(activeWallet)}>
+              {t('Receive Tokens')}
+            </OptInButton>
           ) : (
             <>
               <OptInButton className="disabledOptInButton">

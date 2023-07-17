@@ -12,14 +12,14 @@ function useBalanceInfo() {
   const { activeWallet } = useContext(WalletReducerContext)
   const [currentBalance, setCurrentBalance] = useState('')
   const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
-  const [optedIn, setOptedIn] = useState('')
+  const [optedIn, setOptedIn] = useState(false)
+  const [received, setReceived] = useState(false)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
 
   async function hasAlgxBalance(activeWalletObj) {
-    if (getActiveNetwork() === 'testnet') return setCurrentBalance(true)
-    const assetId = 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
-
+    // if (getActiveNetwork() === 'testnet') return setCurrentBalance(true)
+    let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
     try {
       const assetInfo = await algodex.http.indexer.indexer.lookupAssetByID(assetId).do()
       const assetDecimals = assetInfo?.asset?.params?.decimals
@@ -35,8 +35,11 @@ function useBalanceInfo() {
     }
   }
   async function checkBalanceBeforeDate(activeWalletObj, beforeTime) {
-    const assetId = 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
-    let indexerFetch = ''
+    let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
+    let indexerFetch =
+      getActiveNetwork() === 'testnet'
+        ? 'https://indexer.testnet.algoexplorerapi.io/v2/transactions/'
+        : 'https://indexer.algoexplorerapi.io/v2/transactions/'
     try {
       const indexerAssetInfo = await algodex.http.indexer.indexer
         .lookupAccountTransactions(activeWalletObj?.address)
@@ -46,12 +49,9 @@ function useBalanceInfo() {
         .do()
 
       if (indexerAssetInfo?.transactions[0]?.id) {
-        getActiveNetwork() === 'testnet'
-          ? (indexerFetch = 'https://indexer.testnet.algoexplorerapi.io/v2/transactions/')
-          : (indexerFetch = 'https://indexer.algoexplorerapi.io/v2/transactions/')
-
         const response = await fetch(`${indexerFetch}${indexerAssetInfo?.transactions[0]?.id}`)
         const data = await response.json()
+
         const balance =
           data?.transaction?.sender === activeWalletObj?.address
             ? data.transaction['asset-transfer-transaction']['sender-asset-balance']
@@ -66,7 +66,7 @@ function useBalanceInfo() {
     }
   }
   async function checkOptIn(activeWalletObj) {
-    const assetId = 255830125 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+    const assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
     try {
       const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
@@ -91,7 +91,7 @@ function useBalanceInfo() {
       return [{ txn: optInTxn, signers: [initiatorAddr] }]
     }
     const optInTxn = await generateOptIntoAssetTxns({
-      assetID: 255830125, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+      assetID: getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
       initiatorAddr: activeWalletObj?.address
     })
     try {
@@ -99,6 +99,7 @@ function useBalanceInfo() {
       console.log(signedTxnGroups)
       const { txId } = await algodex.algod.sendRawTransaction(signedTxnGroups).do()
       console.log(`txns signed successfully! - txID: ${txId}`)
+      setOptedIn(true)
     } catch (error) {
       console.log("Couldn't sign txn", error)
     }
@@ -109,9 +110,9 @@ function useBalanceInfo() {
       const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         from: recoveredAccount1.addr,
         suggestedParams,
-        assetIndex: 255830125, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+        assetIndex: getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
         to: activeWalletObj?.address,
-        amount: balanceBeforeDate
+        amount: 10000000 //balanceBeforeDate
       })
       return ptxn
     }
@@ -121,6 +122,7 @@ function useBalanceInfo() {
       const { txId } = await algodex.algod.sendRawTransaction(signedTxn).do()
       const result = await algosdk.waitForConfirmation(algodex.algod, txId, 4)
       console.log(result)
+      setReceived(true)
     } catch (error) {
       console.log("Couldn't sign all txns", error)
     }
@@ -139,7 +141,8 @@ function useBalanceInfo() {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn
+    optedIn,
+    received
   }
 }
 
