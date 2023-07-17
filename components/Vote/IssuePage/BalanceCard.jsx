@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
@@ -165,7 +165,26 @@ const InfoText = styled.p`
 `
 function BalanceCard() {
   const { t } = useTranslation('vote')
-  const { activeWallet, currentBalance, balanceBeforeDate } = useBalanceInfo()
+
+  const {
+    activeWallet,
+    currentBalance,
+    balanceBeforeDate,
+    optInTxn,
+    assetTransferTxn,
+    checkBalanceBeforeDate,
+    hasAlgxBalance,
+    checkOptIn,
+    optedIn
+  } = useBalanceInfo()
+
+  useEffect(() => {
+    // if (activeWallet) {
+    //   hasAlgxBalance(activeWallet)
+    //   checkBalanceBeforeDate(activeWallet, '2023-07-16T14:30:00.000Z')
+    //   checkOptIn(activeWallet)
+    // }
+  }, [activeWallet])
 
   return (
     <>

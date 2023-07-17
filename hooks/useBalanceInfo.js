@@ -1,25 +1,19 @@
 import algosdk from 'algosdk'
 import { PeraWalletConnect } from '@perawallet/connect'
-import useWalletConnect from 'hooks/useWalletConnect'
-import { peraSigner } from 'hooks/usePeraConnection'
 import { useContext, useEffect, useState } from 'react'
 import { getActiveNetwork } from '@/services/environment'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { useAlgodex } from '@/hooks'
 
-//trnsactions
-const rehyrdratedPeraWallet = new PeraWalletConnect({ chainId: '416002' })
+const peraWallet = new PeraWalletConnect()
 
 function useBalanceInfo() {
   const { http } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
-  const { connector } = useWalletConnect()
-  const [currentBalance, setCurrentBalance] = useState('')
-  const [balanceBeforeDate, setBalanceBeforeDate] = useState('')
-  let myAddress = ''
 
-  const { setAddressesNew, setActiveWallet, peraWallet, setPeraWallet } =
-    useContext(WalletReducerContext)
+  const [currentBalance, setCurrentBalance] = useState('')
+  const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
+  const [optedIn, setOptedIn] = useState('')
 
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
@@ -30,7 +24,66 @@ function useBalanceInfo() {
 
   const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort)
 
-  async function optInTxn() {
+  async function hasAlgxBalance(activeWalletObj) {
+    if (getActiveNetwork() === 'testnet') return setCurrentBalance(true)
+    const assetId = 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
+
+    try {
+      const assetInfo = await http.indexer.indexer.lookupAssetByID(assetId).do()
+      const assetDecimals = assetInfo?.asset?.params?.decimals
+      const assetInWallet = activeWalletObj?.assets?.find((asset) => asset['asset-id'] === assetId)
+      setCurrentBalance(
+        typeof assetInWallet !== 'undefined'
+          ? assetInWallet.amount / Math.pow(10, assetDecimals)
+          : false
+      )
+    } catch (error) {
+      setCurrentBalance(false)
+      console.log(error.message)
+    }
+  }
+  async function checkBalanceBeforeDate(activeWalletObj, beforeTime) {
+    const assetId = 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
+    try {
+      const indexerAssetInfo = await http.indexer.indexer
+        .lookupAccountTransactions(activeWalletObj?.address)
+        .assetID(assetId)
+        .beforeTime(beforeTime)
+        .limit(1)
+        .do()
+
+      if (indexerAssetInfo?.transactions[0]?.id) {
+        const response = await fetch(
+          `https://indexer.testnet.algoexplorerapi.io/v2/transactions/${indexerAssetInfo?.transactions[0]?.id}`
+        )
+        const data = await response.json()
+        const balance =
+          data?.transaction?.sender === activeWalletObj?.address
+            ? data.transaction['asset-transfer-transaction']['sender-asset-balance']
+            : data.transaction['asset-transfer-transaction']['receiver-asset-balance']
+        setBalanceBeforeDate(balance)
+      } else {
+        throw new Error('No transactions or token balance found')
+      }
+    } catch (error) {
+      setBalanceBeforeDate(null)
+      console.log(error.message)
+    }
+  }
+  async function checkOptIn(activeWalletObj) {
+    const assetId = 255830125 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+    try {
+      const accountAssets = await http.indexer.indexer
+        .lookupAccountAssets(activeWalletObj?.address)
+        .do()
+      const assetOptedIn = await accountAssets.assets?.some((asset) => asset['asset-id'] == assetId)
+      setOptedIn(assetOptedIn)
+    } catch (error) {
+      setOptedIn(false)
+      console.log(error.message)
+    }
+  }
+  async function optInTxn(activeWalletObj) {
     async function generateOptIntoAssetTxns({ assetID, initiatorAddr }) {
       const suggestedParams = await algodClient.getTransactionParams().do()
       const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -43,11 +96,11 @@ function useBalanceInfo() {
       return [{ txn: optInTxn, signers: [initiatorAddr] }]
     }
     const optInTxn = await generateOptIntoAssetTxns({
-      assetID: 10458941,
-      initiatorAddr: peraWallet.address
+      assetID: 255830125, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+      initiatorAddr: activeWalletObj?.address
     })
     try {
-      const signedTxnGroups = await rehyrdratedPeraWallet.signTransaction([optInTxn])
+      const signedTxnGroups = await peraWallet.signTransaction([optInTxn])
       console.log(signedTxnGroups)
       const { txId } = await algodClient.sendRawTransaction(signedTxnGroups).do()
       console.log(`txns signed successfully! - txID: ${txId}`)
@@ -55,15 +108,15 @@ function useBalanceInfo() {
       console.log("Couldn't sign txn", error)
     }
   }
-  async function assetTransferTxn() {
+  async function assetTransferTxn(activeWalletObj) {
     async function generateAssetTransferTxns() {
       const suggestedParams = await algodClient.getTransactionParams().do()
       const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         from: recoveredAccount1.addr,
         suggestedParams,
-        assetIndex: 10458941,
-        to: peraWallet.address,
-        amount: 10000
+        assetIndex: 255830125, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+        to: activeWalletObj?.address,
+        amount: balanceBeforeDate
       })
       return ptxn
     }
@@ -77,81 +130,21 @@ function useBalanceInfo() {
       console.log("Couldn't sign all txns", error)
     }
   }
-  const hasAlgxBalance = (activeWalletObj) => {
-    //if (getActiveNetwork() === 'testnet') return true
-    const AlgxAssetId = 724480511
-    const assetInWallet = activeWalletObj?.assets?.find(
-      (asset) => asset['asset-id'] === AlgxAssetId
-    )
-    console.log({ assetInWallet }) //keep in for debugging
-    return typeof assetInWallet !== 'undefined' ? assetInWallet.amount : false
-  }
-  const checkBalanceBeforeDate = async (myAddress, beforeTime) => {
-    const assetId = 724480511
-    try {
-      const assetInfo = await http.indexer.indexer.lookupAssetByID(assetId).do()
-      const assetDecimals = assetInfo?.asset?.params?.decimals
-
-      const indexerAssetInfo = await http.indexer.indexer
-        .lookupAccountTransactions(myAddress)
-        .assetID(assetId)
-        .beforeTime(beforeTime)
-        .limit(1)
-        .do()
-
-      if (indexerAssetInfo?.transactions[0]?.id) {
-        const response = await fetch(
-          `https://indexer.testnet.algoexplorerapi.io/v2/transactions/${indexerAssetInfo?.transactions[0]?.id}`
-        )
-        const data = await response.json()
-
-        const balance =
-          data?.transaction?.sender === myAddress
-            ? data.transaction['asset-transfer-transaction']['sender-asset-balance'] /
-              Math.pow(10, assetDecimals)
-            : data.transaction['asset-transfer-transaction']['receiver-asset-balance'] /
-              Math.pow(10, assetDecimals)
-
-        setBalanceBeforeDate(balance)
-      } else {
-        throw new Error('No transactions or token balance found')
-      }
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
 
   useEffect(() => {
-    if (activeWallet) {
-      myAddress = activeWallet.address
-      setCurrentBalance(hasAlgxBalance(activeWallet))
-      //checkBalanceBeforeDate(myAddress)
-    }
-
-    const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
-
-    if (_peraWallet?.type === 'wallet-connect' && peraWallet === null) {
-      rehyrdratedPeraWallet.reconnectSession().then((accounts) => {
-        // Setup the disconnect event listener
-        // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
-        const _rehyrdratedPeraWallet = {
-          ..._peraWallet,
-          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner }
-        }
-        setPeraWallet(_rehyrdratedPeraWallet)
-        setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
-        setActiveWallet(_rehyrdratedPeraWallet)
-        console.log(accounts)
-      })
-    }
-  }, [connector])
+    peraWallet.reconnectSession()
+  }, [activeWallet])
 
   return {
     activeWallet,
     currentBalance,
     balanceBeforeDate,
     optInTxn,
-    assetTransferTxn
+    assetTransferTxn,
+    checkBalanceBeforeDate,
+    hasAlgxBalance,
+    checkOptIn,
+    optedIn
   }
 }
 
