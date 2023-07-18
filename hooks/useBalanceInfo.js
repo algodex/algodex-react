@@ -65,12 +65,27 @@ function useBalanceInfo() {
     }
   }
   async function checkOptIn(activeWalletObj) {
-    const assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+    const assetId = getActiveNetwork() === 'testnest' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
     try {
+      const accountAssetTransfers = await algodex.http.indexer.indexer
+        .lookupAccountTransactions(activeWalletObj?.address)
+        .assetID(assetId)
+        .do()
+
       const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
         .do()
 
+      if (
+        accountAssetTransfers.transactions?.length &&
+        accountAssetTransfers.transactions?.some(
+          (transfer) =>
+            transfer['sender'] === activeWalletObj?.address &&
+            transfer['asset-transfer-transaction'].amount > 0
+        )
+      ) {
+        return setOptedIn('received')
+      }
       if (
         accountAssets.assets?.some((asset) => asset['asset-id'] === assetId && asset['amount'] > 0)
       ) {
@@ -79,6 +94,7 @@ function useBalanceInfo() {
       if (accountAssets.assets?.some((asset) => asset['asset-id'] === assetId)) {
         return setOptedIn(true)
       }
+      throw new Error('No transactions or token balance found')
     } catch (error) {
       setOptedIn(false)
       console.log(error.message)
