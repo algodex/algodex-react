@@ -176,8 +176,7 @@ function BalanceCard() {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn,
-    received
+    optedIn
   } = useBalanceInfo()
 
   useEffect(() => {
@@ -216,9 +215,10 @@ function BalanceCard() {
               <p className="noWallet">{t('Connect wallet for ALGX balance')}</p>
             )}
           </BalanceDisplay>
+
           {activeWallet && optedIn === false ? (
             <OptInButton onClick={() => optInTxn(activeWallet)}>{t('Opt in')}</OptInButton>
-          ) : activeWallet && optedIn === true && received === true ? (
+          ) : activeWallet && optedIn === 'received' ? (
             <OptInButton className="disabledOptInButton">
               {t('Already received Tokens')}
             </OptInButton>

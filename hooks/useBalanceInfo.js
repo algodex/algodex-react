@@ -13,7 +13,6 @@ function useBalanceInfo() {
   const [currentBalance, setCurrentBalance] = useState('')
   const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
   const [optedIn, setOptedIn] = useState(false)
-  const [received, setReceived] = useState(false)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
 
@@ -71,8 +70,15 @@ function useBalanceInfo() {
       const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
         .do()
-      const assetOptedIn = await accountAssets.assets?.some((asset) => asset['asset-id'] == assetId)
-      setOptedIn(assetOptedIn)
+
+      if (
+        accountAssets.assets?.some((asset) => asset['asset-id'] === assetId && asset['amount'] > 0)
+      ) {
+        return setOptedIn('received')
+      }
+      if (accountAssets.assets?.some((asset) => asset['asset-id'] === assetId)) {
+        return setOptedIn(true)
+      }
     } catch (error) {
       setOptedIn(false)
       console.log(error.message)
@@ -121,8 +127,8 @@ function useBalanceInfo() {
       const signedTxn = unsignedTxn.signTxn(recoveredAccount1.sk)
       const { txId } = await algodex.algod.sendRawTransaction(signedTxn).do()
       const result = await algosdk.waitForConfirmation(algodex.algod, txId, 4)
+      setOptedIn('received')
       console.log(result)
-      setReceived(true)
     } catch (error) {
       console.log("Couldn't sign all txns", error)
     }
@@ -141,8 +147,7 @@ function useBalanceInfo() {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn,
-    received
+    optedIn
   }
 }
 
