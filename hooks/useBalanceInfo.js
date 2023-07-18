@@ -65,7 +65,7 @@ function useBalanceInfo() {
     }
   }
   async function checkOptIn(activeWalletObj) {
-    const assetId = getActiveNetwork() === 'testnest' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+    const assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
     try {
       const accountAssetTransfers = await algodex.http.indexer.indexer
         .lookupAccountTransactions(activeWalletObj?.address)
