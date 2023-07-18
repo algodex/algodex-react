@@ -249,7 +249,7 @@ function BalanceCard() {
                 {t('Opt in to Voting Token')}
               </OptInButton>
               <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
-              <InfoText>{t('This wallet is not eligible to vote on this issue.')}</InfoText>
+              <InfoText>{t('This wallet is not eligible to vote on this issue')}.</InfoText>
             </>
           ) : activeWallet && optedIn === false ? (
             <>
@@ -259,15 +259,16 @@ function BalanceCard() {
               <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
               <InfoText>
                 {t(
-                  'Once opted into the token, you’ll be able to receive your tokens with the button above.'
+                  'Once opted into the token, you’ll be able to receive your tokens with the button above'
                 )}
+                .
               </InfoText>
             </>
           ) : activeWallet && optedIn === 'received' ? (
             <>
               <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
               <InfoText>
-                {t('This wallet has claimed its voting tokens. Cast your vote below.')}
+                {t('This wallet has claimed its voting tokens. Cast your vote below')}.
               </InfoText>
             </>
           ) : activeWallet && optedIn === true ? (
@@ -277,8 +278,9 @@ function BalanceCard() {
               </ReceiveButton>
               <InfoText>
                 {t(
-                  'This wallet has opted into this voting token. Click button above to receive tokens to vote.'
+                  'This wallet has opted into this voting token. Click button above to receive tokens to vote'
                 )}
+                .
               </InfoText>
             </>
           ) : (
