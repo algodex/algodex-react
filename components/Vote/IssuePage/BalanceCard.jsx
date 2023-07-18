@@ -47,6 +47,9 @@ const BalanceCardBottomContainer = styled.div`
   border-radius: 0px 0px 8px 8px;
   padding-top: 9px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   p {
     font-size: 10px;
@@ -60,30 +63,40 @@ const BalanceCardBottomContainer = styled.div`
 
   .disabledOptInButton {
     cursor: default;
-    background-color: #363B46;
-    color: #72767D;
+    background-color: #363b46;
+    color: #72767d;
     margin-bottom: 16px;
-    
 
     :hover {
-      background-color: #363B46;
+      background-color: #363b46;
+    }
+  }
+
+  .disabledReceiveButton {
+    cursor: default;
+    background-color: #363b46;
+    color: #72767d;
+    margin-top: 0px;
+    margin-bottom: 19px;
+    :hover {
+      background-color: #363b46;
     }
   }
 
   @media (min-width: 1024px) {
     padding-top: 21px;
     p {
-        font-size: 12px;
-        line-height: 15px;
+      font-size: 12px;
+      line-height: 15px;
     }
     .disabledOptInButton {
-      cursor: default;
-      margin-top: -16px;
-  
       :hover {
-        background-color: #363B46;
+        background-color: #363b46;
       }
     }
+    .disabledReceiveButton {
+    }
+  }
 `
 const BalanceDisplay = styled.div`
   align-items: center;
@@ -110,7 +123,7 @@ const BalanceDisplay = styled.div`
 
   @media (min-width: 1024px) {
     height: 41px;
-    margin-bottom: 36px;
+    margin-bottom: 20px;
     margin-top: 26px;
     max-width: 327px;
     width: 100%;
@@ -128,6 +141,7 @@ const OptInButton = styled(Button)`
   background-color: #38a169;
   border-radius: 2px;
   color: white;
+  font-family: Inter;
   font-size: 12px;
   font-weight: 700;
   height: 28px;
@@ -147,7 +161,37 @@ const OptInButton = styled(Button)`
     font-weight: 700;
     height: 33px;
     line-height: 17px;
-    margin-bottom: 38px;
+    margin-bottom: 16px;
+    width: 290px;
+  }
+`
+const ReceiveButton = styled(Button)`
+  background-color: #38a169;
+  font-family: Inter;
+  border-radius: 2px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  height: 28px;
+  letter-spacing: 0em;
+  line-height: 15px;
+  margin-bottom: 20px;
+
+  text-align: left;
+  text-transform: inherit;
+  width: 220px;
+
+  :hover {
+    background-color: #38a169;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 14px;
+    font-weight: 700;
+    height: 33px;
+    line-height: 17px;
+    margin-bottom: 16px;
+
     width: 290px;
   }
 `
@@ -167,25 +211,8 @@ const InfoText = styled.p`
 function BalanceCard() {
   const { t } = useTranslation('vote')
 
-  const {
-    activeWallet,
-    currentBalance,
-    balanceBeforeDate,
-    optInTxn,
-    assetTransferTxn,
-    checkBalanceBeforeDate,
-    hasAlgxBalance,
-    checkOptIn,
-    optedIn
-  } = useBalanceInfo()
-
-  useEffect(() => {
-    if (activeWallet) {
-      hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet)
-      checkOptIn(activeWallet)
-    }
-  }, [activeWallet])
+  const { activeWallet, currentBalance, balanceBeforeDate, optInTxn, assetTransferTxn, optedIn } =
+    useBalanceInfo()
 
   return (
     <>
@@ -216,16 +243,44 @@ function BalanceCard() {
             )}
           </BalanceDisplay>
 
-          {activeWallet && optedIn === false ? (
-            <OptInButton onClick={() => optInTxn(activeWallet)}>{t('Opt in')}</OptInButton>
+          {activeWallet && (balanceBeforeDate === null || balanceBeforeDate <= 0) ? (
+            <>
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>{t('This wallet is not eligible to vote on this issue.')}</InfoText>
+            </>
+          ) : activeWallet && optedIn === false ? (
+            <>
+              <OptInButton onClick={() => optInTxn(activeWallet)}>
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>
+                {t(
+                  'Once opted into the token, you’ll be able to receive your tokens with the button above.'
+                )}
+              </InfoText>
+            </>
           ) : activeWallet && optedIn === 'received' ? (
-            <OptInButton className="disabledOptInButton">
-              {t('Already received Tokens')}
-            </OptInButton>
+            <>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>
+                {t('This wallet has claimed its voting tokens. Cast your vote below.')}
+              </InfoText>
+            </>
           ) : activeWallet && optedIn === true ? (
-            <OptInButton onClick={() => assetTransferTxn(activeWallet)}>
-              {t('Receive Tokens')}
-            </OptInButton>
+            <>
+              <ReceiveButton onClick={() => assetTransferTxn(activeWallet)}>
+                {t('Receive Tokens')}
+              </ReceiveButton>
+              <InfoText>
+                {t(
+                  'This wallet has opted into this voting token. Click button above to receive tokens to vote.'
+                )}
+              </InfoText>
+            </>
           ) : (
             <>
               <OptInButton className="disabledOptInButton">

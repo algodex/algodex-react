@@ -57,7 +57,7 @@ function useBalanceInfo() {
             : data.transaction['asset-transfer-transaction']['receiver-asset-balance']
         setBalanceBeforeDate(balance)
       } else {
-        throw new Error('No transactions or token balance found')
+        throw new Error('checkBalanceBeforeDate: No transactions or token balance found')
       }
     } catch (error) {
       setBalanceBeforeDate(null)
@@ -94,7 +94,7 @@ function useBalanceInfo() {
       if (accountAssets.assets?.some((asset) => asset['asset-id'] === assetId)) {
         return setOptedIn(true)
       }
-      throw new Error('No transactions or token balance found')
+      throw new Error('checkOptIn: No transactions or token balance found')
     } catch (error) {
       setOptedIn(false)
       console.log(error.message)
@@ -152,6 +152,11 @@ function useBalanceInfo() {
 
   useEffect(() => {
     peraWallet.reconnectSession()
+    if (activeWallet) {
+      hasAlgxBalance(activeWallet)
+      checkBalanceBeforeDate(activeWallet)
+      checkOptIn(activeWallet)
+    }
   }, [activeWallet])
 
   return {
