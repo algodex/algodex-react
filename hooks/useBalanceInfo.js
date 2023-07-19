@@ -14,6 +14,9 @@ function useBalanceInfo() {
   const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
   const [optedIn, setOptedIn] = useState(false)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
+  if (!account1_mnemonic) {
+    throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
+  }
   const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
 
   async function hasAlgxBalance(activeWalletObj) {
