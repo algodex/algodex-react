@@ -4,8 +4,8 @@ export const votesArray = [
     title: 'Smart contract functionality for a specific cryptocurrency',
     description:
       'By implementing smart contract functionality, users of this specific cryptocurrency will gain the ability to create programmable and self-executing contracts on its blockchain. Smart contracts are digital agreements that automatically execute predefined conditions and actions when specific criteria are met. They enable automation of transactions, allowing parties to define conditions and rules that are automatically enforced, without the need for intermediaries. This opens up a wide range of possibilities, including the development of decentralized applications (DApps), tokenization of real-world assets, creation of decentralized finance (DeFi) protocols, and much more. Smart contracts provide transparency, security, and efficiency in executing agreements on the blockchain. They can revolutionize industries by automating processes and removing the need for middlemen, enabling peer-to-peer interactions and reducing costs.',
-    startDate: '2023-07-01T14:30:00.000Z',
-    endDate: '2023-07-22T14:30:00.000Z',
+    startDate: '2023-08-01T14:30:00.000Z',
+    endDate: '2023-09-22T14:30:00.000Z',
     question: {
       title: 'What is the total supply of Bitcoin?',
       description: 'Please choose one of the following options',
@@ -18,7 +18,7 @@ export const votesArray = [
     description:
       'This feature aims to establish seamless communication and asset transfer between different blockchain networks. Currently, most blockchains operate in isolation, making it challenging to exchange assets across different networks. Cross-chain interoperability addresses this limitation by enabling the transfer of digital assets between disparate blockchains. It facilitates decentralized exchanges, liquidity pools, and cross-chain transactions, allowing users to interact with assets across multiple blockchains. Cross-chain interoperability promotes collaboration and integration between different blockchain ecosystems, fostering innovation and expanding the utility of cryptocurrencies. It opens up new opportunities for developers and users, enabling them to leverage the strengths of multiple blockchains and overcome the limitations of single networks. ',
     startDate: '2023-07-03T18:00:00.000Z',
-    endDate: '2023-07-19T18:00:00.000Z',
+    endDate: '2023-09-19T18:00:00.000Z',
     question: {
       title: 'Which cryptocurrency introduced the concept of smart contracts?',
       description: 'Please choose one of the following options',
@@ -44,7 +44,7 @@ export const votesArray = [
     title: 'Integration of decentralized identity solutions for user authentication',
     description:
       'This feature aims to integrate decentralized identity solutions into the cryptocurrency ecosystem. Decentralized identity systems provide users with control over their personal data and enable secure authentication and verification of identities without relying on centralized authorities. By leveraging decentralized identity, users can securely interact with various applications and services within the cryptocurrency ecosystem. This implementation enhances privacy, mitigates the risk of identity theft and fraud, and promotes user-centric control over personal information. Decentralized identity solutions enable users to have portable and verifiable digital identities, facilitating secure and trustworthy interactions in the digital world.',
-    startDate: '2023-08-09T10:00:00.000Z',
+    startDate: '2023-07-09T10:00:00.000Z',
     endDate: '2023-08-25T10:00:00.000Z',
     question: {
       title:

@@ -145,6 +145,7 @@ const OpenIssue = () => {
                   assetTransferTxn={assetTransferTxn}
                   optedIn={optedIn}
                   voted={voted}
+                  vote={vote}
                 />
                 <CurrentTurnoutCard />
                 <CurrentLiveResultsCard
@@ -168,6 +169,7 @@ const OpenIssue = () => {
               assetTransferTxn={assetTransferTxn}
               optedIn={optedIn}
               voted={voted}
+              vote={vote}
             />
             <QuestionForm
               vote={vote}

@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
+import dayjs from 'dayjs'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -216,11 +217,14 @@ function BalanceCard({
   optInTxn,
   assetTransferTxn,
   optedIn,
-  voted
+  voted,
+  vote
 }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
-
+  const { startDate, endDate } = vote[0]
+  const today = dayjs().toISOString()
+  console.log({ startDate, endDate, today })
   return (
     <>
       <BalanceCardContainer>
@@ -250,9 +254,22 @@ function BalanceCard({
             )}
           </BalanceDisplay>
 
-          {activeWallet && voted === true ? (
+          {activeWallet && dayjs(today).isBefore(dayjs(startDate)) ? (
             <>
-              {' '}
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <InfoText>{t('Voting hasn’t started yet')}.</InfoText>
+            </>
+          ) : activeWallet && dayjs(today).isAfter(dayjs(endDate)) ? (
+            <>
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <InfoText>{t('Voting has ended')}.</InfoText>
+            </>
+          ) : activeWallet && voted === true ? (
+            <>
               <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
               <InfoText>
                 {t('This wallet has claimed its voting tokens and has already voted')}.
@@ -314,6 +331,7 @@ function BalanceCard({
   )
 }
 BalanceCard.propTypes = {
+  vote: PropTypes.array,
   assetId: PropTypes.number,
   currentBalance: PropTypes.number,
   balanceBeforeDate: PropTypes.number,

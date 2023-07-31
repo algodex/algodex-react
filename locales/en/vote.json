@@ -22,6 +22,8 @@
     "Current Turnout": "Current Turnout",
     "Current Live Results": "Current Live Results",
     "Votes": "Votes",
+    "Voting hasn’t started yet": "Voting hasn’t started yet",
+    "Voting has ended":"Voting has ended",
     "This wallet has opted into this voting token. Click button above to receive tokens to vote": "This wallet has opted into this voting token. Click button above to receive tokens to vote",
     "Once opted into the token, you’ll be able to receive your tokens with the button above": "Once opted into the token, you’ll be able to receive your tokens with the button above",
     "This wallet has claimed its voting tokens" : "This wallet has claimed its voting tokens",
