@@ -224,7 +224,7 @@ function BalanceCard({
   const { activeWallet } = useContext(WalletReducerContext)
   const { startDate, endDate } = vote[0]
   const today = dayjs().toISOString()
-  console.log({ startDate, endDate, today })
+
   return (
     <>
       <BalanceCardContainer>
