@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
-import useBalanceInfo from '../../../hooks/useBalanceInfo'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -208,11 +209,17 @@ const InfoText = styled.p`
     font-size: 14px !important;
   }
 `
-function BalanceCard() {
+function BalanceCard({
+  assetId,
+  currentBalance,
+  balanceBeforeDate,
+  optInTxn,
+  assetTransferTxn,
+  optedIn,
+  voted
+}) {
   const { t } = useTranslation('vote')
-
-  const { activeWallet, currentBalance, balanceBeforeDate, optInTxn, assetTransferTxn, optedIn } =
-    useBalanceInfo()
+  const { activeWallet } = useContext(WalletReducerContext)
 
   return (
     <>
@@ -243,7 +250,15 @@ function BalanceCard() {
             )}
           </BalanceDisplay>
 
-          {activeWallet && (balanceBeforeDate === null || balanceBeforeDate <= 0) ? (
+          {activeWallet && voted === true ? (
+            <>
+              {' '}
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>
+                {t('This wallet has claimed its voting tokens and has already voted')}.
+              </InfoText>
+            </>
+          ) : activeWallet && (balanceBeforeDate === null || balanceBeforeDate <= 0) ? (
             <>
               <OptInButton className="disabledOptInButton">
                 {t('Opt in to Voting Token')}
@@ -253,7 +268,7 @@ function BalanceCard() {
             </>
           ) : activeWallet && optedIn === false ? (
             <>
-              <OptInButton onClick={() => optInTxn(activeWallet)}>
+              <OptInButton onClick={() => optInTxn(activeWallet, assetId)}>
                 {t('Opt in to Voting Token')}
               </OptInButton>
               <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
@@ -273,7 +288,7 @@ function BalanceCard() {
             </>
           ) : activeWallet && optedIn === true ? (
             <>
-              <ReceiveButton onClick={() => assetTransferTxn(activeWallet)}>
+              <ReceiveButton onClick={() => assetTransferTxn(activeWallet, assetId)}>
                 {t('Receive Tokens')}
               </ReceiveButton>
               <InfoText>
@@ -298,5 +313,13 @@ function BalanceCard() {
     </>
   )
 }
-
+BalanceCard.propTypes = {
+  assetId: PropTypes.number,
+  currentBalance: PropTypes.number,
+  balanceBeforeDate: PropTypes.number,
+  optInTxn: PropTypes.func,
+  assetTransferTxn: PropTypes.func,
+  optedIn: PropTypes.bool,
+  voted: PropTypes.bool
+}
 export default BalanceCard

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Head from 'next/head'
 import Header from '../../components/Nav/Header'
 import BackNavigation from '@/components/Vote/IssuePage/BackNavigation'
@@ -11,7 +11,9 @@ import Banner from '@/components/Vote/Homepage/Banner'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import { votesArray } from '../../utils/votesData'
-
+import useVoteSubmit from '@/hooks/useVoteSubmit'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
+import useBalanceInfo from '../../hooks/useBalanceInfo'
 const DesktopContainer = styled.div`
   display: flex;
   margin-top: 20px;
@@ -33,10 +35,35 @@ const NotFoundContainer = styled.div`
   color: ${({ theme }) => theme.palette.gray['400']};
 `
 const OpenIssue = () => {
+  const { activeWallet } = useContext(WalletReducerContext)
   const [innerWidth, setInnerWidth] = useState(undefined)
+  const [optionsVotes, setOptionsVotes] = useState([])
+  const [totalVotes, setTotalVotes] = useState(0)
   const router = useRouter()
   const { title } = router.query
-
+  const vote = votesArray.filter((e) => {
+    return e.title === title
+  })
+  const {
+    globalState,
+    readGlobalState,
+    assetBalance,
+    voted,
+    decimals,
+    voteSubmit,
+    active,
+    assetId
+  } = useVoteSubmit()
+  const {
+    currentBalance,
+    balanceBeforeDate,
+    optInTxn,
+    assetTransferTxn,
+    checkBalanceBeforeDate,
+    hasAlgxBalance,
+    checkOptIn,
+    optedIn
+  } = useBalanceInfo()
   useEffect(() => {
     const handleResize = () => {
       setInnerWidth(window.innerWidth)
@@ -47,10 +74,39 @@ const OpenIssue = () => {
       window.removeEventListener('resize', handleResize)
     }
   }, [])
-
-  const vote = votesArray.filter((e) => {
-    return e.title === title
-  })
+  useEffect(() => {
+    if (vote.length && activeWallet) {
+      readGlobalState(vote[0].appId, activeWallet.address)
+    }
+  }, [activeWallet])
+  useEffect(() => {
+    if (globalState.length) {
+      setOptionsVotes(
+        globalState
+          .filter((e) => e.key.includes('votes'))
+          .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
+      )
+    }
+  }, [globalState])
+  useEffect(() => {
+    if (optionsVotes.length) {
+      let votesSum = 0
+      optionsVotes.forEach((e) => (votesSum = votesSum + e.value))
+      setTotalVotes(votesSum)
+    }
+  }, [optionsVotes])
+  useEffect(() => {
+    if (assetId !== null) {
+      hasAlgxBalance(activeWallet)
+      checkBalanceBeforeDate(activeWallet)
+      checkOptIn(activeWallet, assetId)
+    }
+  }, [assetId])
+  useEffect(() => {
+    if (vote.length && activeWallet && optedIn === 'received' && voted === false) {
+      readGlobalState(vote[0].appId, activeWallet.address)
+    }
+  }, [optedIn])
 
   return (
     <>
@@ -72,12 +128,31 @@ const OpenIssue = () => {
               <DesktopLeftContainer>
                 <BackNavigation />
                 <VoteContent vote={vote} />
-                <QuestionForm vote={vote} />
+                <QuestionForm
+                  vote={vote}
+                  voteSubmit={voteSubmit}
+                  voted={voted}
+                  assetBalance={assetBalance}
+                  active={active}
+                />
               </DesktopLeftContainer>
               <DesktopRightContainer>
-                <BalanceCard />
+                <BalanceCard
+                  assetId={assetId}
+                  currentBalance={currentBalance}
+                  balanceBeforeDate={balanceBeforeDate}
+                  optInTxn={optInTxn}
+                  assetTransferTxn={assetTransferTxn}
+                  optedIn={optedIn}
+                  voted={voted}
+                />
                 <CurrentTurnoutCard />
-                <CurrentLiveResultsCard />
+                <CurrentLiveResultsCard
+                  optionsVotes={optionsVotes}
+                  options={vote[0].question.options}
+                  decimals={decimals}
+                  totalVotes={totalVotes}
+                />
               </DesktopRightContainer>
             </DesktopContainer>
           </>
@@ -85,10 +160,29 @@ const OpenIssue = () => {
           <>
             <BackNavigation />
             <VoteContent vote={vote} />
-            <BalanceCard />
-            <QuestionForm vote={vote} />
+            <BalanceCard
+              assetId={assetId}
+              currentBalance={currentBalance}
+              balanceBeforeDate={balanceBeforeDate}
+              optInTxn={optInTxn}
+              assetTransferTxn={assetTransferTxn}
+              optedIn={optedIn}
+              voted={voted}
+            />
+            <QuestionForm
+              vote={vote}
+              voteSubmit={voteSubmit}
+              voted={voted}
+              assetBalance={assetBalance}
+              active={active}
+            />
             <CurrentTurnoutCard />
-            <CurrentLiveResultsCard />
+            <CurrentLiveResultsCard
+              optionsVotes={optionsVotes}
+              options={vote[0].question.options}
+              decimals={decimals}
+              totalVotes={totalVotes}
+            />
           </>
         )
       ) : (

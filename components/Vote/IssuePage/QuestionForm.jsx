@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import Radio from '@mui/material/Radio'
@@ -7,6 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 
 const Container = styled.div`
   border-radius: 8px;
@@ -119,9 +120,38 @@ const VoteButton = styled(Button)`
     width: 151px;
   }
 `
-function QuestionForm({ vote }) {
+const DisabledVoteButton = styled(Button)`
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+  font-weight: 500;
+  height: 30px;
+  line-height: 22px;
+  margin-bottom: 18px;
+  margin-top: 22px;
+  text-align: center;
+  text-transform: uppercase;
+  width: 108px;
+  cursor: default;
+  :hover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 16px;
+    font-weight: 500;
+    height: 42px;
+    line-height: 26px;
+    margin-bottom: 40px;
+    width: 151px;
+  }
+`
+function QuestionForm({ vote, voteSubmit, voted, assetBalance, active }) {
   const { t } = useTranslation('vote')
-  const { question } = vote[0]
+  const { activeWallet } = useContext(WalletReducerContext)
+  const { question, appId } = vote[0]
+  const [userOption, setUserOption] = useState(null)
 
   return (
     <>
@@ -143,12 +173,19 @@ function QuestionForm({ vote }) {
                     control={<Radio />}
                     label={option}
                     key={i}
+                    onClick={() => setUserOption(`option_${i + 1}`)}
                   />
                 ))}
             </RadioGroup>
           </FormControlStyled>
         </form>
-        <VoteButton>{t('Submit Vote')}</VoteButton>
+        {userOption !== null && assetBalance !== null && voted === false && active === true ? (
+          <VoteButton onClick={() => voteSubmit(activeWallet.address, appId, userOption)}>
+            {t('Submit Vote')}
+          </VoteButton>
+        ) : (
+          <DisabledVoteButton>{t('Submit Vote')}</DisabledVoteButton>
+        )}
       </Container>
     </>
   )
@@ -158,6 +195,10 @@ QuestionForm.propTypes = {
   question: PropTypes.object,
   title: PropTypes.string,
   description: PropTypes.string,
-  options: PropTypes.array
+  options: PropTypes.array,
+  voteSubmit: PropTypes.func,
+  voted: PropTypes.bool,
+  assetBalance: PropTypes.number,
+  active: PropTypes.bool
 }
 export default QuestionForm

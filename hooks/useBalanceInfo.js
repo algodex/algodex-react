@@ -67,8 +67,8 @@ function useBalanceInfo() {
       console.log(error.message)
     }
   }
-  async function checkOptIn(activeWalletObj) {
-    const assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+  async function checkOptIn(activeWalletObj, assetId) {
+    // const assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
     try {
       const accountAssetTransfers = await algodex.http.indexer.indexer
         .lookupAccountTransactions(activeWalletObj?.address)
@@ -78,7 +78,6 @@ function useBalanceInfo() {
       const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
         .do()
-
       if (
         accountAssetTransfers.transactions?.length &&
         accountAssetTransfers.transactions?.some(
@@ -103,7 +102,7 @@ function useBalanceInfo() {
       console.log(error.message)
     }
   }
-  async function optInTxn(activeWalletObj) {
+  async function optInTxn(activeWalletObj, assetId) {
     async function generateOptIntoAssetTxns({ assetID, initiatorAddr }) {
       const suggestedParams = await algodex.algod.getTransactionParams().do()
       const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -116,7 +115,7 @@ function useBalanceInfo() {
       return [{ txn: optInTxn, signers: [initiatorAddr] }]
     }
     const optInTxn = await generateOptIntoAssetTxns({
-      assetID: getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+      assetID: assetId, //getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
       initiatorAddr: activeWalletObj?.address
     })
     try {
@@ -129,15 +128,15 @@ function useBalanceInfo() {
       console.log("Couldn't sign txn", error)
     }
   }
-  async function assetTransferTxn(activeWalletObj) {
+  async function assetTransferTxn(activeWalletObj, assetId) {
     async function generateAssetTransferTxns() {
       const suggestedParams = await algodex.algod.getTransactionParams().do()
       const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         from: recoveredAccount1.addr,
         suggestedParams,
-        assetIndex: getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+        assetIndex: assetId, //getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
         to: activeWalletObj?.address,
-        amount: 10000000 //balanceBeforeDate
+        amount: balanceBeforeDate
       })
       return ptxn
     }
@@ -155,11 +154,11 @@ function useBalanceInfo() {
 
   useEffect(() => {
     peraWallet.reconnectSession()
-    if (activeWallet) {
-      hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet)
-      checkOptIn(activeWallet)
-    }
+    // if (activeWallet) {
+    //   hasAlgxBalance(activeWallet)
+    //   checkBalanceBeforeDate(activeWallet)
+    //   checkOptIn(activeWallet)
+    // }
   }, [activeWallet])
 
   return {

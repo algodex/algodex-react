@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import LinearProgress from '@mui/material/LinearProgress'
 import useTranslation from 'next-translate/useTranslation'
@@ -99,7 +100,7 @@ const Percentage = styled.p`
   text-align: left;
 `
 
-function CurrentLiveResultsCard() {
+function CurrentLiveResultsCard({ optionsVotes, options, decimals, totalVotes }) {
   const { t } = useTranslation('vote')
 
   return (
@@ -109,42 +110,35 @@ function CurrentLiveResultsCard() {
           <p>{t('Current Live Results')}:</p>
         </CardTopContainer>
         <CurrentLiveResultsBottomContainer>
-          <OptionContainer>
-            <Option>Pineapple</Option>
-            <LinearProgress variant="determinate" value={42.3} />
-            <NumbersContainer>
-              <VoteNumbers>5,687 {t('Votes')}</VoteNumbers>
-              <Percentage>42.3%</Percentage>
-            </NumbersContainer>
-          </OptionContainer>
-          <OptionContainer>
-            <Option>Pepperoni</Option>
-            <LinearProgress variant="determinate" value={22.3} />
-            <NumbersContainer>
-              <VoteNumbers>3,103 {t('Votes')}</VoteNumbers>
-              <Percentage>22.3%</Percentage>
-            </NumbersContainer>
-          </OptionContainer>
-          <OptionContainer>
-            <Option>Cheese</Option>
-            <LinearProgress variant="determinate" value={19.3} />
-            <NumbersContainer>
-              <VoteNumbers>2,908 {t('Votes')}</VoteNumbers>
-              <Percentage>19.3%</Percentage>
-            </NumbersContainer>
-          </OptionContainer>
-          <OptionContainer>
-            <Option>Other</Option>
-            <LinearProgress variant="determinate" value={12.3} />
-            <NumbersContainer>
-              <VoteNumbers>1,678 {t('Votes')}</VoteNumbers>
-              <Percentage>12.3%</Percentage>
-            </NumbersContainer>
-          </OptionContainer>
+          {options.map((e, i) => (
+            <OptionContainer key={i}>
+              <Option>{e}</Option>
+              <LinearProgress
+                variant="determinate"
+                value={
+                  totalVotes > 0 ? ((optionsVotes[i]?.value / totalVotes) * 100).toFixed(2) : 0
+                }
+              />
+              <NumbersContainer>
+                <VoteNumbers>
+                  {optionsVotes.length ? optionsVotes[i]?.value / Math.pow(10, decimals) : 0}{' '}
+                  {t('Votes')}
+                </VoteNumbers>
+                <Percentage>
+                  {totalVotes > 0 ? ((optionsVotes[i]?.value / totalVotes) * 100).toFixed(2) : 0}%
+                </Percentage>
+              </NumbersContainer>
+            </OptionContainer>
+          ))}
         </CurrentLiveResultsBottomContainer>
       </CurrentLiveResultsContainer>
     </>
   )
 }
-
+CurrentLiveResultsCard.propTypes = {
+  optionsVotes: PropTypes.array,
+  options: PropTypes.array,
+  decimals: PropTypes.number,
+  totalVotes: PropTypes.number
+}
 export default CurrentLiveResultsCard
