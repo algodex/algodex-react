@@ -1,0 +1,66 @@
+{
+  "name": "AlgoVoteApp",
+  "methods": [
+    {
+      "name": "opt_in_vote_asa",
+      "args": [
+        {
+          "type": "asset",
+          "name": "asset"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "vote_option_1",
+      "args": [
+        {
+          "type": "axfer",
+          "name": "axfer"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "vote_option_2",
+      "args": [
+        {
+          "type": "axfer",
+          "name": "axfer"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "start_vote",
+      "args": [
+        {
+          "type": "string",
+          "name": "proposal"
+        },
+        {
+          "type": "uint64",
+          "name": "duration"
+        },
+        {
+          "type": "string",
+          "name": "option_1"
+        },
+        {
+          "type": "string",
+          "name": "option_2"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ],
+  "networks": {}
+}
