@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
-import useBalanceInfo from '../../../hooks/useBalanceInfo'
+import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
+import dayjs from 'dayjs'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -47,6 +49,9 @@ const BalanceCardBottomContainer = styled.div`
   border-radius: 0px 0px 8px 8px;
   padding-top: 9px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   p {
     font-size: 10px;
@@ -60,30 +65,40 @@ const BalanceCardBottomContainer = styled.div`
 
   .disabledOptInButton {
     cursor: default;
-    background-color: #363B46;
-    color: #72767D;
+    background-color: #363b46;
+    color: #72767d;
     margin-bottom: 16px;
-    
 
     :hover {
-      background-color: #363B46;
+      background-color: #363b46;
+    }
+  }
+
+  .disabledReceiveButton {
+    cursor: default;
+    background-color: #363b46;
+    color: #72767d;
+    margin-top: 0px;
+    margin-bottom: 19px;
+    :hover {
+      background-color: #363b46;
     }
   }
 
   @media (min-width: 1024px) {
     padding-top: 21px;
     p {
-        font-size: 12px;
-        line-height: 15px;
+      font-size: 12px;
+      line-height: 15px;
     }
     .disabledOptInButton {
-      cursor: default;
-      margin-top: -16px;
-  
       :hover {
-        background-color: #363B46;
+        background-color: #363b46;
       }
     }
+    .disabledReceiveButton {
+    }
+  }
 `
 const BalanceDisplay = styled.div`
   align-items: center;
@@ -110,7 +125,7 @@ const BalanceDisplay = styled.div`
 
   @media (min-width: 1024px) {
     height: 41px;
-    margin-bottom: 36px;
+    margin-bottom: 20px;
     margin-top: 26px;
     max-width: 327px;
     width: 100%;
@@ -128,6 +143,7 @@ const OptInButton = styled(Button)`
   background-color: #38a169;
   border-radius: 2px;
   color: white;
+  font-family: Inter;
   font-size: 12px;
   font-weight: 700;
   height: 28px;
@@ -147,7 +163,37 @@ const OptInButton = styled(Button)`
     font-weight: 700;
     height: 33px;
     line-height: 17px;
-    margin-bottom: 38px;
+    margin-bottom: 16px;
+    width: 290px;
+  }
+`
+const ReceiveButton = styled(Button)`
+  background-color: #38a169;
+  font-family: Inter;
+  border-radius: 2px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  height: 28px;
+  letter-spacing: 0em;
+  line-height: 15px;
+  margin-bottom: 20px;
+
+  text-align: left;
+  text-transform: inherit;
+  width: 220px;
+
+  :hover {
+    background-color: #38a169;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 14px;
+    font-weight: 700;
+    height: 33px;
+    line-height: 17px;
+    margin-bottom: 16px;
+
     width: 290px;
   }
 `
@@ -164,28 +210,20 @@ const InfoText = styled.p`
     font-size: 14px !important;
   }
 `
-function BalanceCard() {
+function BalanceCard({
+  assetId,
+  currentBalance,
+  balanceBeforeDate,
+  optInTxn,
+  assetTransferTxn,
+  optedIn,
+  voted,
+  vote
+}) {
   const { t } = useTranslation('vote')
-
-  const {
-    activeWallet,
-    currentBalance,
-    balanceBeforeDate,
-    optInTxn,
-    assetTransferTxn,
-    checkBalanceBeforeDate,
-    hasAlgxBalance,
-    checkOptIn,
-    optedIn
-  } = useBalanceInfo()
-
-  useEffect(() => {
-    if (activeWallet) {
-      hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet)
-      checkOptIn(activeWallet)
-    }
-  }, [activeWallet])
+  const { activeWallet } = useContext(WalletReducerContext)
+  const { startDate, endDate } = vote[0]
+  const today = dayjs().toISOString()
 
   return (
     <>
@@ -216,16 +254,67 @@ function BalanceCard() {
             )}
           </BalanceDisplay>
 
-          {activeWallet && optedIn === false ? (
-            <OptInButton onClick={() => optInTxn(activeWallet)}>{t('Opt in')}</OptInButton>
+          {activeWallet && dayjs(today).isBefore(dayjs(startDate)) ? (
+            <>
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <InfoText>{t('Voting hasn’t started yet')}.</InfoText>
+            </>
+          ) : activeWallet && dayjs(today).isAfter(dayjs(endDate)) ? (
+            <>
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <InfoText>{t('Voting has ended')}.</InfoText>
+            </>
+          ) : activeWallet && voted === true ? (
+            <>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>
+                {t('This wallet has claimed its voting tokens and has already voted')}.
+              </InfoText>
+            </>
+          ) : activeWallet && (balanceBeforeDate === null || balanceBeforeDate <= 0) ? (
+            <>
+              <OptInButton className="disabledOptInButton">
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>{t('This wallet is not eligible to vote on this issue')}.</InfoText>
+            </>
+          ) : activeWallet && optedIn === false ? (
+            <>
+              <OptInButton onClick={() => optInTxn(activeWallet, assetId)}>
+                {t('Opt in to Voting Token')}
+              </OptInButton>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>
+                {t(
+                  'Once opted into the token, you’ll be able to receive your tokens with the button above'
+                )}
+                .
+              </InfoText>
+            </>
           ) : activeWallet && optedIn === 'received' ? (
-            <OptInButton className="disabledOptInButton">
-              {t('Already received Tokens')}
-            </OptInButton>
+            <>
+              <ReceiveButton className="disabledReceiveButton">{t('Receive Tokens')}</ReceiveButton>
+              <InfoText>
+                {t('This wallet has claimed its voting tokens. Cast your vote below')}.
+              </InfoText>
+            </>
           ) : activeWallet && optedIn === true ? (
-            <OptInButton onClick={() => assetTransferTxn(activeWallet)}>
-              {t('Receive Tokens')}
-            </OptInButton>
+            <>
+              <ReceiveButton onClick={() => assetTransferTxn(activeWallet, assetId)}>
+                {t('Receive Tokens')}
+              </ReceiveButton>
+              <InfoText>
+                {t(
+                  'This wallet has opted into this voting token. Click button above to receive tokens to vote'
+                )}
+                .
+              </InfoText>
+            </>
           ) : (
             <>
               <OptInButton className="disabledOptInButton">
@@ -241,5 +330,14 @@ function BalanceCard() {
     </>
   )
 }
-
+BalanceCard.propTypes = {
+  vote: PropTypes.array,
+  assetId: PropTypes.number,
+  currentBalance: PropTypes.number,
+  balanceBeforeDate: PropTypes.number,
+  optInTxn: PropTypes.func,
+  assetTransferTxn: PropTypes.func,
+  optedIn: PropTypes.bool,
+  voted: PropTypes.bool
+}
 export default BalanceCard
