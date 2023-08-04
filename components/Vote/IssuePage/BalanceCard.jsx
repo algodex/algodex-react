@@ -248,7 +248,7 @@ function BalanceCard({
                 <p>{t('Your ALGX Balance')}: 0</p>
               )
             ) : currentBalance == true ? (
-              <p>{t('Your ALGX Balance')}:</p>
+              <p>{t('Your ALGX Balance')}:testnet</p>
             ) : (
               <p className="noWallet">{t('Connect wallet for ALGX balance')}</p>
             )}

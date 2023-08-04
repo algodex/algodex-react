@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 import useTranslation from 'next-translate/useTranslation'
@@ -94,7 +95,8 @@ const Amount = styled.div`
     text-align: center;
   }
 `
-function CurrentTurnoutCard() {
+
+function CurrentTurnoutCard({ totalVoters, totalHolders }) {
   const { t } = useTranslation('vote')
 
   return (
@@ -108,7 +110,7 @@ function CurrentTurnoutCard() {
             <CircularProgressContainer>
               <CircularProgress
                 variant="determinate"
-                value={18}
+                value={totalVoters > 0 ? ((totalVoters / totalHolders) * 100).toFixed(2) : 0}
                 size={50}
                 thickness={6}
                 className={'foreground'}
@@ -116,15 +118,20 @@ function CurrentTurnoutCard() {
               <CircularProgress variant="determinate" value={100} size={50} thickness={6} />
             </CircularProgressContainer>
 
-            <p>18%</p>
+            <p>{totalVoters > 0 ? ((totalVoters / totalHolders) * 100).toFixed(2) : 0}%</p>
           </Progress>
           <Amount>
-            <p>14,567 / 87,900 ALGX</p>
+            <p>
+              {totalVoters > 0 ? totalVoters : 0} / {totalHolders.toLocaleString('en-US')} ALGX
+            </p>
           </Amount>
         </CurrentTurnoutBottomContainer>
       </CurrentTurnout>
     </>
   )
 }
-
+CurrentTurnoutCard.propTypes = {
+  totalHolders: PropTypes.number,
+  totalVoters: PropTypes.number
+}
 export default CurrentTurnoutCard

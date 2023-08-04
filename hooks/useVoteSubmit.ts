@@ -6,6 +6,7 @@ import * as abiThreeOptionsContract from '../utils/VotingSmartContracts/threeOpt
 //import * as abiFourOptionsContract from '../utils/VotingSmartContracts/fourOptionContract.json'
 import { PeraWalletConnect } from '@perawallet/connect'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
+import { getActiveNetwork } from '@/services/environment'
 const peraWallet = new PeraWalletConnect()
 
 function useVoteSubmit() {
@@ -23,6 +24,7 @@ function useVoteSubmit() {
   const [currentContract, setCurrentContract] = useState<ABIContract | null>(null)
   const [active, setActive] = useState<boolean>(false)
   const [globalState, setGlobalState] = useState<{ key: string; value: number | string }[]>([])
+  const [totalHolders, setTotalHolders] = useState<number>(0)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   if (!account1_mnemonic) {
     throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
@@ -94,7 +96,7 @@ function useVoteSubmit() {
       const currentTime = new Date().getTime() / 1000.0
       setActive((currentTime as number) < voteEnd[0].value)
       setDecimals(assetDecimals)
-      if (myAddress !== null) {
+      if (myAddress !== null && myAddress !== undefined) {
         checkAssetBalance(myAddress, foundAssetId)
         checkVote(myAddress, foundAssetId, appId)
       }
@@ -158,6 +160,16 @@ function useVoteSubmit() {
       console.log("Couldn't sign asset transfer txns", error)
     }
   }
+  async function getTotalHolders() {
+    let assetId = getActiveNetwork() === 'testnet' ? 95999794 : 724480511
+    const minBalance = 10000000000
+    const assetBalances = await algodex.indexer
+      .lookupAssetBalances(assetId)
+      .currencyGreaterThan(minBalance)
+      .limit(9999)
+      .do()
+    setTotalHolders(assetBalances.balances.length)
+  }
   return {
     globalState,
     readGlobalState,
@@ -167,7 +179,9 @@ function useVoteSubmit() {
     decimals,
     voteSubmit,
     active,
-    assetId
+    assetId,
+    getTotalHolders,
+    totalHolders
   }
 }
 export default useVoteSubmit

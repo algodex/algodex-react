@@ -39,6 +39,7 @@ const OpenIssue = () => {
   const [innerWidth, setInnerWidth] = useState(undefined)
   const [optionsVotes, setOptionsVotes] = useState([])
   const [totalVotes, setTotalVotes] = useState(0)
+  const [totalVoters, setTotalVoters] = useState(0)
   const router = useRouter()
   const { title } = router.query
   const vote = votesArray.filter((e) => {
@@ -52,7 +53,9 @@ const OpenIssue = () => {
     decimals,
     voteSubmit,
     active,
-    assetId
+    assetId,
+    getTotalHolders,
+    totalHolders
   } = useVoteSubmit()
   const {
     currentBalance,
@@ -75,8 +78,9 @@ const OpenIssue = () => {
     }
   }, [])
   useEffect(() => {
-    if (vote.length && activeWallet) {
-      readGlobalState(vote[0].appId, activeWallet.address)
+    if (vote.length) {
+      readGlobalState(vote[0].appId, activeWallet?.address)
+      getTotalHolders()
     }
   }, [activeWallet])
   useEffect(() => {
@@ -86,6 +90,7 @@ const OpenIssue = () => {
           .filter((e) => e.key.includes('votes'))
           .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
       )
+      setTotalVoters(globalState.filter((e) => e.key.includes('total_voters')))
     }
   }, [globalState])
   useEffect(() => {
@@ -96,12 +101,12 @@ const OpenIssue = () => {
     }
   }, [optionsVotes])
   useEffect(() => {
-    if (assetId !== null) {
+    if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
       checkBalanceBeforeDate(activeWallet)
       checkOptIn(activeWallet, assetId)
     }
-  }, [assetId])
+  }, [assetId, activeWallet])
   useEffect(() => {
     if (vote.length && activeWallet && optedIn === 'received' && voted === false) {
       readGlobalState(vote[0].appId, activeWallet.address)
@@ -147,7 +152,10 @@ const OpenIssue = () => {
                   voted={voted}
                   vote={vote}
                 />
-                <CurrentTurnoutCard />
+                <CurrentTurnoutCard
+                  totalVoters={totalVoters[0]?.value}
+                  totalHolders={totalHolders}
+                />
                 <CurrentLiveResultsCard
                   optionsVotes={optionsVotes}
                   options={vote[0].question.options}
@@ -178,7 +186,7 @@ const OpenIssue = () => {
               assetBalance={assetBalance}
               active={active}
             />
-            <CurrentTurnoutCard />
+            <CurrentTurnoutCard totalVoters={totalVoters[0]?.value} totalHolders={totalHolders} />
             <CurrentLiveResultsCard
               optionsVotes={optionsVotes}
               options={vote[0].question.options}
