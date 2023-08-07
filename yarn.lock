@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/-/-/--0.0.1.tgz#db6db7cd866142880dd03e5b8781d1b4fac0e5bd"
   integrity sha512-3HfneK3DGAm05fpyj20sT3apkNcvPpCuccOThOPdzz8sY7GgQGe0l93XH9bt+YzibcTIgUAIMoyVJI740RtgyQ==
 
-"@algodex/algodex-sdk@^2.2.4":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.2.4.tgz#72466e1c4b8884efa587bd2eadd23b9dd7e4484b"
-  integrity sha512-IDFkygssbxAnhPF+j6qaxRiRi8hzGUQpS1G95fu6mpHMl1agWQ+4dcmz8mqaPHKdACZeXc4EDqF5GDeJQhlKsg==
+"@algodex/algodex-sdk@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@algodex/algodex-sdk/-/algodex-sdk-2.2.5.tgz#2ec04858edc853d0037f927aeb4de8b18bd5e534"
+  integrity sha512-p1o/BLGJM0b+T2nBMzS38JvL4VW3tO1H66eqkHmNBKQc4ncF0QelxApmZAFkvie0ZKwSAPCA0x+MMbZBGoHdig==
   dependencies:
     ajv "^8.10.0"
     ajv-formats "^2.1.1"
