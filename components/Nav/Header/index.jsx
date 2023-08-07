@@ -342,13 +342,14 @@ export function Header() {
               </NavActiveLink>
             </MenuItem>
             <Divider sx={{ backgroundColor: 'gray.500', margin: '20px 10px' }} />
-            {/* <MenuItem onClick={handleCloseMenu}>
+            <MenuItem onClick={handleCloseMenu}>
               <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
                 <NavTextLgWrapper isMobile={isMobile}>
                   <Typography variant="navText">Launch Pad</Typography>
                 </NavTextLgWrapper>
               </NavActiveLink>
-            </MenuItem> */}
+            </MenuItem>
+            <Divider sx={{ backgroundColor: 'gray.500', margin: '20px 10px' }} />
             <MenuItem onClick={handleCloseMenu}>
               <NavActiveLink href="/vote" matches={/^\/vote/}>
                 <NavTextLgWrapper isMobile={isMobile}>
@@ -399,11 +400,11 @@ export function Header() {
       )}
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
-          {/* <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
+          <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
             <NavTextSmWrapper isMobile={isMobile}>
               <Typography variant="navText">Launch Pad</Typography>
             </NavTextSmWrapper>
-          </NavActiveLink> */}
+          </NavActiveLink>
           <NavActiveLink href="/vote" matches={/^\/vote/}>
             <NavTextSmWrapper isMobile={isMobile}>
               <Typography variant="navText">Vote</Typography>
