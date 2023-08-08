@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -218,13 +218,20 @@ function BalanceCard({
   assetTransferTxn,
   optedIn,
   voted,
-  vote
+  vote,
+  contractDuration
 }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
+  const [contractEndDate, setContractEndDate] = useState(null)
   const { startDate, endDate } = vote[0]
   const today = dayjs().toISOString()
 
+  useEffect(() => {
+    if (contractDuration !== null) {
+      setContractEndDate(dayjs.unix(contractDuration[0].value).toISOString())
+    }
+  }, [contractDuration])
   return (
     <>
       <BalanceCardContainer>
@@ -261,7 +268,9 @@ function BalanceCard({
               </OptInButton>
               <InfoText>{t('Voting hasn’t started yet')}.</InfoText>
             </>
-          ) : activeWallet && dayjs(today).isAfter(dayjs(endDate)) ? (
+          ) : activeWallet &&
+            (dayjs(today).isAfter(dayjs(endDate)) ||
+              dayjs(today).isAfter(dayjs(contractEndDate))) ? (
             <>
               <OptInButton className="disabledOptInButton">
                 {t('Opt in to Voting Token')}
@@ -338,6 +347,7 @@ BalanceCard.propTypes = {
   optInTxn: PropTypes.func,
   assetTransferTxn: PropTypes.func,
   optedIn: PropTypes.bool,
-  voted: PropTypes.bool
+  voted: PropTypes.bool,
+  contractDuration: PropTypes.array
 }
 export default BalanceCard

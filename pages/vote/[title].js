@@ -40,6 +40,7 @@ const OpenIssue = () => {
   const [optionsVotes, setOptionsVotes] = useState([])
   const [totalVotes, setTotalVotes] = useState(0)
   const [totalVoters, setTotalVoters] = useState(0)
+  const [contractDuration, setContractDuration] = useState(null)
   const router = useRouter()
   const { title } = router.query
   const vote = votesArray.filter((e) => {
@@ -91,6 +92,7 @@ const OpenIssue = () => {
           .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
       )
       setTotalVoters(globalState.filter((e) => e.key.includes('total_voters')))
+      setContractDuration(globalState.filter((e) => e.key.includes('vote_end')))
     }
   }, [globalState])
   useEffect(() => {
@@ -112,7 +114,7 @@ const OpenIssue = () => {
       readGlobalState(vote[0].appId, activeWallet.address)
     }
   }, [optedIn])
-
+  console.log({ globalState })
   return (
     <>
       <Head>
@@ -151,6 +153,7 @@ const OpenIssue = () => {
                   optedIn={optedIn}
                   voted={voted}
                   vote={vote}
+                  contractDuration={contractDuration}
                 />
                 <CurrentTurnoutCard
                   totalVoters={totalVoters[0]?.value}
@@ -178,6 +181,7 @@ const OpenIssue = () => {
               optedIn={optedIn}
               voted={voted}
               vote={vote}
+              contractDuration={contractDuration}
             />
             <QuestionForm
               vote={vote}
