@@ -52,11 +52,11 @@ const OpenIssue = () => {
     assetBalance,
     voted,
     decimals,
-    voteSubmit,
     active,
     assetId,
     getTotalHolders,
-    totalHolders
+    totalHolders,
+    optInAndSubmitVote
   } = useVoteSubmit()
   const {
     currentBalance,
@@ -105,7 +105,7 @@ const OpenIssue = () => {
   useEffect(() => {
     if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet, vote[0].startDate)
+      checkBalanceBeforeDate(activeWallet, '2023-08-07T22:54:00.000Z') //snapshot date
       checkOptIn(activeWallet, assetId)
     }
   }, [assetId, activeWallet])
@@ -114,7 +114,7 @@ const OpenIssue = () => {
       readGlobalState(vote[0].appId, activeWallet.address)
     }
   }, [optedIn])
-  console.log({ globalState })
+
   return (
     <>
       <Head>
@@ -137,7 +137,7 @@ const OpenIssue = () => {
                 <VoteContent vote={vote} />
                 <QuestionForm
                   vote={vote}
-                  voteSubmit={voteSubmit}
+                  optInAndSubmitVote={optInAndSubmitVote}
                   voted={voted}
                   assetBalance={assetBalance}
                   active={active}
@@ -185,7 +185,7 @@ const OpenIssue = () => {
             />
             <QuestionForm
               vote={vote}
-              voteSubmit={voteSubmit}
+              optInAndSubmitVote={optInAndSubmitVote}
               voted={voted}
               assetBalance={assetBalance}
               active={active}

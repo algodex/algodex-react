@@ -1,89 +1,96 @@
 {
-    "name": "Algodex3Option",
-    "methods": [
+  "name": "AlgxFlagVote",
+  "methods": [
       {
-        "name": "opt_in_vote_asa",
-        "args": [
-          {
-            "type": "asset",
-            "name": "asset"
+          "name": "opt_in_voter",
+          "args": [],
+          "returns": {
+              "type": "void"
           }
-        ],
-        "returns": {
-          "type": "void"
-        }
       },
       {
-        "name": "vote_option_1",
-        "args": [
-          {
-            "type": "axfer",
-            "name": "axfer"
+          "name": "opt_in_vote_asa",
+          "args": [
+              {
+                  "type": "asset",
+                  "name": "asset"
+              }
+          ],
+          "returns": {
+              "type": "void"
           }
-        ],
-        "returns": {
-          "type": "void"
-        }
       },
       {
-        "name": "vote_option_2",
-        "args": [
-          {
-            "type": "axfer",
-            "name": "axfer"
+          "name": "vote_option_1",
+          "args": [
+              {
+                  "type": "asset",
+                  "name": "asa"
+              }
+          ],
+          "returns": {
+              "type": "void"
           }
-        ],
-        "returns": {
-          "type": "void"
-        }
       },
       {
-        "name": "vote_option_3",
-        "args": [
-          {
-            "type": "axfer",
-            "name": "axfer"
+          "name": "vote_option_2",
+          "args": [
+              {
+                  "type": "asset",
+                  "name": "asa"
+              }
+          ],
+          "returns": {
+              "type": "void"
           }
-        ],
-        "returns": {
-          "type": "void"
-        }
       },
       {
-        "name": "get_current_time",
-        "args": [],
-        "returns": {
-          "type": "uint64"
-        }
+          "name": "vote_option_3",
+          "args": [
+              {
+                  "type": "asset",
+                  "name": "asa"
+              }
+          ],
+          "returns": {
+              "type": "void"
+          }
       },
       {
-        "name": "start_vote",
-        "args": [
-          {
-            "type": "string",
-            "name": "proposal"
-          },
-          {
-            "type": "uint64",
-            "name": "duration"
-          },
-          {
-            "type": "string",
-            "name": "option_1"
-          },
-          {
-            "type": "string",
-            "name": "option_2"
-          },
-          {
-            "type": "string",
-            "name": "option_3"
+          "name": "get_current_time",
+          "args": [],
+          "returns": {
+              "type": "uint64"
           }
-        ],
-        "returns": {
-          "type": "void"
-        }
+      },
+      {
+          "name": "start_vote",
+          "args": [
+              {
+                  "type": "string",
+                  "name": "proposal"
+              },
+              {
+                  "type": "uint64",
+                  "name": "duration"
+              },
+              {
+                  "type": "string",
+                  "name": "option_1"
+              },
+              {
+                  "type": "string",
+                  "name": "option_2"
+              },
+              {
+                  "type": "string",
+                  "name": "option_3"
+              }
+          ],
+          "returns": {
+              "type": "void"
+          }
       }
-    ],
-    "networks": {}
-  }
+  ],
+  "networks": {}
+}

@@ -73,7 +73,6 @@ function useBalanceInfo() {
         .lookupAccountTransactions(activeWalletObj?.address)
         .assetID(assetId)
         .do()
-
       const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
         .do()
@@ -128,22 +127,29 @@ function useBalanceInfo() {
     }
   }
   async function assetTransferTxn(activeWalletObj, assetId) {
-    async function generateAssetTransferTxns() {
-      const suggestedParams = await algodex.algod.getTransactionParams().do()
-      const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: recoveredAccount1.addr,
-        suggestedParams,
-        assetIndex: assetId,
-        to: activeWalletObj?.address,
-        amount: balanceBeforeDate
-      })
-      return ptxn
-    }
+    const suggestedParams = await algodex.algod.getTransactionParams().do()
+    const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+      from: recoveredAccount1.addr,
+      suggestedParams,
+      assetIndex: assetId,
+      to: activeWalletObj?.address,
+      amount: balanceBeforeDate
+    })
+    const freezeTxn = algosdk.makeAssetFreezeTxnWithSuggestedParamsFromObject({
+      from: recoveredAccount1.addr,
+      suggestedParams,
+      assetIndex: assetId,
+      freezeState: true,
+      freezeTarget: activeWalletObj?.address
+    })
+    const txnArray = [ptxn, freezeTxn]
+    const txnGroup = algosdk.assignGroupID(txnArray)
     try {
-      const unsignedTxn = await generateAssetTransferTxns()
-      const signedTxn = unsignedTxn.signTxn(recoveredAccount1.sk)
-      const { txId } = await algodex.algod.sendRawTransaction(signedTxn).do()
-      const result = await algosdk.waitForConfirmation(algodex.algod, txId, 4)
+      const pSignedTxn = txnGroup[0].signTxn(recoveredAccount1.sk)
+      const freezeSignedTxn = txnGroup[1].signTxn(recoveredAccount1.sk)
+      const signedTxns = [pSignedTxn, freezeSignedTxn]
+      const { txId } = await algodex.algod.sendRawTransaction(signedTxns).do()
+      const result = await algosdk.waitForConfirmation(algodex.algod, txId, 3)
       setOptedIn('received')
       console.log(result)
     } catch (error) {

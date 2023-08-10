@@ -25,6 +25,7 @@ function useVoteSubmit() {
   const [active, setActive] = useState<boolean>(false)
   const [globalState, setGlobalState] = useState<{ key: string; value: number | string }[]>([])
   const [totalHolders, setTotalHolders] = useState<number>(0)
+  const [appsLocalState, setAppsLocalState] = useState<number | null>(null)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   if (!account1_mnemonic) {
     throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
@@ -46,17 +47,18 @@ function useVoteSubmit() {
       console.log(error)
     }
   }
-  async function checkVote(myAddress: string, assetId: number, appId: number) {
-    const appAddress = algosdk.getApplicationAddress(appId)
-    const appAssetTransfers = await algodex.indexer
-      .lookupAccountTransactions(appAddress)
-      .assetID(assetId)
-      .do()
-    const userTransfers = appAssetTransfers.transactions.some(
-      (txn: any) => txn['sender'] === myAddress
-    )
+  async function checkVote(myAddress: string, appId: number) {
     try {
-      setVoted(userTransfers)
+      const accountTxns = await algodex.indexer
+        .lookupAccountTransactions(myAddress)
+        .txType('appl')
+        .do()
+      const userTransfers = accountTxns.transactions.some(
+        (txn: any) => txn['application-transaction']['application-id'] === appId
+      )
+      if (userTransfers) {
+        readLocalState(appId, myAddress)
+      }
     } catch (error) {
       setVoted(false)
       console.log(error)
@@ -98,7 +100,7 @@ function useVoteSubmit() {
       setDecimals(assetDecimals)
       if (myAddress !== null && myAddress !== undefined) {
         checkAssetBalance(myAddress, foundAssetId)
-        checkVote(myAddress, foundAssetId, appId)
+        checkVote(myAddress, appId)
       }
       setAssetId(foundAssetId)
       setGlobalState(param)
@@ -109,6 +111,20 @@ function useVoteSubmit() {
       console.log('Application not found', error)
     }
   }
+  async function readLocalState(appId: number, myAddress: string) {
+    try {
+      const accountAppInfo = await algodex.algod
+        .accountApplicationInformation(myAddress, appId)
+        .do()
+      const localState = accountAppInfo['app-local-state']['key-value'][0]
+      const localKey = Buffer.from(localState.key, 'base64').toString()
+      const localValue = localState.value.uint
+      localValue === 1 ? setVoted(true) : setVoted(false)
+    } catch (error) {
+      setVoted(false)
+      console.log(error)
+    }
+  }
   async function peraSign(unsignedTxns: Array<algosdk.Transaction>): Promise<Uint8Array[]> {
     const txsToSign = unsignedTxns.map((txn) => ({
       txn
@@ -117,8 +133,21 @@ function useVoteSubmit() {
 
     return await peraWallet.signTransaction([txsToSign])
   }
-  async function voteSubmit(myAddress: string, appId: number, method: string) {
-    const appAddress = algosdk.getApplicationAddress(appId)
+  async function checkAppsLocalState(myAddress: string) {
+    try {
+      if (myAddress === undefined) {
+        throw new Error('No address provided')
+      }
+      let appIds: any = []
+      const accountApplications = await algodex.indexer.lookupAccountAppLocalStates(myAddress).do()
+      accountApplications['apps-local-states'].forEach((element: any) => appIds.push(element['id']))
+      setAppsLocalState(appIds)
+    } catch (error) {
+      setAppsLocalState(null)
+      console.log(error)
+    }
+  }
+  async function optInAndSubmitVote(appId: number, myAddress: string, method: string) {
     try {
       if (active === false) {
         throw new Error('This voting has ended.')
@@ -130,45 +159,50 @@ function useVoteSubmit() {
         throw new Error('There is an ABIContract error.')
       }
       const suggestedParams = await algodex.algod.getTransactionParams().do()
-      const txn1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: myAddress,
-        to: appAddress,
-        amount: assetBalance as number,
-        assetIndex: assetId as number,
-        suggestedParams
-      })
-
       const atc = new algosdk.AtomicTransactionComposer()
-
-      const selectedMethod = currentContract.methods.filter((e) => {
-        return e.name === `vote_${method}`
+      const optInMethod = currentContract.methods.filter((e) => {
+        return e.name === `opt_in_voter`
       })
-
       atc.addMethodCall({
         appID: appId,
-        method: selectedMethod[0],
-        methodArgs: [{ txn: txn1, signer: peraSign }],
+        method: optInMethod[0],
+        sender: myAddress,
+        signer: peraSign,
+        onComplete: 1,
+        suggestedParams
+      })
+      const votingMethod = currentContract.methods.filter((e) => {
+        return e.name === `vote_${method}`
+      })
+      atc.addMethodCall({
+        appID: appId,
+        method: votingMethod[0],
+        methodArgs: [assetId],
         sender: myAddress,
         signer: peraSign,
         suggestedParams
       })
       const result = await atc.execute(algodex.algod, 4)
-      console.log(result)
       setVoted(true)
       readGlobalState(appId, myAddress)
+      console.log(result)
     } catch (error) {
-      console.log("Couldn't sign asset transfer txns", error)
+      console.log(error)
     }
   }
   async function getTotalHolders() {
-    let assetId = getActiveNetwork() === 'testnet' ? 95999794 : 724480511
-    const minBalance = 10000000000
-    const assetBalances = await algodex.indexer
-      .lookupAssetBalances(assetId)
-      .currencyGreaterThan(minBalance)
-      .limit(9999)
-      .do()
-    setTotalHolders(assetBalances.balances.length)
+    try {
+      let assetId = getActiveNetwork() === 'testnet' ? 95999794 : 724480511
+      const minBalance = 10000000000
+      const assetBalances = await algodex.indexer
+        .lookupAssetBalances(assetId)
+        .currencyGreaterThan(minBalance)
+        .limit(9999)
+        .do()
+      setTotalHolders(assetBalances.balances.length)
+    } catch (error) {
+      console.log(error)
+    }
   }
   return {
     globalState,
@@ -177,11 +211,14 @@ function useVoteSubmit() {
     assetBalance,
     voted,
     decimals,
-    voteSubmit,
     active,
     assetId,
     getTotalHolders,
-    totalHolders
+    totalHolders,
+    readLocalState,
+    optInAndSubmitVote,
+    checkAppsLocalState,
+    appsLocalState
   }
 }
 export default useVoteSubmit
