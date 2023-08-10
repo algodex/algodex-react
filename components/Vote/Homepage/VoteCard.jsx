@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -136,10 +136,19 @@ const Description = styled.p`
   }
 `
 
-function VoteCard({ vote }) {
+function VoteCard({ vote, appsLocalState }) {
   const { t } = useTranslation('vote')
   const today = dayjs().toISOString()
-  const { title, description, startDate, endDate } = vote
+  const { title, description, startDate, endDate, appId } = vote
+  const [voted, setVoted] = useState(false)
+
+  useEffect(() => {
+    if (appsLocalState !== null) {
+      setVoted(appsLocalState?.some((e) => e === appId))
+    } else {
+      setVoted(false)
+    }
+  }, [appsLocalState])
 
   return (
     <>
@@ -148,9 +157,11 @@ function VoteCard({ vote }) {
           <HeadingContainer>
             <LeftHeadingContainer>
               <TitleContainer>
-                <CheckboxContainer>
-                  <img src={'/VoteCardCheckbox.svg'} alt="Voting Card Checkbox" />
-                </CheckboxContainer>
+                {voted ? (
+                  <CheckboxContainer>
+                    <img src={'/VoteCardCheckbox.svg'} alt="Voting Card Checkbox" />
+                  </CheckboxContainer>
+                ) : null}
                 <Title>{title}</Title>
               </TitleContainer>
               {dayjs(today).isBetween(startDate, endDate) ? (
@@ -182,6 +193,8 @@ VoteCard.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   startDate: PropTypes.string,
-  endDate: PropTypes.string
+  endDate: PropTypes.string,
+  appId: PropTypes.number,
+  appsLocalState: PropTypes.array
 }
 export default VoteCard

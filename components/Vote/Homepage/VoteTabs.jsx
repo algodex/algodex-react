@@ -86,7 +86,7 @@ function a11yProps(index) {
   }
 }
 
-function VoteTabs() {
+function VoteTabs({ appsLocalState }) {
   const { t } = useTranslation('vote')
   const [value, setValue] = React.useState(0)
 
@@ -128,7 +128,6 @@ function VoteTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box
@@ -149,15 +148,27 @@ function VoteTabs() {
         </StyledTabs>
       </Box>
       <TabPanel value={value} index={0}>
-        {openVotes && openVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
+        {openVotes &&
+          openVotes?.map((vote, i) => (
+            <VoteCard vote={vote} key={i} appsLocalState={appsLocalState} />
+          ))}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {upcomingVotes && upcomingVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
+        {upcomingVotes &&
+          upcomingVotes?.map((vote, i) => (
+            <VoteCard vote={vote} key={i} appsLocalState={appsLocalState} />
+          ))}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {pastVotes && pastVotes?.map((vote, i) => <VoteCard vote={vote} key={i} />)}
+        {pastVotes &&
+          pastVotes?.map((vote, i) => (
+            <VoteCard vote={vote} key={i} appsLocalState={appsLocalState} />
+          ))}
       </TabPanel>
     </Box>
   )
+}
+VoteTabs.propTypes = {
+  appsLocalState: PropTypes.array
 }
 export default VoteTabs
