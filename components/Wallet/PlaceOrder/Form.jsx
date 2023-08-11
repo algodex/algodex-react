@@ -42,7 +42,12 @@ import toast from 'react-hot-toast'
 import { useEvent } from 'hooks/useEvents'
 import useTranslation from 'next-translate/useTranslation'
 import { useMaxSpendableAlgo, useMaxSpendableAlgoNew } from '@/hooks/useMaxSpendableAlgo'
-
+//use-wallet test
+import { useWallet } from '@txnlab/use-wallet'
+import { PeraWalletConnect } from '@perawallet/connect'
+import { DeflyWalletConnect } from '@blockshake/defly-connect'
+import { peraSigner } from 'hooks/usePeraConnection'
+//
 export const Form = styled.form`
   scrollbar-width: none;
   ::-webkit-scrollbar {
@@ -95,6 +100,8 @@ function shallowEqual(object1, object2) {
  * @returns {JSX.Element}
  * @constructor
  */
+const peraWallet = new PeraWalletConnect()
+const deflyConnect = new DeflyWalletConnect()
 export function PlaceOrderForm({
   showTitle = true,
   asset,
@@ -102,6 +109,34 @@ export function PlaceOrderForm({
   components: { Box },
   selectedOrder
 }) {
+  //use-wallet test
+  const { isReady, isActive, getAccountInfo, signTransactions } = useWallet()
+  const [accInfo, setAccInfo] = useState(null)
+
+  useEffect(() => {
+    const getAccountData = async () => {
+      const response = await getAccountInfo()
+      setAccInfo(response)
+    }
+    if (isActive && isReady) {
+      getAccountData()
+    }
+  }, [isActive])
+
+  useEffect(() => {
+    if (accInfo !== null) {
+      deflyConnect.reconnectSession()
+      accInfo.connector = {
+        ...deflyConnect.connector,
+        connected: true,
+        sign: signTransactions
+      }
+      accInfo.type = 'wallet-connect'
+    }
+  }, [accInfo])
+
+  console.log({ accInfo }, { deflyConnect })
+  //
   const { t } = useTranslation('place-order')
   const otherTranslate = useTranslation('common')
 
@@ -111,8 +146,8 @@ export function PlaceOrderForm({
 
   const { activeWallet } = useContext(WalletReducerContext)
 
-  const isConnected = activeWallet !== null
-  const maxSpendableAlgo = useMaxSpendableAlgoNew(activeWallet)
+  const isConnected = true
+  const maxSpendableAlgo = useMaxSpendableAlgoNew(accInfo)
 
   const formatFloat = useCallback((value, decimal = 6) => {
     const splited = value.toString().split('.')
@@ -125,14 +160,14 @@ export function PlaceOrderForm({
 
   const assetBalance = useMemo(() => {
     let res = 0
-    if (activeWallet !== null && Array.isArray(activeWallet.assets)) {
-      const filter = activeWallet.assets.filter((a) => a['asset-id'] === asset.id)
+    if (accInfo !== null && Array.isArray(accInfo.assets)) {
+      const filter = accInfo.assets.filter((a) => a['asset-id'] === asset.id)
       if (filter.length > 0) {
         res = fromBaseUnits(filter[0].amount, asset.decimals)
       }
     }
     return res
-  }, [activeWallet, asset])
+  }, [accInfo, asset])
 
   const getAdjOrderAmount = useCallback(
     ({ amount, type, price }) => {
@@ -392,20 +427,20 @@ export function PlaceOrderForm({
         // I have checked everywhere in the codebase and no other componenet passes an onSubmit prop to this component
         orderPromise = onSubmit({
           ...formattedOrder,
-          activeWallet,
+          accInfo,
           asset
         })
       } else {
         console.log(
           {
             ...formattedOrder,
-            address: activeWallet.address,
-            activeWallet,
+            address: accInfo.address,
+            accInfo,
             asset,
             appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
             version: 6
           },
-          { wallet: activeWallet }
+          { wallet: accInfo }
         )
 
         const awaitPlaceOrder = async () => {
@@ -423,10 +458,7 @@ export function PlaceOrderForm({
               return
             }
 
-            if (
-              activeWallet.type === 'wallet-connect-general' &&
-              activeWallet.connector.connected !== true
-            ) {
+            if (accInfo.type === 'wallet-connect-general' && accInfo.connector.connected !== true) {
               toast.error(
                 'Your wallet-connect session went stale, please disconnect completely and try again'
               )
@@ -436,13 +468,13 @@ export function PlaceOrderForm({
             await placeOrder(
               {
                 ...formattedOrder,
-                address: activeWallet.address,
-                wallet: activeWallet,
+                address: accInfo.address,
+                wallet: accInfo,
                 asset,
                 appId: formattedOrder.type === 'sell' ? 22045522 : 22045503,
                 version: 6
               },
-              { wallet: activeWallet },
+              { wallet: accInfo },
               notifier
             )
             toast.success(t('order-success'), {
@@ -450,6 +482,7 @@ export function PlaceOrderForm({
               duration: 3000
             })
           } catch (e) {
+            console.log(e)
             toast.error(`${t('error-placing-order')} ${e}`, { id: lastToastId, duration: 5000 })
           }
         }
@@ -459,10 +492,10 @@ export function PlaceOrderForm({
 
       // TODO add events
       throttleLog('Submitting order', {
-        activeWallet
+        accInfo
       })
     },
-    [onSubmit, asset, order, activeWallet]
+    [onSubmit, asset, order, accInfo]
   )
   const handleMarketTabSwitching = (e, tabId) => {
     setTabSwitch(tabId)
@@ -475,7 +508,7 @@ export function PlaceOrderForm({
     })
   }
 
-  const isActive = activeWallet != null
+  //const isActive = activeWallet != null
   if (isLoading || isError) {
     return <Spinner />
   }
@@ -507,7 +540,7 @@ export function PlaceOrderForm({
           )}
         </header>
       )}
-      {typeof order !== 'undefined' && activeWallet !== null && isConnected && showForm && (
+      {typeof order !== 'undefined' && accInfo !== null && isActive && isReady && (
         <Form onSubmit={handleSubmit} className="overflow-x-scroll" disabled={isActive}>
           <ButtonGroup fullWidth variant="contained" className="mb-6">
             <MaterialButton
@@ -535,7 +568,8 @@ export function PlaceOrderForm({
               {t('sell')}
             </MaterialButton>
           </ButtonGroup>
-          <AvailableBalance wallet={activeWallet} asset={asset} />
+          {/* <AvailableBalance wallet={activeWallet} asset={asset} /> */}
+          <AvailableBalance wallet={accInfo} asset={asset} />
           <Tabs
             sx={{ marginBottom: '16px' }}
             textColor="primary"

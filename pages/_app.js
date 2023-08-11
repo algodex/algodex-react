@@ -44,6 +44,11 @@ import theme from '../theme/index'
 import useUserStore from '@/store/use-user-state'
 import { getAlgodexApi } from '@/services/environment'
 
+//use-wallet txnlab TEST
+import { PeraWalletConnect } from '@perawallet/connect'
+import { DeflyWalletConnect } from '@blockshake/defly-connect'
+import { WalletProvider, useInitializeProviders, PROVIDER_ID } from '@txnlab/use-wallet'
+import algosdk from 'algosdk'
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 let api
@@ -95,6 +100,21 @@ const styles = css`
 `
 
 function Algodex(props) {
+  //use-wallet txnlab TEST
+  const providers = useInitializeProviders({
+    providers: [
+      { id: PROVIDER_ID.PERA, clientStatic: PeraWalletConnect },
+      { id: PROVIDER_ID.DEFLY, clientStatic: DeflyWalletConnect }
+    ],
+    nodeConfig: {
+      network: 'testnet',
+      nodeServer: 'https://node.testnet.algoexplorerapi.io',
+      nodeToken: '',
+      nodePort: ''
+    },
+    algosdkStatic: algosdk
+  })
+  //
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const TRACKING_ID = 'UA-195819772-1'
 
@@ -126,12 +146,14 @@ function Algodex(props) {
               <CssBaseline />
               <Global styles={styles} />
               <WalletsReducerProvider>
-                <Provider dex={makeApi()}>
-                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                  <Toaster />
-                  <ReactQueryDevtools initialIsOpen={false} />
-                  <Component {...pageProps} />
-                </Provider>
+                <WalletProvider value={providers}>
+                  <Provider dex={makeApi()}>
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <Toaster />
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    <Component {...pageProps} />
+                  </Provider>
+                </WalletProvider>
               </WalletsReducerProvider>
             </ThemeProvider>
           </CacheProvider>
