@@ -58,12 +58,15 @@ function useVoteSubmit() {
       )
       if (userTransfers) {
         readLocalState(appId, myAddress)
+      } else {
+        setVoted(false)
       }
     } catch (error) {
       setVoted(false)
       console.log(error)
     }
   }
+
   async function readGlobalState(appId: number, myAddress: string) {
     try {
       let appInfo = await algodex.algod.getApplicationByID(appId).do()
@@ -116,7 +119,7 @@ function useVoteSubmit() {
       const accountAppInfo = await algodex.algod
         .accountApplicationInformation(myAddress, appId)
         .do()
-      const localState = accountAppInfo['app-local-state']['key-value'][0]
+      const localState = accountAppInfo['app-local-state']['key-value'][2]
       const localKey = Buffer.from(localState.key, 'base64').toString()
       const localValue = localState.value.uint
       localValue === 1 ? setVoted(true) : setVoted(false)
