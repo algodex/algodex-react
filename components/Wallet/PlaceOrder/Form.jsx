@@ -47,6 +47,7 @@ import { useWallet } from '@txnlab/use-wallet'
 import { PeraWalletConnect } from '@perawallet/connect'
 import { DeflyWalletConnect } from '@blockshake/defly-connect'
 import { peraSigner } from 'hooks/usePeraConnection'
+import signer from '@algodex/algodex-sdk/lib/wallet/signers/PeraConnect'
 //
 export const Form = styled.form`
   scrollbar-width: none;
@@ -110,9 +111,14 @@ export function PlaceOrderForm({
   selectedOrder
 }) {
   //use-wallet test
-  const { isReady, isActive, getAccountInfo, signTransactions } = useWallet()
+  const { isReady, isActive, getAccountInfo, signTransactions, activeAccount } = useWallet()
   const [accInfo, setAccInfo] = useState(null)
 
+  // this is the same as peraSigner, defly wallet is forked from perawalletconnect so it works.
+  async function deflySigner(orders) {
+    const signedTxn = await signer(orders, deflyConnect)
+    return signedTxn
+  }
   useEffect(() => {
     const getAccountData = async () => {
       const response = await getAccountInfo()
@@ -124,18 +130,28 @@ export function PlaceOrderForm({
   }, [isActive])
 
   useEffect(() => {
-    if (accInfo !== null) {
-      deflyConnect.reconnectSession()
-      accInfo.connector = {
-        ...deflyConnect.connector,
-        connected: true,
-        sign: signTransactions
+    if (activeAccount !== null && accInfo !== null) {
+      if (activeAccount.providerId === 'defly') {
+        deflyConnect.reconnectSession()
+        accInfo.connector = {
+          ...deflyConnect.connector,
+          connected: true,
+          sign: deflySigner
+        }
+        accInfo.type = 'wallet-connect'
       }
-      accInfo.type = 'wallet-connect'
+      if (activeAccount.providerId === 'pera') {
+        peraWallet.reconnectSession()
+        accInfo.connector = {
+          ...peraWallet.connector,
+          connected: true,
+          sign: peraSigner
+        }
+        accInfo.type = 'wallet-connect'
+      }
     }
-  }, [accInfo])
-
-  console.log({ accInfo }, { deflyConnect })
+  }, [accInfo, activeAccount])
+  console.log({ accInfo })
   //
   const { t } = useTranslation('place-order')
   const otherTranslate = useTranslation('common')
