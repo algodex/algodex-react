@@ -5,13 +5,16 @@ import * as abiTwpOptionsContract from '../utils/VotingSmartContracts/twoOptionC
 import * as abiThreeOptionsContract from '../utils/VotingSmartContracts/threeOptionContract.json'
 //import * as abiFourOptionsContract from '../utils/VotingSmartContracts/fourOptionContract.json'
 import { PeraWalletConnect } from '@perawallet/connect'
+import { DeflyWalletConnect } from '@blockshake/defly-connect'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { getActiveNetwork } from '@/services/environment'
 const peraWallet = new PeraWalletConnect()
+const deflyWallet = new DeflyWalletConnect()
 
 function useVoteSubmit() {
   const { algodex } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
+
   // contracts
   const twoVotesContract: ABIContract = new algosdk.ABIContract(abiTwpOptionsContract)
   const threeVotesContract: ABIContract = new algosdk.ABIContract(abiThreeOptionsContract)
@@ -32,6 +35,7 @@ function useVoteSubmit() {
   }
   useEffect(() => {
     peraWallet.reconnectSession()
+    deflyWallet.reconnectSession()
   }, [activeWallet])
 
   async function checkAssetBalance(myAddress: string, assetId: number) {
@@ -119,22 +123,43 @@ function useVoteSubmit() {
       const accountAppInfo = await algodex.algod
         .accountApplicationInformation(myAddress, appId)
         .do()
-      const localState = accountAppInfo['app-local-state']['key-value'][2]
-      const localKey = Buffer.from(localState.key, 'base64').toString()
-      const localValue = localState.value.uint
-      localValue === 1 ? setVoted(true) : setVoted(false)
+      let param: [] | any = []
+      for (let i = 0; i < accountAppInfo['app-local-state']['key-value'].length; i++) {
+        param.push({
+          key: Buffer.from(
+            accountAppInfo['app-local-state']['key-value'][i].key,
+            'base64'
+          ).toString(),
+          value:
+            accountAppInfo['app-local-state']['key-value'][i].value.bytes !== ''
+              ? Buffer.from(
+                  accountAppInfo['app-local-state']['key-value'][i].value.bytes,
+                  'base64'
+                ).toString()
+              : accountAppInfo['app-local-state']['key-value'][i].value.uint
+        })
+      }
+      const hasVoted: { key: string; value: number | string }[] = param.filter((e: any) => {
+        return e.key === 'has_voted'
+      })
+      hasVoted[0].value === 1 ? setVoted(true) : setVoted(false)
     } catch (error) {
       setVoted(false)
       console.log(error)
     }
   }
-  async function peraSign(unsignedTxns: Array<algosdk.Transaction>): Promise<Uint8Array[]> {
+  async function signer(unsignedTxns: Array<algosdk.Transaction>): Promise<Uint8Array[]> {
     const txsToSign = unsignedTxns.map((txn) => ({
       txn
     }))
     console.log(txsToSign, 'Txns To sign')
 
-    return await peraWallet.signTransaction([txsToSign])
+    if (activeWallet.type === 'wallet-connect') {
+      return await peraWallet.signTransaction([txsToSign])
+    }
+    if (activeWallet.type === 'wallet-connect-defly') {
+      return await deflyWallet.signTransaction([txsToSign])
+    }
   }
   async function checkAppsLocalState(myAddress: string) {
     try {
@@ -170,7 +195,7 @@ function useVoteSubmit() {
         appID: appId,
         method: optInMethod[0],
         sender: myAddress,
-        signer: peraSign,
+        signer: signer,
         onComplete: 1,
         suggestedParams
       })
@@ -182,7 +207,7 @@ function useVoteSubmit() {
         method: votingMethod[0],
         methodArgs: [assetId],
         sender: myAddress,
-        signer: peraSign,
+        signer: signer,
         suggestedParams
       })
       const result = await atc.execute(algodex.algod, 4)
