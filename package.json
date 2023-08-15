@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@algodex/algodex-sdk": "^2.2.5",
+    "@blockshake/defly-connect": "^1.1.5",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
