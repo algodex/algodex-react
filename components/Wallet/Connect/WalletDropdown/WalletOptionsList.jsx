@@ -26,7 +26,9 @@ import theme from 'theme'
 const WalletsOptions = ({
   myAlgoOnClick,
   peraConnectOnClick,
+  deflyConnectOnClick,
   isPeraConnected,
+  isDeflyConnected,
   isConnectingAddress,
   setIsConnectingAddress
 }) => {
@@ -109,7 +111,60 @@ const WalletsOptions = ({
                 )}
               </Stack>
             </Stack>
+            <Stack
+              direction="row"
+              alignItems={`${isDeflyConnected ? 'flex-start' : 'center'}`}
+              role="button"
+              tabIndex="0"
+              className="cursor-pointer mb-2"
+              onClick={!isDeflyConnected && deflyConnectOnClick}
+              onKeyPress={() => console.log('key pressed')}
+            >
+              {isDeflyConnected ? (
+                <Box width={50} height={50}>
+                  {/* <Image
+                  src="/Wallet-Connect-icon.svg"
+                  alt="Algorand Mobile Wallet"
+                  width="100%"
+                  height="100%"
+                /> */}
+                  <Image
+                    style={{ borderRadius: '50%' }}
+                    src="/Defly-logo.jpg"
+                    alt="Algorand Mobile Wallet"
+                    width={25}
+                    height={25}
+                  />
+                </Box>
+              ) : (
+                // <></>
+                <Image
+                  style={{ borderRadius: '50%' }}
+                  src="/Defly-logo.jpg"
+                  alt="Algorand Mobile Wallet"
+                  width={25}
+                  height={25}
+                />
+              )}
 
+              <Stack>
+                <Typography
+                  sx={{
+                    color: isDeflyConnected ? '#BABABA' : '#FFF'
+                  }}
+                  className="underline ml-2"
+                  variant="body_small_bold"
+                >
+                  Defly Wallet
+                </Typography>
+                {isDeflyConnected && (
+                  <Typography className="italic color-white ml-2 mt-2" variant="body_tiny">
+                    There is a wallet currently connected with Wallet Connect. You must disconnect
+                    this wallet to connect another.
+                  </Typography>
+                )}
+              </Stack>
+            </Stack>
             <Box
               className="cursor-pointer flex items-center mb-2"
               role="button"
@@ -145,9 +200,11 @@ WalletsOptions.propTypes = {
   setIsConnectingAddress: PropTypes.func,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
+  deflyConnectOnClick: PropTypes.func,
   walletconnectGeneralOnClick: PropTypes.func,
 
-  isPeraConnected: PropTypes.bool
+  isPeraConnected: PropTypes.bool,
+  isDeflyConnected: PropTypes.bool
 }
 
 WalletsOptions.defaultProps = {

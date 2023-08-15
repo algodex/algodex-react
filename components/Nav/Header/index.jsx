@@ -48,8 +48,9 @@ import { WalletReducerContext } from 'hooks/WalletsReducerProvider'
 import useMyAlgoConnector from 'hooks/useMyAlgoConnector'
 import { PeraWalletConnect } from '@perawallet/connect'
 import useWalletConnect from 'hooks/useWalletConnect'
-
+import { DeflyWalletConnect } from '@blockshake/defly-connect'
 import { peraSigner } from 'hooks/usePeraConnection'
+import { deflySigner } from '@/hooks/useDeflyConnection'
 // import useWallets from '@/hooks/useWallets'
 import Image from 'next/image'
 
@@ -72,7 +73,7 @@ const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
 const peraWalletRehydate = new PeraWalletConnect()
-
+const deflyWalletRehydrate = new DeflyWalletConnect()
 export function Header() {
   const { t } = useTranslation('common')
   const [isOpen, setIsOpen] = useState(false)
@@ -89,8 +90,10 @@ export function Header() {
     setAddressesNew,
     setActiveWallet,
     peraWallet,
+    deflyWallet,
     walletConnect,
     setPeraWallet,
+    setDeflyWallet,
     setWalletConnect,
     activeWallet: wallet
   } = useContext(WalletReducerContext)
@@ -102,6 +105,7 @@ export function Header() {
   useEffect(() => {
     const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
     const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
+    const _deflyWallet = JSON.parse(localStorage.getItem('deflyWallet'))
     const _walletconnectGeneral = JSON.parse(localStorage.getItem('walletConnectWallet'))
 
     if (_peraWallet?.type === 'wallet-connect' && peraWallet === null) {
@@ -118,7 +122,18 @@ export function Header() {
         console.log(accounts)
       })
     }
-
+    if (_deflyWallet?.type === 'wallet-connect-defly' && deflyWallet === null) {
+      deflyWalletRehydrate.reconnectSession().then((accounts) => {
+        const _rehyrdratedDeflyWallet = {
+          ..._deflyWallet,
+          connector: { ..._rehyrdratedDeflyWallet, connected: true, sign: deflySigner }
+        }
+        setDeflyWallet(_rehyrdratedDeflyWallet)
+        setAddressesNew({ type: 'deflyWallet', addresses: [_rehyrdratedDeflyWallet] })
+        setActiveWallet(_rehyrdratedDeflyWallet)
+        console.log(accounts)
+      })
+    }
     if (
       _walletconnectGeneral?.type === 'wallet-connect-general' &&
       walletConnect === null &&
