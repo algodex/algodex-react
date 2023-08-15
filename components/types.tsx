@@ -62,6 +62,7 @@ export type activeWalletTypes = {
     sendCustomRequest?: (arg: unknown) => Promise<[]>
   }
   peraWallet?: { signTransaction?: (arg: unknown) => Uint8Array | Uint8Array[] }
+  deflyWallet?: { signTransaction?: (arg: unknown) => Uint8Array | Uint8Array[] }
   amount: number
   'amount-without-pending-rewards': number
   assets: Array<asset>
