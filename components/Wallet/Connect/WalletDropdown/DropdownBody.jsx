@@ -33,7 +33,9 @@ const DropdownBody = ({
   addresses,
   myAlgoOnClick,
   peraConnectOnClick,
-  isPeraConnected
+  deflyConnectOnClick,
+  isPeraConnected,
+  isDeflyConnected
 }) => {
   const [isConnectingAddress, setIsConnectingAddress] = useState(false)
   return (
@@ -60,7 +62,9 @@ const DropdownBody = ({
           addresses={addresses}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
+          deflyConnectOnClick={deflyConnectOnClick}
           isPeraConnected={isPeraConnected}
+          isDeflyConnected={isDeflyConnected}
         />
       ) : (
         <>
@@ -83,7 +87,9 @@ const DropdownBody = ({
             addresses={addresses}
             myAlgoOnClick={myAlgoOnClick}
             peraConnectOnClick={peraConnectOnClick}
+            deflyConnectOnClick={deflyConnectOnClick}
             isPeraConnected={isPeraConnected}
+            isDeflyConnected={isDeflyConnected}
           />
         </>
       )}
@@ -99,7 +105,9 @@ DropdownBody.propTypes = {
   addresses: PropTypes.array,
   myAlgoOnClick: PropTypes.func,
   peraConnectOnClick: PropTypes.func,
+  deflyConnectOnClick: PropTypes.func,
   isPeraConnected: PropTypes.bool,
+  isDeflyConnected: PropTypes.bool,
   walletDisconnectMap: PropTypes.object
 }
 

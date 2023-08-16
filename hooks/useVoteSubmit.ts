@@ -4,13 +4,13 @@ import { useAlgodex } from '@/hooks'
 import * as abiTwpOptionsContract from '../utils/VotingSmartContracts/twoOptionContract.json'
 import * as abiThreeOptionsContract from '../utils/VotingSmartContracts/threeOptionContract.json'
 //import * as abiFourOptionsContract from '../utils/VotingSmartContracts/fourOptionContract.json'
-import { PeraWalletConnect } from '@perawallet/connect'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
-const peraWallet = new PeraWalletConnect()
+import { getActiveNetwork } from '@/services/environment'
 
 function useVoteSubmit() {
   const { algodex } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
+
   // contracts
   const twoVotesContract: ABIContract = new algosdk.ABIContract(abiTwpOptionsContract)
   const threeVotesContract: ABIContract = new algosdk.ABIContract(abiThreeOptionsContract)
@@ -23,13 +23,12 @@ function useVoteSubmit() {
   const [currentContract, setCurrentContract] = useState<ABIContract | null>(null)
   const [active, setActive] = useState<boolean>(false)
   const [globalState, setGlobalState] = useState<{ key: string; value: number | string }[]>([])
+  const [totalHolders, setTotalHolders] = useState<number>(0)
+  const [appsLocalState, setAppsLocalState] = useState<number | null>(null)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   if (!account1_mnemonic) {
     throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
   }
-  useEffect(() => {
-    peraWallet.reconnectSession()
-  }, [activeWallet])
 
   async function checkAssetBalance(myAddress: string, assetId: number) {
     try {
@@ -44,22 +43,26 @@ function useVoteSubmit() {
       console.log(error)
     }
   }
-  async function checkVote(myAddress: string, assetId: number, appId: number) {
-    const appAddress = algosdk.getApplicationAddress(appId)
-    const appAssetTransfers = await algodex.indexer
-      .lookupAccountTransactions(appAddress)
-      .assetID(assetId)
-      .do()
-    const userTransfers = appAssetTransfers.transactions.some(
-      (txn: any) => txn['sender'] === myAddress
-    )
+  async function checkVote(myAddress: string, appId: number) {
     try {
-      setVoted(userTransfers)
+      const accountTxns = await algodex.indexer
+        .lookupAccountTransactions(myAddress)
+        .txType('appl')
+        .do()
+      const userTransfers = accountTxns.transactions.some(
+        (txn: any) => txn['application-transaction']['application-id'] === appId
+      )
+      if (userTransfers) {
+        readLocalState(appId, myAddress)
+      } else {
+        setVoted(false)
+      }
     } catch (error) {
       setVoted(false)
       console.log(error)
     }
   }
+
   async function readGlobalState(appId: number, myAddress: string) {
     try {
       let appInfo = await algodex.algod.getApplicationByID(appId).do()
@@ -94,9 +97,9 @@ function useVoteSubmit() {
       const currentTime = new Date().getTime() / 1000.0
       setActive((currentTime as number) < voteEnd[0].value)
       setDecimals(assetDecimals)
-      if (myAddress !== null) {
+      if (myAddress !== null && myAddress !== undefined) {
         checkAssetBalance(myAddress, foundAssetId)
-        checkVote(myAddress, foundAssetId, appId)
+        checkVote(myAddress, appId)
       }
       setAssetId(foundAssetId)
       setGlobalState(param)
@@ -107,16 +110,65 @@ function useVoteSubmit() {
       console.log('Application not found', error)
     }
   }
-  async function peraSign(unsignedTxns: Array<algosdk.Transaction>): Promise<Uint8Array[]> {
+  async function readLocalState(appId: number, myAddress: string) {
+    try {
+      const accountAppInfo = await algodex.algod
+        .accountApplicationInformation(myAddress, appId)
+        .do()
+      let param: [] | any = []
+      for (let i = 0; i < accountAppInfo['app-local-state']['key-value'].length; i++) {
+        param.push({
+          key: Buffer.from(
+            accountAppInfo['app-local-state']['key-value'][i].key,
+            'base64'
+          ).toString(),
+          value:
+            accountAppInfo['app-local-state']['key-value'][i].value.bytes !== ''
+              ? Buffer.from(
+                  accountAppInfo['app-local-state']['key-value'][i].value.bytes,
+                  'base64'
+                ).toString()
+              : accountAppInfo['app-local-state']['key-value'][i].value.uint
+        })
+      }
+      const hasVoted: { key: string; value: number | string }[] = param.filter((e: any) => {
+        return e.key === 'has_voted'
+      })
+      hasVoted[0].value === 1 ? setVoted(true) : setVoted(false)
+    } catch (error) {
+      setVoted(false)
+      console.log(error)
+    }
+  }
+
+  async function signer(unsignedTxns: Array<algosdk.Transaction>): Promise<Uint8Array[]> {
     const txsToSign = unsignedTxns.map((txn) => ({
       txn
     }))
     console.log(txsToSign, 'Txns To sign')
 
-    return await peraWallet.signTransaction([txsToSign])
+    if (activeWallet.type === 'wallet-connect') {
+      return await activeWallet?.peraWallet?.signTransaction([txsToSign])
+    }
+    if (activeWallet.type === 'wallet-connect-defly') {
+      return await activeWallet?.deflyWallet?.signTransaction([txsToSign])
+    }
   }
-  async function voteSubmit(myAddress: string, appId: number, method: string) {
-    const appAddress = algosdk.getApplicationAddress(appId)
+  async function checkAppsLocalState(myAddress: string) {
+    try {
+      if (myAddress === undefined) {
+        throw new Error('No address provided')
+      }
+      let appIds: any = []
+      const accountApplications = await algodex.indexer.lookupAccountAppLocalStates(myAddress).do()
+      accountApplications['apps-local-states'].forEach((element: any) => appIds.push(element['id']))
+      setAppsLocalState(appIds)
+    } catch (error) {
+      setAppsLocalState(null)
+      console.log(error)
+    }
+  }
+  async function optInAndSubmitVote(appId: number, myAddress: string, method: string) {
     try {
       if (active === false) {
         throw new Error('This voting has ended.')
@@ -128,34 +180,49 @@ function useVoteSubmit() {
         throw new Error('There is an ABIContract error.')
       }
       const suggestedParams = await algodex.algod.getTransactionParams().do()
-      const txn1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: myAddress,
-        to: appAddress,
-        amount: assetBalance as number,
-        assetIndex: assetId as number,
-        suggestedParams
-      })
-
       const atc = new algosdk.AtomicTransactionComposer()
-
-      const selectedMethod = currentContract.methods.filter((e) => {
-        return e.name === `vote_${method}`
+      const optInMethod = currentContract.methods.filter((e) => {
+        return e.name === `opt_in_voter`
       })
-
       atc.addMethodCall({
         appID: appId,
-        method: selectedMethod[0],
-        methodArgs: [{ txn: txn1, signer: peraSign }],
+        method: optInMethod[0],
         sender: myAddress,
-        signer: peraSign,
+        signer: signer,
+        onComplete: 1,
+        suggestedParams
+      })
+      const votingMethod = currentContract.methods.filter((e) => {
+        return e.name === `vote_${method}`
+      })
+      atc.addMethodCall({
+        appID: appId,
+        method: votingMethod[0],
+        methodArgs: [assetId],
+        sender: myAddress,
+        signer: signer,
         suggestedParams
       })
       const result = await atc.execute(algodex.algod, 4)
-      console.log(result)
       setVoted(true)
       readGlobalState(appId, myAddress)
+      console.log(result)
     } catch (error) {
-      console.log("Couldn't sign asset transfer txns", error)
+      console.log(error)
+    }
+  }
+  async function getTotalHolders() {
+    try {
+      let assetId = getActiveNetwork() === 'testnet' ? 95999794 : 724480511
+      const minBalance = 10000000000
+      const assetBalances = await algodex.indexer
+        .lookupAssetBalances(assetId)
+        .currencyGreaterThan(minBalance)
+        .limit(9999)
+        .do()
+      setTotalHolders(assetBalances.balances.length)
+    } catch (error) {
+      console.log(error)
     }
   }
   return {
@@ -165,9 +232,14 @@ function useVoteSubmit() {
     assetBalance,
     voted,
     decimals,
-    voteSubmit,
     active,
-    assetId
+    assetId,
+    getTotalHolders,
+    totalHolders,
+    readLocalState,
+    optInAndSubmitVote,
+    checkAppsLocalState,
+    appsLocalState
   }
 }
 export default useVoteSubmit

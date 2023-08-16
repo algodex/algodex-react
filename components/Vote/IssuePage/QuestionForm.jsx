@@ -147,7 +147,7 @@ const DisabledVoteButton = styled(Button)`
     width: 151px;
   }
 `
-function QuestionForm({ vote, voteSubmit, voted, assetBalance, active }) {
+function QuestionForm({ vote, voted, assetBalance, active, optInAndSubmitVote }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
   const { question, appId } = vote[0]
@@ -180,7 +180,7 @@ function QuestionForm({ vote, voteSubmit, voted, assetBalance, active }) {
           </FormControlStyled>
         </form>
         {userOption !== null && assetBalance !== null && voted === false && active === true ? (
-          <VoteButton onClick={() => voteSubmit(activeWallet.address, appId, userOption)}>
+          <VoteButton onClick={() => optInAndSubmitVote(appId, activeWallet.address, userOption)}>
             {t('Submit Vote')}
           </VoteButton>
         ) : (
@@ -197,6 +197,7 @@ QuestionForm.propTypes = {
   description: PropTypes.string,
   options: PropTypes.array,
   voteSubmit: PropTypes.func,
+  optInAndSubmitVote: PropTypes.func,
   voted: PropTypes.bool,
   assetBalance: PropTypes.number,
   active: PropTypes.bool

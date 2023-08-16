@@ -78,6 +78,8 @@ export const getWalletLogo = (wallet) => {
   switch (wallet.type) {
     case 'wallet-connect':
       return '/Pera-logo.png'
+    case 'wallet-connect-defly':
+      return '/Defly-logo.jpg'
     case 'my-algo-wallet':
       return '/My-Algo-Wallet-icon.svg'
     case 'wallet-connect-general':

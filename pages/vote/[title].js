@@ -39,6 +39,8 @@ const OpenIssue = () => {
   const [innerWidth, setInnerWidth] = useState(undefined)
   const [optionsVotes, setOptionsVotes] = useState([])
   const [totalVotes, setTotalVotes] = useState(0)
+  const [totalVoters, setTotalVoters] = useState(0)
+  const [contractDuration, setContractDuration] = useState(null)
   const router = useRouter()
   const { title } = router.query
   const vote = votesArray.filter((e) => {
@@ -50,9 +52,11 @@ const OpenIssue = () => {
     assetBalance,
     voted,
     decimals,
-    voteSubmit,
     active,
-    assetId
+    assetId,
+    getTotalHolders,
+    totalHolders,
+    optInAndSubmitVote
   } = useVoteSubmit()
   const {
     currentBalance,
@@ -75,8 +79,9 @@ const OpenIssue = () => {
     }
   }, [])
   useEffect(() => {
-    if (vote.length && activeWallet) {
-      readGlobalState(vote[0].appId, activeWallet.address)
+    if (vote.length) {
+      readGlobalState(vote[0].appId, activeWallet?.address)
+      getTotalHolders()
     }
   }, [activeWallet])
   useEffect(() => {
@@ -86,6 +91,8 @@ const OpenIssue = () => {
           .filter((e) => e.key.includes('votes'))
           .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
       )
+      setTotalVoters(globalState.filter((e) => e.key.includes('total_voters')))
+      setContractDuration(globalState.filter((e) => e.key.includes('vote_end')))
     }
   }, [globalState])
   useEffect(() => {
@@ -96,12 +103,12 @@ const OpenIssue = () => {
     }
   }, [optionsVotes])
   useEffect(() => {
-    if (assetId !== null) {
+    if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet)
+      checkBalanceBeforeDate(activeWallet, '2023-08-16T22:54:00.000Z') //snapshot date
       checkOptIn(activeWallet, assetId)
     }
-  }, [assetId])
+  }, [assetId, activeWallet])
   useEffect(() => {
     if (vote.length && activeWallet && optedIn === 'received' && voted === false) {
       readGlobalState(vote[0].appId, activeWallet.address)
@@ -113,7 +120,7 @@ const OpenIssue = () => {
       <Head>
         <title>Algodex | Algorand Decentralized Exchange</title>
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin></link>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
           rel="stylesheet"
@@ -130,7 +137,7 @@ const OpenIssue = () => {
                 <VoteContent vote={vote} />
                 <QuestionForm
                   vote={vote}
-                  voteSubmit={voteSubmit}
+                  optInAndSubmitVote={optInAndSubmitVote}
                   voted={voted}
                   assetBalance={assetBalance}
                   active={active}
@@ -146,8 +153,12 @@ const OpenIssue = () => {
                   optedIn={optedIn}
                   voted={voted}
                   vote={vote}
+                  contractDuration={contractDuration}
                 />
-                <CurrentTurnoutCard />
+                <CurrentTurnoutCard
+                  totalVoters={totalVoters[0]?.value}
+                  totalHolders={totalHolders}
+                />
                 <CurrentLiveResultsCard
                   optionsVotes={optionsVotes}
                   options={vote[0].question.options}
@@ -170,15 +181,16 @@ const OpenIssue = () => {
               optedIn={optedIn}
               voted={voted}
               vote={vote}
+              contractDuration={contractDuration}
             />
             <QuestionForm
               vote={vote}
-              voteSubmit={voteSubmit}
+              optInAndSubmitVote={optInAndSubmitVote}
               voted={voted}
               assetBalance={assetBalance}
               active={active}
             />
-            <CurrentTurnoutCard />
+            <CurrentTurnoutCard totalVoters={totalVoters[0]?.value} totalHolders={totalHolders} />
             <CurrentLiveResultsCard
               optionsVotes={optionsVotes}
               options={vote[0].question.options}

@@ -18,10 +18,11 @@ export const CreatorAddress = ({
   activeWallet: activeWalletTypes
   resetForm?: () => void
 }) => {
-  const { peraDisconnect, myAlgoDisconnect } = useWallets(null)
+  const { peraDisconnect, deflyDisconnect, myAlgoDisconnect } = useWallets(null)
   const walletDisconnectMap = {
     'my-algo-wallet': myAlgoDisconnect,
-    'wallet-connect': peraDisconnect
+    'wallet-connect': peraDisconnect,
+    "wallet-connect-defly": deflyDisconnect
   }
 
   const isConnected = typeof activeWallet !== 'undefined'

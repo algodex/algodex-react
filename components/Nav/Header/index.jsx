@@ -48,8 +48,9 @@ import { WalletReducerContext } from 'hooks/WalletsReducerProvider'
 import useMyAlgoConnector from 'hooks/useMyAlgoConnector'
 import { PeraWalletConnect } from '@perawallet/connect'
 import useWalletConnect from 'hooks/useWalletConnect'
-
+import { DeflyWalletConnect } from '@blockshake/defly-connect'
 import { peraSigner } from 'hooks/usePeraConnection'
+import { deflySigner } from '@/hooks/useDeflyConnection'
 // import useWallets from '@/hooks/useWallets'
 import Image from 'next/image'
 
@@ -72,7 +73,7 @@ const MAINNET_LINK = process.env.NEXT_PUBLIC_MAINNET_LINK
 const TESTNET_LINK = process.env.NEXT_PUBLIC_TESTNET_LINK
 
 const peraWalletRehydate = new PeraWalletConnect()
-
+const deflyWalletRehydrate = new DeflyWalletConnect()
 export function Header() {
   const { t } = useTranslation('common')
   const [isOpen, setIsOpen] = useState(false)
@@ -89,8 +90,10 @@ export function Header() {
     setAddressesNew,
     setActiveWallet,
     peraWallet,
+    deflyWallet,
     walletConnect,
     setPeraWallet,
+    setDeflyWallet,
     setWalletConnect,
     activeWallet: wallet
   } = useContext(WalletReducerContext)
@@ -102,6 +105,7 @@ export function Header() {
   useEffect(() => {
     const _myAlgoAddresses = JSON.parse(localStorage.getItem('myAlgoAddresses'))
     const _peraWallet = JSON.parse(localStorage.getItem('peraWallet'))
+    const _deflyWallet = JSON.parse(localStorage.getItem('deflyWallet'))
     const _walletconnectGeneral = JSON.parse(localStorage.getItem('walletConnectWallet'))
 
     if (_peraWallet?.type === 'wallet-connect' && peraWallet === null) {
@@ -110,7 +114,8 @@ export function Header() {
         // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
         const _rehyrdratedPeraWallet = {
           ..._peraWallet,
-          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner }
+          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner },
+          peraWallet: peraWalletRehydate
         }
         setPeraWallet(_rehyrdratedPeraWallet)
         setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
@@ -118,7 +123,19 @@ export function Header() {
         console.log(accounts)
       })
     }
-
+    if (_deflyWallet?.type === 'wallet-connect-defly' && deflyWallet === null) {
+      deflyWalletRehydrate.reconnectSession().then((accounts) => {
+        const _rehyrdratedDeflyWallet = {
+          ..._deflyWallet,
+          connector: { ..._rehyrdratedDeflyWallet, connected: true, sign: deflySigner },
+          deflyWallet: deflyWalletRehydrate
+        }
+        setDeflyWallet(_rehyrdratedDeflyWallet)
+        setAddressesNew({ type: 'deflyWallet', addresses: [_rehyrdratedDeflyWallet] })
+        setActiveWallet(_rehyrdratedDeflyWallet)
+        console.log(accounts)
+      })
+    }
     if (
       _walletconnectGeneral?.type === 'wallet-connect-general' &&
       walletConnect === null &&
@@ -342,13 +359,14 @@ export function Header() {
               </NavActiveLink>
             </MenuItem>
             <Divider sx={{ backgroundColor: 'gray.500', margin: '20px 10px' }} />
-            {/* <MenuItem onClick={handleCloseMenu}>
+            <MenuItem onClick={handleCloseMenu}>
               <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
                 <NavTextLgWrapper isMobile={isMobile}>
                   <Typography variant="navText">Launch Pad</Typography>
                 </NavTextLgWrapper>
               </NavActiveLink>
-            </MenuItem> */}
+            </MenuItem>
+            <Divider sx={{ backgroundColor: 'gray.500', margin: '20px 10px' }} />
             <MenuItem onClick={handleCloseMenu}>
               <NavActiveLink href="/vote" matches={/^\/vote/}>
                 <NavTextLgWrapper isMobile={isMobile}>
@@ -399,11 +417,11 @@ export function Header() {
       )}
       <MobileNavigation data-testid="mobile-nav-element" isOpen={isOpen}>
         <MobileNavContainer>
-          {/* <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
+          <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
             <NavTextSmWrapper isMobile={isMobile}>
               <Typography variant="navText">Launch Pad</Typography>
             </NavTextSmWrapper>
-          </NavActiveLink> */}
+          </NavActiveLink>
           <NavActiveLink href="/vote" matches={/^\/vote/}>
             <NavTextSmWrapper isMobile={isMobile}>
               <Typography variant="navText">Vote</Typography>

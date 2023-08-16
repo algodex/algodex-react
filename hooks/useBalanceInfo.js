@@ -1,11 +1,8 @@
 import algosdk from 'algosdk'
-import { PeraWalletConnect } from '@perawallet/connect'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { getActiveNetwork } from '@/services/environment'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { useAlgodex } from '@/hooks'
-
-const peraWallet = new PeraWalletConnect()
 
 function useBalanceInfo() {
   const { algodex } = useAlgodex()
@@ -28,7 +25,7 @@ function useBalanceInfo() {
       const assetInWallet = activeWalletObj?.assets?.find((asset) => asset['asset-id'] === assetId)
       setCurrentBalance(
         typeof assetInWallet !== 'undefined'
-          ? assetInWallet.amount / Math.pow(10, assetDecimals)
+          ? Number((assetInWallet.amount / Math.pow(10, assetDecimals)).toFixed(2))
           : false
       )
     } catch (error) {
@@ -68,13 +65,11 @@ function useBalanceInfo() {
     }
   }
   async function checkOptIn(activeWalletObj, assetId) {
-    // const assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
     try {
       const accountAssetTransfers = await algodex.http.indexer.indexer
         .lookupAccountTransactions(activeWalletObj?.address)
         .assetID(assetId)
         .do()
-
       const accountAssets = await algodex.http.indexer.indexer
         .lookupAccountAssets(activeWalletObj?.address)
         .do()
@@ -115,11 +110,13 @@ function useBalanceInfo() {
       return [{ txn: optInTxn, signers: [initiatorAddr] }]
     }
     const optInTxn = await generateOptIntoAssetTxns({
-      assetID: assetId, //getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
+      assetID: assetId,
       initiatorAddr: activeWalletObj?.address
     })
     try {
-      const signedTxnGroups = await peraWallet.signTransaction([optInTxn])
+      const signedTxnGroups =
+        (await activeWalletObj?.peraWallet?.signTransaction([optInTxn])) ||
+        (await activeWalletObj?.deflyWallet?.signTransaction([optInTxn]))
       console.log(signedTxnGroups)
       const { txId } = await algodex.algod.sendRawTransaction(signedTxnGroups).do()
       console.log(`txns signed successfully! - txID: ${txId}`)
@@ -129,37 +126,35 @@ function useBalanceInfo() {
     }
   }
   async function assetTransferTxn(activeWalletObj, assetId) {
-    async function generateAssetTransferTxns() {
-      const suggestedParams = await algodex.algod.getTransactionParams().do()
-      const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: recoveredAccount1.addr,
-        suggestedParams,
-        assetIndex: assetId, //getActiveNetwork() === 'testnet' ? 10458941 : 724480511, //ALGX MNET -> 724480511 //USDC TNET -> 10458941 //VoteToken TNET -> 255830125
-        to: activeWalletObj?.address,
-        amount: balanceBeforeDate
-      })
-      return ptxn
-    }
+    const suggestedParams = await algodex.algod.getTransactionParams().do()
+    const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+      from: recoveredAccount1.addr,
+      suggestedParams,
+      assetIndex: assetId,
+      to: activeWalletObj?.address,
+      amount: balanceBeforeDate
+    })
+    const freezeTxn = algosdk.makeAssetFreezeTxnWithSuggestedParamsFromObject({
+      from: recoveredAccount1.addr,
+      suggestedParams,
+      assetIndex: assetId,
+      freezeState: true,
+      freezeTarget: activeWalletObj?.address
+    })
+    const txnArray = [ptxn, freezeTxn]
+    const txnGroup = algosdk.assignGroupID(txnArray)
     try {
-      const unsignedTxn = await generateAssetTransferTxns()
-      const signedTxn = unsignedTxn.signTxn(recoveredAccount1.sk)
-      const { txId } = await algodex.algod.sendRawTransaction(signedTxn).do()
-      const result = await algosdk.waitForConfirmation(algodex.algod, txId, 4)
+      const pSignedTxn = txnGroup[0].signTxn(recoveredAccount1.sk)
+      const freezeSignedTxn = txnGroup[1].signTxn(recoveredAccount1.sk)
+      const signedTxns = [pSignedTxn, freezeSignedTxn]
+      const { txId } = await algodex.algod.sendRawTransaction(signedTxns).do()
+      const result = await algosdk.waitForConfirmation(algodex.algod, txId, 3)
       setOptedIn('received')
       console.log(result)
     } catch (error) {
       console.log("Couldn't sign all txns", error)
     }
   }
-
-  useEffect(() => {
-    peraWallet.reconnectSession()
-    // if (activeWallet) {
-    //   hasAlgxBalance(activeWallet)
-    //   checkBalanceBeforeDate(activeWallet)
-    //   checkOptIn(activeWallet)
-    // }
-  }, [activeWallet])
 
   return {
     activeWallet,

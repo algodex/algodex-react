@@ -30,6 +30,14 @@ const signedTransaction = async (
   const walletSigningMap = {
     'my-algo-wallet': async () =>
       await activeWalletObj.connector.signTransaction(txnArr.map((txn) => txn.toByte())),
+    'wallet-connect-defly': async () =>
+      await activeWalletObj.deflyWallet.signTransaction([
+        [
+          ...txnArr.map((_txn) => {
+            return { txn: _txn }
+          })
+        ]
+      ]),
     'wallet-connect': async () =>
       await activeWalletObj.peraWallet.signTransaction([
         [
@@ -38,6 +46,7 @@ const signedTransaction = async (
           })
         ]
       ]),
+
     'wallet-connect-general': async () => {
       const encodedTxns = txnArr.map((txn) => {
         const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString('base64')

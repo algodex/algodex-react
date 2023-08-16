@@ -1,4 +1,4 @@
-import { filter, find,  } from 'lodash'
+import { filter, find } from 'lodash'
 import { useContext, useMemo, useCallback, useRef } from 'react'
 import useWallets from '@/hooks/useWallets'
 import { WalletReducerContext, mergeAddresses } from '../../../../hooks/WalletsReducerProvider'
@@ -9,8 +9,6 @@ import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useAlgodex } from '@/hooks'
-
-
 
 const styleReset = css`
   margin: 0;
@@ -36,9 +34,7 @@ const Container = styled.div`
   top: 4rem;
 `
 
-const WalletConnectDropdown = ({
-  closeDropdown,
-}) => {
+const WalletConnectDropdown = ({ closeDropdown }) => {
   const { http } = useAlgodex()
   // const [addresses] = useContext(WalletsContext)
   const {
@@ -47,13 +43,16 @@ const WalletConnectDropdown = ({
     activeWallet,
     setActiveWallet,
     peraWallet,
+    deflyWallet,
     setMyAlgoAddresses
   } = useContext(WalletReducerContext)
 
   const {
     peraConnect,
+    deflyConnect,
     myAlgoConnect,
     peraDisconnect: _peraDisconnect,
+    deflyDisconnect: _deflyDisconnect,
     walletconnectConnect,
     walletconnectDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect
@@ -61,6 +60,7 @@ const WalletConnectDropdown = ({
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': myAlgoConnect,
     'pera-connect': peraConnect,
+    'defly-connect': deflyConnect,
     'wallet-connect-general': walletconnectConnect
   }
   const dropDownRef = useRef()
@@ -70,7 +70,7 @@ const WalletConnectDropdown = ({
   //     return
   //   }
   //   setOpenWalletConnectDropdown(false)
-  //   // **** Unexpected Behavior: Header component is outside the dropdown, so this sets false when clicking on header button 
+  //   // **** Unexpected Behavior: Header component is outside the dropdown, so this sets false when clicking on header button
   //   // **** Header button is !walletConnectDropdown so it toggles to true, which leads to the unexpected behavior
   //   // **** Current production behavior forces users to click on header or close icon to exit dropdown so removing altogether
   // }
@@ -108,12 +108,15 @@ const WalletConnectDropdown = ({
   const peraConnectOnClick = async () => {
     await WALLETS_CONNECT_MAP['pera-connect']()
   }
+  const deflyConnectOnClick = async () => {
+    await WALLETS_CONNECT_MAP['defly-connect']()
+  }
   const walletconnectGeneralOnClick = async () => {
     await WALLETS_CONNECT_MAP['wallet-connect-general']()
   }
 
   const isPeraConnected = peraWallet !== null
-
+  const isDeflyConnected = deflyWallet !== null
   const sortedWalletsList = useMemo(() => {
     if (addressesNew) {
       //**may need to change */
@@ -142,12 +145,18 @@ const WalletConnectDropdown = ({
     },
     [_peraDisconnect]
   )
-
+  const deflyDisconnect = useCallback(
+    (targetWallet) => {
+      _deflyDisconnect(targetWallet)
+    },
+    [_deflyDisconnect]
+  )
   const walletDisconnectMap = {
     'my-algo-wallet': (wallet) => {
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-defly': (wallet) => deflyDisconnect(wallet),
     'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
   }
 
@@ -164,8 +173,10 @@ const WalletConnectDropdown = ({
           walletDisconnectMap={walletDisconnectMap}
           myAlgoOnClick={myAlgoOnClick}
           peraConnectOnClick={peraConnectOnClick}
+          deflyConnectOnClick={deflyConnectOnClick}
           walletconnectGeneralOnClick={walletconnectGeneralOnClick}
           isPeraConnected={isPeraConnected}
+          isDeflyConnected={isDeflyConnected}
         />
         {/* <DropdownFooter /> */}
       </div>
