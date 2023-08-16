@@ -4,12 +4,8 @@ import { useAlgodex } from '@/hooks'
 import * as abiTwpOptionsContract from '../utils/VotingSmartContracts/twoOptionContract.json'
 import * as abiThreeOptionsContract from '../utils/VotingSmartContracts/threeOptionContract.json'
 //import * as abiFourOptionsContract from '../utils/VotingSmartContracts/fourOptionContract.json'
-import { PeraWalletConnect } from '@perawallet/connect'
-import { DeflyWalletConnect } from '@blockshake/defly-connect'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { getActiveNetwork } from '@/services/environment'
-const peraWallet = new PeraWalletConnect()
-const deflyWallet = new DeflyWalletConnect()
 
 function useVoteSubmit() {
   const { algodex } = useAlgodex()
@@ -33,10 +29,6 @@ function useVoteSubmit() {
   if (!account1_mnemonic) {
     throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
   }
-  useEffect(() => {
-    peraWallet.reconnectSession()
-    deflyWallet.reconnectSession()
-  }, [activeWallet])
 
   async function checkAssetBalance(myAddress: string, assetId: number) {
     try {
@@ -148,6 +140,7 @@ function useVoteSubmit() {
       console.log(error)
     }
   }
+
   async function signer(unsignedTxns: Array<algosdk.Transaction>): Promise<Uint8Array[]> {
     const txsToSign = unsignedTxns.map((txn) => ({
       txn
@@ -155,10 +148,10 @@ function useVoteSubmit() {
     console.log(txsToSign, 'Txns To sign')
 
     if (activeWallet.type === 'wallet-connect') {
-      return await peraWallet.signTransaction([txsToSign])
+      return await activeWallet?.peraWallet?.signTransaction([txsToSign])
     }
     if (activeWallet.type === 'wallet-connect-defly') {
-      return await deflyWallet.signTransaction([txsToSign])
+      return await activeWallet?.deflyWallet?.signTransaction([txsToSign])
     }
   }
   async function checkAppsLocalState(myAddress: string) {

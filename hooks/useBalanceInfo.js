@@ -1,13 +1,9 @@
 import algosdk from 'algosdk'
-import { PeraWalletConnect } from '@perawallet/connect'
-import { DeflyWalletConnect } from '@blockshake/defly-connect'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { getActiveNetwork } from '@/services/environment'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { useAlgodex } from '@/hooks'
 
-const peraWallet = new PeraWalletConnect()
-const deflyWallet = new DeflyWalletConnect()
 function useBalanceInfo() {
   const { algodex } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
@@ -119,11 +115,8 @@ function useBalanceInfo() {
     })
     try {
       const signedTxnGroups =
-        activeWallet.type === 'wallet-connect'
-          ? await peraWallet.signTransaction([optInTxn])
-          : activeWallet.type === 'wallet-connect-defly'
-          ? await deflyWallet.signTransaction([optInTxn])
-          : null
+        (await activeWalletObj?.peraWallet?.signTransaction([optInTxn])) ||
+        (await activeWalletObj?.deflyWallet?.signTransaction([optInTxn]))
       console.log(signedTxnGroups)
       const { txId } = await algodex.algod.sendRawTransaction(signedTxnGroups).do()
       console.log(`txns signed successfully! - txID: ${txId}`)
@@ -162,11 +155,6 @@ function useBalanceInfo() {
       console.log("Couldn't sign all txns", error)
     }
   }
-
-  useEffect(() => {
-    peraWallet.reconnectSession()
-    deflyWallet.reconnectSession()
-  }, [activeWallet])
 
   return {
     activeWallet,
