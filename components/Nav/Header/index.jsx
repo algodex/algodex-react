@@ -114,7 +114,8 @@ export function Header() {
         // peraWallet.connector?.on("disconnect", handleDisconnectWalletClick)})
         const _rehyrdratedPeraWallet = {
           ..._peraWallet,
-          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner }
+          connector: { ..._rehyrdratedPeraWallet, connected: true, sign: peraSigner },
+          peraWallet: peraWalletRehydate
         }
         setPeraWallet(_rehyrdratedPeraWallet)
         setAddressesNew({ type: 'peraWallet', addresses: [_rehyrdratedPeraWallet] })
@@ -126,7 +127,8 @@ export function Header() {
       deflyWalletRehydrate.reconnectSession().then((accounts) => {
         const _rehyrdratedDeflyWallet = {
           ..._deflyWallet,
-          connector: { ..._rehyrdratedDeflyWallet, connected: true, sign: deflySigner }
+          connector: { ..._rehyrdratedDeflyWallet, connected: true, sign: deflySigner },
+          deflyWallet: deflyWalletRehydrate
         }
         setDeflyWallet(_rehyrdratedDeflyWallet)
         setAddressesNew({ type: 'deflyWallet', addresses: [_rehyrdratedDeflyWallet] })
