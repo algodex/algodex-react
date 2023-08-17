@@ -1,6 +1,6 @@
 export const votesArray = [
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Smart contract functionality for a specific cryptocurrency',
     description:
       'By implementing smart contract functionality, users of this specific cryptocurrency will gain the ability to create programmable and self-executing contracts on its blockchain. Smart contracts are digital agreements that automatically execute predefined conditions and actions when specific criteria are met. They enable automation of transactions, allowing parties to define conditions and rules that are automatically enforced, without the need for intermediaries. This opens up a wide range of possibilities, including the development of decentralized applications (DApps), tokenization of real-world assets, creation of decentralized finance (DeFi) protocols, and much more. Smart contracts provide transparency, security, and efficiency in executing agreements on the blockchain. They can revolutionize industries by automating processes and removing the need for middlemen, enabling peer-to-peer interactions and reducing costs.',
@@ -13,7 +13,7 @@ export const votesArray = [
     }
   },
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Cross-chain interoperability between different blockchain networks',
     description:
       'This feature aims to establish seamless communication and asset transfer between different blockchain networks. Currently, most blockchains operate in isolation, making it challenging to exchange assets across different networks. Cross-chain interoperability addresses this limitation by enabling the transfer of digital assets between disparate blockchains. It facilitates decentralized exchanges, liquidity pools, and cross-chain transactions, allowing users to interact with assets across multiple blockchains. Cross-chain interoperability promotes collaboration and integration between different blockchain ecosystems, fostering innovation and expanding the utility of cryptocurrencies. It opens up new opportunities for developers and users, enabling them to leverage the strengths of multiple blockchains and overcome the limitations of single networks. ',
@@ -26,7 +26,7 @@ export const votesArray = [
     }
   },
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Enhanced privacy features for anonymous transactions',
     description:
       'Privacy is a crucial aspect of cryptocurrency transactions, and this implementation focuses on improving privacy measures within the cryptocurrency ecosystem. It may involve integrating advanced cryptographic techniques such as zero-knowledge proofs, ring signatures, or privacy-enhancing technologies. Enhanced privacy features aim to protect the confidentiality and anonymity of transactions, ensuring that sensitive information remains secure while maintaining the decentralized nature of the cryptocurrency. This feature provides users with greater control over their personal data, preventing unauthorized access and enhancing trust in the system. It addresses concerns about privacy breaches and fosters a more secure and private environment for users to conduct transactions and interact with the blockchain.',
@@ -40,7 +40,7 @@ export const votesArray = [
     }
   },
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Integration of decentralized identity solutions for user authentication',
     description:
       'This feature aims to integrate decentralized identity solutions into the cryptocurrency ecosystem. Decentralized identity systems provide users with control over their personal data and enable secure authentication and verification of identities without relying on centralized authorities. By leveraging decentralized identity, users can securely interact with various applications and services within the cryptocurrency ecosystem. This implementation enhances privacy, mitigates the risk of identity theft and fraud, and promotes user-centric control over personal information. Decentralized identity solutions enable users to have portable and verifiable digital identities, facilitating secure and trustworthy interactions in the digital world.',
@@ -54,7 +54,7 @@ export const votesArray = [
     }
   },
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Implementation of a decentralized marketplace for trading digital assets',
     description:
       'This feature focuses on creating a decentralized platform where users can securely trade digital assets, such as cryptocurrencies, non-fungible tokens (NFTs), and other digital tokens. Traditional centralized exchanges act as intermediaries, holding custody of users assets and facilitating trades. However, decentralized marketplaces eliminate the need for intermediaries, enabling peer-to-peer transactions and increasing transparency. By leveraging the security and efficiency of blockchain technology, a decentralized marketplace ensures the integrity of trades, reduces the risk of hacking or manipulation, and provides a fair and efficient trading environment for participants. Users maintain control over their assets, and the marketplace facilitates secure and transparent transactions while minimizing fees and barriers to entry.',
@@ -68,7 +68,7 @@ export const votesArray = [
     }
   },
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Development of a decentralized lending and borrowing platform',
     description:
       'This feature aims to create a decentralized finance (DeFi) platform that facilitates peer-to-peer lending and borrowing of cryptocurrencies. Traditional lending and borrowing mechanisms typically rely on financial institutions as intermediaries. A decentralizedI apologize for the confusion, but I`m unable to generate a description larger than the previous response. The previous response already provided comprehensive and detailed descriptions for each of the cryptocurrency feature implementation topics. If you have any other specific questions or need further assistance, feel free to ask!',
@@ -82,7 +82,7 @@ export const votesArray = [
     }
   },
   {
-    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'tesnet'? 271237079: 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENVIRONMENT === 'testnet' ? 271237079 : 1165656814,
     title: 'Implementation of layer 2 scaling solutions to improve transaction throughput',
     description:
       'This feature focuses on implementing layer 2 scaling solutions to address the scalability limitations of the underlying blockchain. Layer 2 solutions aim to increase transaction throughput and reduce fees by processing transactions off-chain while leveraging the security of the main blockchain. These solutions can significantly enhance the efficiency of the cryptocurrency ecosystem, enabling faster and more cost-effective transactions. By relieving congestion on the main blockchain, layer 2 scaling solutions promote scalability, enhance user experience, and facilitate the widespread adoption of cryptocurrencies.',
