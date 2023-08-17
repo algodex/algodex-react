@@ -5,6 +5,8 @@ import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import dayjs from 'dayjs'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -219,7 +221,8 @@ function BalanceCard({
   optedIn,
   voted,
   vote,
-  contractDuration
+  contractDuration,
+  loading
 }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
@@ -314,9 +317,17 @@ function BalanceCard({
             </>
           ) : activeWallet && optedIn === true ? (
             <>
-              <ReceiveButton onClick={() => assetTransferTxn(activeWallet, assetId)}>
-                {t('Receive Tokens')}
-              </ReceiveButton>
+              {loading ? (
+                <ReceiveButton className="disabledReceiveButton">
+                  <Box sx={{ display: 'flex' }}>
+                    <CircularProgress size={20} color="white" />
+                  </Box>
+                </ReceiveButton>
+              ) : (
+                <ReceiveButton onClick={() => assetTransferTxn(activeWallet, assetId)}>
+                  {t('Receive Tokens')}
+                </ReceiveButton>
+              )}
               <InfoText>
                 {t(
                   'This wallet has opted into this voting token. Click button above to receive tokens to vote'
@@ -348,6 +359,7 @@ BalanceCard.propTypes = {
   assetTransferTxn: PropTypes.func,
   optedIn: PropTypes.bool,
   voted: PropTypes.bool,
-  contractDuration: PropTypes.array
+  contractDuration: PropTypes.array,
+  loading: PropTypes.bool
 }
 export default BalanceCard
