@@ -3,19 +3,28 @@ import { useContext, useState } from 'react'
 import { getActiveNetwork } from '@/services/environment'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { useAlgodex } from '@/hooks'
-
+import toast from 'react-hot-toast'
 function useBalanceInfo() {
   const { algodex } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
   const [currentBalance, setCurrentBalance] = useState('')
   const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
   const [optedIn, setOptedIn] = useState(false)
+  const [loading, setLoading] = useState(false)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   if (!account1_mnemonic) {
     throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
   }
   const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
-
+  let lastToastId
+  const notifier = (msg, type) => {
+    if (lastToastId) {
+      toast.dismiss(lastToastId)
+    }
+    if (type === 'loading') lastToastId = toast.loading(msg)
+    if (type === 'success') lastToastId = toast.success(msg, { duration: 3000 })
+    if (type === 'error') lastToastId = toast.error(msg, { duration: 3000 })
+  }
   async function hasAlgxBalance(activeWalletObj) {
     // if (getActiveNetwork() === 'testnet') return setCurrentBalance(true)
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
@@ -35,6 +44,7 @@ function useBalanceInfo() {
   }
   async function checkBalanceBeforeDate(activeWalletObj, beforeTime) {
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
+    const minBalance = 10000000000
     let indexerFetch =
       getActiveNetwork() === 'testnet'
         ? 'https://indexer.testnet.algoexplorerapi.io/v2/transactions/'
@@ -55,7 +65,7 @@ function useBalanceInfo() {
           data?.transaction?.sender === activeWalletObj?.address
             ? data.transaction['asset-transfer-transaction']['sender-asset-balance']
             : data.transaction['asset-transfer-transaction']['receiver-asset-balance']
-        setBalanceBeforeDate(balance)
+        balance > minBalance ? setBalanceBeforeDate(balance) : setBalanceBeforeDate(null)
       } else {
         throw new Error('checkBalanceBeforeDate: No transactions or token balance found')
       }
@@ -114,14 +124,18 @@ function useBalanceInfo() {
       initiatorAddr: activeWalletObj?.address
     })
     try {
+      notifier('Awaiting signature', 'loading')
       const signedTxnGroups =
         (await activeWalletObj?.peraWallet?.signTransaction([optInTxn])) ||
         (await activeWalletObj?.deflyWallet?.signTransaction([optInTxn]))
       console.log(signedTxnGroups)
+      notifier('Awaiting Confirmation', 'loading')
       const { txId } = await algodex.algod.sendRawTransaction(signedTxnGroups).do()
       console.log(`txns signed successfully! - txID: ${txId}`)
+      notifier('Successfully opted in!', 'success')
       setOptedIn(true)
     } catch (error) {
+      notifier(`Couldn't opt in: ${error}`, 'error')
       console.log("Couldn't sign txn", error)
     }
   }
@@ -144,14 +158,20 @@ function useBalanceInfo() {
     const txnArray = [ptxn, freezeTxn]
     const txnGroup = algosdk.assignGroupID(txnArray)
     try {
+      setLoading(true)
+      notifier('Awaiting Confirmation', 'loading')
       const pSignedTxn = txnGroup[0].signTxn(recoveredAccount1.sk)
       const freezeSignedTxn = txnGroup[1].signTxn(recoveredAccount1.sk)
       const signedTxns = [pSignedTxn, freezeSignedTxn]
       const { txId } = await algodex.algod.sendRawTransaction(signedTxns).do()
       const result = await algosdk.waitForConfirmation(algodex.algod, txId, 3)
+      notifier('Successfully sent the tokens!', 'success')
       setOptedIn('received')
+      setLoading(false)
       console.log(result)
     } catch (error) {
+      setLoading(false)
+      notifier(`Tokens were not sent: ${error}`, 'error')
       console.log("Couldn't sign all txns", error)
     }
   }
@@ -165,7 +185,8 @@ function useBalanceInfo() {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn
+    optedIn,
+    loading
   }
 }
 

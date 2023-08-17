@@ -56,7 +56,8 @@ const OpenIssue = () => {
     assetId,
     getTotalHolders,
     totalHolders,
-    optInAndSubmitVote
+    optInAndSubmitVote,
+    voteLoading
   } = useVoteSubmit()
   const {
     currentBalance,
@@ -66,7 +67,8 @@ const OpenIssue = () => {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn
+    optedIn,
+    loading
   } = useBalanceInfo()
   useEffect(() => {
     const handleResize = () => {
@@ -105,7 +107,7 @@ const OpenIssue = () => {
   useEffect(() => {
     if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet, '2023-08-16T22:54:00.000Z') //snapshot date
+      checkBalanceBeforeDate(activeWallet, '2023-08-17T22:54:00.000Z') //snapshot date
       checkOptIn(activeWallet, assetId)
     }
   }, [assetId, activeWallet])
@@ -141,6 +143,7 @@ const OpenIssue = () => {
                   voted={voted}
                   assetBalance={assetBalance}
                   active={active}
+                  voteLoading={voteLoading}
                 />
               </DesktopLeftContainer>
               <DesktopRightContainer>
@@ -154,6 +157,7 @@ const OpenIssue = () => {
                   voted={voted}
                   vote={vote}
                   contractDuration={contractDuration}
+                  loading={loading}
                 />
                 <CurrentTurnoutCard
                   totalVoters={totalVoters[0]?.value}
@@ -182,6 +186,7 @@ const OpenIssue = () => {
               voted={voted}
               vote={vote}
               contractDuration={contractDuration}
+              loading={loading}
             />
             <QuestionForm
               vote={vote}
@@ -189,6 +194,7 @@ const OpenIssue = () => {
               voted={voted}
               assetBalance={assetBalance}
               active={active}
+              voteLoading={voteLoading}
             />
             <CurrentTurnoutCard totalVoters={totalVoters[0]?.value} totalHolders={totalHolders} />
             <CurrentLiveResultsCard
