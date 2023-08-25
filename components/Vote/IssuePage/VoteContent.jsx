@@ -140,7 +140,7 @@ function VoteContent({ vote }) {
   )
 }
 VoteContent.propTypes = {
-  vote: PropTypes.object,
+  vote: PropTypes.array,
   title: PropTypes.string,
   description: PropTypes.string,
   startDate: PropTypes.string,

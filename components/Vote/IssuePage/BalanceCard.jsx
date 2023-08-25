@@ -221,20 +221,24 @@ function BalanceCard({
   optedIn,
   voted,
   vote,
-  contractDuration,
+  contractStart,
+  contractEnd,
   loading
 }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
   const [contractEndDate, setContractEndDate] = useState(null)
+  const [contractStartDate, setContractStartDate] = useState(null)
   const { startDate, endDate } = vote[0]
   const today = dayjs().toISOString()
 
   useEffect(() => {
-    if (contractDuration !== null) {
-      setContractEndDate(dayjs.unix(contractDuration[0].value).toISOString())
+    if (contractStart !== null && contractEnd !== null) {
+      setContractStartDate(dayjs.unix(contractStart[0].value).toISOString())
+      setContractEndDate(dayjs.unix(contractEnd[0].value).toISOString())
     }
-  }, [contractDuration])
+  }, [contractStart, contractEnd])
+
   return (
     <>
       <BalanceCardContainer>
@@ -264,7 +268,8 @@ function BalanceCard({
             )}
           </BalanceDisplay>
 
-          {activeWallet && dayjs(today).isBefore(dayjs(startDate)) ? (
+          {(activeWallet && dayjs(today).isBefore(dayjs(startDate))) ||
+          dayjs(today).isBefore(dayjs(contractStartDate)) ? (
             <>
               <OptInButton className="disabledOptInButton">
                 {t('Opt in to Voting Token')}
@@ -359,7 +364,8 @@ BalanceCard.propTypes = {
   assetTransferTxn: PropTypes.func,
   optedIn: PropTypes.bool,
   voted: PropTypes.bool,
-  contractDuration: PropTypes.array,
+  contractStart: PropTypes.array,
+  contractEnd: PropTypes.array,
   loading: PropTypes.bool
 }
 export default BalanceCard
