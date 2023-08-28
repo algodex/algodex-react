@@ -121,7 +121,9 @@ function CurrentLiveResultsCard({ optionsVotes, options, decimals, totalVotes })
               />
               <NumbersContainer>
                 <VoteNumbers>
-                  {optionsVotes.length ? optionsVotes[i]?.value / Math.pow(10, decimals) : 0}{' '}
+                  {optionsVotes.length
+                    ? parseFloat((optionsVotes[i]?.value / Math.pow(10, decimals)).toFixed(2))
+                    : 0}{' '}
                   {t('Votes')}
                 </VoteNumbers>
                 <Percentage>

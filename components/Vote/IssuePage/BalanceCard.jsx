@@ -5,6 +5,8 @@ import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import dayjs from 'dayjs'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 
 const BalanceCardContainer = styled.div`
   color: white;
@@ -219,19 +221,24 @@ function BalanceCard({
   optedIn,
   voted,
   vote,
-  contractDuration
+  contractStart,
+  contractEnd,
+  loading
 }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
   const [contractEndDate, setContractEndDate] = useState(null)
+  const [contractStartDate, setContractStartDate] = useState(null)
   const { startDate, endDate } = vote[0]
   const today = dayjs().toISOString()
 
   useEffect(() => {
-    if (contractDuration !== null) {
-      setContractEndDate(dayjs.unix(contractDuration[0].value).toISOString())
+    if (contractStart !== null && contractEnd !== null) {
+      setContractStartDate(dayjs.unix(contractStart[0].value).toISOString())
+      setContractEndDate(dayjs.unix(contractEnd[0].value).toISOString())
     }
-  }, [contractDuration])
+  }, [contractStart, contractEnd])
+
   return (
     <>
       <BalanceCardContainer>
@@ -261,7 +268,8 @@ function BalanceCard({
             )}
           </BalanceDisplay>
 
-          {activeWallet && dayjs(today).isBefore(dayjs(startDate)) ? (
+          {(activeWallet && dayjs(today).isBefore(dayjs(startDate))) ||
+          dayjs(today).isBefore(dayjs(contractStartDate)) ? (
             <>
               <OptInButton className="disabledOptInButton">
                 {t('Opt in to Voting Token')}
@@ -314,9 +322,17 @@ function BalanceCard({
             </>
           ) : activeWallet && optedIn === true ? (
             <>
-              <ReceiveButton onClick={() => assetTransferTxn(activeWallet, assetId)}>
-                {t('Receive Tokens')}
-              </ReceiveButton>
+              {loading ? (
+                <ReceiveButton className="disabledReceiveButton">
+                  <Box sx={{ display: 'flex' }}>
+                    <CircularProgress size={20} color="white" />
+                  </Box>
+                </ReceiveButton>
+              ) : (
+                <ReceiveButton onClick={() => assetTransferTxn(activeWallet, assetId)}>
+                  {t('Receive Tokens')}
+                </ReceiveButton>
+              )}
               <InfoText>
                 {t(
                   'This wallet has opted into this voting token. Click button above to receive tokens to vote'
@@ -348,6 +364,8 @@ BalanceCard.propTypes = {
   assetTransferTxn: PropTypes.func,
   optedIn: PropTypes.bool,
   voted: PropTypes.bool,
-  contractDuration: PropTypes.array
+  contractStart: PropTypes.array,
+  contractEnd: PropTypes.array,
+  loading: PropTypes.bool
 }
 export default BalanceCard

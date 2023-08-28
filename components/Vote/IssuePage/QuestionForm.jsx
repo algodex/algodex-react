@@ -8,7 +8,8 @@ import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import useTranslation from 'next-translate/useTranslation'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
-
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 const Container = styled.div`
   border-radius: 8px;
   border: 1px solid white;
@@ -147,7 +148,7 @@ const DisabledVoteButton = styled(Button)`
     width: 151px;
   }
 `
-function QuestionForm({ vote, voted, assetBalance, active, optInAndSubmitVote }) {
+function QuestionForm({ vote, voted, assetBalance, active, optInAndSubmitVote, voteLoading }) {
   const { t } = useTranslation('vote')
   const { activeWallet } = useContext(WalletReducerContext)
   const { question, appId } = vote[0]
@@ -180,9 +181,21 @@ function QuestionForm({ vote, voted, assetBalance, active, optInAndSubmitVote })
           </FormControlStyled>
         </form>
         {userOption !== null && assetBalance !== null && voted === false && active === true ? (
-          <VoteButton onClick={() => optInAndSubmitVote(appId, activeWallet.address, userOption)}>
-            {t('Submit Vote')}
-          </VoteButton>
+          <>
+            {voteLoading ? (
+              <DisabledVoteButton>
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress size={20} color="white" />
+                </Box>
+              </DisabledVoteButton>
+            ) : (
+              <VoteButton
+                onClick={() => optInAndSubmitVote(appId, activeWallet.address, userOption)}
+              >
+                {t('Submit Vote')}
+              </VoteButton>
+            )}
+          </>
         ) : (
           <DisabledVoteButton>{t('Submit Vote')}</DisabledVoteButton>
         )}
@@ -200,6 +213,7 @@ QuestionForm.propTypes = {
   optInAndSubmitVote: PropTypes.func,
   voted: PropTypes.bool,
   assetBalance: PropTypes.number,
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  voteLoading: PropTypes.bool
 }
 export default QuestionForm

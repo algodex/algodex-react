@@ -6,7 +6,7 @@ import * as abiThreeOptionsContract from '../utils/VotingSmartContracts/threeOpt
 //import * as abiFourOptionsContract from '../utils/VotingSmartContracts/fourOptionContract.json'
 import { WalletReducerContext } from '@/hooks/WalletsReducerProvider.js'
 import { getActiveNetwork } from '@/services/environment'
-
+import toast from 'react-hot-toast'
 function useVoteSubmit() {
   const { algodex } = useAlgodex()
   const { activeWallet } = useContext(WalletReducerContext)
@@ -25,11 +25,20 @@ function useVoteSubmit() {
   const [globalState, setGlobalState] = useState<{ key: string; value: number | string }[]>([])
   const [totalHolders, setTotalHolders] = useState<number>(0)
   const [appsLocalState, setAppsLocalState] = useState<number | null>(null)
+  const [voteLoading, setVoteLoading] = useState<boolean>(false)
   const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
   if (!account1_mnemonic) {
     throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
   }
-
+  let lastToastId: any
+  const notifier = (msg: string, type: string) => {
+    if (lastToastId) {
+      toast.dismiss(lastToastId)
+    }
+    if (type === 'loading') lastToastId = toast.loading(msg)
+    if (type === 'success') lastToastId = toast.success(msg, { duration: 3000 })
+    if (type === 'error') lastToastId = toast.error(msg, { duration: 3000 })
+  }
   async function checkAssetBalance(myAddress: string, assetId: number) {
     try {
       const accAssetInfo = await algodex.algod.accountAssetInformation(myAddress, assetId).do()
@@ -170,6 +179,8 @@ function useVoteSubmit() {
   }
   async function optInAndSubmitVote(appId: number, myAddress: string, method: string) {
     try {
+      setVoteLoading(true)
+      notifier('Awaiting signature', 'loading')
       if (active === false) {
         throw new Error('This voting has ended.')
       }
@@ -203,11 +214,16 @@ function useVoteSubmit() {
         signer: signer,
         suggestedParams
       })
+
       const result = await atc.execute(algodex.algod, 4)
+      notifier('Successfully voted!', 'success')
       setVoted(true)
       readGlobalState(appId, myAddress)
+
       console.log(result)
     } catch (error) {
+      setVoteLoading(false)
+      notifier(`Vote submission failed: ${error}`, 'error')
       console.log(error)
     }
   }
@@ -239,7 +255,8 @@ function useVoteSubmit() {
     readLocalState,
     optInAndSubmitVote,
     checkAppsLocalState,
-    appsLocalState
+    appsLocalState,
+    voteLoading
   }
 }
 export default useVoteSubmit

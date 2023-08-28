@@ -40,7 +40,8 @@ const OpenIssue = () => {
   const [optionsVotes, setOptionsVotes] = useState([])
   const [totalVotes, setTotalVotes] = useState(0)
   const [totalVoters, setTotalVoters] = useState(0)
-  const [contractDuration, setContractDuration] = useState(null)
+  const [contractStart, setContractStart] = useState(null)
+  const [contractEnd, setContractEnd] = useState(null)
   const router = useRouter()
   const { title } = router.query
   const vote = votesArray.filter((e) => {
@@ -56,7 +57,8 @@ const OpenIssue = () => {
     assetId,
     getTotalHolders,
     totalHolders,
-    optInAndSubmitVote
+    optInAndSubmitVote,
+    voteLoading
   } = useVoteSubmit()
   const {
     currentBalance,
@@ -66,7 +68,8 @@ const OpenIssue = () => {
     checkBalanceBeforeDate,
     hasAlgxBalance,
     checkOptIn,
-    optedIn
+    optedIn,
+    loading
   } = useBalanceInfo()
   useEffect(() => {
     const handleResize = () => {
@@ -92,7 +95,8 @@ const OpenIssue = () => {
           .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
       )
       setTotalVoters(globalState.filter((e) => e.key.includes('total_voters')))
-      setContractDuration(globalState.filter((e) => e.key.includes('vote_end')))
+      setContractStart(globalState.filter((e) => e.key.includes('vote_start')))
+      setContractEnd(globalState.filter((e) => e.key.includes('vote_end')))
     }
   }, [globalState])
   useEffect(() => {
@@ -105,7 +109,7 @@ const OpenIssue = () => {
   useEffect(() => {
     if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet, '2023-08-16T22:54:00.000Z') //snapshot date
+      checkBalanceBeforeDate(activeWallet, '2023-08-17T22:54:00.000Z') //snapshot date
       checkOptIn(activeWallet, assetId)
     }
   }, [assetId, activeWallet])
@@ -141,6 +145,7 @@ const OpenIssue = () => {
                   voted={voted}
                   assetBalance={assetBalance}
                   active={active}
+                  voteLoading={voteLoading}
                 />
               </DesktopLeftContainer>
               <DesktopRightContainer>
@@ -153,7 +158,9 @@ const OpenIssue = () => {
                   optedIn={optedIn}
                   voted={voted}
                   vote={vote}
-                  contractDuration={contractDuration}
+                  contractStart={contractStart}
+                  contractEnd={contractEnd}
+                  loading={loading}
                 />
                 <CurrentTurnoutCard
                   totalVoters={totalVoters[0]?.value}
@@ -181,7 +188,9 @@ const OpenIssue = () => {
               optedIn={optedIn}
               voted={voted}
               vote={vote}
-              contractDuration={contractDuration}
+              contractStart={contractStart}
+              contractEnd={contractEnd}
+              loading={loading}
             />
             <QuestionForm
               vote={vote}
@@ -189,6 +198,7 @@ const OpenIssue = () => {
               voted={voted}
               assetBalance={assetBalance}
               active={active}
+              voteLoading={voteLoading}
             />
             <CurrentTurnoutCard totalVoters={totalVoters[0]?.value} totalHolders={totalHolders} />
             <CurrentLiveResultsCard

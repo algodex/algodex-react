@@ -3,12 +3,19 @@ import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
 
 const Container = styled.div`
-  background-color: #4a5568;
+  background: rgb(67, 84, 105);
+  background: linear-gradient(
+    90deg,
+    rgba(67, 84, 105, 1) 19%,
+    rgba(45, 57, 74, 1) 40%,
+    rgba(25, 36, 51, 1) 100%
+  );
   font-family: Inter;
   height: 167px;
 
   @media (min-width: 1024px) {
     display: flex;
+    height: 200px;
     flex-direction: row;
     justify-content: space-between;
   }
@@ -19,15 +26,15 @@ const LeftContainer = styled.div`
 
   @media (min-width: 1024px) {
     padding-left: 83px;
-    padding-top: 28px;
+    padding-top: 38px;
   }
 `
 const RightContainer = styled.div`
   display: none;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1344px) {
     display: flex;
-    padding-right: 155px;
+    padding-right: 125px;
   }
 `
 const Title = styled.h2`
@@ -81,12 +88,6 @@ const InfoButton = styled.a`
     line-height: 16.94px;
   }
 `
-const ImagePlaceholder = styled.img`
-  background-color: #8f8f8f;
-  height: 104px;
-  margin: auto;
-  width: 257px;
-`
 
 function Banner() {
   const { t } = useTranslation('vote')
@@ -103,7 +104,7 @@ function Banner() {
           </InfoButton>
         </LeftContainer>
         <RightContainer>
-          <ImagePlaceholder></ImagePlaceholder>
+          <img src="/vote-banner.png" alt="balance with algodex logo" />
         </RightContainer>
       </Container>
     </>
