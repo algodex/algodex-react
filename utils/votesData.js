@@ -20,6 +20,7 @@ export const votesArray = [
   },
   {
     appId: process.env.NEXT_PUBLIC_ENV === 'development' ? 287730432 : 1165656814,
+    appId: process.env.NEXT_PUBLIC_ENV === 'development' ? 287730432 : 1165656814,
     title: 'Future projects and partnerships',
     description:
       'The Algodex team is always looking for new opportunities to expand our ecosystem and reach. We are considering building a business to business Software as a Service (SaaS) platform that would leverage the Algorand Blockchain and the concept of psuedoanonymity to increase the transparency of business operations for critical stakeholders while simultenously obfuscating those operations from the general public. Regardless of the outcome, the team is comitted to maintaining the operation of our flaghship decentralized exchange and the continued development of the Algorand ecosystem.',
