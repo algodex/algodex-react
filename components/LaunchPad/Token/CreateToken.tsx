@@ -169,10 +169,10 @@ export const CreateToken = () => {
     if (
       isNaN(Number(decimals)) ||
       !isInteger(Number(decimals)) ||
-      Number(decimals) < 1 ||
+      Number(decimals) < 0 ||
       Number(decimals) > 10
     ) {
-      setError((prev) => ({ ...prev, decimals: 'Enter whole number between 1 and 10' }))
+      setError((prev) => ({ ...prev, decimals: 'Enter whole number between 0 and 10' }))
 
       _error = true
     }
@@ -329,7 +329,7 @@ export const CreateToken = () => {
             <Box className="mb-4 w-full md:w-1/2">
               <OutlinedInput
                 inputComponent={NumberFormatCustom}
-                placeholder="Decimals (1-10)"
+                placeholder="Decimals (0-10)"
                 name="decimals"
                 required
                 value={decimals}
