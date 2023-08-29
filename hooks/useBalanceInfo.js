@@ -44,7 +44,7 @@ function useBalanceInfo() {
   }
   async function checkBalanceBeforeDate(activeWalletObj, beforeTime) {
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
-    const minBalance = 10000000000
+    const minBalance = getActiveNetwork() === 'testnet' ? 10 : 10000000000
     let indexerFetch =
       getActiveNetwork() === 'testnet'
         ? 'https://indexer.testnet.algoexplorerapi.io/v2/transactions/'

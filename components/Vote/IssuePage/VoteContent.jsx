@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
@@ -91,11 +91,19 @@ const Description = styled.p`
   }
 `
 
-function VoteContent({ vote }) {
+function VoteContent({ vote, contractStart, contractEnd }) {
   const { t } = useTranslation('vote')
-  const { title, description, startDate, endDate } = vote[0]
+  const { title, description } = vote[0]
   const today = dayjs().toISOString()
+  const [contractEndDate, setContractEndDate] = useState(null)
+  const [contractStartDate, setContractStartDate] = useState(null)
 
+  useEffect(() => {
+    if (contractStart !== null && contractEnd !== null) {
+      setContractStartDate(dayjs.unix(contractStart[0].value).toISOString())
+      setContractEndDate(dayjs.unix(contractEnd[0].value).toISOString())
+    }
+  }, [contractStart, contractEnd])
   return (
     <>
       <Container>
@@ -104,31 +112,31 @@ function VoteContent({ vote }) {
             <VoteNow>{t('Vote Now')}</VoteNow>
             <Title>{title}</Title>
 
-            {dayjs(today).isBetween(startDate, endDate) ? (
+            {dayjs(today).isBetween(contractStartDate, contractEndDate) ? (
               <>
                 <VotingDate>
-                  {t('Voting started')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                  {t('Voting started')}: {dayjs(contractStartDate).format('MMMM D, YYYY, HH:mm')}
                 </VotingDate>
                 <VotingDate>
-                  {t('Voting ends')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                  {t('Voting ends')}: {dayjs(contractEndDate).format('MMMM D, YYYY, HH:mm')}
                 </VotingDate>
               </>
-            ) : dayjs(today).isBefore(dayjs(startDate)) ? (
+            ) : dayjs(today).isBefore(dayjs(contractStartDate)) ? (
               <>
                 <VotingDate>
-                  {t('Voting starts')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                  {t('Voting starts')}: {dayjs(contractStartDate).format('MMMM D, YYYY, HH:mm')}
                 </VotingDate>
                 <VotingDate>
-                  {t('Voting ends')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                  {t('Voting ends')}: {dayjs(contractEndDate).format('MMMM D, YYYY, HH:mm')}
                 </VotingDate>
               </>
             ) : (
               <>
                 <VotingDate>
-                  {t('Voting started')}: {dayjs(startDate).format('MMMM D, YYYY, HH:mm')}
+                  {t('Voting started')}: {dayjs(contractStartDate).format('MMMM D, YYYY, HH:mm')}
                 </VotingDate>
                 <VotingDate>
-                  {t('Voting ended')}: {dayjs(endDate).format('MMMM D, YYYY, HH:mm')}
+                  {t('Voting ended')}: {dayjs(contractEndDate).format('MMMM D, YYYY, HH:mm')}
                 </VotingDate>
               </>
             )}
@@ -143,7 +151,7 @@ VoteContent.propTypes = {
   vote: PropTypes.array,
   title: PropTypes.string,
   description: PropTypes.string,
-  startDate: PropTypes.string,
-  endDate: PropTypes.string
+  contractStart: PropTypes.string,
+  contractEnd: PropTypes.string
 }
 export default VoteContent

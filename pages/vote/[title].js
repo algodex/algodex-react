@@ -138,7 +138,7 @@ const OpenIssue = () => {
             <DesktopContainer>
               <DesktopLeftContainer>
                 <BackNavigation />
-                <VoteContent vote={vote} />
+                <VoteContent vote={vote} contractStart={contractStart} contractEnd={contractEnd} />
                 <QuestionForm
                   vote={vote}
                   optInAndSubmitVote={optInAndSubmitVote}
@@ -178,7 +178,7 @@ const OpenIssue = () => {
         ) : (
           <>
             <BackNavigation />
-            <VoteContent vote={vote} />
+            <VoteContent vote={vote} contractStart={contractStart} contractEnd={contractEnd} />
             <BalanceCard
               assetId={assetId}
               currentBalance={currentBalance}

@@ -229,7 +229,6 @@ function BalanceCard({
   const { activeWallet } = useContext(WalletReducerContext)
   const [contractEndDate, setContractEndDate] = useState(null)
   const [contractStartDate, setContractStartDate] = useState(null)
-  const { startDate, endDate } = vote[0]
   const today = dayjs().toISOString()
 
   useEffect(() => {
@@ -268,17 +267,14 @@ function BalanceCard({
             )}
           </BalanceDisplay>
 
-          {(activeWallet && dayjs(today).isBefore(dayjs(startDate))) ||
-          dayjs(today).isBefore(dayjs(contractStartDate)) ? (
+          {activeWallet && dayjs(today).isBefore(dayjs(contractStartDate)) ? (
             <>
               <OptInButton className="disabledOptInButton">
                 {t('Opt in to Voting Token')}
               </OptInButton>
               <InfoText>{t('Voting hasn’t started yet')}.</InfoText>
             </>
-          ) : activeWallet &&
-            (dayjs(today).isAfter(dayjs(endDate)) ||
-              dayjs(today).isAfter(dayjs(contractEndDate))) ? (
+          ) : activeWallet && dayjs(today).isAfter(dayjs(contractEndDate)) ? (
             <>
               <OptInButton className="disabledOptInButton">
                 {t('Opt in to Voting Token')}
