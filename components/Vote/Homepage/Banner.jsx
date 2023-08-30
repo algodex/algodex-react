@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import useTranslation from 'next-translate/useTranslation'
-
+import banner from '/public/vote-banner.png'
+import smallerBanner from '/public/vote-banner2.png'
 const Container = styled.div`
   background: rgb(67, 84, 105);
   background: linear-gradient(
@@ -31,10 +32,21 @@ const LeftContainer = styled.div`
 `
 const RightContainer = styled.div`
   display: none;
-
+  @media (min-width: 1024px) {
+    display: block;
+    background: url(${smallerBanner.src});
+    width: 40%;
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: contain;
+  }
   @media (min-width: 1344px) {
-    display: flex;
-    padding-right: 125px;
+    background: url(${banner.src});
+    width: 50%;
+    background-repeat: no-repeat;
+    background-position: right;
+    margin-right: 90px;
+    background-size: contain;
   }
 `
 const Title = styled.h2`
@@ -103,9 +115,7 @@ function Banner() {
             {t('More Info')}
           </InfoButton>
         </LeftContainer>
-        <RightContainer>
-          <img src="/vote-banner.png" alt="balance with algodex logo" />
-        </RightContainer>
+        <RightContainer></RightContainer>
       </Container>
     </>
   )
