@@ -49,7 +49,7 @@ function useVoteSubmit() {
       }
     } catch (error) {
       setAssetBalance(null)
-      console.log(error)
+      console.log('Check asset balance:', error)
     }
   }
   async function checkVote(myAddress: string, appId: number) {
@@ -146,7 +146,7 @@ function useVoteSubmit() {
       hasVoted[0].value === 1 ? setVoted(true) : setVoted(false)
     } catch (error) {
       setVoted(false)
-      console.log(error)
+      console.log('Local State:', error)
     }
   }
 

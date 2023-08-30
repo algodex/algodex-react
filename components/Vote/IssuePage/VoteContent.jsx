@@ -151,7 +151,7 @@ VoteContent.propTypes = {
   vote: PropTypes.array,
   title: PropTypes.string,
   description: PropTypes.string,
-  contractStart: PropTypes.string,
-  contractEnd: PropTypes.string
+  contractStart: PropTypes.array,
+  contractEnd: PropTypes.array
 }
 export default VoteContent

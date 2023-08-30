@@ -109,7 +109,7 @@ const OpenIssue = () => {
   useEffect(() => {
     if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet, '2023-08-17T22:54:00.000Z') //snapshot date
+      checkBalanceBeforeDate(activeWallet) //snapshot date
       checkOptIn(activeWallet, assetId)
     }
   }, [assetId, activeWallet])

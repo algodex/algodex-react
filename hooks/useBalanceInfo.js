@@ -42,7 +42,8 @@ function useBalanceInfo() {
       console.log(error.message)
     }
   }
-  async function checkBalanceBeforeDate(activeWalletObj, beforeTime) {
+  async function checkBalanceBeforeDate(activeWalletObj) {
+    const snapshotDate = '2023-09-01T00:00:00.000Z'
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
     const minBalance = getActiveNetwork() === 'testnet' ? 10 : 10000000000
     let indexerFetch =
@@ -53,7 +54,7 @@ function useBalanceInfo() {
       const indexerAssetInfo = await algodex.http.indexer.indexer
         .lookupAccountTransactions(activeWalletObj?.address)
         .assetID(assetId)
-        .beforeTime(beforeTime)
+        .beforeTime(snapshotDate)
         .limit(1)
         .do()
 
