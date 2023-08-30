@@ -220,7 +220,6 @@ function BalanceCard({
   assetTransferTxn,
   optedIn,
   voted,
-  vote,
   contractStart,
   contractEnd,
   loading
