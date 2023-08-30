@@ -362,7 +362,7 @@ export function Header() {
             <MenuItem onClick={handleCloseMenu}>
               <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
                 <NavTextLgWrapper isMobile={isMobile}>
-                  <Typography variant="navText">Launch Pad</Typography>
+                  <Typography variant="navText">Launch X</Typography>
                 </NavTextLgWrapper>
               </NavActiveLink>
             </MenuItem>
@@ -419,7 +419,7 @@ export function Header() {
         <MobileNavContainer>
           <NavActiveLink href="/launchpad/create-token" matches={/^\/launchpad/}>
             <NavTextSmWrapper isMobile={isMobile}>
-              <Typography variant="navText">Launch Pad</Typography>
+              <Typography variant="navText">Launch X</Typography>
             </NavTextSmWrapper>
           </NavActiveLink>
           <NavActiveLink href="/vote" matches={/^\/vote/}>
