@@ -243,6 +243,9 @@ export const AboutFooter = () => {
             >
               Twitter
             </FooterLinks>
+            <FooterLinks target={'_blank'} href="https://www.instagram.com/official_algodex/">
+              Instagram
+            </FooterLinks>
             <FooterLinks target={'_blank'} href="https://discord.gg/qS3Q7AqwF6">
               Discord
             </FooterLinks>
@@ -254,9 +257,11 @@ export const AboutFooter = () => {
             </FooterLinks>
           </div>
         </div>
-        <FooterCopyright className='mt-9'>
+        <FooterCopyright className="mt-9">
           <p>© 2023 Algonaut Capital</p>|
-          <FooterLinks target={'_blank'} href="https://app.algodex.com/algodex_tos.pdf">Terms of Service</FooterLinks>
+          <FooterLinks target={'_blank'} href="https://app.algodex.com/algodex_tos.pdf">
+            Terms of Service
+          </FooterLinks>
         </FooterCopyright>
       </AboutContainer>
     </FooterWrapper>

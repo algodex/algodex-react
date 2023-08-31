@@ -30,12 +30,13 @@ function useBalanceInfo() {
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
     try {
       const assetInfo = await algodex.http.indexer.indexer.lookupAssetByID(assetId).do()
+      const { assets } = await algodex.http.indexer.indexer
+        .lookupAccountAssets(activeWalletObj?.address)
+        .assetId(assetId)
+        .do()
       const assetDecimals = assetInfo?.asset?.params?.decimals
-      const assetInWallet = activeWalletObj?.assets?.find((asset) => asset['asset-id'] === assetId)
       setCurrentBalance(
-        typeof assetInWallet !== 'undefined'
-          ? Number((assetInWallet.amount / Math.pow(10, assetDecimals)).toFixed(2))
-          : false
+        assets.length ? (assets[0].amount / Math.pow(10, assetDecimals)).toFixed(2) : false
       )
     } catch (error) {
       setCurrentBalance(false)
