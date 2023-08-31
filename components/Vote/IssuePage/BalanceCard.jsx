@@ -246,7 +246,7 @@ function BalanceCard({
         <BalanceCardBottomContainer>
           <p>
             {t(
-              'Voting requires the possession of voting tokens. The quantity of votes at your disposal is determined by the quantity of ALGX present in this wallet at the time of the voting smart contract start date. ALGX added after the start date will be ignored when determining the quantity of voting tokens'
+              'Voting requires the possession of voting tokens. The quantity of votes at your disposal is determined by the quantity of ALGX present in this wallet at the time of the voting smart contract announcement date. ALGX added after the announcement date will be ignored when determining the quantity of voting tokens'
             )}
             .
           </p>

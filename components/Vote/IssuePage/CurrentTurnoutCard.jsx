@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 import useTranslation from 'next-translate/useTranslation'
+import Tooltip from '@mui/material/Tooltip'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
+import { Fade } from '@mui/material'
 
 const CurrentTurnout = styled.div`
   color: white;
@@ -22,8 +25,8 @@ const CardTopContainer = styled.div`
   background: #2a313c;
   border-radius: 8px 8px 0px 0px;
   display: flex;
+  justify-content: space-between;
   height: 36px;
-
   p {
     color: #d4d4d4;
     font-size: 14px;
@@ -104,6 +107,16 @@ function CurrentTurnoutCard({ totalVoters, totalHolders }) {
       <CurrentTurnout>
         <CardTopContainer>
           <p>{t('Current Turnout')}:</p>
+          <Tooltip
+            title="The total turnout number represents the amount of ALGX holders with a balance over 10000."
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}
+            placement="top"
+            arrow
+            sx={{ marginRight: '20px' }}
+          >
+            <HelpOutlineOutlinedIcon />
+          </Tooltip>
         </CardTopContainer>
         <CurrentTurnoutBottomContainer>
           <Progress>
