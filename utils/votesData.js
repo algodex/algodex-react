@@ -4,7 +4,7 @@ export const votesArray = [
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
         ? 287726836
-        : 1182543783,
+        : 1182993615,
     title: 'Algodex Community Leaders Program',
     description:
       'The Community Leaders Program was launched with the intention of fostering community growth, education, and participation. The program leverages the expertise of Community Leaders to improve the overall ecosystem and user experience by creating a more inclusive, knowledgeable, and vocal community.',
@@ -29,7 +29,7 @@ export const votesArray = [
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
         ? 287730432
-        : 1182554151,
+        : 1182996176,
     title: 'Future projects and partnerships',
     description:
       'The Algodex team is always looking for new opportunities to expand our ecosystem and reach. We are considering building a business to business Software as a Service (SaaS) platform that would leverage the Algorand Blockchain and the concept of psuedoanonymity to increase the transparency of business operations for critical stakeholders while simultenously obfuscating those operations from the general public. Regardless of the outcome, the team is comitted to maintaining the operation of our flaghship decentralized exchange and the continued development of the Algorand ecosystem.',
@@ -54,7 +54,7 @@ export const votesArray = [
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
         ? 284837932
-        : 1182556078,
+        : 1183002682,
     title: 'One-to-One token swap for ALGX',
     description:
       'The ecosystem wide MyAlgo wallet breach has affected our ability to provide liquidity for ALGX. The Algodex team is considering initiating a token swap on a 1-to-1 basis to restore equitable liquidity to our token. This would be a one time event and would not be repeated.',
