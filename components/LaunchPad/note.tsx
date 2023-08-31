@@ -144,7 +144,7 @@ export const ServiceFeeNote = ({ sx, fee }: { sx?: object; fee: number }) => {
           Service Fee
         </Typography>
         <ServiceIcon
-          content="Holding 10,000 ALGX waives the 1000 ALGO service fee"
+          content="We are currently not charging a service fee."
           sx={{
             color: 'white',
             fontSize: '11px',

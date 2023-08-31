@@ -109,7 +109,7 @@ const OpenIssue = () => {
   useEffect(() => {
     if (assetId !== null && activeWallet) {
       hasAlgxBalance(activeWallet)
-      checkBalanceBeforeDate(activeWallet, '2023-08-17T22:54:00.000Z') //snapshot date
+      checkBalanceBeforeDate(activeWallet) //snapshot date
       checkOptIn(activeWallet, assetId)
     }
   }, [assetId, activeWallet])
@@ -138,7 +138,7 @@ const OpenIssue = () => {
             <DesktopContainer>
               <DesktopLeftContainer>
                 <BackNavigation />
-                <VoteContent vote={vote} />
+                <VoteContent vote={vote} contractStart={contractStart} contractEnd={contractEnd} />
                 <QuestionForm
                   vote={vote}
                   optInAndSubmitVote={optInAndSubmitVote}
@@ -178,7 +178,7 @@ const OpenIssue = () => {
         ) : (
           <>
             <BackNavigation />
-            <VoteContent vote={vote} />
+            <VoteContent vote={vote} contractStart={contractStart} contractEnd={contractEnd} />
             <BalanceCard
               assetId={assetId}
               currentBalance={currentBalance}

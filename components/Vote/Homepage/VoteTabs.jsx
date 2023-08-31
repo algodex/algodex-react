@@ -36,6 +36,22 @@ const StyledTabs = styled(Tabs)`
     padding-left: 155px;
   }
 `
+const StyledNoVotes = styled.p`
+  font-size: 14px;
+  margin-top: 30px;
+  text-align-last: center;
+  color: white;
+  @media (min-width: 1024px) {
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 500;
+  }
+`
+const StyledSVGContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+`
 const StyledTab = styled(Tab)`
   color: #718096;
   font-family: Inter;
@@ -148,22 +164,46 @@ function VoteTabs({ appsLocalState }) {
         </StyledTabs>
       </Box>
       <TabPanel value={value} index={0}>
-        {openVotes &&
+        {openVotes.length ? (
           openVotes?.map((vote, i) => (
             <VoteCard vote={vote} key={i} appsLocalState={appsLocalState} />
-          ))}
+          ))
+        ) : (
+          <>
+            <StyledSVGContainer>
+              <img src="/calendar.svg" alt="Calendar Logo" />
+            </StyledSVGContainer>
+            <StyledNoVotes>There are no open votes at the time.</StyledNoVotes>
+          </>
+        )}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {upcomingVotes &&
+        {upcomingVotes.length ? (
           upcomingVotes?.map((vote, i) => (
             <VoteCard vote={vote} key={i} appsLocalState={appsLocalState} />
-          ))}
+          ))
+        ) : (
+          <>
+            <StyledSVGContainer>
+              <img src="/calendar.svg" alt="Calendar Logo" />
+            </StyledSVGContainer>
+            <StyledNoVotes>There are no open votes at the time.</StyledNoVotes>
+          </>
+        )}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {pastVotes &&
+        {pastVotes.length ? (
           pastVotes?.map((vote, i) => (
             <VoteCard vote={vote} key={i} appsLocalState={appsLocalState} />
-          ))}
+          ))
+        ) : (
+          <>
+            <StyledSVGContainer>
+              <img src="/calendar.svg" alt="Calendar Logo" />
+            </StyledSVGContainer>
+            <StyledNoVotes>There are no past votes yet.</StyledNoVotes>
+          </>
+        )}
       </TabPanel>
     </Box>
   )
