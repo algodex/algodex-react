@@ -44,7 +44,7 @@ function useBalanceInfo() {
     }
   }
   async function checkBalanceBeforeDate(activeWalletObj) {
-    const snapshotDate = '2023-09-01T00:00:00.000Z'
+    const snapshotDate = '2023-09-01T16:00:00.000Z'
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
     const minBalance = getActiveNetwork() === 'testnet' ? 10 : 10000000000
     let indexerFetch =
