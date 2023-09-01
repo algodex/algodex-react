@@ -108,7 +108,7 @@ function CurrentTurnoutCard({ totalVoters, totalHolders }) {
         <CardTopContainer>
           <p>{t('Current Turnout')}:</p>
           <Tooltip
-            title="The total turnout represents the amount of ALGX holders with a balance over 10000."
+            title="The total turnout represents the number of ALGX holders with a balance over 10000."
             TransitionComponent={Fade}
             TransitionProps={{ timeout: 600 }}
             placement="top"

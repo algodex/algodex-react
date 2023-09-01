@@ -7,7 +7,7 @@ export const votesArray = [
         : 1183156086,
     title: 'Algodex Community Leaders Program',
     description:
-      'The Community Leaders Program was launched with the intention of fostering community growth, education, and participation. The program leverages the expertise of Community Leaders to improve the overall ecosystem and user experience by creating a more inclusive, knowledgeable, and vocal community.',
+      'The Community Leaders Program was launched with the intention of fostering community growth, education, and participation. The program leverages the expertise of Community Leaders to improve the overall ecosystem and user experience by creating a more inclusive, knowledgeable, and vocal community. However, this is geared to individuals rather than businesses.',
     startDate:
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
@@ -32,7 +32,7 @@ export const votesArray = [
         : 1183154926,
     title: 'Future projects and partnerships',
     description:
-      'The Algodex team is always looking for new opportunities to expand our ecosystem and reach. We are considering building a business to business Software as a Service (SaaS) platform that would leverage the Algorand Blockchain and the concept of psuedoanonymity to increase the transparency of business operations for critical stakeholders while simultenously obfuscating those operations from the general public. Regardless of the outcome, the team is comitted to maintaining the operation of our flaghship decentralized exchange and the continued development of the Algorand ecosystem.',
+      'The Algodex team is considering building a business to business Software as a Service (SaaS) platform that would leverage the Algorand Blockchain and the concept of a public ledger to provide visibility and transparency for business operations to critical stakeholders.',
     startDate:
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
