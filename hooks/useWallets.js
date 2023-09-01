@@ -5,6 +5,7 @@ import { logInfo } from 'services/logRemote'
 import { useAlgodex } from '@/hooks'
 import useMyAlgoConnect from './useMyAlgoConnect'
 import usePeraConnection from './usePeraConnection'
+import useDeflyConnection from './useDeflyConnection'
 import useWalletConnect from './useWalletConnect'
 import { WalletReducerContext } from './WalletsReducerProvider'
 import useAccountInfo from './useAccountInfo'
@@ -38,6 +39,7 @@ function _mergeAddresses(a, b) {
 function useWallets(closeDropdown) {
   const {
     setPeraWallet,
+    setDeflyWallet,
     setWalletConnect,
     setActiveWallet,
     setAddressesNew,
@@ -62,7 +64,13 @@ function useWallets(closeDropdown) {
         setAddressesNew({ type: 'peraWallet', addresses: mergedPrivateAddresses })
         setActiveWallet(mergedPrivateAddresses[0])
       }
-
+      if (_addresses[0]?.type === 'wallet-connect-defly') {
+        const accounts = await http.indexer.fetchAccounts(_addresses)
+        const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
+        setDeflyWallet(mergedPrivateAddresses[0])
+        setAddressesNew({ type: 'deflyWallet', addresses: mergedPrivateAddresses })
+        setActiveWallet(mergedPrivateAddresses[0])
+      }
       if (_addresses[0]?.type === 'wallet-connect-general') {
         const accounts = await http.indexer.fetchAccounts(_addresses)
         const mergedPrivateAddresses = _mergeAddresses(_addresses, accounts)
@@ -83,7 +91,10 @@ function useWallets(closeDropdown) {
       disconnectWallet({ type: 'peraWallet', address: _addresses[0] })
       setAddressesNew({ type: 'peraWallet', addresses: [] })
     }
-
+    if (_addresses[0]?.type === 'wallet-connect-defly') {
+      disconnectWallet({ type: 'deflyWallet', address: _addresses[0] })
+      setAddressesNew({ type: 'deflyWallet', addresses: [] })
+    }
     if (_addresses[0]?.type === 'wallet-connect-general') {
       disconnectWallet({ type: 'walletConnect', address: _addresses[0] })
       setAddressesNew({ type: 'walletConnect', addresses: [] })
@@ -114,7 +125,11 @@ function useWallets(closeDropdown) {
     disconnect: peraDisconnect,
     connector: _peraConnector
   } = usePeraConnection(handleConnect, handleDisconnect)
-
+  const {
+    connect: deflyConnect,
+    disconnect: deflyDisconnect,
+    connector: _deflyConnector
+  } = useDeflyConnection(handleConnect, handleDisconnect)
   const {
     connect: walletconnectConnect,
     disconnect: walletconnectDisconnect,
@@ -133,10 +148,13 @@ function useWallets(closeDropdown) {
   return {
     myAlgoConnect,
     peraConnect,
+    deflyConnect,
     peraDisconnect,
+    deflyDisconnect,
     myAlgoDisconnect,
     myAlgoConnector,
     peraConnector: _peraConnector,
+    deflyConnector: _deflyConnector,
     walletconnectConnect,
     walletconnectDisconnect,
     walletconnectConnector

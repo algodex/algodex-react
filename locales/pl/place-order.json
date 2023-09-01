@@ -26,5 +26,6 @@
     "order-size-filtering": "Filtrowanie według rozmiaru zamówienia",
     "less-lag": "Mniej opóźnień",
     "better-execution": "Lepsze wykonanie",
-    "fund-wallet":"Zasil swój portfel większą ilością ALGO przed złożeniem zamówienia!"
+    "fund-wallet":"Zasil swój portfel większą ilością ALGO przed złożeniem zamówienia!",
+    "asset-success": "Pomyślnie utworzono zasób"
 }

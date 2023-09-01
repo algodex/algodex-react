@@ -26,5 +26,6 @@
   "order-size-filtering": "Rendelési méret szűrés",
   "less-lag": "Kevesebb késés",
   "better-execution": "Jobb kivitelezés",
-  "fund-wallet": "Kérjük, a megrendelések leadása előtt finanszírozza pénztárcáját több ALGO-val!"
+  "fund-wallet": "Kérjük, a megrendelések leadása előtt finanszírozza pénztárcáját több ALGO-val!",
+  "asset-success": "Az elem sikeresen létrehozva"
 }

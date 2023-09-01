@@ -122,6 +122,7 @@ export function WalletView(props) {
   const {
     // myAlgoConnector,
     peraDisconnect: _peraDisconnect,
+    deflyDisconnect: _deflyDisconnect,
     myAlgoDisconnect: _myAlgoDisconnect,
     walletconnectDisconnect
   } = useWallets(activeWallet)
@@ -136,12 +137,18 @@ export function WalletView(props) {
     },
     [_peraDisconnect]
   )
-
+  const deflyDisconnect = useCallback(
+    (targetWallet) => {
+      _deflyDisconnect(targetWallet)
+    },
+    [_deflyDisconnect]
+  )
   const walletDisconnectMap = {
     'my-algo-wallet': (wallet) => {
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-defly': (wallet) => deflyDisconnect(wallet),
     'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
   }
 
@@ -254,11 +261,12 @@ export function WalletOptionsListComp(props) {
     setMyAlgoAddresses
   } = props
   const { http } = useAlgodex()
-  const { peraConnect, myAlgoConnect, walletconnectConnect } = useWallets()
+  const { peraConnect, myAlgoConnect, walletconnectConnect, deflyConnect } = useWallets()
 
   const WALLETS_CONNECT_MAP = {
     'my-algo-wallet': () => myAlgoConnect(),
     'pera-connect': () => peraConnect(),
+    'defly-connect': () => deflyConnect(),
     'wallet-connect-general': () => walletconnectConnect()
   }
 
@@ -278,6 +286,9 @@ export function WalletOptionsListComp(props) {
   const peraConnectOnClick = useCallback(() => {
     WALLETS_CONNECT_MAP['pera-connect']()
   }, [WALLETS_CONNECT_MAP])
+  const deflyConnectOnClick = useCallback(() => {
+    WALLETS_CONNECT_MAP['defly-connect']()
+  }, [WALLETS_CONNECT_MAP])
 
   const walletconnectGeneralOnClick = () => {
     WALLETS_CONNECT_MAP['wallet-connect-general']()
@@ -287,6 +298,15 @@ export function WalletOptionsListComp(props) {
     if (isConnected) {
       const peraAddr = isConnected && addresses.filter((addr) => addr.type === 'wallet-connect')
       return peraAddr.length > 0
+    }
+    return false
+  }, [isConnected, addresses])
+
+  const isDeflyConnected = useMemo(() => {
+    if (isConnected) {
+      const deflyAddr =
+        isConnected && addresses.filter((addr) => addr.type === 'wallet-connect-defly')
+      return deflyAddr.length > 0
     }
     return false
   }, [isConnected, addresses])
@@ -315,7 +335,9 @@ export function WalletOptionsListComp(props) {
                 myAlgoOnClick={myAlgoOnClick}
                 walletconnectGeneralOnClick={walletconnectGeneralOnClick}
                 peraConnectOnClick={() => peraConnectOnClick()}
+                deflyConnectOnClick={() => deflyConnectOnClick()}
                 isPeraConnected={isPeraConnected}
+                isDeflyConnected={isDeflyConnected}
               />
             </Box>
             <DropdownFooter />
@@ -358,6 +380,7 @@ function WalletConnect() {
   const {
     // myAlgoConnector,
     peraDisconnect,
+    deflyDisconnect,
     myAlgoDisconnect,
     walletconnectDisconnect
   } = useWallets(activeWallet)
@@ -367,6 +390,7 @@ function WalletConnect() {
       myAlgoDisconnect(wallet)
     },
     'wallet-connect': (wallet) => peraDisconnect(wallet),
+    'wallet-connect-defly': (wallet) => deflyDisconnect(wallet),
     'wallet-connect-general': (wallet) => walletconnectDisconnect(wallet)
   }
 

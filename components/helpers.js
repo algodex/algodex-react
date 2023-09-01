@@ -14,6 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import algosdk from 'algosdk'
 import toast from 'react-hot-toast'
 
 export const formatUSDPrice = (amount) => {
@@ -21,7 +22,10 @@ export const formatUSDPrice = (amount) => {
 }
 
 export const truncatedWalletAddress = (addr, size) => {
-  return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
+  if (addr) {
+    return `${subStringFn(0, size, addr)}....${subStringFn(addr.length - size, addr.length, addr)}`
+  }
+  return ''
 }
 
 export const subStringFn = (start, end, string) => {
@@ -49,6 +53,24 @@ export const assetVeryShortNameFn = (asset) => {
   return asset?.name && asset.name.length >= 1 ? asset.name : 'NO-NAME'
 }
 
+export const algodClient = () => {
+  const algodToken = ''
+  const algodServer = 'https://node.algoexplorerapi.io/'
+  const algodPort = ''
+
+  return new algosdk.Algodv2(algodToken, algodServer, algodPort)
+}
+
+export const isValidAddr = async (addr) => {
+  //Check your if account exist on Algorand
+  try {
+    await algodClient().accountInformation(addr).do()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
 export const getWalletLogo = (wallet) => {
   if (typeof wallet === 'undefined' || typeof wallet.type === 'undefined') {
     throw new TypeError('Must have a valid wallet!')
@@ -56,6 +78,8 @@ export const getWalletLogo = (wallet) => {
   switch (wallet.type) {
     case 'wallet-connect':
       return '/Pera-logo.png'
+    case 'wallet-connect-defly':
+      return '/Defly-logo.jpg'
     case 'my-algo-wallet':
       return '/My-Algo-Wallet-icon.svg'
     case 'wallet-connect-general':

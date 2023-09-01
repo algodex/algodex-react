@@ -26,5 +26,6 @@
     "order-size-filtering": "Filtraggio delle dimensioni dell'ordine",
     "less-lag": "Meno ritardo",
     "better-execution": "Migliore esecuzione",
-    "fund-wallet":"Si prega di finanziare il portafoglio con più ALGO prima di effettuare ordini!"
+    "fund-wallet":"Si prega di finanziare il portafoglio con più ALGO prima di effettuare ordini!",
+    "asset-success": "Asset creato correttamente"
 }

@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "dev-mainnet": "env-cmd -f .env.mainnet next dev",
     "build-start": "cross-env DISABLE_SENTRY=true NODE_ENV=test next build && next start",
+    "build-start-prod": "cross-env DISABLE_SENTRY=true NODE_ENV=mainnet next build && next start",
     "start": "next start",
     "test": "concurrently \"npm:test-*\"",
     "test-lint": "cp .env.mainnet .env.production && next lint",
@@ -30,6 +32,7 @@
   },
   "dependencies": {
     "@algodex/algodex-sdk": "^2.2.5",
+    "@blockshake/defly-connect": "^1.1.5",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
@@ -59,6 +62,7 @@
     "crypto-browserify": "^3.12.0",
     "csstype": "^3.0.11",
     "dayjs": "^1.11.0",
+    "env-cmd": "^10.1.0",
     "framer-motion": "^6.3.0",
     "immer": "^9.0.12",
     "jest-canvas-mock": "^2.4.0",

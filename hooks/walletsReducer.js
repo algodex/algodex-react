@@ -3,6 +3,7 @@ export const initialState = {
   activeWallet: null,
   signedIn: false,
   peraWallet: null,
+  deflyWallet: null,
   walletConnect: null,
   myAlgoAddresses: []
 }
@@ -18,6 +19,7 @@ export function walletReducer(state, { action, payload }) {
         case 'myAlgo':
           _addresses.push(...state.myAlgoAddresses)
           if (state.peraWallet) _addresses.push(state.peraWallet)
+          if (state.deflyWallet) _addresses.push(state.deflyWallet)
           if (state.walletConnect) _addresses.push(state.walletConnect)
 
           return { ...state, addresses: [..._addresses] }
@@ -28,16 +30,23 @@ export function walletReducer(state, { action, payload }) {
           // const _addresses = []
           // arrange it so peraWallet is first in the array since it triggered the event
           if (state.peraWallet) _addresses.push(state.peraWallet)
+          if (state.deflyWallet) _addresses.push(state.deflyWallet)
           _addresses.push(...state.myAlgoAddresses)
           if (state.walletConnect) _addresses.push(state.walletConnect)
 
           return { ...state, addresses: [..._addresses] }
+        case 'deflyWallet':
+          if (state.deflyWallet) _addresses.push(state.deflyWallet)
+          _addresses.push(...state.myAlgoAddresses)
+          if (state.peraWallet) _addresses.push(state.peraWallet)
+          if (state.walletConnect) _addresses.push(state.walletConnect)
 
+          return { ...state, addresses: [..._addresses] }
         case 'walletConnect':
           if (state.walletConnect) _addresses.push(state.walletConnect)
           _addresses.push(...state.myAlgoAddresses)
           if (state.peraWallet) _addresses.push(state.peraWallet)
-
+          if (state.deflyWallet) _addresses.push(state.deflyWallet)
           return { ...state, addresses: [..._addresses] }
 
         // return { ...state, addresses: [...state.addresses, ...addresses] }
@@ -48,7 +57,9 @@ export function walletReducer(state, { action, payload }) {
     case 'setPeraWallet':
       localStorage.setItem('peraWallet', JSON.stringify(payload))
       return { ...state, peraWallet: payload }
-
+    case 'setDeflyWallet':
+      localStorage.setItem('deflyWallet', JSON.stringify(payload))
+      return { ...state, deflyWallet: payload }
     case 'setWalletConnect':
       localStorage.setItem('walletConnectWallet', JSON.stringify(payload))
       return { ...state, walletConnect: payload }
@@ -76,10 +87,12 @@ export function walletReducer(state, { action, payload }) {
           _state.walletConnect = null
           localStorage.removeItem('walletConnectWallet')
 
+        case 'deflyWallet':
+          _state.deflyWallet = null
+          localStorage.removeItem('deflyWallet')
         case 'peraWallet':
           _state.peraWallet = null
           localStorage.removeItem('peraWallet')
-
         case 'myAlgo':
           const _remainingAlgoAddresses = state.myAlgoAddresses.filter((wallet) => {
             return wallet.address !== address.address

@@ -26,5 +26,6 @@
   "order-size-filtering": "Filtrado por tamaño de pedido",
   "less-lag": "Menos retraso",
   "better-execution": "Mejor ejecución",
-  "fund-wallet": "¡Por favor, financie su billetera con más ALGO antes de realizar pedidos!"
+  "fund-wallet": "¡Por favor, financie su billetera con más ALGO antes de realizar pedidos!",
+  "asset-success": "Activo creado con éxito"
 }

@@ -26,5 +26,6 @@
   "order-size-filtering": "Filtrovanie veľkosti objednávky",
   "less-lag": "Menej oneskorenia",
   "better-execution": "Lepšie prevedenie",
-  "fund-wallet":"Pred zadaním objednávok si zafinancujte peňaženku s viacerými algo!"
+  "fund-wallet":"Pred zadaním objednávok si zafinancujte peňaženku s viacerými algo!",
+  "asset-success": "Dielo bolo úspešne vytvorené"
 }

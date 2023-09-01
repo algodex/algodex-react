@@ -26,5 +26,6 @@
     "order-size-filtering": "Filtrering av ordrestørrelse",
     "less-lag": "Mindre etterslep",
     "better-execution": "Bedre utførelse",
-    "fund-wallet":"Vennligst finansier lommeboken din med mer ALGO før du legger inn bestillinger!"
+    "fund-wallet":"Vennligst finansier lommeboken din med mer ALGO før du legger inn bestillinger!",
+    "asset-success": "Innholdselementet er opprettet"
 }
