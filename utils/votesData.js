@@ -1,7 +1,7 @@
 export const votesArray = [
   {
     appId: 290524200,
-    title: 'Algodex Community Leaders Program',
+    title: 'Test vote',
     description:
       'The Community Leaders Program was launched with the intention of fostering community growth, education, and participation. The program leverages the expertise of Community Leaders to improve the overall ecosystem and user experience by creating a more inclusive, knowledgeable, and vocal community. However, this is geared to individuals rather than businesses.',
     startDate:
@@ -12,7 +12,7 @@ export const votesArray = [
     endDate:
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
-        ? '2023-08-31T19:30:34.000Z'
+        ? '2023-09-31T19:30:34.000Z'
         : '2023-09-09T00:00:00.000Z',
     question: {
       title: 'Should we continue to support the community leaders program?',
