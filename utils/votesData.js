@@ -8,7 +8,7 @@ export const votesArray = [
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
         ? '2023-08-29T19:30:34.000Z'
-        : '2023-09-02T00:00:00.000Z',
+        : '2023-08-02T00:00:00.000Z',
     endDate:
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
