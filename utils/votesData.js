@@ -1,10 +1,6 @@
 export const votesArray = [
   {
-    appId:
-      process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
-      process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
-        ? 287726836
-        : 1183156086,
+    appId: 290524200,
     title: 'Algodex Community Leaders Program',
     description:
       'The Community Leaders Program was launched with the intention of fostering community growth, education, and participation. The program leverages the expertise of Community Leaders to improve the overall ecosystem and user experience by creating a more inclusive, knowledgeable, and vocal community. However, this is geared to individuals rather than businesses.',
