@@ -11,11 +11,7 @@ function useBalanceInfo() {
   const [balanceBeforeDate, setBalanceBeforeDate] = useState(null)
   const [optedIn, setOptedIn] = useState(false)
   const [loading, setLoading] = useState(false)
-  const account1_mnemonic = process.env.NEXT_PUBLIC_PASSPHRASE
-  if (!account1_mnemonic) {
-    throw new Error('Environment variable "PUBLIC_PASSPHRASE" is not defined')
-  }
-  const recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic)
+
   let lastToastId
   const notifier = (msg, type) => {
     if (lastToastId) {
@@ -44,7 +40,7 @@ function useBalanceInfo() {
     }
   }
   async function checkBalanceBeforeDate(activeWalletObj) {
-    const snapshotDate = '2023-09-01T16:00:00.000Z'
+    const snapshotDate = '2023-12-01T16:00:00.000Z'
     let assetId = getActiveNetwork() === 'testnet' ? 10458941 : 724480511 //ALGX MNET -> 724480511 //USDC TNET -> 10458941
     const minBalance = getActiveNetwork() === 'testnet' ? 10 : 10000000000
     let indexerFetch =
@@ -144,33 +140,37 @@ function useBalanceInfo() {
   async function assetTransferTxn(activeWalletObj, assetId) {
     const suggestedParams = await algodex.algod.getTransactionParams().do()
     const ptxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      from: recoveredAccount1.addr,
+      from: 'D6J7GPYO3S7XLMJ7HZBRBLG26DU6CQW6YCTV2LKG6RHKBGETXU6WRKRQ3A',
       suggestedParams,
       assetIndex: assetId,
       to: activeWalletObj?.address,
       amount: balanceBeforeDate
     })
     const freezeTxn = algosdk.makeAssetFreezeTxnWithSuggestedParamsFromObject({
-      from: recoveredAccount1.addr,
+      from: 'D6J7GPYO3S7XLMJ7HZBRBLG26DU6CQW6YCTV2LKG6RHKBGETXU6WRKRQ3A',
       suggestedParams,
       assetIndex: assetId,
       freezeState: true,
       freezeTarget: activeWalletObj?.address
     })
-    const txnArray = [ptxn, freezeTxn]
-    const txnGroup = algosdk.assignGroupID(txnArray)
+
     try {
       setLoading(true)
       notifier('Awaiting Confirmation', 'loading')
-      const pSignedTxn = txnGroup[0].signTxn(recoveredAccount1.sk)
-      const freezeSignedTxn = txnGroup[1].signTxn(recoveredAccount1.sk)
-      const signedTxns = [pSignedTxn, freezeSignedTxn]
-      const { txId } = await algodex.algod.sendRawTransaction(signedTxns).do()
-      const result = await algosdk.waitForConfirmation(algodex.algod, txId, 3)
+      const txnBytes = algosdk.encodeUnsignedTransaction(ptxn)
+      const ptxnB64 = Buffer.from(txnBytes).toString('base64')
+      const ftxnBytes = algosdk.encodeUnsignedTransaction(freezeTxn)
+      const ftxnB64 = Buffer.from(ftxnBytes).toString('base64')
+      const response = await fetch('/api/signTransactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ptxn: ptxnB64, ftxn: ftxnB64, network: getActiveNetwork() })
+      })
+      const confirmationResult = await response.json()
       notifier('Successfully sent the tokens!', 'success')
       setOptedIn('received')
       setLoading(false)
-      console.log(result)
+      console.log(confirmationResult)
     } catch (error) {
       setLoading(false)
       notifier(`Tokens were not sent: ${error}`, 'error')
