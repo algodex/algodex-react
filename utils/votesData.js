@@ -80,7 +80,7 @@ export const votesArray = [
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK &&
       process.env.NEXT_PUBLIC_ALGORAND_NETWORK.toLowerCase() === 'testnet'
         ? 383002681
-        : 1183152866,
+        : 383002681,
     title: 'Server-side signing',
     description:
       'The ecosystem wide MyAlgo wallet breach has affected our ability to provide liquidity for ALGX. The Algodex team is considering initiating a token swap on a 1-to-1 basis to restore equitable liquidity to our token. This would be a one time event and would not be repeated.',
