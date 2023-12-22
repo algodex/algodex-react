@@ -43,6 +43,45 @@ import NFTView from '@/components/Asset/NFTView'
 
 import _ from 'lodash'
 
+const toExplorerAsset = (data) => {
+  const {
+    index: id,
+    'creation-txid': txid,
+    'asset-tx-counter': txns,
+    deleted,
+    verification,
+    params
+  } = data.asset
+  const {
+    decimals,
+    url,
+    name: fullName,
+    'unit-name': name,
+    total,
+    'circulating-supply': circulating
+  } = params
+
+  const res = {
+    id,
+    deleted,
+    txid,
+    decimals,
+    name: name || fullName || null,
+    txns,
+    fullName,
+    circulating,
+    verified: typeof verification !== 'undefined',
+    url: url || null,
+    total
+  }
+
+  if (typeof verification !== 'undefined') {
+    console.log(verification)
+    res.verified_info = verification
+  }
+  return res
+}
+
 // const peraWalletRehydate = new PeraWalletConnect()
 
 /**
@@ -105,7 +144,8 @@ export async function getStaticProps({ params: { id } }) {
 
   const api = getAlgodexApi()
   try {
-    staticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(id)
+    staticExplorerAsset = await fetch(`https://mainnet-idx.algonode.cloud/v2/assets/${id}`) //no longer supporting testnet
+    staticExplorerAsset = await staticExplorerAsset.json()
     originalStaticExplorerAsset = staticExplorerAsset
   } catch ({ response: { status } }) {
     switch (status) {
@@ -125,7 +165,7 @@ export async function getStaticProps({ params: { id } }) {
     if (typeof staticAssetPrice.isTraded === 'undefined') {
       staticAssetPrice = {
         isTraded: false,
-        id: staticExplorerAsset.id
+        id: staticExplorerAsset.asset.index
       }
     }
   }
@@ -211,7 +251,11 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
       const api = getAlgodexApi()
 
       try {
-        const _realStaticExplorerAsset = await api.http.explorer.fetchExplorerAssetInfo(assetId)
+        let _realStaticExplorerAsset = await fetch(
+          `https://mainnet-idx.algonode.cloud/v2/assets/${assetId}`
+        )
+        _realStaticExplorerAsset = await _realStaticExplorerAsset.json()
+
         _realStaticExplorerAsset.isRestricted =
           getIsRestricted(assetId) && getAssetTotalStatus(_realStaticExplorerAsset.total)
         setRealStaticExplorerAsset(_realStaticExplorerAsset)
@@ -225,7 +269,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   useEffect(() => {
     if (
       realStaticExplorerAsset !== undefined &&
-      realStaticExplorerAsset.id === parseInt(query.id)
+      realStaticExplorerAsset.asset.index === parseInt(query.id)
     ) {
       setRealStaticExplorerAsset(realStaticExplorerAsset)
       return
@@ -250,7 +294,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
   const _asset = useMemo(() => {
     if (
       typeof staticExplorerAsset !== 'undefined' &&
-      staticExplorerAsset.id !== parseInt(query.id)
+      staticExplorerAsset.asset.index !== parseInt(query.id)
     ) {
       console.error('ID mismatch! ', { staticExplorerAsset }, { queryId: parseInt(query.id) })
     }
@@ -258,7 +302,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     let _asset = undefined
     if (
       typeof staticExplorerAsset !== 'undefined' &&
-      staticExplorerAsset.id === parseInt(query.id)
+      staticExplorerAsset.asset.index === parseInt(query.id)
     ) {
       _asset = staticExplorerAsset
       if (realStaticExplorerAsset?.name && realStaticExplorerAsset?.id === parseInt(query.id)) {
@@ -269,7 +313,7 @@ function TradePage({ staticExplorerAsset, originalStaticExplorerAsset, deviceTyp
     } else {
       _asset = { ...realStaticExplorerAsset }
     }
-    setAsset(_asset)
+    setAsset(toExplorerAsset(_asset))
 
     return _asset
   }, [query.id, realStaticExplorerAsset, staticExplorerAsset])
