@@ -46,7 +46,7 @@ export const copyAddress = (address) => {
 export const setExplorerLink = (addr, network) => {
   return network === 'testnet'
     ? `https://testnet.algoexplorer.io/address/${addr}`
-    : `https://algoexplorer.io/address/${addr}`
+    : `https://explorer.perawallet.app/accounts/${addr}`
 }
 
 export const assetVeryShortNameFn = (asset) => {

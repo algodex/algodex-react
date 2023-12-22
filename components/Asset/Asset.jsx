@@ -100,12 +100,12 @@ export function AssetInfo({ asset }) {
   const { t } = useTranslation('assets')
   const setShowAssetInfo = useUserStore((state) => state.setShowAssetInfo)
   const description = asset.description || asset?.verified_info?.description || 'N/A'
-  const activeNetwork = getActiveNetwork();
+  const activeNetwork = getActiveNetwork()
 
   const explorerURL =
     activeNetwork === 'testnet'
       ? `https://testnet.algoexplorer.io/asset/`
-      : `https://algoexplorer.io/asset/`
+      : `https://explorer.perawallet.app/assets/`
 
   const onClick = useCallback(() => {
     setShowAssetInfo(false)
@@ -144,7 +144,7 @@ export function AssetInfo({ asset }) {
     }
     return null
   }, [asset.url])
-  
+
   return (
     <Container>
       <InfoContainer>
@@ -160,7 +160,13 @@ export function AssetInfo({ asset }) {
           </Button>
         ) : null}
         <HeaderContainer>
-          <Typography className='leading-8' variant="h3" data-testid="asset-info-asa-name" color="gray.100" mb={2}>
+          <Typography
+            className="leading-8"
+            variant="h3"
+            data-testid="asset-info-asa-name"
+            color="gray.100"
+            mb={2}
+          >
             {renderName()}
           </Typography>
           {renderLink()}
@@ -170,7 +176,12 @@ export function AssetInfo({ asset }) {
             <Typography variant="body_tiny_cap" color="gray.500">
               {t('description')}
             </Typography>
-            <Typography className="leading-normal" variant="h6" color="gray.400" data-testid="asset-info-desc">
+            <Typography
+              className="leading-normal"
+              variant="h6"
+              color="gray.400"
+              data-testid="asset-info-desc"
+            >
               {description}
             </Typography>
           </InfoItem>
@@ -179,7 +190,9 @@ export function AssetInfo({ asset }) {
               {t('circulating-supply')}
             </Typography>
             <Typography data-testid="asset-info-circ-supply" variant="h6" color="gray.400">
-              {asset.circulating ? (asset.circulating / (10**asset.decimals)).toLocaleString() : 'NA'}
+              {asset.circulating
+                ? (asset.circulating / 10 ** asset.decimals).toLocaleString()
+                : 'NA'}
             </Typography>
           </InfoItem>
           <InfoItem halfWidth>
@@ -187,7 +200,7 @@ export function AssetInfo({ asset }) {
               {t('total-supply')}
             </Typography>
             <Typography data-testid="asset-info-total-supply" variant="h6" color="gray.400">
-              {(asset.total / (10**asset.decimals)).toLocaleString()}
+              {(asset.total / 10 ** asset.decimals).toLocaleString()}
             </Typography>
           </InfoItem>
           <InfoItem>

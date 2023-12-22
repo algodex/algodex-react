@@ -20,11 +20,11 @@ import styled from '@emotion/styled'
 import { Box, Button, Grid, Stack, Typography, TextField } from '@mui/material'
 import Image from 'next/image'
 import Link from '@/components/Nav/Link'
-import VerifiedIcon from '@mui/icons-material/Verified';
+import VerifiedIcon from '@mui/icons-material/Verified'
 import theme from 'theme'
 import Icon from 'components/Icon'
 import { withNFTDetailsQuery } from '../../../hooks'
-import LaunchIcon from '@mui/icons-material/Launch';
+import LaunchIcon from '@mui/icons-material/Launch'
 import { truncatedWalletAddress } from 'components/helpers'
 import { getActiveNetwork } from 'services/environment'
 import detectMobileDisplay from '@/utils/detectMobileDisplay'
@@ -51,7 +51,10 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
   const containerRef = useRef()
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const activeNetwork = getActiveNetwork()
-  const algoURL = activeNetwork === 'testnet' ? `https://testnet.algoexplorer.io/asset/${nftDetails.id}` : `https://algoexplorer.io/asset/${nftDetails.id}`
+  const algoURL =
+    activeNetwork === 'testnet'
+      ? `https://testnet.algoexplorer.io/asset/${nftDetails.id}`
+      : `https://explorer.perawallet.app/assets/${nftDetails.id}`
   const NFTData = {
     imageUrl: `https://ipfs.algonft.tools/ipfs/${nftDetails.url}`,
     asset: nftDetails.name,
@@ -66,7 +69,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
     prices: {
       lastSalePrice: asset?.price_info?.price || 0,
       avgSalePrice: '',
-      collectionAverage: '',
+      collectionAverage: ''
     },
     currentHolderAddr: nftDetails.txid,
     algoExplorerLink: algoURL
@@ -94,7 +97,7 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
     return (
       <Container ref={containerRef} height={containerSize.height}>
         <Box
-          className='overflow-y-scroll overflow-x-hidden'
+          className="overflow-y-scroll overflow-x-hidden"
           sx={{
             marginTop: '0.5rem',
             padding: '1rem',
@@ -104,23 +107,54 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
         >
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" alignItems="center" mr={8}>
-              <VerifiedIcon sx={{ width: 18, height: 18, color: theme.colors.gray['000'] }} />&nbsp;
-              <Typography variant="h6" fontWeight="bold" color={theme.colors.gray['000']}>{NFTData.asset}</Typography>
-              <Typography variant="h6" color={theme.colors.gray['500']}>/ALGO</Typography>
+              <VerifiedIcon sx={{ width: 18, height: 18, color: theme.colors.gray['000'] }} />
+              &nbsp;
+              <Typography variant="h6" fontWeight="bold" color={theme.colors.gray['000']}>
+                {NFTData.asset}
+              </Typography>
+              <Typography variant="h6" color={theme.colors.gray['500']}>
+                /ALGO
+              </Typography>
             </Stack>
             <Box>
-              <Button onClick={() => setActiveView('nft-image')} sx={{ backgroundColor: theme.colors.green['500'], width: '6rem', height: '1.5rem', marginRight: '1rem' }} variant="primary">
+              <Button
+                onClick={() => setActiveView('nft-image')}
+                sx={{
+                  backgroundColor: theme.colors.green['500'],
+                  width: '6rem',
+                  height: '1.5rem',
+                  marginRight: '1rem'
+                }}
+                variant="primary"
+              >
                 <Typography variant="body_small_medium">IMAGE</Typography>
               </Button>
-              {asset.isTraded && <Button onClick={() => setActiveView('chart')} sx={{ width: '6rem', height: '1.5rem', border: '1px solid #718096', color: theme.colors.gray['000'] }} variant="outlined">
-                <Typography variant="body_small_medium">CHART</Typography>
-              </Button>
-              }
+              {asset.isTraded && (
+                <Button
+                  onClick={() => setActiveView('chart')}
+                  sx={{
+                    width: '6rem',
+                    height: '1.5rem',
+                    border: '1px solid #718096',
+                    color: theme.colors.gray['000']
+                  }}
+                  variant="outlined"
+                >
+                  <Typography variant="body_small_medium">CHART</Typography>
+                </Button>
+              )}
             </Box>
-
           </Stack>
           <Stack>
-            <Typography variant='subtitle_medium' mb={1} mt={1} fontWeight="500" color={theme.colors.gray['400']}>Collection: {NFTData.collection.name}</Typography>
+            <Typography
+              variant="subtitle_medium"
+              mb={1}
+              mt={1}
+              fontWeight="500"
+              color={theme.colors.gray['400']}
+            >
+              Collection: {NFTData.collection.name}
+            </Typography>
           </Stack>
           <Grid container spacing={{ xs: 2, md: 3 }}>
             {/* <Grid item xs={7}> */}
@@ -130,93 +164,127 @@ export function NFTView({ asset, setActiveView, activeView, ...props }) {
                   backgroundPosition: detectMobileDisplay() ? 'center' : 'left',
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: 'contain',
-                  width: '100%', 
+                  width: '100%',
                   height: `${containerSize.height - 118}px`,
                   backgroundImage: `url(${NFTData.imageUrl})`
                 }}
-              >
-              </Box>
+              ></Box>
               <Box>
                 <Stack direction="row">
-                  <Typography mr={1} sx={{ color: theme.colors.white }} variant='body_small'>{asset.id}</Typography>
-                  <Typography mr={1} sx={{ color: theme.colors.white }} variant='body_small'>1/1</Typography>
-                  <Typography mr={1} sx={{ color: theme.colors.white }} variant='body_small_bold'>{NFTData.collection.name}</Typography>
+                  <Typography mr={1} sx={{ color: theme.colors.white }} variant="body_small">
+                    {asset.id}
+                  </Typography>
+                  <Typography mr={1} sx={{ color: theme.colors.white }} variant="body_small">
+                    1/1
+                  </Typography>
+                  <Typography mr={1} sx={{ color: theme.colors.white }} variant="body_small_bold">
+                    {NFTData.collection.name}
+                  </Typography>
                 </Stack>
               </Box>
             </Grid>
             {/* <Grid item xs={5}> */}
             <Grid item xs={12} sm={12} md={5}>
-              {NFTData.description && <Box sx={{
-                border: '1px solid #FFFFFF',
-                borderRadius: '3px',
-                padding: '5px'
-              }}>
-                <Box>
-                  <Typography variant='subtitle' sx={{ color: theme.colors.white }}>Collection Description:</Typography>
+              {NFTData.description && (
+                <Box
+                  sx={{
+                    border: '1px solid #FFFFFF',
+                    borderRadius: '3px',
+                    padding: '5px'
+                  }}
+                >
+                  <Box>
+                    <Typography variant="subtitle" sx={{ color: theme.colors.white }}>
+                      Collection Description:
+                    </Typography>
+                  </Box>
+                  <TextField
+                    variant="outlined"
+                    sx={{
+                      width: '100%',
+                      '.MuiOutlinedInput-root': {
+                        padding: 0,
+                        color: '#FFFFFF',
+                        fontSize: 14,
+                        fontWeight: 500
+                      },
+                      '.MuiOutlinedInput-notchedOutline': {
+                        border: 'unset'
+                      }
+                    }}
+                    value={NFTData.description}
+                    multiline
+                    maxRows={7}
+                  />
                 </Box>
-                <TextField
+              )}
+
+              <Stack
+                mt={3}
+                direction="column"
+                className="hey"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Button
                   variant="outlined"
-                  sx={{ 
-                    width: '100%',
-                    '.MuiOutlinedInput-root': {
-                      padding: 0,
-                      color: '#FFFFFF',
-                      fontSize: 14,
-                      fontWeight: 500
-                    },
-                    '.MuiOutlinedInput-notchedOutline': {
-                      border: 'unset',
+                  sx={{
+                    border: '2px solid #FFFFFF',
+                    borderRadius: '3px',
+                    padding: '5px',
+                    '&:hover': {
+                      border: '2px solid #CBD5E0'
                     }
                   }}
-                  value={NFTData.description}
-                  multiline
-                  maxRows={7}
-                />
-              </Box>
-              }
-
-              <Stack mt={3} direction="column" className='hey' justifyContent="center" alignItems="center">
-                <Button variant='outlined' sx={{
-                  border: '2px solid #FFFFFF',
-                  borderRadius: '3px',
-                  padding: '5px',
-                  '&:hover': {
-                    border: '2px solid #CBD5E0'
-                  }
-                }}>
+                >
                   <Stack direction="row" alignItems="center">
                     <Link href={NFTData.nftExplorerLink} data-testid="nft-url" className="flex">
-                      <Typography variant='body_small_bold' sx={{ color: theme.colors.white }}>View Collection on NFTExplorer</Typography>&nbsp;
+                      <Typography variant="body_small_bold" sx={{ color: theme.colors.white }}>
+                        View Collection on NFTExplorer
+                      </Typography>
+                      &nbsp;
                       <LaunchIcon style={{ width: 18, height: 18, color: theme.colors.white }} />
                     </Link>
                   </Stack>
                 </Button>
                 <Stack direction="row" alignItems="center" justifyContent="center" mt={4}>
-                  <Typography variant='subtitle' sx={{ color: theme.colors.gray['000'] }}>Last Sale Price</Typography>&nbsp;
+                  <Typography variant="subtitle" sx={{ color: theme.colors.gray['000'] }}>
+                    Last Sale Price
+                  </Typography>
+                  &nbsp;
                   <Stack direction="row" alignItems="center" justifyContent="center">
-                    <Typography variant='subtitle' sx={{ color: theme.colors.white }}>{NFTData?.prices.lastSalePrice}</Typography>&nbsp;
+                    <Typography variant="subtitle" sx={{ color: theme.colors.white }}>
+                      {NFTData?.prices.lastSalePrice}
+                    </Typography>
+                    &nbsp;
                     <Icon color="gray" fillGradient={100} use="algoLogo" size={0.725} />
                   </Stack>
                 </Stack>
 
                 <Stack direction="row" alignItems="center" justifyContent="center" mt={4}>
-                  <Typography variant='subtitle' sx={{ color: theme.colors.white }}>Current Holder: {truncatedWalletAddress(NFTData.currentHolderAddr, 4)}</Typography>
+                  <Typography variant="subtitle" sx={{ color: theme.colors.white }}>
+                    Current Holder: {truncatedWalletAddress(NFTData.currentHolderAddr, 4)}
+                  </Typography>
                 </Stack>
 
-                <Button variant='outlined' sx={{
-                  border: '2px solid #FFFFFF',
-                  borderRadius: '3px',
-                  padding: '5px',
-                  marginTop: '2rem',
-                  '&:hover': {
-                    border: '2px solid #CBD5E0'
-                  }
-                }}>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    border: '2px solid #FFFFFF',
+                    borderRadius: '3px',
+                    padding: '5px',
+                    marginTop: '2rem',
+                    '&:hover': {
+                      border: '2px solid #CBD5E0'
+                    }
+                  }}
+                >
                   <Stack direction="row" alignItems="center">
                     <Link href={NFTData.algoExplorerLink} data-testid="nft-url" className="flex">
-                      <Typography variant='body_small_bold' sx={{ color: theme.colors.white }}>
+                      <Typography variant="body_small_bold" sx={{ color: theme.colors.white }}>
                         View Collection on AlgoExplorer
-                      </Typography>&nbsp;
+                      </Typography>
+                      &nbsp;
                       <LaunchIcon style={{ width: 18, height: 18, color: theme.colors.white }} />
                     </Link>
                   </Stack>
@@ -234,8 +302,7 @@ NFTView.propTypes = {
   nftDetail: PropTypes.object,
   setActiveView: PropTypes.func,
   activeView: PropTypes.string,
-  asset: PropTypes.object,
-
+  asset: PropTypes.object
 }
 
 NFTView.defaultProps = {}

@@ -46,8 +46,10 @@ const TradeDetailLink = styled.a`
  */
 export const AssetNameCell = ({ value, row }) => {
   const dispatcher = useEventDispatch()
-  const assetId = useMemo(() => row?.original?.asset?.id || row?.original?.id,
-    [row?.original?.asset?.id, row?.original?.id])
+  const assetId = useMemo(
+    () => row?.original?.asset?.id || row?.original?.id,
+    [row?.original?.asset?.id, row?.original?.id]
+  )
   const onClick = useCallback(() => {
     dispatcher('clicked', 'asset')
   }, [dispatcher])
@@ -102,13 +104,15 @@ export const ExpandTradeDetail = ({ value, row }) => {
   const explorerOpenOrderURL =
     activeNetwork === 'testnet'
       ? `https://testnet.algoexplorer.io/address/`
-      : `https://algoexplorer.io/address/`
+      : `https://explorer.perawallet.app/accounts/`
 
   // Open Orders Link
   const explorerTradeHistoryURL =
     activeNetwork === 'testnet'
       ? `https://testnet.algoexplorer.io/tx/group/`
       : `https://algoexplorer.io/tx/group/`
+  //TODO Update /tx/ endpoints with allo block explorer once released to mainnet
+  // Pera explorer does not support transactions
 
   const urlFn = () => {
     if (row.original.status === 'OPEN') {
